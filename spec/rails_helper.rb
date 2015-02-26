@@ -1,11 +1,15 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
-require File.expand_path("../../config/environment", __FILE__)
-require 'rspec/rails'
+require 'her'
+require 'factory_girl_rails'
+#require File.expand_path("../../config/environment", __FILE__)
 
 # Load the Dummy application
 require File.expand_path("../../spec/dummy/config/environment.rb",  __FILE__)
+require 'rspec/rails'
+
+# Check Dummy application migrations
 ActiveRecord::Migrator.migrations_paths = [File.expand_path("../../test/dummy/db/migrate", __FILE__)]
 ActiveRecord::Migrator.migrations_paths << File.expand_path('../../db/migrate', __FILE__)
 
@@ -17,7 +21,7 @@ ActiveRecord::Migrator.migrations_paths << File.expand_path('../../db/migrate', 
 # run twice. It is recommended that you do not name files matching this glob to
 # end with _spec.rb. You can configure this pattern with the --pattern
 # option on the command line or in ~/.rspec, .rspec or `.rspec-local`.
-Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+Dir[Rails.root.join("../..","spec/support/**/*.rb")].each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
