@@ -32,6 +32,9 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
   
+  # Include FactoryGirl methods to avoid typing FactoryGirl.create(...)
+  config.include FactoryGirl::Syntax::Methods
+  
   # Include MnoEnterpriseApiTestHelper
   # Enable API stub helpers (e.g.: stub_api_for)
   config.include MnoEnterpriseApiTestHelper
