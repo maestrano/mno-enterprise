@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     mno-enterprise (0.0.1)
+      her (~> 0.7.3)
       rails (~> 4.2.0)
 
 GEM
@@ -51,8 +52,15 @@ GEM
     factory_girl_rails (4.4.1)
       factory_girl (~> 4.4.0)
       railties (>= 3.0.0)
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
     globalid (0.3.3)
       activesupport (>= 4.1.0)
+    her (0.7.3)
+      activemodel (>= 3.0.0, <= 4.2)
+      activesupport (>= 3.0.0, <= 4.2)
+      faraday (>= 0.8, < 1.0)
+      multi_json (~> 1.7)
     hike (1.2.3)
     i18n (0.7.0)
     json (1.8.2)
@@ -64,6 +72,7 @@ GEM
     mini_portile (0.6.2)
     minitest (5.5.1)
     multi_json (1.10.1)
+    multipart-post (2.0.0)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     rack (1.6.0)
