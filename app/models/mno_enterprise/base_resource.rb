@@ -1,8 +1,6 @@
 module MnoEnterprise
-  class BaseResource < ActiveResource::Base
-    # General connection Details
-    self.site = "#{URI.join(MnoEnterprise.mno_api_host,MnoEnterprise.mno_api_root_path)}"
-    self.user = MnoEnterprise.tenant_id
-    self.password = MnoEnterprise.tenant_key
+  class BaseResource
+    include Her::Model
+    use_api MNO_ENTERPRISE_API_V1
   end
 end
