@@ -1,3 +1,5 @@
+require 'devise'
+require 'devise/strategies/remote_authenticatable'
 require "mno_enterprise/engine"
 
 module MnoEnterprise

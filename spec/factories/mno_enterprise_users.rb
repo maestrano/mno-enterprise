@@ -5,6 +5,7 @@
 # See http://stackoverflow.com/questions/10032760/how-to-define-an-array-hash-in-factory-girl
 FactoryGirl.define do
   factory :api_user, class: Hash do
+    sequence(:id) { |n| "usr-#{n}" }
     first_name "John"
     last_name "Doe"
     

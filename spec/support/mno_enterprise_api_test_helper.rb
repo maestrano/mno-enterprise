@@ -22,7 +22,7 @@ module MnoEnterpriseApiTestHelper
   # )
   def stub_api_for(klass, opts = {})
     klass.use_api (api = Her::API.new)
-
+    
     # This block should match the her.rb initializer
     api.setup url: "http://api.example.com" do |c|
       # Request
@@ -31,13 +31,10 @@ module MnoEnterpriseApiTestHelper
   
       # Response
       c.use Her::Middleware::DefaultParseJSON
-
-      # Adapter
-      c.use Faraday::Adapter::NetHttp
       
       if opts[:path]
         c.adapter(:test) do |stub|
-          stub.send(opts[:method] || :get) { |env| [opts[:code] || 200, {}, (opts[:response] || {}).to_json] }
+          stub.send(opts[:method] || :get,opts[:path]) { |env| [opts[:code] || 200, {}, (opts[:response] || {}).to_json] }
         end
       else
         c.adapter(:test) { |stub| yield(stub) }

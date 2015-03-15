@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
 
-  mount MnoEnterprise::Engine => "/mno_enterprise"
+  mount MnoEnterprise::Engine => "/mnoe"
 end
