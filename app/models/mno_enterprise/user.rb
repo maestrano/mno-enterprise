@@ -1,8 +1,10 @@
 # == Schema Information
 #
-# Endpoint: /v1/users
+# Endpoint: 
+#   - /v1/users
+#   - /v1/organizations/:organization_id/users
 #
-#  id                             :integer         not null, primary key
+#  id                             :string          e.g.: usr-1d4f56
 #  email                          :string(255)     default(""), not null
 #  encrypted_password             :string(255)     default(""), not null
 #  reset_password_token           :string(255)
@@ -28,8 +30,6 @@
 
 module MnoEnterprise
   class User < BaseResource
-    #include ActiveModel::Validations #required because some before_validations are defined in devise
-    #extend ActiveModel::Callbacks #required to define callbacks
     include HerExtension::Validations::RemoteUniquenessValidation
     extend Devise::Models
     
