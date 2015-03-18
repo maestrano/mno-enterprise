@@ -1,6 +1,8 @@
 # == Schema Information
 #
-# Table name: org_teams
+# Endpoint:
+#  - /v1/org_teams
+#  - /v1/organizations/:organization_id/org_teams
 #
 #  id              :integer         not null, primary key
 #  name            :string(255)
@@ -10,6 +12,6 @@
 #
 
 module MnoEnterprise
-  class OrgaTeam < BaseResource
+  class OrgTeam < BaseResource
   end
 end

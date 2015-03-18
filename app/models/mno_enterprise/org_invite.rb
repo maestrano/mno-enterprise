@@ -1,8 +1,8 @@
 # == Schema Information
 #
-# Endpoint: /v1/teams
-#  - /v1/orga_invites
-#  - /v1/organizations/:organization_id/orga_invites
+# Endpoint:
+#  - /v1/org_invites
+#  - /v1/organizations/:organization_id/org_invites
 #
 #  id              :integer         not null, primary key
 #  user_id         :integer
