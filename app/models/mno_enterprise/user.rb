@@ -1,20 +1,57 @@
-# /v1/users
+# == Schema Information
+#
+# Endpoint: /v1/users
+#
+#  id                             :integer         not null, primary key
+#  email                          :string(255)     default(""), not null
+#  encrypted_password             :string(255)     default(""), not null
+#  reset_password_token           :string(255)
+#  reset_password_sent_at         :datetime
+#  remember_created_at            :datetime
+#  sign_in_count                  :integer         default(0)
+#  current_sign_in_at             :datetime
+#  last_sign_in_at                :datetime
+#  current_sign_in_ip             :string(255)
+#  last_sign_in_ip                :string(255)
+#  confirmation_token             :string(255)
+#  confirmed_at                   :datetime
+#  confirmation_sent_at           :datetime
+#  unconfirmed_email              :string(255)
+#  failed_attempts                :integer         default(0)
+#  unlock_token                   :string(255)
+#  locked_at                      :datetime
+#  created_at                     :datetime        not null
+#  updated_at                     :datetime        not null
+#  name                           :string(255)
+#  surname                        :string(255)
+#
+
 module MnoEnterprise
   class User < BaseResource
-    include ActiveModel::Validations #required because some before_validations are defined in devise
-    extend ActiveModel::Callbacks #required to define callbacks
+    #include ActiveModel::Validations #required because some before_validations are defined in devise
+    #extend ActiveModel::Callbacks #required to define callbacks
+    include HerExtension::Validations::RemoteUniquenessValidation
     extend Devise::Models
     
-    attr_accessor :email
+    attributes :id, :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, 
+      :remember_created_at, :sign_in_count, :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, 
+      :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email, 
+      :failed_attempts, :unlock_token, :locked_at, :created_at, :updated_at, :name,:surname
     
     define_model_callbacks :validation #required by Devise
-    devise :remote_authenticatable
+    devise :remote_authenticatable, :registerable, :recoverable, :rememberable,
+      :trackable, :validatable, :lockable, :confirmable
     
     # The auth_hash includes an email and password
     # Return nil in case of failure
     def self.authenticate(auth_hash)
       u = self.post(:authenticate, auth_hash)
       u.id ? u : nil
+    end
+    
+    # Default value for failed attempts
+    def failed_attempts
+      read_attribute(:failed_attempts) || 0
     end
   end
 end

@@ -1,5 +1,7 @@
 require 'devise'
 require 'devise/strategies/remote_authenticatable'
+require "her_extension/her_orm_adapter"
+require "her_extension/model/relation"
 require "mno_enterprise/engine"
 
 module MnoEnterprise

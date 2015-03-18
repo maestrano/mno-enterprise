@@ -2,9 +2,9 @@ module Devise
   module Strategies
     class RemoteAuthenticatable < Authenticatable
       
-      def valid?
-        true || params[scope]
-      end
+      # def valid?
+      #   true || params[scope]
+      # end
       
       # For an example check : https://github.com/plataformatec/devise/blob/master/lib/devise/strategies/database_authenticatable.rb
       # Method called by warden to authenticate a resource.

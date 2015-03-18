@@ -43,8 +43,16 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   
   # Include MnoEnterpriseApiTestHelper
-  # Enable API stub helpers (e.g.: stub_api_for)
+  # Enable API stub helpers (e.g.: api_stub_for)
   config.include MnoEnterpriseApiTestHelper
+  
+  # Include devise tests
+  config.include Devise::TestHelpers, type: :controller
+  
+  # Reset API stubs before each step
+  config.before :each do
+    api_stub_reset
+  end
   
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
