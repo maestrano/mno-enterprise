@@ -1,8 +1,10 @@
 module MnoEnterprise
   class BaseResource
-    #extend ActiveSupport::Concern
     include Her::Model
-    use_api MNO_ENTERPRISE_API_V1
+    #parse_root_in_json :data
+    include_root_in_json :data
+    use_api MnoEnterprise.mnoe_api_v1
+    
     
     attributes :id
     
