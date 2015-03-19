@@ -1,0 +1,12 @@
+//= require_relative ./bootstrap/transition.js
+//= require_relative ./bootstrap/alert.js
+//= require_relative ./bootstrap/button.js
+//= require_relative ./bootstrap/carousel.js
+//= require_relative ./bootstrap/collapse.js
+//= require_relative ./bootstrap/dropdown.js
+//= require_relative ./bootstrap/modal.js
+//= require_relative ./bootstrap/tooltip.js
+//= require_relative ./bootstrap/popover.js
+//= require_relative ./bootstrap/scrollspy.js
+//= require_relative ./bootstrap/tab.js
+//= require_relative ./bootstrap/affix.js

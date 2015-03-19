@@ -20,7 +20,9 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 4.2.0"
   s.add_dependency "her", "~> 0.7.3"
   s.add_dependency "devise", "~> 3.0"
-
+  s.add_dependency "less-rails"
+  s.add_dependency "therubyracer"
+  
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "factory_girl_rails"
