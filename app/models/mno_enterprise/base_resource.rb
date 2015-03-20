@@ -47,7 +47,7 @@ module MnoEnterprise
     
     # Emulate ActiveRecord for Her
     def reload(options = nil)
-      @attributes.update(self.class.find(self.id)).instance_variable_get('@attributes'))
+      @attributes.update(self.class.find(self.id)).instance_variable_get('@attributes')
     end
     
     protected
