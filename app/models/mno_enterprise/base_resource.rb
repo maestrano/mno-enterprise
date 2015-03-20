@@ -1,3 +1,7 @@
+# TODO: spec the ActiveRecord behaviour
+# - processing of remote errors
+# - response parsing (using data: [] format)
+# - save methods
 module MnoEnterprise
   class BaseResource
     include Her::Model
@@ -21,15 +25,54 @@ module MnoEnterprise
     
     # Emulate ActiveRecord for Her
     def save(options={})
-      perform_validations(options) ? super() : false
+      if perform_validations(options) 
+        ret = super()
+        process_response_errors
+        ret
+      else
+        false
+      end
     end
     
     # Emulate ActiveRecord for Her
     def save!(options={})
-      perform_validations(options) ? super() : raise_record_invalid
+      if perform_validations(options) 
+        ret = super()
+        process_response_errors
+        raise_record_invalid
+      else
+        false
+      end
+    end
+    
+    # Emulate ActiveRecord for Her
+    def reload(options = nil)
+      @attributes.update(self.class.find(self.id)).instance_variable_get('@attributes'))
     end
     
     protected
+      # Process errors from the servers and add them to the
+      # model
+      # Servers are returned using the jsonapi format
+      # E.g.: 
+      # errors: [
+      #   {
+      #     :id=>"f720ca10-b104-0132-dbc0-600308937d74", 
+      #     :href=>"http://maestrano.github.io/enterprise/#users-users-list-post",
+      #     :status=>"400",
+      #     :code=>"name-can-t-be-blank",
+      #     :title=>"Name can't be blank",
+      #     :detail=>"Name can't be blank"
+      #   }
+      # ]
+      def process_response_errors
+        if self.response_errors && self.response_errors.any?
+          self.response_errors.each do |error|
+            self.errors[:base] << error[:title]
+          end
+        end
+      end
+      
       # Emulate ActiveRecord for Her
       def raise_record_invalid
         raise(Her::Errors::ResourceInvalid.new(self))
