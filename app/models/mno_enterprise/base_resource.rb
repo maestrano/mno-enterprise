@@ -13,7 +13,20 @@ module MnoEnterprise
     # after a KLASS.all / KLASS.where etc..
     after_find { |res| res.instance_variable_set(:@changed_attributes, {}) }
     
-    attributes :id
+    # Attributes common to all classes
+    attributes :id, :created_at, :updated_at
+    
+    # Class query methods
+    class << self
+      # Delegate the following methods to `scoped`
+      [:limit, :order_by, :sort_by, :order, :sort].each do |method|
+        class_eval <<-RUBY, __FILE__, __LINE__ + 1
+          def #{method}(*params)
+            scoped.send(#{method.to_sym.inspect}, *params)
+          end
+        RUBY
+      end
+    end
     
     # Emulate ActiveRecord for Her
     def read_attribute(attr_name)
