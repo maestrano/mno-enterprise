@@ -97,12 +97,16 @@ module MnoEnterprise
       #     :code=>"name-can-t-be-blank",
       #     :title=>"Name can't be blank",
       #     :detail=>"Name can't be blank"
+      #     :attribute => "name"
+      #     :value => "can't be blank"
       #   }
       # ]
       def process_response_errors
         if self.response_errors && self.response_errors.any?
           self.response_errors.each do |error|
-            self.errors[:base] << error[:title]
+            key = error[:attribute] && !error[:attribute].empty? ? error[:attribute] : :base
+            val = error[:value] && !error[:value].empty? ? error[:value] : error[:title]
+            self.errors[key.to_sym] << val
           end
         end
       end
