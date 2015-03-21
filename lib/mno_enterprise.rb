@@ -3,6 +3,7 @@ require 'devise/strategies/remote_authenticatable'
 require "her"
 require "her_extension/her_orm_adapter"
 require "her_extension/model/relation"
+require "her_extension/model/attributes"
 require "her_extension/middleware/mnoe_api_v1_parse_json"
 require "mno_enterprise/engine"
 
