@@ -36,10 +36,16 @@ module MnoEnterprise
   end
   
   private
+    # Return the options to use in the setup of the API
+    def self.api_options
+      { url: "#{URI.join(@@mno_api_host,@@mno_api_root_path).to_s}", send_only_modified_attributes: true }
+    end
+    
+    # Configure the Her for Maestrano Enteprise API V1
     def self.configure_api
       # Configure HER for Maestrano Enterprise Endpoints
       @@mnoe_api_v1 = Her::API.new
-      @@mnoe_api_v1.setup url: "#{URI.join(@@mno_api_host,@@mno_api_root_path).to_s}" do |c|
+      @@mnoe_api_v1.setup self.api_options  do |c|
         # Request
         c.use Faraday::Request::BasicAuthentication, @@tenant_id, @@tenant_key
         c.use Faraday::Request::UrlEncoded

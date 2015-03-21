@@ -1,3 +1,6 @@
+# TODO:
+# - spec module
+# - spec that validator ignores records with the same id
 module HerExtension
   module Validations
     
@@ -6,7 +9,7 @@ module HerExtension
       def validate_each(record,attribute,value)
         list = record.class.where({ attribute => value }).limit(1)
         
-        if list.any?
+        if list.reject { |e| e.id == record.id }.any?
           error_options = options.except(:case_sensitive, :scope, :conditions)
           error_options[:value] = value
           record.errors.add(attribute, :taken, error_options)

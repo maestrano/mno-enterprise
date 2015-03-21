@@ -9,6 +9,9 @@ module MnoEnterprise
     include_root_in_json :data
     use_api MnoEnterprise.mnoe_api_v1
     
+    # TODO: spec that changed_attributes is empty
+    # after a KLASS.all / KLASS.where etc..
+    after_find { |res| res.instance_variable_set(:@changed_attributes, {}) }
     
     attributes :id
     
@@ -47,7 +50,9 @@ module MnoEnterprise
     
     # Emulate ActiveRecord for Her
     def reload(options = nil)
-      @attributes.update(self.class.find(self.id)).instance_variable_get('@attributes')
+      @attributes.update(self.class.find(self.id).attributes)
+      self.run_callbacks :find
+      self
     end
     
     protected
