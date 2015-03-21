@@ -70,15 +70,17 @@ module Her
         self
       end
       
-      # @private
+      # Reset the cache for the current query
       def clear_fetch_cache!
         cache[query_checkum] = nil
       end
       
+      # Reset the whole cache
       def clear_cache!
         @cache.clear
       end
       
+      # Reset the query parameters
       def reset_params
         @params.clear
       end
@@ -92,21 +94,6 @@ module Her
       private
         def query_checkum
           Digest::MD5.hexdigest(Marshal.dump(@params))
-        end
-        
-        # Check whether the inputed params change
-        # the query
-        # Used to determine whether the query should
-        # be changed refetched or not
-        def unchanged_with?(key, params)
-          case 
-          when params.kind_of?(Hash)
-            @params == @params.merge(key.to_sym => (@params[key] || {}).merge(params))
-          when params.kind_of?(Array)
-            @params == @params.merge(key.to_sym => [(@params[key] || []),params].flatten.compact.uniq)
-          else
-            @params == @params.merge(key.to_sym => params)
-          end
         end
     end
   end
