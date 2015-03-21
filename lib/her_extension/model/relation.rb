@@ -21,7 +21,7 @@ module Her
       # Doing more advanced caching out of the box may lead to undesirable 
       # results and should be left to the developer.
       def fetch
-        cache[params_checksum] ||= begin
+        cache[query_checkum] ||= begin
           self.clear_cache!
           path = @parent.build_request_path(@params)
           method = @parent.method_for(:find)
@@ -72,7 +72,7 @@ module Her
       
       # @private
       def clear_fetch_cache!
-        cache[params_checksum] = nil
+        cache[query_checkum] = nil
       end
       
       def clear_cache!
@@ -90,7 +90,7 @@ module Her
       end
       
       private
-        def params_checksum
+        def query_checkum
           Digest::MD5.hexdigest(Marshal.dump(@params))
         end
         
