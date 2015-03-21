@@ -28,6 +28,20 @@ module MnoEnterprise
           end
         RUBY
       end
+      
+      # Emulate ActiveRecord for Her
+      def first(n = 1)
+        return [] unless n > 0
+        q = self.order_by('id.asc').limit(n)
+        n == 1 ? q.to_a.first : q.to_a
+      end
+    
+      # Emulate ActiveRecord for Her
+      def last(n = 1)
+        return [] unless n > 0
+        q = self.order_by('id.desc').limit(n)
+        n == 1 ? q.to_a.first : q.to_a
+      end
     end
     
     # Emulate ActiveRecord for Her
