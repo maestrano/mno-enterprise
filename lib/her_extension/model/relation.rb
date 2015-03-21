@@ -1,7 +1,9 @@
 require 'digest/md5'
 
-# TODO: we should do a PR to the HER project with a feature
-# to support jsonapi.org
+# TODO: we should do a PR to the HER project which includes
+# smarter filtering and more reliable caching
+# Before doing so, we make the filtering behavior customizable
+# (E.g.: configure name of filter/sort/limit keys)
 module Her
   module Model
     class Relation
