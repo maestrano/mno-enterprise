@@ -26,5 +26,14 @@
 
 module MnoEnterprise
   class Organization < BaseResource
+    
+    attributes :uid, :name, :account_frozen, :free_trial_end_at, :soa_enabled, :mails, :logo,
+      :latitude, :longitude, :geo_country_code, :geo_state_code, :geo_city, :geo_tz, :geo_currency,
+      :meta_data
+    
+    #================================
+    # Associations
+    #================================
+    has_many :users, class_name: 'MnoEnterprise::User'
   end
 end

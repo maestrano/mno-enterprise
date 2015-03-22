@@ -5,7 +5,8 @@
 module MnoEnterprise
   class BaseResource
     include Her::Model
-    #parse_root_in_json :data
+    include HerExtension::Validations::RemoteUniquenessValidation
+    
     include_root_in_json :data
     use_api MnoEnterprise.mnoe_api_v1
     
@@ -20,7 +21,7 @@ module MnoEnterprise
     class << self
       # Delegate the following methods to `scoped`
       # Clear relation params for each class level query
-      [:all, :where, :create, :build, :find, :first_or_create, :first_or_initialize, :limit, :order_by, :sort_by, :order, :sort].each do |method|
+      [:all, :where, :create, :find, :first_or_create, :first_or_initialize, :limit, :order_by, :sort_by, :order, :sort].each do |method|
         class_eval <<-RUBY, __FILE__, __LINE__ + 1
           def #{method}(*params)
             scoped.reset_params
