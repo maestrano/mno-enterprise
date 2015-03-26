@@ -43,6 +43,11 @@ module MnoEnterprise
         q = self.order_by('id.desc').limit(n)
         n == 1 ? q.to_a.first : q.to_a
       end
+      
+      # Find first record using a hash of attributes
+      def find_by(hash)
+        self.where(hash).limit(1).first
+      end
     end
     
     # Emulate ActiveRecord for Her
