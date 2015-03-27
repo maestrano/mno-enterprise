@@ -1,6 +1,37 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :mno_enterprise_app, :class => 'App' do
+  factory :app, class: MnoEnterprise::App do
+    sequence(:id) { |n| n }
+    sequence(:name) { |n| "TestApp#{n}" }
+    description "This is a description"
+    created_at 1.day.ago
+    updated_at 2.hours.ago
+    logo "https://cdn.somedomain.com/app/2f4g2r474.jpg"
+    website "https://www.testapp.com"
+    slug { "#{id}-myapp" }
+    categories ["CRM"]
+    key_benefits ['Super','Hyper','Good']
+    key_features ['Super','Hyper','Good']
+    testimonials [{text:'Bla', company:'Doe Pty Ltd', author: 'John'}]
+    worldwide_usage 120000
+    tiny_description "A great app"
+    stack 'cube'
+    terms_url "http://opensource.org/licenses/MIT"
+    
+    trait :cloud do
+      stack 'cloud'
+    end
+  
+    trait :connector do
+      stack 'connector'
+    end
+  
+    factory :cloud_app, traits: [:cloud]
+    factory :connector_app, traits: [:connector]
+  end
+  
+  factory :api_app, class: Hash, parent: :app do
+    initialize_with { attributes }
   end
 end
