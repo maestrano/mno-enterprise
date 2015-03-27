@@ -12,7 +12,7 @@ module MnoEnterprise
         before { api_stub_for(MnoEnterprise::User, method: :post, path: '/users/authenticate', response: api_user) }
         
         it 'logs the user in' do
-          post '/mnoe/auth/users/sign_in', user: { email: 'john@doecorp.com', password: 'securepassword' }
+          post '/mnoe/auth/users/sign_in', user: { email: api_user[:email], password: 'securepassword' }
           #puts controller.inspect
           #expect(controller).to be_user_signed_in
           expect(controller.current_user.id).to eq(api_user[:id])
