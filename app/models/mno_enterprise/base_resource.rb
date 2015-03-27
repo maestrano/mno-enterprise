@@ -90,6 +90,13 @@ module MnoEnterprise
       self
     end
     
+    # Reset the ActiveModel hash containing all attribute changes
+    # Useful when initializing a existing resource using a hash fetched
+    # via http call (e.g.: MnoEnterprise::User.authenticate)
+    def clear_attribute_changes!
+      self.instance_variable_set(:@changed_attributes, {})
+    end
+    
     protected
       # Process errors from the servers and add them to the
       # model
@@ -126,5 +133,6 @@ module MnoEnterprise
       def perform_validations(options={}) # :nodoc:
         options[:validate] == false || valid?(options[:context])
       end
+      
   end
 end

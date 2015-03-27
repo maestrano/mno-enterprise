@@ -5,11 +5,13 @@ module MnoEnterprise
     
     let(:confirmation_token) { 'wky763pGjtzWR7dP44PD' }
     let(:api_user) { build(:api_user, :unconfirmed, confirmation_token: confirmation_token) }
-    let(:api_user_uniq_resp) { build(:api_user_validate_uniqueness) }
+    let(:email_uniq_resp) { [] }
     let(:signup_attrs) { { name: "John", surname: "Doe", email: 'john@doecorp.com', password: 'securepassword' } }
     
-    before { api_stub_for(MnoEnterprise::User, method: :get, path: '/users/validate_uniqueness', response: api_user_uniq_resp) }
+    # Stub user creation
     before { api_stub_for(MnoEnterprise::User, method: :post, path: '/users', response: api_user) }
+    
+    # Stub user update
     before { api_stub_for(MnoEnterprise::User, method: :put, path: '/users/usr-1', response: api_user) }
     
     # Stub call checking if another user already has the confirmation token provided
@@ -17,10 +19,19 @@ module MnoEnterprise
     before { allow(OpenSSL::HMAC).to receive(:hexdigest).and_return(confirmation_token) }
     before { api_stub_for(MnoEnterprise::User, 
       method: :get, 
-      path: '/users', 
+      path: '/users',
       params: { filter: {confirmation_token: confirmation_token }, limit: 1 },
       response: []
     )}
+    
+    # Stub user email uniqueness check
+    before { api_stub_for(MnoEnterprise::User, 
+      path: '/users',
+      params: { filter: { email: signup_attrs[:email] }, limit: 1 },
+      response: email_uniq_resp
+    )}
+    
+    
     
     describe 'signup' do  
       describe 'success' do
@@ -36,7 +47,7 @@ module MnoEnterprise
       end
       
       describe 'failure' do
-        let(:api_user_uniq_resp) { build(:api_user_validate_uniqueness, :fail) }
+        let(:email_uniq_resp) { [api_user] }
         
         it 'does logs the user in' do
           post '/mnoe/auth/users', user: signup_attrs

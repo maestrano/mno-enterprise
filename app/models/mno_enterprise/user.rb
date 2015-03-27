@@ -50,7 +50,14 @@ module MnoEnterprise
     # Return nil in case of failure
     def self.authenticate(auth_hash)
       u = self.post(:authenticate, auth_hash)
-      u.id ? u : nil
+      
+      if u && u.id
+        puts "MnoEnterprise::User | authenticate | u.changes: #{u.changes}"
+        u.clear_attribute_changes!
+        return u
+      end
+      
+      nil
     end
     
     # Default value for failed attempts

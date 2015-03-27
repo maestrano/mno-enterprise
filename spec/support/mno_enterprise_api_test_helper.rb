@@ -58,7 +58,7 @@ module MnoEnterpriseApiTestHelper
     # Configure the api and apply a list of stubs
     def api_stub_configure(api)
       # This block should match the her.rb initializer
-      api.setup MnoEnterprise.send(:api_options) do |c|
+      api.setup MnoEnterprise.send(:api_options).merge(url: "http://localhost:3000") do |c|
         # Request
         c.use Faraday::Request::BasicAuthentication, MnoEnterprise.tenant_id, MnoEnterprise.tenant_key
         c.use Faraday::Request::UrlEncoded
