@@ -20,6 +20,7 @@ MnoEnterprise::Engine.routes.draw do
   namespace :jpi do
     namespace :v1 do
       resources :marketplace, only: [:index,:show]
+      resource :current_user, only: [:show]
     end
   end
 end
