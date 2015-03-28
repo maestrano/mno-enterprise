@@ -34,7 +34,4 @@ FactoryGirl.define do
     initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
   end
   
-  factory :api_app, class: Hash, parent: :app do
-    initialize_with { attributes }
-  end
 end

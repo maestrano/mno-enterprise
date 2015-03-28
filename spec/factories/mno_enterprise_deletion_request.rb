@@ -13,8 +13,4 @@ FactoryGirl.define do
     initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
   end
   
-  # API Response for user model
-  factory :api_deletion_request, class: Hash, parent: :deletion_request do
-    initialize_with { attributes }
-  end
 end

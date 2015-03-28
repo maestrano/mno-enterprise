@@ -6,11 +6,10 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
     
-    let(:api_app) { build(:api_app) }
-    let(:app) { MnoEnterprise::App.new(api_app) }
+    let(:app) { build(:app) }
     
-    before { api_stub_for(MnoEnterprise::App, path: '/apps', response: [api_app]) }
-    before { api_stub_for(MnoEnterprise::App, path: "/apps/#{api_app[:id]}", response: api_app) }
+    before { api_stub_for(MnoEnterprise::App, path: '/apps', response: from_api([app])) }
+    before { api_stub_for(MnoEnterprise::App, path: "/apps/#{app.id}", response: from_api(app)) }
   
     def partial_hash_for_app(app)
       {

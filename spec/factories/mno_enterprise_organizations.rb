@@ -13,11 +13,6 @@ FactoryGirl.define do
       # Properly build the resource with Her
       initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
     end
-  
-    # API Response for user model
-    factory :api_organization, class: Hash, parent: :organization do
-      initialize_with { attributes }
-    end
     
   end
 end

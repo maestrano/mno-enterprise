@@ -4,15 +4,15 @@ module MnoEnterprise
   RSpec.describe "Remote Registration", type: :request do
     
     let(:confirmation_token) { 'wky763pGjtzWR7dP44PD' }
-    let(:api_user) { build(:api_user, :unconfirmed, confirmation_token: confirmation_token) }
+    let(:user) { build(:user, :unconfirmed, confirmation_token: confirmation_token) }
     let(:email_uniq_resp) { [] }
     let(:signup_attrs) { { name: "John", surname: "Doe", email: 'john@doecorp.com', password: 'securepassword' } }
     
     # Stub user creation
-    before { api_stub_for(MnoEnterprise::User, method: :post, path: '/users', response: api_user) }
+    before { api_stub_for(MnoEnterprise::User, method: :post, path: '/users', response: from_api(user)) }
     
     # Stub user update
-    before { api_stub_for(MnoEnterprise::User, method: :put, path: '/users/usr-1', response: api_user) }
+    before { api_stub_for(MnoEnterprise::User, method: :put, path: "/users/#{user.id}", response: from_api(user)) }
     
     # Stub call checking if another user already has the confirmation token provided
     # by devise
@@ -40,14 +40,14 @@ module MnoEnterprise
           expect(controller).to be_user_signed_in
           
           user = controller.current_user
-          expect(user.id).to eq(api_user[:id])
-          expect(user.name).to eq(api_user[:name])
-          expect(user.surname).to eq(api_user[:surname])
+          expect(user.id).to eq(user.id)
+          expect(user.name).to eq(user.name)
+          expect(user.surname).to eq(user.surname)
         end
       end
       
       describe 'failure' do
-        let(:email_uniq_resp) { [api_user] }
+        let(:email_uniq_resp) { [from_api(user)] }
         
         it 'does logs the user in' do
           post '/mnoe/auth/users', user: signup_attrs
