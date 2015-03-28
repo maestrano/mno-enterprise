@@ -1,5 +1,29 @@
 module MnoEnterpriseApiTestHelper
   
+  # Take a resource and transform it into a Hash describing
+  # the resource as if it had been returned by the MnoEnterprise
+  # API server
+  def from_api(res)
+    case
+    when res.kind_of?(Array)
+      return res.map { |e| from_api(e) }
+    when res.kind_of?(MnoEnterprise::BaseResource)
+      hash = res.attributes.dup
+      hash.each do |k,v|
+        hash[k] = from_api(v)
+      end
+      return hash
+    when res.kind_of?(Hash)
+      hash = res.dup
+      hash.each do |k,v|
+        hash[k] = from_api(v)
+      end
+      return hash
+    else
+      return res
+    end
+  end
+  
   # Reset all API stubs.
   # Called before each test (see spec_helper)
   def api_stub_reset
@@ -58,7 +82,7 @@ module MnoEnterpriseApiTestHelper
     # Configure the api and apply a list of stubs
     def api_stub_configure(api)
       # This block should match the her.rb initializer
-      api.setup MnoEnterprise.send(:api_options).merge(url: "http://localhost:3000") do |c|
+      api.setup MnoEnterprise.send(:api_options).merge(url: "http://localhost:65000") do |c|
         # Request
         c.use Faraday::Request::BasicAuthentication, MnoEnterprise.tenant_id, MnoEnterprise.tenant_key
         c.use Faraday::Request::UrlEncoded

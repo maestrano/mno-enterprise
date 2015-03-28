@@ -11,17 +11,6 @@ module MnoEnterprise
     
     before { api_stub_for(MnoEnterprise::App, path: '/apps', response: [api_app]) }
     before { api_stub_for(MnoEnterprise::App, path: "/apps/#{api_app[:id]}", response: api_app) }
-    # def create_full_featured_app
-    #   app = create(:app,
-    #     key_benefits: [{text: 'Super'},{text: 'Hyper'},{text: 'Good'}],
-    #     description: "Some app description",
-    #     testimonials: [{text:'Bla', company:'Doe Pty Ltd', author: 'John'}],
-    #     logo: "https://cdn.somedomain.com/app_logo",
-    #     pictures: ["https://cdn.somedomain.com/app_screenshot"]
-    #   )
-    #
-    #   return app
-    # end
   
     def partial_hash_for_app(app)
       {
@@ -61,7 +50,6 @@ module MnoEnterprise
     end
   
     describe 'GET #index' do
-      #before { create_full_featured_app }
       subject { get :index }
     
       it 'is successful' do
@@ -76,7 +64,6 @@ module MnoEnterprise
     end
   
     describe 'GET #show' do
-      #let(:app) { create_full_featured_app }
       subject { get :show, id: app.id }
     
       it 'is successful' do

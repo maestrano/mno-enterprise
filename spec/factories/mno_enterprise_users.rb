@@ -6,37 +6,40 @@
 FactoryGirl.define do
   
   factory :user, class: MnoEnterprise::User do
-    sequence(:id) { |n| "usr-#{n}" }
+    sequence(:id)
     name "John"
     surname "Doe"
     sequence(:email) { |n| "john.doe#{n}@maestrano.com" }
+    company "Doe Inc."
+    phone "449 789 456"
+    phone_country_code "AU"
+    geo_country_code "AU"
+    geo_state_code "NSW"
+    geo_city "Sydney"
+    
     confirmation_token "wky763pGjtzWR7dP44PD"
     confirmed_at 3.days.ago.iso8601
     
     trait :unconfirmed do
       confirmed_at nil
     end
+    
+    trait :with_deletion_request do
+      #association :deletion_request, strategy: :build
+      deletion_request { build(:deletion_request).attributes }
+    end
+    
+    trait :with_organizations do
+      #organizations { [build(:organization)] }
+      organizations { [build(:organization).attributes] }
+    end
+    
+    # Properly build the resource with Her
+    initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
   end
   
   # API Response for user model
   factory :api_user, class: Hash, parent: :user do
     initialize_with { attributes }
   end
-  
-  # API Response for RemoteUniquenessValidator
-  # factory :api_user_validate_uniqueness, class: Hash do
-  #
-  #   trait :fail do
-  #     errors { [{
-  #       id: "897b7a80-adce-0132-8bfa-600308937d74",
-  #       href: "https://maestrano.com/support",
-  #       status: 400,
-  #       code: "email-has-already-been-taken",
-  #       title: "Email has already been taken",
-  #       detail: "Email has already been taken"
-  #     }] }
-  #   end
-  #
-  #   initialize_with { attributes }
-  # end
 end

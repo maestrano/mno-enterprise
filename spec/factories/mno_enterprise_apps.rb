@@ -29,6 +29,9 @@ FactoryGirl.define do
   
     factory :cloud_app, traits: [:cloud]
     factory :connector_app, traits: [:connector]
+    
+    # Properly build the resource with Her
+    initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
   end
   
   factory :api_app, class: Hash, parent: :app do

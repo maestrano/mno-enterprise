@@ -27,10 +27,10 @@ module Devise
         # returned in serialize_into_session
         #
         # Recreates a resource from session data
-        def serialize_from_session(id)
-          resource = self.new
-          resource.id = id
-          resource
+        def serialize_from_session(key,salt)
+          puts "Devise::Models::RemoteAuthenticatable | serialize_from_session | key: #{key}"
+          record = to_adapter.get(key)
+          record if record && record.authenticatable_salt == salt
         end
         
         # Here you have to return and array with the data of your resource
@@ -38,7 +38,8 @@ module Devise
         #
         # You might want to include some authentication data
         def serialize_into_session(record)
-          [record.id]
+          puts "Devise::Models::RemoteAuthenticatable | serialize_into_session | record: #{record.inspect}"
+          [record.to_key, record.authenticatable_salt]
         end
  
       end

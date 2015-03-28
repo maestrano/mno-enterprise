@@ -6,6 +6,7 @@
 #
 #  id                             :string          e.g.: usr-1d4f56
 #  email                          :string(255)     default(""), not null
+#  authenticatable_salt           :string(255)     used for session authentication
 #  encrypted_password             :string(255)     default(""), not null
 #  reset_password_token           :string(255)
 #  reset_password_sent_at         :datetime
@@ -25,17 +26,26 @@
 #  created_at                     :datetime        not null
 #  updated_at                     :datetime        not null
 #  name                           :string(255)
-#  surname                        :string(255)
+#  surname                        :string(255)            
+#  company                        :string(255)   
+#  phone                          :string(255)
+#  phone_country_code             :string(255)
+#  geo_country_code               :string(255)
+#  geo_state_code                 :string(255)
+#  geo_city                       :string(255)  
 #
 
 module MnoEnterprise
   class User < BaseResource
     extend Devise::Models
     
-    attributes :email, :password, :encrypted_password, :reset_password_token, :reset_password_sent_at, 
+    # Note: password and encrypted_password are write-only attributes and are never returned by
+    # the remote API. If you are looking for a session token, use authenticatable_salt
+    attributes :email, :password, :authenticatable_salt, :encrypted_password, :reset_password_token, :reset_password_sent_at, 
       :remember_created_at, :sign_in_count, :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, 
       :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email, 
-      :failed_attempts, :unlock_token, :locked_at, :name,:surname
+      :failed_attempts, :unlock_token, :locked_at, :name, :surname, :company, :phone, :phone_country_code, 
+      :geo_country_code, :geo_state_code, :geo_city
     
     define_model_callbacks :validation #required by Devise
     devise :remote_authenticatable, :registerable, :recoverable, :rememberable,
@@ -44,7 +54,8 @@ module MnoEnterprise
     #================================
     # Associations
     #================================
-    has_many :organization, class_name: 'MnoEnterprise::Organization'
+    has_many :organizations, class_name: 'MnoEnterprise::Organization'
+    has_one :deletion_request, class_name: 'MnoEnterprise::DeletionRequest'
     
     # The auth_hash includes an email and password
     # Return nil in case of failure
@@ -63,6 +74,11 @@ module MnoEnterprise
     # Default value for failed attempts
     def failed_attempts
       read_attribute(:failed_attempts) || 0
+    end
+    
+    # Override Devise default method
+    def authenticatable_salt
+      read_attribute(:authenticatable_salt)
     end
   end
 end
