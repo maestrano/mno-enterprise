@@ -80,5 +80,12 @@ module MnoEnterprise
     def authenticatable_salt
       read_attribute(:authenticatable_salt)
     end
+    
+    # Return the role of this user for the provided
+    # organization
+    def role(organization)
+      org = self.organizations.select { |o| o.id == organization.id }
+      org ? org.role : nil
+    end
   end
 end

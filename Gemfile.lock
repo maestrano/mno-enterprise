@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     mno-enterprise (0.0.1)
+      cancancan (~> 1.10)
       devise (~> 3.0)
       her (~> 0.7.3)
       jbuilder (~> 2.2.12)
@@ -50,6 +51,7 @@ GEM
     arel (6.0.0)
     bcrypt (3.1.10)
     builder (3.2.2)
+    cancancan (1.10.1)
     commonjs (0.2.7)
     devise (3.4.1)
       bcrypt (~> 3.0)
