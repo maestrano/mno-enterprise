@@ -45,7 +45,7 @@ module.directive('dashboardOrganizationBilling', ['TemplatePath', (TemplatePath)
       restrict: 'A',
       scope: {
       },
-      templateUrl: TemplatePath['dashboard/organization/billing.html'],
+      templateUrl: TemplatePath['mno_enterprise/dashboard/organization/billing.html'],
       controller: 'DashboardOrganizationBillingCtrl'
     }
 ])

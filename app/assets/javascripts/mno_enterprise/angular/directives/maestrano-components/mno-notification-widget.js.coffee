@@ -194,7 +194,7 @@ module.directive('mnoNotificationWidget', ['TemplatePath', (TemplatePath) ->
         mnoNotificationWidget: '&',
         userLoggedIn: '&'
       },
-      templateUrl: TemplatePath['maestrano-components/notification-widget.html'],
+      templateUrl: TemplatePath['mno_enterprise/maestrano-components/notification-widget.html'],
       controller: 'MnoNotificationWidgetCtrl',
     }
 ])

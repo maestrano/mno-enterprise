@@ -255,7 +255,7 @@ module.directive('dashboardOrganizationMembers', ['TemplatePath', (TemplatePath)
       restrict: 'A',
       scope: {
       },
-      templateUrl: TemplatePath['dashboard/organization/members.html'],
+      templateUrl: TemplatePath['mno_enterprise/dashboard/organization/members.html'],
       controller: 'DashboardOrganizationMembersCtrl'
     }
 ])

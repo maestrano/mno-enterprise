@@ -32,7 +32,7 @@ module.controller('MnoShoppingCartCtrl',[
     modal.config = {
       instance: {
         backdrop: 'static'
-        templateUrl: TemplatePath['maestrano-components/shopping_cart.html']
+        templateUrl: TemplatePath['mno_enterprise/maestrano-components/shopping_cart.html']
         size: 'lg'
         windowClass: 'inverse'
         scope: $scope

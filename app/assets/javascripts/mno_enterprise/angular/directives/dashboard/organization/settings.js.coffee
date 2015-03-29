@@ -85,7 +85,7 @@ module.directive('dashboardOrganizationSettings', ['TemplatePath', (TemplatePath
       restrict: 'A',
       scope: {
       },
-      templateUrl: TemplatePath['dashboard/organization/settings.html'],
+      templateUrl: TemplatePath['mno_enterprise/dashboard/organization/settings.html'],
       controller: 'DashboardOrganizationSettingsCtrl'
     }
 ])

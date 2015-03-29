@@ -60,10 +60,10 @@ angular.module('maestrano.services.message-svc', []).factory('MessageSvc', ['$q'
   # (not used at the moment, see comment above)
   templateMessageUrl = ->
     switch currentMessage.category
-      when 'taskCompleted' then return TemplatePath['maestrano-components/modal-messages/congratulations.html']
-      when 'information' then return TemplatePath['maestrano-components/modal-messages/information.html']
-      when 'default' then return TemplatePath['maestrano-components/modal-messages/default.html']
-      else return TemplatePath['maestrano-components/modal-messages/default.html']
+      when 'taskCompleted' then return TemplatePath['mno_enterprise/maestrano-components/modal-messages/congratulations.html']
+      when 'information' then return TemplatePath['mno_enterprise/maestrano-components/modal-messages/information.html']
+      when 'default' then return TemplatePath['mno_enterprise/maestrano-components/modal-messages/default.html']
+      else return TemplatePath['mno_enterprise/maestrano-components/modal-messages/default.html']
 
 
   return service

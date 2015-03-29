@@ -34,7 +34,7 @@ module.directive('mnoSyncConfig', ['TemplatePath', (TemplatePath) ->
         instanceUid: '@'
         appName: '='
       },
-      templateUrl: TemplatePath['maestrano-components/sync_config.html'],
+      templateUrl: TemplatePath['mno_enterprise/maestrano-components/sync_config.html'],
       controller: 'MnoSyncConfigCtrl',
   }
 ])

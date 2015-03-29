@@ -117,7 +117,7 @@ module.directive('mnoAutostopApp', ['TemplatePath', (TemplatePath) ->
       scope: {
         mnoAutostopApp: '&'
       },
-      templateUrl: TemplatePath['maestrano-components/autostop_app.html'],
+      templateUrl: TemplatePath['mno_enterprise/maestrano-components/autostop_app.html'],
       controller: 'MnoAutostopAppCtrl'
     }
 ])

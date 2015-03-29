@@ -50,7 +50,7 @@ module.controller('DashboardOrganizationTeamListCtrl',[
     memberAddModal.config = {
       instance: {
         backdrop: 'static'
-        templateUrl: TemplatePath['dashboard/teams/member-add-modal.html']
+        templateUrl: TemplatePath['mno_enterprise/dashboard/teams/member-add-modal.html']
         size: 'lg'
         windowClass: 'inverse team-member-add-modal'
         scope: $scope
@@ -121,7 +121,7 @@ module.controller('DashboardOrganizationTeamListCtrl',[
     memberRemovalModal.config = {
       instance: {
         backdrop: 'static'
-        templateUrl: TemplatePath['dashboard/teams/member-removal-modal.html']
+        templateUrl: TemplatePath['mno_enterprise/dashboard/teams/member-removal-modal.html']
         size: 'lg'
         windowClass: 'inverse team-member-removal-modal'
         scope: $scope
@@ -173,7 +173,7 @@ module.directive('dashboardOrganizationTeamList', ['TemplatePath', (TemplatePath
       scope: {
         title: '@'
       },
-      templateUrl: TemplatePath['dashboard/teams/team-list.html'],
+      templateUrl: TemplatePath['mno_enterprise/dashboard/teams/team-list.html'],
       controller: 'DashboardOrganizationTeamListCtrl'
     }
 ])

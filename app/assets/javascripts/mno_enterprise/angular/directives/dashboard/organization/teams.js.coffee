@@ -155,7 +155,7 @@ module.controller('DashboardOrganizationTeamsCtrl',[
     addTeamModal.config = {
       instance: {
         backdrop: 'static'
-        templateUrl: TemplatePath['dashboard/teams/team-add-modal.html']
+        templateUrl: TemplatePath['mno_enterprise/dashboard/teams/team-add-modal.html']
         size: 'lg'
         windowClass: 'inverse team-add-modal'
         scope: $scope
@@ -205,7 +205,7 @@ module.controller('DashboardOrganizationTeamsCtrl',[
     teamDeletionModal.config = {
       instance: {
         backdrop: 'static'
-        templateUrl: TemplatePath['dashboard/teams/team-delete-modal.html']
+        templateUrl: TemplatePath['mno_enterprise/dashboard/teams/team-delete-modal.html']
         size: 'lg'
         windowClass: 'inverse team-delete-modal'
         scope: $scope
@@ -262,7 +262,7 @@ module.directive('dashboardOrganizationTeams', ['TemplatePath', (TemplatePath) -
       restrict: 'A',
       scope: {
       },
-      templateUrl: TemplatePath['dashboard/teams/index.html'],
+      templateUrl: TemplatePath['mno_enterprise/dashboard/teams/index.html'],
       controller: 'DashboardOrganizationTeamsCtrl'
     }
 ])

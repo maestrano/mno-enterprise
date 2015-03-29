@@ -210,7 +210,7 @@ module.directive('mnoLoadingLounge', ['TemplatePath', (TemplatePath) ->
         redirectUrl: '&'
         autostop: '&'
       },
-      templateUrl: TemplatePath['maestrano-components/loading_lounge.html'],
+      templateUrl: TemplatePath['mno_enterprise/maestrano-components/loading_lounge.html'],
       controller: 'MnoLoadingLoungeCtrl'
     }
 ])

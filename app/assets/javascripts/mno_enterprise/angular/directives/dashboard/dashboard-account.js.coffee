@@ -147,7 +147,7 @@ module.directive('dashboardAccount', ['TemplatePath', (TemplatePath) ->
       restrict: 'A',
       scope: {
       },
-      templateUrl: TemplatePath['dashboard/account.html'],
+      templateUrl: TemplatePath['mno_enterprise/dashboard/account.html'],
       controller: 'DashboardAccountCtrl'
     }
 ])

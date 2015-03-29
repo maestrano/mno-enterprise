@@ -199,7 +199,7 @@ module.directive('dashboardMenu', ['TemplatePath', (TemplatePath) ->
       scope: {
         backgroundColor:'='
       },
-      templateUrl: TemplatePath['dashboard/menu.html'],
+      templateUrl: TemplatePath['mno_enterprise/dashboard/menu.html'],
       controller: 'DashboardMenuCtrl'
       # We need to manually close the collapse menu as we actually stay on the same page
       link: (scope,element,attrs) ->

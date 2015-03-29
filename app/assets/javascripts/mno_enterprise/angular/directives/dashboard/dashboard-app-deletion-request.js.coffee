@@ -49,7 +49,7 @@ module.directive('dashboardAppDeletionRequest', ['TemplatePath', (TemplatePath) 
         appId:'@'
         openModal:'='
       },
-      templateUrl: TemplatePath['dashboard/app_deletion.html'],
+      templateUrl: TemplatePath['mno_enterprise/dashboard/app_deletion.html'],
       controller: 'DashboardAppDeletionRequestCtrl'
     }
 ])

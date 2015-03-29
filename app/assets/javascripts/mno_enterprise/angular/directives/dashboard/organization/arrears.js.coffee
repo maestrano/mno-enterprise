@@ -64,7 +64,7 @@ module.directive('dashboardOrganizationArrears', ['TemplatePath', (TemplatePath)
       restrict: 'A',
       scope: {
       },
-      templateUrl: TemplatePath['dashboard/organization/arrears.html'],
+      templateUrl: TemplatePath['mno_enterprise/dashboard/organization/arrears.html'],
       controller: 'DashboardOrganizationArrearsCtrl'
     }
 ])

@@ -52,7 +52,7 @@ module.directive('mnoPartnerContact', ['TemplatePath', (TemplatePath) ->
         partnerName: '@',
         partnerId: '@',
       },
-      templateUrl: TemplatePath['maestrano-components/partner_contact.html'],
+      templateUrl: TemplatePath['mno_enterprise/maestrano-components/partner_contact.html'],
       controller: 'MnoPartnerContactCtrl',
   }
 ])

@@ -45,7 +45,7 @@ module.directive('dashboardMarketplace', ['TemplatePath', (TemplatePath) ->
   return {
       restrict: 'A',
       scope: {},
-      templateUrl: TemplatePath['dashboard/marketplace/index.html'],
+      templateUrl: TemplatePath['mno_enterprise/dashboard/marketplace/index.html'],
       controller: 'DashboardMarketplaceCtrl'
     }
 ])

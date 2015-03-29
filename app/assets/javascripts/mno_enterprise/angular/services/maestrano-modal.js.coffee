@@ -53,12 +53,12 @@ angular.module('maestrano.services.modal-svc', []).factory( 'ModalSvc', [
       return new Modal(opts)
 
     service.newOrgModal = (opts = {}) ->
-      opts.templateUrl = TemplatePath['modals/new-organization.html']
+      opts.templateUrl = TemplatePath['mno_enterprise/modals/new-organization.html']
       opts.controller = 'NewOrgModalCtrl'
       return new Modal(opts)
 
     service.newOrgResellerReqModal = (opts = {}) ->
-      opts.templateUrl = TemplatePath['modals/new-organization-reseller-req.html']
+      opts.templateUrl = TemplatePath['mno_enterprise/modals/new-organization-reseller-req.html']
       opts.controller = 'NewOrgResellerReqModalCtrl'
       return new Modal(opts)
 

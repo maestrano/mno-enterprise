@@ -50,7 +50,7 @@ module.directive('mnoMessageModal', ['TemplatePath', (TemplatePath) ->
       restrict: 'A',
       scope: {
       },
-      templateUrl: TemplatePath['default_template.html'],
+      templateUrl: TemplatePath['mno_enterprise/default_template.html'],
       controller: 'MnoMessageModalCtrl'
     }
 ])

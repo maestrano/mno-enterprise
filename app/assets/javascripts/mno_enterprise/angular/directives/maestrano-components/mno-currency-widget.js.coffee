@@ -37,7 +37,7 @@ module.directive('mnoCurrencyWidget', ['TemplatePath', '$timeout', (TemplatePath
       restrict: 'A',
       scope:
         selectedCurrency: '=?'
-      templateUrl: TemplatePath['maestrano-components/currency_widget.html'],
+      templateUrl: TemplatePath['mno_enterprise/maestrano-components/currency_widget.html'],
       controller: 'MnoCurrencyWidgetCtrl',
   }
 ])

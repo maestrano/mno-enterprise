@@ -136,7 +136,7 @@ module.directive('dashboardOrganizationCreditCard', ['TemplatePath', (TemplatePa
       scope: {
         callback:'&'
       },
-      templateUrl: TemplatePath['dashboard/organization/credit-card.html'],
+      templateUrl: TemplatePath['mno_enterprise/dashboard/organization/credit-card.html'],
       controller: 'DashboardOrganizationCreditCardCtrl'
     }
 ])

@@ -68,7 +68,7 @@ module.directive('mnoPartnerCodePopup', ['TemplatePath', (TemplatePath) ->
       restrict: 'A',
       scope: {
       },
-      templateUrl: TemplatePath['maestrano-components/partner_code_popup.html'],
+      templateUrl: TemplatePath['mno_enterprise/maestrano-components/partner_code_popup.html'],
       controller: 'MnoPartnerCodePopupCtrl'
     }
 ])

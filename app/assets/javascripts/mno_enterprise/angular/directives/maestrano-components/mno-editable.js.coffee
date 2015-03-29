@@ -51,7 +51,7 @@ module.directive('mnoEditable', ['TemplatePath', (TemplatePath) ->
         customStyle:'@'
       },
       controller: 'MnoEditableCtrl'
-      templateUrl: TemplatePath['maestrano-components/editable.html'],
+      templateUrl: TemplatePath['mno_enterprise/maestrano-components/editable.html'],
       link: (scope, element, attrs) ->
         scope.showForm = false
         element.on("mouseenter", ->
