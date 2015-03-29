@@ -1,0 +1,44 @@
+.footer {
+  background-color: @lightgray;
+  padding: 60px 0px;
+
+  h2 {
+    color: @bluegray;
+    font-size:14px;
+    font-weight:500;
+  }
+
+  ul {
+    color:@mediumblue;
+    font-size:13px;
+    font-weight:300;
+    list-style-type: none;
+    padding:0px;
+
+    a {
+      .font(12px,300,@mediumblue);
+    }
+  }
+
+  .copyright {
+    color:@bluegray;
+    text-align:center;
+    font-weight:300;
+    font-size:12px;
+    padding-top:25px;
+  }
+
+  .fa {
+    font-size: 25px;
+    color: @bluegray;
+    &:hover {
+      color: darken(@bluegray,30%);
+      text-decoration:none;
+    }
+  }
+
+  a.social-link:hover {
+    text-decoration:none;
+  }
+
+}

@@ -1,0 +1,55 @@
+.pricing-faq {
+
+  .banners {
+    h3 {
+      .font(20px,300,@darkblue);
+    }
+  }
+
+  .panel.panel-default {
+    .border-radius(0px);
+    border:0px;
+    border-bottom:solid 1px @lightgray;
+    margin:15px 0px;
+
+    .panel-heading {
+      background-color:white;
+      margin:8px 0px 10px 0px;
+
+      .panel-title {
+        width:87%;
+        a {
+          .font(18px,300,@mediumblue);
+        }
+      }
+    }
+
+    .plus,.minus {
+      position:absolute;
+      margin:-38px 30px 0px 0px;
+      right:0px;
+      .font(60px,300,@mediumblue);
+    }
+
+    .minus {
+      display:none;
+    }
+    &.active {
+      .plus {
+        display:none;
+      }
+      .minus {
+        display:block;
+      }
+    }
+
+    .panel-body {
+      background-color:@lightgray;
+      padding:20px;
+      margin:20px 14px;
+      border:0px;
+      .font(16px,300,@mediumblue);
+    }
+  }
+
+}

@@ -1,0 +1,366 @@
+.myspace {
+  background-color:@lightgray;
+  min-height:100%;
+  padding-top:30px;
+
+  .customer-org-warning {
+    background-color: @fluropink;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    text-align: center;
+    z-index: 10;
+    color:white;
+  }
+
+  .accordion .panel-group .panel .panel-body p {
+    font-weight:normal;
+  }
+
+  p {
+    font-weight:normal;
+  }
+
+  .star-wizard-button-wrapper {
+    float:right;
+    .star-button {
+      float:right;
+      margin:4px 198px 0px 0px;
+    }
+  }
+
+  .organization-select-box {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: @darkblue;
+    color: @lightblue;
+    font-size: 14px;
+    padding: 10px 20px;
+    .border-bottom-radius(5px);
+    z-index: 10;
+
+    .btn {
+      margin-left: 15px;
+    }
+    
+    .box-header {
+      text-align: right;
+    }
+
+    .box-content {
+      margin-top: 10px;
+      border-top: solid 1px @lightblue;
+      .border-bottom-radius(5px);
+    }
+    
+    .box-content ul {
+      list-style: none;
+      padding-top: 15px;
+      max-height: 400px;
+      min-width: 250px;
+      overflow-y: auto;
+    }
+
+    .box-content ul li a {
+      color: white;
+      line-height: 25px;
+      display: block;
+      padding-left: 5px;
+
+      &:hover {
+        text-decoration: none;
+        background-color: @lightblue;
+      }
+    }
+    
+    .box-content ul li a i.fa {
+      width: 13px;
+      margin-right: 6px;
+      text-align: center;
+    }
+    
+    .box-content ul li a i.fa.reseller {
+      color: @purple;
+    }
+    
+    .box-content ul li a i.fa.customer {
+      color: @flurogreen;
+    }
+    
+    .box-content ul li a i.fa.company {
+      color: @fluroblue;
+    }
+
+    .box-content .create-new {
+      text-align: center;
+    }
+
+    @media (max-width: @screen-sm-min) { top: 46px; }
+  }
+
+
+  .menu {
+    z-index:100;
+    position:fixed;
+    left:0px;
+    top:0px;
+    
+    
+    padding-top:30px;
+    padding-left:10px;
+    width:80px;
+    min-height:100%;
+    height:99%;
+    
+    overflow-x:hidden;
+    overflow-y:auto;
+
+    background-color: @darkblue;
+    .mno-main-logo {
+      width:51px;
+    }
+
+    hr {
+      border-top:2px dashed darken(@darkblue,5%);
+      margin-right:11px;
+    }
+
+    &:hover {
+      .mno-main-logo {
+        width:201px;
+      }
+
+      .dashboard-button {
+        width:250px;
+        .content {
+          display:block;
+          white-space: nowrap;
+          color:@mediumblue;
+          position:absolute;
+          margin:8px 0px 0px 55px;
+          font-size:15px;
+          &:hover {
+            color:@mediumblue;
+          }
+        }
+        &.active {
+          .content {
+            color:white;
+          }
+        }
+        &:hover {
+          background-color:lighten(@darkblue,5%);
+        }
+      }
+    }
+
+    .fa {
+      font-size:31px;
+      margin-top:4px;
+      color:@mediumblue;
+      &.active {
+        color:white;
+      }
+    }
+
+    .dashboard-button {
+      .border-radius(5px);
+      width:51px;
+      height:51px;
+      padding-top:7px;
+      padding-left:9px;
+      .content {
+        display:none;
+      }
+      &.active {
+        background-color:@darkerblue;
+      }
+
+      .dashboard-button-wrapper {
+        margin:10px 10px;
+        .dashboard {
+          width:40px;
+          height:40px;
+          background-image: image-url('dashboard-sprites/dashboard.png');
+          background-repeat: no-repeat;
+          background-size:contain;
+          background-position:12px 12px;
+          &.active {
+            background-position-y: -14px;
+          }
+        }
+
+        .dashboard {
+          background-image: image-url('dashboard-sprites/my_account.png');
+          background-repeat: no-repeat;
+        }
+
+        .company {
+          width:40px;
+          height:40px;
+          background-size:contain;
+          background-image: image-url('dashboard-sprites/organization.png');
+          background-repeat: no-repeat;
+        }
+      }
+    }
+
+  }
+
+  .render-partial {
+    padding-top:30px;
+    padding-left:120px;
+
+    h2 {
+      .font(35px,bold,@darkblue);
+    }
+  }
+
+  .field-name {
+    .font(14px,light,@mediumblue);
+    margin:10px 0px;
+  }
+
+  input {
+    background-color: @lightgray;
+    border:0px;
+    box-shadow:none;
+    height:45px;
+  }
+
+  select {
+    background-color: @lightgray;
+  }
+
+  .input-group-addon {
+    border:0px;
+  }
+
+  .panel-group {
+    .panel {
+      border:0px;
+      box-shadow:none;
+      margin:25px 0px;
+      .panel-heading {
+        background-color:white;
+      }
+    }
+  }
+
+  .app-dashboard {
+    min-height:280px;
+    max-width:225px;
+    margin-left:auto;
+    margin-right:auto;
+    .border-radius(5px);
+    background-color:white;
+    text-align:center;
+    padding:30px 0px;
+    padding-bottom: 0px;
+    margin-top:15px;
+
+    .btn-change-plan {
+      margin-top:50px;
+    }
+
+    .title {
+      .font(14px,normal,@mediumblue);
+      margin-top:10px;
+      margin-bottom:10px;
+    }
+
+    .app-line {
+      .font(12px,normal,@mediumblue);
+    }
+
+    img.app-logo {
+      .border-radius(5px);
+      .square(85px);
+    }
+
+    .connector-logo {
+      margin-top:3px;
+      margin-bottom:3px;
+      cursor: pointer;
+    }
+
+    .office365-connector-logo {
+      height: 32px;
+      padding: 2px;
+    }
+
+    .tutorial {
+      display:block;
+      margin-top:7px;
+    }
+
+    .status {
+      .square(20px);
+      .border-radius(20px);
+      border:solid 5px #e6eced;
+      background-color:#e6eced;
+      margin:-25px 0px 0px 5px;
+      float:left;
+      background-color:#e6eced;
+      &.updating, &.upgrading {
+        background-color:#FF9B05;
+      }
+      &.running, &.starting, &.restarting, {
+        background-color:#46ff00;
+      }
+      &.terminating, &.terminated {
+        background-color:#FF0505;
+      }
+      &.neutral {
+        background-color:#e6eced;
+      }
+    }
+
+    a.options {
+      line-height:19px;
+      .square(20px);
+      .border-radius(20px);
+      background-color:#e6eced;
+      float:right;
+      margin:-25px 5px 0px 0px;
+      &:hover {
+        background-color:@darkblue;
+      }
+      .fa {
+        color:@mediumblue;
+      }
+    }
+
+    &.add-app {
+      padding:15px 0px;
+      font-size:140px;
+      a {
+        color:@lightgray;
+        &:hover {
+          color:@fluroblue;
+        }
+      }
+    }
+
+    .app-custom-info {
+      position: relative;
+      top: -10px;
+      z-index: 999;
+    }
+  }
+
+  .editable-wrap {
+    white-space:normal;
+    margin:10px 0px;
+    button {
+      margin-top:7px;
+    }
+  }
+
+  @media(max-width: 844px) {
+    padding-top:40px;
+  }
+}

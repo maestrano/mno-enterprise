@@ -1,0 +1,70 @@
+.connec-widget {
+
+  input[type='text'] {
+    background-color:darken(@darkblue,5%);
+    .border-radius(5px);
+    .font(16px,500,white);
+    border:0px;
+    margin-bottom: 10px;
+    height:40px;
+  }
+
+  .media.app-entity {
+    margin:0px;
+    img {
+      .square(40px);
+      .border-radius(5px);
+    }
+    .media-heading {
+      .font(16px,500,white);
+      margin:8px 0px 0px 8px;
+    }
+
+    .border-radius(5px);
+    padding:5px;
+    &:hover {
+      background-color:darken(@darkblue,5%);
+    }
+  }
+
+  .apps-list {
+    height: 250px;
+    overflow-y: scroll;
+  }
+
+  .app-drop-zone {
+    .square(120px);
+    margin:auto;
+    img.select-app {
+      .border-radius(5px);
+      .square(120px);
+      margin:0px 0px 0px 0px;
+      border:solid 1px @fluroblue;
+      box-shadow: 0 0 18px rgba(0, 229, 240, 0.95);
+      -webkit-box-shadow: 0 0 18px rgba(0, 229, 240, 0.95);        
+    }
+
+    .select-app {
+      .square(120px);
+      position:absolute;
+    }
+  }
+
+  .arrow {
+    position:absolute;
+    &.top-left {
+      margin:-46px 0px 0px 37px;
+    }
+    &.top-right {
+      right:0;
+      margin:-50px 42px 0px 0px;
+    }
+    &.bottom-left {
+      margin:21px 0px 0px 40px;
+    }
+    &.bottom-right {
+      right:0;
+      margin:23px 45px 0px 0px;
+    }
+  }
+}

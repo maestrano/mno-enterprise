@@ -1,0 +1,598 @@
+
+//-----------------------------
+// Modals
+//-----------------------------
+  .modal-add .modal-body {
+
+    .widgets-panel {
+      width: 100%;
+      border-radius: 4px;
+      // color: @titleBgColor;
+      color: @mdarkblue;
+      // color: @mblue;
+      background-color: white;
+      padding: 5px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      max-height: 550px;
+
+      .panel-heading {
+        cursor: pointer;
+        background-color: #f5f5f5;
+
+        h1.panel-title {
+          color: @titleBgColor;
+          font-size: 20px;
+        }
+      }
+
+      .panel-body {
+        padding: 8px;
+
+        .tooltip {
+          .tooltip-inner {
+            &.ng-binding {
+              background-color: @mdarkblue;
+              color: @green;
+            }
+          }
+        }
+
+        .widget {
+          min-height: 133px;
+          margin-bottom: 5px;
+          padding-top: 8px;
+          cursor: pointer;
+          border-radius: 3px;
+          .icon {
+            height: 80px;
+            width: 80px;
+            border: solid 1px @mlightgrey;
+            border-radius: 2px;
+            background-color: white;
+            i {
+              color: @titleBgColor;
+              margin-left: 4px;
+              margin-top: 19px;
+            }
+            img {
+              margin-top: 12px;
+            }
+          }
+          label {
+            font-weight: normal;
+            cursor: pointer;
+          }
+        }
+
+        .widget:hover {
+          background-color: @lightgray;
+          // background-color: #f5f5f5;
+          .icon {
+            i {
+              color: darken(@purple,3%), ;
+            }
+          }
+          label {
+            // text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  .modal-custom-calculation .modal-body {
+    .edit {
+      color: @darkblue;
+      padding: 5px;
+      h4 {
+        margin: 0;
+        margin-bottom: 8px;
+        text-align: left;
+        .font(15px,300,@darkblue);
+      }
+      .part {
+        margin-bottom: 8px;
+        padding-top: 5px;
+        padding-bottom: 8px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border: 1px solid @mgrey;
+        background-color: #f5f5f5;
+        // font-weight: 200;
+        color: #626d6d;
+        h5 {
+          margin: 0;
+          margin-bottom: 4px;
+          padding: 0;
+          .font(14px,bold,#626d6d);
+        }
+        input[type="checkbox"], input[type="radio"] {
+          margin: 0;
+          margin-right: 3px;
+          padding: 0;
+          width: 13px;
+          height: 13px;
+          vertical-align: middle;
+          position: relative;
+          top: -1px;
+          outline: none;
+        }
+        input[type="range"] {
+          height: 20px;
+        }
+        label {
+          font-weight: normal;
+        }
+        li {
+          margin-bottom: 2px;
+        }
+        ul {
+          margin-bottom: 0px;
+        }
+      }
+    }
+    .loader {
+      // margin-top: 75px;
+      color: @mblue;
+      font-weight: bold;
+      .gif {
+        display: block;
+        margin-top: 10px;
+      }
+    }
+  } 
+
+.analytics {
+  //-----------------------------
+  // Format Dashboard Selection
+  // and data sources
+  //-----------------------------
+  padding: 5px;
+
+  .head-title {
+    padding: 5px;
+  }
+
+  .dashboard-search {
+    padding-right: 5px;
+    padding-left: 5px;
+    .search-label {
+      line-height: 41px;
+      padding-right: 10px;
+    }
+    .data-source-label {
+      padding-left: 3px;
+    }
+  }
+  
+  .dashboard-title {
+    .data-source-label {
+      padding-left: 2px;
+    }
+  }
+
+  .buttons-bar {
+    padding-right: 5px;
+  }
+  
+  //----------------------------
+  // Format top menu actions
+  //----------------------------
+  .actions-panel {
+    float:right;
+    .btn {
+      margin:3px;
+    }
+  }
+
+  select {
+    margin-top: 5px;
+    background-color: white;
+    height: 32px;
+  }
+  
+  //-----------------------------
+  // Format widgets
+  //-----------------------------
+  .widgets-container {
+
+    //-----------------------------
+    // Common to all widgets
+    //-----------------------------
+
+    .placeHolderBox {
+      height: 282px;
+      width: 300px;
+      float: left;
+      border: 2px dashed @lightblue;
+      background: none;
+    }
+
+    .widget-item {
+      padding: 5px;
+
+      &.new_row {
+        clear: both;
+      }
+
+      .top-line {
+        cursor: move;
+        height: 32px;
+        background-color: #17262d;
+        padding: 5px 5px 0 8px;
+        border-radius: 5px 5px 0px 0px;
+
+        .btn {
+          float: right;
+          background: transparent;
+          border: none;
+          color: black;
+          padding: 0;
+          padding-top: 1px;
+          margin-left: 3px;
+          outline: none;
+        }
+
+        .btn.btn-edit:hover {
+          color: @mgreen;
+        }
+
+        .btn.btn-editmode {
+          color: @mgreen;
+        }
+
+        .btn.btn-close:hover {
+          color: @pink;
+        }
+
+        .title-wrapper {
+          width: 100%;
+          margin-top: 1px;
+          .title {
+            display: inline;
+            text-transform: uppercase;
+            .font(14px,300,white);
+            text-align: left;
+            cursor: text;
+          }
+          .editable-wrap {
+            width: 75%;
+            .editable-controls {
+              width: 100%;
+              .editable-input {
+                height: 23px;
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+
+      .content {
+        padding: 5px;
+        border-radius: 0px 0px 5px 5px;
+        background-color:white;
+        min-height:250px;
+        vertical-align:top;
+
+        // max-height: 250px;
+        // overflow-y: auto;
+        // overflow-x: hidden;
+
+        a {
+          font-weight: bold;
+          color: @mlightblue;
+          cursor: pointer;
+        }
+        
+        .currency {
+          .font(16px,300,@darkblue);
+          text-align: center;
+        }
+
+        .edit {
+          max-height: 240px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          color: @darkblue;
+          padding: 5px;
+          h4 {
+            margin: 0;
+            margin-bottom: 8px;
+            text-align: left;
+            .font(15px,300,@darkblue);
+          }
+          .part {
+            margin-bottom: 8px;
+            padding-top: 5px;
+            padding-bottom: 8px;
+            padding-left: 10px;
+            padding-right: 10px;
+            border: 1px solid @mgrey;
+            background-color: #f5f5f5;
+            // font-weight: 200;
+            color: #626d6d;
+            h5 {
+              margin: 0;
+              margin-bottom: 4px;
+              padding: 0;
+              .font(14px,bold,#626d6d);
+            }
+            input[type="checkbox"], input[type="radio"] {
+              margin: 0;
+              margin-right: 3px;
+              padding: 0;
+              width: 13px;
+              height: 13px;
+              vertical-align: middle;
+              position: relative;
+              top: -1px;
+              outline: none;
+            }
+            input[type="range"] {
+              height: 20px;
+            }
+            label {
+              font-weight: normal;
+            }
+            li {
+              margin-bottom: 2px;
+            }
+            ul {
+              margin-bottom: 0px;
+            }
+          }
+        }
+
+        .fa-pencil-square {
+          float: right;
+        }
+
+        h2 {
+          text-align: left;
+          .font(35px,700,@darkblue);
+        }
+
+        h3 {
+          margin: 0;
+          text-align: left;
+          .font(20px,300,@darkblue);
+        }
+
+        .h3-wrapper {
+          display:table;
+          min-height:90px;
+          width:100%;
+          h3 {
+            width:100%;
+            display:table-cell;
+            text-transform: uppercase;
+            .font(20px,300,@mediumblue);
+            text-align: center;
+            vertical-align: middle;
+          }
+        }
+
+        .histModeChoser {
+          a {
+            color: @mlightgrey;
+            font-size: 12px;
+            &.active {
+              text-decoration: underline;
+            }
+          }
+        }
+
+        .input-group {
+          width: 100%;
+        }
+
+        .legend {
+          text-align: center;
+          .font(12px,300,@mediumblue);
+        }
+
+        .loader {
+          margin-top: 75px;
+          color: @mblue;
+          font-weight: bold;
+          .gif {
+            display: block;
+            margin-top: 10px;
+          }
+        }
+
+        .price {
+          .font(22px,900,@darkblue);
+          text-align: center;
+        }
+
+        .widget-lines-container {
+          max-height: 210px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          font-size: 14px;
+        }
+
+        .widget-line {
+          width:100%;
+          margin:0px;
+          padding:5px;
+          color:@mediumblue;
+          &:nth-child(even) {
+            background-color:@lightgray;
+          }
+          &:nth-child(odd) {
+            background-color:white;
+          }
+          .table-header {
+            font-weight: bold;
+          }
+        }
+
+        //-----------------------------
+        // 'Accounts' widgets
+        //-----------------------------
+
+        &.accounts {
+          .blue {
+            color: @mblue;
+          }
+          .history {
+            margin-top: 10px;
+          }
+          .pink {
+            color: @pink;
+          }
+          .price {
+            margin-top: 85px;
+          }
+
+          &.accounting-value {
+            .price {
+              margin-top: 62px;
+            }
+          }
+
+          &.assets-summary {
+            .chart-container {
+              margin-top: 10px;
+            }
+            .legend {
+              text-align: left;
+              overflow-y: auto;
+              overflow-x: hidden;
+              max-height: 98px;
+            }
+          }
+          
+          &.balance {
+            h3 {
+              margin-top: 15px;
+              text-align: center;
+            }
+            .price {
+              margin-top: 40px;
+            }
+          }
+
+          &.comparison {
+            .legend {
+              text-align: left;
+              max-height: 107px;
+              overflow-y: auto;
+              overflow-x: hidden;
+            }
+            .row {
+              margin: 0;
+            }
+            .col-md-6 {
+              padding: 0;
+            }
+            .widget-lines-container {
+              max-height: 203px;
+            }
+          }
+
+          &.custom-calculation {
+            h3 {
+              margin-top: 85px;
+              text-align: center;
+              font-weight: bold;
+            }
+          }
+
+          &.expenses-revenue {
+            .chart-container {
+              margin-top: 13px;
+              margin-bottom: 8px;
+            }
+            .history {
+              .legend {
+                font-weight: bold;
+              }
+            }
+          }
+
+          &.payable-receivable {
+            h3 {
+              text-align: center;
+            }
+            .legend {
+              font-weight: bold;
+            }
+            .payable {
+              margin-top: 15px;
+              .price {
+                margin: 0;
+              }
+            }
+            .receivable {
+              margin-top: 20px;
+              .price {
+                margin: 0;
+              }
+            }
+          }
+        }
+
+        //-----------------------------
+        // 'Invoices' widgets
+        //-----------------------------
+        
+        &.invoices {
+
+          &.list {
+            .tooltip {
+              .tooltip-inner {
+                &.ng-binding {
+                  text-align: left;
+                  background-color: @mdarkblue;
+                  max-width: 100%;
+                  white-space: nowrap;
+                  strong {
+                    color: @green;
+                  }
+                }
+              }
+            }
+
+            .widget-lines-container {
+              .widget-line:hover {
+                background-color: @mgrey;
+                cursor: pointer;
+              }
+            }
+
+            &.unpaid, &.paid, &.invoiced{
+              .widget-lines-container {
+                // max-height: 160px;
+              }
+            }
+          }
+
+          &.summary {
+            height: 250px;
+            a {
+              font-weight: bold;
+              color: @mlightblue
+            }
+            .chart-container {
+              max-width: 410px;
+            }
+            .legend {
+              height: 28px;
+            }
+            .price {
+              margin-top: 85px;
+            }
+            #myChart {
+              margin-top: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

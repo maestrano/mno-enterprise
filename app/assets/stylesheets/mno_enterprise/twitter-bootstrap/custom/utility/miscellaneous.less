@@ -1,0 +1,134 @@
+.rounded-number {
+  .border-radius(45px);
+  height:45px;
+  width:45px;
+  background-color:@fluroblue;
+  color:white;
+  font-size:30px;
+  font-weight:700;
+  &.center {
+    margin:auto;
+  }
+  &.small {
+    .border-radius(18px);
+    height:18px;
+    width:18px;
+    color:white;
+    font-size:12px;
+    font-weight:700;
+  }
+  &.green {
+    background-color:@green;
+  }
+
+  &.bluegray2 {
+    background-color:@bluegray2;
+  }
+
+  &.lightblue {
+    background-color:@lightblue;
+  }
+
+  &.medium {
+    .border-radius(60px);
+    height:60px;
+    width:60px;
+  }
+
+  &.size-30 {
+    .border-radius(30px);
+    height:30px;
+    width:30px;
+  }
+
+  &.size-26 {
+    .border-radius(26px);
+    height:26px;
+    width:26px;
+  }
+}
+
+.price-presenter {
+  width:220px;
+
+  .config {
+    padding:15px 0px;
+    .border-top-radius(5px);
+    background-color:@bluegray;
+    text-align:center;
+    font-weight:900;
+    font-size:13px;
+    color:#0e181c;
+
+    .title {
+      text-align:center;
+      margin-bottom:5px;
+    }
+  }
+
+  .body {
+    padding:15px 25px;
+    margin-top:-5px;
+    .border-bottom-radius(5px);
+    background-color:white;
+    .title {
+      font-size:16px;
+      font-weight:900;
+      margin-top:9px;
+    }
+    .price {
+      font-size:27px;
+      font-weight:900;
+    }
+    .btn.btn-promo {
+      padding-left:0px;
+      padding-right:0px;
+      margin-top:10px;
+      width:190px;
+      margin-left:-10px;
+    }
+  }
+
+}
+
+.modal-content .gibbon {
+  margin-top:0px;
+}
+
+.gibbon {
+  position:absolute;
+  margin-top:-20px;
+  .square(90px);
+
+  &.new {
+    background: transparent image-url('icons/gibbon-new-yellow.png') 0px 0px no-repeat;
+  }
+
+  &.popular {
+    background: transparent image-url('icons/gibbon-popular-pink.png') 0px 0px no-repeat;
+  }
+
+  &.beta {
+    background: transparent image-url('icons/gibbon-beta.png') 0px 0px no-repeat;
+  }
+}
+
+.app-presenter {
+  text-align:center;
+  padding:20px 0px;
+  background-color:#2f3c42;
+  .border-radius(5px);
+  img {
+    .square(140px);
+  }
+}
+
+// Hide Google remarketing iframe
+iframe[name='google_conversion_frame'] { 
+  height: 0 !important;
+  width: 0 !important; 
+  line-height: 0 !important; 
+  font-size: 0 !important;
+  margin-top: -13px;
+  float: left;
+}

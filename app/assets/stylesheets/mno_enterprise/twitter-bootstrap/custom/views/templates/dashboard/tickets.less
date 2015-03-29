@@ -1,0 +1,80 @@
+.myspace {
+  .tickets {
+    .status {
+      .square(20px);
+      .border-radius(20px);
+      border:solid 5px #e6eced;
+      background-color:#e6eced;
+      margin:19px 0px 0px 0px;
+      float:left;
+      background-color:#e6eced;
+      &.open {
+        background-color:#FF9B05;
+      }
+      &.pending {
+        background-color:#46ff00;
+      }
+      &.solved {
+        background-color:#e6eced;
+      }
+    }
+
+    .comment-body {
+      padding:10px;
+      background-color:white;
+      .font(16px,normal,@darkblue);
+    }
+
+    .author {
+      margin:10px 0px 30px 0px;
+      .font(14px,normal,@mediumblue);
+    }
+
+    .date {
+      .font(14px,normal,@lightblue);
+    }
+
+    .tickets-list {
+      .border-radius(5px);
+      background-color:white;
+      padding-bottom: 10px;
+
+      .panel-default > .panel-heading + .panel-collapse > .panel-body {
+        background-color:#f7fafa;
+      }
+
+      .main-title {
+        padding: 15px 20px;
+      }
+
+      h4 {
+        .font(14px,bold,@darkblue);
+      }
+
+      .panel-group .panel {
+        .border-radius(0px);
+        margin:0px;
+        background-color:inherit;
+        .panel-heading {
+          background-color:inherit;
+        }
+      }
+
+      .reference {
+        .font(16px,normal,@mediumblue);
+      }
+
+      .reference-id {
+        .font(16px,normal,@darkblue);
+      }
+
+      ul.tickets-list {
+        list-style:none;
+        padding:0px;
+        li:nth-child(odd) {
+          background-color:#f7fafa;
+        }
+      }
+    }
+  }
+}

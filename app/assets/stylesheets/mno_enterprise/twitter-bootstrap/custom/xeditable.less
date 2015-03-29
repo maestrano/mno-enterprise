@@ -1,0 +1,40 @@
+.editable.editable-click,
+a.editable.editable-click {
+  color: @bluegray2;
+  border: none;
+
+  &:hover {
+    color: @bluegray2;
+    border-bottom: dashed 1px fadeout(@bluegray2,60%);
+  }
+}
+
+form.editable-wrap {
+  margin: 0px !important;
+}
+
+form.editable-wrap .editable-controls {
+  padding: 0px;
+}
+
+form.editable-wrap .editable-controls input {
+  height: 30px;
+  padding: 0px 5px;
+  border: dashed 1px #ccc;
+  .box-shadow(none);
+}
+
+.editable-instructions {
+  display: inline;
+}
+
+.editable-instructions form.editable-wrap .editable-controls:after {
+  display: block;
+  content: "press enter to confirm";
+  font-style: italic;
+  font-size: 10px;
+  line-height: 12px;
+  color: #777777;
+  margin-top: -10px;
+  padding-left: 5px;
+}

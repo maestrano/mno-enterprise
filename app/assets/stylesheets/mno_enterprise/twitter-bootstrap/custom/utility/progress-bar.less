@@ -1,0 +1,55 @@
+.bootstrap2 {
+  .progress-bar {
+    background-color: #C1E88E;
+  }
+
+  // Additional Progress bars
+  // Maestrano (mno green)
+  .progress-mno,
+  .progress-mno-success,
+  .progress-mno-warning,
+  .progress-mno-none,
+  .progress-mno-danger{
+    margin: auto;
+    margin-top: 5px;
+    height: 12px;
+  }
+
+  // Bootstrap 3
+  .progress-mno .progress-bar,
+  .progress-mno-success .progress-bar,
+  .progress .progress-bar-mno {
+    #gradient > .vertical(lighten(@mgreen, 10%), darken(@mgreen,20%));
+  }
+  .progress-mno.progress-striped .progress-bar,
+  .progress-mno-success.progress-striped .progress-bar,
+  .progress-striped .progress-bar-mno {
+    #gradient > .striped(lighten(@mgreen, 10%));
+  }
+
+  .progress-mno-warning .progress-bar {
+    #gradient > .vertical(lighten(#fab451, 10%), darken(#fab451,20%));
+  }
+  .progress-mno-warning.progress-striped .progress-bar {
+    #gradient > .striped(lighten(#fab451, 10%));
+  }
+
+  .progress-mno-danger .progress-bar {
+    #gradient > .vertical(lighten(#df5426, 10%), darken(#df5426,20%));
+  }
+  .progress-mno-danger.progress-striped .progress-bar {
+    #gradient > .striped(lighten(#df5426, 10%));
+  }
+
+  .progress-mno-none .progress-bar {
+    #gradient > .vertical(lighten(#999999, 10%), darken(#999999,20%));
+  }
+  .progress-mno-none.progress-striped .progress-bar {
+    #gradient > .striped(lighten(#999999, 10%));
+  }
+
+  .progress-indicator {
+    font-size: 10px;
+    margin-right: 3px;
+  }
+}

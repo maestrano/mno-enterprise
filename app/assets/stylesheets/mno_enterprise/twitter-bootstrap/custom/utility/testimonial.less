@@ -1,0 +1,118 @@
+.testimonial {
+  font-size: 25px;
+  font-weight:300;
+  color:@darkblue;
+  padding:20px;
+  min-height: 115px;
+
+  &.promo-dark {
+    color:white;
+    .border-radius(10px);
+    .rgba(@darkblue,0.7);
+  }
+
+  .author {
+    font-style:italic;
+    font-size:16px;
+  }
+
+  .body {
+    background-color:@lightgray;
+    .border-radius(5px);
+    padding:20px;
+    color:@darkblue2;
+    font-weight:300;
+    font-size:16px;
+    font-style:italic;
+
+
+    .arrow {
+      .rotate(45deg);
+      width: 0;
+      height: 0;
+      border-top: 18px solid transparent;
+      border-bottom: 18px solid transparent;
+      border-right:18px solid @bluegray;
+      position:absolute;
+      right:48px;
+      margin-top:8px;
+    }
+  }
+
+  .from {
+    margin:7px 0px 0px 30px;
+    .name {
+      display:inline;
+      font-size:14px;
+      font-weight:700;
+      color:@mediumblue;
+    }
+
+    .company {
+      display:inline;
+      font-size:14px;
+      font-weight:300;
+      color:@lightblue;
+    }
+
+    .avatar {
+      img {
+        float:right;
+        margin:33px 9px 0px 0px;
+      }
+    }
+  }
+}
+
+.ribbon-testimonial {
+  .body {
+    background-color:@lightgray;
+    .border-radius(5px);
+    padding:20px;
+    color:@darkblue2;
+    font-weight:300;
+    font-size:16px;
+    font-style:italic;
+
+
+    .arrow {
+      .rotate(45deg);
+      width: 0;
+      height: 0;
+      border-top: 18px solid transparent;
+      border-bottom: 18px solid transparent;
+      border-right:18px solid @bluegray;
+      position:absolute;
+      right:28px;
+      margin-top:8px;
+    }
+  }
+
+  .from {
+    margin:7px 0px 0px 30px;
+    .name {
+      display:inline;
+      font-size:14px;
+      font-weight:700;
+      color:@mediumblue;
+    }
+
+    .company {
+      display:inline;
+      font-size:14px;
+      font-weight:300;
+      color:@lightblue;
+    }
+
+  }
+}
+
+.ribbon-testimonial.ribbon-white {
+  .body {
+    background-color: white;
+  }
+
+  .arrow {
+    border-right:18px solid #ccc;
+  }
+}

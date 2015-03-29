@@ -1,0 +1,95 @@
+.apps-bundle-builder {
+  .border-radius(5px);
+  background-color:#131f25;
+  padding:25px;
+
+  .pre-questionnaire p {
+    font-size:16px;
+    color: @lightblue;
+  }
+
+  .short-list-title {
+    padding:8px 0px;
+    text-align:center;
+    .font(16px,300,white);
+    .border-radius(5px);
+    background-color:@darkblue;
+    margin-bottom:20px;
+  }
+
+  .short-list {
+    background-color:@darkblue;
+    padding:15px;
+    border:dashed 1px @mediumblue;
+    .border-radius(5px);
+    .font(13px,300,@fluroblue);
+
+    a.remove {
+      position:absolute;
+      margin-right:23px;
+      right:0px;
+      color:#131f25;
+      font-size:16px;
+      &:hover {
+        color:@pink;
+      }
+    }
+
+    .title {
+      .font(14px,700,white);
+    }
+  }
+
+  .needs-list {
+    background-color:@darkblue;
+    .border-radius(5px);
+    padding:10px;
+
+    .choice {
+      padding-bottom: 5px;
+      a {
+        .font(14px,300,@lightblue);
+      }
+    }
+  }
+
+  .category {
+    a {
+      .border-radius(5px);
+      display:block;
+      .font(14px,300,white);
+      padding:8px 0px 8px 11px;
+      &:hover {
+        text-decoration:none;
+      }
+    }
+
+    &.active {
+      a {
+        background-color:@darkblue;
+      }
+      .arrow {
+        float:right;
+        margin:0px -14px 0px 0px;
+        width: 0;
+        height: 0;
+        border-top: 18px solid transparent;
+        border-bottom: 18px solid transparent;
+        border-left: 18px solid @darkblue;
+      }
+    }
+  }
+
+  .next-button {
+    .btn.btn-promo {
+      font-size:16px;
+      margin-top:15px;
+    }
+  }
+
+  .main-title {
+    .font(20px,500,white);
+    margin-top:3px;
+  }
+
+}

@@ -1,0 +1,87 @@
+// Cozy tabset 
+// Large nav buttons separated from body
+.tabset.tabset-cozy {
+  ul.nav.nav-tabs {
+    background-color: transparent;
+  }
+
+  ul.nav.nav-tabs > li {
+    margin-right: 5px;
+    padding-bottom: 5px;
+    background-color: transparent;
+    border-bottom: solid 5px transparent;
+    padding: 0px;
+  }
+
+  ul.nav.nav-tabs > li.active {
+    border-bottom: solid 5px white;
+  }
+  
+  ul.nav.nav-tabs > li > a:hover {
+    background-color: @purple;
+    color: white;
+  }
+
+  ul.nav.nav-tabs > li.active > a,
+  ul.nav.nav-tabs > li.active > a:hover,
+  ul.nav.nav-tabs > li.active > a:focus {
+    padding-bottom: 20px;
+    background-color: white;
+    color: #878787;
+  }
+
+  ul.nav.nav-tabs > li > a {
+    padding: 20px 40px;
+    border: none;
+    background-color: white;
+  }
+
+  .tab-content {
+    border-top: solid 2px white;
+    padding-top: 20px;
+  }
+
+  .tab-content .tab-pane {
+    background-color: transparent;
+  }
+
+  @media(max-width: 720px) {
+    ul.nav.nav-tabs > li {
+      width:100%;
+
+      &.active {
+        border-bottom: solid 5px transparent;
+        a {
+          background-color:@fluroblue;
+          color:white;
+        }
+      }
+    }
+  }
+}
+
+// Cozy style on dark background
+.tabset.tabset-cozy.tabset-inverse {
+  ul.nav.nav-tabs > li.active {
+    border-bottom: solid 5px @purple;
+  }
+  
+  //ul.nav.nav-tabs > li.active,
+  ul.nav.nav-tabs > li > a:hover {
+    background-color: lighten(@purple,28%);
+    color: darken(@purple,10%);;
+  }
+  
+  ul.nav.nav-tabs > li.active > a,
+  ul.nav.nav-tabs > li.active > a:hover,
+  ul.nav.nav-tabs > li.active > a:focus {
+    padding-bottom: 20px;
+    background-color: @purple;
+    color: white;
+  }
+  
+  .tab-content {
+    border-top: solid 2px @purple;
+  }
+}
+  

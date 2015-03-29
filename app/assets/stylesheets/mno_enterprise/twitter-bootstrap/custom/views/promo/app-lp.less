@@ -1,0 +1,234 @@
+.app-lp {
+  .app-sync {
+    text-align:center;
+    img.app-logo {
+      .square(120px);
+      .border-radius(5px);
+      border:solid 1px #ccc;
+      margin-left:20px;
+      margin-right:20px;
+    }
+    .sync-icon {
+      img {
+        position:absolute;
+        margin-left:-46px;
+        margin-top:18px;
+        width:85px;
+      }
+    }
+  }
+  .click-to-connec {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    img.click-to-connec-img {
+      margin-top: 46px;
+      margin-left:-28px;
+    }
+    img.connec-button {
+      .border-radius(5px);
+      margin-left:-28px;
+      margin-top:8px;
+      &:hover {
+        border:solid 1px @fluroblue;
+        box-shadow: 0 0 18px rgba(0, 229, 240, 0.3);
+        -webkit-box-shadow: 0 0 18px rgba(0, 229, 240, 0.3);
+      }
+    }
+  }
+
+  .connec-presentation {
+    img.app-logo {
+      .border-radius(5px);
+      .square(110px);
+    }
+    .laptop {
+      width:422px;
+      height:350px;
+      display:inline-block;
+      &.left {
+        background: image-url('promo_logo/laptop-left.png') 0px 0px no-repeat;
+        background-size:cover;
+        background-position:left;
+        margin-left:-30px;
+        img {
+          float:right;
+          margin:113px 96px 0px 0px;
+        }
+      }
+      &.right {
+        background: image-url('promo_logo/laptop-right.png') 0px 0px no-repeat;
+        background-size:cover;
+        background-position:right;
+        margin-right:-30px;
+        float:right;
+        img {
+          float:left;
+          margin:113px 0px 0px 96px;
+        }
+      }
+    }
+  }
+
+  .padding {
+    margin-top:310px;
+  }
+
+  .margin-minus {
+    margin-bottom:-150px;
+  }
+
+  .app-icon {
+    display:inline-block;
+    width:200px;
+    img {
+      .border-radius(5px);
+      .square(80px);
+    }
+    &.active {
+      .arrow-up {
+        width: 0;
+        height: 0;
+        border-left: 30px solid transparent;
+        border-right: 30px solid transparent;
+        border-bottom: 22px solid @purple;
+        margin:-79px 0px 0px 66px;
+        position:absolute;
+      }
+    }
+
+    h4 {
+      .font(14px,bold,white);
+    }
+  }
+
+  .banners.promo {
+    .apps {
+      text-align:center;
+      h4 {
+        .font(20px,bold,@darkblue);
+      }
+      .app-presenter {
+        display:inline-block;
+        margin:10px;
+        width:180px;
+        .title {
+          .font(14px,bold,@mediumblue);
+        }
+        background-color:white;
+        border:solid 1px #ddd;
+        &:hover {
+          background-color:lighten(@fluroblue,40%);
+        }
+        a:hover {
+          text-decoration:none;
+        }
+
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+      -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.15);
+
+        &.active {
+          border-color:@fluroblue;
+          box-shadow: 0 0 18px rgba(0, 229, 240, 0.3);
+          -webkit-box-shadow: 0 0 18px rgba(0, 229, 240, 0.3);
+        }
+      }
+    }
+
+    .app-information {
+      h2 {
+        text-align:left;
+      }
+      .fa {
+        color:@green;
+      }
+
+      .tagline {
+        .font(16px,300,@mediumblue);
+      }
+
+      .media-heading {
+        .font(16px,300,@mediumblue);
+        margin-bottom:-5px;
+      }
+    }
+    .usage {
+      font-size:20px;
+      color:@mediumblue;
+      font-weight:300;
+    }
+
+    .number {
+      font-size:45px;
+      color:@green;
+      font-weight:900;
+    }
+
+    .people {
+      font-size:20px;
+      color:@mediumblue;
+      font-weight:300;
+    }
+  }
+
+  .carousel {
+    .title {
+      .font(26px,300,@darkblue);
+      margin-bottom:15px;
+    }
+
+    .tagline {
+      .font(16px,300,@darkblue);
+    }
+
+    .fa {
+      color:@green;
+      .media-heading {
+        .font(16px,300,@mediumblue);
+      }
+    }
+  }
+  .banners.promo {
+    .feature {
+      h2 {
+        text-align:left;
+        .font(35px,bold,@darkblue);
+      }
+
+      p {
+        .font(16px,normal,@mediumblue);
+      }
+    }
+  }
+  .banners.promo.screenshots {
+    padding-bottom:0px;
+    a {
+      .fa {
+        color:@mediumblue;
+      }
+    }
+  }
+
+  .purple {
+    .testimonial {
+      .font(28px,lighter,white);
+      text-align:center;
+
+      .from {
+        .avatar {
+          display:inline-block;
+        }
+        .author {
+          display:inline-block;
+          .font(18px,lighter,white);
+          font-style: italic;
+        }
+        .company {
+          display:inline-block;
+          .font(18px,lighter,white);
+          font-style: italic;
+        }
+      }
+    }
+  }
+}

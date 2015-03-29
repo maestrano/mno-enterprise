@@ -1,0 +1,40 @@
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  margin-left:50%-5px;
+  margin-top:2px;
+  border-top: 5px solid @green;
+
+  &.warning {
+    border-top: 5px solid @purple;
+  }
+
+  &.blue {
+    border-top: 5px solid @mblue;
+  }
+}
+
+.helptext {
+  letter-spacing:1px;
+  text-align:center;
+  text-transform:none;
+  position:absolute;
+  margin-top:-38px;
+  font-size:11px;
+  font-weight:300;
+  color:@green;
+
+  &.warning {
+    color:@purple;
+  }
+
+  &.blue {
+    color:@mblue;
+  }
+
+  &.green {
+    color:@green;
+  }
+}

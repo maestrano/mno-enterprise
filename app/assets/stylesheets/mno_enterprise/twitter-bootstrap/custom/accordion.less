@@ -1,0 +1,90 @@
+// Base style
+.accordion .panel-group .panel .panel-body {
+  p {
+    font-weight: 300;
+  }
+  
+  ul > li {
+    font-weight: 300;
+  }
+}
+
+.accordion .panel-group .panel .panel-heading {
+  padding: 0px;
+  
+  .panel-title > div,
+  .panel-title > a {
+    font-size: 90%;
+    display: block;
+    padding-left: 10px;
+    line-height: 54px;
+    height: 54px;
+    cursor: pointer;
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  
+  .panel-title i,
+  .panel-title .caret-up,
+  .panel-title .caret-down {
+    margin-left: 10px;
+  }
+  
+  .panel-title a.btn.pull-right {
+    margin-top: 10px;
+    margin-right: 10px;
+  }
+  
+  .panel-title span.pull-right {
+    margin-right: 10px;
+  }
+  
+  .panel-title span.caret.pull-right {
+    margin-top: 26px;
+  }
+}
+
+// Accordion Black background style
+.accordion.inverse {
+  
+  .panel-group > .panel,
+  .panel-group > .panel > .panel-heading {
+    background-color: @darkblue;
+    border: none;
+  }
+  
+  .panel-group > .panel > .panel-heading > .panel-title .text-muted {
+    color: @mediumblue;
+    font-weight: 700;
+  }
+  
+  .panel-group > .panel > .panel-collapse > .panel-body {
+    border-top: solid 1px black;
+  }
+  
+  .panel-group > .panel > .panel-heading > .panel-title > .caret-up,
+  .panel-group > .panel > .panel-heading > .panel-title > .caret-down {
+    color: @mediumblue;
+  }
+}
+
+// Accordion Compact style
+.accordion.accordion-compact {
+  margin-top: 40px;
+  
+  .panel-group .panel .panel-heading .panel-title > a {
+    line-height: 35px;
+    height: 35px;
+  }
+
+  .panel-group .panel .panel-heading .panel-title span.caret.pull-right {
+    margin-top: 17px;
+  }
+
+  .panel-group .panel {
+    margin: 11px 0px;
+  }
+}
+
