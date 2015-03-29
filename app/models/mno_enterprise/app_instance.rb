@@ -31,5 +31,14 @@
 
 module MnoEnterprise
   class AppInstance < BaseResource
+    
+    attributes :id, :uid, :name, :status, :app_id, :created_at, :updated_at, :started_at, :stack, :owner_id,
+    :owner_type, :terminated_at, :stopped_at, :billing_type, :autostop_at, :autostop_interval,
+    :next_status, :soa_enabled
+    
+    #================================
+    # Associations
+    #================================
+    belongs_to :organization, class_name: 'MnoEnterprise::Organization'
   end
 end
