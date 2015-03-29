@@ -27,22 +27,22 @@ module MnoEnterprise
     end
 
     # PUT /jpi/v1/organization/:id/charge
-    def charge
-      authorize! :manage_billing, @organization
-      payment = @organization.charge
-      s = ''
-      if payment
-        if payment.success?
-          s = 'success'
-        else
-          s = 'fail'
-        end
-      else
-        s = 'error'
-      end
-
-      render json: { status: s, data: payment }
-    end
+    # def charge
+    #   authorize! :manage_billing, @organization
+    #   payment = @organization.charge
+    #   s = ''
+    #   if payment
+    #     if payment.success?
+    #       s = 'success'
+    #     else
+    #       s = 'fail'
+    #     end
+    #   else
+    #     s = 'error'
+    #   end
+    #
+    #   render json: { status: s, data: payment }
+    # end
 
     # PUT /jpi/v1/organization/:id/update_billing
     def update_billing
