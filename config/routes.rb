@@ -21,6 +21,10 @@ MnoEnterprise::Engine.routes.draw do
     namespace :v1 do
       resources :marketplace, only: [:index,:show]
       resource :current_user, only: [:show]
+      
+      resources :organizations, only: [] do
+        resources :app_instances, only: [:index]
+      end
     end
   end
 end

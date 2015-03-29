@@ -36,9 +36,22 @@ module MnoEnterprise
     :owner_type, :terminated_at, :stopped_at, :billing_type, :autostop_at, :autostop_interval,
     :next_status, :soa_enabled
     
-    #================================
+    #==============================================================
+    # Constants
+    #==============================================================
+    ACTIVE_STATUSES = [:running,:stopped,:staged,:provisioning,:starting,:stopping]
+    TERMINATION_STATUSES = [:terminating,:terminated]
+    
+    #==============================================================
     # Associations
-    #================================
-    belongs_to :organization, class_name: 'MnoEnterprise::Organization'
+    #==============================================================
+    belongs_to :owner, class_name: 'MnoEnterprise::Organization'
+    belongs_to :app, class_name: 'MnoEnterprise::App'
+    
+    # Return true if the instance can be considered active
+    def active?
+      ACTIVE_STATUSES.include?(self.status.to_sym) ||
+      (TERMINATION_STATUSES.include?(self.status.to_sym) && self.terminated_at > 3.minutes.ago)
+    end
   end
 end

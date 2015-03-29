@@ -13,7 +13,7 @@ module JpiV1TestHelper
     context 'with signed in user' do
       it "authorizes access" do
         sign_in user
-        expect(subject).to_not be_successful
+        expect(subject).to be_successful
       end
     end
   end
