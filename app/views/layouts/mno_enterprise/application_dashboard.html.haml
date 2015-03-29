@@ -1,0 +1,15 @@
+!!!
+%html{ :id => 'ng-app', 'ng-app' => 'maestrano' }
+  %head
+    %title= @meta[:title]
+    %meta{ :name => 'description', :content => @meta[:description] }
+    %meta{ 'http-equiv'=>"X-UA-Compatible", content:"IE=edge" }
+    %meta{ 'name'=>"viewport", 'content'=>"width=device-width, initial-scale=1" }
+    //= render 'layouts/header_files'
+  
+  %body
+    //%div{ 'mno-notification-widget' => [notice_hash(notice),alert_hash(alert)].to_json, 'user-logged-in' => "#{user_signed_in?}" }
+    
+    = yield
+    
+    //= render partial: 'layouts/footer_files', locals: { star: { display: true, hide_toggle_menu: true } }

@@ -3,7 +3,13 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   # Static Pages
   #============================================================
-  root to: "application#index"
+  root to: redirect('/myspace')
+  
+  # MySpace routes
+  # TODO: check that those routes are always working with the new dashboard
+  get '/myspace', :to => 'pages#myspace'
+  get '/myspace#/apps/dashboard', :to => 'pages#myspace', :as => 'myspace_home'
+  get '/myspace#/billing', :to => 'pages#myspace', :as => 'myspace_billing'
   
   #============================================================
   # Devise Configuration

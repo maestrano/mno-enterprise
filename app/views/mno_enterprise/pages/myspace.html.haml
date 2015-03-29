@@ -1,0 +1,6 @@
+.myspace{ 'ng-init'=>'backgroundColor = "#e6edee"', 'ng-style'=>'{backgroundColor: backgroundColor}' }
+  .container
+    .row
+      %div{ 'dashboard-menu'=>true, 'background-color'=>'backgroundColor' }
+      .col-xs-12.col-sm-11
+        %div{ 'ng-view'=>true }

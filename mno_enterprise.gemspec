@@ -24,6 +24,8 @@ Gem::Specification.new do |s|
   s.add_dependency "therubyracer"
   s.add_dependency "jbuilder", '~> 2.2.12'
   s.add_dependency 'cancancan', '~> 1.10'
+  s.add_dependency 'haml', '~> 4.0.6'
+  s.add_dependency 'haml-rails', '~> 0.9.0'
   
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"

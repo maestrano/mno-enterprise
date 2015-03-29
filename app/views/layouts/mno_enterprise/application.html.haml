@@ -1,0 +1,9 @@
+!!!
+%html
+  %head
+    %title MnoEnterprise
+    = stylesheet_link_tag    "mno_enterprise/application", media: "all"
+    = javascript_include_tag "mno_enterprise/application"
+    = csrf_meta_tags
+  %body
+    = yield

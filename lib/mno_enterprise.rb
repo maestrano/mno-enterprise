@@ -1,3 +1,4 @@
+require 'haml'
 require 'jbuilder'
 require 'cancancan'
 require 'devise'
