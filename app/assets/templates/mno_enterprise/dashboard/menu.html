@@ -19,53 +19,15 @@
       </button>
     </div>
     <a class="navbar-brand" href="/">
-      <div>Maestrano</div>
+      <div>Dashboard</div>
     </a>
     <div class="collapse navbar-collapse" id="maestrano-dashboard-navbar-collapse">
-      <div>{{isPartner()}}</div>
       <ul class="nav navbar-nav">
-        <!-- ------------------------- -->
-        <!-- Cloud partner section -->
-        <!-- ------------------------- -->
-        <li ng-show="isCloudPartner()">
-          <a href="#/cloud_partner_portfolio">My portfolio</a>
-        </li>
-        <li ng-show="isCloudPartner()">
-          <a href="#/cloud_partner_account">Account</a>
-        </li>
-        <li ng-show="isCloudPartner()">
-          <a href="#/cloud_partner_api">API</a>
-        </li>
-        <li ng-show="isCloudPartner()">
-          <a href="#/cloud_partner_marketing">Marketing</a>
-        </li>
-        <li ng-show="isCloudPartner()">
-          <a href="#/cloud_partner_pricing">Pricing</a>
-        </li>
-
-        <!-- ------------------------- -->
-        <!-- Partner section -->
-        <!-- ------------------------- -->
-        <li ng-show="isPartner() && displayPartnerOrganizationAdministration()">
-          <a href="#/partner_summary">My partner dashboard</a>
-        </li>
-        <li ng-show="isPartner()">
-          <a href="#/partner_users">My portfolio</a>
-        </li>
-        <li ng-show="isPartner() && displayPartnerOrganizationAdministration()">
-          <a href="#/partner_organization_management">Account Managers</a>
-        </li>
-        <!--<li ng-show="isPartner()">-->
-          <!--<a href="#/partner_webinar">Webinars</a>-->
-        <!--</li>-->
         <!-- ------------------------- -->
         <!-- My account section        -->
         <!-- ------------------------- -->
         <li ng-show="!selectBoxisEmpty()">
           <a href="#/">My dashboard</a>
-        </li>
-        <li ng-show="!selectBoxisEmpty() && isAnalyticsTabShown()">
-          <a href="#/analytics">Impac!&trade;</a>
         </li>
         <li>
           <a href="#/account">My account</a>
@@ -125,180 +87,20 @@
     <!--Home page link-->
     <a href="/">
       <div class='mno-main-logo'></div>
-      <!--<img ng-src="{{assetPath['icons/mno-logo-notext.png']}}">-->
     </a>
-
     <!---------------------------------------------------------------------------------------------------------------->
-    <!--                                Cloud partner section                                                       -->
-    <!---------------------------------------------------------------------------------------------------------------->
-    <div class='spacer1'></div>
-    <div ng-show="isCloudPartner()">
-      <a href="#/cloud_partner_portfolio">
-        <div ng-class="isButtonActive('/cloud_partner_portfolio') && 'active'" class="dashboard-button">
-          <div class='content'>My portfolio</div>
-          <div ng-switch="isButtonActive('/cloud_partner_portfolio')">
-            <div ng-switch-when="true">
-              <div class="dashboard-icon-partner-customers-active"></div>
-            </div>
-            <div ng-switch-default>
-              <div class="dashboard-icon-partner-customers"></div>
-            </div>
-          </div>
-        </div>
-      </a>
-      <br>
-      <a href="#/cloud_partner_account">
-        <div ng-class="isButtonActive('/cloud_partner_account') && 'active'" class="dashboard-button">
-          <div class='content'>Account</div>
-          <div ng-switch="isButtonActive('/cloud_partner_account')">
-            <div ng-switch-when="true">
-              <div class='fa fa-suitcase active'></div>
-            </div>
-            <div ng-switch-default>
-              <div class='fa fa-suitcase'></div>
-            </div>
-          </div>
-        </div>
-      </a>
-      <br>
-      <a href="#/cloud_partner_api">
-        <div ng-class="isButtonActive('/cloud_partner_api') && 'active'" class="dashboard-button">
-          <div class='content'>API</div>
-          <div ng-switch="isButtonActive('/cloud_partner_api')">
-            <div ng-switch-when="true">
-              <div class='fa fa-cogs active'></div>
-            </div>
-            <div ng-switch-default>
-              <div class='fa fa-cogs'></div>
-            </div>
-          </div>
-        </div>
-      </a>
-      <br>
-      <a href="#/cloud_partner_marketing">
-        <div ng-class="isButtonActive('/cloud_partner_marketing') && 'active'" class="dashboard-button">
-          <div class='content'>Marketing</div>
-          <div ng-switch="isButtonActive('/cloud_partner_marketing')">
-            <div ng-switch-when="true">
-              <div class='fa fa-smile-o active'></div>
-            </div>
-            <div ng-switch-default>
-              <div class='fa fa-smile-o'></div>
-            </div>
-          </div>
-        </div>
-      </a>
-      <br>
-      <a href="#/cloud_partner_pricing">
-        <div ng-class="isButtonActive('/cloud_partner_pricing') && 'active'" class="dashboard-button">
-          <div class='content'>Pricing</div>
-          <div ng-switch="isButtonActive('/cloud_partner_pricing')">
-            <div ng-switch-when="true">
-              <div class='fa fa-tags active'></div>
-            </div>
-            <div ng-switch-default>
-              <div class='fa fa-tags'></div>
-            </div>
-          </div>
-        </div>
-      </a>
-      <hr>
-    </div>
-
-    <!---------------------------------------------------------------------------------------------------------------->
-    <!--                                      Partner section                                                       -->
-    <!---------------------------------------------------------------------------------------------------------------->
-    <div ng-show="isPartner()">
-      <div ng-show="displayPartnerOrganizationAdministration()">
-        <a href="#/partner_summary">
-          <div ng-class="isButtonActive('/partner_summary') && 'active'" class="dashboard-button">
-            <div class='content'>Partner Dashboard</div>
-            <div ng-switch="isButtonActive('/partner_summary')">
-              <div ng-switch-when="true">
-                <div class="dashboard-icon-partner-summary-active"></div>
-              </div>
-              <div ng-switch-default>
-                <div class="dashboard-icon-partner-summary"></div>
-              </div>
-            </div>
-          </div>
-        </a>
-        <br>
-      </div>
-      <a href="#/partner_users">
-        <div ng-class="isButtonActive('/partner_users') && 'active'" class="dashboard-button">
-          <div class='content'>My portfolio</div>
-          <div ng-switch="isButtonActive('/partner_users')">
-            <div ng-switch-when="true">
-              <div class="dashboard-icon-partner-customers-active"></div>
-            </div>
-            <div ng-switch-default>
-              <div class="dashboard-icon-partner-customers"></div>
-            </div>
-          </div>
-        </div>
-      </a>
-      <br>
-      <div ng-show="displayPartnerOrganizationAdministration()">
-        <a href="#/partner_organization_management">
-          <div ng-class="isButtonActive('/partner_organization_management') && 'active'" class="dashboard-button">
-            <div class='content'>Account Managers</div>
-            <div ng-switch="isButtonActive('/partner_organization_management')">
-              <div ng-switch-when="true">
-                <div class='fa fa-group active'></div>
-              </div>
-              <div ng-switch-default>
-                <div class='fa fa-group'></div>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-      <!--<br>-->
-      <!--<a href="#/partner_webinar">-->
-        <!--<div ng-class="isButtonActive('/partner_webinar') && 'active'" class="dashboard-button">-->
-          <!--<div ng-switch="isButtonActive('/partner_webinar')">-->
-            <!--<div ng-switch-when="true">-->
-              <!--<div class="dashboard-icon-webinar-active"></div>-->
-            <!--</div>-->
-            <!--<div ng-switch-default>-->
-              <!--<div class="dashboard-icon-webinar"></div>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</a>-->
-      <hr>
-    </div>
-
-    <!---------------------------------------------------------------------------------------------------------------->
-    <!--                                         User section                                                       -->
-    <!---------------------------------------------------------------------------------------------------------------->
+<!--                                         User section                                                       -->
+<!---------------------------------------------------------------------------------------------------------------->
     <div  ng-show="!selectBoxisEmpty()">
       <a href="#/">
         <div class="dashboard-button" ng-class="isButtonActive('/') && 'active'">
           <div class='content'>Dashboard</div>
           <div ng-switch="isButtonActive('/')">
             <div ng-switch-when="true">
-              <div class="dashboard-icon-dashboard-active"></div>
+              <i class="fa fa-th"></i>
             </div>
             <div ng-switch-default>
-              <div class="dashboard-icon-dashboard"></div>
-            </div>
-          </div>
-        </div>
-      </a>
-      <br>
-    </div>
-    <div  ng-show="!selectBoxisEmpty() && isAnalyticsTabShown()">
-      <a href="#/analytics">
-        <div ng-class="isButtonActive('/analytics') && 'active'" class="dashboard-button">
-          <div class='content'>Impac!&trade;</div>
-          <div ng-switch="isButtonActive('/analytics')">
-            <div ng-switch-when="true">
-              <div class='fa fa-bar-chart-o active'></div>
-            </div>
-            <div ng-switch-default>
-              <div class='fa fa-bar-chart-o'></div>
+              <i class="fa fa-th"></i>
             </div>
           </div>
         </div>
@@ -310,10 +112,10 @@
         <div class='content'>My Account</div>
         <div ng-switch="isButtonActive('/account')">
           <div ng-switch-when="true">
-            <div class="dashboard-icon-my-account-active"></div>
+            <i class="fa fa-user"></i>
           </div>
           <div ng-switch-default>
-            <div class="dashboard-icon-my-account"></div>
+            <i class="fa fa-user"></i>
           </div>
         </div>
       </div>
@@ -325,10 +127,10 @@
           <div class='content'>Company</div>
           <div ng-switch="isButtonActive('/company')">
             <div ng-switch-when="true">
-              <div class="dashboard-icon-organization-active"></div>
+              <i class="fa fa-briefcase"></i>
             </div>
             <div ng-switch-default>
-              <div class="dashboard-icon-organization"></div>
+              <i class="fa fa-briefcase"></i>
             </div>
           </div>
         </div>
@@ -341,10 +143,10 @@
           <div class='content'>Support</div>
           <div ng-switch="isButtonActive('/support')">
             <div ng-switch-when="true">
-              <div class="dashboard-icon-support-active"></div>
+              <i class="fa fa-life-ring"></i>
             </div>
             <div ng-switch-default>
-              <div class="dashboard-icon-support"></div>
+              <i class="fa fa-life-ring"></i>
             </div>
           </div>
         </div>
@@ -357,22 +159,12 @@
           <div class='content'>Marketplace</div>
           <div ng-switch="isButtonActive('/marketplace')">
             <div ng-switch-when="true">
-              <div class="dashboard-icon-marketplace-active"></div>
+              <i class="fa fa-plus-square-o"></i>
             </div>
             <div ng-switch-default>
-              <div class="dashboard-icon-marketplace"></div>
+              <i class="fa fa-plus-square-o"></i>
             </div>
           </div>
-        </div>
-      </a>
-      <br>
-    </div>
-    <div  ng-show="!selectBoxisEmpty()">
-      <a href='' ng-click="openMnoStarMenu()" ng-init="starBtnActive = false" ng-mouseenter="starBtnActive = true" ng-mouseleave="starBtnActive = false">
-        <div class="dashboard-button">
-          <div class='content'>Star!™</div>
-          <div ng-hide="starBtnActive" class="dashboard-icon-star" style="margin-left:-2px; margin-top:3px;"></div>
-          <div ng-show="starBtnActive" class="dashboard-icon-star-active" style="margin-left:-2px; margin-top:3px;"></div>
         </div>
       </a>
       <br>
@@ -380,7 +172,7 @@
     <a href="/auth/users/sign_out" data-method='delete'>
       <div class="dashboard-button">
         <div class='content'>Logout</div>
-        <div class="dashboard-icon-logout" style="margin-left:6px;"></div>
+        <i class="fa fa-lock"></i>
       </div>
     </a>
   </div>
