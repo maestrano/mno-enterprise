@@ -6,7 +6,7 @@ module MnoEnterprise
     def index
       @categories = MnoEnterprise::App.categories
       @categories.delete('Most Popular')
-      @apps = MnoEnterprise::App.active
+      @apps = MnoEnterprise::App.all.to_a
     end
   
     # GET /mnoe/jpi/v1/marketplace/1
