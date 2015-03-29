@@ -256,7 +256,7 @@ Devise.setup do |config|
   #
   # The router that invoked `devise_for`, in the example above, would be:
   # config.router_name = :my_engine
-  config.router_name = :mnoe
+  # config.router_name = :mno_enterprise
   
   #
   # When using omniauth, Devise cannot automatically set Omniauth path,

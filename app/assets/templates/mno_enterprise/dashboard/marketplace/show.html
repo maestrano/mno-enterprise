@@ -1,0 +1,124 @@
+<div mno-shopping-cart="cart.isOpen" bundle="cart.bundle" config="cart.config"></div>
+
+<div class="dashboard-marketplace-app">
+    <div class="spacer1"></div>
+    
+    <!-- Header -->
+    <div class="row show-header">
+      <div class="col-md-12">
+        <a href="#/marketplace" class="text-muted">
+          < Back
+        </a>
+        
+        <div class="media">
+          <div class="pull-left">
+            <img class="media-object" ng-src="{{app.logo}}" ng-alt="{{app.name}}">
+          </div>
+          <div class="media-body">
+            <h2 class="media-heading">{{app.name}}</h2>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="spacer1"></div>
+    
+    <!-- Content -->
+    <div class="show-content">
+        
+        <!-- Pics/details row -->
+        <div class="row">
+      
+          <div class="col-md-8">
+            <div class="well carousel">
+              <div carousel interval="3000">
+                <div slide ng-repeat="picture in app.pictures" class="screenshot">
+                  <img ng-src={{picture}} alt="screenshot">
+                </div>
+              </div>
+            </div>
+        
+          </div>
+      
+          <div class="col-md-4">
+          
+              <div class="well text-center well-details">
+                <div class="row">
+                  <div class="col-xs-12 col-sm-4 col-sm-offset-4 col-md-8 col-md-offset-2">
+                    <div class="btn-fluid-wrapper">
+                      <button class="btn btn-warning btn-promo arrow-right" ng-click="cart.open()">Start Now!</button>
+                    </div>
+                  </div>
+                </div>
+            
+                <div class="row">
+            
+                  <div class="col-xs-12 col-sm-4 col-sm-offset-4 col-md-8 col-md-offset-2">
+                    <ul class="app-features">
+                      <li ng-show="app.is_responsive">
+                        <img ng-src="{{assetPath['icons/mobile-responsive-logo.png']}}" alt="responsive icon">
+                        Responsive
+                      </li>
+                      <li ng-show="app.is_star_ready" mno-helptext="Your live tutorials directly inside your app">
+                        <img ng-src="{{assetPath['icons/star-enabled-logo.png']}}" alt="Star icon">
+                        Star!™ Tutorials
+                      </li>
+                      <li ng-show="app.is_connec_ready" mno-helptext="Your Data automatically shared between your applications">
+                        <img ng-src="{{assetPath['icons/connec-enabled-logo.png']}}" alt="Connec icon">
+                        Connec!™ Ready
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+            
+                <div class="row">
+                  <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-12 col-md-offset-0">
+              
+                    <ul class="key-benefits">
+                      <li ng-repeat="benefit in app.key_benefits">
+                        <i class="fa fa-check"></i>
+                        {{benefit}}
+                      </li>
+                    </ul>
+              
+                  </div>
+                </div>
+            
+              </div>
+        
+          </div>
+          
+          <!-- End pics/details row -->
+        </div>
+        
+        <!-- Testimonials row -->
+        <div class="row">
+          <div class="col-md-6" ng-repeat="testimonial in app.testimonials | limitTo:2" ng-show="isTestimonialShown(testimonial)">
+            <div class="ribbon-testimonial ribbon-white">
+                <div class="body">
+                  {{ testimonial.text }}
+                  <div class="arrow"></div>
+                </div>
+              <div class="from">
+                <div class="name">{{ testimonial.author }}</div>
+                <div class="company">{{ testimonial.company }}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="spacer1"></div>
+        </div>
+        
+        <!-- Description row -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="well" ng-bind-html="app.description"></div>
+          </div>
+        </div>
+        
+        <!-- End show-content -->
+    </div>
+    
+    
+</div>

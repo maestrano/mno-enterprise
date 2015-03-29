@@ -9,7 +9,7 @@ class Jpi::V1::ShoppingCartController < ApplicationController
   # # login and inject it in angular
   # skip_before_filter :verify_authenticity_token
   #
-  # # GET /jpi/v1/shopping_cart/apps
+  # # GET /mnoe/jpi/v1/shopping_cart/apps
   # # params:
   # # - ensure_apps: [{ app: {id: 16 } }] (as string) -- ensure that some apps are present in the list
   # def apps
@@ -29,16 +29,16 @@ class Jpi::V1::ShoppingCartController < ApplicationController
   #   render json: @apps.map { |a| Shopping::Cart.hash_for_app(a) }
   # end
   #
-  # # GET /jpi/v1/shopping_cart/organizations
+  # # GET /mnoe/jpi/v1/shopping_cart/organizations
   # def organizations
   #   @orgs = Organization.accessible_by(Ability.new(current_user)).sort_by { |o| o.name }
   # end
   #
-  # # GET /jpi/v1/shopping_cart/1
+  # # GET /mnoe/jpi/v1/shopping_cart/1
   # def show
   # end
   #
-  # # POST /jpi/v1/shopping_cart
+  # # POST /mnoe/jpi/v1/shopping_cart
   # # TODO: add test for bundle parameter on create
   # def create
   #   organization = Organization.find(params[:shopping_cart][:organization_id])
@@ -50,19 +50,19 @@ class Jpi::V1::ShoppingCartController < ApplicationController
   #   render 'show'
   # end
   #
-  # # PUT /jpi/v1/shopping_cart/1/upsert_item
+  # # PUT /mnoe/jpi/v1/shopping_cart/1/upsert_item
   # def upsert_item
   #   @item = @cart.add_item!(params[:item])
   #   render 'show_item'
   # end
   #
-  # # PUT /jpi/v1/shopping_cart/1/remove_item
+  # # PUT /mnoe/jpi/v1/shopping_cart/1/remove_item
   # def remove_item
   #   @item = @cart.remove_item!(params[:item])
   #   render 'show_item'
   # end
   #
-  # # PUT /jpi/v1/shopping_cart/1/checkout
+  # # PUT /mnoe/jpi/v1/shopping_cart/1/checkout
   # def checkout
   #   if @cart.checkout!(params[:credit_card])
   #     render 'show'

@@ -2,17 +2,17 @@ module MnoEnterprise
   class Jpi::V1::OrganizationsController < Jpi::V1::BaseResourceController
     respond_to :json
 
-    # GET /jpi/v1/organizations
+    # GET /mnoe/jpi/v1/organizations
     def index
       @organizations ||= current_user.organizations
     end
     
-    # GET /jpi/v1/organizations/1
+    # GET /mnoe/jpi/v1/organizations/1
     def show
       organization # load organization
     end
 
-    # PUT /jpi/v1/organizations/:id
+    # PUT /mnoe/jpi/v1/organizations/:id
     def update
       # Filter
       whitelist = [:name,:soa_enabled]
@@ -30,7 +30,7 @@ module MnoEnterprise
       end
     end
 
-    # PUT /jpi/v1/organizations/:id/charge
+    # PUT /mnoe/jpi/v1/organizations/:id/charge
     # def charge
     #   authorize! :manage_billing, organization
     #   payment = organization.charge
@@ -48,7 +48,7 @@ module MnoEnterprise
     #   render json: { status: s, data: payment }
     # end
 
-    # PUT /jpi/v1/organizations/:id/update_billing
+    # PUT /mnoe/jpi/v1/organizations/:id/update_billing
     # def update_billing
     #   whitelist = ['title','first_name','last_name','number','month','year','country','verification_value','billing_address','billing_city','billing_postcode', 'billing_country']
     #   attributes = params[:credit_card].select { |k,v| whitelist.include?(k.to_s) }
@@ -68,7 +68,7 @@ module MnoEnterprise
     #   end
     # end
 
-    # PUT /jpi/v1/organizations/:id/invite_members
+    # PUT /mnoe/jpi/v1/organizations/:id/invite_members
     def invite_members
       # Filter
       whitelist = ['email','role','team_id']
@@ -94,7 +94,7 @@ module MnoEnterprise
       render partial: 'members'
     end
 
-    # PUT /jpi/v1/organizations/:id/update_member
+    # PUT /mnoe/jpi/v1/organizations/:id/update_member
     def update_member
       attributes = params[:member]
       @orga_relation = organization.orga_relations.joins(:user).where("users.email = ?",attributes[:email]).first
@@ -113,7 +113,7 @@ module MnoEnterprise
       render partial: 'members'
     end
 
-    # PUT /jpi/v1/organizations/:id/remove_member
+    # PUT /mnoe/jpi/v1/organizations/:id/remove_member
     def remove_member
       attributes = params[:member]
       @member = User.find_by_email(attributes[:email])
@@ -130,7 +130,7 @@ module MnoEnterprise
       render partial: 'members'
     end
 
-    # PUT /jpi/v1/organizations/:id/update_support_plan
+    # PUT /mnoe/jpi/v1/organizations/:id/update_support_plan
     # def update_support_plan
     #   attributes = params['support_plan']
     #   authorize! :update, organization
@@ -141,7 +141,7 @@ module MnoEnterprise
     #   end
     # end
 
-    # PUT /jpi/v1/
+    # PUT /mnoe/jpi/v1/
     # def update_meta_data
     #   # Authorize and update
     #   authorize! :update, organization
@@ -157,7 +157,7 @@ module MnoEnterprise
     # end
 
 
-    # POST /jpi/v1/dashboard/:id/organizations/training_session_req
+    # POST /mnoe/jpi/v1/dashboard/:id/organizations/training_session_req
     # def training_session_req
     #   if params['message'] && organization.support_plan && organization.support_plan.custom_training_credits > 0
     #     # Consume a custom training credit

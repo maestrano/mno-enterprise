@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <div class="close" type="button" ng-click="modal.close(_self)" >×</div>
+  <h3>Create New Company</h3>
+</div>
+
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="alert alert-error" ng-show="modal.errors">
+        <button class="close" ng-click="modal.errors=''">×</button>
+        <ul>
+          <li ng-repeat="error in modal.errors">{{error}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3 text-center">
+      <p>Enter a name for your new company</p>
+      <div class="spacer1"></div>
+      <input type="text" class="form-control" ng-model="modal.model.name" required/>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="row">
+    <div class="col-sm-12">
+      <button class="btn btn-lg btn-shaded" ng-click="modal.close(_self)" ng-show="!modal.isLoading">Cancel</button>
+      <button class="btn btn-lg btn-info" ng-click="modal.proceed(_self)" ng-show="!modal.isLoading">Create</button>
+      <img ng-src="{{assetPath['loader-darkblue-bg.gif']}}" ng-show="modal.isLoading" alt="Loading">
+    </div>
+  </div>
+</div>

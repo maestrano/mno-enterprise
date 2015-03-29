@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-md-12">
+    <p>
+      Your billing for the current invoicing period is:
+      <b>{{ billing.current.value | currency:"AUD$"}}</b>
+    </p>
+  </div>
+</div>
+
+<div class="row" ng-show="isCreditShown()">
+  <div class="col-md-12">
+    <p>
+      You have <b>{{ billing.credit.value | currency:"AUD$"}}</b> credit on your account to be used for the next payment. Note that this credit account will also be linked to any organization you create.
+    </p>
+  </div>
+</div>
+
+<div class="row" ng-show="isFreeTrialStatusShown()">
+  <div class="col-md-12">
+    This amount is for information only as you are still benefiting from your FREE trial offer until <b class='text-info'>{{ billing.free_trial_end_at | date:'MMMM d, y h:mm:ss a' }}</b>. The amount shown above will <b>NOT</b> be charged to you.
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <p>
+      <small>
+        <em>
+          Note that the amount for your current invoicing period is indicative and might not reflect the latest changes in your current billing.
+        </em>
+      </small>
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h5>About Maestrano's Billing</h5>
+    <p>
+      Maestrano's invoicing period is from the 25th of the previous month to the 24th of the current month. Any amount due (current spending minus credit) is charged on the 2nd of the following month.
+    </p>
+  </div>
+</div>
+      

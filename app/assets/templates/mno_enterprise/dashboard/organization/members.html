@@ -1,0 +1,280 @@
+<!-- 
+  List of Members
+-->
+<div class="row" ng-show="isInviteShown()">
+  <button class="btn btn-sm btn-grey" ng-click="inviteMembers()">
+    <i class="fa fa-plus"></i>
+    <i class="fa fa-user"></i>
+    Invite Users
+  </button>
+</div>
+<div class="clearfix"></div>
+<div class="spacer1"></div>
+
+<div class="table-cell">
+  <div class="row th-row hidden-xs">
+    <div class="cell col-sm-2">Name</div>
+    <div class="cell col-sm-2">Surname</div>
+    <div class="cell col-sm-4">Email</div>
+    <div class="cell col-sm-2">Role</div>
+  </div>
+
+  <div class="row td-row" ng-repeat="member in members">
+    <div class="cell col-sm-2">
+      <span class="cell-label visible-xs-inline">Name:</span>
+      {{ member.name }}
+    </div>
+    
+    <div class="cell col-sm-2">
+      <span class="cell-label visible-xs-inline">Surname: </span>
+      {{ member.surname }}
+    </div>
+    
+    <div class="cell col-sm-4">
+      <span class="cell-label visible-xs-inline">Email: <br/></span>
+      {{ member.email }}
+    </div>
+    
+    <div class="cell col-sm-2">
+      <span class="cell-label visible-xs-inline">Role:</span>
+      {{ memberRoleLabel(member) }}
+    </div>
+    
+    <div class="cell col-sm-2">
+      <a ng-click="editMember(member)" class="btn btn-sm edit-member-button-star-ref" ng-show="isEditShown(member)">
+        <i class="fa fa-pencil-square-o"></i>
+        <span class="cell-label visible-xs-inline"><br/>Edit</span>
+      </a>
+      <a ng-click="removeMember(member)" class="btn btn-sm btn-link remove-member-button-star-ref" ng-show="isRemoveShown(member)">
+        <i class="fa fa-remove"></i>
+        <span class="cell-label visible-xs-inline"><br/>Remove</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- 
+  Member Invite modal
+-->
+<script type="text/ng-template" id="dashboard/organization/members/invite-modal.html">
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <div class="close" type="button" ng-click="inviteModal.close()" >×</div>
+    <h3 ng-bind-html="inviteModal.title()"></h3>
+  </div>
+
+  <!-- Modal Body -->
+  <div class="modal-body" ng-switch on="inviteModal.step">
+    
+    <!-- Enter Emails step -->
+    <div ng-switch-when="enterEmails" class="text-center">
+      
+      <div class="row">
+        <div class="col-sm-12">
+            <p>Enter the email addresses of the people you want to invite in your company</p>
+            <p>
+              One address per line, e.g.:<br>
+              user1@company.com<br>
+              user2@company.com
+            </p>
+          
+          </div>
+      </div>
+    
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+          <textarea class="form-control" rows="3" style="color:black;background-color:white;" ng-model="inviteModal.userEmails" required></textarea>
+        </div>
+      </div>
+      
+      <div class="spacer1"></div>
+      
+      <div class="row">
+        <div class="col-sm-12">
+          <p>Please note that for security reasons unaccepted invites will automatically expire after 3 days.</p>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Define Roles step -->
+    <div ng-switch-when="defineRoles">
+      <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+          
+          <div class="table-cell inverse">
+            <div class="row th-row hidden-xs">
+              <div class="cell col-sm-4">Email</div>
+              <div class="cell col-sm-3">Role</div>
+              <div class="cell col-sm-3" ng-show="inviteModal.isTeamListShown()">Team</div>
+            </div>
+
+            <div class="row td-row" ng-repeat="member in inviteModal.members">
+              <div class="cell col-sm-4">
+                <span class="cell-label visible-xs-inline">Email: <br/></span>
+                {{ member.email }}
+              </div>
+    
+              <div class="cell col-sm-3">
+                <span class="cell-label visible-xs-inline">Role:</span>
+                <select ng-model="member.role" ng-options="role for role in inviteModal.roleList" class="form-control"></select>
+              </div>
+              <div class="cell col-sm-3" ng-show="inviteModal.isTeamListShown()">
+                <span class="cell-label visible-xs-inline">Team:</span>
+                <select ng-model="member.team_id" ng-options="team.id as team.name for team in inviteModal.teamList" class="form-control">
+                  <option value='' selected>-- Select Team --</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- End: modal-body -->
+  </div>
+  
+  <!-- Modal Footer -->
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-md-12">
+        <button class="btn btn-shaded" ng-click="inviteModal.close()">
+          Cancel
+        </button>
+        <button class="btn btn-warning" ng-disabled="!inviteModal.isNextEnabled()" ng-click="inviteModal.next()">
+          {{inviteModal.labelForAction()}}
+        </button>
+      </div>
+    </div>
+  </div>
+</script>
+
+<!-- 
+  Member edition modal
+-->
+<div>
+  <script type="text/ng-template" id="dashboard/organization/members/edition-modal.html">
+    <!--Modal Header -->
+    <div class="modal-header">
+      <div class="close" type="button" ng-click="editionModal.close()" >×</div>
+      <h4 ng-bind-html="editionModal.title()"></h4>
+    </div>
+
+    <!--Modal Body -->
+    <div class="modal-body">
+      <div class="alert alert-error" ng-show="editionModal.errors">
+        <button class="close" ng-click="editionModal.errors=''">×</button>
+        <ul>
+          <li ng-repeat="error in editionModal.errors">{{error}}</li>
+        </ul>
+      </div>
+      
+      <div class="row role-management">
+      
+        <div class="col-sm-12">
+          
+          <div ng-switch on="editionModal.selectedRole">
+            <div ng-switch-when="Member">
+              <i class="fa fa-cloud fa-4x"></i>
+              <br/><br/>
+              <p>A member can see other members and access the company apps</p>
+            </div>
+            <div ng-switch-when="Power User">
+              <i class="fa fa-cloud fa-4x"></i>
+              <i class="fa fa-power-off fa-4x"></i>
+              <br/><br/>
+              <p>A Power User can see other members and start idle company apps (on per hour plan)</p>
+            </div>
+            <div ng-switch-when="Admin">
+              <i class="fa fa-cloud fa-4x"></i>
+              <i class="fa fa-power-off fa-4x"></i>
+              <i class="fa fa-users fa-4x"></i>
+              <br/><br/>
+              <p>An Admin can manage other members (except Super Admin users) and manage the company apps</p>
+            </div>
+            <div ng-switch-when="Super Admin">
+              <i class="fa fa-cloud fa-4x"></i>
+              <i class="fa fa-power-off fa-4x"></i>
+              <i class="fa fa-users fa-4x"></i>
+              <i class="fa fa-cc-mastercard fa-4x"></i>
+              <br/><br/>
+              <p>A Super Admin has all power within the company including access to billing management</p>
+            </div>
+          </div>
+          
+          <div class="spacer1"></div>
+          
+          <div class="btn-group">
+            <button type="button" class="btn btn-default" ng-click="editionModal.select(role)" ng-class="editionModal.classForRole(role)" ng-repeat="role in editionModal.config.roles">
+              {{role}}
+            </button>
+          </div>
+          
+          <!-- End: col -->
+        </div>
+        
+        <!-- End: Row -->
+      </div>
+      
+      
+      <!-- End: Modal Body -->
+    </div>
+
+    <!--Modal Footer -->
+    <div class="modal-footer">
+      <div class="row">
+        <div class="col-sm-12">
+          <button class="btn btn-lg btn-shaded" ng-click="editionModal.close()" ng-show="!editionModal.isLoading">Cancel</button>
+          <button class="btn btn-lg btn-warning" ng-click="editionModal.change()" ng-show="!editionModal.isLoading" ng-disabled="editionModal.isChangeDisabled()">Change</button>
+          <img ng-src="{{assetPath['loader-darkblue-bg.gif']}}" ng-show="editionModal.isLoading" alt="Loading">
+        </div>
+        
+      </div>
+      
+    </div>
+  </script>
+</div>
+
+
+
+<!-- 
+  Member Removal Modal
+-->
+<script type="text/ng-template" id="dashboard/organization/members/removal-modal.html">
+  <div class="modal-header">
+    <div class="close" type="button" ng-click="deletionModal.close()" >×</div>
+    <h3>Confirm action</h3>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="alert alert-error" ng-show="deletionModal.errors">
+          <button class="close" ng-click="deletionModal.errors=''">×</button>
+          <ul>
+            <li ng-repeat="error in deletionModal.errors">{{error}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-sm-12">
+        <p class="align-center" ng-bind-html="deletionModal.confirmationText()"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-sm-12">
+        <button class="btn btn-lg btn-info" ng-click="deletionModal.close()" ng-show="!deletionModal.isLoading">Cancel</button>
+        <button class="btn btn-lg btn-danger" ng-click="deletionModal.remove()" ng-show="!deletionModal.isLoading">Remove</button>
+        <img ng-src="{{assetPath['loader-darkblue-bg.gif']}}" ng-show="deletionModal.isLoading" alt="Loading">
+      </div>
+    </div>
+  </div>
+</script>

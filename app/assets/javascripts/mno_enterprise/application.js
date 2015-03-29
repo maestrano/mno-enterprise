@@ -10,4 +10,6 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require mno_enterprise/twitter/bootstrap
+// require mno_enterprise/twitter/bootstrap
+//= require_tree ./angular
+//= require_tree ../../templates/mno_enterprise

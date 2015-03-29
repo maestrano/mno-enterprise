@@ -1,4 +1,5 @@
 require 'haml'
+require 'countries'
 require 'jbuilder'
 require 'cancancan'
 require 'devise'

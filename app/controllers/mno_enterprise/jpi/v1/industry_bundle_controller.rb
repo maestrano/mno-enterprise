@@ -1,7 +1,7 @@
 module MnoEnterprise
   class Jpi::V1::IndustryBundleController < ApplicationController
 
-    # GET /jpi/v1/industry_bundles/app_descriptions/pr.json
+    # GET /mnoe/jpi/v1/industry_bundles/app_descriptions/pr.json
     # def app_descriptions
     #   @bundle = IndustryBundle.find_by_name(params[:bundle_name])
     #   if @bundle

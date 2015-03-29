@@ -17,7 +17,7 @@ MnoEnterprise::Engine.routes.draw do
   devise_for :users, { 
     class_name: "MnoEnterprise::User",
     module: :devise, 
-    path_prefix: 'auth' 
+    path_prefix: 'auth'
   }
   
   #============================================================
@@ -36,6 +36,9 @@ MnoEnterprise::Engine.routes.draw do
         end
         
         resources :app_instances, only: [:index]
+        
+        # Currently stubbed
+        resources :teams, only: [:index]
       end
     end
   end

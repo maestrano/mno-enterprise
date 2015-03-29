@@ -1,0 +1,191 @@
+<div ng-switch="step.title">
+  <!------------------------------------------------------------------------------------>
+  <!------------------------------------------------------------------------------------>
+  <!------------------------------------------------------------------------------------>
+  <div ng-switch-when="upload">
+    <div class="alert alert-error" ng-show="errors.mappingSpreadsheet" style="margin-top:10px;">
+      <button class="close" ng-click="errors.mappingSpreadsheet=null">×</button>
+      <p>{{errors.mappingSpreadsheet}}</p>
+    </div>
+
+    <div ng-switch="category">
+
+      <!------------------>
+      <!-- ORGANIZATION -->
+      <!------------------>
+      <div ng-switch-when="organization">
+        <h2>Upload your contacts that are organizations</h2>
+        <p>In your applications, you can manage organizations. These can be supplier companies, vendor companies, customer companies. The data for organizations typically includes; name, address, number of employees - you can view an example below.</p>
+        <p>You can use our template to upload your data, or simply select your file in .csv format.</p>
+        
+        <br>
+        
+        <div class='col-md-6 col-md-offset-3'>
+          <input class='form-control' type="file" file-model="spreadsheet.file">
+        </div>
+        
+        <br><br><br>
+        <a href="https://s3-ap-southeast-1.amazonaws.com/cdn-prd-maestrano/docs/public/website/Sample+wizard+files+-+organizations_template.csv">Download a template spreadsheet</a>
+        <br>
+        <img ng-src="{{assetPath['star_wizard/organization.png']}}">
+        
+        <br><br>
+        
+        <button class='btn btn-success btn-promo arrow-right' ng-disabled="!spreadsheet.file" ng-click="uploadSpreadsheet()">Upload</button>
+        <button class='btn btn-whited btn-promo skip' ng-click="skipThisStep()">Skip</button>
+        <button class='btn btn-whited btn-promo arrow-left previous' ng-click="goToPreviousStep()">Back</button>
+        
+        <div class='clearfix'></div>
+        
+        
+      </div>
+
+      <!------------------>
+      <!--    PERSON    -->
+      <!------------------>
+      <div ng-switch-when="person">
+        <h2>Upload your contacts that are persons</h2>
+        <p>In your applications, you can manage contacts that are persons. These are real people which belong to organizations, usually your main point of contacts. The data for people typically includes; first name, last name, email - you can view an example below.</p>
+        <p>You can use our template to upload your data, or simply select your file in .csv format.</p>
+        
+        <br>
+        
+        <div class='col-md-6 col-md-offset-3'>
+          <input class='form-control' type="file" file-model="spreadsheet.file">
+        </div>
+        
+        <br><br><br>
+        
+        <a href="https://s3-ap-southeast-1.amazonaws.com/cdn-prd-maestrano/docs/public/website/Sample+wizard+files+-+people_template.csv">Download a template spreadsheet</a>
+        <br>
+        <img ng-src="{{assetPath['star_wizard/person.png']}}">
+        
+        <br><br>
+        
+        <button class='btn btn-success btn-promo arrow-right' ng-disabled="!spreadsheet.file" ng-click="uploadSpreadsheet()">Upload</button>
+        <button class='btn btn-whited btn-promo skip' ng-click="skipThisStep()">Skip</button>
+        <button class='btn btn-whited btn-promo arrow-left previous' ng-click="goToPreviousStep()">Back</button>
+        
+        <div class='clearfix'></div>
+        
+        
+      </div>
+
+      <!------------------>
+      <!--     ITEM     -->
+      <!------------------>
+      <div ng-switch-when="item">
+        <h2>Upload your products and services</h2>
+        <p>In your applications, you can manage products and services. These are the physical products or services your company provides. The data for products and services typically includes; product name, service description, price, stock level - you can view an example below.</p>
+        
+        <br>
+        
+        <div class='col-md-6 col-md-offset-3'>
+          <input class='form-control' type="file" file-model="spreadsheet.file">
+        </div>
+        
+        <br><br><br>
+        <a href="https://s3-ap-southeast-1.amazonaws.com/cdn-prd-maestrano/docs/public/website/Sample+wizard+files+-+products_and_services_template.csv">Download a template spreadsheet</a>
+        <br>
+        <img ng-src="{{assetPath['star_wizard/item.png']}}">
+        
+        <br><br>
+        
+        <button class='btn btn-success btn-promo arrow-right' ng-disabled="!spreadsheet.file" ng-click="uploadSpreadsheet()">Upload</button>
+        <button class='btn btn-whited btn-promo skip' ng-click="skipThisStep()">Skip</button>
+        <button class='btn btn-whited btn-promo arrow-left previous' ng-click="goToPreviousStep()">Back</button>
+        
+        <div class='clearfix'></div>
+        
+        
+      </div>
+
+    </div>
+
+  </div>
+
+  <!------------------------------------------------------------------------------------>
+  <!------------------------------------------------------------------------------------>
+  <!------------------------------------------------------------------------------------>
+
+  <div ng-switch-when="mapping">
+
+
+    <div ng-switch="mappingStep.title">
+
+      <!------------------>
+      <!--   MAPPING    -->
+      <!------------------>
+      <div ng-switch-when="mapping">
+        <br>
+        <h2>Review your data upload</h2>
+        <p>Before proceeding, make sure that our wizard has correctly matched your spreadsheet headings with Connec! You can modify the matches below before proceeding with your upload.</p>
+        <hr>
+        <form name='form' novalidate>
+          <div class='row'>
+            <div class='col-md-8'>
+              <div class='align-center'><h3>Fields</h3></div>
+            </div>
+            <div class='col-md-4'>
+              <div class='align-center'><h3>First row</h3></div>
+            </div>
+          </div>
+          <br>
+          <div ng-repeat="toMap in spreadsheetData.to_map">
+            <div class='row'>
+              <div class='col-md-8'>
+                <div class='input-group'>
+                  <div class='input-group-addon large'>
+                    {{toMap['name'] | replaceUnderscoreWithSpace | titleize}}
+                    <span ng-show="toMap['required']">(*)</span>
+                  </div>
+                  <select class='form-control' ng-required="{{toMap['required']}}" ng-model="mapping[toMap['path']]" ng-options="header[1] as header[0] for header in spreadsheetData.header"></select>
+                </div>
+              </div>
+              <div class='col-md-4'><div class='align-center'>{{spreadsheetData.field_examples[mapping[toMap['path']]] || 'empty'}}</div></div>
+            </div>
+            <br>
+          </div>
+          
+          <button ng-disabled="form.$invalid" class="btn btn-success btn-promo arrow-right" ng-click="mapSpreadsheet()">Ok</button>
+          
+          <div class='clearfix'></div>
+        </form>
+      </div>
+
+      <!------------------>
+      <!--   WAITING    -->
+      <!------------------>
+      <div ng-switch-when="waiting">
+        <div class='align-center'>
+          <h2>Loading</h2>
+          <p>Connec! is uploading your data in your applications!</p>
+          <br>
+          <img ng-src="{{assetPath['loader.gif']}}">
+        </div>
+      </div>
+
+      <!------------------>
+      <!--    ERROR     -->
+      <!------------------>
+      <div ng-switch-when="error">
+        <h2>Error</h2>
+        <div class="alert alert-error" ng-show="errors.upload">
+          <button class="close" ng-click="errors.upload=null">×</button>
+          <ul>
+            <li ng-repeat="error in errors.upload">#{{error._row_id}} - {{error.message}}</li>
+          </ul>
+        </div>
+        <p>You can continue your upload with the above error(s) or go back and try again.</p>
+        <p>Do you want to force the upload?</p>
+        <button ng-click="mapSpreadsheet(true);" class='btn btn-warning btn-promo'>Upload anyway</button>
+        <button ng-click="step.title = 'upload'; mappingStep.title = 'mapping'" class='btn btn-success btn-promo skip'>Review and Try Again</button>
+        <div class='clearfix'></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

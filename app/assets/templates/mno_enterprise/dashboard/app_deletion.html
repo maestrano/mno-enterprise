@@ -1,0 +1,32 @@
+<div>
+  <script type="text/ng-template" id="internal-deletion-modal.html">
+    <div class="modal-header">
+      <div class="close" type="button" ng-click="modal.close()" >×</div>
+      <h3>Confirm app deletion</h3>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-error" ng-show="modal.errors">
+        <button class="close" ng-click="modal.errors=''">×</button>
+        <ul>
+          <li ng-repeat="error in modal.errors">{{error}}</li>
+        </ul>
+      </div>
+
+      <div ng-show="data.currentBillingType == 'monthly'">
+        <p class="text-error align-center">
+          <strong>Please note this app is on a monthly plan. Your billing for this app will be calculated pro rata.</strong>
+        </p>
+        <hr>
+      </div>
+      <p><small><em>In order to delete your app, please enter the following statement in the box below:</em></small></p>
+      <p class="text-error align-center">{{sentence}}</p>
+      <div class="align-center">
+        <input type="text" style="width: 390px;" ng-model="sentenceCheck" required>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" ng-click="modal.close()">Cancel</button>
+      <button class="btn btn-danger" ng-click="proceed()" ng-disabled="sentence != sentenceCheck">Delete</button>
+    </div>
+  </script>
+</div>

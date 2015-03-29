@@ -1,0 +1,35 @@
+<div class="modal-header">
+  <div class="close" type="button" ng-click="memberRemovalModal.close()" >×</div>
+  <h3>Confirm action</h3>
+</div>
+
+<div class="modal-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="alert alert-error" ng-show="memberRemovalModal.errors">
+        <button class="close" ng-click="memberRemovalModal.errors=''">×</button>
+        <ul>
+          <li ng-repeat="error in memberRemovalModal.errors">{{error}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-12">
+      <p class="align-center">
+        Are you sure you want to remove {{memberRemovalModal.user.name}} {{memberRemovalModal.user.surname}} from {{memberRemovalModal.team.name}}?
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="row">
+    <div class="col-sm-12">
+      <button class="btn btn-shaded" ng-click="memberRemovalModal.close()" ng-show="!memberRemovalModal.isLoading">Cancel</button>
+      <button class="btn btn-danger" ng-click="memberRemovalModal.proceed()" ng-show="!memberRemovalModal.isLoading">Remove</button>
+      <img ng-src="{{assetPath['loader-darkblue-bg.gif']}}" ng-show="memberRemovalModal.isLoading" alt="Loading">
+    </div>
+  </div>
+</div>

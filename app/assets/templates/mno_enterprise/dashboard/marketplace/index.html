@@ -1,0 +1,60 @@
+<h2>Marketplace</h2>
+<div class="spacer2"></div>
+
+<div class="row dashboard-marketplace">
+  <!-- Loader -->
+  <div class="col-md-12 text-center" ng-show="isLoading">
+    <img ng-src="{{assetPath['loader-lightgray-bg.gif']}}" alt="Loading"/>
+  </div>
+
+  <!-------------------------------------->
+  <!--        Marketplace Content       -->
+  <!-------------------------------------->
+  <div class="col-md-12" ng-show="!isLoading">
+    <!-- Marketplace nav -->
+    <div class="row">
+      <div class="marketplace-nav">
+        <div class="col-sm-4">
+          <select class="form-control" ng-model="selectedCategory" ng-options="elem for elem in categories" ng-change="searchTerm = ''">
+            <option value=''>All</option>
+          </select>
+        </div>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" placeholder="Search..." ng-model="searchTerm" ng-change="selectedCategory = ''"/>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Marketplace list -->
+    <div class="row">
+      <div class="marketplace-list">
+        
+        <!-- App Cards-->
+        <div class="col-sm-6 col-md-4" ng-repeat="app in apps | filter:appsFilter | filter:searchTerm">
+         
+          <a class="marketplace-app-card" ng-href="{{linkFor(app)}}">
+            <div class="media">
+              <div class="pull-left">
+                <img class="media-object" ng-src="{{app.logo}}" ng-alt="{{app.name}}">
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">{{app.name}}</h4>
+                {{app.tiny_description}}
+              </div>
+              <div class="arrow">
+                <i class="fa fa-caret-right fa-2x"></i>
+              </div>
+            </div>
+          </a>
+          
+        </div>
+        
+        <!-- End: marketplace-list -->
+      </div>
+      
+      <!-- End: row -->
+    </div>
+    
+  </div>
+</div>
+

@@ -1,0 +1,8 @@
+-# Load all CDN Base libraries
+= render "layouts/mno_enterprise/common_cdn_lib_js"
+  
+-# JS libraries hosted internally - usually not changing
+= javascript_include_tag "mno_enterprise/application_lib"
+
+-# Application JS - changing quite often
+= javascript_include_tag "mno_enterprise/application"

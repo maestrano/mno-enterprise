@@ -36,5 +36,6 @@ module MnoEnterprise
     #================================
     has_many :users, class_name: 'MnoEnterprise::User'
     has_many :org_invites, class_name: 'MnoEnterprise::OrgInvite'
+    has_many :app_instances, class_name: 'MnoEnterprise::AppInstance'
   end
 end

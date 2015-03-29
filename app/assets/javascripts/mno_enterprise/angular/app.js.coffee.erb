@@ -1,0 +1,85 @@
+# This is the app declaration
+
+# Declare the module
+@maestranoApp = angular.module('maestrano',
+  [
+    'ngRoute',
+    'ngSanitize',
+    'xeditable',
+    'ngReallyClick',
+    'ui.bootstrap',
+    'maestrano.assets',
+    'maestrano.utilities',
+    'maestrano.components',
+    'maestrano.controllers',
+    'maestrano.message-bus',
+    'maestrano.exchange-rates',
+    'maestrano.notifications',
+    'maestrano.services',
+    'maestrano.filters',
+    'maestrano.dashboard'
+  ])
+
+# Configure the http headers for AJAX requests
+# Define content type and set csrf token
+# TODO: properly configure SCE
+@maestranoApp.config(['$httpProvider', '$sceDelegateProvider', ($httpProvider,$sceDelegateProvider) ->
+  $httpProvider.defaults.headers.common['Accept'] = 'application/json'
+  $httpProvider.defaults.headers.common['Content-Type'] = 'application/json'
+
+  if token = $("meta[name='csrf-token']").attr("content")
+    $httpProvider.defaults.headers.common['X-CSRF-Token'] = token
+
+  # Configure SCE to authorize the Maestrano domains
+  #$sceProvider.enabled(false);
+  $sceDelegateProvider.resourceUrlWhitelist([
+      # Allow same origin resource loads.
+      'self'
+      # Allow UAT asset server
+      #'https://assets-apse1-uat-maestrano.s3.amazonaws.com/assets/**',
+      # Allow UAT Cloudfront distribution
+      #'https://dbu1g4tv4k5kk.cloudfront.net/web/mno/assets/**',
+      # Allow PROD asset server
+      #'https://assets-apse1-prd-maestrano.s3.amazonaws.com/assets/**',
+      # Allow PROD Cloudfront distribution
+      #'https://cdn.maestrano.com/web/mno/assets/**'
+  ]);
+
+  return $httpProvider
+])
+
+@maestranoApp.config(['$routeProvider', ($routeProvider) ->
+  if window.location.pathname == '/mnoe/myspace'
+    $routeProvider.
+      when('/', {
+        template: "<div dashboard-apps-list></div>"
+      }).
+      when('/account', {
+        template: "<div dashboard-account></div>"
+      }).
+      when('/company', {
+        template: "<div dashboard-organization-index></div>"
+      }).
+      when('/support', {
+        template: "<div dashboard-support></div>"
+      }).
+      when('/billing', {
+        redirectTo: '/company'
+      }).
+      when('/marketplace', {
+        template: "<div dashboard-marketplace></div>"
+      }).
+      when('/marketplace/:appId', {
+        template: "<div dashboard-marketplace-app></div>"
+      }).
+      otherwise({
+        redirectTo: '/'
+      })
+])
+
+# Configure asset in rootScope
+@maestranoApp.run(['$rootScope', 'AssetPath', 'TemplatePath','editableOptions', ($rootScope, AssetPath, TemplatePath, editableOptions) ->
+  $rootScope.assetPath = AssetPath
+  $rootScope.templatePath = TemplatePath
+  editableOptions.theme = 'bs3'
+])

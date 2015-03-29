@@ -1,0 +1,254 @@
+<div>
+  <script type="text/ng-template" id="internal-star-wizard.html">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <span>Data Upload Wizard</span>
+      <div class="close" type="button" ng-click="modal.close()" >×</div>
+    </div>
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <div class="star-wizard">
+        <div class='row'>
+          <div class='col-md-12'>
+            <div class='steps'>
+              <div class='step light-color left' ng-class="step == 0 && 'active'">
+                <div class='wrapper'>
+                  <div class='arrow'></div>
+                </div>
+                1
+                <span class='hidden-xs hidden-sm'>- Welcome</span>
+              </div>
+              <div class='step light-color' ng-class="step == 1 && 'active'">
+                <div class='wrapper'>
+                  <div class='arrow'></div>
+                </div>
+                2
+                <span class='hidden-xs hidden-sm'>- Company</span>
+              </div>
+              <div class='step light-color' ng-class="step == 2 && 'active'">
+                <div class='wrapper'>
+                  <div class='arrow'></div>
+                </div>
+                3
+                <span class='hidden-xs hidden-sm'>- Organizations</span>
+              </div>
+              <div class='step light-color' ng-class="step == 3 && 'active'">
+                <div class='wrapper'>
+                  <div class='arrow'></div>
+                </div>
+                4
+                <span class='hidden-xs hidden-sm'>- People</span>
+              </div>
+              <div class='step light-color' ng-class="step == 4 && 'active'">
+                <div class='wrapper'>
+                  <div class='arrow'></div>
+                </div>
+                5
+                <span class='hidden-xs hidden-sm'>- Items</span>
+              </div>
+              <div class='step right light-color' ng-class="step == 5 && 'active'">
+                6
+                <span class='hidden-xs hidden-sm'>- Conclusion</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div ng-switch="step">
+          <!-------------------------------------->
+          <!--        CHOOSE ORGANIZATION       -->
+          <!-------------------------------------->
+          <div ng-switch-when="0">
+            <div class='row'>
+              <div class='col-md-12'>
+                <h2>Organization choice</h2>
+                <p>Welcome to the Maestrano Data Upload Wizard. In just a few simple steps, all your data will be securely uploaded. When you launch your organizations applications, all your data will have seamlessly been uploaded for you through Connec!™</p>
+                <p>Select the organization you'd like to upload data to.<p>
+                <p>Please note, you must be either a Super Admin or Admin in your organization to upload data. If you don't have access, please contact your organizations Super Admin or Admin.</p>
+
+                <div class='col-md-6 col-md-offset-3'>
+                  <select class="form-control" ng-model="orgaChoosen.uid" ng-options="orga.uid as orga.name for orga in orgaList">
+                    <option ng-repeat="orga in orgaList">{{orga}}</option>
+                  </select>
+                </div>
+
+                <br><br><br>
+                <div class='align-center'>
+                  <div class='remark'>(If you don't want to upload your data now, click on "Cancel")</div>
+                  <button class='btn btn-success btn-promo arrow-right' ng-click="goToStep(1)" ng-disabled="!orgaChoosen.uid">Next</button>
+                  <button class='btn cancel btn-grey btn-promo' ng-click="modal.close()">Cancel</button>
+                </div>
+                <br>
+                <div class='clearfix'></div>
+              </div>
+            </div>
+          </div>
+
+          <!-------------------------------------->
+          <!--          COMPANY DETAILS         -->
+          <!-------------------------------------->
+          <div ng-switch-when="1">
+            <div class="alert alert-error" ng-show="errors.uploadCompanyDetails">
+              <button class="close" ng-click="errors.uploadCompanyDetails=''">×</button>
+              <ul>
+                <li ng-repeat="error in errors.uploadCompanyDetails">{{error}}</li>
+              </ul>
+            </div>
+            <h2>Your company details</h2>
+            <p>Enter your company details where applicable</p>
+            <form>
+              <div class='row'>
+                <div class='col-md-6'>
+                  <div class='input-group'>
+                    <div class='input-group-addon'>Name</div>
+                    <input class="form-control" type="text" ng-model="company.name">
+                  </div>
+                  <br>
+                </div>
+
+                <div class='col-md-6'>
+                  <div class='input-group'>
+                    <div class='input-group-addon'>Email</div>
+                    <input class="form-control" type="text" ng-model="company.contacts.email.emailAddress">
+                  </div>
+                  <br>
+                </div>
+              </div>
+
+              <div class='row'>
+                <div class='col-md-6'>
+                  <div class='input-group'>
+                    <div class='input-group-addon'>Currency</div>
+                    <!--TODO-->
+                    <select class="form-control" ng-options="currency for currency in miscellaneous.currencies" ng-model="company.currency"></select>
+                  </div>
+                  <br>
+                </div>
+
+                <div class='col-md-6'>
+                  <div class='input-group'>
+                    <div class='input-group-addon'>Address</div>
+                    <input class="form-control" type="text" ng-model="company.contacts.address.streetAddress.streetAddress">
+                  </div>
+                  <br>
+                </div>
+              </div>
+
+              <div class='row'>
+                <div class='col-md-6'>
+                  <div class='input-group'>
+                    <div class='input-group-addon'>City</div>
+                    <!--TODO-->
+                    <input type="text" class="form-control" ng-model="company.contacts.address.streetAddress.locality">
+                  </div>
+                  <br>
+                </div>
+
+                <div class='col-md-6'>
+                  <div class='input-group'>
+                    <div class='input-group-addon'>Country</div>
+                    <select class="form-control" ng-options="country for country in miscellaneous.countries" ng-model="company.contacts.address.streetAddress.country"></select>
+                  </div>
+                  <br>
+                </div>
+              </div>
+
+              <div class='row'>
+                <div class='col-md-6'>
+                  <div class='input-group'>
+                    <div class='input-group-addon'>Website</div>
+                    <input type="text" class="form-control" ng-model="company.contacts.website.url">
+                  </div>
+                  <br>
+                </div>
+
+                <div class='col-md-6'>
+                  <div class='input-group'>
+                    <div class='input-group-addon'>Phone</div>
+                    <input class="form-control" type="text" ng-model="company.contacts.telephone.voice">
+                  </div>
+                  <br>
+                </div>
+              </div>
+
+              <div class='row'>
+                <div class='col-md-12'>
+                  <div class='input-group'>
+                    <div class='input-group-addon large'>Business Registration Number</div>
+                    <input type="text" class="form-control" ng-model="company.vat_number">
+                  </div>
+                  <br>
+                </div>
+              </div>
+
+              <div class='row'>
+                <div class='col-md-12'>
+                  <div class='input-group'>
+                    <div class='input-group-addon large'>Fiscal Year First Month</div>
+                    <!--TODO-->
+                    <select class="form-control" ng-options="month for month in ['January','February','March','April','May','June','July','August','September','October','November','December']" ng-model="company.fiscal_year_first_month"></select>
+                  </div>
+                  <br>
+                </div>
+              </div>
+
+              <div class='row'>
+                <div class='col-md-12'>
+                  <div class='input-group'>
+                    <div class='input-group-addon large'>Your Company Logo</div>
+                    <input type="file" class="form-control" file-model="companyLogo.file">
+                  </div>
+                  <br>
+                </div>
+              </div>
+              <button ng-style="uploadCompanyDetails.loading && {backgroundColor:'white'}" ng-disabled="uploadCompanyDetails.loading"class='btn btn-success btn-promo arrow-right' ng-click="uploadCompanyDetails.perform()" style="width:102px;">
+                <span ng-hide="uploadCompanyDetails.loading">Next</span>
+                <img ng-src="{{assetPath['loader.gif']}}" ng-show="uploadCompanyDetails.loading">
+              </button>
+              <button class='btn btn-whited btn-promo arrow-left previous' ng-click="goToStep(0)">Back</button>
+              <div class='clearfix'></div>
+            </form>
+          </div>
+
+          <!-------------------------------------->
+          <!--         ORGA SPREADSHEET         -->
+          <!-------------------------------------->
+          <div ng-switch-when="2">
+            <div mno-upload-spreadsheet=true category="organization" channel-id="orgaChoosen.uid" deferred="deferred['organization']"></div>
+          </div>
+
+          <!-------------------------------------->
+          <!--       PERSON SPREADSHEET         -->
+          <!-------------------------------------->
+          <div ng-switch-when="3">
+            <div mno-upload-spreadsheet=true category="person" channel-id="orgaChoosen.uid" deferred="deferred['person']"></div>
+          </div>
+
+          <!-------------------------------------->
+          <!--         ITEM SPREADSHEET         -->
+          <!-------------------------------------->
+          <div ng-switch-when="4">
+            <div mno-upload-spreadsheet=true category="item" channel-id="orgaChoosen.uid" deferred="deferred['item']"></div>
+          </div>
+
+          <!-------------------------------------->
+          <!--            CONCLUSION            -->
+          <!-------------------------------------->
+          <div ng-switch-when="5">
+            <div class='align-center'>
+              <h2>{{conclusionTitle}}</h2>
+              <p>{{conclusionMessage}}</p>
+              <br><br><br>
+              <a href="" ng-click="modal.close()" class='btn btn-warning btn-promo'>Close</a>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+    </div>
+  </script>
+</div>

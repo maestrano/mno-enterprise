@@ -87,7 +87,7 @@ module MnoEnterprise
       # Return cached version if available
       return self.read_attribute(:role) if !organization
       
-      org = self.organizations.find { |o| o.id.to_s == organization.id.to_s }
+      org = self.organizations.to_a.find { |o| o.id.to_s == organization.id.to_s }
       org ? org.role : nil
     end
   end

@@ -1,0 +1,31 @@
+<div class="notification-widget">
+  <!-- Popup notifications -->
+  <div>
+    <script type="text/ng-template" id="internal-notif-popup-modal.html">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="close" type="button" ng-click="notifPopup.close()" >×</div>
+
+        <h3>
+          {{notifPopup.model.title}}
+        </h3>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body scrollable-frame" ng-style="{ maxHeight: windowHeight-200 + 'px' }">
+        <div ng-bind-html="notifPopup.model.content"></div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button ng-click="notifPopup.close()" class="fbtn fbtn-large fbtn-grey">{{notifPopup.model.dismissText}}</button>
+      </div>
+    </script>
+  </div>
+
+  <!-- Flash Notifications-->
+  <div ng-class="notifWidget.classFor(msgObject)" ng-repeat="msgObject in notifWidget.outboundQueue" id="notification{{$index}}">
+    <button type="button" class="close" ng-click="notifWidget.closeMsg(msgObject)">&times;</button>
+    <div ng-bind-html="msgObject.msg"></div>
+  </div>
+</div>

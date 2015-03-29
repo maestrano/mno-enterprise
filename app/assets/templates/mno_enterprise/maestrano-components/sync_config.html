@@ -1,0 +1,28 @@
+<!-- Autostop App Modal-->
+<div>
+  <script type="text/ng-template" id="internal-sync-config-modal.html">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div class="close" type="button" ng-click="modal.toggle()" >×</div>
+      <h3>
+        Connec! with {{appName}}
+      </h3>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body scrollable-frame">
+      <div class="alert alert-error" ng-show="modal.errors">
+        <button class="close" ng-click="modal.errors=''">×</button>
+        <ul>
+          <li ng-repeat="error in modal.errors">{{error}}</li>
+        </ul>
+      </div>
+
+      <p>Please select a data priority. The data priority is set up to decide which data to select in case of conflict.</p>
+      <a class="fbtn" ng-class="sync.mode == 'PUSH-PULL' && 'fbtn-info'" ng-click="sync.mode = 'PUSH-PULL'" style="width:150px;">Maestrano</a>
+      <a class="fbtn" ng-class="sync.mode == 'PULL-PUSH' && 'fbtn-info'" ng-click="sync.mode = 'PULL-PUSH'" style="width:150px;">{{appName}}</a>
+      <div class="spacer2"></div>
+      <a class="fbtn fbtn-success" href="" ng-click="sync.go()">Sync my data</a>
+    </div>
+  </script>
+</div>

@@ -1,0 +1,55 @@
+<!-- 
+  Error messages 
+-->
+<div class="row">
+  <div class="alert alert-error" ng-show="errors">
+    <button class="close" ng-click="errors=''">×</button>
+    <ul>
+      <li ng-repeat="error in errors">{{error}}</li>
+    </ul>
+  </div>
+</div>
+
+
+<div class="row">
+  <form name="forms.settings" role="form" novalidate class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Company name</label>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" ng-model="model.name" required/>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Connec!™ Data Sharing</label>
+      <div class="col-sm-6">
+        <div class="btn-group btn-group-lg">
+          <button class="btn btn-default" ng-click="connecBtnClickOn('enable')" ng-class="connecBtnClassFor('enable')">
+            Enable
+          </button>
+          <button class="btn btn-default" ng-click="connecBtnClickOn('disable')" ng-class="connecBtnClassFor('disable')">
+            Disable
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!--
+  Action buttons
+-->
+<div class="row text-right" ng-show="isLoading">
+  <img ng-src="{{assetPath['loader-white-bg.gif']}}" alt="Loading"/>
+</div>
+<div class="row text-right" ng-show="!isLoading">
+  <div class="col-md-4 col-md-offset-8">
+    <button ng-click="cancel()" class="btn btn-shaded btn-lg" ng-show="isCancelShown()">
+      Cancel 
+    </button>
+    
+    <button ng-click="save()" href="" class="btn btn-info btn-lg" ng-disabled="!isSaveEnabled()">
+      Save
+    </button>
+  </div>
+</div>

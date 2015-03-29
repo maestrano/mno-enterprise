@@ -1,0 +1,28 @@
+<span ng-switch="contentType" style="{{customStyle}}">
+  <span ng-switch-when="image">
+    <span class='upload-picture' ng-show="showForm">
+      <span class='input-group'>
+        <input type="file" class="form-control" file-model="model.image">
+        <span class='input-group-addon'>
+          <button ng-click="uploadImage()" class='btn btn-success'>Ok</button>
+        </span>
+      </span>
+    </span>
+    <img ng-src="{{model.orig}}">
+    <br>
+  </span>
+  <span ng-switch-when="banner">
+    <span class='upload-picture' ng-show="showForm">
+      <span class='input-group'>
+        <input type="file" class="form-control" file-model="model.image">
+        <span class='input-group-addon'>
+          <button ng-click="uploadImage()" class='btn btn-success'>Ok</button>
+        </span>
+      </span>
+    </span>
+  </span>
+  <span ng-switch-default>
+    <span editable-textarea='model.value' onaftersave='updateField()' ng-bind-html='model.orig'>
+    </span>
+  </span>
+</span>

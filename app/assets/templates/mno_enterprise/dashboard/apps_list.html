@@ -1,0 +1,152 @@
+<h2>
+  Dashboard
+  <div class='star-wizard-button-wrapper'>
+    <div mno-star-wizard=true modal-open='starWizardModal.value'></div>
+    <a class='star-button hidden-sm hidden-xs btn btn-promo btn-success' ng-click='openStarWizard()'>
+      <span class='fa fa-upload'></span>
+      Data Upload Wizard
+    </a>
+  </div>
+</h2>
+
+<div class="spacer1"></div>
+
+<div ng-switch="loading.value">
+  <div ng-switch-when='true'>
+    <div class='align-center'>
+      <img ng-src="{{assetPath['loader-lightgray-bg.gif']}}">
+    </div>
+  </div>
+  <div ng-switch-default>
+    <div class='row'>
+      <div ng-repeat="app in apps" class='col-md-3'>
+        <div class='app-dashboard'>
+          <div ng-switch="displayOptions[app.id]">
+
+            <div ng-switch-when="true">
+              <div class="status" ng-class="app.status + ' ' + (shouldBlink(app.status) && blink.value)" mno-helptext="{{app.status}}"></div>
+              <div ng-init="openModal = 0" dashboard-plan-change-request=true app-id="{{app.id}}" open-modal="openModal"></div>
+              <div ng-init="deletionModal = 0" dashboard-app-deletion-request=true app-id="{{app.id}}" open-modal="deletionModal"></div>
+              <a ng-click="displayOptions[app.id] = !displayOptions[app.id]" ng-show="helper.displayCogwheel()" class="options" href=""><div class="fa fa-cog"></div></a>
+              <button ng-click="openModal = openModal + 1" ng-show="helper.canChangePlanApp(app)" class="btn btn-success btn-change-plan">Change plan</button>
+
+              <!-- Data Sync Button -->
+              <div ng-show="appsListHelper.isDataSyncShown(app)">
+                <br>
+                <a class="btn btn-info" href="{{ appsListHelper.dataSyncPath(app) }}" mno-helptext="Trigger a manual sync between {{app.appName}} and Maestrano.">Manual Data Sync</a>
+              </div>
+
+              <!-- Data Disconnect Button -->
+              <div ng-show="appsListHelper.isDataDisconnectShown(app)">
+                <br>
+                <a class="btn btn-danger" ng-really-message="Are you sure you want to disconnect {{app.appName}} and Maestrano?" ng-really-click="appsListHelper.dataDisconnectClick(app)" href="" mno-helptext="Disconnect the link between {{app.appName}} and Maestrano.">Disconnect Link</a>
+              </div>
+              <br>
+              <div>
+                <br>
+                <button ng-click="restartApp.perform(app.id)" ng-show="helper.canRestartApp() && appsListHelper.isRestartShown(app)" ng-disabled="restartApp.loading" class="btn">Restart</button>
+                <button ng-click="deletionModal = deletionModal + 1" ng-show="helper.canDeleteApp()" class="btn btn-danger">Delete</button>
+              </div>
+            </div>
+
+            <div ng-switch-default>
+              <div class="status" ng-class="app.status + ' ' + (shouldBlink(app.status) && blink.value)" mno-helptext="{{app.status}}"></div>
+              <a ng-click="displayOptions[app.id] = !displayOptions[app.id]" ng-show="helper.displayCogwheel()" class="options" href=""><div class="fa fa-cog"></div></a>
+              <br>
+              <a ng-href="{{appsListHelper.appActionUrl(app)}}" target="_blank">
+                <img class="app-logo" ng-src="{{app.logo}}">
+              </a>
+              <br>
+              <div ng-hide="displayCustomInfo[app.id]" editable-text="app.name" onaftersave="updateAppName(app)" class='title' style="border:0px;">{{app.name}}</div>
+
+              <!-- Connected company name -->
+              <div ng-show="appsListHelper.companyName(app)">
+                <div class='app-line' style="border:0px;" tooltip="{{appsListHelper.companyName(app)}}">
+                  Linked to: {{ appsListHelper.companyName(app) | truncate:25 }}
+                </div>
+              </div>
+
+              <!-- Connected company name -->
+              <div ng-show="appsListHelper.connectorVersion(app)">
+                <div class='app-line' style="border:0px;">MYOB Version: {{appsListHelper.connectorVersion(app)}}</div>
+              </div>
+
+              <!-- Office365 Connect Button -->
+              <div ng-show="appsListHelper.isMicrosoftSetupShown(app)">
+                <a ng-href="{{appsListHelper.microsoftTrialUrl(app)}}" target="_blank">
+                  <img class="connector-logo office365-connector-logo" ng-src="{{assetPath['office365/connect_office365.jpg']}}" alt="Connect Office 365 and Maestrano"/>
+                </a>
+              </div>
+
+              <!-- QuickBooks Connect Button -->
+              <div ng-show="appsListHelper.isQuickBooksConnectShown(app)">
+                <a href="" ng-click="appsListHelper.connectToQuickBooks(app)" class="intuitPlatformConnectButton">
+                  <ipp:connecttointuit></ipp:connecttointuit>
+                </a>
+              </div>
+
+              <!-- Xero Connect Button -->
+              <div ng-show="appsListHelper.isXeroConnectShown(app)">
+                <div style="margin-top:-5px;">
+                  <label>
+                    <input style="position: relative; vertical-align: middle; bottom: 1px; margin-right: 5px; height: 10px;" type="checkbox" ng-click="extra_params = (extra_params ? '' : '?extra_params=payroll')">
+                    Allow payroll access?
+                  </label>
+                </div>
+                <a href="{{ appsListHelper.dataSyncPath(app) }}{{ extra_params }}">
+                  <img ng-src="{{assetPath['xero/connect_xero_button_blue1.png']}}" alt="Connect Xero and Maestrano"/>
+                </a>
+              </div>
+
+              <!-- MYOB Connect Button -->
+              <div ng-show="appsListHelper.isMYOBConnectShown(app)">
+                <a ng-click="displayCustomInfo[app.id] = !displayCustomInfo[app.id]"
+                  popover-placement="top" popover-trigger="mouseenter" popover="You must have an existing MYOB Account, if you don't click on Launch App button below to create one">
+                  <img class="connector-logo" ng-src="{{assetPath['myob/connect_myob.png']}}" alt="Connect MYOB and Maestrano"/>
+                </a>
+              </div>
+
+              <!-- Custom application information -->
+              <div class="app-custom-info" ng-show="displayCustomInfo[app.id]">
+                <!-- MYOB version selection -->
+                <div ng-show="appsListHelper.isMYOBConnectShown(app)">
+                  <span>Select your MYOB Product</span>
+                  <div>
+                    <a class="btn" href="{{ appsListHelper.myobEssentialsConnectPath(app) }}"
+                        popover-placement="top" popover-trigger="mouseenter" popover="You must have an existing MYOB Essentials Account">
+                      <img ng-src="{{assetPath['myob/myob_essentials.png']}}" alt="Connect MYOB Essentials and Maestrano"/>
+                    </a>
+                  </div>
+                  <div>
+                    <a class="btn" href="{{ appsListHelper.myobAccountRightConnectPath(app) }}"
+                        popover-placement="top" popover-trigger="mouseenter" popover="You must have an existing MYOB AccountRight Account">
+                      <img ng-src="{{assetPath['myob/myob_AccountRight.png']}}" alt="Connect MYOB AccountRight and Maestrano"/>
+                    </a>
+                  </div>
+                  <div>
+                    <a class="btn btn-default" ng-click="displayCustomInfo[app.id] = !displayCustomInfo[app.id]">Cancel</a>
+                  </div>
+                </div>
+              </div>
+
+              <a ng-href="{{appsListHelper.appActionUrl(app)}}" target="_blank" ng-hide="displayCustomInfo[app.id] || appsListHelper.isLaunchHidden(app)" class="btn btn-warning">Launch App</a>
+
+              <span ng-show="app.status == 'terminating' || app.status == 'terminated'">(deleted)</span>
+              <br>
+              <a ng-show="app.tutorial" ng-href="{{app.tutorial}}" class='tutorial' target="_blank">Tutorials</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class='col-md-3'>
+        <div class='app-dashboard add-app'>
+          <a href="#/marketplace">
+            <div class="fa fa-plus-circle"></div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class='spacer2'></div>
+    <div dashboard-bootstrap-wizard='true' ng-show='helper.displayBootstrapWizard()'></div>
+  </div>
+</div>
