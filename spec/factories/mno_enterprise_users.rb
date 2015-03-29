@@ -25,12 +25,10 @@ FactoryGirl.define do
     end
     
     trait :with_deletion_request do
-      #association :deletion_request, strategy: :build
       deletion_request { build(:deletion_request).attributes }
     end
     
     trait :with_organizations do
-      #organizations { [build(:organization)] }
       organizations { [build(:organization).attributes] }
     end
     

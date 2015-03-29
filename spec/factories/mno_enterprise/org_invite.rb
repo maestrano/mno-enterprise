@@ -1,0 +1,22 @@
+# Read about factories at https://github.com/thoughtbot/factory_girl
+
+FactoryGirl.define do
+  factory :mno_enterprise_org_invite, :class => 'AppInstance' do
+    
+    factory :org_invite, class: MnoEnterprise::OrgInvite do
+      sequence(:id) 
+      sequence(:token) { |n| "dfhsohflsklddfdsJDasldnjsaHsnjdlsa#{n}" } 
+      sequence(:user_email) { |n| "jack.doe#{n}@maestrano.com" }
+      status "pending"
+      user_role "Admin"
+      organization { build(:organization).attributes }
+      referrer { build(:user).attributes }
+      
+      created_at 3.days.ago 
+      updated_at 1.hour.ago
+      
+      # Properly build the resource with Her
+      initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
+    end
+  end
+end

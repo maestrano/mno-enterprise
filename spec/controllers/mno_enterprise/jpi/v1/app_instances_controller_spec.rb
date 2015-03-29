@@ -1,7 +1,8 @@
 require 'rails_helper'
 
+# TODO: spec AppInstance response
 module MnoEnterprise
-  describe Jpi::V1::AppInstancesController do
+  describe Jpi::V1::AppInstancesController, type: :controller do
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }

@@ -18,6 +18,15 @@
 #
 
 module MnoEnterprise
-  class OrgaInvite < BaseResource
+  class OrgInvite < BaseResource
+    
+    #==============================================================
+    # Associations
+    #==============================================================
+    belongs_to :user, class_name: 'MnoEnterprise::User'
+    belongs_to :referrer, class_name: 'MnoEnterprise::User'
+    belongs_to :organization, class_name: 'MnoEnterprise::Organization'
+    belongs_to :team, class_name: 'MnoEnterprise::OrgTeam'
+    
   end
 end

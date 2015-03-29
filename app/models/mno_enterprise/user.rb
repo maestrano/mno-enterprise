@@ -83,8 +83,11 @@ module MnoEnterprise
     
     # Return the role of this user for the provided
     # organization
-    def role(organization)
-      org = self.organizations.select { |o| o.id == organization.id }
+    def role(organization = nil)
+      # Return cached version if available
+      return self.read_attribute(:role) if !organization
+      
+      org = self.organizations.find { |o| o.id.to_s == organization.id.to_s }
       org ? org.role : nil
     end
   end

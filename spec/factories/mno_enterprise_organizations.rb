@@ -10,6 +10,10 @@ FactoryGirl.define do
       created_at 3.days.ago
       updated_at 1.hour.ago
       
+      trait :with_org_invites do
+        org_invites { [build(:org_invite).attributes] }
+      end
+      
       # Properly build the resource with Her
       initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
     end

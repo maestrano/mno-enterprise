@@ -22,7 +22,13 @@ MnoEnterprise::Engine.routes.draw do
       resources :marketplace, only: [:index,:show]
       resource :current_user, only: [:show]
       
-      resources :organizations, only: [] do
+      resources :organizations, only: [:index, :show, :update] do
+        member do
+          put :invite_members
+          put :update_member
+          put :remove_member
+        end
+        
         resources :app_instances, only: [:index]
       end
     end

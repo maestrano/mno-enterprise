@@ -1,4 +1,5 @@
 require 'jbuilder'
+require 'cancancan'
 require 'devise'
 require 'devise/strategies/remote_authenticatable'
 require "her"
