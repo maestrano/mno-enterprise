@@ -29,17 +29,17 @@ module MnoEnterprise
       #puts "---------------------- Current User -----------------------------"
       #puts current_user.inspect
       
-      unless current_user
-        begin
-          #puts "just before sign_in"
-          sign_in MnoEnterprise::User.find(205), bypass: true
-          #puts "current user after sign_in"
-          #puts current_user.inspect
-        rescue Exception => e
-          puts "sign_in error"
-          puts e
-        end
-      end
+      # unless current_user
+      #   begin
+      #     #puts "just before sign_in"
+      #     sign_in MnoEnterprise::User.find(205), bypass: true
+      #     #puts "current user after sign_in"
+      #     #puts current_user.inspect
+      #   rescue Exception => e
+      #     puts "sign_in error"
+      #     puts e
+      #   end
+      # end
       #puts "-----------------------------------------------------------------"
       true
     end
@@ -74,7 +74,7 @@ module MnoEnterprise
     def after_sign_in_path_for(resource)
       previous_url = session[:previous_url]
       session[:previous_url] = nil
-      return (previous_url || myspace_url)
+      return (previous_url || mno_enterprise.myspace_url)
     end
   end
 end

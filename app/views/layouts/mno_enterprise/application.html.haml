@@ -1,9 +1,15 @@
 !!!
-%html
+%html{ :id => 'ng-app', 'ng-app' => 'maestrano' }
   %head
-    %title MnoEnterprise
-    = stylesheet_link_tag    "mno_enterprise/application", media: "all"
-    = javascript_include_tag "mno_enterprise/application"
-    = csrf_meta_tags
+    %title= @meta[:title]
+    %meta{ :name => 'description', :content => @meta[:description] }
+    %meta{ 'http-equiv'=>"X-UA-Compatible", content:"IE=edge" }
+    %meta{ 'name'=>"viewport", 'content'=>"width=device-width, initial-scale=1" }
+    = render 'layouts/mno_enterprise/header_files'
+  
   %body
+    //%div{ 'mno-notification-widget' => [notice_hash(notice),alert_hash(alert)].to_json, 'user-logged-in' => "#{user_signed_in?}" }
+    
     = yield
+    
+    = render partial: 'layouts/mno_enterprise/footer_files'
