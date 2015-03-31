@@ -47,34 +47,36 @@ module MnoEnterprise
     #============================================
     # Devise
     #============================================
-    # Do not updated devise last access timestamps on ajax call so that
-    # timeout feature works properly
-    # Only GET request get ignored - POST/PUT/DELETE requests reflect a
-    # user action and should therefore be taken into account
-    def skip_devise_trackable_on_xhr
-      if request.format == 'application/json' && request.get?
-        request.env["devise.skip_trackable"] = true
+    protected
+      
+      # Do not updated devise last access timestamps on ajax call so that
+      # timeout feature works properly
+      # Only GET request get ignored - POST/PUT/DELETE requests reflect a
+      # user action and should therefore be taken into account
+      def skip_devise_trackable_on_xhr
+        if request.format == 'application/json' && request.get?
+          request.env["devise.skip_trackable"] = true
+        end
       end
-    end
   
-    # Devise will always redirect to the last non devise route
-    # (alias not starting with /auth)
-    # ---
-    # WARNING: if one day you change the below please also check that
-    # the new behaviour fits with ConfirmationsController (yes...I know...it's not clean)
-    def store_location
-      # store last url if the request is html (not json or other)
-      # and matches a specific action
-      if request.format == 'text/html' && request.fullpath =~ /\/(myspace|deletion_requests|org_invites)/
-        session[:previous_url] = request.original_url
+      # Devise will always redirect to the last non devise route
+      # (alias not starting with /auth)
+      # ---
+      # WARNING: if one day you change the below please also check that
+      # the new behaviour fits with ConfirmationsController (yes...I know...it's not clean)
+      def store_location
+        # store last url if the request is html (not json or other)
+        # and matches a specific action
+        if request.format == 'text/html' && request.fullpath =~ /\/(myspace|deletion_requests|org_invites)/
+          session[:previous_url] = request.original_url
+        end
       end
-    end
 
-    # Redirect to previous url and reset it
-    def after_sign_in_path_for(resource)
-      previous_url = session[:previous_url]
-      session[:previous_url] = nil
-      return (previous_url || mno_enterprise.myspace_url)
-    end
+      # Redirect to previous url and reset it
+      def after_sign_in_path_for(resource)
+        previous_url = session[:previous_url]
+        session[:previous_url] = nil
+        return (previous_url || mno_enterprise.myspace_url)
+      end
   end
 end

@@ -6,7 +6,6 @@ MnoEnterprise::Engine.routes.draw do
   root to: redirect('/myspace')
   
   # MySpace routes
-  # TODO: check that those routes are always working with the new dashboard
   get '/myspace', :to => 'pages#myspace'
   get '/myspace#/apps/dashboard', :to => 'pages#myspace', :as => 'myspace_home'
   get '/myspace#/billing', :to => 'pages#myspace', :as => 'myspace_billing'
@@ -17,8 +16,23 @@ MnoEnterprise::Engine.routes.draw do
   devise_for :users, { 
     class_name: "MnoEnterprise::User",
     module: :devise, 
-    path_prefix: 'auth'
+    path_prefix: 'auth',
+    controllers: {
+      confirmations: "mno_enterprise/auth/confirmations",
+      #omniauth_callbacks: "auth/omniauth_callbacks",
+      passwords: "auth/passwords",
+      registrations: "auth/registrations",
+      sessions: "auth/sessions",
+      unlocks: "auth/unlocks"
+    }
   }
+  
+  # TODO: routing specs
+  devise_scope :user do
+    get "/auth/users/confirmation/lounge", :to => "auth/confirmations#lounge", as: :user_confirmation_lounge
+    patch "/auth/users/confirmation", :to => "auth/confirmations#update"
+  end
+  
   
   #============================================================
   # JPI V1

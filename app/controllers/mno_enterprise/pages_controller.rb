@@ -1,6 +1,7 @@
 module MnoEnterprise
   class PagesController < ApplicationController
-    before_filter :authenticate_user!, :only => [:myspace]
+    before_filter :authenticate_user!, only: [:myspace]
+    before_filter :redirect_to_lounge_if_unconfirmed, only: [:myspace]
     
     # GET /myspace
     def myspace
