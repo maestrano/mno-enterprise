@@ -60,7 +60,7 @@ module MnoEnterprise
     # The auth_hash includes an email and password
     # Return nil in case of failure
     def self.authenticate(auth_hash)
-      u = self.post(:authenticate, auth_hash)
+      u = self.post("user_sessions", auth_hash)
       
       if u && u.id
         puts "MnoEnterprise::User | authenticate | u.changes: #{u.changes}"
