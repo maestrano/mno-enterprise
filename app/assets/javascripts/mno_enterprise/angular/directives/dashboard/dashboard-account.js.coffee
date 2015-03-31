@@ -15,7 +15,7 @@ module.controller('DashboardAccountCtrl',[
       $scope.success = {}
       # User model init
       $scope.isPersoInfoOpen = true
-      userDocument = CurrentUserSvc.document.user
+      userDocument = CurrentUserSvc.document.current_user
       $scope.user = { model: {}, password: {}, loading:false }
 
       setUserModel = (model) ->

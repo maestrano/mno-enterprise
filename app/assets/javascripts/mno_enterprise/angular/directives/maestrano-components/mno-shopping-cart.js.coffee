@@ -24,7 +24,7 @@ module.controller('MnoShoppingCartCtrl',[
     currentUserInfos = CurrentUserSvc
     currentUserInfos.loadDocument()
     currentUserInfos.then ->
-      $scope.country_code = currentUserInfos.document.user.country_code
+      $scope.country_code = currentUserInfos.document.current_user.country_code
 
     #=======================================================
     # Configuration
