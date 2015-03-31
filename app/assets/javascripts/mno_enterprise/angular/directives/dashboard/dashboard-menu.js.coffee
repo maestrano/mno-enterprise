@@ -158,8 +158,8 @@ module.controller('DashboardMenuCtrl',[
     # user.put_metadata('has_analytics_beta_access',true)
     $scope.isAnalyticsTabShown = ->
       return CurrentUserSvc.document &&
-      CurrentUserSvc.document.user &&
-      CurrentUserSvc.document.user.hasAnalyticsBetaAccess
+      CurrentUserSvc.document.current_user &&
+      CurrentUserSvc.document.current_user.hasAnalyticsBetaAccess
     
     #====================================
     # Background color management

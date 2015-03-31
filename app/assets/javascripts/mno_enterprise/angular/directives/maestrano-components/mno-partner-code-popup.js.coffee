@@ -58,7 +58,7 @@ module.controller('MnoPartnerCodePopupCtrl',[
     #===================================
     # Listener for the modal opening
     CurrentUserSvc.loadDocument().then (data) ->
-      resellerCode = CurrentUserSvc.document.user.reseller_code
+      resellerCode = CurrentUserSvc.document.current_user.reseller_code
       if (!resellerCode || resellerCode == '')
         partnerCodeModal.open()
 ])
