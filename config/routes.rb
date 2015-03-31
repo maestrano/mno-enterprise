@@ -20,10 +20,10 @@ MnoEnterprise::Engine.routes.draw do
     controllers: {
       confirmations: "mno_enterprise/auth/confirmations",
       #omniauth_callbacks: "auth/omniauth_callbacks",
-      passwords: "auth/passwords",
-      registrations: "auth/registrations",
-      sessions: "auth/sessions",
-      unlocks: "auth/unlocks"
+      passwords: "mno_enterprise/auth/passwords",
+      registrations: "mno_enterprise/auth/registrations",
+      sessions: "mno_enterprise/auth/sessions",
+      unlocks: "mno_enterprise/auth/unlocks"
     }
   }
   
