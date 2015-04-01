@@ -125,16 +125,8 @@ module.controller('DashboardMenuCtrl',[
     selectBox.organizationLabel = (organization) ->
       icon = {}
       icon.type = if (organization.id == DhbOrganizationSvc.getId()) then "fa-dot-circle-o" else "fa-circle-o"
-      
-      if organization.is_reseller_branch
-        icon.klass = "reseller"
-        icon.tooltip = "This is your partner practice"
-      else if organization.is_customer_account
-        icon.klass = "customer"
-        icon.tooltip = "This company is one of your customers"
-      else
-        icon.klass = "company"
-        icon.tooltip = "You belong to this company"
+      icon.klass = "company"
+      icon.tooltip = "You belong to this company"
       
       html = "<i class=\"fa #{icon.type} #{icon.klass}\" tooltip=\"#{icon.tooltip}\"></i>#{organization.name}"        
       return html
@@ -160,25 +152,6 @@ module.controller('DashboardMenuCtrl',[
       return CurrentUserSvc.document &&
       CurrentUserSvc.document.current_user &&
       CurrentUserSvc.document.current_user.hasAnalyticsBetaAccess
-    
-    #====================================
-    # Background color management
-    # (the background color is different
-    # for the partners tabs)
-    #====================================
-    $scope.$watch(( -> $location.$$path),
-      () ->
-        switch $location.$$path
-          when "/partner_summary" then $scope.backgroundColor = "#131f25"
-          when "/partner_users" then $scope.backgroundColor = "#131f25"
-          when "/partner_webinar" then $scope.backgroundColor = "#131f25"
-          when "/cloud_partner_api" then $scope.backgroundColor = "#131f25"
-          when "/cloud_partner_marketing" then $scope.backgroundColor = "#131f25"
-          when "/cloud_partner_pricing" then $scope.backgroundColor = "#131f25"
-          when "/cloud_partner_account" then $scope.backgroundColor = "#131f25"
-          when "/cloud_partner_portfolio" then $scope.backgroundColor = "#131f25"
-          else $scope.backgroundColor = "#e6edee"
-    )
 
     #====================================
     # New Orga Modal
