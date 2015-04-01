@@ -1,3 +1,4 @@
+require 'jwt'
 require 'jquery-rails'
 require 'haml'
 require 'countries'
@@ -43,6 +44,19 @@ module MnoEnterprise
   def self.configure
     yield self
     self.configure_api
+  end
+  
+  # Create a JSON web token with the provided payload
+  # E.g.: MnoEnterprise.jwt({ user_id: 'usr-427431' })
+  def self.jwt(payload)
+    secret = "#{self.tenant_id}:#{self.tenant_key}"
+    iat = Time.now.utc.to_i
+    
+    JWT.encode(payload.merge(
+      iss: MnoEnterprise.tenant_id,
+      iat: iat,
+      jit: Digest::MD5.hexdigest("#{secret}:#{iat}")
+    ), secret)
   end
   
   private
