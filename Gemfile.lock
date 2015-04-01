@@ -11,6 +11,7 @@ PATH
       her (~> 0.7.3)
       jbuilder (~> 2.2.12)
       jquery-rails (~> 4.0.3)
+      jwt (~> 1.4.1)
       less-rails
       rails (~> 4.2.0)
       therubyracer
@@ -117,6 +118,7 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (1.8.2)
+    jwt (1.4.1)
     less (2.6.0)
       commonjs (~> 0.2.7)
     less-rails (2.6.0)
