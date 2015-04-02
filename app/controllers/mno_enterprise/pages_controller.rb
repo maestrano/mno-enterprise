@@ -20,7 +20,7 @@ module MnoEnterprise
     # TODO: Access + existence checks could be added in the future. This is not
     # mandatory as Mno Enterprise will do it anyway
     def launch
-      redirect_to(MnoEnterprise.router.launch_url(params[:id]))
+      redirect_to MnoEnterprise.router.launch_url(params[:id], wtk: MnoEnterprise.jwt(user_id: current_user.uid))
     end
   end
 end
