@@ -2,13 +2,16 @@ MnoEnterprise::Engine.routes.draw do
   
   #============================================================
   # Static Pages
-  #============================================================
-  root to: redirect('/myspace')
+  #============================================================  
+  root to: redirect { Rails.application.routes.url_helpers.myspace_path }
+  
+  # Generic routes
+  get '/launch/:id', to: 'pages#launch', constraints: { id: /[\w\-\.]+/ }
   
   # MySpace routes
-  get '/myspace', :to => 'pages#myspace'
-  get '/myspace#/apps/dashboard', :to => 'pages#myspace', :as => 'myspace_home'
-  get '/myspace#/billing', :to => 'pages#myspace', :as => 'myspace_billing'
+  get '/myspace', to: 'pages#myspace'
+  get '/myspace#/apps/dashboard', to: 'pages#myspace', as: 'myspace_home'
+  get '/myspace#/billing', to: 'pages#myspace', as: 'myspace_billing'
   
   #============================================================
   # Devise Configuration
