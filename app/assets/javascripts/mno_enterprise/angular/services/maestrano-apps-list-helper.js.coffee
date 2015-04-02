@@ -88,7 +88,7 @@ angular.module('maestrano.services.apps-list-helper', []).factory( 'AppsListHelp
         return (instance && instance.status != 'terminating' && instance.status != 'terminated')
 
       appActionUrl: (instance) ->
-        "/app_instances/#{instance.uid}/launch"
+        "/mnoe/launch/#{instance.uid}"
 
       appLoaderPath: (instance) ->
         if instance.status == 'running'
