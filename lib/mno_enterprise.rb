@@ -104,7 +104,6 @@ module MnoEnterprise
         c.use Faraday::Request::UrlEncoded
   
         # Response
-        #SecondLevelParseJSON
         c.use Her::Middleware::MnoeApiV1ParseJson
 
         # Adapter
