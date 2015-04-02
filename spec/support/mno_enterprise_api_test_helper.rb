@@ -4,21 +4,27 @@ module MnoEnterpriseApiTestHelper
   # the resource as if it had been returned by the MnoEnterprise
   # API server
   def from_api(res)
+    { data: serialize_type(res) }
+  end
+  
+  def serialize_type(res)
     case
     when res.kind_of?(Array)
-      return res.map { |e| from_api(e) }
+      return res.map { |e| serialize_type(e) }
     when res.kind_of?(MnoEnterprise::BaseResource)
       hash = res.attributes.dup
       hash.each do |k,v|
-        hash[k] = from_api(v)
+        hash[k] = serialize_type(v)
       end
       return hash
     when res.kind_of?(Hash)
       hash = res.dup
       hash.each do |k,v|
-        hash[k] = from_api(v)
+        hash[k] = serialize_type(v)
       end
       return hash
+    when res.respond_to?(:iso8601)
+      return res.iso8601
     else
       return res
     end
@@ -88,7 +94,7 @@ module MnoEnterpriseApiTestHelper
         c.use Faraday::Request::UrlEncoded
 
         # Response
-        c.use Her::Middleware::DefaultParseJSON
+        c.use Her::Middleware::MnoeApiV1ParseJson
       
         # Add stubs on the test adapter
         c.adapter(:test) do |receiver|

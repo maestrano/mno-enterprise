@@ -16,9 +16,12 @@ FactoryGirl.define do
     geo_country_code "AU"
     geo_state_code "NSW"
     geo_city "Sydney"
+    created_at 2.days.ago
+    updated_at 2.days.ago
     
+    confirmation_sent_at 2.days.ago
     confirmation_token "wky763pGjtzWR7dP44PD"
-    confirmed_at 3.days.ago.iso8601
+    confirmed_at 1.days.ago
     
     trait :unconfirmed do
       confirmed_at nil
