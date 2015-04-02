@@ -7,6 +7,7 @@ FactoryGirl.define do
   
   factory :user, class: MnoEnterprise::User do
     sequence(:id)
+    sequence(:uid) { |n| "usr-fda9#{n}" }
     name "John"
     surname "Doe"
     sequence(:email) { |n| "john.doe#{n}@maestrano.com" }

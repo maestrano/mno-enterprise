@@ -4,7 +4,8 @@
 #   - /v1/users
 #   - /v1/organizations/:organization_id/users
 #
-#  id                             :string          e.g.: usr-1d4f56
+#  id                             :string          e.g.: 1
+#  uid                            :string          e.g.: usr-k3j23npo
 #  email                          :string(255)     default(""), not null
 #  authenticatable_salt           :string(255)     used for session authentication
 #  encrypted_password             :string(255)     default(""), not null
@@ -41,7 +42,7 @@ module MnoEnterprise
     
     # Note: password and encrypted_password are write-only attributes and are never returned by
     # the remote API. If you are looking for a session token, use authenticatable_salt
-    attributes :email, :password, :authenticatable_salt, :encrypted_password, :reset_password_token, :reset_password_sent_at, 
+    attributes :uid, :email, :password, :authenticatable_salt, :encrypted_password, :reset_password_token, :reset_password_sent_at, 
       :remember_created_at, :sign_in_count, :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, 
       :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email, 
       :failed_attempts, :unlock_token, :locked_at, :name, :surname, :company, :phone, :phone_country_code, 
