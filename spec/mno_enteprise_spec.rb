@@ -35,4 +35,13 @@ describe MnoEnterprise do
     end
   end
   
+  context 'router' do
+    
+    describe 'launch_url' do
+      let(:id) { "cld-1d45e6" }
+      let(:url) { "#{MnoEnterprise.mno_api_host}#{MnoEnterprise.mno_api_root_path}/launch/#{id}" }
+      it { expect(MnoEnterprise.router.launch_url(id)).to eq(url) }
+    end
+    
+  end
 end
