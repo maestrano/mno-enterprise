@@ -3,8 +3,7 @@ module MnoEnterprise
     protect_from_forgery
     include ApplicationHelper
     prepend_before_filter :skip_devise_trackable_on_xhr
-  
-    before_filter :mock_current_user
+    
     before_filter :set_default_meta
     before_filter :store_location
     
@@ -23,25 +22,6 @@ module MnoEnterprise
       @meta = {}
       @meta[:title] = "Application"
       @meta[:description] = "Enterprise Applications"
-    end
-    
-    def mock_current_user
-      #puts "---------------------- Current User -----------------------------"
-      #puts current_user.inspect
-      
-      # unless current_user
-      #   begin
-      #     #puts "just before sign_in"
-      #     sign_in MnoEnterprise::User.find(205), bypass: true
-      #     #puts "current user after sign_in"
-      #     #puts current_user.inspect
-      #   rescue Exception => e
-      #     puts "sign_in error"
-      #     puts e
-      #   end
-      # end
-      #puts "-----------------------------------------------------------------"
-      true
     end
     
     #============================================
