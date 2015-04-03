@@ -45,7 +45,10 @@ MnoEnterprise::Engine.routes.draw do
   namespace :jpi do
     namespace :v1 do
       resources :marketplace, only: [:index,:show]
-      resource :current_user, only: [:show]
+      resource :current_user, only: [:show, :update] do
+        post '/deletion_request', action: :create_deletion_request
+        delete '/deletion_request', action: :cancel_deletion_request
+      end
       
       resources :organizations, only: [:index, :show, :update] do
         member do

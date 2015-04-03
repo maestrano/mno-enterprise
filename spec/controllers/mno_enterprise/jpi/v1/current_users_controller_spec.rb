@@ -21,7 +21,7 @@ module MnoEnterprise
         'surname' => res.surname,
         'email' => res.email,
         'logged_in' => !!res.id,
-        'created_at' => res.created_at,
+        'created_at' => res.created_at ? res.created_at.iso8601 : nil,
         'company' => res.company,
         'phone' => res.phone,
         'phone_country_code' => res.phone_country_code,
@@ -49,8 +49,9 @@ module MnoEnterprise
     end
     
     # Stub user retrieval
-    let(:user) { build(:user, :with_deletion_request, :with_organizations) }
+    let!(:user) { build(:user, :with_deletion_request, :with_organizations) }
     before { api_stub_for(MnoEnterprise::User, method: :get, path: "/users/#{user.id}", response: from_api(user)) }
+    
     
     describe "GET #show" do
       subject { get :show }
@@ -68,8 +69,8 @@ module MnoEnterprise
       end
       
       describe 'logged in' do
-        before { puts user.inspect; puts from_api(user) }
         before { sign_in user }
+        
         it 'is successful' do
           subject
           expect(response).to be_success
@@ -80,59 +81,23 @@ module MnoEnterprise
           expect(response.body).to eq(json_for(user))
         end
       end
+    end
+    
+    describe 'PUT #update' do
+      let(:attrs) { { name: user.name + 'aaa' } }
+      before { api_stub_for(MnoEnterprise::User, method: :put, path: "/users/#{user.id}", response: ->{ user.assign_attributes(attrs); from_api(user) }) }
+      subject { put :update, user: attrs }
       
+      describe 'guest' do
+        before { subject }
+        it { expect(response).to_not be_success }
+      end
       
-      # context "when user is logged in" do
-      #   subject! do
-      #     user = create(:user,free_trial_end_at: Time.now + 1.month)
-      #     sign_in user
-      #     user
-      #   end
-      #
-      #   it "should be successful" do
-      #     get :show
-      #     response.should be_success
-      #   end
-      #
-      #   it "should assign the current user as @current_user" do
-      #     get :show
-      #     assigns(:user).should == subject
-      #   end
-      #
-      #   describe "@deletion_request" do
-      #     it "contains the last active deletion request" do
-      #       deletion_request = create(:deletion_request, deletable:subject)
-      #       get :show
-      #       expect(assigns(:deletion_request)).to eq(deletion_request)
-      #     end
-      #
-      #     it "does not contain unactive deletion request" do
-      #       # Create unactive deletion request
-      #       create(:deletion_request, deletable:subject,created_at: Time.now - 1.year)
-      #       get :show
-      #       expect(assigns(:deletion_request)).to eq(nil)
-      #     end
-      #   end
-      #
-      #   describe "@organizations" do
-      #     it "calls accessible_by on Organization" do
-      #       Organization.should_receive(:accessible_by).twice.and_call_original
-      #       get :show
-      #     end
-      #   end
-      # end
-      #
-      # context "when user is not logged in" do
-      #   it "set the new user under free trial" do
-      #     get :show
-      #     assigns(:user).under_free_trial?.should be_true
-      #   end
-      #
-      #   it "assigns a new user" do
-      #     get :show
-      #     assigns(:user).should_not be_persisted
-      #   end
-      # end
+      describe 'logged in' do
+        before { sign_in user }
+        before { subject }
+        it { expect(user.name).to eq(attrs[:name])}
+      end
     end
 
   end

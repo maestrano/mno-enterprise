@@ -4,7 +4,7 @@ json.current_user do
   json.surname @user.surname
   json.email @user.email
   json.logged_in !!@user.id
-  json.created_at @user.created_at
+  json.created_at @user.created_at ? @user.created_at.iso8601 : nil
   json.company @user.company
   json.phone @user.phone
   json.phone_country_code @user.phone_country_code
@@ -20,10 +20,7 @@ json.current_user do
       end
     end
     
-    puts "Rendering show"
-    puts @user.deletion_request.inspect
     if @user.deletion_request.present?
-      puts "in deletion_request json"
       json.deletion_request do
         json.extract! @user.deletion_request, :id, :token
       end

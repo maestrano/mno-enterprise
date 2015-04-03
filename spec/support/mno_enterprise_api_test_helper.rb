@@ -102,8 +102,9 @@ module MnoEnterpriseApiTestHelper
             params = stub[:params] && stub[:params].any? ? "?#{stub[:params].to_param}" : ""
             path = "#{stub[:path]}#{params}"
             receiver.send(stub[:method] || :get,path) { |env|
-              puts "Consumed stub: #{stub}"
-              [stub[:code] || 200, {}, (stub[:response] || {}).to_json] 
+              resp = stub[:response].is_a?(Proc) ? stub[:response].call : (stub[:response] || {})
+              puts "Consumed stub #{stub} with resp: #{resp}"
+              [stub[:code] || 200, {}, resp.to_json] 
             }
           end
         end

@@ -30,14 +30,14 @@ module MnoEnterprise
         RUBY
       end
       
-      # Emulate ActiveRecord for Her
+      # ActiveRecord Compatibility for Her
       def first(n = 1)
         return [] unless n > 0
         q = self.order_by('id.asc').limit(n)
         n == 1 ? q.to_a.first : q.to_a
       end
     
-      # Emulate ActiveRecord for Her
+      # ActiveRecord Compatibility for Her
       def last(n = 1)
         return [] unless n > 0
         q = self.order_by('id.desc').limit(n)
@@ -50,18 +50,18 @@ module MnoEnterprise
       end
     end
     
-    # Emulate ActiveRecord for Her
+    # ActiveRecord Compatibility for Her
     def read_attribute(attr_name)
       get_attribute(attr_name)
     end
     
-    # Emulate ActiveRecord for Her
+    # ActiveRecord Compatibility for Her
     def write_attribute(attr_name, value)
       assign_attributes(attr_name => value)
     end
     alias []= write_attribute
     
-    # Emulate ActiveRecord for Her
+    # ActiveRecord Compatibility for Her
     def save(options={})
       if perform_validations(options) 
         ret = super()
@@ -72,7 +72,7 @@ module MnoEnterprise
       end
     end
     
-    # Emulate ActiveRecord for Her
+    # ActiveRecord Compatibility for Her
     def save!(options={})
       if perform_validations(options) 
         ret = super()
@@ -83,11 +83,17 @@ module MnoEnterprise
       end
     end
     
-    # Emulate ActiveRecord for Her
+    # ActiveRecord Compatibility for Her
     def reload(options = nil)
       @attributes.update(self.class.find(self.id).attributes)
       self.run_callbacks :find
       self
+    end
+    
+    # ActiveRecord Compatibility for Her
+    def update(attributes)
+      assign_attributes(attributes)
+      save
     end
     
     # Reset the ActiveModel hash containing all attribute changes
@@ -124,12 +130,12 @@ module MnoEnterprise
         end
       end
       
-      # Emulate ActiveRecord for Her
+      # ActiveRecord Compatibility for Her
       def raise_record_invalid
         raise(Her::Errors::ResourceInvalid.new(self))
       end
 
-      # Emulate ActiveRecord for Her
+      # ActiveRecord Compatibility for Her
       def perform_validations(options={}) # :nodoc:
         options[:validate] == false || valid?(options[:context])
       end

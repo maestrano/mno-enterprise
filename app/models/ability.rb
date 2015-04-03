@@ -7,17 +7,17 @@ class Ability
     #===================================================
     # Organizations
     #===================================================
-    can :create, Organization
+    can :create, MnoEnterprise::Organization
     
-    can :read, Organization do |organization|
+    can :read, MnoEnterprise::Organization do |organization|
       !!user.role(organization)
     end
     
-    can [:update, :destroy, :manage_billing], Organization do |organization|
+    can [:update, :destroy, :manage_billing], MnoEnterprise::Organization do |organization|
       user.role(organization) == 'Super Admin'
     end
     
-    can [:upload,:purchase,:invite_member,:administrate,:access_analytics_data], Organization do |organization|
+    can [:upload,:purchase,:invite_member,:administrate,:access_analytics_data], MnoEnterprise::Organization do |organization|
       ['Super Admin','Admin'].include? user.role(organization)
     end
     
