@@ -9,7 +9,7 @@ module MnoEnterprise
     end
     
     it 'routes to #show' do
-      expect(get('/jpi/v1/organizations/1')).to route_to("mno_enterprise/jpi/v1/organizations#show")
+      expect(get('/jpi/v1/organizations/1')).to route_to("mno_enterprise/jpi/v1/organizations#show", id: '1')
     end
     
     it 'routes to #update' do
