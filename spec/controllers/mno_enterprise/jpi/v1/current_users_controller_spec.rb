@@ -25,7 +25,8 @@ module MnoEnterprise
         'company' => res.company,
         'phone' => res.phone,
         'phone_country_code' => res.phone_country_code,
-        'country_code' => res.geo_country_code || 'US'
+        'country_code' => res.geo_country_code || 'US',
+        'website' => res.website
       }
       
       if res.id
@@ -51,7 +52,6 @@ module MnoEnterprise
     # Stub user retrieval
     let!(:user) { build(:user, :with_deletion_request, :with_organizations) }
     before { api_stub_for(MnoEnterprise::User, method: :get, path: "/users/#{user.id}", response: from_api(user)) }
-    
     
     describe "GET #show" do
       subject { get :show }
@@ -86,6 +86,7 @@ module MnoEnterprise
     describe 'PUT #update' do
       let(:attrs) { { name: user.name + 'aaa' } }
       before { api_stub_for(MnoEnterprise::User, method: :put, path: "/users/#{user.id}", response: ->{ user.assign_attributes(attrs); from_api(user) }) }
+      
       subject { put :update, user: attrs }
       
       describe 'guest' do
@@ -99,6 +100,24 @@ module MnoEnterprise
         it { expect(user.name).to eq(attrs[:name])}
       end
     end
-
+    
+    describe 'PUT #update_password' do
+      let(:attrs) { { current_password: 'password', password: 'blablabla', password_confirmation: 'blablabla' } }
+      before { api_stub_for(MnoEnterprise::User, method: :put, path: "/users/#{user.id}", response:  from_api(user)) }
+      
+      subject { put :update_password, user: attrs }
+      
+      describe 'guest' do
+        before { subject }
+        it { expect(response).to_not be_success }
+      end
+      
+      describe 'logged in' do
+        before { sign_in user }
+        before { subject }
+        it { expect(response).to be_success }
+        it { expect(controller.current_user).to eq(user) } # check user is re-signed in
+      end
+    end
   end
 end

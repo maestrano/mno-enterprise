@@ -62,7 +62,11 @@
       </div>
     </form>
   </div>
-
+  
+  
+  <!-- 
+    Change Password Section 
+    -->
   <div accordion-group is-open="isChangePasswordOpen">
     <div accordion-heading>
         Change password <span class="caret pull-right" ng-class="{'caret-down': !isChangePasswordOpen, 'caret-up': isChangePasswordOpen}"></span>
@@ -99,7 +103,13 @@
       <button ng-click="user.cancelPassword()" ng-show="user.cancelPasswordEnabled()" class='btn'>Cancel</button>
     </form>
   </div>
-  <div accordion-group is-open="isAccountDeletionOpen">
+  
+
+
+  <!-- 
+    Account Deletion Section 
+    -->
+  <!-- <div accordion-group is-open="isAccountDeletionOpen">
     <div accordion-heading>
         Account deletion <span class="caret pull-right" ng-class="{'caret-down': !isAccountDeletionOpen, 'caret-up': isAccountDeletionOpen}"></span>
     </div>
@@ -124,6 +134,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
+  
 </div>
 

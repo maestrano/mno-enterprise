@@ -89,10 +89,12 @@ module.controller('DashboardAccountCtrl',[
 
       $scope.user.updatePassword = ->
         $scope.user.loading = true
-        DashboardUser.updatePassword($scope.user.password.newPassword,$scope.user.password.confirmPassword,$scope.user.password.currentPassword).then(
+        CurrentUserSvc.updatePassword($scope.user.password.newPassword,$scope.user.password.confirmPassword,$scope.user.password.currentPassword).then(
           (success) ->
             $scope.user.loading = false
             $scope.success.changePassword = "Saved!"
+            $scope.errors = null
+            $scope.user.cancelPassword()
           ,(error) ->
             $scope.user.loading = false
             $scope.errors.changePassword = Utilities.processRailsError(error)

@@ -12,13 +12,17 @@ module MnoEnterprise
       expect(put('/jpi/v1/current_user')).to route_to("mno_enterprise/jpi/v1/current_users#update")
     end
     
-    it 'routes to #create_deletion_request' do
-      expect(post('/jpi/v1/current_user/deletion_request')).to route_to("mno_enterprise/jpi/v1/current_users#create_deletion_request")
+    it 'routes to #update_password' do
+      expect(put('/jpi/v1/current_user/update_password')).to route_to("mno_enterprise/jpi/v1/current_users#update_password")
     end
     
-    it 'routes to #cancel_deletion_request' do
-      expect(delete('/jpi/v1/current_user/deletion_request')).to route_to("mno_enterprise/jpi/v1/current_users#cancel_deletion_request")
-    end
+    # it 'routes to #create_deletion_request' do
+    #   expect(post('/jpi/v1/current_user/deletion_request')).to route_to("mno_enterprise/jpi/v1/current_users#create_deletion_request")
+    # end
+    #
+    # it 'routes to #cancel_deletion_request' do
+    #   expect(delete('/jpi/v1/current_user/deletion_request')).to route_to("mno_enterprise/jpi/v1/current_users#cancel_deletion_request")
+    # end
   end
 end
 

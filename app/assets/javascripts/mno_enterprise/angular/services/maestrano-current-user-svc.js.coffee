@@ -5,7 +5,8 @@ angular.module('maestrano.services.current-user-svc', []).factory('CurrentUserSv
   service.config = {
     signInPath: '/mnoe/auth/users/sign_in'
     signUpPath: '/mnoe/auth/users'
-    updatePath: '/mnoe/jpi/v1/current_user'
+    updatePath: '/mnoe/jpi/v1/current_user',
+    updatePasswordPath: '/mnoe/jpi/v1/current_user/update_password',
   }
   
   # Load User
@@ -40,7 +41,15 @@ angular.module('maestrano.services.current-user-svc', []).factory('CurrentUserSv
       userResp = resp.data.current_user
       angular.copy(userResp, self.document.current_user)
       return userResp
-    
+  
+  service.updatePassword = (newPassword,confirmPassword,currentPassword) ->
+    self = service
+    return $http.put(self.config.updatePasswordPath,{ user: {
+      password: newPassword,
+      password_confirmation: confirmPassword,
+      current_password: currentPassword
+    } })
+  
   # Sign user up
   # expect the following hash:
   # {
