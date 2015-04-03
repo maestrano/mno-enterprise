@@ -242,7 +242,7 @@ module.controller('DashboardOrganizationMembersCtrl',[
     #====================================
     refresh = ->
       $q.all([DhbOrganizationSvc.load(),DhbTeamSvc.load()]).then (values)->
-        $scope.initialize(values[0].members,values[1])
+        $scope.initialize(values[0].organization.members,values[1])
     
     contextObj = ->
       { orgId: DhbOrganizationSvc.getId(), teams: DhbTeamSvc.data }
