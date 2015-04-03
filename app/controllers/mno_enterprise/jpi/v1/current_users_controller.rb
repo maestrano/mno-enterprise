@@ -21,7 +21,7 @@ module MnoEnterprise
     
     private
       def user_params
-        params.require(:user).permit(:name, :surname, :email, :company, :workspace, :settings, :reseller_code, :phone, :website, :phone_country_code)
+        params.require(:user).permit(:name, :surname, :email, :company, :settings, :phone, :website, :phone_country_code)
       end
   end
 end

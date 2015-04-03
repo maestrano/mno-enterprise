@@ -9,6 +9,7 @@ json.current_user do
   json.phone @user.phone
   json.phone_country_code @user.phone_country_code
   json.country_code @user.geo_country_code || 'US'
+  json.website @user.website
   
   # Embed association if user is persisted
   if @user.id

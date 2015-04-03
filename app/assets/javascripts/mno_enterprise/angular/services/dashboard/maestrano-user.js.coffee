@@ -3,7 +3,7 @@ angular.module('maestrano.services.dashboard.user', []).factory('DashboardUser',
   service = {}
 
   service.update = (data) ->
-    return $http.put("/auth/users",{user:data})
+    return $http.put("/jpi/v1/current_user",{user:data})
 
   service.updatePassword = (newPassword,confirmPassword,currentPassword) ->
     return $http.put("/auth/users/update_password",{ user: {

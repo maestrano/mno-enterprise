@@ -44,8 +44,8 @@ module.controller('DashboardAccountCtrl',[
 
       $scope.user.update = ->
         $scope.user.loading = true
-        DashboardUser.update($scope.user.model).then(
-          (success) ->
+        CurrentUserSvc.update($scope.user.model).then(
+          (userResp) ->
             # Email is not changed straight away - Notify user that new email will need to
             # be confirmed
             if userOld.email == $scope.user.model.email
@@ -54,7 +54,8 @@ module.controller('DashboardAccountCtrl',[
               $scope.success.user = "Saved! A confirmation email will be sent to your new email address. You will need to click on the link enclosed in this email in order to validate this new address."
             
             displayEmail = $scope.user.model.email
-            setUserModel(success.data)
+            console.log(userResp)
+            setUserModel(userResp)
 
             # Email not changed in backend until confirmation
             # Keep changed email on frontend side to avoid user confusion
