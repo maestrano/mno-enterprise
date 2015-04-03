@@ -1,6 +1,10 @@
 module MnoEnterprise
   module ApplicationHelper
     
+    def support_email
+      MnoEnterprise.support_email
+    end
+    
     # Re-implement Devise filter
     # For some reasons the original Devise filter seems to ignore the
     # mnoe prefix when using custom devise controllers
