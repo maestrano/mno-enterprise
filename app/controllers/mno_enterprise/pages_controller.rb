@@ -22,5 +22,17 @@ module MnoEnterprise
     def launch
       redirect_to MnoEnterprise.router.launch_url(params[:id], wtk: MnoEnterprise.jwt(user_id: current_user.uid))
     end
+    
+    # GET /app_access_unauthorized
+    def app_access_unauthorized
+      @meta[:title] = "Unauthorized"
+      @meta[:description] = "Application access not granted"
+    end
+    
+    # GET /app_logout
+    def app_logout
+      @meta[:title] = "Logged out"
+      @meta[:description] = "Logged out from application"
+    end
   end
 end

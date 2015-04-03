@@ -7,6 +7,8 @@ MnoEnterprise::Engine.routes.draw do
   
   # Generic routes
   get '/launch/:id', to: 'pages#launch', constraints: { id: /[\w\-\.]+/ }
+  get '/app_access_unauthorized', to: 'pages#app_access_unauthorized'
+  get '/app_logout', to: 'pages#app_logout'
   
   # MySpace routes
   get '/myspace', to: 'pages#myspace'

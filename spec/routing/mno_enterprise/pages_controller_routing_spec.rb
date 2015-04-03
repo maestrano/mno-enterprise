@@ -9,6 +9,14 @@ module MnoEnterprise
       expect(get("/launch/bla.mcube.co")).to route_to("mno_enterprise/pages#launch", id: 'bla.mcube.co')
     end
     
+    it 'routes to #app_access_unauthorized' do
+      expect(get("/app_access_unauthorized")).to route_to("mno_enterprise/pages#app_access_unauthorized")
+    end
+    
+    it 'routes to #app_logout' do
+      expect(get("/app_logout")).to route_to("mno_enterprise/pages#app_logout")
+    end
+    
     describe "myspace" do
       it "routes to myspace" do
         expect(get("/myspace")).to route_to("mno_enterprise/pages#myspace")

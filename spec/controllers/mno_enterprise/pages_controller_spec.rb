@@ -36,5 +36,17 @@ module MnoEnterprise
         expect(response).to redirect_to(MnoEnterprise.router.launch_url(app_instance.uid, wtk: MnoEnterprise.jwt({user_id: user.uid })))
       end
     end
+    
+    describe 'GET #app_access_unauthorized' do
+      subject { get :app_access_unauthorized }
+      before { subject }
+      it { expect(response).to be_success }
+    end
+    
+    describe 'GET #app_logout' do
+      subject { get :app_logout }
+      before { subject }
+      it { expect(response).to be_success }
+    end
   end
 end

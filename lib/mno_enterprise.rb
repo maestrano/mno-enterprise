@@ -46,6 +46,10 @@ module MnoEnterprise
   # Module definition
   #==================================================================
   
+  # The support email address
+  mattr_accessor :support_email
+  @@support_email = "support@changeme.com"
+  
   # The Maestrano Enterprise API Host
   mattr_accessor :mno_api_host
   @@mno_api_host = "https://api-enterprise.maestrano.com"
