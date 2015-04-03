@@ -1,0 +1,181 @@
+<!-- Full version of the company section -->
+<h2>Company</h2>
+<div class="spacer1"></div>
+
+<div class="row dashboard-organization">
+  
+  <div class="col-md-12 text-center" ng-show="isLoading">
+    <img ng-src="{{assetPath['mno_enterprise/loader-32x32-bgmainlight.gif']}}" alt="Loading"/>
+  </div>
+  
+  <!-------------------------------------->
+  <!--            Normal View           -->
+  <!-------------------------------------->
+  <div class="col-md-12" ng-show="!isTabSetShown() && !isLoading">
+    
+    <!-- Directive: DashboardOrganizationMembers -->
+    <div class="well">
+      <h4>Company Members</h4>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <div dashboard-organization-members></div>
+        </div>
+      </div>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div dashboard-organization-team-list title="Your Teams"></div>
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  
+  <!-------------------------------------->
+  <!--         Super Admin View         -->
+  <!-------------------------------------->
+  <div class="col-md-12 super-admin-view-star-ref" ng-show="isTabSetShown() && !isLoading">
+    
+    <div tabset>
+    
+      <!-------------------------------------->
+      <!--         Billing Section          -->
+      <!-------------------------------------->
+      <div tab ng-show="isBillingShown()" active="tabs.billing">
+        <div tab-heading>Billing</div>
+      
+
+        <!-- Directive: DashboardOrganizationArrears -->
+        <div dashboard-organization-arrears></div>
+
+
+        <div accordion class="accordion">
+          <div accordion-group is-open="isCrbgOpen">
+            <div accordion-heading>
+                Current Billing <span class="caret pull-right" ng-class="{'caret-down': !isCrbgOpen, 'caret-up': isCrbgOpen}"></span>
+            </div>
+            
+            <!-- Directive: DashboardOrganizationBilling -->
+            <div class="col-md-12">
+              <div dashboard-organization-billing></div>
+            </div>
+            
+            <!-- End: accordion-group current billing -->
+          </div>
+          
+          <div accordion-group is-open="isBdtOpen">
+            <div accordion-heading>
+                Billing Details <span class="caret pull-right" ng-class="{'caret-down': !isBdtOpen, 'caret-up': isBdtOpen}"></span>
+            </div>
+            
+            <!-- Directive: DashboardOrganizationBilling -->
+            <div class="col-md-12">
+              <div dashboard-organization-credit-card></div>
+            </div>
+            
+            
+            <!-- End: accordion-group credit card form -->
+          </div>
+          
+          
+          
+          <div accordion-group is-open="isPsIvOpen">
+            <div accordion-heading>
+                Past Invoices <span class="caret pull-right" ng-class="{'caret-down': !isPsIvOpen, 'caret-up': isPsIvOpen}"></span>
+            </div>
+            
+            <!-- Directive: DashboardOrganizationInvoices -->
+            <div class="col-md-12">
+              <div dashboard-organization-invoices></div>
+            </div>
+            
+            <!-- End: accordion-group past invoices -->
+          </div>
+          
+                  
+          <!-- End: accordion -->
+        </div>
+        
+        <!-- End: tab billing section -->
+      </div>
+    
+      
+      <!-------------------------------------->
+      <!--        Members Section           -->
+      <!-------------------------------------->
+      <div tab active="tabs.members">
+        <div tab-heading>Members</div>
+        
+        <!-- Directive: DashboardOrganizationMembers -->
+        <div class="well">
+          <h4>Company Members</h4>
+          
+          <div class="col-md-12">
+            <div dashboard-organization-members></div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        
+        <!-- End: tab members section -->
+      </div>
+      
+      
+      <!-------------------------------------->
+      <!--     Team Management Section      -->
+      <!-------------------------------------->
+      <div tab active="tabs.teams">
+        <div tab-heading>Teams</div>
+        
+        <div>
+          <h4>
+            Team Management 
+            <span class="text-muted"><small><em>&nbsp;Control access to your apps</em></small></span>
+          </h4>
+          
+          <div class="spacer2"></div>
+          
+          <!-- Directive: DashboardOrganizationSettings -->
+          <div class="col-md-12">
+            <div dashboard-organization-teams></div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        
+        <!-- End: tab team management section -->
+      </div>
+      
+      
+      <!-------------------------------------->
+      <!--    Company Settings Section      -->
+      <!-------------------------------------->
+      <div tab ng-show="isSettingsShown()" active="tabs.settings">
+        <div tab-heading>Settings</div>
+        
+        <div class="well">
+          <h4>Company Settings</h4>
+          
+          <!-- Directive: DashboardOrganizationSettings -->
+          <div class="col-md-12">
+            <div dashboard-organization-settings></div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        
+        <!-- End: tab settings section -->
+      </div>
+    
+    
+      <!-- End: tabset -->
+    </div>
+    
+    <!-- End: column -->
+  </div>
+  
+  <!-- End: row -->
+</div>
+
