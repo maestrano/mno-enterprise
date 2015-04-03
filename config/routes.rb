@@ -3,7 +3,7 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   # Static Pages
   #============================================================  
-  root to: redirect { Rails.application.routes.url_helpers.myspace_path }
+  root to: redirect { MnoEnterprise::Engine.routes.url_helpers.myspace_path }
   
   # Generic routes
   get '/launch/:id', to: 'pages#launch', constraints: { id: /[\w\-\.]+/ }

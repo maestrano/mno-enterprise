@@ -9,7 +9,7 @@ angular.module('maestrano.services.dashboard.apps-document', []).factory('Dashbo
   }
 
   service.defaultConfig = {
-    delay: 1000 * 10 # seconds - long polling delay
+    delay: 1000 * 60 # seconds - long polling delay
     timestamp: 0
   }
 

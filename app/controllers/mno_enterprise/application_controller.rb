@@ -6,6 +6,7 @@ module MnoEnterprise
     
     before_filter :set_default_meta
     before_filter :store_location
+    before_filter :perform_return_to
     
     #============================================
     # CanCan Authorization Rescue
@@ -38,6 +39,13 @@ module MnoEnterprise
           request.env["devise.skip_trackable"] = true
         end
       end
+      
+      # Return the user to the 'return_to' url if one was specified
+      # previously. Only if user is signed in
+      def perform_return_to
+        return true unless current_user && (url = return_to_url(current_user))
+        redirect_to url
+      end
   
       # Devise will always redirect to the last non devise route
       # (alias not starting with /auth)
@@ -45,18 +53,37 @@ module MnoEnterprise
       # WARNING: if one day you change the below please also check that
       # the new behaviour fits with ConfirmationsController (yes...I know...it's not clean)
       def store_location
-        # store last url if the request is html (not json or other)
-        # and matches a specific action
+        capture_return_to_redirection || capture_previous_url
+      end
+      
+      def capture_previous_url
         if request.format == 'text/html' && request.fullpath =~ /\/(myspace|deletion_requests|org_invites)/
           session[:previous_url] = request.original_url
         end
       end
+      
+      # Handle return_to parameter in URL if present
+      def capture_return_to_redirection
+        return false unless request.format == 'text/html'  && params[:return_to].present?
+      
+        # Capture return url
+        session[:return_to] = params[:return_to] 
+      end
+      
+      # Return the URL that the user should be immediately returned to
+      def return_to_url(resource)
+        return nil unless (url = session.delete(:return_to)).present?
+        
+        # Add Web Token to URL
+        separator = (url =~ /\?/ ? '&' : '?')
+        
+        url + "#{separator}wtk=#{MnoEnterprise.jwt({user_id: resource.uid})}"
+      end
 
       # Redirect to previous url and reset it
       def after_sign_in_path_for(resource)
-        previous_url = session[:previous_url]
-        session[:previous_url] = nil
-        return (previous_url || mno_enterprise.myspace_url)
+        previous_url = session.delete(:previous_url)
+        return (return_to_url(resource) || previous_url || mno_enterprise.myspace_url)
       end
   end
 end
