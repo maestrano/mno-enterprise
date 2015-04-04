@@ -13,13 +13,13 @@
 .scrollbar-lightgrey {
   ::-webkit-scrollbar { width: 15px; }
   ::-webkit-scrollbar-track {
-    background-color: lighten(@lightgray,6%);
+    background-color: lighten(@bg-main-color,6%);
   }
   ::-webkit-scrollbar-thumb {
-    background-color: darken(@lightgray,10%);
+    background-color: darken(@bg-main-color,10%);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background-color: darken(@lightgray,15%);
+    background-color: darken(@bg-main-color,15%);
   }
 }
 
@@ -71,7 +71,7 @@
 }
 
 .text-purple {
-  color: @purple;
+  color: @elem-cozy-color;
 }
 
 //-----------------------------------------
@@ -88,7 +88,7 @@
 // for an example
 //-----------------------------------------
 .table-cell .th-row {
-  background-color: @lightgray;
+  background-color: @bg-main-color;
 }
 
 
@@ -108,11 +108,11 @@
 }
 
 .table-cell .td-row:nth-child(odd) { 
-  background-color: lighten(@lightgray,3%);
+  background-color: lighten(@bg-main-color,3%);
 }
 
 .table-cell .td-row:nth-child(even) {
-  background-color: lighten(@lightgray,5%);
+  background-color: lighten(@bg-main-color,5%);
 }
 
 .table-cell .td-row .cell > .cell-label { 
@@ -129,16 +129,16 @@
 
 // Inverse Style
 .table-cell.inverse .th-row {
-  background-color: @darkerblue;
+  background-color: @bg-inverse-intense-color;
   color: white;
 }
 
 .table-cell.inverse .td-row:nth-child(odd) { 
-  background-color: lighten(@darkblue,3%);
+  background-color: lighten(@bg-inverse-color,3%);
 }
 
 .table-cell.inverse .td-row:nth-child(even) {
-  background-color: lighten(@darkblue,5%);
+  background-color: lighten(@bg-inverse-color,5%);
 }
 
 //-----------------------------------------
@@ -388,7 +388,7 @@ hr.vertical {
 }
 
 .green-banner {
-  background-color: @mgreen;
+  background-color: @elem-positive-color;
   min-height: 150px;
   position: absolute;
   left: 0px;
@@ -399,8 +399,8 @@ hr.vertical {
 
 .lightgreen-banner.bordered,
 .green-banner.bordered {
-  border-top: solid 1px darken(@mgreen,15%);
-  border-bottom: solid 1px darken(@mgreen,15%);
+  border-top: solid 1px darken(@elem-positive-color,15%);
+  border-bottom: solid 1px darken(@elem-positive-color,15%);
 }
 
 .lightgreen-banner {

@@ -1,14 +1,14 @@
 .app-presentation {
   .title {
-    .font(20px,700,@darkblue);
+    .font(20px,700,@bg-inverse-color);
   }
 
   .tagline {
-    .font(16px,300,@mediumblue);
+    .font(16px,300,@text-inverse-color);
   }
 
   .media-heading {
-    .font(12px,300,@lightblue);
+    .font(12px,300,@decorator-inverse-color);
   }
 
   img.app-logo {
@@ -18,7 +18,7 @@
   }
 
   .app-name {
-    .font(14px,700,@mediumblue);
+    .font(14px,700,@text-inverse-color);
   }
 
 }
@@ -27,7 +27,7 @@
   z-index:5;
   padding:20px 0px;
   .border-radius(5px);
-  background-color:@darkblue;
+  background-color:@bg-inverse-color;
   width:150px;
   position:absolute;
   left:50%;
@@ -46,9 +46,9 @@
       .square(50px);
       margin:0px 0px 0px -34px;
       .fa {
-        color:@green;
+        color:@elem-positive-color;
         &.active {
-          color:@fluroblue;
+          color:@brand-primary;
         }
       }
     }
@@ -60,7 +60,7 @@
     a {
       .font(14px,700,white);
       &:hover {
-        color:@fluroblue;
+        color:@brand-primary;
         text-decoration:underline;
       }
     }
@@ -68,7 +68,7 @@
 
   .body-hover-description {
     text-align:center;
-    .font(12px,500,@mediumblue);
+    .font(12px,500,@text-inverse-color);
   }
 
   img {

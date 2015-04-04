@@ -56,10 +56,10 @@ form .phone {
 //----------------------------------------
 form.inverse {
   select {
-    background-color:@darkblue;
+    background-color:@bg-inverse-color;
     border:solid 1px #111c21;
     .border-radius(5px);
-    .font(16px,300,@lightblue);
+    .font(16px,300,@decorator-inverse-color);
     height:44px;
     -webkit-appearance: none;
     padding-left:15px;
@@ -67,7 +67,7 @@ form.inverse {
   }
 
   .select.fa {
-    .font(16px,300,@lightblue);
+    .font(16px,300,@decorator-inverse-color);
     margin: -28px 7% 0px 0px;
     float: right;
   }
@@ -80,9 +80,9 @@ form.inverse {
 form.dark {
   input[type='text'], input[type='email'], textarea {
     .border-radius(5px);
-    .font(16px, 300, @lightgray);
-    background-color: @mdarkbg;
-    border: solid 1px @mdarkbg;
+    .font(16px, 300, @bg-main-color);
+    background-color: @bg-inverse-color;
+    border: solid 1px @bg-inverse-color;
     line-height: 25px;
     margin-bottom: 0px;
     width: 100%;
@@ -91,31 +91,31 @@ form.dark {
   }
 
   *::-webkit-input-placeholder {
-      color: @lightgray;
+      color: @bg-main-color;
   }
   *:-moz-placeholder {
       /* FF 4-18 */
-      color: @lightgray;
+      color: @bg-main-color;
   }
   *::-moz-placeholder {
       /* FF 19+ */
-      color: @lightgray;
+      color: @bg-main-color;
   }
   *:-ms-input-placeholder {
       /* IE 10+ */
-      color: @lightgray;
+      color: @bg-main-color;
   }
 
   label {
-    color: @lightgray;
+    color: @bg-main-color;
   }
 }
 
 .dark {
   .bootstrap-select {
     select {
-      .font(16px, 300, @lightgray);
-      background-color: @mdarkbg;
+      .font(16px, 300, @bg-main-color);
+      background-color: @bg-inverse-color;
     }
 
     .dropdown-toggle {
@@ -123,16 +123,16 @@ form.dark {
     }
 
     .dropdown-menu {
-      .font(16px, 300, @lightgray);
-      background-color: @mdarkbg;
+      .font(16px, 300, @bg-main-color);
+      background-color: @bg-inverse-color;
     }
     .dropdown-menu > li > a {
-      .font(16px, 300, @lightgray);
+      .font(16px, 300, @bg-main-color);
     }
 
     .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
-      .font(16px, 300, @lightblue);
-      background-color: @mdarkbg;
+      .font(16px, 300, @decorator-inverse-color);
+      background-color: @bg-inverse-color;
     }
   }
 }
@@ -150,5 +150,5 @@ form.dark {
 // Invalid inputs (AngularJS)
 //------------------------------------
 input.ng-dirty.ng-invalid {
-  border-color: @pink;
+  border-color: @brand-danger;
 }

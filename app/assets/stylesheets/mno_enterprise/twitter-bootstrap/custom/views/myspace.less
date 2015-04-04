@@ -1,10 +1,10 @@
 .myspace {
-  background-color:@lightgray;
+  background-color:@bg-main-color;
   min-height:100%;
   padding-top:30px;
 
   .customer-org-warning {
-    background-color: @fluropink;
+    background-color: @brand-danger;
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -35,8 +35,8 @@
     position: absolute;
     top: 0px;
     right: 0px;
-    background-color: @darkblue;
-    color: @lightblue;
+    background-color: @bg-inverse-color;
+    color: @decorator-inverse-color;
     font-size: 14px;
     padding: 10px 20px;
     .border-bottom-radius(5px);
@@ -52,7 +52,7 @@
 
     .box-content {
       margin-top: 10px;
-      border-top: solid 1px @lightblue;
+      border-top: solid 1px @decorator-inverse-color;
       .border-bottom-radius(5px);
     }
     
@@ -72,7 +72,7 @@
 
       &:hover {
         text-decoration: none;
-        background-color: @lightblue;
+        background-color: @decorator-inverse-color;
       }
     }
     
@@ -83,15 +83,15 @@
     }
     
     .box-content ul li a i.fa.reseller {
-      color: @purple;
+      color: @elem-cozy-color;
     }
     
     .box-content ul li a i.fa.customer {
-      color: @flurogreen;
+      color: @elem-positive-flash-color;
     }
     
     .box-content ul li a i.fa.company {
-      color: @fluroblue;
+      color: @brand-primary;
     }
 
     .box-content .create-new {
@@ -118,13 +118,13 @@
     overflow-x:hidden;
     overflow-y:auto;
 
-    background-color: @darkblue;
+    background-color: @bg-inverse-color;
     .mno-main-logo {
       width:51px;
     }
 
     hr {
-      border-top:2px dashed darken(@darkblue,5%);
+      border-top:2px dashed darken(@bg-inverse-color,5%);
       margin-right:11px;
     }
 
@@ -138,12 +138,12 @@
         .content {
           display:block;
           white-space: nowrap;
-          color:@mediumblue;
+          color:@text-inverse-color;
           position:absolute;
           margin:8px 0px 0px 55px;
           font-size:15px;
           &:hover {
-            color:@mediumblue;
+            color:@text-inverse-color;
           }
         }
         &.active {
@@ -152,7 +152,7 @@
           }
         }
         &:hover {
-          background-color:lighten(@darkblue,5%);
+          background-color:lighten(@bg-inverse-color,5%);
         }
       }
     }
@@ -160,7 +160,7 @@
     .fa {
       font-size:31px;
       margin-top:4px;
-      color:@mediumblue;
+      color:@text-inverse-color;
       &.active {
         color:white;
       }
@@ -176,7 +176,7 @@
         display:none;
       }
       &.active {
-        background-color:@darkerblue;
+        background-color:@bg-inverse-intense-color;
       }
 
       .dashboard-button-wrapper {
@@ -215,24 +215,24 @@
     padding-left:120px;
 
     h2 {
-      .font(35px,bold,@darkblue);
+      .font(35px,bold,@bg-inverse-color);
     }
   }
 
   .field-name {
-    .font(14px,light,@mediumblue);
+    .font(14px,light,@text-inverse-color);
     margin:10px 0px;
   }
 
   input {
-    background-color: @lightgray;
+    background-color: @bg-main-color;
     border:0px;
     box-shadow:none;
     height:45px;
   }
 
   select {
-    background-color: @lightgray;
+    background-color: @bg-main-color;
   }
 
   .input-group-addon {
@@ -267,13 +267,13 @@
     }
 
     .title {
-      .font(14px,normal,@mediumblue);
+      .font(14px,normal,@text-inverse-color);
       margin-top:10px;
       margin-bottom:10px;
     }
 
     .app-line {
-      .font(12px,normal,@mediumblue);
+      .font(12px,normal,@text-inverse-color);
     }
 
     img.app-logo {
@@ -327,10 +327,10 @@
       float:right;
       margin:-25px 5px 0px 0px;
       &:hover {
-        background-color:@darkblue;
+        background-color:@bg-inverse-color;
       }
       .fa {
-        color:@mediumblue;
+        color:@text-inverse-color;
       }
     }
 
@@ -338,9 +338,9 @@
       padding:15px 0px;
       font-size:140px;
       a {
-        color:@lightgray;
+        color:@bg-main-color;
         &:hover {
-          color:@fluroblue;
+          color:@brand-primary;
         }
       }
     }

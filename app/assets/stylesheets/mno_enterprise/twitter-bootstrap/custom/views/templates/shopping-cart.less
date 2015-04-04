@@ -10,7 +10,7 @@
 }
 
 .frame.dark-frame {
-  background-color: darken(@darkblue,4%);
+  background-color: darken(@bg-inverse-color,4%);
 }
 
 .alert {
@@ -45,8 +45,8 @@
   
   td {
     //padding: 10px 20px;
-    background-color: @darkblue;
-    border-top: solid 1px @darkerblue;
+    background-color: @bg-inverse-color;
+    border-top: solid 1px @bg-inverse-intense-color;
   }
   
   td:nth-child(even) {
@@ -65,8 +65,8 @@
   text-align: center;
   
   .total-savings {
-    color: @green;
-    background-color: darken(@darkblue,4%);
+    color: @elem-positive-color;
+    background-color: darken(@bg-inverse-color,4%);
     padding: 5px 20px;
     display: inline;
     line-height: 35px;
@@ -108,12 +108,12 @@
   
   .billing-status-notes {
     font-size: 85%;
-    color: @mediumblue;
+    color: @text-inverse-color;
   }
   
   .table.order-total {
     border: none;
-    color: @fluroblue;
+    color: @brand-primary;
     margin-top: 10px;
     
     &.total-final {
@@ -122,7 +122,7 @@
   }
   
   .total-final {
-    border-top: solid 1px @mediumblue;
+    border-top: solid 1px @text-inverse-color;
   }
   
   .table.order-total td {
@@ -136,19 +136,19 @@
   }
   
   .total-payable-raw {
-    color: @lightblue;
+    color: @decorator-inverse-color;
   }
   
   .total-discount {
-    color: @green;
+    color: @elem-positive-color;
   }
   
   .total-credit {
-    color: @fluropink;
+    color: @brand-danger;
   }
   
   .total-tax {
-    color: @lightgray;
+    color: @bg-main-color;
   }
 }
 
@@ -176,7 +176,7 @@ form.form-signup.form-horizontal .form-group {
   .app-card {
     margin-top: 5px;
     padding: 10px;
-    background-color: @darkblue;
+    background-color: @bg-inverse-color;
   }
   
   .app-card .app-card-header select {
@@ -209,16 +209,16 @@ form.form-signup.form-horizontal .form-group {
   .add-app-card a {
     display: block;
     width: 100%;
-    border: dashed 1px @mediumblue;
-    color: @mediumblue;
+    border: dashed 1px @text-inverse-color;
+    color: @text-inverse-color;
     padding: 5px inherit;
     line-height: 40px;
     .border-radius(5px);
     height: 50px;
     
     &:hover {
-      color: @lightblue;
-      border: dashed 1px @lightblue;
+      color: @decorator-inverse-color;
+      border: dashed 1px @decorator-inverse-color;
       text-decoration: none;
     }
   }
@@ -235,7 +235,7 @@ form.form-signup.form-horizontal .form-group {
     margin: 10px 0px 40px 0px;
     padding: 5px 15px 20px 15px;
     .border-radius(3px);
-    background-color: @darkblue;
+    background-color: @bg-inverse-color;
   }
   
   .deal-card-header h4 {
@@ -262,11 +262,11 @@ form.form-signup.form-horizontal .form-group {
   }
   
   ul.support-feature-list li > i.fa-check {
-    color: @green;
+    color: @elem-positive-color;
   }
   
   ul.support-feature-list li > i.fa-times {
-    color: @mediumblue;
+    color: @text-inverse-color;
   }
 }
 
@@ -304,7 +304,7 @@ form.form-signup.form-horizontal .form-group {
   form {
     padding: 10px;
     margin-bottom: 35px;
-    background-color: @darkblue;
+    background-color: @bg-inverse-color;
   }
   
   form .form-group .control-label {

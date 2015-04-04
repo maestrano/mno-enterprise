@@ -1,6 +1,6 @@
 .apps-index {
   .selected-app {
-    color:@green;
+    color:@elem-positive-color;
     font-size:16px;
     position:absolute;
     left:50%;
@@ -21,7 +21,7 @@
   }
 
   .banners.promo.bundle h3 {
-    .font(20px,500,@darkblue);
+    .font(20px,500,@bg-inverse-color);
     text-align:left;
   }
 
@@ -39,7 +39,7 @@
   }
 
   .price-presenter .body {
-    background-color:@darkblue;
+    background-color:@bg-inverse-color;
     .price,.title {
       color:white;
     }
@@ -47,28 +47,28 @@
 
   .app-bundle-custom {
     .close-app {
-      background-color:@mediumblue;
-      border:solid 1px @lightgray;
+      background-color:@text-inverse-color;
+      border:solid 1px @bg-main-color;
       a, a.fluroblue {
-        color:@lightgray;
+        color:@bg-main-color;
       }
     }
     .app-description .title {
-      color:@mediumblue;
+      color:@text-inverse-color;
     }
   }
 
   .app-presentation {
     .title {
-      .font(20px,700,@darkblue);
+      .font(20px,700,@bg-inverse-color);
     }
 
     .tagline {
-      .font(16px,300,@mediumblue);
+      .font(16px,300,@text-inverse-color);
     }
 
     .media-heading {
-      .font(12px,300,@lightblue);
+      .font(12px,300,@decorator-inverse-color);
     }
 
     img.app-logo {
@@ -78,7 +78,7 @@
     }
 
     .app-name {
-      .font(14px,700,@mediumblue);
+      .font(14px,700,@text-inverse-color);
     }
 
   }
@@ -87,7 +87,7 @@
 .apps-show {
 
   .app-feature {
-    .font(12px,500,@lightblue);
+    .font(12px,500,@decorator-inverse-color);
     margin-left:40px;
     display:inline-block;
     img {
@@ -107,7 +107,7 @@
     h3 {
       font-weight:700;
       font-size:20px;
-      color:@darkblue;
+      color:@bg-inverse-color;
       margin-bottom: 50px;
     }
     
@@ -136,24 +136,24 @@
 
     p {
       font-size: 16px;
-      color:@mediumblue;
+      color:@text-inverse-color;
     }
 
     .usage {
       font-size:20px;
-      color:@mediumblue;
+      color:@text-inverse-color;
       font-weight:300;
     }
 
     .number {
       font-size:45px;
-      color:@green;
+      color:@elem-positive-color;
       font-weight:900;
     }
 
     .people {
       font-size:20px;
-      color:@mediumblue;
+      color:@text-inverse-color;
       font-weight:300;
     }
   }
@@ -162,7 +162,7 @@
     list-style-type: none;
     padding:0px;
     .fa {
-      color:@green;
+      color:@elem-positive-color;
     }
 
     .title {
@@ -201,14 +201,14 @@
   .pricing-section {
 
     .btn-shaded {
-      background-color: @darkerblue;
+      background-color: @bg-inverse-intense-color;
       min-height: 42px;
     }
 
     .pricing-table-wrapper .pricing-table {
       font-size: 16px;
-      color: @lightblue;
-      background-color: @darkerblue;
+      color: @decorator-inverse-color;
+      background-color: @bg-inverse-intense-color;
 
       .cell {
         padding: 20px 60px;
@@ -220,7 +220,7 @@
       }
       
       .pricing-name {
-        color: @purple;
+        color: @elem-cozy-color;
         font-size: 22px;
       }
 
@@ -230,7 +230,7 @@
       }
 
       .pricing-price .pricing-price-factors {
-        color: @lightblue;
+        color: @decorator-inverse-color;
         font-size: 70%;
       }
 

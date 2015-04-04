@@ -1,14 +1,14 @@
 .testimonial {
   font-size: 25px;
   font-weight:300;
-  color:@darkblue;
+  color:@bg-inverse-color;
   padding:20px;
   min-height: 115px;
 
   &.promo-dark {
     color:white;
     .border-radius(10px);
-    .rgba(@darkblue,0.7);
+    .rgba(@bg-inverse-color,0.7);
   }
 
   .author {
@@ -17,10 +17,10 @@
   }
 
   .body {
-    background-color:@lightgray;
+    background-color:@bg-main-color;
     .border-radius(5px);
     padding:20px;
-    color:@darkblue2;
+    color:@text-strong-color;
     font-weight:300;
     font-size:16px;
     font-style:italic;
@@ -32,7 +32,7 @@
       height: 0;
       border-top: 18px solid transparent;
       border-bottom: 18px solid transparent;
-      border-right:18px solid @bluegray;
+      border-right:18px solid @decorator-main-color;
       position:absolute;
       right:48px;
       margin-top:8px;
@@ -45,14 +45,14 @@
       display:inline;
       font-size:14px;
       font-weight:700;
-      color:@mediumblue;
+      color:@text-inverse-color;
     }
 
     .company {
       display:inline;
       font-size:14px;
       font-weight:300;
-      color:@lightblue;
+      color:@decorator-inverse-color;
     }
 
     .avatar {
@@ -66,10 +66,10 @@
 
 .ribbon-testimonial {
   .body {
-    background-color:@lightgray;
+    background-color:@bg-main-color;
     .border-radius(5px);
     padding:20px;
-    color:@darkblue2;
+    color:@text-strong-color;
     font-weight:300;
     font-size:16px;
     font-style:italic;
@@ -81,7 +81,7 @@
       height: 0;
       border-top: 18px solid transparent;
       border-bottom: 18px solid transparent;
-      border-right:18px solid @bluegray;
+      border-right:18px solid @decorator-main-color;
       position:absolute;
       right:28px;
       margin-top:8px;
@@ -94,14 +94,14 @@
       display:inline;
       font-size:14px;
       font-weight:700;
-      color:@mediumblue;
+      color:@text-inverse-color;
     }
 
     .company {
       display:inline;
       font-size:14px;
       font-weight:300;
-      color:@lightblue;
+      color:@decorator-inverse-color;
     }
 
   }

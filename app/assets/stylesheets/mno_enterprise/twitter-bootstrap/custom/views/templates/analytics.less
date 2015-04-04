@@ -8,8 +8,8 @@
       width: 100%;
       border-radius: 4px;
       // color: @titleBgColor;
-      color: @mdarkblue;
-      // color: @mblue;
+      color: @bg-inverse-intense-color;
+      // color: @decorator-main-color;
       background-color: white;
       padding: 5px;
       overflow-y: auto;
@@ -32,8 +32,8 @@
         .tooltip {
           .tooltip-inner {
             &.ng-binding {
-              background-color: @mdarkblue;
-              color: @green;
+              background-color: @bg-inverse-intense-color;
+              color: @elem-positive-color;
             }
           }
         }
@@ -47,7 +47,7 @@
           .icon {
             height: 80px;
             width: 80px;
-            border: solid 1px @mlightgrey;
+            border: solid 1px @bg-main-color;
             border-radius: 2px;
             background-color: white;
             i {
@@ -66,11 +66,11 @@
         }
 
         .widget:hover {
-          background-color: @lightgray;
+          background-color: @bg-main-color;
           // background-color: #f5f5f5;
           .icon {
             i {
-              color: darken(@purple,3%), ;
+              color: darken(@elem-cozy-color,3%), ;
             }
           }
           label {
@@ -83,13 +83,13 @@
 
   .modal-custom-calculation .modal-body {
     .edit {
-      color: @darkblue;
+      color: @bg-inverse-color;
       padding: 5px;
       h4 {
         margin: 0;
         margin-bottom: 8px;
         text-align: left;
-        .font(15px,300,@darkblue);
+        .font(15px,300,@bg-inverse-color);
       }
       .part {
         margin-bottom: 8px;
@@ -97,7 +97,7 @@
         padding-bottom: 8px;
         padding-left: 10px;
         padding-right: 10px;
-        border: 1px solid @mgrey;
+        border: 1px solid @bg-main-color;
         background-color: #f5f5f5;
         // font-weight: 200;
         color: #626d6d;
@@ -134,7 +134,7 @@
     }
     .loader {
       // margin-top: 75px;
-      color: @mblue;
+      color: @decorator-main-color;
       font-weight: bold;
       .gif {
         display: block;
@@ -205,7 +205,7 @@
       height: 282px;
       width: 300px;
       float: left;
-      border: 2px dashed @lightblue;
+      border: 2px dashed @decorator-inverse-color;
       background: none;
     }
 
@@ -235,15 +235,15 @@
         }
 
         .btn.btn-edit:hover {
-          color: @mgreen;
+          color: @elem-positive-color;
         }
 
         .btn.btn-editmode {
-          color: @mgreen;
+          color: @elem-positive-color;
         }
 
         .btn.btn-close:hover {
-          color: @pink;
+          color: @brand-danger;
         }
 
         .title-wrapper {
@@ -282,12 +282,12 @@
 
         a {
           font-weight: bold;
-          color: @mlightblue;
+          color: @decorator-alt-color;
           cursor: pointer;
         }
         
         .currency {
-          .font(16px,300,@darkblue);
+          .font(16px,300,@bg-inverse-color);
           text-align: center;
         }
 
@@ -295,13 +295,13 @@
           max-height: 240px;
           overflow-y: auto;
           overflow-x: hidden;
-          color: @darkblue;
+          color: @bg-inverse-color;
           padding: 5px;
           h4 {
             margin: 0;
             margin-bottom: 8px;
             text-align: left;
-            .font(15px,300,@darkblue);
+            .font(15px,300,@bg-inverse-color);
           }
           .part {
             margin-bottom: 8px;
@@ -309,7 +309,7 @@
             padding-bottom: 8px;
             padding-left: 10px;
             padding-right: 10px;
-            border: 1px solid @mgrey;
+            border: 1px solid @bg-main-color;
             background-color: #f5f5f5;
             // font-weight: 200;
             color: #626d6d;
@@ -351,13 +351,13 @@
 
         h2 {
           text-align: left;
-          .font(35px,700,@darkblue);
+          .font(35px,700,@bg-inverse-color);
         }
 
         h3 {
           margin: 0;
           text-align: left;
-          .font(20px,300,@darkblue);
+          .font(20px,300,@bg-inverse-color);
         }
 
         .h3-wrapper {
@@ -368,7 +368,7 @@
             width:100%;
             display:table-cell;
             text-transform: uppercase;
-            .font(20px,300,@mediumblue);
+            .font(20px,300,@text-inverse-color);
             text-align: center;
             vertical-align: middle;
           }
@@ -376,7 +376,7 @@
 
         .histModeChoser {
           a {
-            color: @mlightgrey;
+            color: @bg-main-color;
             font-size: 12px;
             &.active {
               text-decoration: underline;
@@ -390,12 +390,12 @@
 
         .legend {
           text-align: center;
-          .font(12px,300,@mediumblue);
+          .font(12px,300,@text-inverse-color);
         }
 
         .loader {
           margin-top: 75px;
-          color: @mblue;
+          color: @decorator-main-color;
           font-weight: bold;
           .gif {
             display: block;
@@ -404,7 +404,7 @@
         }
 
         .price {
-          .font(22px,900,@darkblue);
+          .font(22px,900,@bg-inverse-color);
           text-align: center;
         }
 
@@ -419,9 +419,9 @@
           width:100%;
           margin:0px;
           padding:5px;
-          color:@mediumblue;
+          color:@text-inverse-color;
           &:nth-child(even) {
-            background-color:@lightgray;
+            background-color:@bg-main-color;
           }
           &:nth-child(odd) {
             background-color:white;
@@ -437,13 +437,13 @@
 
         &.accounts {
           .blue {
-            color: @mblue;
+            color: @decorator-main-color;
           }
           .history {
             margin-top: 10px;
           }
           .pink {
-            color: @pink;
+            color: @brand-danger;
           }
           .price {
             margin-top: 85px;
@@ -548,11 +548,11 @@
               .tooltip-inner {
                 &.ng-binding {
                   text-align: left;
-                  background-color: @mdarkblue;
+                  background-color: @bg-inverse-intense-color;
                   max-width: 100%;
                   white-space: nowrap;
                   strong {
-                    color: @green;
+                    color: @elem-positive-color;
                   }
                 }
               }
@@ -560,7 +560,7 @@
 
             .widget-lines-container {
               .widget-line:hover {
-                background-color: @mgrey;
+                background-color: @bg-main-color;
                 cursor: pointer;
               }
             }
@@ -576,7 +576,7 @@
             height: 250px;
             a {
               font-weight: bold;
-              color: @mlightblue
+              color: @decorator-alt-color
             }
             .chart-container {
               max-width: 410px;

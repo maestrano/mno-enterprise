@@ -14,21 +14,6 @@
 @font-family-base:               @font-family-sans-serif;
 
 /*-----------------------------------------------------------------------*/
-/*                       Legacy Color palette                            */
-/*-----------------------------------------------------------------------*/
-@mgreen: #dae173;
-@morange: #d6782b;
-@mdarkblue: #232528;
-@mgrey: #cccccc;
-@mlightgrey: #999999;
-@mdarkbg: #16161B;
-@mblue: #358fdc;
-@mlightblue: lighten(@mblue, 15%);
-
-@linkColor: darken(#d1e17c, 20%);
-@titleBgColor: lighten(@mdarkblue,3%);
-
-/*-----------------------------------------------------------------------*/
 /*                          Color palette                                */
 /*-----------------------------------------------------------------------*/
 @darkerblue:                     #16252c;
@@ -40,11 +25,8 @@
 @pink:                           #ed1e79;
 
 @fluroblue:                      #00e5f0;
-@fluroorange:                    #ff7300;
 @flureoyellow:                   #fbd925;
 @flurogreen:                     #47ff00;
-@fluropink:                      #e01f74;
-
 
 @green:                          #d1e55c;
 @purple:                         #977bf0;
@@ -52,11 +34,27 @@
 @bluegray:                       #abc4c6;
 @bluegray2:                      #35464c;
 
-@brand-success:                  @fluroblue;
-@brand-warning:                  @purple;
-@brand-info:                     @fluroblue;
-@brand-danger:                   @fluropink;
-@brand-primary:                  @fluroblue;
+// Main Background and text colors
+@bg-main-color:                  @lightgray;
+@decorator-main-color:           @bluegray;
+@decorator-alt-color:            @bluegray2;
+@text-strong-color:              @darkblue2;
+
+@bg-inverse-color:               @darkblue;
+@bg-inverse-intense-color:       @darkerblue;
+@decorator-inverse-color:        @lightblue;
+@text-inverse-color:             @mediumblue;
+
+// Color for punctual elements (like fontawesome icon)
+@elem-positive-color:            @green;
+@elem-positive-flash-color:      @flurogreen;
+@elem-cozy-color:                @purple;
+
+/*-----------------------------------------------------------------------*/
+/*                       Legacy Color palette                            */
+/*-----------------------------------------------------------------------*/
+@linkColor: darken(#d1e17c, 20%);
+@titleBgColor: lighten(@bg-inverse-intense-color,3%);
 
 /*-----------------------------------------------------------------------*/
 /*                          Text Size                                    */
@@ -65,13 +63,22 @@
 @normal:                         13px;
 
 /*-----------------------------------------------------------------------*/
+/*                       Twitter Bootstrap colors                        */
+/*-----------------------------------------------------------------------*/
+@brand-success:                  @fluroblue;
+@brand-warning:                  @purple;
+@brand-info:                     @fluroblue;
+@brand-danger:                   @pink;
+@brand-primary:                  @fluroblue;
+
+/*-----------------------------------------------------------------------*/
 /*                          Navbar Customization                         */
 /*-----------------------------------------------------------------------*/
-@navbar-inverse-bg:              @darkblue;
+@navbar-inverse-bg:              @bg-inverse-color;
 @navbar-height:                  40px;
-@navbar-inverse-link-color:      @lightblue;
+@navbar-inverse-link-color:      @decorator-inverse-color;
 @navbar-border-radius:           0px;
-@navbar-inverse-border:          @darkblue;
+@navbar-inverse-border:          @bg-inverse-color;
 @navbar-desktop-height:          120px;
 @navbar-inverse-link-active-bg:  @navbar-inverse-bg;
 

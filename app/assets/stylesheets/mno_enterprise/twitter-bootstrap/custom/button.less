@@ -34,39 +34,39 @@
   }
 
   &.btn-dark {
-    .font(16px, 300, @lightgray);
-    background-color: @mdarkbg;
+    .font(16px, 300, @bg-main-color);
+    background-color: @bg-inverse-color;
 
     &:hover {
-      color: @purple;
+      color: @elem-cozy-color;
     }
   }
 
   &.btn-shaded {
-    background-color: @darkblue;
-    border: solid 1px @darkerblue;
-    color: @mediumblue;
+    background-color: @bg-inverse-color;
+    border: solid 1px @bg-inverse-intense-color;
+    color: @text-inverse-color;
     font-weight: 400;
 
     &:hover {
-      color: lighten(@mediumblue,5%);
-      background-color: lighten(@darkblue,5%);
+      color: lighten(@text-inverse-color,5%);
+      background-color: lighten(@bg-inverse-color,5%);
     }
   }
 
   &.btn-grey {
-    background-color: @lightgray;
-    border: solid 1px @lightgray;
-    color: lighten(@darkblue,5%);
+    background-color: @bg-main-color;
+    border: solid 1px @bg-main-color;
+    color: lighten(@bg-inverse-color,5%);
     font-weight: 400;
 
     &:hover {
-      color: @darkblue;
-      background-color: darken(@lightgray,5%);
+      color: @bg-inverse-color;
+      background-color: darken(@bg-main-color,5%);
     }
 
     &.btn-grey-bordered {
-      border: solid 1px darken(@lightgray,5%);
+      border: solid 1px darken(@bg-main-color,5%);
     }
   }
 

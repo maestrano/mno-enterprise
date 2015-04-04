@@ -2,26 +2,26 @@
   padding: 10px;
   .border-radius(5px);
   // border: solid 1px #ddd;
-  background-color: @darkblue;
+  background-color: @bg-inverse-color;
 
   .task {
     .border-radius(50px);
     .square(50px);
 
     &.unchecked {
-      border: solid 2px @fluropink;
+      border: solid 2px @brand-danger;
 
       .fa {
         margin: 7px 0px 0px 10px;
         font-size: 30px;
-        color: @fluropink;
+        color: @brand-danger;
         &.done{
           display:none;
         }
       }
 
       &:hover {
-        background-color: @fluropink;
+        background-color: @brand-danger;
         .fa {
           color: white;
         }
@@ -30,7 +30,7 @@
 
     &.checked {
       opacity:0.6;
-      background-color: @fluroblue;
+      background-color: @brand-primary;
 
       .fa {
         margin: 10px 0px 0px 10px;
@@ -55,7 +55,7 @@
   .progression {
     .font(40px,700,white);
     .border-radius(60px);
-    background-color: @fluroblue;
+    background-color: @brand-primary;
     .square(100px);
     padding: 20px 0px 0px 11px;
     margin: 23px 0px 0px 64px;

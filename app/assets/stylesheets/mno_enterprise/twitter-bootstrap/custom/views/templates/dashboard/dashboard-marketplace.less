@@ -1,7 +1,7 @@
 .dashboard-marketplace {
   
   .marketplace-nav input, select {
-    border: solid 1px darken(@lightgray,10%);
+    border: solid 1px darken(@bg-main-color,10%);
     background: transparent;
     .box-shadow(none);
     height: 35px;
@@ -30,7 +30,7 @@
   
   .marketplace-app-card img.media-object {
     max-width: 100px;
-    border: solid 1px lighten(@bluegray,20%);
+    border: solid 1px lighten(@decorator-main-color,20%);
     .border-radius(5px);
   }
   
@@ -48,11 +48,11 @@
     
   .marketplace-app-card:hover {
     text-decoration: none;
-    background-color: @bluegray;
+    background-color: @decorator-main-color;
     //color: white;
   
     img.media-object {
-      border: solid 1px darken(@bluegray,5%);
+      border: solid 1px darken(@decorator-main-color,5%);
     }
     
     .arrow {
@@ -72,7 +72,7 @@
   .show-header .media-object {
     max-width: 80px;
     .border-radius(5px);
-    border: solid 1px darken(@lightgray,5%);
+    border: solid 1px darken(@bg-main-color,5%);
   }
   
   .show-header .media-body h2 {
@@ -154,7 +154,7 @@
   }
   
   .show-content ul.key-benefits > li > .fa.fa-check {
-    color: @green;
+    color: @elem-positive-color;
     margin-right: 5px;
   }
 }

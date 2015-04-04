@@ -18,7 +18,7 @@
   }
   
   ul.nav.nav-tabs > li > a:hover {
-    background-color: @purple;
+    background-color: @elem-cozy-color;
     color: white;
   }
 
@@ -52,7 +52,7 @@
       &.active {
         border-bottom: solid 5px transparent;
         a {
-          background-color:@fluroblue;
+          background-color:@brand-primary;
           color:white;
         }
       }
@@ -63,25 +63,25 @@
 // Cozy style on dark background
 .tabset.tabset-cozy.tabset-inverse {
   ul.nav.nav-tabs > li.active {
-    border-bottom: solid 5px @purple;
+    border-bottom: solid 5px @elem-cozy-color;
   }
   
   //ul.nav.nav-tabs > li.active,
   ul.nav.nav-tabs > li > a:hover {
-    background-color: lighten(@purple,28%);
-    color: darken(@purple,10%);;
+    background-color: lighten(@elem-cozy-color,28%);
+    color: darken(@elem-cozy-color,10%);;
   }
   
   ul.nav.nav-tabs > li.active > a,
   ul.nav.nav-tabs > li.active > a:hover,
   ul.nav.nav-tabs > li.active > a:focus {
     padding-bottom: 20px;
-    background-color: @purple;
+    background-color: @elem-cozy-color;
     color: white;
   }
   
   .tab-content {
-    border-top: solid 2px @purple;
+    border-top: solid 2px @elem-cozy-color;
   }
 }
   

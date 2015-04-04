@@ -16,8 +16,8 @@
 .navbar.navbar-inverse ul.nav.navbar-nav.navbar-right a.my-apps {
   width:100%;
   .border-radius(5px);
-  background-color:@darkblue;
-  .font(14px,700,@fluroblue);
+  background-color:@bg-inverse-color;
+  .font(14px,700,@brand-primary);
 
   .label-myapps {
     display:inline;
@@ -28,7 +28,7 @@
   }
 
   &:hover {
-    color:@fluroblue;
+    color:@brand-primary;
   }
 }
 
@@ -48,7 +48,7 @@
   }
 
   .navbar-submenu {
-    background-color:@purple;
+    background-color:@elem-cozy-color;
     padding:15px;
     margin-top:34px;
     margin-bottom:-1px;
@@ -65,7 +65,7 @@
           font-size:14px;
           font-weight:300;
           &.active {
-            color:@darkblue;
+            color:@bg-inverse-color;
             font-weight:300;
           }
         }
@@ -88,7 +88,7 @@
         border-left: 27px solid transparent;
         border-right: 27px solid transparent;
         margin-left:50%-27px;
-        border-bottom: 20px solid @purple;
+        border-bottom: 20px solid @elem-cozy-color;
       }
     }
   }
@@ -173,14 +173,14 @@
           font-size:@normal;
           text-align:center;
           background-color:#111c21;
-          border-bottom: solid 1px @darkblue;
+          border-bottom: solid 1px @bg-inverse-color;
           padding:22px 0px;
         }
 
         ul.dropdown-menu {
           padding:0px;
           a {
-            background-color:@darkblue;
+            background-color:@bg-inverse-color;
             border-bottom: solid 1px #111c21;
             padding:13px 0px;
           }
@@ -234,15 +234,15 @@
 
 .navbar-nav {
   ul.dropdown-menu {
-    background-color: @mdarkbg;
+    background-color: @bg-inverse-color;
 
     li a {
-      .font(16px, 300, @lightgray);
-      background-color: @mdarkbg;
+      .font(16px, 300, @bg-main-color);
+      background-color: @bg-inverse-color;
     }
 
     li a:hover, li a:focus {
-      .font(16px, 300, @lightblue);
+      .font(16px, 300, @decorator-inverse-color);
     }
   }
 }
@@ -251,5 +251,5 @@
 // Email lounge
 //-----------------------------------
 .navbar .navbar-nav .greetings  {
-  color: @green;
+  color: @elem-positive-color;
 }

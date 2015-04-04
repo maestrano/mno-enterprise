@@ -11,7 +11,7 @@
 
 
   .alert {
-    border: solid 1px @lightblue;
+    border: solid 1px @decorator-inverse-color;
     .border-radius(3px);
   }
 
@@ -25,8 +25,8 @@
     width: 21px;
     height: 21px;
     font-weight: 400;
-    background-color: darken(@darkerblue,5%);
-    color: lighten(@lightblue,10%);
+    background-color: darken(@bg-inverse-intense-color,5%);
+    color: lighten(@decorator-inverse-color,10%);
     .border-radius(20px);
     line-height: 19px;
 
@@ -34,13 +34,13 @@
     text-shadow: none;
 
     &:hover {
-      color: @pink;
+      color: @brand-danger;
       opacity: 1;
     }
   }
 
   .modal-content {
-    background-color: @darkblue;
+    background-color: @bg-inverse-color;
   }
 
   .modal-footer {
@@ -58,20 +58,20 @@
 
     .media-body {
       h4.media-heading {
-        .font(20px,700,@darkblue);
+        .font(20px,700,@bg-inverse-color);
         text-align:left;
       }
       text-align:left;
-      .font(16px,300,@mediumblue);
+      .font(16px,300,@text-inverse-color);
     }
   }
   .modal-body {
     text-align:left;
     ul {
       list-style-type: none;
-      .font(16px,300,@mediumblue);
+      .font(16px,300,@text-inverse-color);
       .fa {
-        color:@green;
+        color:@elem-positive-color;
       }
 
       .media-heading {
@@ -90,7 +90,7 @@
       }
       a {
         .fa {
-          color:@lightgray;
+          color:@bg-main-color;
         }
       }
       
@@ -109,8 +109,8 @@
 
 .modal {
   .dark {
-    background-color: @darkblue;
-    color:@lightgray;
+    background-color: @bg-inverse-color;
+    color:@bg-main-color;
 
     .modal-header {
       border:0px;
@@ -121,20 +121,20 @@
 
       .media-body {
         h4.media-heading {
-          .font(20px,700,@darkblue);
+          .font(20px,700,@bg-inverse-color);
           text-align:left;
         }
         text-align:left;
-        .font(16px,300,@mediumblue);
+        .font(16px,300,@text-inverse-color);
       }
     }
     .modal-body {
       text-align:left;
       ul {
         list-style-type: none;
-        .font(16px,300,@mediumblue);
+        .font(16px,300,@text-inverse-color);
         .fa {
-          color:@green;
+          color:@elem-positive-color;
         }
 
         .media-heading {
@@ -153,7 +153,7 @@
         }
         a {
           .fa {
-            color:@lightgray;
+            color:@bg-main-color;
           }
         }
         img {
@@ -167,8 +167,8 @@
       width: 21px;
       height: 21px;
       font-weight: 400;
-      background-color: darken(@darkerblue,5%);
-      color: @lightblue;
+      background-color: darken(@bg-inverse-intense-color,5%);
+      color: @decorator-inverse-color;
       .border-radius(8px);
       line-height: 19px;
 
