@@ -22,5 +22,15 @@ module MnoEnterprise
       return true
     end
     
+    # Redirect to signup page if user not authenticated
+    def authenticate_user_or_signup!
+      unless current_user
+        redirect_to new_user_registration_path
+        false
+      end
+    
+      true
+    end
+    
   end
 end

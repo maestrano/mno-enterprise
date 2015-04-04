@@ -8,7 +8,7 @@ module.controller('DashboardAppDeletionRequestCtrl',[
   ($scope, $modal, DashboardAppInstance, DashboardAppsDocument, Utilities) ->
 
     init = ->
-      $scope.data = DashboardAppsDocument.data["app_instance_#{$scope.appId}"].plan
+      $scope.data = DashboardAppsDocument.data["#{$scope.appId}"].plan
       $scope.modal = { inProgress:false }
       $scope.sentence = "Please proceed to the deletion of my app and all data it contains"
 

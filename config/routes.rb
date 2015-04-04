@@ -15,6 +15,9 @@ MnoEnterprise::Engine.routes.draw do
   get '/myspace#/apps/dashboard', to: 'pages#myspace', as: 'myspace_home'
   get '/myspace#/billing', to: 'pages#myspace', as: 'myspace_billing'
   
+  # App Provisioning
+  resources :provision, only: [:new,:create]
+  
   #============================================================
   # Devise Configuration
   #============================================================
