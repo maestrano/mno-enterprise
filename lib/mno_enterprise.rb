@@ -1,3 +1,4 @@
+require 'less-rails'
 require 'jwt'
 require 'jquery-rails'
 require 'haml'

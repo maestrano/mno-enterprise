@@ -4,11 +4,20 @@ module MnoEnterprise
   module Generators
     class InstallGenerator < ::Rails::Generators::Base
       source_root File.expand_path("../../templates", __FILE__)
-      desc "Create a Maestrano Enterprise initializer"
+      desc "Install Maestrano Enterprise Engine in your application"
       
       def copy_initializer
-        template "mno_enterprise.rb", "config/initializers/mno_enterprise.rb"
+        template "initializers/mno_enterprise.rb", "config/initializers/mno_enterprise.rb"
+        template "stylesheets/main.less", "app/assets/stylesheets/main.less"
+        template "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
+        
+        # Require main stylesheet file
+        inject_into_file 'app/assets/stylesheets/application.css', before: " */" do
+          " *= require main\n"
+        end
       end
+      
+      
     end
   end
 end
