@@ -24,12 +24,12 @@
       <label class="col-sm-3 control-label">Connec!™ Data Sharing</label>
       <div class="col-sm-6">
         <div class="btn-group btn-group-lg">
-          <button class="btn btn-default" ng-click="connecBtnClickOn('enable')" ng-class="connecBtnClassFor('enable')">
-            Enable
-          </button>
-          <button class="btn btn-default" ng-click="connecBtnClickOn('disable')" ng-class="connecBtnClassFor('disable')">
-            Disable
-          </button>
+          <a class="btn btn-default" ng-click="connecBtnClickOn('enable')" ng-class="connecBtnClassFor('enable')">
+            On
+          </a>
+          <a class="btn btn-default" ng-click="connecBtnClickOn('disable')" ng-class="connecBtnClassFor('disable')">
+            Off
+          </a>
         </div>
       </div>
     </div>
@@ -44,11 +44,11 @@
 </div>
 <div class="row text-right" ng-show="!isLoading">
   <div class="col-md-4 col-md-offset-8">
-    <button ng-click="cancel()" class="btn btn-shaded btn-lg" ng-show="isCancelShown()">
+    <button ng-click="cancel()" class="btn" ng-show="isCancelShown()">
       Cancel 
     </button>
     
-    <button ng-click="save()" href="" class="btn btn-info btn-lg" ng-disabled="!isSaveEnabled()">
+    <button ng-click="save()" href="" class="btn btn-warning" ng-disabled="!isSaveEnabled()">
       Save
     </button>
   </div>

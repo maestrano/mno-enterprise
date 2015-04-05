@@ -6,7 +6,8 @@
   ul.nav.nav-tabs {
     background-color: transparent;
   }
-
+  
+  // Tab Header Wrapper Styling
   ul.nav.nav-tabs > li {
     margin-right: 5px;
     padding-bottom: 5px;
@@ -14,32 +15,40 @@
     border-bottom: solid 5px transparent;
     padding: 0px;
   }
-
-  ul.nav.nav-tabs > li.active {
-    border-bottom: solid 5px white;
+  ul.nav.nav-tabs > li.active when (@dashboard-cpy-tabs-subline-size > 0) {
+    border-bottom: solid 4px @dashboard-cpy-tabs-active-bg-color;
   }
-
+  
+  // Tab Header Styling
+  ul.nav.nav-tabs > li > a {
+    padding: 20px 40px;
+    border: none;
+    color: @dashboard-cpy-tabs-text-color;
+    background-color: @dashboard-cpy-tabs-bg-color;
+    .border-top-radius(@dashboard-cpy-tabs-border-radius);
+    .border-bottom-radius(@dashboard-cpy-tabs-border-radius);
+    
+    
+  }
   ul.nav.nav-tabs > li > a:hover {
-    background-color: @elem-cozy-color;
-    color: white;
+    background-color: @dashboard-cpy-tabs-hover-bg-color;
+    color: @dashboard-cpy-tabs-hover-text-color;
   }
-
   ul.nav.nav-tabs > li.active > a,
   ul.nav.nav-tabs > li.active > a:hover,
   ul.nav.nav-tabs > li.active > a:focus {
     padding-bottom: 20px;
-    background-color: white;
-    color: #878787;
+    background-color: @dashboard-cpy-tabs-active-bg-color;
+    color: @dashboard-cpy-tabs-active-text-color;
+    
+    & when (@dashboard-cpy-tabs-subline-size = 0) {
+      .border-bottom-radius(@dashboard-cpy-tabs-border-radius);
+    }
   }
-
-  ul.nav.nav-tabs > li > a {
-    padding: 20px 40px;
-    border: none;
-    background-color: white;
-  }
-
+  
+  // Tab Content Styling
   .tab-content {
-    border-top: solid 2px white;
+    border-top: solid @dashboard-cpy-tabs-subline-size @dashboard-cpy-tabs-subline-color;
     padding-top: 20px;
   }
 
@@ -54,8 +63,8 @@
       &.active {
         border-bottom: solid 5px transparent;
         a {
-          background-color:@brand-primary;
-          color:white;
+          background-color: @dashboard-cpy-tabs-active-bg-color;
+          color: white;
         }
       }
     }

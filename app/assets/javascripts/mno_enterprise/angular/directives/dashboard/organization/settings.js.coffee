@@ -61,9 +61,9 @@ module.controller('DashboardOrganizationSettingsCtrl',[
     # based on soa_enabled
     $scope.connecBtnClassFor = (action) ->
       if action == 'enable'
-        return ( $scope.model.soa_enabled && 'btn-warning')
+        return ( $scope.model.soa_enabled && 'btn-info')
       else
-       return ( !$scope.model.soa_enabled && 'btn-warning')
+       return ( !$scope.model.soa_enabled && 'btn-info')
     
     # Action to be perform when user clicks on 'enable'
     # or 'disable'
