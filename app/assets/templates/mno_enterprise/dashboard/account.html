@@ -20,27 +20,27 @@
     <form name='form'>
       <div class='row'>
         <div class='col-md-6'>
-          <div class='field-name'>Name</div>
+          <label>Name</label>
           <input type='text' ng-model='user.model.name' class='form-control'>
         </div>
         <div class='col-md-6'>
-          <div class='field-name'>Surname</div>
+          <label>Surname</label>
           <input type='text' ng-model='user.model.surname' class='form-control'>
         </div>
       </div>
       <div class='row'>
         <div class='col-md-6'>
-          <div class='field-name'>Email</div>
+          <label>Email</label>
           <input type='text' ng-model='user.model.email' class='form-control'>
         </div>
         <div class='col-md-6'>
-          <div class='field-name'>Company</div>
+          <label>Company</label>
           <input type='text' ng-model='user.model.company' class='form-control'>
         </div>
       </div>
       <div class='row'>
         <div class='col-md-6'>
-          <div class='field-name'>Phone</div>
+          <label>Phone</label>
           <div class="input-group">
             <div class="input-group-addon select">
               <select ng-options="phone[0] as phone[1] for phone in countryCodes" ng-model='user.model.phone_country_code'></select>
@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class='col-md-6'>
-          <div class='field-name'>Website</div>
+          <label>Website</label>
           <input type='text' ng-model='user.model.website' class='form-control'>
         </div>
       </div>

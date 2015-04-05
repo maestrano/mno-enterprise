@@ -17,21 +17,12 @@ input.fluroblue[type=radio]:checked + label{
   background-position : 0 1px;
 }
 
-form.free-trial-form {
-  input[type='text'] {
-    height:40px;
-    background-color:#111c21;
-    font-weight:300;
-    font-size:15px;
-    border:0px;
-  }
+form label {
+  color: @input-label-color;
+}
 
-  .btn.btn-promo {
-    font-weight:500;
-    font-size:15px;
-    height:40px;
-    width:100%;
-  }
+.input-group-addon.select select {
+  background-color: @input-bg;
 }
 
 //----------------------------------------
@@ -52,14 +43,15 @@ form .phone {
 }
 
 //----------------------------------------
-// Style for forms on black backgrounds
+// Style for forms on inverse backgrounds
 //----------------------------------------
 form.inverse {
   select {
-    background-color:@bg-inverse-color;
+    background-color: @bg-inverse-color;
+    .font(16px, 300, @decorator-inverse-color);
     border:solid 1px #111c21;
+    
     .border-radius(5px);
-    .font(16px,300,@decorator-inverse-color);
     height:44px;
     -webkit-appearance: none;
     padding-left:15px;
