@@ -25,10 +25,9 @@
           <div ng-switch="displayOptions[app.id]">
 
             <div ng-switch-when="true">
-              <div class="status" ng-class="app.status + ' ' + (shouldBlink(app.status) && blink.value)" mno-helptext="{{app.status}}"></div>
               <div ng-init="openModal = 0" dashboard-plan-change-request=true app-id="{{app.id}}" open-modal="openModal"></div>
               <div ng-init="deletionModal = 0" dashboard-app-deletion-request=true app-id="{{app.id}}" open-modal="deletionModal"></div>
-              <a ng-click="displayOptions[app.id] = !displayOptions[app.id]" ng-show="helper.displayCogwheel()" class="options" href=""><div class="fa fa-cog"></div></a>
+              <a ng-click="displayOptions[app.id] = !displayOptions[app.id]" ng-show="helper.displayCogwheel()" class="options" href=""><i class="fa fa-times"></i></a>
 
               <!-- Data Sync Button -->
               <div ng-show="appsListHelper.isDataSyncShown(app)">
@@ -50,8 +49,7 @@
             </div>
 
             <div ng-switch-default>
-              <div class="status" ng-class="app.status + ' ' + (shouldBlink(app.status) && blink.value)" mno-helptext="{{app.status}}"></div>
-              <a ng-click="displayOptions[app.id] = !displayOptions[app.id]" ng-show="helper.displayCogwheel()" class="options" href=""><div class="fa fa-cog"></div></a>
+              <a ng-click="displayOptions[app.id] = !displayOptions[app.id]" ng-show="helper.displayCogwheel()" class="options" href=""><i class="fa fa-cog"></i></a>
               <br>
               <a ng-href="{{appsListHelper.appActionUrl(app)}}" target="_blank">
                 <img class="app-logo" ng-src="{{app.logo}}">

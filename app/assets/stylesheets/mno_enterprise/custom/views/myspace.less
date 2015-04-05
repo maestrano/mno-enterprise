@@ -208,6 +208,92 @@
   
 }
 
+.myspace .app-dashboard {
+  min-height: 280px;
+  max-width: 225px;
+  margin-left: auto;
+  margin-right: auto;
+  .border-radius(5px);
+  background-color: @dashboard-apps-tile-bg-color;
+  text-align: center;
+  padding: 30px 0px;
+  padding-bottom: 0px;
+  margin-top: 15px;
+
+  .btn-change-plan {
+    margin-top:50px;
+  }
+
+  .title {
+    .font(14px,normal,@dashboard-apps-tile-text-color);
+    margin-top:10px;
+    margin-bottom:10px;
+  }
+
+  .app-line {
+    .font(12px,normal,@text-inverse-color);
+  }
+
+  img.app-logo {
+    .border-radius(5px);
+    .square(85px);
+    border: solid @dashboard-apps-tile-logo-border-size @dashboard-apps-tile-logo-border-color;
+  }
+
+  .connector-logo {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    cursor: pointer;
+  }
+
+  .office365-connector-logo {
+    height: 32px;
+    padding: 2px;
+  }
+
+  .tutorial {
+    display:block;
+    margin-top: 7px;
+  }
+
+  // App Tile Settings (top right)
+  a.options {
+    line-height: 19px;
+    .square(20px);
+    .border-radius(20px);
+    color: @dashboard-apps-tile-settings-color;
+    background-color: @dashboard-apps-tile-settings-bg-color;
+    float:right;
+    margin: -25px 5px 0px 0px;
+  }
+  
+  a.options:hover {
+    color: @dashboard-apps-tile-settings-hover-color;
+    background-color: @dashboard-apps-tile-settings-hover-bg-color;
+  }
+  a.options i {
+    margin-top: 3px;
+  }
+
+  .app-custom-info {
+    position: relative;
+    top: -10px;
+    z-index: 999;
+  }
+}
+
+// Add application tile (tile with + button)
+.myspace .app-dashboard.add-app {
+  padding:15px 0px;
+  font-size:140px;
+}
+.myspace .app-dashboard.add-app a {
+  color: @dashboard-bg-color;
+  
+  &:hover {
+    color: @brand-warning;
+  }
+}
 
 /*-----------------------------------------------------------------------*/
 /*                   Dashboard Elements (remaining)                      */
@@ -243,109 +329,6 @@
       }
     }
   }
-
-  .app-dashboard {
-    min-height:280px;
-    max-width:225px;
-    margin-left:auto;
-    margin-right:auto;
-    .border-radius(5px);
-    background-color:white;
-    text-align:center;
-    padding:30px 0px;
-    padding-bottom: 0px;
-    margin-top:15px;
-
-    .btn-change-plan {
-      margin-top:50px;
-    }
-
-    .title {
-      .font(14px,normal,@text-inverse-color);
-      margin-top:10px;
-      margin-bottom:10px;
-    }
-
-    .app-line {
-      .font(12px,normal,@text-inverse-color);
-    }
-
-    img.app-logo {
-      .border-radius(5px);
-      .square(85px);
-    }
-
-    .connector-logo {
-      margin-top:3px;
-      margin-bottom:3px;
-      cursor: pointer;
-    }
-
-    .office365-connector-logo {
-      height: 32px;
-      padding: 2px;
-    }
-
-    .tutorial {
-      display:block;
-      margin-top:7px;
-    }
-
-    .status {
-      .square(20px);
-      .border-radius(20px);
-      border:solid 5px #e6eced;
-      background-color:#e6eced;
-      margin:-25px 0px 0px 5px;
-      float:left;
-      background-color:#e6eced;
-      &.updating, &.upgrading {
-        background-color:#FF9B05;
-      }
-      &.running, &.starting, &.restarting, {
-        background-color:#46ff00;
-      }
-      &.terminating, &.terminated {
-        background-color:#FF0505;
-      }
-      &.neutral {
-        background-color:#e6eced;
-      }
-    }
-
-    a.options {
-      line-height:19px;
-      .square(20px);
-      .border-radius(20px);
-      background-color:#e6eced;
-      float:right;
-      margin:-25px 5px 0px 0px;
-      &:hover {
-        background-color:@bg-inverse-color;
-      }
-      .fa {
-        color:@text-inverse-color;
-      }
-    }
-
-    &.add-app {
-      padding:15px 0px;
-      font-size:140px;
-      a {
-        color:@bg-main-color;
-        &:hover {
-          color:@brand-primary;
-        }
-      }
-    }
-
-    .app-custom-info {
-      position: relative;
-      top: -10px;
-      z-index: 999;
-    }
-  }
-
   .editable-wrap {
     white-space:normal;
     margin:10px 0px;
