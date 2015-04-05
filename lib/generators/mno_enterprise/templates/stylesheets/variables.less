@@ -35,20 +35,20 @@
 @bluegray2:                      #35464c;
 
 // Main Background and text colors
-@bg-main-color:                  @lightgray;
-@decorator-main-color:           @bluegray;
-@decorator-alt-color:            @bluegray2;
-@text-strong-color:              @darkblue2;
+@bg-main-color:                  @lightgray;  // Dashboard background color
+@decorator-main-color:           @bluegray;   // Elements placed on top of bg-main-color
+@decorator-alt-color:            @bluegray2;  // Elements placed on top of bg-main-color (secondary)
+@text-strong-color:              @darkblue2;  // Used for text used in the context of bg-main-color
 
-@bg-inverse-color:               @darkblue;
-@bg-inverse-intense-color:       @darkerblue;
-@decorator-inverse-color:        @lightblue;
-@text-inverse-color:             @mediumblue;
+@bg-inverse-color:               @darkblue;   // Background color used for top banners, inverse modals
+@bg-inverse-intense-color:       @darkerblue; // Background color used for elements on top of bg-inverse-color
+@decorator-inverse-color:        @lightblue;  // Design elements (lines, borders) on top of bg-inverse-color
+@text-inverse-color:             @mediumblue; // Text used on top of bg-inverse-color such as inverse modals
 
-// Color for punctual elements (like fontawesome icon)
-@elem-positive-color:            @green;
-@elem-positive-flash-color:      @flurogreen;
-@elem-cozy-color:                @purple;
+// Color used in small/isolated elements
+@elem-positive-color:            @green;      // used to reflect a positive action or point (e.g: tick icon)
+@elem-positive-flash-color:      @flurogreen; // stronger version of elem-positive-color (barely used)
+@elem-cozy-color:                @purple;     // used for regular design element - fits well with both main and inverse backgrounds
 
 /*-----------------------------------------------------------------------*/
 /*                          Text Size                                    */
