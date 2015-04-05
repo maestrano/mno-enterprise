@@ -1,3 +1,5 @@
+require 'mno-enterprise'
+
 MnoEnterprise.configure do |config|
   
   # ==> Maestrano Enterprise Tenant Authentication
