@@ -18,7 +18,7 @@ module MnoEnterprise
         
         # Inject engine routes
         inject_into_file 'config/routes.rb', after: "Rails.application.routes.draw do\n" do
-          "  # MnoEnterprise Engine\n  mount MnoEnterprise::Engine => \"/mnoe\", as: :mno_enterprise"
+          "  # MnoEnterprise Engine\n  mount MnoEnterprise::Engine => \"/mnoe\", as: :mno_enterprise\n\n"
         end
       end
       
