@@ -1,3 +1,71 @@
+.myspace .company-select-box {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: @dashboard-cpy-select-bg-color;
+  color: @dashboard-cpy-select-header-text-color;
+  font-size: @dashboard-cpy-select-header-text-size;
+  padding: @dashboard-cpy-select-padding;
+  .border-bottom-radius(@dashboard-cpy-select-border-radius);
+  z-index: 10;
+  
+  // Change company button
+  .btn {
+    margin-left: 15px;
+  }
+  
+  // Section always visible
+  .box-header {
+    text-align: right;
+  }
+  
+  // Section visible when change company is clicked
+  .box-content {
+    margin-top: 10px;
+    border-top: solid 1px @dashboard-cpy-select-link-color;
+    .border-bottom-radius(5px);
+  }
+  
+  .box-content ul {
+    list-style: none;
+    padding-top: 15px;
+    max-height: 400px;
+    min-width: 250px;
+    overflow-y: auto;
+  }
+  
+  .box-content ul li a {
+    color: @dashboard-cpy-select-link-color;
+    line-height: 25px;
+    display: block;
+    padding-left: 5px;
+
+    &:hover {
+      text-decoration: none;
+      color: @dashboard-cpy-select-link-hover-color;
+      background-color: @dashboard-cpy-select-link-hover-bg-color;
+    }
+  }
+  
+  .box-content ul li a i.fa {
+    width: 13px;
+    margin-right: 6px;
+    text-align: center;
+    color: @dashboard-cpy-select-link-color;
+  }
+
+  .box-content .create-new {
+    text-align: center;
+  }
+  
+  .box-content .create-new a {
+    color: @dashboard-cpy-select-link-create-color;
+  }
+  
+  // Play well with menu at the top in responsive mode
+  @media (max-width: @screen-sm-min) { top: 46px; }
+}
+
 .myspace .menu {
   z-index:100;
   position:fixed;
@@ -101,76 +169,6 @@
       float:right;
       margin:4px 198px 0px 0px;
     }
-  }
-
-  .organization-select-box {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    background-color: @bg-inverse-color;
-    color: @decorator-inverse-color;
-    font-size: 14px;
-    padding: 10px 20px;
-    .border-bottom-radius(5px);
-    z-index: 10;
-
-    .btn {
-      margin-left: 15px;
-    }
-    
-    .box-header {
-      text-align: right;
-    }
-
-    .box-content {
-      margin-top: 10px;
-      border-top: solid 1px @decorator-inverse-color;
-      .border-bottom-radius(5px);
-    }
-    
-    .box-content ul {
-      list-style: none;
-      padding-top: 15px;
-      max-height: 400px;
-      min-width: 250px;
-      overflow-y: auto;
-    }
-
-    .box-content ul li a {
-      color: white;
-      line-height: 25px;
-      display: block;
-      padding-left: 5px;
-
-      &:hover {
-        text-decoration: none;
-        background-color: @decorator-inverse-color;
-      }
-    }
-    
-    .box-content ul li a i.fa {
-      width: 13px;
-      margin-right: 6px;
-      text-align: center;
-    }
-    
-    .box-content ul li a i.fa.reseller {
-      color: @elem-cozy-color;
-    }
-    
-    .box-content ul li a i.fa.customer {
-      color: @elem-positive-flash-color;
-    }
-    
-    .box-content ul li a i.fa.company {
-      color: @brand-primary;
-    }
-
-    .box-content .create-new {
-      text-align: center;
-    }
-
-    @media (max-width: @screen-sm-min) { top: 46px; }
   }
 
   .field-name {

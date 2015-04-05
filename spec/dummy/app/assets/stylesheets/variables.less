@@ -10,7 +10,7 @@
 /*-----------------------------------------------------------------------*/
 /*                          Fonts & Text                                 */
 /*-----------------------------------------------------------------------*/
-@font-family-sans-serif:         "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-sans-serif:         Arial, "Helvetica Neue", Helvetica, sans-serif;
 @font-family-base:               @font-family-sans-serif;
 @small:                          11px;
 @normal:                         13px;
@@ -54,7 +54,7 @@
 @text-strong-color:              @darkblue;  // Used for text used in the context of bg-main-color
 
 @bg-inverse-color:               @white;   // Background color used for dashboard side menu. top banners, inverse modals
-@bg-inverse-intense-color:       @darkblue; // Background color used for elements on top of bg-inverse-color
+@bg-inverse-intense-color:       @lightblack; // Background color used for elements on top of bg-inverse-color
 @decorator-inverse-color:        @a7-orange;  // Design elements (lines, borders) on top of bg-inverse-color
 @text-inverse-color:             @darkblue; // Text used on top of bg-inverse-color such as inverse modals
 
@@ -68,6 +68,7 @@
 /*-----------------------------------------------------------------------*/
 @dashboard-bg-color:                            @bg-main-color;
 
+// Side navbar menu
 @dashboard-side-menu-bg-color:                  @bg-inverse-color;
 
 @dashboard-side-menu-link-color:                @bg-main-color;
@@ -78,6 +79,21 @@
 
 @dashboard-side-menu-link-hover-color:          @bg-main-color;
 @dashboard-side-menu-link-hover-bg-color:       lighten(@bg-inverse-color,5%);
+
+// Company select box (top right)
+@dashboard-cpy-select-bg-color:                 @bg-inverse-intense-color;
+@dashboard-cpy-select-border-radius:            0px;
+@dashboard-cpy-select-padding:                  15px 25px;
+
+@dashboard-cpy-select-header-text-color:        @bg-inverse-color;
+@dashboard-cpy-select-header-text-size:         13px;
+
+@dashboard-cpy-select-link-color:               @dashboard-cpy-select-header-text-color;
+
+@dashboard-cpy-select-link-hover-color:         @dashboard-cpy-select-link-color;
+@dashboard-cpy-select-link-hover-bg-color:      lighten(@dashboard-cpy-select-bg-color,10%);
+
+@dashboard-cpy-select-link-create-color:        @decorator-alt-color;
 
 /*-----------------------------------------------------------------------*/
 /*                       Twitter Bootstrap colors                        */

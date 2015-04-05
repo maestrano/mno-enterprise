@@ -110,14 +110,8 @@ module.controller('DashboardMenuCtrl',[
       selectBox.isClosed = true
     
     selectBox.organizationList = ->
-      self = selectBox
-      arr = [
-        _.where(self.organizations,{is_reseller_branch: true}),
-        _.sortBy(_.where(self.organizations,{is_reseller_branch: false, is_customer_account: false}), (o) -> o.name),
-        _.sortBy(_.where(self.organizations,{is_customer_account: true}), (o) -> o.name)
-      ]
-      
-      return _.flatten(arr)
+      self = selectBox      
+      return _.sortBy(self.organizations, (o) -> o.name)
     
     # Format the html of the label used by the provided
     # organization, based on whether it is selected, is a customer, reseller
@@ -125,10 +119,8 @@ module.controller('DashboardMenuCtrl',[
     selectBox.organizationLabel = (organization) ->
       icon = {}
       icon.type = if (organization.id == DhbOrganizationSvc.getId()) then "fa-dot-circle-o" else "fa-circle-o"
-      icon.klass = "company"
-      icon.tooltip = "You belong to this company"
       
-      html = "<i class=\"fa #{icon.type} #{icon.klass}\" tooltip=\"#{icon.tooltip}\"></i>#{organization.name}"        
+      html = "<i class=\"fa #{icon.type}\"></i>#{organization.name}"        
       return html
     
     # TODO: This function should go in a service
