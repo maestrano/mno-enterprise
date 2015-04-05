@@ -1,0 +1,119 @@
+// Use this file to override Twitter Bootstrap variables or define own variables.
+/*-----------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------*/
+/*                       Design variables                                */
+/*-----------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------*/
+/*                          Fonts & Text                                 */
+/*-----------------------------------------------------------------------*/
+@font-family-sans-serif:         "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-base:               @font-family-sans-serif;
+@small:                          11px;
+@normal:                         13px;
+
+/*-----------------------------------------------------------------------*/
+/*                        Custom Color Palette                           */
+/*-----------------------------------------------------------------------*/
+@darkerblue:                     #16252c;
+@darkblue:                       #17262d;
+@darkerblue:                     darken(@darkblue,4%);
+@darkblue2:                      #25333a;
+@mediumblue:                     #626d6d;
+@lightblue:                      #abc4c6;
+@pink:                           #ed1e79;
+
+@fluroblue:                      #00e5f0;
+@flureoyellow:                   #fbd925;
+@flurogreen:                     #47ff00;
+
+@green:                          #d1e55c;
+@purple:                         #977bf0;
+@lightgray:                      #e6edee;
+@bluegray:                       #abc4c6;
+@bluegray2:                      #35464c;
+
+// Alpha7 Color Code
+@white:                          #ffffff; // light background color
+@darkgray:                       #353739; // dark background color
+@lightblack:                     #1e1f20; // Used for elements placed on top of darkgray
+@a7-orange:                      #f58634; // Brand + CTA color
+@darkblue:                       #343e4c; // used for text
+@lightgray:                      #edf1f5; // used for text and input background
+
+/*-----------------------------------------------------------------------*/
+/*                       General Theme Colors                            */
+/*-----------------------------------------------------------------------*/
+// Main Background and text colors
+@bg-main-color:                  @darkgray;   // Dashboard background color
+@decorator-main-color:           @lightgray;   // Elements placed on top of bg-main-color
+@decorator-alt-color:            @a7-orange;  // Elements placed on top of bg-main-color (secondary)
+@text-strong-color:              @darkblue;  // Used for text used in the context of bg-main-color
+
+@bg-inverse-color:               @white;   // Background color used for dashboard side menu. top banners, inverse modals
+@bg-inverse-intense-color:       @darkblue; // Background color used for elements on top of bg-inverse-color
+@decorator-inverse-color:        @a7-orange;  // Design elements (lines, borders) on top of bg-inverse-color
+@text-inverse-color:             @darkblue; // Text used on top of bg-inverse-color such as inverse modals
+
+// Color used in small/isolated elements
+@elem-positive-color:            @green;      // used to reflect a positive action or point (e.g: tick icon)
+@elem-positive-flash-color:      @flurogreen; // stronger version of elem-positive-color (barely used)
+@elem-cozy-color:                @purple;     // used for regular design element - fits well with both main and inverse backgrounds
+
+/*-----------------------------------------------------------------------*/
+/*                   Mno Enterprise Customization                        */
+/*-----------------------------------------------------------------------*/
+@dashboard-bg-color:                            @bg-main-color;
+
+@dashboard-side-menu-bg-color:                  @bg-inverse-color;
+
+@dashboard-side-menu-link-color:                @bg-main-color;
+@dashboard-side-menu-link-bg-color:             @dashboard-side-menu-bg-color;
+
+@dashboard-side-menu-link-active-color:         @dashboard-side-menu-bg-color;
+@dashboard-side-menu-link-active-bg-color:      @bg-main-color;
+
+@dashboard-side-menu-link-hover-color:          @bg-main-color;
+@dashboard-side-menu-link-hover-bg-color:       lighten(@bg-inverse-color,5%);
+
+/*-----------------------------------------------------------------------*/
+/*                       Twitter Bootstrap colors                        */
+/*-----------------------------------------------------------------------*/
+@brand-success:                  @fluroblue;
+@brand-warning:                  @purple;
+@brand-info:                     @fluroblue;
+@brand-danger:                   @pink;
+@brand-primary:                  @fluroblue;
+
+/*-----------------------------------------------------------------------*/
+/*                          Navbar Customization                         */
+/*-----------------------------------------------------------------------*/
+@navbar-inverse-bg:              @bg-inverse-color;
+@navbar-height:                  40px;
+@navbar-inverse-link-color:      @decorator-inverse-color;
+@navbar-border-radius:           0px;
+@navbar-inverse-border:          @bg-inverse-color;
+@navbar-desktop-height:          120px;
+@navbar-inverse-link-active-bg:  @navbar-inverse-bg;
+
+/*-----------------------------------------------------------------------*/
+/*                         Buttons Customization                         */
+/*-----------------------------------------------------------------------*/
+
+// General
+@btn-font-weight:                500;
+
+// Warning
+@btn-warning-color:              #fff;
+
+// Success
+@btn-success-color:              #fff;
+
+/*-----------------------------------------------------------------------*/
+/*                            Footer                                     */
+/*-----------------------------------------------------------------------*/
+
+@footer-bg:                      @lightgray;
