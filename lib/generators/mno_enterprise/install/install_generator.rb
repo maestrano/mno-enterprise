@@ -15,8 +15,12 @@ module MnoEnterprise
         inject_into_file 'app/assets/stylesheets/application.css', before: " */" do
           " *= require main\n"
         end
+        
+        # Inject engine routes
+        inject_into_file 'app/assets/stylesheets/application.css', after: "Rails.application.routes.draw do\n" do
+          "  # MnoEnterprise Engine\n  mount MnoEnterprise::Engine => \"/mnoe\", as: :mno_enterprise"
+        end
       end
-      
       
     end
   end

@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = "Maestrano Enteprise is your application marketplace, out of the box."
   s.license     = "Maestrano Enterprise License V1"
 
-  s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails", "~> 4.2.0"

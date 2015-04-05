@@ -3,9 +3,9 @@ Maestrano Enterprise Engine
 
 ## Install
 
-Add mno-enterprise to your Gemfile
+Add mno-enterprise to your Gemfile (repo currently private)
 ```ruby
-gem 'mno-enterprise', git: 'git://github.com/maestrano/mno-enterprise.git'
+gem 'mno-enterprise', git: 'git@github.com:maestrano/mno-enterprise.git'
 ```
 
 Run the install script
