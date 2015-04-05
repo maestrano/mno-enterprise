@@ -1,7 +1,8 @@
 .dashboard-marketplace {
   
   .marketplace-nav input, select {
-    border: solid 1px darken(@bg-main-color,10%);
+    color: @dashboard-marketplace-search-text-color;
+    border: solid 1px @dashboard-marketplace-search-border-color;
     background: transparent;
     .box-shadow(none);
     height: 35px;
@@ -26,39 +27,44 @@
     color: rgb(51, 51, 51);
     cursor: pointer;
     font-weight: 300;
+    
+    &:hover {
+      text-decoration: none;
+      background-color: @decorator-main-color;
+    }
   }
   
+  // Application logo
   .marketplace-app-card img.media-object {
     max-width: 100px;
-    border: solid 1px lighten(@decorator-main-color,20%);
+    border: solid 1px @dashboard-marketplace-tile-img-border-color;
     .border-radius(5px);
   }
-  
-  .marketplace-app-card .media-body {
-    padding-right: 10px;
+  .marketplace-app-card:hover img.media-object {
+    border: solid 1px darken(@dashboard-marketplace-tile-hover-img-border-color,5%);
   }
   
+  // Application Description
+  .marketplace-app-card .media-body {
+    padding-right: 10px;
+    color: @dashboard-marketplace-tile-text-color;
+  }
+  .marketplace-app-card:hover .media-body {
+    color: @dashboard-marketplace-tile-hover-text-color;
+  }
+  
+  // App tile arrow right
   .marketplace-app-card .arrow {
     position: absolute;
     right: 20px;
     top: 50px;
-    color: white;
+    color: @dashboard-marketplace-tile-hover-arrow-color;
     visibility: hidden;
   }
-    
-  .marketplace-app-card:hover {
-    text-decoration: none;
-    background-color: @decorator-main-color;
-    //color: white;
-  
-    img.media-object {
-      border: solid 1px darken(@decorator-main-color,5%);
-    }
-    
-    .arrow {
-      visibility: visible;
-    }
+  .marketplace-app-card:hover .arrow {
+    visibility: visible;
   }
+  
 }
 
 //-------------------------------
@@ -77,6 +83,7 @@
   
   .show-header .media-body h2 {
     line-height: 80px;
+    color: @dashboard-marketplace-show-header-text-color;
   }
   
   //-------------------------------
@@ -108,6 +115,10 @@
   
   .show-content .carousel .carousel-indicators {
     visibility: hidden;
+  }
+  
+  .show-content .carousel .carousel-control .glyphicon-chevron-left, .carousel-control .icon-prev {
+    margin-left: 0px;
   }
   
   //-------------------------------

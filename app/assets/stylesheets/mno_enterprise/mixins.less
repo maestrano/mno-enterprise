@@ -65,3 +65,11 @@ html, body {
   @fa-icon-variable: "fa-var-@{icon}";
   &:before { content: @@fa-icon-variable; }
 };
+
+// Replace glyphicon by fontawesome
+.glyphicon.glyphicon-chevron-right {
+  .icon-fa(chevron-right)
+}
+.glyphicon.glyphicon-chevron-left {
+  .icon-fa(chevron-left)
+}
