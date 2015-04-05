@@ -50,8 +50,16 @@ html, body {
 
 // Fontawesome icon mixing
 // E.g.: 
-// - .icon-fa(exchange)
-// - .icon-fa(circle)
+// .my-class {
+//   .icon-fa(exchange);
+// }
+//
+// E.g.: 
+// .my-class {
+//   .fa-lg();
+//   .icon-fa(exchange);
+// }
+//
 .icon-fa(@icon) {
   .fa;
   @fa-icon-variable: "fa-var-@{icon}";
