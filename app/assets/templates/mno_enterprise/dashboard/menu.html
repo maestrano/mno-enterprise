@@ -57,15 +57,16 @@
 <!-------------------------->
 <div class="company-select-box">
   <div class="wrapper">
+    
     <div class="box-header">
       <span class="title">{{ selectBox.userLabel }}</span>
       -
       <span class="title">{{ selectBox.organization.name }}</span>
-      <button type="button" class="btn btn-sm btn-grey" ng-click="selectBox.toggle()">
-        <!-- <i class="fa fa-exchange"></i> -->
-        <i class="switch-company"></i>
-      </button>
+      <a type="button" class="btn switch-company" ng-click="selectBox.toggle()">
+        <i ng-class="!selectBox.isClosed && 'active'"></i>
+      </a>
     </div>
+    
     <div class="box-content scrollbar-hidden" collapse="selectBox.isClosed">
       <ul class="list-unstyled">
         <li ng-repeat="organization in selectBox.organizationList()" >
@@ -76,6 +77,7 @@
         <a href="" ng-click="selectBox.createNewOrga()"><em><small>New Company</small></em></a>
       </div>
     </div>
+    
   </div>
 </div>
 

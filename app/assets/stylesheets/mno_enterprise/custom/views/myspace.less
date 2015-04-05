@@ -10,13 +10,16 @@
   z-index: 10;
   
   // Change company button
-  .btn {
+  .btn.switch-company {
+    color: @dashboard-cpy-select-header-text-color;
+    background-color: @dashboard-cpy-select-switch-btn-bg-color;
     margin-left: 15px;
   }
-  
-  // Pass a ruleset to the class
-  .btn .switch-company {
-    @dashboard-cpy-select-icon-switch();
+  .btn.switch-company i {
+    @dashboard-cpy-select-switch-btn-icon();
+  }
+  .btn.switch-company i.active {
+    @dashboard-cpy-select-switch-btn-icon-active();
   }
   
   // Section always visible
