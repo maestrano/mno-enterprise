@@ -47,3 +47,13 @@ html, body {
   background-color:inherit;
   text-align:inherit;
 }
+
+// Fontawesome icon mixing
+// E.g.: 
+// - .icon-fa(exchange)
+// - .icon-fa(circle)
+.icon-fa(@icon) {
+  .fa;
+  @fa-icon-variable: "fa-var-@{icon}";
+  &:before { content: @@fa-icon-variable; }
+};
