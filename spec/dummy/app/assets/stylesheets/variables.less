@@ -56,7 +56,7 @@
 @bg-inverse-color:               @white;   // Background color used for dashboard side menu. top banners, inverse modals
 @bg-inverse-intense-color:       @lightblack; // Background color used for elements on top of bg-inverse-color
 @decorator-inverse-color:        @a7-orange;  // Design elements (lines, borders) on top of bg-inverse-color
-@text-inverse-color:             @darkblue; // Text used on top of bg-inverse-color such as inverse modals
+@text-inverse-color:             @lightgray; // Text used on top of bg-inverse-color such as inverse modals
 
 // Color used in small/isolated elements
 @elem-positive-color:            @green;      // used to reflect a positive action or point (e.g: tick icon)
@@ -64,11 +64,12 @@
 @elem-cozy-color:                @purple;     // used for regular design element - fits well with both main and inverse backgrounds
 
 /*-----------------------------------------------------------------------*/
-/*                   Mno Enterprise Customization                        */
+/*                Mno Enterprise Dashboard Customization                 */
 /*-----------------------------------------------------------------------*/
 @dashboard-bg-color:                            @bg-main-color;
 
 // Side navbar menu
+//--------------------------------------
 @dashboard-side-menu-bg-color:                  @bg-inverse-color;
 
 @dashboard-side-menu-link-color:                @bg-main-color;
@@ -81,6 +82,7 @@
 @dashboard-side-menu-link-hover-bg-color:       lighten(@bg-inverse-color,5%);
 
 // Company select box (top right)
+//--------------------------------------
 @dashboard-cpy-select-bg-color:                 @bg-inverse-intense-color;
 @dashboard-cpy-select-border-radius:            0px;
 @dashboard-cpy-select-padding:                  15px 25px;
