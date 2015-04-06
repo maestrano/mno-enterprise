@@ -8,13 +8,15 @@
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
-/*                             Fonts                                     */
+/*                          Fonts & Text                                 */
 /*-----------------------------------------------------------------------*/
-@font-family-sans-serif:         "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family-sans-serif:         Arial, "Helvetica Neue", Helvetica, sans-serif;
 @font-family-base:               @font-family-sans-serif;
+@small:                          11px;
+@normal:                         13px;
 
 /*-----------------------------------------------------------------------*/
-/*                          Color palette                                */
+/*                        Custom Color Palette                           */
 /*-----------------------------------------------------------------------*/
 @darkerblue:                     #16252c;
 @darkblue:                       #17262d;
@@ -34,36 +36,186 @@
 @bluegray:                       #abc4c6;
 @bluegray2:                      #35464c;
 
+// Alpha7 Color Code
+@white:                          #ffffff; // light background color
+@darkgray:                       #353739; // dark background color
+@lightblack:                     #1e1f20; // Used for elements placed on top of darkgray
+@a7-orange:                      #f58634; // Brand + CTA color
+@darkblue:                       #343e4c; // used for text
+@lightgray:                      #edf1f5; // used for text and input background
+
+/*-----------------------------------------------------------------------*/
+/*                       General Theme Colors                            */
+/*-----------------------------------------------------------------------*/
 // Main Background and text colors
-@bg-main-color:                  @lightgray;
-@decorator-main-color:           @bluegray;
-@decorator-alt-color:            @bluegray2;
-@text-strong-color:              @darkblue2;
+@bg-main-color:                  @darkgray;   // Dashboard background color
+@decorator-main-color:           @lightgray;   // Elements placed on top of bg-main-color
+@decorator-alt-color:            @a7-orange;  // Elements placed on top of bg-main-color (secondary)
+@text-strong-color:              @darkblue;  // Used for text used in the context of bg-main-color
 
-@bg-inverse-color:               @darkblue;
-@bg-inverse-intense-color:       @darkerblue;
-@decorator-inverse-color:        @lightblue;
-@text-inverse-color:             @mediumblue;
+@bg-inverse-color:               @white;   // Background color used for dashboard side menu. top banners, inverse modals
+@bg-inverse-intense-color:       @lightblack; // Background color used for elements on top of bg-inverse-color
+@decorator-inverse-color:        @a7-orange;  // Design elements (lines, borders) on top of bg-inverse-color
+@text-inverse-color:             @lightgray; // Text used on top of bg-inverse-color such as inverse modals
 
-// Color for punctual elements (like fontawesome icon)
-@elem-positive-color:            @green;
-@elem-positive-flash-color:      @flurogreen;
-@elem-cozy-color:                @purple;
+// Color used in small/isolated elements
+@elem-positive-color:            @green;      // used to reflect a positive action or point (e.g: tick icon)
+@elem-positive-flash-color:      @flurogreen; // stronger version of elem-positive-color (barely used)
+@elem-cozy-color:                @a7-orange;     // used for regular design element - fits well with both main and inverse backgrounds
 
 /*-----------------------------------------------------------------------*/
-/*                          Text Size                                    */
+/*                              Login Page                               */
 /*-----------------------------------------------------------------------*/
-@small:                          11px;
-@normal:                         13px;
+@login-bg-color:                     @bg-main-color;
+@login-box-grid-position:            { margin-top: 80px; .make-sm-column(4); .make-sm-column-offset(4); };
+
+@login-box-title-color:               white;
+@login-box-title:                     { text-transform: uppercase; };
+@login-box-title-display-box-arrow:   true;
+
+@login-box-bg-color:                  @bg-inverse-color;
+@login-box-padding:                   20px;
+@login-box-brand-logo-img:            "main-logo-with-sentence.png";
+@login-box-brand-logo:                { min-height: 97px; max-width: 130px; max-height: 131px; margin: 25px auto 5px auto; };
+@login-box-btn-login:                 { width: 100%; };
+
+/*-----------------------------------------------------------------------*/
+/*                           Dashboard Layout                            */
+/*-----------------------------------------------------------------------*/
+@dashboard-bg-color:                            @bg-main-color;
+
+@dashboard-section-title-color:                 @bg-inverse-color;
+@dashboard-section-title-alignment:             center;
+@dashboard-section-title-display-subline:       true;
+
+// Side navbar menu
+//--------------------------------------
+@dashboard-side-menu-padding:                   30px 0px 0px 14px;
+@dashboard-side-menu-bg-color:                  @bg-inverse-color;
+
+@dashboard-side-menu-brand-logo-img:            "main-logo.png";
+@dashboard-side-menu-brand-logo:                { width: 51px; };
+@dashboard-side-menu-brand-logo-expanded:       { width: 201px; background-size: 60% };
+
+@dashboard-side-menu-link-color:                @bg-main-color;
+@dashboard-side-menu-link-bg-color:             @dashboard-side-menu-bg-color;
+
+@dashboard-side-menu-link-active-color:         @dashboard-side-menu-bg-color;
+@dashboard-side-menu-link-active-bg-color:      @bg-main-color;
+
+@dashboard-side-menu-link-hover-color:          @bg-main-color;
+@dashboard-side-menu-link-hover-bg-color:       lighten(@bg-inverse-color,5%);
+
+
+@dashboard-side-menu-btn-dashboard:             { .i-coaas-notepad; }; //&.active i { .i-coaas-notepad.active; }; };
+@dashboard-side-menu-btn-dashboard-active:      { .i-coaas-notepad.active; };
+@dashboard-side-menu-btn-account:               { .i-coaas-cogwheels; };
+@dashboard-side-menu-btn-account-active:        { .i-coaas-cogwheels.active; };
+@dashboard-side-menu-btn-company:               { .i-coaas-pantheon; &.active { .i-coaas-pantheon.active; } };
+@dashboard-side-menu-btn-company-active:        { .i-coaas-pantheon.active; };
+@dashboard-side-menu-btn-marketplace:           { .i-coaas-cloud; };
+@dashboard-side-menu-btn-marketplace-active:    { .i-coaas-cloud.active; };
+@dashboard-side-menu-btn-logout:                { .i-coaas-lock; };
+@dashboard-side-menu-btn-logout-active:         { .i-coaas-lock.active; };
+
+// Company select box (top right)
+//--------------------------------------
+@dashboard-cpy-select-bg-color:                 @bg-inverse-intense-color;
+@dashboard-cpy-select-border-radius:            0px;
+@dashboard-cpy-select-padding:                  15px 25px;
+
+@dashboard-cpy-select-header-text-color:        @bg-inverse-color;
+@dashboard-cpy-select-header-text-size:         13px;
+
+@dashboard-cpy-select-link-color:               @dashboard-cpy-select-header-text-color;
+
+@dashboard-cpy-select-link-hover-color:         @dashboard-cpy-select-link-color;
+@dashboard-cpy-select-link-hover-bg-color:      lighten(@dashboard-cpy-select-bg-color,10%);
+
+@dashboard-cpy-select-link-create-color:        @decorator-alt-color;
+
+@dashboard-cpy-select-switch-btn-color:         @dashboard-cpy-select-header-text-color;
+@dashboard-cpy-select-switch-btn-bg-color:      @dashboard-cpy-select-bg-color;
+@dashboard-cpy-select-switch-btn-icon:          { .icon-fa(caret-down); }; //pass a ruleset
+@dashboard-cpy-select-switch-btn-icon-active:   { .icon-fa(caret-up); }; //pass a ruleset
+
+/*-----------------------------------------------------------------------*/
+/*                        Dashboard > Apps Section                       */
+/*-----------------------------------------------------------------------*/
+@dashboard-apps-tile-bg-color:                  @bg-inverse-color;
+@dashboard-apps-tile-text-color:                @text-strong-color;
+
+@dashboard-apps-tile-logo-border-size:          0px;
+@dashboard-apps-tile-logo-border-color:         @decorator-main-color;
+
+@dashboard-apps-tile-settings-color:            @text-strong-color;
+@dashboard-apps-tile-settings-bg-color:         @dashboard-apps-tile-bg-color;
+@dashboard-apps-tile-settings-hover-color:      @dashboard-apps-tile-bg-color;
+@dashboard-apps-tile-settings-hover-bg-color:   @text-strong-color;
+
+/*-----------------------------------------------------------------------*/
+/*                      Dashboard > Company Section                      */
+/*-----------------------------------------------------------------------*/
+// Tab Heading
+//--------------------------------------
+@dashboard-cpy-tabs-text-color:                  @text-strong-color;
+@dashboard-cpy-tabs-bg-color:                    @decorator-main-color;
+@dashboard-cpy-tabs-border-radius:               2px;
+
+@dashboard-cpy-tabs-subline-size:                0px;
+@dashboard-cpy-tabs-subline-color:               transparent;
+
+@dashboard-cpy-tabs-active-text-color:           @decorator-alt-color;
+@dashboard-cpy-tabs-active-bg-color:             @bg-inverse-color;
+
+@dashboard-cpy-tabs-hover-text-color:            @dashboard-cpy-tabs-bg-color;
+@dashboard-cpy-tabs-hover-bg-color:              @decorator-alt-color;
+
+// Tab Content
+//--------------------------------------
+@dashboard-cpy-tabcontent-bg-color:              @dashboard-cpy-tabs-bg-color;
+
+/*-----------------------------------------------------------------------*/
+/*                 Mno Enterprise > Marketplace Section                  */
+/*-----------------------------------------------------------------------*/
+@dashboard-marketplace-search-text-color:             @bg-inverse-color;
+@dashboard-marketplace-search-border-color:           @bg-inverse-intense-color;
+
+@dashboard-marketplace-tile-bg-color:                 @bg-inverse-color;
+@dashboard-marketplace-tile-text-color:               @text-strong-color;
+@dashboard-marketplace-tile-img-border-color:         @dashboard-marketplace-tile-bg-color;
+
+@dashboard-marketplace-tile-hover-bg-color:           @decorator-main-color;
+@dashboard-marketplace-tile-hover-text-color:         @dashboard-marketplace-tile-text-color;
+@dashboard-marketplace-tile-hover-img-border-color:   darken(@decorator-main-color,10%);
+@dashboard-marketplace-tile-hover-arrow-color:        @text-strong-color;
+
+@dashboard-marketplace-show-header-text-color:        @bg-inverse-color;
+
+/*-----------------------------------------------------------------------*/
+/*                     Responsive Table (cell table)                     */
+/*-----------------------------------------------------------------------*/
+@table-cell-row-spacing:               10px;
+@table-cell-row-padding:               3px;
+
+@table-cell-header-text-size:          12px;
+@table-cell-header-text-color:         @bg-inverse-color;
+@table-cell-header-bg-color:           @bg-main-color;
+@table-cell-header-additional-rule:    { text-transform: uppercase; };
+
+@table-cell-row-text-size:             13px;
+@table-cell-row-odd-bg-color:          @decorator-main-color;
+@table-cell-row-even-bg-color:         @decorator-main-color;
+
 
 /*-----------------------------------------------------------------------*/
 /*                       Twitter Bootstrap colors                        */
 /*-----------------------------------------------------------------------*/
 @brand-success:                  @fluroblue;
-@brand-warning:                  @purple;
-@brand-info:                     @fluroblue;
-@brand-danger:                   @pink;
-@brand-primary:                  @fluroblue;
+@brand-warning:                  @decorator-alt-color;
+@brand-info:                     @text-strong-color;
+@brand-danger:                   @text-strong-color;
+@brand-primary:                  @text-strong-color;
 
 /*-----------------------------------------------------------------------*/
 /*                          Navbar Customization                         */
@@ -75,6 +227,14 @@
 @navbar-inverse-border:          @bg-inverse-color;
 @navbar-desktop-height:          120px;
 @navbar-inverse-link-active-bg:  @navbar-inverse-bg;
+
+/*-----------------------------------------------------------------------*/
+/*                          Form Customization                           */
+/*-----------------------------------------------------------------------*/
+@input-bg: @decorator-main-color;
+@input-color: @text-strong-color;
+
+@input-label-color: @text-strong-color;
 
 /*-----------------------------------------------------------------------*/
 /*                         Buttons Customization                         */
@@ -94,4 +254,3 @@
 /*-----------------------------------------------------------------------*/
 
 @footer-bg:                      @lightgray;
-
