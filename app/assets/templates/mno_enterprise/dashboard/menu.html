@@ -98,14 +98,7 @@
       <a href="#/">
         <div class="dashboard-button" ng-class="isButtonActive('/') && 'active'">
           <div class='content'>Dashboard</div>
-          <div ng-switch="isButtonActive('/')">
-            <div ng-switch-when="true">
-              <i class="fa fa-th"></i>
-            </div>
-            <div ng-switch-default>
-              <i class="fa fa-th"></i>
-            </div>
-          </div>
+          <i class="dhb-icon-dashboard"></i>
         </div>
       </a>
       <br>
@@ -113,14 +106,7 @@
     <a href="#/account">
       <div ng-class="isButtonActive('/account') && 'active'" class="dashboard-button">
         <div class='content'>My Account</div>
-        <div ng-switch="isButtonActive('/account')">
-          <div ng-switch-when="true">
-            <i class="fa fa-user"></i>
-          </div>
-          <div ng-switch-default>
-            <i class="fa fa-user"></i>
-          </div>
-        </div>
+        <i class="dhb-icon-account"></i>
       </div>
     </a>
     <br>
@@ -128,14 +114,7 @@
       <a href="#/company">
         <div ng-class="isButtonActive('/company') && 'active'" class="dashboard-button">
           <div class='content'>Company</div>
-          <div ng-switch="isButtonActive('/company')">
-            <div ng-switch-when="true">
-              <i class="fa fa-briefcase"></i>
-            </div>
-            <div ng-switch-default>
-              <i class="fa fa-briefcase"></i>
-            </div>
-          </div>
+          <i class="dhb-icon-company"></i>
         </div>
       </a>
       <br>
@@ -144,14 +123,7 @@
       <a href="#/support">
         <div ng-class="isButtonActive('/support') && 'active'" class="dashboard-button">
           <div class='content'>Support</div>
-          <div ng-switch="isButtonActive('/support')">
-            <div ng-switch-when="true">
-              <i class="fa fa-life-ring"></i>
-            </div>
-            <div ng-switch-default>
-              <i class="fa fa-life-ring"></i>
-            </div>
-          </div>
+          <i class="dhb-icon-support"></i>
         </div>
       </a>
       <br>
@@ -160,14 +132,7 @@
       <a href="#/marketplace">
         <div ng-class="isButtonActive('/marketplace') && 'active'" class="dashboard-button">
           <div class='content'>Marketplace</div>
-          <div ng-switch="isButtonActive('/marketplace')">
-            <div ng-switch-when="true">
-              <i class="fa fa-plus-square-o"></i>
-            </div>
-            <div ng-switch-default>
-              <i class="fa fa-plus-square-o"></i>
-            </div>
-          </div>
+          <i class="dhb-icon-marketplace"></i>
         </div>
       </a>
       <br>
@@ -175,7 +140,7 @@
     <a href="/mnoe/auth/users/sign_out" data-method='delete'>
       <div class="dashboard-button">
         <div class='content'>Logout</div>
-        <i class="fa fa-lock"></i>
+        <i class="dhb-icon-logout"></i>
       </div>
     </a>
   </div>

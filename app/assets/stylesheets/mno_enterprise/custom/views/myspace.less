@@ -194,18 +194,31 @@
   }
   
   // Dashboard Button Icon > Normal State
-  .dashboard-button .fa {
-    font-size: 31px;
-    margin-top: 4px;
-    color: @dashboard-side-menu-link-color;
-  }
+  // .dashboard-button .fa {
+  //   font-size: 31px;
+  //   margin-top: 4px;
+  //   color: @dashboard-side-menu-link-color;
+  // }
   
   // Dashboard Button Icon > Active State
-  .dashboard-button.active .fa,
-  &:hover .dashboard-button.active .fa {
-    color: @dashboard-side-menu-link-active-color;
-  }
+  // .dashboard-button.active .fa,
+  // &:hover .dashboard-button.active .fa {
+  //   color: @dashboard-side-menu-link-active-color;
+  // }
   
+  
+  // Icon configuration for each dashboard button
+  .dashboard-button i { display: inline-block; margin-top: 4px; }
+  .dashboard-button i.dhb-icon-dashboard { @dashboard-side-menu-btn-dashboard(); };
+  .dashboard-button.active i.dhb-icon-dashboard { @dashboard-side-menu-btn-dashboard-active(); };
+  .dashboard-button i.dhb-icon-account { @dashboard-side-menu-btn-account(); };
+  .dashboard-button.active i.dhb-icon-account { @dashboard-side-menu-btn-account-active(); };
+  .dashboard-button i.dhb-icon-company { @dashboard-side-menu-btn-company(); };
+  .dashboard-button.active i.dhb-icon-company { @dashboard-side-menu-btn-company-active(); };
+  .dashboard-button i.dhb-icon-marketplace { @dashboard-side-menu-btn-marketplace(); };
+  .dashboard-button.active i.dhb-icon-marketplace { @dashboard-side-menu-btn-marketplace-active(); };
+  .dashboard-button i.dhb-icon-logout { @dashboard-side-menu-btn-logout(); };
+  .dashboard-button.active i.dhb-icon-logout { @dashboard-side-menu-btn-logout-active(); };
 }
 
 .myspace .app-dashboard {
