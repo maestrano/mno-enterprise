@@ -170,13 +170,13 @@ module.directive('dashboardMenu', ['TemplatePath', (TemplatePath) ->
       link: (scope,element,attrs) ->
         element.find(".menu").on("mouseenter", ->
           angular.element(this).stop()
-          angular.element(this).find(".mno-main-logo").css("width", "201px")
+          angular.element(this).find(".brand-logo").addClass('expanded')
           angular.element(this).find(".dashboard-button").find(".content").css("display", "block")
           angular.element(this).animate({width:275},150)
         )
         element.find(".menu").on("mouseleave", ->
           angular.element(this).stop()
-          angular.element(this).find(".mno-main-logo").css("width", "51px")
+          angular.element(this).find(".brand-logo").removeClass('expanded')
           angular.element(this).find(".dashboard-button").find(".content").css("display", "none")
           angular.element(this).animate({width:80},150)
         )

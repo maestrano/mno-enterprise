@@ -129,10 +129,7 @@
   position:fixed;
   left:0px;
   top:0px;
-  
-  
-  padding-top:30px;
-  padding-left:10px;
+  padding: @dashboard-side-menu-padding;
   width:80px;
   min-height:100%;
   height:99%;
@@ -147,12 +144,16 @@
     margin-right:11px;
   }
   
-  // Main Logo
-  .mno-main-logo {
-    width:51px;
+  // Side menu brand logo
+  .brand-logo {
+    height: 90px;
+    background-repeat: no-repeat;
+    background-image: asset-url(@dashboard-side-menu-brand-logo-img);
+    background-size: 100%;
+    @dashboard-side-menu-brand-logo();
   }
-  &:hover .mno-main-logo {
-    width:201px;
+  .brand-logo.expanded {
+    @dashboard-side-menu-brand-logo-expanded();
   }
   
   // Dashboard Button > Normal State
