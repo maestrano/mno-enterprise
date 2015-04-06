@@ -2,7 +2,7 @@ module MnoEnterprise
   class ProvisionController < ApplicationController
     before_filter :authenticate_user_or_signup!
     
-    # GET /provision/new
+    # GET /provision/new?apps[]=vtiger&organization_id=1
     # TODO: check organization accessibility via ability
     def new
       @apps = params[:apps]

@@ -28,6 +28,9 @@ module.controller('DashboardMarketplaceAppCtrl',[
     $scope.isTestimonialShown = (testimonial) ->
       testimonial.text? && testimonial.text.length > 0
     
+    $scope.provisionLink = () ->
+      "/mnoe/provision/new?apps[]=#{$scope.app.nid}&organization_id=#{DhbOrganizationSvc.getId()}"
+    
     #====================================
     # Cart Management
     #====================================

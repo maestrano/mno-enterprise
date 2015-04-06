@@ -1,4 +1,4 @@
-<div mno-shopping-cart="cart.isOpen" bundle="cart.bundle" config="cart.config"></div>
+<!-- <div mno-shopping-cart="cart.isOpen" bundle="cart.bundle" config="cart.config"></div> -->
 
 <div class="dashboard-marketplace-app">
     <div class="spacer1"></div>
@@ -47,9 +47,9 @@
                 <div class="row">
                   <div class="col-xs-12 col-sm-4 col-sm-offset-4 col-md-8 col-md-offset-2">
                     <div class="btn-fluid-wrapper">
-                      <button class="btn btn-warning btn-promo" ng-click="cart.open()">
+                      <a class="btn btn-warning btn-promo" ng-href="{{provisionLink()}}">
                         Start Now!
-                      </button>
+                      </a>
                     </div>
                   </div>
                 </div>

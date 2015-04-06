@@ -14,6 +14,7 @@ module MnoEnterprise
     def partial_hash_for_app(app)
       {
         'id' => app.id,
+        'nid' => app.nid,
         'name' => app.name,
         'stack' => app.stack,
         'logo' => app.logo.to_s,

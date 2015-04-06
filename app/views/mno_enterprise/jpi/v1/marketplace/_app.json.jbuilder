@@ -1,4 +1,5 @@
 json.id app.id
+json.nid app.nid
 json.name app.name
 json.stack app.stack
 json.key_benefits app.key_benefits
