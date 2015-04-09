@@ -30,7 +30,7 @@ Perform a deploy:cold via webistrano/capistrano (which will certainly fail). The
 Login to the server then run the following setup script
 ```bash
 # sh /apps/<project-name>/current/scripts/<environment>/setup.sh
-$ sh /apps/<project-name>/current/scripts/production/setup.sh
+$ sh /apps/my-super-app/current/scripts/production/setup.sh
 ```
 This script will setup a bunch of symlinks for nginx, upstart and monit pointing to the config files located under the scripts directory created previously.
 
