@@ -13,7 +13,7 @@ server {
 }
 
 server {
-  server_name  <%= app_name %>-mnoe.maestrano.io;
+  server_name  <%= @app_domain %>;
   listen       443;
 
   ssl on;

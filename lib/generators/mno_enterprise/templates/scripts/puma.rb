@@ -1,5 +1,5 @@
 # Performance tuning
-workers <%= num_cpus %>
+workers <%= @num_cpus %>
 threads 8,16
 worker_timeout 60
 
@@ -8,7 +8,7 @@ preload_app!
 
 # Configuration
 rails_env = ENV['RAILS_ENV'] || 'production'
-working_directory = File.expand_path('../../../../current', __FILE__)
+working_directory = File.expand_path('../../../../../current', './scripts/production/puma.rb')
 
 # General config
 environment rails_env

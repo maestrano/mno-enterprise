@@ -14,8 +14,8 @@ module MnoEnterprise
       
       def install_puma_gem
         gem "puma"
-        num_cpus = ask("How many CPUs (or vCPU for EC2) does your #{environment} machine have? [1]")
-        num_cpus = "1" if num_cpus.blank?
+        @num_cpus = ask("How many CPUs (or vCPU for EC2) does your #{environment} machine have? [1]")
+        @num_cpus = "1" if @num_cpus.blank?
         template "scripts/puma.rb", "scripts/#{environment}/puma.rb"
       end
       
@@ -24,8 +24,8 @@ module MnoEnterprise
       end
       
       def copy_nginx
-        app_domain = ask("What is the domain pointing to your #{environment} application? [#{default_domain}]")
-        app_domain = default_domain if app_domain.blank?
+        @app_domain = ask("What is the domain pointing to your #{environment} application? [#{default_domain}]")
+        @app_domain = default_domain if @app_domain.blank?
         template "scripts/nginx/app", "scripts/#{environment}/nginx/app"
       end
       
