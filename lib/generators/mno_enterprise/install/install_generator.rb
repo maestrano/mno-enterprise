@@ -7,6 +7,7 @@ module MnoEnterprise
       desc "Description:\n  Install Maestrano Enterprise Engine in your application\n\n"
       
       def copy_initializer
+        template "Procfile", "Procfile"
         template "initializers/mno_enterprise.rb", "config/initializers/mno_enterprise.rb"
         template "stylesheets/main.less", "app/assets/stylesheets/main.less"
         template "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
@@ -65,6 +66,7 @@ module MnoEnterprise
         say("\n\n")
         say("==> Maestrano Enterprise has been installed ==")
         say("- You can generate deployment configs by running: 'rails g mno_enterprise:puma_stack'")
+        say("- You can start the server with: 'foreman start'")
         if @install_sprite =~ /y/i
           say("\n\n")
           say("==> Sprite Factory has been installed")
