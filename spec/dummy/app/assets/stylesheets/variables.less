@@ -93,9 +93,9 @@
 @dashboard-side-menu-padding:                   30px 0px 0px 14px;
 @dashboard-side-menu-bg-color:                  @bg-inverse-color;
 
-@dashboard-side-menu-brand-logo-img:            "main-logo.png";
-@dashboard-side-menu-brand-logo:                { width: 51px; };
-@dashboard-side-menu-brand-logo-expanded:       { width: 201px; background-size: 60% };
+@dashboard-side-menu-brand-logo-img:            "mno_enterprise/main-logo.png";
+@dashboard-side-menu-brand-logo:                { background-size: 204px; width: 51px; margin-left: 5px; };
+@dashboard-side-menu-brand-logo-expanded:       { width: 201px; background-size: 100%; };
 
 @dashboard-side-menu-link-color:                @bg-main-color;
 @dashboard-side-menu-link-bg-color:             @dashboard-side-menu-bg-color;
@@ -106,17 +106,18 @@
 @dashboard-side-menu-link-hover-color:          @bg-main-color;
 @dashboard-side-menu-link-hover-bg-color:       lighten(@bg-inverse-color,5%);
 
-
-@dashboard-side-menu-btn-dashboard:             { .i-coaas-notepad; }; //&.active i { .i-coaas-notepad.active; }; };
-@dashboard-side-menu-btn-dashboard-active:      { .i-coaas-notepad.active; };
-@dashboard-side-menu-btn-account:               { .i-coaas-cogwheels; };
-@dashboard-side-menu-btn-account-active:        { .i-coaas-cogwheels.active; };
-@dashboard-side-menu-btn-company:               { .i-coaas-pantheon; &.active { .i-coaas-pantheon.active; } };
-@dashboard-side-menu-btn-company-active:        { .i-coaas-pantheon.active; };
-@dashboard-side-menu-btn-marketplace:           { .i-coaas-cloud; };
-@dashboard-side-menu-btn-marketplace-active:    { .i-coaas-cloud.active; };
-@dashboard-side-menu-btn-logout:                { .i-coaas-lock; };
-@dashboard-side-menu-btn-logout-active:         { .i-coaas-lock.active; };
+@_default_style:                                { .fa-2x; margin-top: 6px; margin-left: 2px; };
+@_default_style_active:                         { @_default_style(); color: white; };
+@dashboard-side-menu-btn-dashboard:             { .icon-fa(th); @_default_style(); };
+@dashboard-side-menu-btn-dashboard-active:      { .icon-fa(th); @_default_style_active(); };
+@dashboard-side-menu-btn-account:               { .icon-fa(user); @_default_style(); };
+@dashboard-side-menu-btn-account-active:        { .icon-fa(user); @_default_style_active(); };
+@dashboard-side-menu-btn-company:               { .icon-fa(briefcase); @_default_style(); };
+@dashboard-side-menu-btn-company-active:        { .icon-fa(briefcase); @_default_style_active(); };
+@dashboard-side-menu-btn-marketplace:           { .icon-fa(plus-square-o); @_default_style(); };
+@dashboard-side-menu-btn-marketplace-active:    { .icon-fa(plus-square-o); @_default_style_active(); };
+@dashboard-side-menu-btn-logout:                { .icon-fa(lock); @_default_style(); };
+@dashboard-side-menu-btn-logout-active:         { .icon-fa(lock); @_default_style_active(); };
 
 // Company select box (top right)
 //--------------------------------------
