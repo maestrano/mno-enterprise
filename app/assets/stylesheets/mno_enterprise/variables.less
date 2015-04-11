@@ -81,7 +81,7 @@
 @dashboard-side-menu-brand-logo:                { background-size: 204px; width: 51px; margin-left: 5px; };
 @dashboard-side-menu-brand-logo-expanded:       { width: 201px; background-size: 100%; };
 
-@dashboard-side-menu-link-color:                @text-strong-color;
+@dashboard-side-menu-link-color:                @text-inverse-color;
 @dashboard-side-menu-link-bg-color:             @dashboard-side-menu-bg-color;
 
 @dashboard-side-menu-link-active-color:         @dashboard-side-menu-bg-color;
@@ -90,8 +90,8 @@
 @dashboard-side-menu-link-hover-color:          @bg-main-color;
 @dashboard-side-menu-link-hover-bg-color:       lighten(@bg-inverse-color,5%);
 
-@_default_style:                                { .fa-2x; margin-top: 6px; margin-left: 2px; };
-@_default_style_active:                         { @_default_style(); color: white; };
+@_default_style:                                { .fa-2x; margin-top: 6px; margin-left: 2px; color: @dashboard-side-menu-link-color; };
+@_default_style_active:                         { @_default_style(); color: @dashboard-side-menu-link-active-color; };
 @dashboard-side-menu-btn-dashboard:             { .icon-fa(th); @_default_style(); };
 @dashboard-side-menu-btn-dashboard-active:      { .icon-fa(th); @_default_style_active(); };
 @dashboard-side-menu-btn-account:               { .icon-fa(user); @_default_style(); };
