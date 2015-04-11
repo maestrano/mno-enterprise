@@ -94,14 +94,14 @@
 @_default_style_active:                         { @_default_style(); color: @dashboard-side-menu-link-active-color; };
 @dashboard-side-menu-btn-dashboard:             { .icon-fa(th); @_default_style(); };
 @dashboard-side-menu-btn-dashboard-active:      { .icon-fa(th); @_default_style_active(); };
-@dashboard-side-menu-btn-account:               { .icon-fa(user); @_default_style(); };
-@dashboard-side-menu-btn-account-active:        { .icon-fa(user); @_default_style_active(); };
+@dashboard-side-menu-btn-account:               { .icon-fa(user); @_default_style(); margin-left: 5px; };
+@dashboard-side-menu-btn-account-active:        { .icon-fa(user); @_default_style_active(); margin-left: 5px; };
 @dashboard-side-menu-btn-company:               { .icon-fa(briefcase); @_default_style(); };
 @dashboard-side-menu-btn-company-active:        { .icon-fa(briefcase); @_default_style_active(); };
-@dashboard-side-menu-btn-marketplace:           { .icon-fa(plus-square-o); @_default_style(); };
-@dashboard-side-menu-btn-marketplace-active:    { .icon-fa(plus-square-o); @_default_style_active(); };
-@dashboard-side-menu-btn-logout:                { .icon-fa(lock); @_default_style(); };
-@dashboard-side-menu-btn-logout-active:         { .icon-fa(lock); @_default_style_active(); };
+@dashboard-side-menu-btn-marketplace:           { .icon-fa(plus-square-o); @_default_style(); margin-left: 5px; };
+@dashboard-side-menu-btn-marketplace-active:    { .icon-fa(plus-square-o); @_default_style_active(); margin-left: 5px; };
+@dashboard-side-menu-btn-logout:                { .icon-fa(lock); @_default_style(); margin-left: 6px; };
+@dashboard-side-menu-btn-logout-active:         { .icon-fa(lock); @_default_style_active(); margin-left: 6px; };
 
 // Company select box (top right)
 //--------------------------------------
@@ -128,23 +128,24 @@
 /*                        Dashboard > Apps Section                       */
 /*-----------------------------------------------------------------------*/
 @dashboard-apps-tile-bg-color:                  @bg-inverse-color;
-@dashboard-apps-tile-text-color:                @text-strong-color;
+@dashboard-apps-tile-text-color:                @text-inverse-color;
 
 @dashboard-apps-tile-logo-border-size:          0px;
 @dashboard-apps-tile-logo-border-color:         @decorator-main-color;
 
-@dashboard-apps-tile-settings-color:            @text-strong-color;
+@dashboard-apps-tile-settings-color:            @dashboard-apps-tile-text-color;
 @dashboard-apps-tile-settings-bg-color:         @dashboard-apps-tile-bg-color;
+
 @dashboard-apps-tile-settings-hover-color:      @dashboard-apps-tile-bg-color;
-@dashboard-apps-tile-settings-hover-bg-color:   @text-strong-color;
+@dashboard-apps-tile-settings-hover-bg-color:   @dashboard-apps-tile-text-color;
 
 /*-----------------------------------------------------------------------*/
 /*                      Dashboard > Company Section                      */
 /*-----------------------------------------------------------------------*/
 // Tab Heading
 //--------------------------------------
-@dashboard-cpy-tabs-text-color:                  @text-strong-color;
 @dashboard-cpy-tabs-bg-color:                    @decorator-main-color;
+@dashboard-cpy-tabs-text-color:                  @text-inverse-color;
 @dashboard-cpy-tabs-border-radius:               2px;
 
 @dashboard-cpy-tabs-subline-size:                0px;
@@ -198,9 +199,9 @@
 /*-----------------------------------------------------------------------*/
 @brand-success:                  @elem-positive-color;
 @brand-warning:                  @decorator-alt-color;
-@brand-info:                     @text-strong-color;
-@brand-danger:                   @text-strong-color;
-@brand-primary:                  @text-strong-color;
+@brand-info:                     @text-inverse-color;
+@brand-danger:                   @text-inverse-color;
+@brand-primary:                  @text-inverse-color;
 
 /*-----------------------------------------------------------------------*/
 /*                          Navbar Customization                         */
