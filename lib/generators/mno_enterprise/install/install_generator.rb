@@ -4,7 +4,7 @@ module MnoEnterprise
   module Generators
     class InstallGenerator < ::Rails::Generators::Base
       source_root File.expand_path("../../templates", __FILE__)
-      desc "Install Maestrano Enterprise Engine in your application"
+      desc "Description:\n  Install Maestrano Enterprise Engine in your application\n\n"
       
       def copy_initializer
         template "initializers/mno_enterprise.rb", "config/initializers/mno_enterprise.rb"

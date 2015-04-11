@@ -2,9 +2,10 @@ require 'rails/generators/base'
 
 module MnoEnterprise
   module Generators
-    class PumaStackGenerator < ::Rails::Generators::NamedBase
+    class PumaStackGenerator < ::Rails::Generators::Base
       source_root File.expand_path("../../templates", __FILE__)
-      desc "Configure a stack with Nginx + Puma + Upstart + Monit"
+      argument :environment, type: :string
+      desc "Description:\n  Configure a stack composed of Nginx, Puma, Upstart and Monit\n\n"
       
       def validate_environment
         unless available_environments.include?(environment)
@@ -41,10 +42,6 @@ module MnoEnterprise
       end
       
       protected
-        def environment
-          file_name
-        end
-        
         def available_environments
           Dir.glob("./config/environments/*.rb").map { |filename| File.basename(filename, ".rb") }
         end
