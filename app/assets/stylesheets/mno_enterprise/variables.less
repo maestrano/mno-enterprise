@@ -16,52 +16,36 @@
 @normal:                         13px;
 
 /*-----------------------------------------------------------------------*/
-/*                        Custom Color Palette                           */
+/*                          Color Palette                                */
 /*-----------------------------------------------------------------------*/
-@darkerblue:                     #16252c;
+@white:                          #ffffff;
 @darkblue:                       #17262d;
-@darkerblue:                     darken(@darkblue,4%);
-@darkblue2:                      #25333a;
-@mediumblue:                     #626d6d;
-@lightblue:                      #abc4c6;
-@pink:                           #ed1e79;
-
-@fluroblue:                      #00e5f0;
-@flureoyellow:                   #fbd925;
-@flurogreen:                     #47ff00;
-
-@green:                          #d1e55c;
+@lightgray:                      #aeb5bf;
+@lightergray:                    lighten(@lightgray,10%);
+@darkgray:                       darken(@lightgray,20%);
 @purple:                         #977bf0;
-@lightgray:                      #e6edee;
-@bluegray:                       #abc4c6;
-@bluegray2:                      #35464c;
-
-// Alpha7 Color Code
-@white:                          #ffffff; // light background color
-@darkgray:                       #353739; // dark background color
-@lightblack:                     #1e1f20; // Used for elements placed on top of darkgray
-@a7-orange:                      #f58634; // Brand + CTA color
-@darkblue:                       #343e4c; // used for text
-@lightgray:                      #edf1f5; // used for text and input background
+@flurogreen:                     #47ff00;
+@green:                          #d1e55c;
 
 /*-----------------------------------------------------------------------*/
 /*                       General Theme Colors                            */
 /*-----------------------------------------------------------------------*/
 // Main Background and text colors
-@bg-main-color:                  @darkgray;   // Dashboard background color
-@decorator-main-color:           @lightgray;   // Elements placed on top of bg-main-color
-@decorator-alt-color:            @a7-orange;  // Elements placed on top of bg-main-color (secondary)
+@bg-main-color:                  @lightgray;   // Dashboard background color
+@decorator-main-color:           @darkgray;   // Elements placed on top of bg-main-color
+@decorator-alt-color:            @purple;  // Elements placed on top of bg-main-color (secondary)
 @text-strong-color:              @darkblue;  // Used for text used in the context of bg-main-color
 
 @bg-inverse-color:               @white;   // Background color used for dashboard side menu. top banners, inverse modals
-@bg-inverse-intense-color:       @lightblack; // Background color used for elements on top of bg-inverse-color
-@decorator-inverse-color:        @a7-orange;  // Design elements (lines, borders) on top of bg-inverse-color
-@text-inverse-color:             @lightgray; // Text used on top of bg-inverse-color such as inverse modals
+@bg-on-bg-inverse-color:         @lightergray;
+@bg-inverse-intense-color:       @darkblue; // Background color used for elements on top of bg-inverse-color
+@decorator-inverse-color:        @purple;  // Design elements (lines, borders) on top of bg-inverse-color
+@text-inverse-color:             @darkblue; // Text used on top of bg-inverse-color such as inverse modals
 
 // Color used in small/isolated elements
 @elem-positive-color:            @green;      // used to reflect a positive action or point (e.g: tick icon)
 @elem-positive-flash-color:      @flurogreen; // stronger version of elem-positive-color (barely used)
-@elem-cozy-color:                @a7-orange;     // used for regular design element - fits well with both main and inverse backgrounds
+@elem-cozy-color:                @purple;     // used for regular design element - fits well with both main and inverse backgrounds
 
 /*-----------------------------------------------------------------------*/
 /*                              Login Page                               */
@@ -69,14 +53,14 @@
 @login-bg-color:                     @bg-main-color;
 @login-box-grid-position:            { margin-top: 80px; .make-sm-column(4); .make-sm-column-offset(4); };
 
-@login-box-title-color:               white;
+@login-box-title-color:               @decorator-main-color;
 @login-box-title:                     { text-transform: uppercase; };
-@login-box-title-display-box-arrow:   true;
+@login-box-title-display-box-arrow:   false;
 
 @login-box-bg-color:                  @bg-inverse-color;
 @login-box-padding:                   20px;
-@login-box-brand-logo-img:            "main-logo-with-sentence.png";
-@login-box-brand-logo:                { min-height: 97px; max-width: 130px; max-height: 131px; margin: 25px auto 5px auto; };
+@login-box-brand-logo-img:            "mno_enterprise/main-logo.png";
+@login-box-brand-logo:                { min-height: 61px; max-width: 160px; max-height: 130px; margin: 17px auto 5px auto; };
 @login-box-btn-login:                 { width: 100%; };
 
 /*-----------------------------------------------------------------------*/
@@ -84,20 +68,20 @@
 /*-----------------------------------------------------------------------*/
 @dashboard-bg-color:                            @bg-main-color;
 
-@dashboard-section-title-color:                 @bg-inverse-color;
+@dashboard-section-title-color:                 @text-strong-color;
 @dashboard-section-title-alignment:             center;
-@dashboard-section-title-display-subline:       true;
+@dashboard-section-title-display-subline:       false;
 
 // Side navbar menu
 //--------------------------------------
 @dashboard-side-menu-padding:                   30px 0px 0px 14px;
 @dashboard-side-menu-bg-color:                  @bg-inverse-color;
 
-@dashboard-side-menu-brand-logo-img:            "main-logo.png";
-@dashboard-side-menu-brand-logo:                { width: 51px; };
-@dashboard-side-menu-brand-logo-expanded:       { width: 201px; background-size: 60% };
+@dashboard-side-menu-brand-logo-img:            "mno_enterprise/main-logo.png";
+@dashboard-side-menu-brand-logo:                { background-size: 204px; width: 51px; margin-left: 5px; };
+@dashboard-side-menu-brand-logo-expanded:       { width: 201px; background-size: 100%; };
 
-@dashboard-side-menu-link-color:                @bg-main-color;
+@dashboard-side-menu-link-color:                @text-strong-color;
 @dashboard-side-menu-link-bg-color:             @dashboard-side-menu-bg-color;
 
 @dashboard-side-menu-link-active-color:         @dashboard-side-menu-bg-color;
@@ -106,17 +90,18 @@
 @dashboard-side-menu-link-hover-color:          @bg-main-color;
 @dashboard-side-menu-link-hover-bg-color:       lighten(@bg-inverse-color,5%);
 
-
-@dashboard-side-menu-btn-dashboard:             { .icon-fa(th); };
-@dashboard-side-menu-btn-dashboard-active:      { .icon-fa(th); color: white; };
-@dashboard-side-menu-btn-account:               { .icon-fa(user); };
-@dashboard-side-menu-btn-account-active:        { .icon-fa(user); color: white; };
-@dashboard-side-menu-btn-company:               { .icon-fa(briefcase); };
-@dashboard-side-menu-btn-company-active:        { .icon-fa(briefcase); color: white; };
-@dashboard-side-menu-btn-marketplace:           { .icon-fa(plus-square-o); };
-@dashboard-side-menu-btn-marketplace-active:    { .icon-fa(plus-square-o); color: white; };
-@dashboard-side-menu-btn-logout:                { .icon-fa(lock); };
-@dashboard-side-menu-btn-logout-active:         { .icon-fa(lock); color: white; };
+@_default_style:                                { .fa-2x; margin-top: 6px; margin-left: 2px; };
+@_default_style_active:                         { @_default_style(); color: white; };
+@dashboard-side-menu-btn-dashboard:             { .icon-fa(th); @_default_style(); };
+@dashboard-side-menu-btn-dashboard-active:      { .icon-fa(th); @_default_style_active(); };
+@dashboard-side-menu-btn-account:               { .icon-fa(user); @_default_style(); };
+@dashboard-side-menu-btn-account-active:        { .icon-fa(user); @_default_style_active(); };
+@dashboard-side-menu-btn-company:               { .icon-fa(briefcase); @_default_style(); };
+@dashboard-side-menu-btn-company-active:        { .icon-fa(briefcase); @_default_style_active(); };
+@dashboard-side-menu-btn-marketplace:           { .icon-fa(plus-square-o); @_default_style(); };
+@dashboard-side-menu-btn-marketplace-active:    { .icon-fa(plus-square-o); @_default_style_active(); };
+@dashboard-side-menu-btn-logout:                { .icon-fa(lock); @_default_style(); };
+@dashboard-side-menu-btn-logout-active:         { .icon-fa(lock); @_default_style_active(); };
 
 // Company select box (top right)
 //--------------------------------------
@@ -211,7 +196,7 @@
 /*-----------------------------------------------------------------------*/
 /*                       Twitter Bootstrap colors                        */
 /*-----------------------------------------------------------------------*/
-@brand-success:                  @fluroblue;
+@brand-success:                  @elem-positive-color;
 @brand-warning:                  @decorator-alt-color;
 @brand-info:                     @text-strong-color;
 @brand-danger:                   @text-strong-color;
@@ -231,10 +216,11 @@
 /*-----------------------------------------------------------------------*/
 /*                          Form Customization                           */
 /*-----------------------------------------------------------------------*/
-@input-bg: @decorator-main-color;
-@input-color: @text-strong-color;
+@input-bg: @bg-on-bg-inverse-color;
+@input-color: @text-inverse-color;
+@input-color-placeholder: @input-color;
 
-@input-label-color: @text-strong-color;
+@input-label-color: @text-inverse-color;
 
 /*-----------------------------------------------------------------------*/
 /*                         Buttons Customization                         */
