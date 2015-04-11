@@ -43,7 +43,7 @@ module MnoEnterprise
         end
       end
       
-      def install_rspec_rails
+      def install_factory_girl
         default_answer = 'y'
         @install_facto_girl = ask("Do you want to install factory_girl_rails? [Yn]")
         @install_facto_girl = default_answer if @install_facto_girl.blank?
