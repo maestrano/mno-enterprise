@@ -44,19 +44,28 @@
 @darkblue:                       #343e4c; // used for text
 @lightgray:                      #edf1f5; // used for text and input background
 
+// Default color code
+@darkblue:                       #17262d;
+@lightgray:                      darken(#e7e9ec,20%);
+@lightergray:                    lighten(@lightgray,10%);
+@darkgray:                       darken(@lightgray,20%);
+@purple:                         #977bf0;
+
+
 /*-----------------------------------------------------------------------*/
 /*                       General Theme Colors                            */
 /*-----------------------------------------------------------------------*/
 // Main Background and text colors
-@bg-main-color:                  @darkgray;   // Dashboard background color
-@decorator-main-color:           @lightgray;   // Elements placed on top of bg-main-color
-@decorator-alt-color:            @a7-orange;  // Elements placed on top of bg-main-color (secondary)
+@bg-main-color:                  @lightgray;   // Dashboard background color
+@decorator-main-color:           @darkgray;   // Elements placed on top of bg-main-color
+@decorator-alt-color:            @purple;  // Elements placed on top of bg-main-color (secondary)
 @text-strong-color:              @darkblue;  // Used for text used in the context of bg-main-color
 
 @bg-inverse-color:               @white;   // Background color used for dashboard side menu. top banners, inverse modals
-@bg-inverse-intense-color:       @lightblack; // Background color used for elements on top of bg-inverse-color
+@bg-on-bg-inverse-color:         @lightergray;
+@bg-inverse-intense-color:       @darkblue; // Background color used for elements on top of bg-inverse-color
 @decorator-inverse-color:        @a7-orange;  // Design elements (lines, borders) on top of bg-inverse-color
-@text-inverse-color:             @lightgray; // Text used on top of bg-inverse-color such as inverse modals
+@text-inverse-color:             @darkblue; // Text used on top of bg-inverse-color such as inverse modals
 
 // Color used in small/isolated elements
 @elem-positive-color:            @green;      // used to reflect a positive action or point (e.g: tick icon)
@@ -69,14 +78,14 @@
 @login-bg-color:                     @bg-main-color;
 @login-box-grid-position:            { margin-top: 80px; .make-sm-column(4); .make-sm-column-offset(4); };
 
-@login-box-title-color:               white;
+@login-box-title-color:               @decorator-main-color;
 @login-box-title:                     { text-transform: uppercase; };
-@login-box-title-display-box-arrow:   true;
+@login-box-title-display-box-arrow:   false;
 
 @login-box-bg-color:                  @bg-inverse-color;
 @login-box-padding:                   20px;
-@login-box-brand-logo-img:            "main-logo-with-sentence.png";
-@login-box-brand-logo:                { min-height: 97px; max-width: 130px; max-height: 131px; margin: 25px auto 5px auto; };
+@login-box-brand-logo-img:            "mno_enterprise/main-logo.png";
+@login-box-brand-logo:                { min-height: 61px; max-width: 160px; max-height: 130px; margin: 17px auto 5px auto; };
 @login-box-btn-login:                 { width: 100%; };
 
 /*-----------------------------------------------------------------------*/
@@ -84,9 +93,9 @@
 /*-----------------------------------------------------------------------*/
 @dashboard-bg-color:                            @bg-main-color;
 
-@dashboard-section-title-color:                 @bg-inverse-color;
+@dashboard-section-title-color:                 @text-strong-color;
 @dashboard-section-title-alignment:             center;
-@dashboard-section-title-display-subline:       true;
+@dashboard-section-title-display-subline:       false;
 
 // Side navbar menu
 //--------------------------------------
@@ -97,7 +106,7 @@
 @dashboard-side-menu-brand-logo:                { background-size: 204px; width: 51px; margin-left: 5px; };
 @dashboard-side-menu-brand-logo-expanded:       { width: 201px; background-size: 100%; };
 
-@dashboard-side-menu-link-color:                @bg-main-color;
+@dashboard-side-menu-link-color:                @text-strong-color;
 @dashboard-side-menu-link-bg-color:             @dashboard-side-menu-bg-color;
 
 @dashboard-side-menu-link-active-color:         @dashboard-side-menu-bg-color;
@@ -232,10 +241,11 @@
 /*-----------------------------------------------------------------------*/
 /*                          Form Customization                           */
 /*-----------------------------------------------------------------------*/
-@input-bg: @decorator-main-color;
-@input-color: @text-strong-color;
+@input-bg: @bg-on-bg-inverse-color;
+@input-color: @text-inverse-color;
+@input-color-placeholder: @input-color;
 
-@input-label-color: @text-strong-color;
+@input-label-color: @text-inverse-color;
 
 /*-----------------------------------------------------------------------*/
 /*                         Buttons Customization                         */
