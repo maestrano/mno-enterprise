@@ -23,6 +23,7 @@ module MnoEnterprise
       end
       
       def install_sprite_generator
+        say("\n")
         default_answer = 'y'
         @install_sprite = ask("Do you want to install sprite-factory? [Yn]")
         @install_sprite = default_answer if @install_sprite.blank?
@@ -34,6 +35,7 @@ module MnoEnterprise
       end
       
       def install_rspec_rails
+        say("\n")
         default_answer = 'y'
         @install_rspec = ask("Do you want to install rspec-rails? [Yn]")
         @install_rspec = default_answer if @install_rspec.blank?
@@ -44,6 +46,7 @@ module MnoEnterprise
       end
       
       def install_factory_girl
+        say("\n")
         default_answer = 'y'
         @install_facto_girl = ask("Do you want to install factory_girl_rails? [Yn]")
         @install_facto_girl = default_answer if @install_facto_girl.blank?
