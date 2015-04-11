@@ -37,6 +37,8 @@ This script will setup a bunch of symlinks for nginx, upstart and monit pointing
 That's it. You should be done!
 
 ## Loader gif Reference
-bgwhite - http://spiffygif.com/?color=82909c&lines=8&length=4&radius=7&width=4&halo=false
-bgmaindark - http://spiffygif.com/?color=c7d2db&lines=8&bgColor=17262d&length=4&radius=7&width=4&halo=false
-bgmainlight - http://spiffygif.com/?color=6d7a85&lines=8&bgColor=e6edee&length=4&radius=7&width=4&halo=false
+**bg-main**
+http://spiffygif.com/?color=ebe5ff&lines=8&bgColor=aeb5bf&length=4&radius=7&width=4&halo=false
+
+**bg-inverse**
+http://spiffygif.com/?color=977bf0&lines=8&length=4&radius=7&width=4&halo=false
