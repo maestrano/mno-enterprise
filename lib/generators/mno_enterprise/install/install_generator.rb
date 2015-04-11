@@ -28,8 +28,10 @@ module MnoEnterprise
         @install_sprite = ask("Do you want to install sprite-factory? [Yn]")
         @install_sprite = default_answer if @install_sprite.blank?
         if @install_sprite =~ /y/i
-          gem "chunky_png", group: :development
-          gem "sprite-factory", group: :development
+          gem_group :development do
+            gem "chunky_png"
+            gem "sprite-factory"
+          end
           template "tasks/sprites.rake", "lib/tasks/sprites.rake"
         end
       end
@@ -40,7 +42,9 @@ module MnoEnterprise
         @install_rspec = ask("Do you want to install rspec-rails? [Yn]")
         @install_rspec = default_answer if @install_rspec.blank?
         if @install_rspec =~ /y/i
-          gem "rspec-rails", group: :test
+          gem_group :test do
+            gem "rspec-rails"
+          end
           generate "rspec:install"
         end
       end
@@ -51,7 +55,9 @@ module MnoEnterprise
         @install_facto_girl = ask("Do you want to install factory_girl_rails? [Yn]")
         @install_facto_girl = default_answer if @install_facto_girl.blank?
         if @install_facto_girl =~ /y/i
-          gem "factory_girl_rails", group: :test
+          gem_group :test do
+            gem "factory_girl_rails"
+          end
         end
       end
       
