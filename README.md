@@ -26,7 +26,7 @@ $ rails g mno_enterprise:puma_stack production
 ```
 This generator creates a script folder with all the configuration files required by nginx, puma, upstart and monit.
 
-Perform a deploy:cold via webistrano/capistrano (which will certainly fail). The whole codebase will be copied to the server.
+Perform a deploy:update via webistrano/capistrano (which will certainly fail). The whole codebase will be copied to the server.
 
 Login to the server then run the following setup script
 ```bash
