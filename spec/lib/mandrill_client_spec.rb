@@ -3,6 +3,23 @@ require "rails_helper"
 describe MandrillClient do
   subject { MandrillClient }
   
+  describe 'email' do
+    let(:template) { :some_template }
+    let(:from) {{ name: "John", email: 'j@e.com' }}
+    let(:to) {{ name: "John", email: 'j@e.com' }}
+    let(:vars) {{ some: 'var' }}
+    
+    it 'sends the right template with the right parameters' do
+      expect(subject).to receive(:send_template).with(template,[],{
+        from_name: from[:name],
+        from_email: from[:email],
+        to: [{email: to[:email], type: :to, name: to[:name]}],
+        global_merge_vars: [{name: vars.keys.first.to_s, content: vars.values.first}]
+      })
+      subject.deliver(template,from,to,vars)
+    end
+  end
+  
   describe "send_template" do
     let!(:orig_delivery_method) { Rails.configuration.action_mailer.delivery_method }
     before { MandrillClient.instance_variable_set("@client",nil) }
