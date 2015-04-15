@@ -50,17 +50,12 @@ module MnoEnterprise
   # Module definition
   #==================================================================
   
-  # The support email address
-  mattr_accessor :support_email
-  @@support_email = "support@changeme.com"
-  
-  # The Maestrano Enterprise API Host
-  mattr_accessor :mno_api_host
-  @@mno_api_host = "https://api-enterprise.maestrano.com"
-  
-  # The Maestrano Enterprise API base path
-  mattr_accessor :mno_api_root_path
-  @@mno_api_root_path = "/v1"
+  #====================================
+  # Tenant
+  #====================================
+  # Maestrano Enterprise Tenant name
+  mattr_accessor :app_name
+  @@tenant_name = 'Maestrano Enterprise'
   
   # Maestrano Enterprise Tenant ID
   mattr_accessor :tenant_id
@@ -70,6 +65,17 @@ module MnoEnterprise
   mattr_accessor :tenant_key
   @@tenant_key = nil
   
+  #====================================
+  # System
+  #====================================
+  # The Maestrano Enterprise API Host
+  mattr_accessor :mno_api_host
+  @@mno_api_host = "https://api-enterprise.maestrano.com"
+  
+  # The Maestrano Enterprise API base path
+  mattr_accessor :mno_api_root_path
+  @@mno_api_root_path = "/v1"
+  
   # Hold the Her API configuration (see configure_api method)
   mattr_reader :mnoe_api_v1
   @@mnoe_api_v1 = nil
@@ -78,10 +84,26 @@ module MnoEnterprise
   mattr_reader :router
   @@router = Router.new
   
+  
+  #====================================
+  # Emailing
+  #====================================
   # Mandrill Key for sending emails
   # Points to the default maestrano enterprise account
   mattr_reader :mandrill_key
   @@mandrill_key = 'QcrLVdukhBi7iYrTeWHRPQ'
+  
+  # The support email address
+  mattr_accessor :support_email
+  @@support_email = "support@example.com"
+  
+  # Default sender name
+  mattr_accessor :default_sender_name
+  @@default_sender_name = nil
+  
+  # Default sender email
+  mattr_accessor :default_sender_email
+  @@default_sender_email = "no-reply@example.com"
   
   # Default way to setup MnoEnterprise. Run rails generate mno-enterprise:install to create
   # a fresh initializer with all configuration values.
