@@ -39,7 +39,7 @@ module MnoEnterprise
     #   :first_name
     #   :last_name
     #   :full_name
-    #   :reset_password_link
+    #   :unlock_link
     #
     def unlock_instructions(record, token, opts={})
       MandrillClient.deliver('unlock-instructions',
