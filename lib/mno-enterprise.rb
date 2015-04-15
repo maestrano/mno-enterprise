@@ -18,6 +18,9 @@ require "her_extension/model/associations/has_many_association"
 require "her_extension/middleware/mnoe_api_v1_parse_json"
 require "mno_enterprise/engine"
 
+require 'mandrill'
+require "mandrill_client"
+
 
 module MnoEnterprise
   
@@ -67,11 +70,18 @@ module MnoEnterprise
   mattr_accessor :tenant_key
   @@tenant_key = nil
   
+  # Hold the Her API configuration (see configure_api method)
   mattr_reader :mnoe_api_v1
   @@mnoe_api_v1 = nil
   
+  # Hold the Maestrano enterprise router (redirection to central enterprise platform)
   mattr_reader :router
   @@router = Router.new
+  
+  # Mandrill Key for sending emails
+  # Points to the default maestrano enterprise account
+  mattr_reader :mandrill_key
+  @@mandrill_key = 'QcrLVdukhBi7iYrTeWHRPQ'
   
   # Default way to setup MnoEnterprise. Run rails generate mno-enterprise:install to create
   # a fresh initializer with all configuration values.
