@@ -15,7 +15,7 @@ module MnoEnterprise
     
     describe 'confirmation_instructions' do
       it 'sends the right email' do
-        expect(MandrillClient).to receive(:deliver).with(:confirmation_instructions,
+        expect(MandrillClient).to receive(:deliver).with('confirmation-instructions',
           SystemNotificationMailer::DEFAULT_SENDER,
           { name: "#{user.name} #{user.surname}".strip, email: user.email },
           user_vars(user).merge(confirmation_link: routes.user_confirmation_url(host: host, confirmation_token: token))
@@ -27,7 +27,7 @@ module MnoEnterprise
     
     describe 'reset_password_instructions' do
       it 'sends the right email' do
-        expect(MandrillClient).to receive(:deliver).with(:reset_password_instructions,
+        expect(MandrillClient).to receive(:deliver).with('reset-password-instructions',
           SystemNotificationMailer::DEFAULT_SENDER,
           { name: "#{user.name} #{user.surname}".strip, email: user.email },
           user_vars(user).merge(reset_password_link: routes.edit_user_password_url(host: host, reset_password_token: token))
@@ -39,7 +39,7 @@ module MnoEnterprise
     
     describe 'unlock_instructions' do
       it 'sends the right email' do
-        expect(MandrillClient).to receive(:deliver).with(:unlock_instructions,
+        expect(MandrillClient).to receive(:deliver).with('unlock-instructions',
           SystemNotificationMailer::DEFAULT_SENDER,
           { name: "#{user.name} #{user.surname}".strip, email: user.email },
           user_vars(user).merge(unlock_link: routes.user_unlock_url(host: host, unlock_token: token))

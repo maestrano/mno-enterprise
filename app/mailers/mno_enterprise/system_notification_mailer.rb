@@ -12,7 +12,7 @@ module MnoEnterprise
     #
     def confirmation_instructions(record, token, opts={})
       puts "tamere"
-      MandrillClient.deliver(:confirmation_instructions,
+      MandrillClient.deliver('confirmation-instructions',
         DEFAULT_SENDER,
         recipient(record),
         user_vars(record).merge(confirmation_link: user_confirmation_url(confirmation_token: token))
@@ -27,7 +27,7 @@ module MnoEnterprise
     #   :reset_password_link
     #
     def reset_password_instructions(record, token, opts={})  
-      MandrillClient.deliver(:reset_password_instructions,
+      MandrillClient.deliver('reset-password-instructions',
         DEFAULT_SENDER,
         recipient(record),
         user_vars(record).merge(reset_password_link: edit_user_password_url(reset_password_token: token))
@@ -42,7 +42,7 @@ module MnoEnterprise
     #   :reset_password_link
     #
     def unlock_instructions(record, token, opts={})
-      MandrillClient.deliver(:unlock_instructions,
+      MandrillClient.deliver('unlock-instructions',
         DEFAULT_SENDER,
         recipient(record),
         user_vars(record).merge(unlock_link: user_unlock_url(unlock_token: token))
