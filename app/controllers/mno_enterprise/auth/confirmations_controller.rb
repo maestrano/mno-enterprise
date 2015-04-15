@@ -29,7 +29,8 @@ module MnoEnterprise
       self.resource = @resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
 
       # Redirect straight away if no changes
-      if @resource.email == params[:user][:email]  
+      if @resource.email == params[:user][:email] 
+        @resource.resend_confirmation_instructions
         redirect_to :user_confirmation_lounge
         return
       end
@@ -40,15 +41,12 @@ module MnoEnterprise
       @resource.skip_reconfirmation!
     
       if @resource.save
-        @resource.send_on_create_confirmation_instructions
-        # Force trigger of commit callback to send notifications
-        # @resource.touch
-        @resource.save
+        @resource.resend_confirmation_instructions
 
-        redirect_to mno_enterprise.user_confirmation_lounge, notice: "'Email updated! A confirmation email has been resent."
+        redirect_to mno_enterprise.user_confirmation_lounge_path, notice: "'Email updated! A confirmation email has been resent."
       else
         # Rollback
-        @resource.restore_email!
+        #@resource.restore_email!
 
         render 'lounge'
       end
