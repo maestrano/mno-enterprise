@@ -18,6 +18,9 @@ MnoEnterprise::Engine.routes.draw do
   # App Provisioning
   resources :provision, only: [:new,:create]
   
+  # Organization Invites
+  resources :org_invites, only: [:show]
+  
   #============================================================
   # Devise Configuration
   #============================================================
