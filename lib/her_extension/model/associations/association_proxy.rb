@@ -13,14 +13,18 @@ module Her
             return association.fetch.object_id
           end
           
+          # Check if a class scope has previously been defined
           begin
-            return self.association.send(name,*args,&block)
+            if Relation.scopes.keys.grep(::Regexp.new(name.to_s)).any?
+              return self.association.send(name,*args,&block)
+            end
           rescue ::NoMethodError => e
             puts e.backtrace.join("\n")          
-            # create a proxy to the fetched object's method
-            metaclass = (class << self; self; end)
-            metaclass.install_proxy_methods 'association.fetch', name
           end
+          
+          # create a proxy to the fetched object's method
+          metaclass = (class << self; self; end)
+          metaclass.install_proxy_methods 'association.fetch', name
 
           # resend message to fetched object
           __send__(name, *args, &block)
