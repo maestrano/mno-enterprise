@@ -38,7 +38,7 @@ module Her
       # Use filter instead of raw parameters
       def where(params = {})
         return self if !params || params.empty?
-        self.params[:filter] = {}
+        self.params[:filter] ||= {}
         self.params[:filter].merge!(params)
         self
       end
@@ -91,6 +91,12 @@ module Her
       def reload
         clear_fetch_cache!
         fetch
+      end
+      
+      # Hold the scopes defined on Her::Model classes
+      # E.g.: scope :admin, -> { where(admin: 1) }
+      def self.scopes
+        @scopes ||= {}
       end
       
       private

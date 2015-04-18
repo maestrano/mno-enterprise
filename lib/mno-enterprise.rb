@@ -9,6 +9,7 @@ require 'devise'
 require 'devise/strategies/remote_authenticatable'
 require "her"
 require "her_extension/her_orm_adapter"
+require "her_extension/model/orm"
 require "her_extension/model/relation"
 require "her_extension/model/attributes"
 require "her_extension/model/parse"

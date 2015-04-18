@@ -5,7 +5,7 @@ module Her
       class Association
         # @private
         attr_accessor :params
-        delegate :all, :where, :order_by, :sort_by, :order, :sort, :limit, to: :blank_relation
+        delegate :all, :order_by, :sort_by, :order, :sort, :limit, :where, to: :blank_relation
         
         # Required by Relation methods
         def build_request_path(params = {})
@@ -39,8 +39,21 @@ module Her
           end
         end
         
+        # Reset params when directly called on association class
+        # def where(*args)
+        #   blank_relation.params = {}
+        #   blank_relation.where(*args)
+        # end
+        
         def blank_relation
           @blank_relation ||= Relation.new(self)
+          @blank_relation.params = {}
+          @blank_relation
+        end
+        
+        def method_missing(name, *args, &block)
+          puts "==========> method missing! #{name}"
+          blank_relation.send(name, *args, &block)
         end
 
       end
