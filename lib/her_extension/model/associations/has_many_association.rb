@@ -71,16 +71,19 @@ module Her
         #   user.comments # => [#<Comment id=2 user_id=1 body="Hello!">]
         def create(attributes = {})
           puts "I am in association > create"
-          self.execute_request(:create,attributes)
+          resp = self.execute_request(:create,attributes)
+          @klass.build(resp)
         end
         
+        # Consider removing - not sure this method on a has_many collection has any meaning
         def update(attributes = {})
-          puts "I am in association > create"
+          puts "I am in association > update"
           self.execute_request(:update,attributes)
         end
         
+        # Consider removing - not sure this method on a has_many collection has any meaning
         def destroy(attributes = {})
-          puts "I am in association > create"
+          puts "I am in association > destroy"
           self.execute_request(:destroy,attributes)
         end
         

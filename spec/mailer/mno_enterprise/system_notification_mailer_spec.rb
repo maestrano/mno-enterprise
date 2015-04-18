@@ -21,9 +21,11 @@ module MnoEnterprise
         team: org_invite.team ? org_invite.team.name : nil,
         ref_first_name: org_invite.referrer.name,
         ref_last_name: org_invite.referrer.surname,
+        ref_full_name: "#{org_invite.referrer.name} #{org_invite.referrer.surname}".strip,
         ref_email: org_invite.referrer.email,
         invitee_first_name: new_user ? nil : org_invite.user.name,
         invitee_last_name: new_user ? nil : org_invite.user.surname,
+        invitee_full_name: new_user ? nil : "#{org_invite.user.name} #{org_invite.user.surname}".strip,
         invitee_email: org_invite.user.email,
       }
     end

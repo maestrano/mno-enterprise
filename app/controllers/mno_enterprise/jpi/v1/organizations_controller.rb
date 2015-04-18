@@ -80,18 +80,17 @@ module MnoEnterprise
       # Authorize and create
       authorize! :invite_member, organization
       attributes.each do |invite|
-        @org_invite = organization.org_invites.build(
+        @org_invite = organization.org_invites.create(
           user_email: invite['email'], 
           user_role: invite['role'],
           team_id: invite['team_id'],
-          referrer: current_user,
+          referrer_id: current_user.id
         )
-      
-        authorize! :create, @org_invite
-        # AccountMailer.delay.organization_invite(@org_invite) if @org_invite.save
+        
+        SystemNotificationMailer.organization_invite(@org_invite).deliver_now
       end
 
-      render partial: 'members'
+      render 'members'
     end
 
     # PUT /mnoe/jpi/v1/organizations/:id/update_member

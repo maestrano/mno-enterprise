@@ -139,12 +139,7 @@ angular.module('maestrano.services.dashboard.organization-svc', []).factory('Dhb
   service.billing.update = (opts) ->
     self = service
     data = { credit_card: opts }
-    q = $http.put(self.routes.updateBillingPath(),data).then (success)->
-      # Bootstrap tasks
-      unless self.data.organization.bootstrap_tasks.credit_card_details
-        self.data.organization.bootstrap_tasks.credit_card_details = true
-        MessageSvc.putMessage({body:"Congratulations! You've successfully updated your billing details. Now you can continue experiencing the great service you've come to expect with Maestrano!",category:"taskCompleted"})
-        
+    q = $http.put(self.routes.updateBillingPath(),data).then (success)->        
       angular.copy(success.data.credit_card,self.data.credit_card)
 
     return q
@@ -211,11 +206,6 @@ angular.module('maestrano.services.dashboard.organization-svc', []).factory('Dhb
 
     data = { invites: finalList}
     q = $http.put(self.routes.inviteMembersPath(), data).then (success)->
-      # Bootstrap tasks
-      unless self.data.organization.bootstrap_tasks.colleagues_invited
-        self.data.organization.bootstrap_tasks.colleagues_invited = true
-        MessageSvc.putMessage({body:"Congratulations, you have invited your first colleagues to join your company. When you're ready to invite the rest of your team, just follow the same steps.",category:"taskCompleted"})
-
       angular.copy(success.data.members,self.data.members)
 
     return q
