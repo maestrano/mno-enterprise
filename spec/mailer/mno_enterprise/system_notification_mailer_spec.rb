@@ -13,6 +13,21 @@ module MnoEnterprise
       { first_name: user.name, last_name: user.surname, full_name: "#{user.name} #{user.surname}".strip }
     end
     
+    def invite_vars(org_invite)
+      new_user = !org_invite.user.confirmed?
+      
+      {
+        organization: org_invite.organization.name,
+        team: org_invite.team ? org_invite.team.name : nil,
+        ref_first_name: org_invite.referrer.name,
+        ref_last_name: org_invite.referrer.surname,
+        ref_email: org_invite.referrer.email,
+        invitee_first_name: new_user ? nil : org_invite.user.name,
+        invitee_last_name: new_user ? nil : org_invite.user.surname,
+        invitee_email: org_invite.user.email,
+      }
+    end
+    
     describe 'confirmation_instructions' do
       it 'sends the right email' do
         expect(MandrillClient).to receive(:deliver).with('confirmation-instructions',
@@ -47,6 +62,38 @@ module MnoEnterprise
         
         subject.unlock_instructions(user,token).deliver_now
       end
+    end
+    
+    describe 'organization_invite' do
+      let(:invitee) { build(:user) }
+      let(:org_invite) { build(:org_invite, user: invitee, referrer: user) }
+      
+      context 'when invitee is a confirmed user' do
+        it 'sends the right email' do
+          expect(MandrillClient).to receive(:deliver).with('organization-invite-existing-user',
+            SystemNotificationMailer::DEFAULT_SENDER,
+            { name: "#{invitee.name} #{invitee.surname}".strip, email: invitee.email },
+            invite_vars(org_invite).merge(confirmation_link: routes.org_invite_url(host: host, id: org_invite.id, token: org_invite.token))
+          )
+        
+          subject.organization_invite(org_invite).deliver_now
+        end
+      end
+      
+      context 'when inviteee is an unconfirmed user' do
+        let(:invitee) { build(:user, :unconfirmed) }
+        
+        it 'sends the right email' do
+          expect(MandrillClient).to receive(:deliver).with('organization-invite-new-user',
+            SystemNotificationMailer::DEFAULT_SENDER,
+            { email: invitee.email },
+            invite_vars(org_invite).merge(confirmation_link: routes.user_confirmation_url(host: host, confirmation_token: invitee.confirmation_token))
+          )
+        
+          subject.organization_invite(org_invite).deliver_now
+        end
+      end
+      
     end
   end
 end

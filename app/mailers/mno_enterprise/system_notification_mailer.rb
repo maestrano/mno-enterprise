@@ -3,7 +3,10 @@ module MnoEnterprise
     helper :application
     DEFAULT_SENDER = { name: MnoEnterprise.default_sender_name, email: MnoEnterprise.default_sender_email }
     
-    # Email asking users to confirm their email
+    # ==> Devise Email
+    # Description: 
+    #   Email asking users to confirm their email
+    #
     # Mandrill vars:
     #   :first_name
     #   :last_name
@@ -19,7 +22,10 @@ module MnoEnterprise
       )
     end
     
-    # Email providing instructions + link to reset password
+    # ==> Devise Email
+    # Description:
+    #   Email providing instructions + link to reset password
+    #
     # Mandrill vars:
     #   :first_name
     #   :last_name
@@ -34,7 +40,10 @@ module MnoEnterprise
       )
     end
     
-    # Email providing instructions + link to unlock a user account after too many failed attempts
+    # ==> Devise Email
+    # Description:
+    #   Email providing instructions + link to unlock a user account after too many failed attempts
+    #
     # Mandrill vars:
     #   :first_name
     #   :last_name
@@ -49,9 +58,42 @@ module MnoEnterprise
       )
     end
     
+    # Description:
+    #   Send an email inviting the user to join an existing organization. If the user
+    #   is already confirmed it is directed to the organization invite page where he
+    #   can accept or decline the invite
+    #   If the user is not confirmed yet then it is considered a new user and will be directed
+    #   to the confirmation page
+    #
+    # Mandrill vars:
+    #   :organization
+    #   :team
+    #   :ref_first_name
+    #   :ref_last_name
+    #   :ref_email
+    #   :invitee_new_user
+    #   :invitee_first_name
+    #   :invitee_last_name
+    #   :invitee_email
+    #   :confirmation_link
+    #
+    def organization_invite(org_invite)
+      new_user = !org_invite.user.confirmed?
+      confirmation_link = new_user ? user_confirmation_url(confirmation_token: org_invite.user.confirmation_token) : org_invite_url(org_invite, token: org_invite.token)
+      email_template = new_user ? 'organization-invite-new-user' : 'organization-invite-existing-user'
+      
+      MandrillClient.deliver(email_template,
+        DEFAULT_SENDER,
+        recipient(org_invite.user,new_user),
+        invite_vars(org_invite,new_user).merge(confirmation_link: confirmation_link)
+      )
+    end
+    
     protected
-      def recipient(record)
-        { name: "#{record.name} #{record.surname}".strip, email: record.email }
+      def recipient(record, new_user = false)
+        hash = { email: record.email }
+        hash[:name] = "#{record.name} #{record.surname}".strip unless new_user
+        hash
       end
       
       def user_vars(record)
@@ -59,6 +101,19 @@ module MnoEnterprise
           first_name: record.name,
           last_name: record.surname,
           full_name: "#{record.name} #{record.surname}".strip
+        }
+      end
+      
+      def invite_vars(org_invite, new_user = true)
+        {
+          organization: org_invite.organization.name,
+          team: org_invite.team ? org_invite.team.name : nil,
+          ref_first_name: org_invite.referrer.name,
+          ref_last_name: org_invite.referrer.surname,
+          ref_email: org_invite.referrer.email,
+          invitee_first_name: new_user ? nil : org_invite.user.name,
+          invitee_last_name: new_user ? nil : org_invite.user.surname,
+          invitee_email: org_invite.user.email,
         }
       end
   end
