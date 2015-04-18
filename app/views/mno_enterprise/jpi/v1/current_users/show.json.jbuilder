@@ -23,7 +23,7 @@ json.current_user do
     
     if @user.deletion_request.present?
       json.deletion_request do
-        json.extract! @user.deletion_request, :id, :token
+        #json.extract! @user.deletion_request, :id, :token
       end
     end
   end

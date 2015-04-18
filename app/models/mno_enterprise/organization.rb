@@ -25,8 +25,7 @@
 #
 
 module MnoEnterprise
-  class Organization < BaseResource
-    
+  class Organization < BaseResource    
     attributes :uid, :name, :account_frozen, :free_trial_end_at, :soa_enabled, :mails, :logo,
       :latitude, :longitude, :geo_country_code, :geo_state_code, :geo_city, :geo_tz, :geo_currency,
       :meta_data
@@ -40,7 +39,7 @@ module MnoEnterprise
     
     # Return the list of users + active invites
     def members
-      [self.users,self.org_invites.where(status: 'pending')].flatten
+      [self.users,self.org_invites.active].flatten
     end
   end
 end

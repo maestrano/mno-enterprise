@@ -96,20 +96,19 @@ module MnoEnterprise
     # PUT /mnoe/jpi/v1/organizations/:id/update_member
     def update_member
       attributes = params[:member]
-      @orga_relation = organization.orga_relations.joins(:user).where("users.email = ?",attributes[:email]).first
-      @orga_relation ||= organization.org_invites.active.where("user_email = ?",attributes[:email]).first
+      @member = organization.users.where(email: attributes[:email]).first
+      @member ||= organization.org_invites.active.where(user_email: attributes[:email]).first
 
       # Authorize and update
-      if @orga_relation.is_a?(OrgaRelation)
-        @orga_relation = OrgaRelation.find(@orga_relation.id)
-        @orga_relation.assign_attributes(role: attributes[:role])
-      elsif @orga_relation.is_a?(OrgaInvite)
-        @orga_relation.assign_attributes(user_role: attributes[:role])
+      authorize! :invite_member, organization
+      if @member.is_a?(MnoEnterprise::User)
+        organization.users.update(id: @member.id, role: attributes[:role])
+      elsif @member.is_a?(MnoEnterprise::OrgInvite)
+        @member.user_role = attributes[:role]
+        @member.save
       end
-      authorize! :update, @orga_relation
-      @orga_relation.save
 
-      render partial: 'members'
+      render 'members'
     end
 
     # PUT /mnoe/jpi/v1/organizations/:id/remove_member
