@@ -23,6 +23,17 @@ module MnoEnterprise
       redirect_to MnoEnterprise.router.launch_url(params[:id], wtk: MnoEnterprise.jwt(user_id: current_user.uid))
     end
     
+    # GET /loading/:id
+    # Loading lounge - wait for an app to be online
+    def loading
+      @app_instance = MnoEnterprise::AppInstance.where(uid: params[:id]).reload.first
+      
+      respond_to do |format|
+        format.html { @app_instance_hash = app_instance_hash(@app_instance) }
+        format.json { render json: app_instance_hash(@app_instance) }
+      end
+    end
+    
     # GET /app_access_unauthorized
     def app_access_unauthorized
       @meta[:title] = "Unauthorized"
@@ -34,5 +45,22 @@ module MnoEnterprise
       @meta[:title] = "Logged out"
       @meta[:description] = "Logged out from application"
     end
+    
+    private
+      def app_instance_hash(app_instance)
+        {
+          id: app_instance.id,
+          uid: app_instance.uid,
+          name: app_instance.name,
+          status: app_instance.status,
+          durations: app_instance.durations,
+          started_at: app_instance.started_at,
+          stopped_at: app_instance.stopped_at,
+          created_at: app_instance.created_at,
+          server_time: Time.now.utc,
+          is_online: app_instance.online?,
+          errors: app_instance.errors.full_messages,
+        }
+      end
   end
 end

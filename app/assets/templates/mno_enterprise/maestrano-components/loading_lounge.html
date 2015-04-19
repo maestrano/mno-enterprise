@@ -1,37 +1,27 @@
 <div>
-  <!-- Autostop Modal -->
-  <div mno-autostop-app="autoStopQueue"></div>
-
-  <!-- Loader picture -->
+  
+  <div class="spacer5 hidden-xs hidden-sm"></div>
+  
   <div class='align-center'>
-    <hr>
-    <img ng-src="{{loaderImage()}}" alt="Status Picture" height="100" width="100">
-    <!-- Loading Bar -->
-    <div ng-show="isProgressBarShown()">
-      <div class="muted progress-indicator" style='margin-left:11px;'>{{progressBarPercent()}}</div>
-      <div class="progress progress-mno progress-striped active">
-        <div class="progress-bar" ng-style="{width: progressBarPercent()}"></div>
-      </div>
-    </div>
-
-    <hr>
+    
+    <!-- Status Details -->
     <div ng-switch on="currentStatus()">
       <div ng-switch-when='online'>
-        <h4 class='mgreen'>Redirecting to {{appInstance.app_name}}</h4>
+        <h3 class='mgreen'>Redirecting to {{appInstance.name}}</h4>
         <h4 class='muted'>You will be automatically redirected in {{redirectionCounter}}s (or click the button below)</h4>
         <br>
         <a class='fbtn fbtn-large fbtn-success' ng-href="{{redirectUrl()}}"><b>Go to my app now!</b></a>
       </div>
       <div ng-switch-when='loading'>
-        <h4 class='mgreen'>{{appInstance.app_name}} is loading</h4>
-        <h4 class='muted'>{{appInstance.app_name}} has been idle for a long time. We are currently loading it. It should be available soon!</h4>
+        <h3 class='mgreen'>{{appInstance.name}} is loading</h4>
+        <h4 class='muted'>{{appInstance.name}} has been idle for a long time. We are currently loading it. It should be available soon!</h4>
       </div>
       <div ng-switch-when='creating'>
-        <h4 class='mgreen'>{{appInstance.app_name}} is getting setup</h4>
-        <h4 class='muted'>{{appInstance.app_name}} is preparing for the first use. It should be available soon!</h4>
+        <h3 class='mgreen'>{{appInstance.name}} is getting setup</h4>
+        <h4 class='muted'>{{appInstance.name}} is preparing for the first use. It should be available soon!</h4>
       </div>
       <div ng-switch-when='errors'>
-        <h4 class='muted'>{{appInstance.app_name}} is idle</h4>
+        <h3 class='muted'>{{appInstance.name}} is idle</h4>
         <br>
         <div class='alert alert-danger align-left'>
           <p><b>Unfortunately we cannot switch this app ON for you:</b></p>
@@ -45,26 +35,18 @@
         <h4 class='muted'>The app you requested does not seem to be managed by Maestrano. Are you sure you typed the right url?</h4>
       </div>
     </div>
-  </div>
-
-  <hr>
-  <div class='alert alert-success align-center' ng-show="areInstructionsDisplayed()">
-    <b>If this is the first time you login to this app then use the following credentials</b>
-    <br>
-    <b>Login:</b>
-    {{appInstance.first_credentials.login}}
-    <br>
-    <b>Password:</b>
-    {{appInstance.first_credentials.password || 'Leave password field blank'}}
-  </div>
-  <div class='alert alert-info align-center' ng-show="isTutorialDisplayed()">
-    We've got a quick start tutorial for this app! Click the button below to open it in a new tab
-    <br>
-    <div class='align-center'>
-      <a class='fbtn fbtn-info' ng-href="{{appInstance.tutorial_page_url}}" target="_blank">
-        <i class='icon-book icon-white'></i>
-        <b>Open {{appInstance.app_name}} Tutorial</b>
-      </a>
+    
+    <hr>
+    
+    <!-- Loading Bar -->
+    <div ng-show="isProgressBarShown()">
+      <div class="muted progress-indicator" style='margin-left:11px;'>{{progressBarPercent()}}</div>
+      <div class="progress progress-mno progress-striped active">
+        <div class="progress-bar" ng-style="{width: progressBarPercent()}"></div>
+      </div>
     </div>
+
+    
+    
   </div>
 </div>

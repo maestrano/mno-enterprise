@@ -53,5 +53,13 @@ module MnoEnterprise
       ACTIVE_STATUSES.include?(self.status.to_sym) ||
       (TERMINATION_STATUSES.include?(self.status.to_sym) && self.terminated_at > 3.minutes.ago)
     end
+    
+    def running?
+      self.status == 'running'
+    end
+    
+    def online?
+      running?
+    end
   end
 end

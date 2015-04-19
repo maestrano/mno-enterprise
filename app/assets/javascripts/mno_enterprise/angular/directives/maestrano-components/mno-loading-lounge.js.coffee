@@ -21,15 +21,6 @@ module.controller('MnoLoadingLoungeCtrl',[
     $scope.scheduler = null
     $scope.redirectScheduler = null
 
-    # Propose autostop after 5s only if autostop option
-    # is true and appInstance has no errors
-    $scope.autoStopQueue = []
-    if $scope.autostop() && appInstance.errors.length == 0
-      $timeout(
-        () ->
-          $scope.autoStopQueue.push(appInstance)
-      ,4000)
-
 
     #==========================
     # Helpers
@@ -49,26 +40,6 @@ module.controller('MnoLoadingLoungeCtrl',[
           'loading'
       else
         'not_found'
-
-    $scope.loaderImage = () ->
-      if currentStatus() == 'online'
-        AssetPath['loaders/app_online.png']
-      else if currentStatus() == 'loading' || currentStatus() == 'creating'
-        AssetPath['loaders/app_loading.gif']
-      else if currentStatus() == 'errors'
-        AssetPath['loaders/app_offline.png']
-      else
-        AssetPath['loaders/app_not_found.png']
-
-    $scope.areInstructionsDisplayed = () ->
-      currentStatus() != 'errors' &&
-      currentStatus() != 'not_found' &&
-      !appInstance.sso_enabled &&
-      appInstance.first_credentials &&
-      appInstance.first_credentials.login
-
-    $scope.isTutorialDisplayed = () ->
-      currentStatus() != 'errors' && currentStatus() != 'not_found' && appInstance.tutorial_page_url
 
     $scope.errorMessages = () ->
       Utilities.processRailsError(appInstance.errors)
@@ -107,7 +78,7 @@ module.controller('MnoLoadingLoungeCtrl',[
 
       # Get the action elapsed time in seconds
       startTime = new Date(appInstance[referenceField])
-      endTime = new Date((new Date()).getTime() - $window.clientTimeOffset) #remove Client-Server time offset
+      endTime = new Date(appInstance.server_time)
       elapsedTime = (endTime.getTime() - startTime.getTime()) / 1000
 
       # Calculate the percentage
@@ -123,11 +94,11 @@ module.controller('MnoLoadingLoungeCtrl',[
       percent = "#{percent}%"
       return percent
 
-    checkOnlineStatus = (_appInstance)->
-      q = $http.get("/app_instances/#{_appInstance.id}/is_online")
+    reloadAppInstance = (_appInstance)->
+      q = $http.get($window.location.pathname)
       q.then(
         (success) ->
-          _appInstance.is_online = success.data
+          angular.copy(success.data,_appInstance)
       )
       return q
 
@@ -140,20 +111,17 @@ module.controller('MnoLoadingLoungeCtrl',[
 
       # Configure the scheduler
       $scope.scheduler = $timeout(->
-        $http.get("/app_instances/#{appInstanceId}").then(
-          (success) ->
-            data = success.data
-            appInstance.status = data.status
-            appInstance.started_at = data.started_at
-            checkOnlineStatus(appInstance) if appInstance.status == 'running'
-            $scope.startAutoRefresh()
-        )
+        reloadAppInstance(appInstance)
+        $scope.startAutoRefresh()
       ,intervalMilliSec)
 
     $scope.stopAutoRefresh = () ->
       if $scope.scheduler?
         $timeout.cancel($scope.scheduler)
-
+    
+    $scope.redirectUrl = ->
+      "/mnoe/launch/#{appInstance.uid}"
+    
     $scope.performRedirection = () ->
       # Then reload the page
       window.location = $scope.redirectUrl()
@@ -198,17 +166,13 @@ module.controller('MnoLoadingLoungeCtrl',[
           $scope.stopRedirectCountdown() if $scope.redirectScheduler
     )
 
-    # Watch countdown
-
 ])
 
 module.directive('mnoLoadingLounge', ['TemplatePath', (TemplatePath) ->
   return {
       restrict: 'AE',
       scope: {
-        mnoLoadingLounge: '&',
-        redirectUrl: '&'
-        autostop: '&'
+        mnoLoadingLounge: '&'
       },
       templateUrl: TemplatePath['mno_enterprise/maestrano-components/loading_lounge.html'],
       controller: 'MnoLoadingLoungeCtrl'

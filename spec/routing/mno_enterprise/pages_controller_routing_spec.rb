@@ -9,6 +9,11 @@ module MnoEnterprise
       expect(get("/launch/bla.mcube.co")).to route_to("mno_enterprise/pages#launch", id: 'bla.mcube.co')
     end
     
+    it "routes to #launch" do
+      expect(get("/loading/cld-1f47d5s4")).to route_to("mno_enterprise/pages#loading", id: 'cld-1f47d5s4')
+      expect(get("/loading/bla.mcube.co")).to route_to("mno_enterprise/pages#loading", id: 'bla.mcube.co')
+    end
+    
     it 'routes to #app_access_unauthorized' do
       expect(get("/app_access_unauthorized")).to route_to("mno_enterprise/pages#app_access_unauthorized")
     end
