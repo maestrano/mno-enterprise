@@ -72,7 +72,6 @@ module MnoEnterprise
     #   :ref_last_name
     #   :ref_full_name
     #   :ref_email
-    #   :invitee_new_user
     #   :invitee_first_name
     #   :invitee_last_name
     #   :invitee_full_name
