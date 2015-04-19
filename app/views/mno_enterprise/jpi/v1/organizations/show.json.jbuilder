@@ -1,6 +1,6 @@
 json.organization do
   json.partial! 'organization', organization: @organization
-  json.members [@organization.users,@organization.org_invites].flatten, partial: 'member', as: :member, organization: @organization
+  json.members @organization.members, partial: 'member', as: :member, organization: @organization
 end
 
 json.current_user do
