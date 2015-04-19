@@ -7,11 +7,6 @@ json.current_user do
   json.partial! 'current_user', user: current_user, organization: @organization
 end
 
-
-
-# json.partial! 'current_user', user: @current_user, organization: @organization
-# json.partial! 'members', organization: @organization
-
 # if @current_user.role(@organization) == 'Super Admin'
 #   json.partial! 'billing', organization: @organization
 #   json.partial! 'invoices', organization: @organization
