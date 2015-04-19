@@ -29,12 +29,19 @@ module MnoEnterprise
     belongs_to :organization, class_name: 'MnoEnterprise::Organization'
     belongs_to :team, class_name: 'MnoEnterprise::OrgTeam'
     
+    # TODO: specs
     # Add the user to the organization and update the status of the invite
     # Add team
     def accept!(user = self.user)
       self.put(operation: 'accept', data: { user_id: user.id})
     end
     
+    # TODO: specs
+    def cancel!
+      self.put(operation: 'cancel')
+    end
+    
+    # TODO: specs
     # Check whether the invite is expired or not
     def expired?
       self.status != 'pending' || self.created_at < 3.days.ago

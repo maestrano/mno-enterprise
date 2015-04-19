@@ -67,7 +67,8 @@ module MnoEnterprise
     #     render json: @credit_card.errors, status: :bad_request
     #   end
     # end
-
+    
+    # TODO: specs
     # PUT /mnoe/jpi/v1/organizations/:id/invite_members
     def invite_members
       # Filter
@@ -92,7 +93,8 @@ module MnoEnterprise
 
       render 'members'
     end
-
+    
+    # TODO: specs
     # PUT /mnoe/jpi/v1/organizations/:id/update_member
     def update_member
       attributes = params[:member]
@@ -110,22 +112,23 @@ module MnoEnterprise
 
       render 'members'
     end
-
+    
+    # TODO: specs
     # PUT /mnoe/jpi/v1/organizations/:id/remove_member
     def remove_member
       attributes = params[:member]
-      @member = User.find_by_email(attributes[:email])
-      @member ||= organization.org_invites.active.find_by_user_email(attributes[:email])
-
-      if @member.is_a?(User)
-        authorize! :destroy, @member.orga_relations_all.where(organization_id: organization).first
+      @member = organization.users.where(email: attributes[:email]).first
+      @member ||= organization.org_invites.active.where(user_email: attributes[:email]).first
+      
+      # Authorize and update
+      authorize! :invite_member, organization
+      if @member.is_a?(MnoEnterprise::User)
         organization.remove_user(@member)
-      elsif @member.is_a?(OrgaInvite)
-        authorize! :destroy, @member
-        @member.update_attribute(:status,'cancelled')
+      elsif @member.is_a?(MnoEnterprise::OrgInvite)
+        @member.cancel!
       end
 
-      render partial: 'members'
+      render 'members'
     end
     
     protected

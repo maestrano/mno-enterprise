@@ -38,8 +38,21 @@ module MnoEnterprise
     has_many :app_instances, class_name: 'MnoEnterprise::AppInstance'
     
     # Return the list of users + active invites
+    # TODO: specs
     def members
       [self.users,self.org_invites.active].flatten
+    end
+    
+    # Add a user to the organization with the provided role
+    # TODO: specs
+    def add_user(user,role = 'Member')
+      self.users.create(id: user.id, role: role)
+    end
+    
+    # Remove a user from the organization
+    # TODO: specs
+    def remove_user(user)
+      self.users.destroy(id: user.id)
     end
   end
 end
