@@ -33,6 +33,7 @@ module MnoEnterprise
       # ActiveRecord Compatibility for Her
       def first(n = 1)
         return [] unless n > 0
+        scoped.clear_fetch_cache!
         q = self.order_by('id.asc').limit(n)
         n == 1 ? q.to_a.first : q.to_a
       end
@@ -40,6 +41,7 @@ module MnoEnterprise
       # ActiveRecord Compatibility for Her
       def last(n = 1)
         return [] unless n > 0
+        scoped.clear_fetch_cache!
         q = self.order_by('id.desc').limit(n)
         n == 1 ? q.to_a.first : q.to_a
       end
