@@ -34,5 +34,10 @@ module MnoEnterprise
     def accept!(user = self.user)
       self.put(operation: 'accept', data: { user_id: user.id})
     end
+    
+    # Check whether the invite is expired or not
+    def expired?
+      self.status != 'pending' || self.created_at < 3.days.ago
+    end
   end
 end
