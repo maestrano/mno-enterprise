@@ -29,5 +29,10 @@ module MnoEnterprise
     belongs_to :organization, class_name: 'MnoEnterprise::Organization'
     belongs_to :team, class_name: 'MnoEnterprise::OrgTeam'
     
+    # Add the user to the organization and update the status of the invite
+    # Add team
+    def accept!(user = self.user)
+      self.put(operation: 'accept', data: { user_id: user.id})
+    end
   end
 end
