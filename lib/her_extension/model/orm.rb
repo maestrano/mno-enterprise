@@ -2,11 +2,21 @@
 # automatically start fresh
 # 
 # FIX: scope to create real isolated scopes for each Her::Model
+#
+# FIX: add put method on model
 module Her
   module Model
     module ORM
+      
+      # Send raw PUT request to model - no data encapsulation performed
+      def put(attrs)
+        method = :put
+        self.class.request(attrs.merge(:_method => method, :_path => request_path)) do |parsed_data, response|
+          return parsed_data
+        end
+      end
+      
       module ClassMethods
-        
         # Create a new chainable scope
         #
         # @example
