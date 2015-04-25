@@ -23,11 +23,11 @@ MnoEnterprise.configure do |config|
   # config.mandrill_key = 'some-mandrill-api-key'
   
   # Support email address
-  config.support_email = 'support@enteprise-demo-mnoe.maestrano.io'
+  config.support_email = 'support@enterprise-demo-mnoe.maestrano.io'
   
   # Default sender for system generated emails
   config.default_sender_name = 'Enterprise Demo'
-  config.default_sender_email = 'no-reply@enteprise-demo-mnoe.maestrano.io'
+  config.default_sender_email = 'no-reply@enterprise-demo-mnoe.maestrano.io'
   
   #===============================================
   # API Configuration

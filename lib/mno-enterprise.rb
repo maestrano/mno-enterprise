@@ -62,7 +62,7 @@ module MnoEnterprise
   mattr_accessor :tenant_id
   @@tenant_id = nil
   
-  # Maestrano Enteprise Tenant Key
+  # Maestrano Enterprise Tenant Key
   mattr_accessor :tenant_key
   @@tenant_key = nil
   
@@ -132,7 +132,7 @@ module MnoEnterprise
       { url: "#{URI.join(@@mno_api_host,@@mno_api_root_path).to_s}", send_only_modified_attributes: true }
     end
     
-    # Configure the Her for Maestrano Enteprise API V1
+    # Configure the Her for Maestrano Enterprise API V1
     def self.configure_api
       # Configure HER for Maestrano Enterprise Endpoints
       @@mnoe_api_v1 = Her::API.new

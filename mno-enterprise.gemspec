@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ["arnaud.lachaume@maestrano.com"]
   s.homepage    = "https://maestrano.com"
   s.summary     = "Maestrano Enterprise"
-  s.description = "Maestrano Enteprise is your application marketplace, out of the box."
+  s.description = "Maestrano Enterprise is your application marketplace, out of the box."
   s.license     = "Maestrano Enterprise License V1"
 
   s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.rdoc"]
