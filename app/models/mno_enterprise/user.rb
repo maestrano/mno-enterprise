@@ -59,6 +59,11 @@ module MnoEnterprise
     has_many :organizations, class_name: 'MnoEnterprise::Organization'
     has_one :deletion_request, class_name: 'MnoEnterprise::DeletionRequest'
     
+    
+    
+    #================================
+    # Class Methods
+    #================================
     # The auth_hash includes an email and password
     # Return nil in case of failure
     def self.authenticate(auth_hash)
@@ -72,6 +77,29 @@ module MnoEnterprise
       
       nil
     end
+    
+    # Override Devise to allow confirmation via original token
+    # Less secure but useful if user has been created by Maestrano Enterprise
+    # (happens when an orga_invite is sent to a new user)
+    #  
+    # Find a user by its confirmation token and try to confirm it.
+    # If no user is found, returns a new user with an error.
+    # If the user is already confirmed, create an error for the user
+    # Options must have the confirmation_token
+    def self.confirm_by_token(confirmation_token)
+      original_token     = confirmation_token
+      confirmation_token = Devise.token_generator.digest(self, :confirmation_token, confirmation_token)
+
+      confirmable = find_or_initialize_with_error_by(:confirmation_token, confirmation_token)
+      confirmable = find_or_initialize_with_error_by(:confirmation_token, original_token) if confirmable.errors.any?
+      confirmable.confirm! if confirmable.persisted?
+      confirmable.confirmation_token = original_token
+      confirmable
+    end
+    
+    #================================
+    # Instance Methods
+    #================================
     
     # Default value for failed attempts
     def failed_attempts

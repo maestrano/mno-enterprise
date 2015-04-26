@@ -13,9 +13,12 @@ module MnoEnterprise
     # end
 
     # GET /resource/confirmation?confirmation_token=abcdef
-    # def show
-    #   super
-    # end
+    # Override to sign user in
+    def show
+      super do |resource|
+        sign_in resource unless resource.errors.any?
+      end
+    end
   
     # TODO: specs
     # GET /resource/confirmation/lounge
