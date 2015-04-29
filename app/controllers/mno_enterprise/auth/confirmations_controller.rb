@@ -36,11 +36,14 @@ module MnoEnterprise
     end
     
     # POST /resource/confirmation/finalize
+    # Confirm a new user and update 
     def finalize
-      self.resource = resource_class.confirm_by_token(params[:user].delete(:confirmation_token))
+      @confirmation_token = params[:user].delete(:confirmation_token)
+      self.resource = resource_class.find_for_confirmation(@confirmation_token)
 
       if resource.errors.empty?
-        self.resource.update_attributes(params[:user])
+        resource.update_attributes(params[:user]) unless resource.confirmed?
+        resource.perform_confirmation(@confirmation_token)
         sign_in resource
         set_flash_message(:notice, :confirmed) if is_flashing_format?
         respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
