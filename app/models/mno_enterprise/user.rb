@@ -78,6 +78,12 @@ module MnoEnterprise
       nil
     end
     
+    #================================
+    # Devise Confirmation
+    # TODO: should go in a module
+    #================================
+    
+    
     # Override Devise to allow confirmation via original token
     # Less secure but useful if user has been created by Maestrano Enterprise
     # (happens when an orga_invite is sent to a new user)
@@ -87,14 +93,25 @@ module MnoEnterprise
     # If the user is already confirmed, create an error for the user
     # Options must have the confirmation_token
     def self.confirm_by_token(confirmation_token)
+      confirmable = self.find_for_confirmation(confirmation_token)
+      confirmable.perform_confirmation(confirmation_token)
+      confirmable
+    end
+    
+    # Find a user using a confirmation token
+    def self.find_for_confirmation(confirmation_token)
       original_token     = confirmation_token
       confirmation_token = Devise.token_generator.digest(self, :confirmation_token, confirmation_token)
-
+      
       confirmable = find_or_initialize_with_error_by(:confirmation_token, confirmation_token)
       confirmable = find_or_initialize_with_error_by(:confirmation_token, original_token) if confirmable.errors.any?
-      confirmable.confirm! if confirmable.persisted?
-      confirmable.confirmation_token = original_token
       confirmable
+    end
+    
+    # Confirm the user and store confirmation_token
+    def perform_confirmation(confirmation_token)
+      self.confirm! if self.persisted?
+      self.confirmation_token = confirmation_token
     end
     
     #================================
