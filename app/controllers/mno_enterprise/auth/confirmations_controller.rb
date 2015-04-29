@@ -13,10 +13,39 @@ module MnoEnterprise
     # end
 
     # GET /resource/confirmation?confirmation_token=abcdef
-    # Override to sign user in
+    # Override to display a form for the user to fill the final registration details
     def show
-      super do |resource|
-        sign_in resource unless resource.errors.any?
+      @confirmation_token = params[:confirmation_token]
+      self.resource = resource_class.find_for_confirmation(@confirmation_token)
+      
+      # Exit if no resources
+      unless resource.errors.empty?
+        respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+        return
+      end
+      
+      # Case 1: user is confirmed but trying to confirm a new email address (change of email)
+      # Case 2: user is a new user - in this case a form is displayed with final details to fill
+      if resource.confirmed?
+        resource.perform_confirmation(@confirmation_token)
+        sign_in(resource)
+        set_flash_message(:notice, :confirmed) if is_flashing_format?
+        respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+        return
+      end
+    end
+    
+    # POST /resource/confirmation/finalize
+    def finalize
+      self.resource = resource_class.confirm_by_token(params[:user].delete(:confirmation_token))
+
+      if resource.errors.empty?
+        self.resource.update_attributes(params[:user])
+        sign_in resource
+        set_flash_message(:notice, :confirmed) if is_flashing_format?
+        respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+      else
+        respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
       end
     end
   
