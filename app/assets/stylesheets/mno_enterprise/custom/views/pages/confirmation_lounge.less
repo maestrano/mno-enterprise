@@ -6,7 +6,8 @@
   height: 100%;
 }
 
-.confirmation-lounge h4.bold {
+.confirmation-lounge h4 {
+  color: @text-inverse-color;
   font-weight: 400;
 }
 
@@ -14,10 +15,17 @@
   text-align: center;
   font-size: 14px;
   font-weight: 300;
-  color: #abc4c6;
+  color: @elem-cozy-color;
 }
 
 .confirmation-lounge i.fa.fa-envelope {
   color: @elem-cozy-color;
   font-size: 160px;
+}
+
+.confirmation-lounge form .form-group input {
+  outline: 0;
+  border-bottom: solid 1px @bg-on-bg-inverse-color;
+  padding-left: 2px;
+  .border-bottom-radius(0px);
 }

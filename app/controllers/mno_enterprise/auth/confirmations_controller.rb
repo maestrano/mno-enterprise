@@ -44,6 +44,7 @@ module MnoEnterprise
       if resource.errors.empty?
         resource.update_attributes(params[:user]) unless resource.confirmed?
         resource.perform_confirmation(@confirmation_token)
+        resource.save
         sign_in resource
         set_flash_message(:notice, :confirmed) if is_flashing_format?
         respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }

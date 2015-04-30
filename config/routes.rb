@@ -42,7 +42,7 @@ MnoEnterprise::Engine.routes.draw do
   # TODO: routing specs
   devise_scope :user do
     get "/auth/users/confirmation/lounge", to: "auth/confirmations#lounge", as: :user_confirmation_lounge
-    post "/auth/users/confirmation/finalize", to: "auth/confirmations#finalize", as: :user_confirmation_finalize
+    patch "/auth/users/confirmation/finalize", to: "auth/confirmations#finalize", as: :user_confirmation_finalize
     patch "/auth/users/confirmation", to: "auth/confirmations#update"
   end
   
