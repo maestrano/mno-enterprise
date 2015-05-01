@@ -33,6 +33,10 @@ module MnoEnterprise
         respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
         return
       end
+      
+      # Check if phone number should be required
+      # Bypassed for invited users
+      @phone_required = resource.organizations.map(&:users).flatten.count == 1
     end
     
     # POST /resource/confirmation/finalize

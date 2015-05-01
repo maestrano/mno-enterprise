@@ -1,49 +1,35 @@
 %div{ 'ng-init' => "user = { $pwdScore: {}, email: '#{params['email']}' }" }
+
 = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { 'name' => 'form', :class => 'form-horizontal autofill-detect', :autocomplete => "off" }) do |f|
+  
   - unless devise_error_messages!.empty?
     .row
       .alert.alert-error
         %button.close ×
         = devise_error_messages!
   
-  .form-group
-    .col-sm-12
-      = f.text_field :name, placeholder: "*First Name", required: true, 'ng-model' => 'user.firstName', class:'form-control'
-  
-  .form-group
-    .col-sm-12
-      = f.text_field :surname, placeholder: "*Last Name", required: true, 'ng-model' => 'user.lastName', class: 'form-control'
-  
-  .form-group
+  .row
     .col-sm-12
       = f.email_field :email, placeholder: "*Email", :required => true, 'ng-model' => 'user.email', :class => 'form-control'
   
-  .form-group
+  %br
+  
+  .row
     .col-sm-12
       = f.text_field :company, placeholder: "Company", 'ng-model' => 'user.company', class: 'form-control'
   
-  .form-group
+  %br
+  
+  .row
     .col-sm-12
-      .phone
-        = f.select :phone_country_code, options_for_select(Country.all.map { |country,code| c = Country.new(code); ["#{c.alpha2} +#{c.country_code}", code]}, "AU"), {}, class: 'form-control'
-        = f.text_field :phone, :placeholder => "Phone (optional)", 'ng-model' => 'user.phone_number', :class => 'form-control'
-  .form-group
+      .checkbox-section.text-center
+        = check_box_tag 'tos', 'accept', false, :required => true, :style => "margin-top: -3px;", 'ng-model' => 'acceptTos'
+        %label{for: 'tos'} I accept the
+        = link_to "Terms of Use", 'terms_path', :target => '_blank'
+  
+  %br
+  .row
     .col-sm-12
-      .input-group
-        = f.password_field :password, :placeholder => "*Choose Password", 'ng-model' => 'user.password', class: 'form-control', 'ng-minlength' => 6, 'mno-password-strength' => true, "password-score" => 'user.$pwdScore', :required => true
-        %span.input-group-addon.pw-strength-indicator{'ng-class' => 'user.$pwdScore.class' }
-          {{ user.$pwdScore.value }}
-      
-      .text-center{ 'ng-show' => 'user.$pwdScore.showTip' }
-        %small.text-danger Password is not strong enough. Try mixing letters, numbers and cases
-  .form-group
-    .col-sm-12
-      = f.password_field :password_confirmation, :placeholder => "*Confirm Password", :required => true, 'ng-model' => 'user.passwordRepeat', 'mno-match' => "user.password", :class => 'form-control'
-  .form-group
-    .checkbox-section.text-center
-      = check_box_tag 'tos', 'accept', false, :required => true, :style => "margin-top: -3px;", 'ng-model' => 'acceptTos'
-      %label{for: 'tos'} I accept the
-      = link_to "Terms of Use", 'terms_path', :target => '_blank'
-  %div.text-center
-    %button{ :class => "btn btn-success", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'form.$invalid', 'ng-hide' => 'hasClicked' } Create my account!
-    %img.ng-hide{ 'ng-src' => asset_path('mno_enterprise/loader-32x32-bg-inverse.gif'), 'ng-show' => 'hasClicked' }
+      .text-center
+        %button{ :class => "btn btn-warning", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'form.$invalid', 'ng-hide' => 'hasClicked' } Create my account!
+        %img.ng-hide{ 'ng-src' => asset_path('mno_enterprise/loader-32x32-bg-inverse.gif'), 'ng-show' => 'hasClicked' }

@@ -1,16 +1,12 @@
 .registration
-  .spacer5.hidden-xs.hidden-sm
-  .banners.promo
-    .container
-      .row
-        .col-md-6.col-md-offset-3
-          .align-center
-            %h4 Sign Up
-          
+  .container
+    .row
+      .login-box-wrapper
+        .login-box-title
+          %h2 Sign Up
+        .login-box
+          .brand-logo
           = render "form"
-          
           %hr
-          
-          .text-center
-            = render "devise/shared/links"
+          = render "devise/shared/links"
 
