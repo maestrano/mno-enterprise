@@ -38,8 +38,8 @@ This script will setup a bunch of symlinks for nginx, upstart and monit pointing
 That's it. You should be done!
 
 ## Loader gif Reference
-**bg-main**
+**bg-main** - mno_enterprise/loader-32x32-bg-main.gif
 http://spiffygif.com/?color=ebe5ff&lines=8&bgColor=aeb5bf&length=4&radius=7&width=4&halo=false
 
-**bg-inverse**
+**bg-inverse** - mno_enterprise/loader-32x32-bg-inverse.gif
 http://spiffygif.com/?color=977bf0&lines=8&length=4&radius=7&width=4&halo=false
