@@ -40,7 +40,13 @@ module MnoEnterprise
     def finalize
       @confirmation_token = params[:user].delete(:confirmation_token)
       self.resource = resource_class.find_for_confirmation(@confirmation_token)
-
+      
+      # Exit action and redirect if user is already confirmed
+      if resource && resource.confirmed?
+        redirect_to after_confirmation_path_for(resource_name, resource)
+        return
+      end
+      
       if resource.errors.empty?
         resource.update_attributes(params[:user]) unless resource.confirmed?
         resource.perform_confirmation(@confirmation_token)

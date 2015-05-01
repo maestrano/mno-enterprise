@@ -101,8 +101,20 @@ module MnoEnterpriseApiTestHelper
           @_stub_list.each do |key,stub|
             params = stub[:params] && stub[:params].any? ? "?#{stub[:params].to_param}" : ""
             path = "#{stub[:path]}#{params}"
+            
             receiver.send(stub[:method] || :get,path) { |env|
-              resp = stub[:response].is_a?(Proc) ? stub[:response].call : (stub[:response] || {})
+              body = Rack::Utils.parse_nested_query(env.body)
+              
+              # respond_with takes a model in argument and automatically responds with
+              # a json representation of the model
+              # If the action is an update, it attempts to update the model
+              if model = stub[:respond_with]
+                model.assign_attributes(body['data']) if stub[:method] == :put && model.respond_to?(:assign_attributes) && body['data']
+                resp = from_api(model)
+              else
+                resp ||= stub[:response].is_a?(Proc) ? stub[:response].call(body) : (stub[:response] || {})
+              end
+              
               puts "Consumed stub #{stub} with resp: #{resp}"
               [stub[:code] || 200, {}, resp.to_json] 
             }
