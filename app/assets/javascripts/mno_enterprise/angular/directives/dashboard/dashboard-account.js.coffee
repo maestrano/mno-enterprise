@@ -4,15 +4,17 @@ module = angular.module('maestrano.dashboard.dashboard-account',['maestrano.asse
 #
 #============================================
 module.controller('DashboardAccountCtrl',[
-  '$scope','CurrentUserSvc','DashboardUser','Miscellaneous','Utilities',
-  ($scope, CurrentUserSvc, DashboardUser, Miscellaneous, Utilities) ->
+  '$scope','CurrentUserSvc','DashboardUser','Miscellaneous','Utilities', 'AssetPath',
+  ($scope, CurrentUserSvc, DashboardUser, Miscellaneous, Utilities, AssetPath) ->
     CurrentUserSvc.loadDocument()
     CurrentUserSvc.then ->
 
       # Scope init
+      $scope.assetPath = AssetPath
       $scope.countryCodes = Miscellaneous.countryCodes
       $scope.errors = {}
       $scope.success = {}
+      
       # User model init
       $scope.isPersoInfoOpen = true
       userDocument = CurrentUserSvc.document.current_user
