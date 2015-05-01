@@ -11,18 +11,21 @@
           <li ng-repeat="error in modal.errors">{{error}}</li>
         </ul>
       </div>
-
-      <div ng-show="data.currentBillingType == 'monthly'">
-        <p class="text-error align-center">
-          <strong>Please note this app is on a monthly plan. Your billing for this app will be calculated pro rata.</strong>
-        </p>
-        <hr>
+      
+      <p class="text-center"><small>In order to delete your app, please enter the following statement in the box below.</small></p>
+      
+      <div class="spacer1"></div>
+      
+      <p class="text-error text-center">{{sentence}}</p>
+      
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <input type="text" ng-model="sentenceCheck" class='form-control text-center' required>
+        </div>
       </div>
-      <p><small><em>In order to delete your app, please enter the following statement in the box below:</em></small></p>
-      <p class="text-error align-center">{{sentence}}</p>
-      <div class="align-center">
-        <input type="text" style="width: 390px;" ng-model="sentenceCheck" required>
-      </div>
+      
+      <div class="spacer1"></div>
+      
     </div>
     <div class="modal-footer">
       <button class="btn" ng-click="modal.close()">Cancel</button>
