@@ -66,7 +66,8 @@ MnoEnterprise::Engine.routes.draw do
           put :remove_member
         end
         
-        resources :app_instances, only: [:index]
+        # AppInstances
+        resources :app_instances, only: [:index,:destroy], shallow: true
         
         # Currently stubbed
         resources :teams, only: [:index]

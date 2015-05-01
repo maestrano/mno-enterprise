@@ -6,5 +6,13 @@ module MnoEnterprise
       @app_instances = parent_organization.app_instances.select { |i| i.active? && i.updated_at > Time.at(timestamp) }
     end
     
+    # DELETE /mnoe/jpi/v1/app_instances/1
+    def destroy
+      app_instance = MnoEnterprise::AppInstance.find(params[:id])
+      authorize! :manage_app_instances, app_instance.owner
+      app_instance.terminate if app_instance
+      
+      head :accepted
+    end
   end
 end

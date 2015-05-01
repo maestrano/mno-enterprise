@@ -126,7 +126,7 @@ angular.module('maestrano.services.apps-list-helper', []).factory( 'AppsListHelp
 
       isLaunchHidden: (instance) ->
         instance.status == 'terminating' || instance.status == 'terminated' || this.isNewOfficeApp(instance)
-
+      
       # Deprecated?
       isStartShown: (instance) ->
         if instance.stack? && instance.stack.match(/^(cloud|connector)$/i)

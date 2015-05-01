@@ -112,7 +112,12 @@ module MnoEnterpriseApiTestHelper
                 model.assign_attributes(body['data']) if stub[:method] == :put && model.respond_to?(:assign_attributes) && body['data']
                 resp = from_api(model)
               else
-                resp ||= stub[:response].is_a?(Proc) ? stub[:response].call(body) : (stub[:response] || {})
+                if stub[:response].is_a?(Proc)
+                  args = stub[:response].arity > 0 ? [body] : []
+                  resp = stub[:response].call(*args)
+                else
+                  resp = stub[:response] || {}
+                end
               end
               
               puts "Consumed stub #{stub} with resp: #{resp}"

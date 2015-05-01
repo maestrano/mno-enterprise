@@ -21,6 +21,7 @@ FactoryGirl.define do
       soa_enabled true
       
       app { build(:app).attributes }
+      owner { build(:organization).attributes }
       
       # Properly build the resource with Her
       initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }

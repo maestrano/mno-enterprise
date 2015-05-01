@@ -60,7 +60,10 @@ angular.module('maestrano.services.dashboard.apps-document', []).factory('Dashbo
 
   # Force the service to reload
   service.reload = ->
+    self = service
     self.stopAutoRefresh()
+    self.config.timestamp = 0
+    angular.copy({},self.data)
     self.load(true).then(self.startAutoRefresh)
 
   # Setup the service

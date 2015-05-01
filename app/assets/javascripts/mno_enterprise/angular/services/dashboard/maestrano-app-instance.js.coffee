@@ -2,7 +2,7 @@ angular.module('maestrano.services.dashboard.app-instance', []).factory('Dashboa
   service = {}
 
   service.terminate = (id) ->
-    return $http.put("/app_instances/#{id}/terminate")
+    return $http.delete("/mnoe/jpi/v1/app_instances/#{id}")
 
   service.restart = (id) ->
     return $http.put("/app_instances/#{id}/restart")

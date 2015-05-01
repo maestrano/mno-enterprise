@@ -48,10 +48,16 @@ module MnoEnterprise
     belongs_to :owner, class_name: 'MnoEnterprise::Organization'
     belongs_to :app, class_name: 'MnoEnterprise::App'
     
+    # Send a request to terminate the AppInstance
+    # Alias of destroy
+    # TODO: specs
+    def terminate
+      self.destroy
+    end
+    
     # Return true if the instance can be considered active
     def active?
-      ACTIVE_STATUSES.include?(self.status.to_sym) ||
-      (TERMINATION_STATUSES.include?(self.status.to_sym) && self.terminated_at > 3.minutes.ago)
+      ACTIVE_STATUSES.include?(self.status.to_sym)
     end
     
     def running?
