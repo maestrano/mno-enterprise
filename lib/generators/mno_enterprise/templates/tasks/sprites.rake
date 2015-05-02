@@ -1,4 +1,4 @@
-require 'sprite_factory'
+# require 'sprite_factory'
 
 namespace :assets do
   desc 'recreate sprite images and css'
