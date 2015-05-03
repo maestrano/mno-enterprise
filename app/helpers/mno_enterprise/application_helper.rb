@@ -32,5 +32,29 @@ module MnoEnterprise
       true
     end
     
+    def notice_hash(notice)
+      return {} unless notice
+      # TODO: refactor
+      auto_close = (notice =~ /signed (in|out)/i ? 5*1000 : nil)
+      # Check if a timeout has been defined in flash
+      unless auto_close
+        auto_close = flash[:flash_options][:timeout] if flash[:flash_options] && flash[:flash_options][:timeout]
+      end
+
+      {
+        type:'success',
+        msg: (notice || '').html_safe,
+        timeout: auto_close
+      }
+    end
+
+    def alert_hash(alert)
+      return {} unless alert
+      {
+        type:'danger',
+        msg: (alert || '').html_safe,
+        timeout: -1
+      }
+    end
   end
 end
