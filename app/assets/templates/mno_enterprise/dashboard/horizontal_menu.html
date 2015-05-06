@@ -1,0 +1,77 @@
+<!-------------------------->
+<!--  Top Horizontal Menu -->
+<!-------------------------->
+
+<nav class="navbar menu horizontal">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#maestrano-dashboard-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/">
+        <div class="brand-logo"></div>
+      </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="maestrano-dashboard-navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li ng-show="!selectBoxisEmpty()">
+          <div class="dashboard-button" ng-class="isButtonActive('/') && 'active'">
+            <a href="#/" class="content">
+              <i class="dhb-icon-dashboard"></i>
+              <div>Dashboard</div>
+            </a>
+          </div>
+        </li>
+        <li>
+          <div ng-class="isButtonActive('/account') && 'active'" class="dashboard-button">
+            <a href="#/account" class="content">
+              <i class="dhb-icon-account"></i>
+              <div>My Account</div>
+            </a>
+          </div>
+        </li>
+        <li ng-show="!selectBoxisEmpty()">
+          <div ng-class="isButtonActive('/company') && 'active'" class="dashboard-button">
+            <a href="#/company" class="content">
+              <i class="dhb-icon-company"></i>
+              <div>Company</div>
+            </a>
+          </div>
+        </li>
+        <li ng-show="!selectBoxisEmpty()">
+          <div ng-class="isButtonActive('/marketplace') && 'active'" class="dashboard-button">
+            <a href="#/marketplace" class="content">
+              <i class="dhb-icon-marketplace"></i>
+              <div>Marketplace</div>
+            </a>
+          </div>
+        </li>
+      </ul>
+
+      <!-------------------------->
+      <!--     Top Right Menu   -->
+      <!-------------------------->
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <div class="dashboard-button">
+            <a href="#/account" class="content">
+              <div>{{ selectBox.userLabel }}</div>
+            </a>
+          </div>
+        </li>
+        <li>
+          <div class="dashboard-button">
+            <a href="/mnoe/auth/users/sign_out" class="content">
+              <div>Log off</div>
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
