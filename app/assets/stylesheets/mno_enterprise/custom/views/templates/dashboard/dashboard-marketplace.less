@@ -22,15 +22,11 @@
   // App Card
   //-------------------------------
   .marketplace-app-card {
-    display: block;
-    padding: 10px;
-    height: 120px;
     background-color: @dashboard-marketplace-tile-bg-color;
-    margin-bottom: 10px;
     color: rgb(51, 51, 51);
     cursor: pointer;
-    font-weight: 300;
-    
+    @dashboard-marketplace-app-card();
+
     &:hover {
       text-decoration: none;
       background-color: @dashboard-marketplace-tile-hover-bg-color;

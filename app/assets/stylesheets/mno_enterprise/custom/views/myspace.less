@@ -193,8 +193,13 @@
 
   // Horizontal menu
   &.horizontal {
+    @dashboard-side-menu-horizontal();
     z-index:100;
-    min-width:550px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
 
     // Side menu brand logo
     .brand-logo {
@@ -220,6 +225,7 @@
     .dashboard-button a {
       padding: 10px;
       display: block;
+      text-decoration: none;
     }
   }
   
@@ -338,6 +344,8 @@
 .myspace .app-dashboard.add-app {
   padding:15px 0px;
   font-size:140px;
+  color: @dashboard-apps-tile-add-color;
+  background-color: @dashboard-apps-tile-add-bg-color;
 }
 .myspace .app-dashboard.add-app a {
   color: @dashboard-bg-color;
