@@ -132,14 +132,22 @@
     background-color: @dashboard-side-menu-link-active-bg-color;
   }
 
-  // Dashboard Button Content > Normal State
-  .dashboard-button:hover .content {
-    color: @dashboard-side-menu-link-hover-color;
-  }
-
   // Dashboard Button Content > Active State
   .dashboard-button.active .content, .dashboard-button.active:hover .content {
     color: @dashboard-side-menu-link-active-color;
+    background-color: @dashboard-side-menu-link-active-bg-color;
+  }
+
+  // Dashboard Button Content > Normal State
+  .dashboard-button .content {
+    color: @dashboard-side-menu-link-color;
+    background-color: @dashboard-side-menu-link-bg-color;
+  }
+
+  // Dashboard Button Content > Normal State Hover
+  .dashboard-button:hover .content {
+    color: @dashboard-side-menu-link-active-color;
+    background-color: @dashboard-side-menu-link-active-bg-color;
   }
   
   // Vertical menu
