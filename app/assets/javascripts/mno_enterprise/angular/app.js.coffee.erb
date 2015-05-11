@@ -17,7 +17,8 @@
     'maestrano.notifications',
     'maestrano.services',
     'maestrano.filters',
-    'maestrano.dashboard'
+    'maestrano.dashboard',
+    'maestrano.impac',
   ])
 
 # Configure the http headers for AJAX requests
@@ -71,6 +72,9 @@
       }).
       when('/marketplace/:appId', {
         template: "<div dashboard-marketplace-app></div>"
+      }).
+      when('/impac', {
+        template: "<div impac-index></div>"
       }).
       otherwise({
         redirectTo: '/'

@@ -1,181 +1,205 @@
-
 //-----------------------------
 // Modals
 //-----------------------------
-  .modal-add .modal-body {
+.modal-add .modal-body {
 
-    .widgets-panel {
-      width: 100%;
-      border-radius: 4px;
-      // color: @titleBgColor;
-      color: @bg-inverse-intense-color;
-      // color: @decorator-main-color;
-      background-color: white;
-      padding: 5px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      max-height: 550px;
+  .widgets-panel {
+    width: 100%;
+    border-radius: 4px;
+    // color: @bg-inverse-intense-color;
+    color: @bg-inverse-intense-color;
+    // color: @decorator-main-color;
+    background-color: @bg-inverse-color;
+    padding: 5px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 550px;
 
-      .panel-heading {
-        cursor: pointer;
-        background-color: #f5f5f5;
+    .panel-heading {
+      cursor: pointer;
+      background-color: #f5f5f5;
 
-        h1.panel-title {
-          color: @titleBgColor;
-          font-size: 20px;
+      h1.panel-title {
+        color: @bg-inverse-intense-color;
+        font-size: 20px;
+      }
+    }
+
+    .panel-body {
+      padding: 8px;
+
+      .tooltip {
+        .tooltip-inner {
+          &.ng-binding {
+            background-color: @bg-inverse-intense-color;
+            color: @elem-positive-color;
+          }
         }
       }
 
-      .panel-body {
-        padding: 8px;
-
-        .tooltip {
-          .tooltip-inner {
-            &.ng-binding {
-              background-color: @bg-inverse-intense-color;
-              color: @elem-positive-color;
-            }
+      .widget {
+        min-height: 133px;
+        margin-bottom: 5px;
+        padding-top: 8px;
+        cursor: pointer;
+        border-radius: 3px;
+        .icon {
+          height: 80px;
+          width: 80px;
+          border: solid 1px @bg-main-color;
+          border-radius: 2px;
+          background-color: @bg-inverse-color;
+          i {
+            color: @bg-inverse-intense-color;
+            margin-left: 4px;
+            margin-top: 19px;
+          }
+          img {
+            margin-top: 12px;
           }
         }
-
-        .widget {
-          min-height: 133px;
-          margin-bottom: 5px;
-          padding-top: 8px;
+        label {
+          font-weight: normal;
           cursor: pointer;
-          border-radius: 3px;
-          .icon {
-            height: 80px;
-            width: 80px;
-            border: solid 1px @bg-main-color;
-            border-radius: 2px;
-            background-color: white;
-            i {
-              color: @titleBgColor;
-              margin-left: 4px;
-              margin-top: 19px;
-            }
-            img {
-              margin-top: 12px;
-            }
-          }
-          label {
-            font-weight: normal;
-            cursor: pointer;
+        }
+      }
+
+      .widget:hover {
+        background-color: @bg-main-color;
+        // background-color: #f5f5f5;
+        .icon {
+          i {
+            color: darken(@decorator-inverse-color,3%), ;
           }
         }
+        label {
+          // text-decoration: underline;
+        }
+      }
+    }
+  }
+}
 
-        .widget:hover {
-          background-color: @bg-main-color;
-          // background-color: #f5f5f5;
-          .icon {
-            i {
-              color: darken(@elem-cozy-color,3%), ;
-            }
+.modal-custom-calculation .modal-body {
+  .edit {
+    color: @darkblue;
+    padding: 5px;
+    h4 {
+      margin: 0;
+      margin-bottom: 8px;
+      text-align: left;
+      .font(15px,300,@darkblue);
+    }
+    .part {
+      width: 49%;
+      margin-bottom: 8px;
+      padding: 10px 0px;
+      background-color: #f3f4f4;
+      color: #626d6d;
+      border: solid 1px #f3f4f4;
+      h5 {
+        margin: 0;
+        margin-bottom: 10px;
+        padding: 0px 15px;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+      label {
+        font-weight: normal;
+      }
+      .widget-lines-container {
+        .widget-line {
+          padding: 5px 10px 5px 18px;
+          &:nth-child(even) {
+            background-color: #f3f4f4;
           }
-          label {
-            // text-decoration: underline;
+          .fa {
+            float: right;
+            font-size: 20px;
+            cursor: pointer;
+            &.fa-toggle-on {
+              color: @decorator-inverse-color;
+            }
+            &.fa-toggle-off {
+              color: @lightergray;
+            }
           }
         }
       }
     }
   }
-
-  .modal-custom-calculation .modal-body {
-    .edit {
-      color: @bg-inverse-color;
-      padding: 5px;
-      h4 {
-        margin: 0;
-        margin-bottom: 8px;
-        text-align: left;
-        .font(15px,300,@bg-inverse-color);
-      }
-      .part {
-        margin-bottom: 8px;
-        padding-top: 5px;
-        padding-bottom: 8px;
-        padding-left: 10px;
-        padding-right: 10px;
-        border: 1px solid @bg-main-color;
-        background-color: #f5f5f5;
-        // font-weight: 200;
-        color: #626d6d;
-        h5 {
-          margin: 0;
-          margin-bottom: 4px;
-          padding: 0;
-          .font(14px,bold,#626d6d);
-        }
-        input[type="checkbox"], input[type="radio"] {
-          margin: 0;
-          margin-right: 3px;
-          padding: 0;
-          width: 13px;
-          height: 13px;
-          vertical-align: middle;
-          position: relative;
-          top: -1px;
-          outline: none;
-        }
-        input[type="range"] {
-          height: 20px;
-        }
-        label {
-          font-weight: normal;
-        }
-        li {
-          margin-bottom: 2px;
-        }
-        ul {
-          margin-bottom: 0px;
-        }
-      }
+  .loader {
+    // margin-top: 75px;
+    color: @decorator-main-color;
+    font-weight: bold;
+    .gif {
+      display: block;
+      margin-top: 10px;
     }
-    .loader {
-      // margin-top: 75px;
-      color: @decorator-main-color;
-      font-weight: bold;
-      .gif {
-        display: block;
-        margin-top: 10px;
-      }
-    }
-  } 
+  }
+} 
 
 .analytics {
   //-----------------------------
   // Format Dashboard Selection
   // and data sources
   //-----------------------------
-  padding: 5px;
-
   .head-title {
     padding: 5px;
+    .text-info {
+      color: @elem-positive-flash-color;
+    }
   }
 
-  .dashboard-search {
-    padding-right: 5px;
-    padding-left: 5px;
-    .search-label {
-      line-height: 41px;
-      padding-right: 10px;
+  .dashboard-select {
+    margin: 5px 0px 10px 100px;
+    height: auto;
+    border-left: 1px solid @decorator-inverse-color;
+    border-bottom: 1px solid @decorator-inverse-color;
+    width: 300px;
+    background-color: @bg-main-color;
+    cursor: pointer;
+    .option {
+      padding: 5px 10px 5px 10px;
+      color: @lightergray;
+      @bg-inverse-color-space: nowrap;
+      &:hover {
+        background-color: @bg-inverse-color;
+      }
+      &.create {
+        background-color: @decorator-inverse-color;
+        color: @bg-inverse-color;
+      }
+      &.create:hover {
+        background-color: darken(@decorator-inverse-color,10%);
+      }
     }
-    .data-source-label {
-      padding-left: 3px;
-    }
+  }
+
+  .dashboard-label {
+    color: @bg-inverse-color;
+    display: inline;
   }
   
   .dashboard-title {
-    .data-source-label {
-      padding-left: 2px;
+    color: @decorator-inverse-color;
+    display: inline;
+    cursor: pointer;
+    &:hover {
+      color: darken(@decorator-inverse-color,10%);
     }
   }
 
-  .buttons-bar {
-    padding-right: 5px;
+  .data-source-label {
+    color: @bg-on-bg-inverse-color;
+    padding-left: 3px;
+    margin: 0px;
   }
-  
+
+  .buttons-bar {
+    padding-top: 64px;
+  }
+
   //----------------------------
   // Format top menu actions
   //----------------------------
@@ -188,7 +212,7 @@
 
   select {
     margin-top: 5px;
-    background-color: white;
+    background-color: @bg-inverse-color;
     height: 32px;
   }
   
@@ -210,75 +234,94 @@
     }
 
     .widget-item {
-      padding: 5px;
+      padding: 12px;
 
       &.new_row {
-        clear: both;
+        // disabled to test double-height widgets (like accounts comparison)
+        // clear: both;
       }
 
       .top-line {
         cursor: move;
-        height: 32px;
-        background-color: #17262d;
-        padding: 5px 5px 0 8px;
+        background-color: @bg-inverse-color;
+        padding: 10px 10px 0px 10px;
         border-radius: 5px 5px 0px 0px;
+        min-height: 41px;
 
         .btn {
           float: right;
           background: transparent;
           border: none;
-          color: black;
-          padding: 0;
-          padding-top: 1px;
+          color: silver;
+          padding: 0px;
           margin-left: 3px;
           outline: none;
-        }
 
-        .btn.btn-edit:hover {
-          color: @elem-positive-color;
-        }
+          &:active, &:focus {
+              -webkit-box-shadow: none;
+            }
 
-        .btn.btn-editmode {
-          color: @elem-positive-color;
-        }
-
-        .btn.btn-close:hover {
-          color: @brand-danger;
-        }
-
-        .title-wrapper {
-          width: 100%;
-          margin-top: 1px;
-          .title {
-            display: inline;
-            text-transform: uppercase;
-            .font(14px,300,white);
-            text-align: left;
-            cursor: text;
+            &.btn-edit {
+              font-size: 18px;
+              &:hover {
+                color: darken(@elem-positive-color,10%);
+              }
+              span {
+                vertical-align: top;
+              }
+            }
+            &.btn-editmode {
+              font-size: 18px;
+              color: darken(@elem-positive-color,10%);
+              span {
+                vertical-align: top;
+              }
+            }
+            &.btn-close {
+              // Not used as the button contains an image
+              &:hover {
+                color: @brand-danger;
+              }
+              img {
+                vertical-align: top;
+              }
+            }
           }
-          .editable-wrap {
-            width: 75%;
-            .editable-controls {
-              width: 100%;
-              .editable-input {
-                height: 23px;
+
+          .title-wrapper {
+            width: 100%;
+            padding: 0px 10px 10px 10px;
+            border-bottom: solid 1px #e6e6e6;
+            @bg-inverse-color-space: nowrap;
+            .title {
+              display: inline;
+              text-transform: uppercase;
+              .font(12px,600,#5b6667);
+              text-align: left;
+              cursor: text;
+            }
+            .editable-wrap {
+              height: 20px;
+              width: 75%;
+              .editable-controls {
                 width: 100%;
+                .editable-input {
+                  height: 20px;
+                  font-size: 12px;
+                  text-transform: uppercase;
+                  width: 100%;
+                }
               }
             }
           }
         }
-      }
 
       .content {
-        padding: 5px;
+        padding: 10px;
         border-radius: 0px 0px 5px 5px;
-        background-color:white;
+        background-color:@bg-inverse-color;
         min-height:250px;
         vertical-align:top;
-
-        // max-height: 250px;
-        // overflow-y: auto;
-        // overflow-x: hidden;
 
         a {
           font-weight: bold;
@@ -291,35 +334,69 @@
           text-align: center;
         }
 
+        .data-not-found {
+          text-align: center;
+          margin-top: 75px;
+          font-size: 18px;
+          color: #5B6667;
+          a {
+            color: @decorator-inverse-color;
+            display: block;
+            font-size: 16px;
+            font-weight: normal;
+          }
+        }
+
         .edit {
-          max-height: 240px;
+          max-height: 230px;
           overflow-y: auto;
           overflow-x: hidden;
           color: @bg-inverse-color;
-          padding: 5px;
+          padding: 2px;
+          font-size: 12px;
+
+          .btn {
+            border-radius: 2px;
+            margin-right: 5px;
+            padding: 3px 13px;
+            text-transform: uppercase;
+            font-size: 12px;
+
+            &.btn-default {
+              background-color: #c2c4c4;
+              border: solid 1px darken(#c2c4c4,10%);
+              color: @bg-inverse-color;
+              &:hover {
+                border: solid 1px darken(#c2c4c4,20%);
+                background-color: darken(#c2c4c4,10%);
+              }
+            }
+          }
+
           h4 {
             margin: 0;
             margin-bottom: 8px;
             text-align: left;
-            .font(15px,300,@bg-inverse-color);
+            .font(12px,normal,@bg-inverse-color);
           }
           .part {
             margin-bottom: 8px;
-            padding-top: 5px;
-            padding-bottom: 8px;
-            padding-left: 10px;
-            padding-right: 10px;
-            border: 1px solid @bg-main-color;
-            background-color: #f5f5f5;
-            // font-weight: 200;
+            padding: 10px 0px;
+            background-color: #f3f4f4;
             color: #626d6d;
+            border: 1px solid @bg-main-color;
             h5 {
               margin: 0;
-              margin-bottom: 4px;
-              padding: 0;
-              .font(14px,bold,#626d6d);
+              margin-bottom: 10px;
+              padding: 0px 15px;
+              text-transform: uppercase;
+              font-size: 12px;
             }
-            input[type="checkbox"], input[type="radio"] {
+            .input-group.select-account {
+              padding: 0px 5px;
+            }
+            
+            input[type="radio"] {
               margin: 0;
               margin-right: 3px;
               padding: 0;
@@ -330,17 +407,50 @@
               top: -1px;
               outline: none;
             }
+
             input[type="range"] {
               height: 20px;
             }
+
             label {
               font-weight: normal;
             }
-            li {
-              margin-bottom: 2px;
+
+            select.form-control {
+              margin: 0px;
+              border: solid 1px #acb0b1;
+              outline: none;
+              -webkit-box-shadow: none;
+              font-size: 13px;
+              color: #72728b;
             }
-            ul {
-              margin-bottom: 0px;
+
+            .chart-filters {
+              margin: 0px;
+            }
+
+            .time-range {
+              padding: 0px 5px;
+            }
+
+            .widget-lines-container {
+              .widget-line {
+                padding: 5px 10px 5px 18px;
+                &:nth-child(even) {
+                  background-color: #f3f4f4;
+                }
+                .fa {
+                  float: right;
+                  font-size: 20px;
+                  cursor: pointer;
+                  &.fa-toggle-on {
+                    color: @decorator-inverse-color;
+                  }
+                  &.fa-toggle-off {
+                    color: lighten(@bg-inverse-color,40%);
+                  }
+                }
+              }
             }
           }
         }
@@ -357,7 +467,7 @@
         h3 {
           margin: 0;
           text-align: left;
-          .font(20px,300,@bg-inverse-color);
+          .font(14px,300,@bg-inverse-color);
         }
 
         .h3-wrapper {
@@ -375,12 +485,46 @@
         }
 
         .histModeChoser {
+          width: 150px;
+          margin: auto;
+          padding-bottom: 8px;
+          border-bottom: solid 1px #e6e6e6;
+          .font(12px,500,#acb0b1);
           a {
-            color: @bg-main-color;
-            font-size: 12px;
+            .font(12px,500,#acb0b1);
+            text-transform: uppercase;
             &.active {
-              text-decoration: underline;
+              color: @decorator-inverse-color;
             }
+          }
+        }
+        .arrow-container {
+          width: 28px;
+          height: 28px;
+          position: relative;
+          top: -14px;
+          margin: auto;
+          &.right {
+            left: 30px;
+          }
+          &.left {
+            left: -30px;
+          }
+          .arrow-border {
+            border-top: 14px solid #e6e6e6;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            width: 0px;
+            height: 0px;
+          }
+          .arrow {
+            border-top: 14px solid #ffffff;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            position: relative;
+            top: 12px;
+            width: 0px;
+            height: 0px;
           }
         }
 
@@ -406,13 +550,14 @@
         .price {
           .font(22px,900,@bg-inverse-color);
           text-align: center;
+          margin-top: 30px;
         }
 
         .widget-lines-container {
-          max-height: 210px;
+          max-height: 200px;
           overflow-y: auto;
           overflow-x: hidden;
-          font-size: 14px;
+          font-size: 12px;
         }
 
         .widget-line {
@@ -421,10 +566,10 @@
           padding:5px;
           color:@text-inverse-color;
           &:nth-child(even) {
-            background-color:@bg-main-color;
+            background-color:@bg-on-bg-inverse-color;
           }
           &:nth-child(odd) {
-            background-color:white;
+            background-color:@bg-inverse-color;
           }
           .table-header {
             font-weight: bold;
@@ -445,15 +590,6 @@
           .pink {
             color: @brand-danger;
           }
-          .price {
-            margin-top: 85px;
-          }
-
-          &.accounting-value {
-            .price {
-              margin-top: 62px;
-            }
-          }
 
           &.assets-summary {
             .chart-container {
@@ -469,29 +605,75 @@
           
           &.balance {
             h3 {
-              margin-top: 15px;
+              margin-top: 30px;
               text-align: center;
             }
             .price {
-              margin-top: 40px;
+              margin-top: 0px;
             }
           }
 
           &.comparison {
+            min-height: 565px;
+            .add-account {
+              position: absolute;
+              right: 40px;
+              bottom: 30px;
+              width: 160px;
+              select {
+                font-size: 13px;
+                background-color: @decorator-inverse-color;
+                color: @bg-inverse-color;
+                outline: none;
+                border: none;
+                cursor: pointer;
+                &[disabled] {
+                  cursor: not-allowed;
+                  background-color: lighten(@decorator-inverse-color,10%);
+                  &:hover {
+                    background-color: lighten(@decorator-inverse-color,10%);
+                  }
+                }
+                &:hover {
+                  background-color: darken(@decorator-inverse-color,10%);
+                }
+                option {
+                  background-color: @bg-inverse-color;
+                  color: lighten(@bg-main-color,40%);
+                  &[disabled] {
+                    color:@bg-inverse-color;
+                  }
+                }
+              }
+            }
+            .border {
+              margin: 15px 0px;
+              border-color: #E6E6E6;
+              border-top: 0px;
+              border-left: 0px;
+              border-right: 0px;
+            }
+            button.close {
+              font-size: 15px;
+            }
             .legend {
               text-align: left;
-              max-height: 107px;
+              max-height: 103px;
               overflow-y: auto;
               overflow-x: hidden;
             }
+            .loader {
+              margin: 75px 0px 77px 0px;
+            }
             .row {
               margin: 0;
-            }
-            .col-md-6 {
-              padding: 0;
+              &.chart {
+                // min-height: 241px;
+              }
             }
             .widget-lines-container {
-              max-height: 203px;
+              font-size: 11px;
+              max-height: 240px;
             }
           }
 
@@ -501,6 +683,10 @@
               text-align: center;
               font-weight: bold;
             }
+
+            .price {
+              margin-top: 75px;
+            }
           }
 
           &.expenses-revenue {
@@ -508,10 +694,8 @@
               margin-top: 13px;
               margin-bottom: 8px;
             }
-            .history {
-              .legend {
-                font-weight: bold;
-              }
+            .legend {
+              font-weight: bold;
             }
           }
 
@@ -529,7 +713,7 @@
               }
             }
             .receivable {
-              margin-top: 20px;
+              // margin-top: 20px;
               .price {
                 margin: 0;
               }
@@ -544,13 +728,18 @@
         &.invoices {
 
           &.list {
+            .table-header {
+              .font(12px,500,#acb0b1);
+              text-transform: uppercase;
+            }
+            
             .tooltip {
               .tooltip-inner {
                 &.ng-binding {
                   text-align: left;
                   background-color: @bg-inverse-intense-color;
                   max-width: 100%;
-                  white-space: nowrap;
+                  @bg-inverse-color-space: nowrap;
                   strong {
                     color: @elem-positive-color;
                   }
@@ -561,6 +750,7 @@
             .widget-lines-container {
               .widget-line:hover {
                 background-color: @bg-main-color;
+                color: @bg-inverse-color;
                 cursor: pointer;
               }
             }
@@ -574,18 +764,11 @@
 
           &.summary {
             height: 250px;
-            a {
-              font-weight: bold;
-              color: @decorator-alt-color
-            }
             .chart-container {
               max-width: 410px;
             }
             .legend {
               height: 28px;
-            }
-            .price {
-              margin-top: 85px;
             }
             #myChart {
               margin-top: 8px;

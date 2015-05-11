@@ -14,6 +14,16 @@ angular.module('maestrano.services.miscellaneous', []).factory('Miscellaneous', 
   <% countryCodes = Country.all.map { |c| [c[1],"(#{c[1]}) +#{Country[c[1]].country_code}"] } %>
   service.countryCodes = <%= countryCodes %>
 
+  # TODO: retrive from ImpacDashboardingSvc
+  service.analyticsWidgets = <%= [''] %>
+
+  # <% impacGetWidgetUrl = "#{Settings.impac.protocol}://#{Settings.impac.host}#{Settings.impac.paths.get_widget}" %>
+  <% impacUrls = {get_widget: "#{Settings.impac.protocol}://#{Settings.impac.host}#{Settings.impac.paths.get_widget}"}.to_json %>
+  service.impacUrls = <%= impacUrls %>
+
+  <% tenantColors = {positive: Settings.impac.colors.positive, negative: Settings.impac.colors.negative, array: Settings.impac.colors.array}.to_json %>
+  service.impacTenantColors = <%= tenantColors %>
+
   return service
 
 ])

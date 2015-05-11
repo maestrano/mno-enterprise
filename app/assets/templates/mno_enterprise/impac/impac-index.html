@@ -1,0 +1,85 @@
+<div class="analytics">
+
+  <div class='row head-title'>
+    
+    <!-- Title and Dashboard selection -->
+    <div class="col-md-6">
+      
+      <h2>
+        <img ng-src="{{impacLogo}}" style="float: left; margin-right: 15px;" />
+        <div class="text-info" style="padding-top:12px; height: 48px;">Beta</div>
+      </h2>
+      
+      <h4 ng-hide='showChooseDhbMsg' class="dashboard-label">Dashboard:</h4>
+      
+      <h4 ng-hide='showChooseDhbMsg' class='dashboard-title' ng-click="(dashboardsList.length > 1 || showCreateDhb) ? showDashboardsList = !showDashboardsList : showDashboardsList = false">
+        {{currentDhb.full_name}}
+        <i class="fa fa-chevron-down" style="font-size: 18px;"></i>  
+      </h4>
+
+      <div collapse="!showDashboardsList" class='dashboard-select'>
+        <div ng-hide="dhb.id == currentDhbId" class='option' ng-repeat="dhb in dashboardsList" ng-click="selectDashboard(dhb.id)">{{dhb.full_name}}</div>
+        <div ng-show="showCreateDhb" class="option create" ng-click="modal.createDashboard.open()"><i class="fa fa-plus" /> Create Dashboard</div>
+      </div>
+
+      <p ng-hide='showChooseDhbMsg' class="data-source-label">
+        <small><b>Source:</b> {{currentDhb.organizationsNames}}</small>
+      </p>
+      
+    </div>
+
+    <!-- Buttons -->
+    <div class='col-md-6 buttons-bar'>
+      <div class='actions-panel'>
+        <button ng-click="modal.addWidget.open()" class='btn btn-warning' ng-show="showCreateWidget"><span class='fa fa-plus'></span> Add Widget</button>
+        <button ng-click="modal.createDashboard.open()" class='btn btn-warning' ng-show="showCreateDhb"><span class='fa fa-plus'></span> Create Dashboard</button>
+        <button ng-click="modal.deleteDashboard.open()" class='btn btn-danger' ng-show="showDeleteDhb">Delete</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Errors -->
+  <div class="alert alert-error" ng-show="errors">
+    <button class="close" ng-click="errors=''">×</button>
+    <ul>
+      <li ng-repeat="error in errors">{{error}}</li>
+    </ul>
+  </div>
+  
+  <!-- First Time Dashboard Creation -->
+  <div class="row text-center" ng-show='showChooseDhbMsg && !isLoading'>
+    <div class="spacer2"></div>
+    <div class='col-md-8 col-md-offset-2'>
+      <p><b>Looks like you do not have any dashboard yet!</b></p><p>Dashboards are a great way of visualizing your data and monitoring your business. Our smart widgets will give you deep insight on how your business performs every day in real time, all thanks to our patend data sharing platform <span>Connec!™</span></p>
+      <br>
+      <button ng-click="modal.createDashboard.open()" class='btn btn-lg btn-grey btn-grey-bordered'><span class='fa fa-plus'></span> Create a Dashboard!</button>
+      
+      <div class='spacer5'></div>
+      <p class="text-muted"><small><em>Note: dashboards you create will only be accessible by you. Dashboard sharing across users will be added soon.</em></small></p>
+    </div>
+  </div>
+  
+  <!-- First Time Dashboard Creation -->
+  <div class="row text-center" ng-show='showNoWidgetsMsg && !isLoading'>
+    <div class="spacer2"></div>
+    <div class='col-md-8 col-md-offset-2'>
+      <p><b>Right. Let's get this dashboard warmed up!</b></p><p>Click on the button below to add a new widget to your dashboard. Our widgets currently focus on financial data but more will come soon!</p>
+      <br>
+      <button ng-click="modal.addWidget.open()" class='btn btn-lg btn-grey btn-grey-bordered'><span class='fa fa-plus'></span> Add a new Widget</button>
+    </div>
+  </div>
+
+  <div class='spacer1'></div>
+
+  <!-- Widgets -->
+  <div class='row'>
+    <div ui:sortable='sortableOptions' ng:model="currentDhb.widgets" class='widgets-container'>
+      <div impac-widget widget="widget" parent-dashboard="currentDhb" ng-repeat="widget in currentDhb.widgets" class="widget-item" />
+    </div>
+  </div>
+
+</div>
+
+<div class='clearfix'></div>
+<div class='spacer2'></div>
