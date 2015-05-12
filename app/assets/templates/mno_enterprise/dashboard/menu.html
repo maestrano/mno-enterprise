@@ -85,63 +85,62 @@
 <!--    Side Navbar       -->
 <!-------------------------->
 <div class="col-xs-1 hidden-xs scrollbar-hidden">
-  <div class="menu expanded">
-
-    <!--Home page link-->
-    <a href="/">
-      <div class='brand-logo'></div>
-    </a>
-    <!---------------------------------------------------------------------------------------------------------------->
-<!--                                         User section                                                       -->
-<!---------------------------------------------------------------------------------------------------------------->
-    <div  ng-show="!selectBoxisEmpty()">
-      <a href="#/">
-        <div class="dashboard-button" ng-class="isButtonActive('/') && 'active'">
-          <div class='content'>Dashboard</div>
-          <i class="dhb-icon-dashboard"></i>
-        </div>
+  <div class="menu vertical expanded">
+      <!--Home page link-->
+      <a href="/">
+        <div class='brand-logo'></div>
       </a>
-      <br>
-    </div>
-    <a href="#/account">
-      <div ng-class="isButtonActive('/account') && 'active'" class="dashboard-button">
-        <div class='content'>My Account</div>
-        <i class="dhb-icon-account"></i>
+      <!---------------------------------------------------------------------------------------------------------------->
+  <!--                                         User section                                                       -->
+  <!---------------------------------------------------------------------------------------------------------------->
+      <div  ng-show="!selectBoxisEmpty()">
+        <a href="#/">
+          <div class="dashboard-button" ng-class="isButtonActive('/') && 'active'">
+            <div class='content'>Dashboard</div>
+            <i class="dhb-icon-dashboard"></i>
+          </div>
+        </a>
+        <br>
       </div>
-    </a>
-    <br>
-    <div  ng-show="!selectBoxisEmpty()">
-      <a href="#/company">
-        <div ng-class="isButtonActive('/company') && 'active'" class="dashboard-button">
-          <div class='content'>Company</div>
-          <i class="dhb-icon-company"></i>
+      <a href="#/account">
+        <div ng-class="isButtonActive('/account') && 'active'" class="dashboard-button">
+          <div class='content'>My Account</div>
+          <i class="dhb-icon-account"></i>
         </div>
       </a>
       <br>
-    </div>
-    <!-- <div  ng-show="!selectBoxisEmpty()">
-      <a href="#/support">
-        <div ng-class="isButtonActive('/support') && 'active'" class="dashboard-button">
-          <div class='content'>Support</div>
-          <i class="dhb-icon-support"></i>
-        </div>
-      </a>
-      <br>
-    </div> -->
-    <div  ng-show="!selectBoxisEmpty()">
-      <a href="#/marketplace">
-        <div ng-class="isButtonActive('/marketplace') && 'active'" class="dashboard-button">
-          <div class='content'>Marketplace</div>
-          <i class="dhb-icon-marketplace"></i>
-        </div>
-      </a>
-      <br>
-    </div>
-    <a href="/mnoe/auth/users/sign_out" data-method='delete'>
-      <div class="dashboard-button">
-        <div class='content'>Logout</div>
-        <i class="dhb-icon-logout"></i>
+      <div  ng-show="!selectBoxisEmpty()">
+        <a href="#/company">
+          <div ng-class="isButtonActive('/company') && 'active'" class="dashboard-button">
+            <div class='content'>Company</div>
+            <i class="dhb-icon-company"></i>
+          </div>
+        </a>
+        <br>
       </div>
-    </a>
+      <!-- <div  ng-show="!selectBoxisEmpty()">
+        <a href="#/support">
+          <div ng-class="isButtonActive('/support') && 'active'" class="dashboard-button">
+            <div class='content'>Support</div>
+            <i class="dhb-icon-support"></i>
+          </div>
+        </a>
+        <br>
+      </div> -->
+      <div  ng-show="!selectBoxisEmpty()">
+        <a href="#/marketplace">
+          <div ng-class="isButtonActive('/marketplace') && 'active'" class="dashboard-button">
+            <div class='content'>Marketplace</div>
+            <i class="dhb-icon-marketplace"></i>
+          </div>
+        </a>
+        <br>
+      </div>
+      <a href="/mnoe/auth/users/sign_out" data-method='delete'>
+        <div class="dashboard-button">
+          <div class='content'>Logout</div>
+          <i class="dhb-icon-logout"></i>
+        </div>
+      </a>
+    </div>
   </div>
-</div>

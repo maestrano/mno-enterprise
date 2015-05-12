@@ -160,29 +160,36 @@ module.controller('DashboardMenuCtrl',[
 
 module.directive('dashboardMenu', ['TemplatePath', (TemplatePath) ->
   return {
-      restrict: 'A',
+      restrict: 'A'
       scope: {
-        backgroundColor:'='
-      },
-      templateUrl: TemplatePath['mno_enterprise/dashboard/menu.html'],
+        backgroundColor:'=',
+        orientation:'='
+      }
       controller: 'DashboardMenuCtrl'
+      templateUrl: (elem,attrs) ->
+        if attrs.orientation == 'horizontal'
+          TemplatePath['mno_enterprise/dashboard/horizontal_menu.html']
+        else
+          TemplatePath['mno_enterprise/dashboard/menu.html']
       # We need to manually close the collapse menu as we actually stay on the same page
       link: (scope,element,attrs) ->
-        element.find(".menu").on("mouseenter", ->
-          angular.element(this).stop()
-          angular.element(this).find(".brand-logo").addClass('expanded')
-          angular.element(this).find(".dashboard-button").find(".content").css("display", "block")
-          angular.element(this).animate({width:275},150)
-        )
-        element.find(".menu").on("mouseleave", ->
-          angular.element(this).stop()
-          angular.element(this).find(".brand-logo").removeClass('expanded')
-          angular.element(this).find(".dashboard-button").find(".content").css("display", "none")
-          angular.element(this).animate({width:80},150)
-        )
+        if attrs.orientation == 'horizontal'
 
-        element.find(".nav a").on("click", ->
-          element.find(".navbar-toggle").click()
-        )
+        else
+          element.find(".menu").on("mouseenter", ->
+            angular.element(this).stop()
+            angular.element(this).find(".brand-logo").addClass('expanded')
+            angular.element(this).find(".dashboard-button").find(".content").css("display", "block")
+            angular.element(this).animate({width:275},150)
+          )
+          element.find(".menu").on("mouseleave", ->
+            angular.element(this).stop()
+            angular.element(this).find(".brand-logo").removeClass('expanded')
+            angular.element(this).find(".dashboard-button").find(".content").css("display", "none")
+            angular.element(this).animate({width:80},150)
+          )
+          element.find(".nav a").on("click", ->
+            element.find(".navbar-toggle").click()
+          )
     }
 ])

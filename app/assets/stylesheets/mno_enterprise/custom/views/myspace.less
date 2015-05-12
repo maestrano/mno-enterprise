@@ -125,14 +125,118 @@
 /*                         Dashboard Left Navbar                         */
 /*-----------------------------------------------------------------------*/
 .myspace .menu {
-  z-index:100;
-  position:fixed;
-  left:0px;
-  top:0px;
-  padding: @dashboard-side-menu-padding;
-  width:80px;
-  min-height:100%;
-  height:99%;
+
+  // Dashboard Button > Active State
+  .dashboard-button.active, .dashboard-button.active:hover {
+    color: @dashboard-side-menu-link-active-color;
+    background-color: @dashboard-side-menu-link-active-bg-color;
+  }
+
+  // Dashboard Button Content > Active State
+  .dashboard-button.active .content, .dashboard-button.active:hover .content {
+    color: @dashboard-side-menu-link-active-color;
+    background-color: @dashboard-side-menu-link-active-bg-color;
+  }
+
+  // Dashboard Button Content > Normal State
+  .dashboard-button .content {
+    color: @dashboard-side-menu-link-color;
+    background-color: @dashboard-side-menu-link-bg-color;
+  }
+
+  // Dashboard Button Content > Normal State Hover
+  .dashboard-button:hover .content {
+    color: @dashboard-side-menu-link-active-color;
+    background-color: @dashboard-side-menu-link-active-bg-color;
+  }
+  
+  // Vertical menu
+  &.vertical {
+    z-index:100;
+    position:fixed;
+    left:0px;
+    top:0px;
+    padding: @dashboard-side-menu-padding;
+    width:80px;
+    min-height:100%;
+    height:99%;
+
+    // Dashboard Button > Normal State
+    .dashboard-button {
+      .border-radius(5px);
+      width: 51px;
+      height: 51px;
+      padding-top: 7px;
+      padding-left: 9px;
+    }
+    
+    &:hover .dashboard-button {
+      width: 250px;
+    }
+    
+    // Dashboard Button Content > Normal State
+    .dashboard-button .content {
+      display: none;
+    }
+    &:hover .dashboard-button .content {
+      display: block;
+      white-space: nowrap;
+      position: absolute;
+      margin: 8px 0px 0px 55px;
+      font-size: 15px;
+    }
+
+    // Side menu brand logo
+    .brand-logo {
+      height: 90px;
+      background-repeat: no-repeat;
+      background-image: asset-url(@dashboard-side-menu-brand-logo-img);
+      background-size: 100%;
+      @dashboard-side-menu-brand-logo();
+    }
+    .brand-logo.expanded {
+      @dashboard-side-menu-brand-logo-expanded();
+    }
+  }
+
+  // Horizontal menu
+  &.horizontal {
+    @dashboard-side-menu-horizontal();
+    z-index:100;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    // Side menu brand logo
+    .brand-logo {
+      height: 70px;
+      background-repeat: no-repeat;
+      background-image: asset-url(@dashboard-side-menu-brand-logo-img);
+      background-size: 100%;
+      @dashboard-side-menu-brand-logo();
+    }
+    .brand-logo.expanded {
+      @dashboard-side-menu-brand-logo-expanded();
+    }
+
+    // Dashboard Button
+    .dashboard-button {
+      text-align: center;
+      margin-left: 10px;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    // Dashboard Buttons > Links
+    .dashboard-button a {
+      padding: 10px;
+      display: block;
+      text-decoration: none;
+      min-width: 100px;
+    }
+  }
   
   overflow-x:hidden;
   overflow-y:auto;
@@ -142,56 +246,6 @@
   hr {
     border-top:2px dashed darken(@dashboard-side-menu-bg-color,5%);
     margin-right:11px;
-  }
-  
-  // Side menu brand logo
-  .brand-logo {
-    height: 90px;
-    background-repeat: no-repeat;
-    background-image: asset-url(@dashboard-side-menu-brand-logo-img);
-    background-size: 100%;
-    @dashboard-side-menu-brand-logo();
-  }
-  .brand-logo.expanded {
-    @dashboard-side-menu-brand-logo-expanded();
-  }
-  
-  // Dashboard Button > Normal State
-  .dashboard-button {
-    .border-radius(5px);
-    width: 51px;
-    height: 51px;
-    padding-top: 7px;
-    padding-left: 9px;
-  }
-  &:hover .dashboard-button {
-    width: 250px;
-  }
-  
-  // Dashboard Button > Active State
-  .dashboard-button.active,
-  &:hover .dashboard-button.active {
-    color: @dashboard-side-menu-link-active-color;
-    background-color: @dashboard-side-menu-link-active-bg-color;
-  }
-  
-  // Dashboard Button Content > Normal State
-  .dashboard-button .content {
-    display: none;
-  }
-  &:hover .dashboard-button .content {
-    display: block;
-    white-space: nowrap;
-    color: @dashboard-side-menu-link-color;
-    position: absolute;
-    margin: 8px 0px 0px 55px;
-    font-size: 15px;
-  }
-  
-  // Dashboard Button Content > Active State
-  .dashboard-button.active .content,
-  &:hover .dashboard-button.active .content {
-    color: @dashboard-side-menu-link-active-color;
   }
   
   // Dashboard Button Icon > Normal State
@@ -299,6 +353,8 @@
 .myspace .app-dashboard.add-app {
   padding:15px 0px;
   font-size:140px;
+  color: @dashboard-apps-tile-add-color;
+  background-color: @dashboard-apps-tile-add-bg-color;
 }
 .myspace .app-dashboard.add-app a {
   color: @dashboard-bg-color;

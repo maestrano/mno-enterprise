@@ -105,7 +105,16 @@ module MnoEnterprise
   # Default sender email
   mattr_accessor :default_sender_email
   @@default_sender_email = "no-reply@example.com"
-  
+
+
+  #====================================
+  # Layout
+  #====================================
+  # Menu orientation: horizontal or vertical (default)
+  mattr_accessor :layout_menu_orientation
+  @@layout_menu_orientation = 'vertical'
+
+
   # Default way to setup MnoEnterprise. Run rails generate mno-enterprise:install to create
   # a fresh initializer with all configuration values.
   def self.configure
