@@ -99,13 +99,13 @@ angular.module('maestrano.services.impac.dashboarding-svc', []).factory('ImpacDa
       )
     
     # Update a dashboard
-    service.dashboards.update = (id, opts) ->
+    service.dashboards.update = (id, opts, overrideCurrentDhb=yes) ->
       self = service
-      data = { data: opts }
+      data = { dashboard: opts }
       $http.put(self.routes.updatePath(id),data).then(
         (success) ->
           dhb = _.findWhere(self.data,{id: id})
-          angular.extend(dhb,success.data)
+          angular.extend(dhb,success.data) if overrideCurrentDhb
         , (->)
       )
 
