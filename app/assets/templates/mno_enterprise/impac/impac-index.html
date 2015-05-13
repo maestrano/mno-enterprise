@@ -14,7 +14,7 @@
 
       <div collapse="!showDashboardsList" class='dashboard-select'>
         <div ng-hide="dhb.id == currentDhbId" class='option' ng-repeat="dhb in dashboardsList" ng-click="selectDashboard(dhb.id)">{{dhb.full_name}}</div>
-        <div ng-show="showCreateDhb" class="option create" ng-click="modal.createDashboard.open()"><i class="fa fa-plus" /> Create Dashboard</div>
+        <div ng-show="showCreateDhb" class="option create" ng-click="modal.createDashboard.open()"><i class="fa fa-plus" /> New Dashboard</div>
       </div>
 
       <p ng-hide='showChooseDhbMsg' class="data-source-label">
