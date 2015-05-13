@@ -14,7 +14,6 @@ module MnoEnterprise
     #   :confirmation_link
     #
     def confirmation_instructions(record, token, opts={})
-      puts "tamere"
       MandrillClient.deliver('confirmation-instructions',
         DEFAULT_SENDER,
         recipient(record),
