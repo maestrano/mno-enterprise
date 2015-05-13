@@ -14,6 +14,7 @@ module MnoEnterprise
 	  end
 	  
 	  # POST /mnoe/jpi/v1/impac/dashboards
+	  #  -> POST /api/mnoe/v1/users/282/dashboards
 	  def create
 	    whitelist = ['name','organization_ids']
 	    attrs = (params[:dashboard] || {}).select { |k,v| whitelist.include?(k.to_s) }

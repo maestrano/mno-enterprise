@@ -1,6 +1,7 @@
 module MnoEnterprise
-  class Impac::Widget
-    include Her::Model
+  class Impac::Widget < BaseResource
+
+  	attributes :name, :width, :widget_category, :settings
 
   end
 end

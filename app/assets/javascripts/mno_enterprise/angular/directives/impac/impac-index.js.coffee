@@ -19,7 +19,7 @@ module.controller('ImpacIndexCtrl',[
 
     $scope.initialize = () ->
       $scope.user = CurrentUserSvc.document.current_user
-      $scope.widgetsList = Miscellaneous.analyticsWidgets
+      # $scope.widgetsList = Miscellaneous.analyticsWidgets
       $scope.currentWidget = {}
       $scope.currentDhbId = ImpacDashboardingSvc.getId()
       $scope.refreshDashboards()
@@ -35,6 +35,7 @@ module.controller('ImpacIndexCtrl',[
         $scope.currentDhb.organizationsNames = _.map($scope.currentDhb.data_sources, (org) ->
           org.label
         ).join(", ")
+        $scope.widgetsList = $scope.currentDhb.widgets_templates
       $scope.setDisplay()
 
 
