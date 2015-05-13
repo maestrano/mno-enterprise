@@ -173,6 +173,7 @@
 /*-----------------------------------------------------------------------*/
 // Dashboard
 //--------------------------------------
+@impac-dashboard-padding-top:                   33px;
 // Title
 @impac-dashboard-title-label-color:             @text-strong-color;
 @impac-dashboard-title-color:                   @elem-cozy-color;
@@ -181,8 +182,7 @@
 // Widgets container
 @impac-placeholder-border:                      2px dashed @bg-inverse-color;
 @impac-padding-between-widgets:                 12px;
-// Must be be 262px - @impac-padding-between-widgets
-@impac-minimum-widget-size:                     250px;
+@impac-minimum-widget-size:                     258px;
 
 // Widgets
 //--------------------------------------
@@ -201,6 +201,7 @@
 @impac-widget-title-border-radius:              5px 5px 0px 0px;
 // Content
 @impac-widget-content-border-radius:            0px 0px 5px 5px;
+@impac-widget-lines-container-max-height: 			210px;
 // Hist Mode Choser
 @impac-widget-hist-text-transform:              uppercase;
 @impac-widget-hist-text-size:                   12px;
@@ -212,10 +213,16 @@
 @impac-widget-currency-color:                   @impac-widget-text-color-light;
 @impac-widget-legend-color:                     lighten(@impac-widget-text-color,30%);
 // Edit settings
-@impac-widget-sub-bg-color:                     @bg-on-bg-inverse-color;
-@impac-widget-sub-bg-color-light:               lighten(@bg-on-bg-inverse-color,7%);
+@impac-widget-sub-bg-color:                     darken(@impac-widget-background-color,10%);
+@impac-widget-sub-bg-color-light:               lighten(@impac-widget-sub-bg-color,5%);
+// Invoices list
 @impac-widget-line-hover-bg:                    lighten(@bg-inverse-color,10%);
 @impac-widget-line-hover-text:                  @text-inverse-color;
+// Accounts Comparison
+@impac-big-widget-size:                         581px;
+@impac-big-widget-bottom-padding:               30px;
+@impac-widget-accounts-comparison-lines-container-max-height: 250px;
+
 
 /*-----------------------------------------------------------------------*/
 /*                 Mno Enterprise > Marketplace Section                  */

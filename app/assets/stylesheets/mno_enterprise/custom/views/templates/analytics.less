@@ -31,7 +31,7 @@
       .tooltip {
         .tooltip-inner {
           &.ng-binding {
-            background-color: @bg-main-color;
+            background-color: @black;
             color: @elem-positive-color;
           }
         }
@@ -46,9 +46,8 @@
         .icon {
           height: 80px;
           width: 80px;
-          border: solid 1px @bg-main-color;
+          border: solid 1px @impac-widget-borders-color;
           border-radius: 2px;
-          background-color: @bg-inverse-color;
           i {
             color: @impac-widget-text-color;
             margin-left: 4px;
@@ -65,16 +64,11 @@
       }
 
       .widget:hover {
-        background-color: @bg-main-color;
-        color: @text-strong-color;
-        // background-color: #f5f5f5;
+        background-color: @impac-widget-sub-bg-color-light;
         .icon {
           i {
             color: @impac-widget-link-color, ;
           }
-        }
-        label {
-          // text-decoration: underline;
         }
       }
     }
@@ -112,7 +106,7 @@
         .widget-line {
           padding: 5px 10px 5px 18px;
           &:nth-child(even) {
-            background-color: @impac-widget-background-color;
+            background-color: @impac-widget-sub-bg-color;
           }
           .fa {
             float: right;
@@ -146,7 +140,7 @@
 } 
 
 .analytics {
-  padding-top: 33px;
+  padding-top: @impac-dashboard-padding-top;
   //-----------------------------
   // Format Dashboard Selection
   // and data sources
@@ -240,6 +234,7 @@
       select {
         margin-top: 5px;
         background-color: @impac-widget-background-color;
+        color: @impac-widget-text-color;
         height: 32px;
       }
 
@@ -555,7 +550,7 @@
         }
 
         .widget-lines-container {
-          max-height: 200px;
+          max-height: @impac-widget-lines-container-max-height;
           overflow-y: auto;
           overflow-x: hidden;
           font-size: 12px;
@@ -615,11 +610,11 @@
           }
 
           &.comparison {
-            min-height: 565px;
+            min-height: @impac-big-widget-size;
             .add-account {
               position: absolute;
               right: 40px;
-              bottom: 30px;
+              bottom: @impac-big-widget-bottom-padding;
               width: 160px;
               select {
                 font-size: 13px;
@@ -674,7 +669,7 @@
             }
             .widget-lines-container {
               font-size: 11px;
-              max-height: 240px;
+              max-height: @impac-widget-accounts-comparison-lines-container-max-height;
             }
           }
 
