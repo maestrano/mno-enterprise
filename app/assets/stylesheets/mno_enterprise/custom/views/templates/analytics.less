@@ -211,6 +211,7 @@
       float:right;
       .btn {
         margin:3px;
+        border-radius: @impac-dashboard-buttons-border-radius;
       }
     }
   }
@@ -225,16 +226,16 @@
     //-----------------------------
 
     .placeHolderBox {
-      margin: 12px;
+      margin: @impac-padding-between-widgets;
       height: 267px;
       width: 300px;
       float: left;
-      border: 2px dashed @impac-placeholder-border-color;
+      border: @impac-placeholder-border;
       background: none;
     }
 
     .widget-item {
-      padding: 12px;
+      padding: @impac-padding-between-widgets;
 
       select {
         margin-top: 5px;
@@ -244,9 +245,9 @@
 
       .top-line {
         cursor: move;
-        background-color: @impac-widget-background-color;
+        background-color: @impac-widget-title-bg;
         padding: 10px 10px 0px 10px;
-        border-radius: 5px 5px 0px 0px;
+        border-radius: @impac-widget-title-border-radius;
         min-height: 41px;
 
         .btn {
@@ -292,12 +293,12 @@
           .title-wrapper {
             width: 100%;
             padding: 0px 10px 10px 10px;
-            border-bottom: solid 1px @impac-widget-borders-color;
+            border-bottom: @impac-widget-title-border;
             white-space: nowrap;
             .title {
               display: inline;
-              text-transform: uppercase;
-              .font(12px,600,@impac-widget-title-text-color);
+              text-transform: @impac-widget-title-text-transform;
+              .font(@impac-widget-title-text-size,600,@impac-widget-title-text-color);
               text-align: left;
               cursor: text;
             }
@@ -308,8 +309,8 @@
                 width: 100%;
                 .editable-input {
                   height: 20px;
-                  font-size: 12px;
-                  text-transform: uppercase;
+                  font-size: @impac-widget-title-text-size;
+                  text-transform: @impac-widget-title-text-transform;
                   width: 100%;
                 }
               }
@@ -319,9 +320,9 @@
 
       .content {
         padding: 10px;
-        border-radius: 0px 0px 5px 5px;
+        border-radius: @impac-widget-content-border-radius;
         background-color:@impac-widget-background-color;
-        min-height:250px;
+        min-height:@impac-minimum-widget-size;
         vertical-align:top;
 
         a {
@@ -489,10 +490,10 @@
           margin: auto;
           padding-bottom: 8px;
           border-bottom: solid 1px @impac-widget-borders-color;
-          .font(12px,500,@impac-widget-text-color-light);
+          .font(@impac-widget-hist-text-size,500,@impac-widget-hist-text-color);
           a {
-            .font(12px,500,@impac-widget-text-color-light);
-            text-transform: uppercase;
+            .font(@impac-widget-hist-text-size,500,@impac-widget-hist-text-color);
+            text-transform: @impac-widget-hist-text-transform;
             &.active {
               color: @impac-widget-link-color;
             }
