@@ -66,6 +66,7 @@
 
       .widget:hover {
         background-color: @bg-main-color;
+        color: @text-strong-color;
         // background-color: #f5f5f5;
         .icon {
           i {
@@ -82,21 +83,21 @@
 
 .modal-custom-calculation .modal-body {
   .edit {
-    color: @darkblue;
+    color: @impac-widget-text-color;
     padding: 5px;
     h4 {
       margin: 0;
       margin-bottom: 8px;
       text-align: left;
-      .font(15px,300,@darkblue);
+      .font(15px,300,@impac-widget-text-color);
     }
     .part {
       width: 49%;
       margin-bottom: 8px;
       padding: 10px 0px;
-      background-color: #f3f4f4;
-      color: #626d6d;
-      border: solid 1px #f3f4f4;
+      background-color: @impac-widget-sub-bg-color-light;
+      // color: #626d6d;
+      border: solid 1px @impac-widget-borders-color;
       h5 {
         margin: 0;
         margin-bottom: 10px;
@@ -111,17 +112,17 @@
         .widget-line {
           padding: 5px 10px 5px 18px;
           &:nth-child(even) {
-            background-color: #f3f4f4;
+            background-color: @impac-widget-background-color;
           }
           .fa {
             float: right;
             font-size: 20px;
             cursor: pointer;
             &.fa-toggle-on {
-              color: @decorator-inverse-color;
+              color: @impac-widget-link-color;
             }
             &.fa-toggle-off {
-              color: @lightergray;
+              color: @impac-widget-sub-bg-color-light;
             }
           }
         }
@@ -130,12 +131,17 @@
   }
   .loader {
     // margin-top: 75px;
-    color: @decorator-main-color;
+    color: @impac-widget-link-color;
     font-weight: bold;
     .gif {
       display: block;
       margin-top: 10px;
     }
+  }
+  .form-control {
+    margin-top: 5px;
+    background-color: @impac-widget-background-color;
+    height: 32px;
   }
 } 
 
@@ -154,44 +160,45 @@
   .dashboard-select {
     margin: 5px 0px 10px 100px;
     height: auto;
-    border-left: 1px solid @decorator-inverse-color;
-    border-bottom: 1px solid @decorator-inverse-color;
+    border-left: 1px solid darken(@impac-dashboard-title-color,10%);
+    border-bottom: 1px solid darken(@impac-dashboard-title-color,10%);
     width: 300px;
     background-color: @bg-main-color;
     cursor: pointer;
     .option {
       padding: 5px 10px 5px 10px;
-      color: @lightergray;
-      @bg-inverse-color-space: nowrap;
+      color: @impac-dashboard-title-label-color;
+      white-space: nowrap;
       &:hover {
         background-color: @bg-inverse-color;
+        color: @text-inverse-color;
       }
       &.create {
-        background-color: @decorator-inverse-color;
-        color: @bg-inverse-color;
+        background-color: @impac-dashboard-title-color;
+        color: @impac-dashboard-title-label-color;
       }
       &.create:hover {
-        background-color: darken(@decorator-inverse-color,10%);
+        background-color: darken(@impac-dashboard-title-color,10%);
       }
     }
   }
 
   .dashboard-label {
-    color: @bg-inverse-color;
+    color: @impac-dashboard-title-label-color;
     display: inline;
   }
   
   .dashboard-title {
-    color: @decorator-inverse-color;
+    color: @impac-dashboard-title-color;
     display: inline;
     cursor: pointer;
     &:hover {
-      color: darken(@decorator-inverse-color,10%);
+      color: darken(@impac-dashboard-title-color,10%);
     }
   }
 
   .data-source-label {
-    color: @bg-on-bg-inverse-color;
+    color: @impac-dashboard-source-color;
     padding-left: 3px;
     margin: 0px;
   }
@@ -209,12 +216,6 @@
       margin:3px;
     }
   }
-
-  select {
-    margin-top: 5px;
-    background-color: @bg-inverse-color;
-    height: 32px;
-  }
   
   //-----------------------------
   // Format widgets
@@ -226,24 +227,26 @@
     //-----------------------------
 
     .placeHolderBox {
-      height: 282px;
+      margin: 12px;
+      height: 267px;
       width: 300px;
       float: left;
-      border: 2px dashed @decorator-inverse-color;
+      border: 2px dashed @impac-placeholder-border-color;
       background: none;
     }
 
     .widget-item {
       padding: 12px;
 
-      &.new_row {
-        // disabled to test double-height widgets (like accounts comparison)
-        // clear: both;
+      select {
+        margin-top: 5px;
+        background-color: @impac-widget-background-color;
+        height: 32px;
       }
 
       .top-line {
         cursor: move;
-        background-color: @bg-inverse-color;
+        background-color: @impac-widget-background-color;
         padding: 10px 10px 0px 10px;
         border-radius: 5px 5px 0px 0px;
         min-height: 41px;
@@ -252,7 +255,7 @@
           float: right;
           background: transparent;
           border: none;
-          color: silver;
+          color: @impac-widget-borders-color;
           padding: 0px;
           margin-left: 3px;
           outline: none;
@@ -264,7 +267,7 @@
             &.btn-edit {
               font-size: 18px;
               &:hover {
-                color: darken(@elem-positive-color,10%);
+                color: @elem-positive-color;
               }
               span {
                 vertical-align: top;
@@ -272,7 +275,7 @@
             }
             &.btn-editmode {
               font-size: 18px;
-              color: darken(@elem-positive-color,10%);
+              color: @elem-positive-color;
               span {
                 vertical-align: top;
               }
@@ -291,12 +294,12 @@
           .title-wrapper {
             width: 100%;
             padding: 0px 10px 10px 10px;
-            border-bottom: solid 1px #e6e6e6;
-            @bg-inverse-color-space: nowrap;
+            border-bottom: solid 1px @impac-widget-borders-color;
+            white-space: nowrap;
             .title {
               display: inline;
               text-transform: uppercase;
-              .font(12px,600,#5b6667);
+              .font(12px,600,@impac-widget-title-text-color);
               text-align: left;
               cursor: text;
             }
@@ -319,18 +322,18 @@
       .content {
         padding: 10px;
         border-radius: 0px 0px 5px 5px;
-        background-color:@bg-inverse-color;
+        background-color:@impac-widget-background-color;
         min-height:250px;
         vertical-align:top;
 
         a {
           font-weight: bold;
-          color: @decorator-alt-color;
+          color: @impac-widget-link-color;
           cursor: pointer;
         }
         
         .currency {
-          .font(16px,300,@bg-inverse-color);
+          .font(16px,300,@impac-widget-legend-color);
           text-align: center;
         }
 
@@ -340,7 +343,7 @@
           font-size: 18px;
           color: #5B6667;
           a {
-            color: @decorator-inverse-color;
+            color: @impac-widget-link-color;
             display: block;
             font-size: 16px;
             font-weight: normal;
@@ -351,7 +354,7 @@
           max-height: 230px;
           overflow-y: auto;
           overflow-x: hidden;
-          color: @bg-inverse-color;
+          // color: @bg-inverse-color;
           padding: 2px;
           font-size: 12px;
 
@@ -363,12 +366,12 @@
             font-size: 12px;
 
             &.btn-default {
-              background-color: #c2c4c4;
-              border: solid 1px darken(#c2c4c4,10%);
-              color: @bg-inverse-color;
+              background-color: @input-bg;
+              border: solid 1px darken(@input-bg,10%);
+              color: @input-color;
               &:hover {
-                border: solid 1px darken(#c2c4c4,20%);
-                background-color: darken(#c2c4c4,10%);
+                border: solid 1px darken(@input-bg,20%);
+                background-color: darken(@input-bg,10%);
               }
             }
           }
@@ -377,20 +380,21 @@
             margin: 0;
             margin-bottom: 8px;
             text-align: left;
-            .font(12px,normal,@bg-inverse-color);
+            .font(12px,normal,@impac-widget-legend-color);
           }
           .part {
             margin-bottom: 8px;
             padding: 10px 0px;
-            background-color: #f3f4f4;
-            color: #626d6d;
-            border: 1px solid @bg-main-color;
+            background-color: @impac-widget-sub-bg-color-light;
+            color: @impac-widget-text-color;
+            border: 1px solid @impac-widget-borders-color;
             h5 {
               margin: 0;
               margin-bottom: 10px;
               padding: 0px 15px;
               text-transform: uppercase;
               font-size: 12px;
+              color: @impac-widget-legend-color;
             }
             .input-group.select-account {
               padding: 0px 5px;
@@ -418,11 +422,9 @@
 
             select.form-control {
               margin: 0px;
-              border: solid 1px #acb0b1;
               outline: none;
               -webkit-box-shadow: none;
               font-size: 13px;
-              color: #72728b;
             }
 
             .chart-filters {
@@ -437,17 +439,17 @@
               .widget-line {
                 padding: 5px 10px 5px 18px;
                 &:nth-child(even) {
-                  background-color: #f3f4f4;
+                  background-color: @impac-widget-sub-bg-color-light;
                 }
                 .fa {
                   float: right;
                   font-size: 20px;
                   cursor: pointer;
                   &.fa-toggle-on {
-                    color: @decorator-inverse-color;
+                    color: @impac-widget-link-color;
                   }
                   &.fa-toggle-off {
-                    color: lighten(@bg-inverse-color,40%);
+                    color: @impac-widget-legend-color;
                   }
                 }
               }
@@ -461,13 +463,13 @@
 
         h2 {
           text-align: left;
-          .font(35px,700,@bg-inverse-color);
+          .font(35px,700,@impac-widget-text-color);
         }
 
         h3 {
           margin: 0;
           text-align: left;
-          .font(14px,300,@bg-inverse-color);
+          .font(14px,300,@impac-widget-legend-color);
         }
 
         .h3-wrapper {
@@ -478,7 +480,7 @@
             width:100%;
             display:table-cell;
             text-transform: uppercase;
-            .font(20px,300,@text-inverse-color);
+            .font(20px,300,@impac-widget-legend-color);
             text-align: center;
             vertical-align: middle;
           }
@@ -488,13 +490,13 @@
           width: 150px;
           margin: auto;
           padding-bottom: 8px;
-          border-bottom: solid 1px #e6e6e6;
-          .font(12px,500,#acb0b1);
+          border-bottom: solid 1px @impac-widget-borders-color;
+          .font(12px,500,@impac-widget-text-color-light);
           a {
-            .font(12px,500,#acb0b1);
+            .font(12px,500,@impac-widget-text-color-light);
             text-transform: uppercase;
             &.active {
-              color: @decorator-inverse-color;
+              color: @impac-widget-link-color;
             }
           }
         }
@@ -511,7 +513,7 @@
             left: -30px;
           }
           .arrow-border {
-            border-top: 14px solid #e6e6e6;
+            border-top: 14px solid @impac-widget-borders-color;
             border-left: 14px solid transparent;
             border-right: 14px solid transparent;
             width: 0px;
@@ -534,12 +536,12 @@
 
         .legend {
           text-align: center;
-          .font(12px,300,@text-inverse-color);
+          .font(12px,300,@impac-widget-legend-color);
         }
 
         .loader {
           margin-top: 75px;
-          color: @decorator-main-color;
+          color: @impac-widget-text-color-light;
           font-weight: bold;
           .gif {
             display: block;
@@ -548,7 +550,7 @@
         }
 
         .price {
-          .font(22px,900,@bg-inverse-color);
+          .font(22px,900,@impac-widget-price-color);
           text-align: center;
           margin-top: 30px;
         }
@@ -564,12 +566,12 @@
           width:100%;
           margin:0px;
           padding:5px;
-          color:@text-inverse-color;
+          // color:@text-inverse-color;
           &:nth-child(even) {
-            background-color:@bg-on-bg-inverse-color;
+            background-color:@impac-widget-sub-bg-color;
           }
           &:nth-child(odd) {
-            background-color:@bg-inverse-color;
+            background-color:@impac-widget-background-color;
           }
           .table-header {
             font-weight: bold;
@@ -582,13 +584,13 @@
 
         &.accounts {
           .blue {
-            color: @decorator-main-color;
+            color: @impac-widget-price-positive-color;
           }
           .history {
             margin-top: 10px;
           }
           .pink {
-            color: @brand-danger;
+            color: @impac-widget-price-negative-color;
           }
 
           &.assets-summary {
@@ -622,37 +624,37 @@
               width: 160px;
               select {
                 font-size: 13px;
-                background-color: @decorator-inverse-color;
-                color: @bg-inverse-color;
+                background-color: @impac-widget-link-color;
+                color: @impac-widget-background-color;
                 outline: none;
                 border: none;
                 cursor: pointer;
                 &[disabled] {
                   cursor: not-allowed;
-                  background-color: lighten(@decorator-inverse-color,10%);
+                  background-color: lighten(@impac-widget-link-color,40%);
                   &:hover {
-                    background-color: lighten(@decorator-inverse-color,10%);
+                    background-color: lighten(@impac-widget-link-color,40%);
                   }
                 }
                 &:hover {
-                  background-color: darken(@decorator-inverse-color,10%);
+                  background-color: darken(@impac-widget-link-color,10%);
                 }
                 option {
-                  background-color: @bg-inverse-color;
-                  color: lighten(@bg-main-color,40%);
+                  background-color: @impac-widget-background-color;
+                  color: lighten(@impac-widget-text-color,30%);
                   &[disabled] {
-                    color:@bg-inverse-color;
+                    color: @impac-widget-background-color;
                   }
                 }
               }
             }
-            .border {
-              margin: 15px 0px;
-              border-color: #E6E6E6;
-              border-top: 0px;
-              border-left: 0px;
-              border-right: 0px;
-            }
+            // .border {
+            //   margin: 15px 0px;
+            //   border-color: #E6E6E6;
+            //   border-top: 0px;
+            //   border-left: 0px;
+            //   border-right: 0px;
+            // }
             button.close {
               font-size: 15px;
             }
@@ -729,7 +731,7 @@
 
           &.list {
             .table-header {
-              .font(12px,500,#acb0b1);
+              .font(12px,500,@impac-widget-text-color-light);
               text-transform: uppercase;
             }
             
@@ -737,9 +739,9 @@
               .tooltip-inner {
                 &.ng-binding {
                   text-align: left;
-                  background-color: @bg-inverse-intense-color;
+                  background-color: @bg-main-color;
                   max-width: 100%;
-                  @bg-inverse-color-space: nowrap;
+                  white-space: nowrap;
                   strong {
                     color: @elem-positive-color;
                   }
@@ -749,7 +751,7 @@
 
             .widget-lines-container {
               .widget-line:hover {
-                background-color: @bg-main-color;
+                background-color: lighten(@bg-main-color,10%);
                 color: @bg-inverse-color;
                 cursor: pointer;
               }
