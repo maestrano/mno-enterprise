@@ -14,7 +14,8 @@ module MnoEnterprise
     #   :confirmation_link
     #
     def confirmation_instructions(record, token, opts={})
-      MandrillClient.deliver('confirmation-instructions',
+      template = record.confirmed? && record.unconfirmed_email? ? 'reconfirmation-instructions' : 'confirmation-instructions'
+      MandrillClient.deliver(template,
         DEFAULT_SENDER,
         recipient(record),
         user_vars(record).merge(confirmation_link: user_confirmation_url(confirmation_token: token))
