@@ -9,7 +9,6 @@ module.controller('ImpacIndexCtrl',[
     #====================================
     $scope.widgetsList = {}
     $scope.assetPath = AssetPath
-    $scope.impacLogo = $scope.assetPath['mno_enterprise/impac/transparent-logo.png']
     $scope.isLoading = true
     
     $scope.$watch DhbOrganizationSvc.getId, (val) ->

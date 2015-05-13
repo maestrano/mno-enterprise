@@ -146,74 +146,72 @@
 } 
 
 .analytics {
+  padding-top: 33px;
   //-----------------------------
   // Format Dashboard Selection
   // and data sources
   //-----------------------------
   .head-title {
-    padding: 5px;
-    .text-info {
-      color: @elem-positive-flash-color;
-    }
-  }
+    padding-top: 20px;
 
-  .dashboard-select {
-    margin: 5px 0px 10px 100px;
-    height: auto;
-    border-left: 1px solid darken(@impac-dashboard-title-color,10%);
-    border-bottom: 1px solid darken(@impac-dashboard-title-color,10%);
-    width: 300px;
-    background-color: @bg-main-color;
-    cursor: pointer;
-    .option {
-      padding: 5px 10px 5px 10px;
-      color: @impac-dashboard-title-label-color;
-      white-space: nowrap;
-      &:hover {
-        background-color: @bg-inverse-color;
-        color: @text-inverse-color;
-      }
-      &.create {
-        background-color: @impac-dashboard-title-color;
+    .dashboard-select {
+      margin: 5px 0px 10px 100px;
+      height: auto;
+      border-left: 1px solid darken(@impac-dashboard-title-color,10%);
+      border-bottom: 1px solid darken(@impac-dashboard-title-color,10%);
+      width: 300px;
+      background-color: @bg-main-color;
+      cursor: pointer;
+      .option {
+        padding: 5px 10px 5px 10px;
         color: @impac-dashboard-title-label-color;
-      }
-      &.create:hover {
-        background-color: darken(@impac-dashboard-title-color,10%);
+        white-space: nowrap;
+        &:hover {
+          background-color: @bg-inverse-color;
+          color: @text-inverse-color;
+        }
+        &.create {
+          background-color: @impac-dashboard-title-color;
+          color: @impac-dashboard-title-label-color;
+        }
+        &.create:hover {
+          background-color: darken(@impac-dashboard-title-color,10%);
+        }
       }
     }
-  }
 
-  .dashboard-label {
-    color: @impac-dashboard-title-label-color;
-    display: inline;
-  }
-  
-  .dashboard-title {
-    color: @impac-dashboard-title-color;
-    display: inline;
-    cursor: pointer;
-    &:hover {
-      color: darken(@impac-dashboard-title-color,10%);
+    .dashboard-label {
+      color: @impac-dashboard-title-label-color;
+      display: inline;
     }
-  }
+    
+    .dashboard-title {
+      color: @impac-dashboard-title-color;
+      display: inline;
+      cursor: pointer;
+      &:hover {
+        color: darken(@impac-dashboard-title-color,10%);
+      }
+    }
 
-  .data-source-label {
-    color: @impac-dashboard-source-color;
-    padding-left: 3px;
-    margin: 0px;
-  }
+    .data-source-label {
+      color: @impac-dashboard-source-color;
+      padding-left: 3px;
+      margin: 0px;
+    }
 
-  .buttons-bar {
-    padding-top: 64px;
-  }
+    .buttons-bar {
+      // padding-top: 64px;
+    }
 
-  //----------------------------
-  // Format top menu actions
-  //----------------------------
-  .actions-panel {
-    float:right;
-    .btn {
-      margin:3px;
+    //----------------------------
+    // Format top menu actions
+    //----------------------------
+    .actions-panel {
+      float:right;
+      .btn {
+        margin:3px;
+      }
     }
   }
   
