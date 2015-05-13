@@ -52,7 +52,7 @@ module MnoEnterprise
 
 	    def format_attrs(whitelist)
 		    attrs = (params[:widget] || {}).select { |k,v| whitelist.include?(k.to_s) }
-		    attrs['settings'] = widget.settings
+		    attrs['settings'] = widget ? widget.settings || {} : {}
 		    attrs['settings'].merge!(attrs['metadata']) if attrs['metadata']
 		    attrs.except!('metadata')
 	    end
