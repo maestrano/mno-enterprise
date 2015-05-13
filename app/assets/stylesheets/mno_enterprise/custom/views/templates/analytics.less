@@ -519,7 +519,7 @@
             height: 0px;
           }
           .arrow {
-            border-top: 14px solid #ffffff;
+            border-top: 14px solid @impac-widget-background-color;
             border-left: 14px solid transparent;
             border-right: 14px solid transparent;
             position: relative;
@@ -738,7 +738,7 @@
               .tooltip-inner {
                 &.ng-binding {
                   text-align: left;
-                  background-color: @bg-main-color;
+                  background-color: @black;
                   max-width: 100%;
                   white-space: nowrap;
                   strong {
@@ -750,8 +750,8 @@
 
             .widget-lines-container {
               .widget-line:hover {
-                background-color: lighten(@bg-main-color,10%);
-                color: @bg-inverse-color;
+                background-color: @impac-widget-line-hover-bg;
+                color: @impac-widget-line-hover-text;
                 cursor: pointer;
               }
             }

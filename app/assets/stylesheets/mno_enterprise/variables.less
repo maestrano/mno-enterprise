@@ -19,6 +19,7 @@
 /*                          Color Palette                                */
 /*-----------------------------------------------------------------------*/
 @white:                          #ffffff;
+@black:                          #000000;
 @darkblue:                       #17262d;
 @lightgray:                      #aeb5bf;
 @lightergray:                    lighten(@lightgray,10%);
@@ -171,7 +172,7 @@
 // Title
 @impac-dashboard-title-label-color:             @text-strong-color;
 @impac-dashboard-title-color:                   @elem-cozy-color;
-@impac-dashboard-source-color:                  @decorator-main-color;
+@impac-dashboard-source-color:                  @impac-dashboard-title-label-color;
 @impac-dashboard-buttons-border-radius:         4px;
 // Widgets container
 @impac-placeholder-border:                      2px dashed @bg-inverse-color;
@@ -209,6 +210,8 @@
 // Edit settings
 @impac-widget-sub-bg-color:                     @bg-on-bg-inverse-color;
 @impac-widget-sub-bg-color-light:               lighten(@bg-on-bg-inverse-color,7%);
+@impac-widget-line-hover-bg:                    lighten(@bg-inverse-color,10%);
+@impac-widget-line-hover-text:                  @text-inverse-color;
 
 /*-----------------------------------------------------------------------*/
 /*                 Mno Enterprise > Marketplace Section                  */
