@@ -29,6 +29,9 @@
         <li ng-show="!selectBoxisEmpty()">
           <a href="#/">My dashboard</a>
         </li>
+        <li ng-show="!selectBoxisEmpty() && isAnalyticsTabShown()">
+          <a href="#/impac">Impac!</a>
+        </li>
         <li>
           <a href="#/account">My account</a>
         </li>
@@ -99,6 +102,15 @@
         <div class="dashboard-button" ng-class="isButtonActive('/') && 'active'">
           <div class='content'>Dashboard</div>
           <i class="dhb-icon-dashboard"></i>
+        </div>
+      </a>
+      <br>
+    </div>
+    <div  ng-show="!selectBoxisEmpty()">
+      <a href="#/impac">
+        <div class="dashboard-button" ng-class="isButtonActive('/impac') && 'active'">
+          <div class='content'>Impac!</div>
+          <i class="dhb-icon-impac"></i>
         </div>
       </a>
       <br>
