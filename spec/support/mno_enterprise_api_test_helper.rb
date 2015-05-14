@@ -33,7 +33,7 @@ module MnoEnterpriseApiTestHelper
   # Reset all API stubs.
   # Called before each test (see spec_helper)
   def api_stub_reset
-    @_api_stub = {}
+    @_api_stub = nil
     @_stub_list = {}
   end
   
@@ -55,21 +55,24 @@ module MnoEnterpriseApiTestHelper
   #   response: [{ id: 1, name: "Tobias Fünke" }, { id: 2, name: "Lindsay Fünke" }]
   # )
   def api_stub_for(klass, opts = {})
-    api = set_api_stub(klass)
-    api_stub_add(opts)
-    api_stub_configure(api)
+    real_opts = klass
+    if klass.is_a?(Class)
+      warn("DEPRECATION WARNING: api_stub_for(MyClass,{ some: 'opts'}) is deprecated. Please use api_stub_for({ some: 'opts' }) from now on")
+      real_opts = opts
+    end
+    
+    set_api_stub
+    api_stub_add(real_opts)
+    api_stub_configure(@_api_stub)
   end
   
   private
     # Set a stub api on the provider class
-    def set_api_stub(klass)
-      @_api_stub ||= {}
-      unless @_api_stub[klass.to_s]
-        @_api_stub[klass.to_s] = Her::API.new
-        klass.use_api @_api_stub[klass.to_s]
-      end
-    
-      @_api_stub[klass.to_s]
+    def set_api_stub
+      return @_api_stub if @_api_stub
+      @_api_stub = Her::API.new
+      allow(MnoEnterprise::BaseResource).to receive(:her_api).and_return(@_api_stub = Her::API.new)
+      @_api_stub
     end
   
     # Add a stub to the api
@@ -79,8 +82,20 @@ module MnoEnterpriseApiTestHelper
     #   code: 200,
     #   response: [{ id: 1, name: "Tobias Fünke" }, { id: 2, name: "Lindsay Fünke" }]
     # }
-    def api_stub_add(opts)
+    def api_stub_add(orig_opts)
       @_stub_list ||= {}
+      opts = orig_opts.dup
+      
+      # Expand options so that: { put: '/path' } becomes { path: '/path', method: :put }
+      unless opts[:method] && opts[:path]
+        [:get,:put,:post,:delete].each do |verb|
+          if path = opts.delete(verb)
+            opts[:path] = path
+            opts[:method] = verb
+          end
+        end
+      end
+      
       key = opts.to_param
       @_stub_list[key] = opts
     end
