@@ -59,7 +59,7 @@ MnoEnterprise::Engine.routes.draw do
         #delete :deletion_request, action: :cancel_deletion_request
       end
       
-      resources :organizations, only: [:index, :show, :update] do
+      resources :organizations, only: [:index, :show, :create, :update] do
         member do
           put :invite_members
           put :update_member
