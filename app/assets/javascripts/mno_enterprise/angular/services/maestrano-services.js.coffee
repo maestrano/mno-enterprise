@@ -13,5 +13,10 @@ maestranoServices = angular.module('maestrano.services',[
   'maestrano.services.dashboard.organization-svc',
   'maestrano.services.dashboard.team-svc'
   'maestrano.services.dashboard.user',
-  'maestrano.services.dashboard.app-instance'
+  'maestrano.services.dashboard.app-instance',
+
+  # Impac!
+  'maestrano.services.impac.dashboarding-svc',
+  'maestrano.services.impac.chart-formatter-svc',
+
 ])

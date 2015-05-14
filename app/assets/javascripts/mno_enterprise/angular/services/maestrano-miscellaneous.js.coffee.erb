@@ -14,10 +14,17 @@ angular.module('maestrano.services.miscellaneous', []).factory('Miscellaneous', 
   <% countryCodes = Country.all.map { |c| [c[1],"(#{c[1]}) +#{Country[c[1]].country_code}"] } %>
   service.countryCodes = <%= countryCodes %>
 
+  # <% impacGetWidgetUrl = "#{Settings.impac.protocol}://#{Settings.impac.host}#{Settings.impac.paths.get_widget}" %>
+  <% impacUrls = {get_widget: "#{Settings.impac.protocol}://#{Settings.impac.host}#{Settings.impac.paths.get_widget}"}.to_json %>
+  service.impacUrls = <%= impacUrls %>
+
+  <% tenantColors = {positive: Settings.tenant.colors.positive, negative: Settings.tenant.colors.negative, array: Settings.tenant.colors.array}.to_json %>
+  service.impacTenantColors = <%= tenantColors %>
+
   return service
 
 ])
 
 # Increment version below to force
 # asset reload
-# 64
+# 69

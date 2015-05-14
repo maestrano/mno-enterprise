@@ -1,195 +1,213 @@
-
 //-----------------------------
 // Modals
 //-----------------------------
-  .modal-add .modal-body {
+.modal-add .modal-body {
 
-    .widgets-panel {
-      width: 100%;
-      border-radius: 4px;
-      // color: @titleBgColor;
-      color: @bg-inverse-intense-color;
-      // color: @decorator-main-color;
-      background-color: white;
-      padding: 5px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      max-height: 550px;
+  .widgets-panel {
+    width: 100%;
+    border-radius: 4px;
+    // color: @bg-inverse-intense-color;
+    color: @impac-widget-text-color;
+    // color: @decorator-main-color;
+    background-color: @impac-widget-background-color;
+    padding: 5px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 550px;
 
-      .panel-heading {
-        cursor: pointer;
-        background-color: #f5f5f5;
+    .panel-heading {
+      cursor: pointer;
+      background-color: #f5f5f5;
 
-        h1.panel-title {
-          color: @titleBgColor;
-          font-size: 20px;
+      h1.panel-title {
+        color: @impac-widget-text-color;
+        font-size: 20px;
+      }
+    }
+
+    .panel-body {
+      padding: 8px;
+
+      .tooltip {
+        .tooltip-inner {
+          &.ng-binding {
+            background-color: @black;
+            color: @elem-positive-color;
+          }
         }
       }
 
-      .panel-body {
-        padding: 8px;
-
-        .tooltip {
-          .tooltip-inner {
-            &.ng-binding {
-              background-color: @bg-inverse-intense-color;
-              color: @elem-positive-color;
-            }
+      .widget {
+        min-height: 133px;
+        margin-bottom: 5px;
+        padding-top: 8px;
+        cursor: pointer;
+        border-radius: 3px;
+        .icon {
+          height: 80px;
+          width: 80px;
+          border: solid 1px @impac-widget-borders-color;
+          border-radius: 2px;
+          i {
+            color: @impac-widget-text-color;
+            margin-left: 4px;
+            margin-top: 19px;
+          }
+          img {
+            margin-top: 12px;
           }
         }
-
-        .widget {
-          min-height: 133px;
-          margin-bottom: 5px;
-          padding-top: 8px;
+        label {
+          font-weight: normal;
           cursor: pointer;
-          border-radius: 3px;
-          .icon {
-            height: 80px;
-            width: 80px;
-            border: solid 1px @bg-main-color;
-            border-radius: 2px;
-            background-color: white;
-            i {
-              color: @titleBgColor;
-              margin-left: 4px;
-              margin-top: 19px;
-            }
-            img {
-              margin-top: 12px;
-            }
-          }
-          label {
-            font-weight: normal;
-            cursor: pointer;
-          }
         }
+      }
 
-        .widget:hover {
-          background-color: @bg-main-color;
-          // background-color: #f5f5f5;
-          .icon {
-            i {
-              color: darken(@elem-cozy-color,3%), ;
-            }
-          }
-          label {
-            // text-decoration: underline;
+      .widget:hover {
+        background-color: @impac-widget-sub-bg-color-light;
+        .icon {
+          i {
+            color: @impac-widget-link-color, ;
           }
         }
       }
     }
   }
+}
 
-  .modal-custom-calculation .modal-body {
-    .edit {
-      color: @bg-inverse-color;
-      padding: 5px;
-      h4 {
+.modal-custom-calculation .modal-body {
+  .edit {
+    color: @impac-widget-text-color;
+    padding: 5px;
+    h4 {
+      margin: 0;
+      margin-bottom: 8px;
+      text-align: left;
+      .font(15px,300,@impac-widget-text-color);
+    }
+    .part {
+      width: 49%;
+      margin-bottom: 8px;
+      padding: 10px 0px;
+      background-color: @impac-widget-sub-bg-color-light;
+      // color: #626d6d;
+      border: solid 1px @impac-widget-borders-color;
+      h5 {
         margin: 0;
-        margin-bottom: 8px;
-        text-align: left;
-        .font(15px,300,@bg-inverse-color);
+        margin-bottom: 10px;
+        padding: 0px 15px;
+        text-transform: uppercase;
+        font-size: 12px;
       }
-      .part {
-        margin-bottom: 8px;
-        padding-top: 5px;
-        padding-bottom: 8px;
-        padding-left: 10px;
-        padding-right: 10px;
-        border: 1px solid @bg-main-color;
-        background-color: #f5f5f5;
-        // font-weight: 200;
-        color: #626d6d;
-        h5 {
-          margin: 0;
-          margin-bottom: 4px;
-          padding: 0;
-          .font(14px,bold,#626d6d);
-        }
-        input[type="checkbox"], input[type="radio"] {
-          margin: 0;
-          margin-right: 3px;
-          padding: 0;
-          width: 13px;
-          height: 13px;
-          vertical-align: middle;
-          position: relative;
-          top: -1px;
-          outline: none;
-        }
-        input[type="range"] {
-          height: 20px;
-        }
-        label {
-          font-weight: normal;
-        }
-        li {
-          margin-bottom: 2px;
-        }
-        ul {
-          margin-bottom: 0px;
+      label {
+        font-weight: normal;
+      }
+      .widget-lines-container {
+        .widget-line {
+          padding: 5px 10px 5px 18px;
+          &:nth-child(even) {
+            background-color: @impac-widget-sub-bg-color;
+          }
+          .fa {
+            float: right;
+            font-size: 20px;
+            cursor: pointer;
+            &.fa-toggle-on {
+              color: @impac-widget-link-color;
+            }
+            &.fa-toggle-off {
+              color: @impac-widget-sub-bg-color-light;
+            }
+          }
         }
       }
     }
-    .loader {
-      // margin-top: 75px;
-      color: @decorator-main-color;
-      font-weight: bold;
-      .gif {
-        display: block;
-        margin-top: 10px;
-      }
+  }
+  .loader {
+    // margin-top: 75px;
+    color: @impac-widget-link-color;
+    font-weight: bold;
+    .gif {
+      display: block;
+      margin-top: 10px;
     }
-  } 
+  }
+  .form-control {
+    margin-top: 5px;
+    background-color: @impac-widget-background-color;
+    height: 32px;
+  }
+} 
 
 .analytics {
+  padding-top: @impac-dashboard-padding-top;
   //-----------------------------
   // Format Dashboard Selection
   // and data sources
   //-----------------------------
-  padding: 5px;
-
   .head-title {
-    padding: 5px;
-  }
+    padding-top: 20px;
 
-  .dashboard-search {
-    padding-right: 5px;
-    padding-left: 5px;
-    .search-label {
-      line-height: 41px;
-      padding-right: 10px;
+    .dashboard-select {
+      margin: 5px 0px 10px 100px;
+      height: auto;
+      border-left: 1px solid darken(@impac-dashboard-title-color,10%);
+      border-bottom: 1px solid darken(@impac-dashboard-title-color,10%);
+      width: 300px;
+      background-color: @bg-main-color;
+      cursor: pointer;
+      .option {
+        padding: 5px 10px 5px 10px;
+        color: @impac-dashboard-title-label-color;
+        white-space: nowrap;
+        &:hover {
+          background-color: @bg-inverse-color;
+          color: @text-inverse-color;
+        }
+        &.create {
+          background-color: @impac-dashboard-title-color;
+          color: @impac-dashboard-title-label-color;
+        }
+        &.create:hover {
+          background-color: darken(@impac-dashboard-title-color,10%);
+        }
+      }
     }
+
+    .dashboard-label {
+      color: @impac-dashboard-title-label-color;
+      display: inline;
+    }
+    
+    .dashboard-title {
+      color: @impac-dashboard-title-color;
+      display: inline;
+      cursor: pointer;
+      &:hover {
+        color: darken(@impac-dashboard-title-color,10%);
+      }
+    }
+
     .data-source-label {
+      color: @impac-dashboard-source-color;
       padding-left: 3px;
+      margin: 0px;
     }
-  }
-  
-  .dashboard-title {
-    .data-source-label {
-      padding-left: 2px;
-    }
-  }
 
-  .buttons-bar {
-    padding-right: 5px;
-  }
-  
-  //----------------------------
-  // Format top menu actions
-  //----------------------------
-  .actions-panel {
-    float:right;
-    .btn {
-      margin:3px;
+    .buttons-bar {
+      // padding-top: 64px;
     }
-  }
 
-  select {
-    margin-top: 5px;
-    background-color: white;
-    height: 32px;
+    //----------------------------
+    // Format top menu actions
+    //----------------------------
+    .actions-panel {
+      float:right;
+      .btn {
+        margin:3px;
+        border-radius: @impac-dashboard-buttons-border-radius;
+      }
+    }
   }
   
   //-----------------------------
@@ -202,124 +220,181 @@
     //-----------------------------
 
     .placeHolderBox {
-      height: 282px;
+      margin: @impac-padding-between-widgets;
+      height: 267px;
       width: 300px;
       float: left;
-      border: 2px dashed @decorator-inverse-color;
+      border: @impac-placeholder-border;
       background: none;
     }
 
     .widget-item {
-      padding: 5px;
+      padding: @impac-padding-between-widgets;
 
-      &.new_row {
-        clear: both;
+      select {
+        margin-top: 5px;
+        background-color: @impac-widget-background-color;
+        color: @impac-widget-text-color;
+        height: 32px;
       }
 
       .top-line {
         cursor: move;
-        height: 32px;
-        background-color: #17262d;
-        padding: 5px 5px 0 8px;
-        border-radius: 5px 5px 0px 0px;
+        background-color: @impac-widget-title-bg;
+        padding: 10px 10px 0px 10px;
+        border-radius: @impac-widget-title-border-radius;
+        min-height: 41px;
 
         .btn {
           float: right;
           background: transparent;
           border: none;
-          color: black;
-          padding: 0;
-          padding-top: 1px;
+          color: @impac-widget-borders-color;
+          padding: 0px;
           margin-left: 3px;
           outline: none;
-        }
 
-        .btn.btn-edit:hover {
-          color: @elem-positive-color;
-        }
+          &:active, &:focus {
+              -webkit-box-shadow: none;
+            }
 
-        .btn.btn-editmode {
-          color: @elem-positive-color;
-        }
-
-        .btn.btn-close:hover {
-          color: @brand-danger;
-        }
-
-        .title-wrapper {
-          width: 100%;
-          margin-top: 1px;
-          .title {
-            display: inline;
-            text-transform: uppercase;
-            .font(14px,300,white);
-            text-align: left;
-            cursor: text;
+            &.btn-edit {
+              font-size: 18px;
+              &:hover {
+                color: @elem-positive-color;
+              }
+              span {
+                vertical-align: top;
+              }
+            }
+            &.btn-editmode {
+              font-size: 18px;
+              color: @elem-positive-color;
+              span {
+                vertical-align: top;
+              }
+            }
+            &.btn-close {
+              // Not used as the button contains an image
+              &:hover {
+                color: @brand-danger;
+              }
+              img {
+                vertical-align: top;
+              }
+            }
           }
-          .editable-wrap {
-            width: 75%;
-            .editable-controls {
-              width: 100%;
-              .editable-input {
-                height: 23px;
+
+          .title-wrapper {
+            width: 100%;
+            padding: 0px 10px 10px 10px;
+            border-bottom: @impac-widget-title-border;
+            white-space: nowrap;
+            .title {
+              display: inline;
+              text-transform: @impac-widget-title-text-transform;
+              .font(@impac-widget-title-text-size,600,@impac-widget-title-text-color);
+              text-align: left;
+              cursor: text;
+            }
+            .editable-wrap {
+              height: 20px;
+              width: 75%;
+              .editable-controls {
                 width: 100%;
+                .editable-input {
+                  height: 20px;
+                  font-size: @impac-widget-title-text-size;
+                  text-transform: @impac-widget-title-text-transform;
+                  width: 100%;
+                }
               }
             }
           }
         }
-      }
 
       .content {
-        padding: 5px;
-        border-radius: 0px 0px 5px 5px;
-        background-color:white;
-        min-height:250px;
+        padding: 10px;
+        border-radius: @impac-widget-content-border-radius;
+        background-color:@impac-widget-background-color;
+        min-height:@impac-minimum-widget-size;
         vertical-align:top;
-
-        // max-height: 250px;
-        // overflow-y: auto;
-        // overflow-x: hidden;
 
         a {
           font-weight: bold;
-          color: @decorator-alt-color;
+          color: @impac-widget-link-color;
           cursor: pointer;
         }
         
         .currency {
-          .font(16px,300,@bg-inverse-color);
+          .font(16px,300,@impac-widget-legend-color);
           text-align: center;
         }
 
+        .data-not-found {
+          text-align: center;
+          margin-top: 75px;
+          font-size: 18px;
+          color: #5B6667;
+          a {
+            color: @impac-widget-link-color;
+            display: block;
+            font-size: 16px;
+            font-weight: normal;
+          }
+        }
+
         .edit {
-          max-height: 240px;
+          max-height: 230px;
           overflow-y: auto;
           overflow-x: hidden;
-          color: @bg-inverse-color;
-          padding: 5px;
+          // color: @bg-inverse-color;
+          padding: 2px;
+          font-size: 12px;
+
+          .btn {
+            border-radius: 2px;
+            margin-right: 5px;
+            padding: 3px 13px;
+            text-transform: uppercase;
+            font-size: 12px;
+
+            &.btn-default {
+              background-color: @input-bg;
+              border: solid 1px darken(@input-bg,10%);
+              color: @input-color;
+              &:hover {
+                border: solid 1px darken(@input-bg,20%);
+                background-color: darken(@input-bg,10%);
+              }
+            }
+          }
+
           h4 {
             margin: 0;
             margin-bottom: 8px;
             text-align: left;
-            .font(15px,300,@bg-inverse-color);
+            .font(12px,normal,@impac-widget-legend-color);
           }
           .part {
             margin-bottom: 8px;
-            padding-top: 5px;
-            padding-bottom: 8px;
-            padding-left: 10px;
-            padding-right: 10px;
-            border: 1px solid @bg-main-color;
-            background-color: #f5f5f5;
-            // font-weight: 200;
-            color: #626d6d;
+            padding: 10px 0px;
+            background-color: @impac-widget-sub-bg-color-light;
+            color: @impac-widget-text-color;
+            border: 1px solid @impac-widget-borders-color;
             h5 {
               margin: 0;
-              margin-bottom: 4px;
-              padding: 0;
-              .font(14px,bold,#626d6d);
+              margin-bottom: 10px;
+              padding: 0px 15px;
+              text-transform: uppercase;
+              font-size: 12px;
+              color: @impac-widget-legend-color;
             }
-            input[type="checkbox"], input[type="radio"] {
+            .input-group.select-account {
+              padding: 0px 5px;
+            }
+            
+            input[type="radio"] {
               margin: 0;
               margin-right: 3px;
               padding: 0;
@@ -330,17 +405,48 @@
               top: -1px;
               outline: none;
             }
+
             input[type="range"] {
               height: 20px;
             }
+
             label {
               font-weight: normal;
             }
-            li {
-              margin-bottom: 2px;
+
+            select.form-control {
+              margin: 0px;
+              outline: none;
+              -webkit-box-shadow: none;
+              font-size: 13px;
             }
-            ul {
-              margin-bottom: 0px;
+
+            .chart-filters {
+              margin: 0px;
+            }
+
+            .time-range {
+              padding: 0px 5px;
+            }
+
+            .widget-lines-container {
+              .widget-line {
+                padding: 5px 10px 5px 18px;
+                &:nth-child(even) {
+                  background-color: @impac-widget-sub-bg-color-light;
+                }
+                .fa {
+                  float: right;
+                  font-size: 20px;
+                  cursor: pointer;
+                  &.fa-toggle-on {
+                    color: @impac-widget-link-color;
+                  }
+                  &.fa-toggle-off {
+                    color: @impac-widget-legend-color;
+                  }
+                }
+              }
             }
           }
         }
@@ -351,13 +457,13 @@
 
         h2 {
           text-align: left;
-          .font(35px,700,@bg-inverse-color);
+          .font(35px,700,@impac-widget-text-color);
         }
 
         h3 {
           margin: 0;
           text-align: left;
-          .font(20px,300,@bg-inverse-color);
+          .font(14px,300,@impac-widget-legend-color);
         }
 
         .h3-wrapper {
@@ -368,19 +474,53 @@
             width:100%;
             display:table-cell;
             text-transform: uppercase;
-            .font(20px,300,@text-inverse-color);
+            .font(20px,300,@impac-widget-legend-color);
             text-align: center;
             vertical-align: middle;
           }
         }
 
         .histModeChoser {
+          width: 150px;
+          margin: auto;
+          padding-bottom: 8px;
+          border-bottom: solid 1px @impac-widget-borders-color;
+          .font(@impac-widget-hist-text-size,500,@impac-widget-hist-text-color);
           a {
-            color: @bg-main-color;
-            font-size: 12px;
+            .font(@impac-widget-hist-text-size,500,@impac-widget-hist-text-color);
+            text-transform: @impac-widget-hist-text-transform;
             &.active {
-              text-decoration: underline;
+              color: @impac-widget-link-color;
             }
+          }
+        }
+        .arrow-container {
+          width: 28px;
+          height: 28px;
+          position: relative;
+          top: -14px;
+          margin: auto;
+          &.right {
+            left: 30px;
+          }
+          &.left {
+            left: -30px;
+          }
+          .arrow-border {
+            border-top: 14px solid @impac-widget-borders-color;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            width: 0px;
+            height: 0px;
+          }
+          .arrow {
+            border-top: 14px solid @impac-widget-background-color;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            position: relative;
+            top: 12px;
+            width: 0px;
+            height: 0px;
           }
         }
 
@@ -390,12 +530,12 @@
 
         .legend {
           text-align: center;
-          .font(12px,300,@text-inverse-color);
+          .font(12px,300,@impac-widget-legend-color);
         }
 
         .loader {
           margin-top: 75px;
-          color: @decorator-main-color;
+          color: @impac-widget-text-color-light;
           font-weight: bold;
           .gif {
             display: block;
@@ -404,27 +544,28 @@
         }
 
         .price {
-          .font(22px,900,@bg-inverse-color);
+          .font(22px,900,@impac-widget-price-color);
           text-align: center;
+          margin-top: 30px;
         }
 
         .widget-lines-container {
-          max-height: 210px;
+          max-height: @impac-widget-lines-container-max-height;
           overflow-y: auto;
           overflow-x: hidden;
-          font-size: 14px;
+          font-size: 12px;
         }
 
         .widget-line {
           width:100%;
           margin:0px;
           padding:5px;
-          color:@text-inverse-color;
+          // color:@text-inverse-color;
           &:nth-child(even) {
-            background-color:@bg-main-color;
+            background-color:@impac-widget-sub-bg-color;
           }
           &:nth-child(odd) {
-            background-color:white;
+            background-color:@impac-widget-background-color;
           }
           .table-header {
             font-weight: bold;
@@ -437,22 +578,13 @@
 
         &.accounts {
           .blue {
-            color: @decorator-main-color;
+            color: @impac-widget-price-positive-color;
           }
           .history {
             margin-top: 10px;
           }
           .pink {
-            color: @brand-danger;
-          }
-          .price {
-            margin-top: 85px;
-          }
-
-          &.accounting-value {
-            .price {
-              margin-top: 62px;
-            }
+            color: @impac-widget-price-negative-color;
           }
 
           &.assets-summary {
@@ -469,29 +601,75 @@
           
           &.balance {
             h3 {
-              margin-top: 15px;
+              margin-top: 30px;
               text-align: center;
             }
             .price {
-              margin-top: 40px;
+              margin-top: 0px;
             }
           }
 
           &.comparison {
+            min-height: @impac-big-widget-size;
+            .add-account {
+              position: absolute;
+              right: 40px;
+              bottom: @impac-big-widget-bottom-padding;
+              width: 160px;
+              select {
+                font-size: 13px;
+                background-color: @impac-widget-link-color;
+                color: @impac-widget-background-color;
+                outline: none;
+                border: none;
+                cursor: pointer;
+                &[disabled] {
+                  cursor: not-allowed;
+                  background-color: lighten(@impac-widget-link-color,40%);
+                  &:hover {
+                    background-color: lighten(@impac-widget-link-color,40%);
+                  }
+                }
+                &:hover {
+                  background-color: darken(@impac-widget-link-color,10%);
+                }
+                option {
+                  background-color: @impac-widget-background-color;
+                  color: lighten(@impac-widget-text-color,30%);
+                  &[disabled] {
+                    color: @impac-widget-background-color;
+                  }
+                }
+              }
+            }
+            // .border {
+            //   margin: 15px 0px;
+            //   border-color: #E6E6E6;
+            //   border-top: 0px;
+            //   border-left: 0px;
+            //   border-right: 0px;
+            // }
+            button.close {
+              font-size: 15px;
+            }
             .legend {
               text-align: left;
-              max-height: 107px;
+              max-height: 103px;
               overflow-y: auto;
               overflow-x: hidden;
             }
+            .loader {
+              margin: 75px 0px 77px 0px;
+            }
             .row {
               margin: 0;
-            }
-            .col-md-6 {
-              padding: 0;
+              &.chart {
+                // min-height: 241px;
+              }
             }
             .widget-lines-container {
-              max-height: 203px;
+              font-size: 11px;
+              max-height: @impac-widget-accounts-comparison-lines-container-max-height;
             }
           }
 
@@ -501,6 +679,10 @@
               text-align: center;
               font-weight: bold;
             }
+
+            .price {
+              margin-top: 75px;
+            }
           }
 
           &.expenses-revenue {
@@ -508,10 +690,8 @@
               margin-top: 13px;
               margin-bottom: 8px;
             }
-            .history {
-              .legend {
-                font-weight: bold;
-              }
+            .legend {
+              font-weight: bold;
             }
           }
 
@@ -529,7 +709,7 @@
               }
             }
             .receivable {
-              margin-top: 20px;
+              // margin-top: 20px;
               .price {
                 margin: 0;
               }
@@ -544,11 +724,16 @@
         &.invoices {
 
           &.list {
+            .table-header {
+              .font(12px,500,@impac-widget-text-color-light);
+              text-transform: uppercase;
+            }
+            
             .tooltip {
               .tooltip-inner {
                 &.ng-binding {
                   text-align: left;
-                  background-color: @bg-inverse-intense-color;
+                  background-color: @black;
                   max-width: 100%;
                   white-space: nowrap;
                   strong {
@@ -560,7 +745,8 @@
 
             .widget-lines-container {
               .widget-line:hover {
-                background-color: @bg-main-color;
+                background-color: @impac-widget-line-hover-bg;
+                color: @impac-widget-line-hover-text;
                 cursor: pointer;
               }
             }
@@ -574,18 +760,11 @@
 
           &.summary {
             height: 250px;
-            a {
-              font-weight: bold;
-              color: @decorator-alt-color
-            }
             .chart-container {
               max-width: 410px;
             }
             .legend {
               height: 28px;
-            }
-            .price {
-              margin-top: 85px;
             }
             #myChart {
               margin-top: 8px;

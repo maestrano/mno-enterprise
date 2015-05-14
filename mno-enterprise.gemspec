@@ -31,7 +31,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'jquery-rails', '~> 4.0.3'
   s.add_dependency 'jwt', '~> 1.4.1'
   s.add_dependency 'mandrill-api', '~> 1.0.53'
-  
+  s.add_dependency 'sprockets', '~> 2.12.3'
+  s.add_dependency 'sprockets-rails', '~> 2.2.4'
+
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "factory_girl_rails"

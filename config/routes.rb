@@ -72,6 +72,12 @@ MnoEnterprise::Engine.routes.draw do
         # Currently stubbed
         resources :teams, only: [:index]
       end
+
+      namespace :impac do
+        resources :dashboards, only: [:index,:show,:create,:update,:destroy] do
+          resources :widgets, shallow: true, only: [:create,:destroy,:update]
+        end
+      end
     end
   end
 end
