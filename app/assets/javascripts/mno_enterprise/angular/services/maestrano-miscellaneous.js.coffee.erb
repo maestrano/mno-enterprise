@@ -18,7 +18,7 @@ angular.module('maestrano.services.miscellaneous', []).factory('Miscellaneous', 
   <% impacUrls = {get_widget: "#{Settings.impac.protocol}://#{Settings.impac.host}#{Settings.impac.paths.get_widget}"}.to_json %>
   service.impacUrls = <%= impacUrls %>
 
-  <% tenantColors = {positive: Settings.impac.colors.positive, negative: Settings.impac.colors.negative, array: Settings.impac.colors.array}.to_json %>
+  <% tenantColors = {positive: Settings.tenant.colors.positive, negative: Settings.tenant.colors.negative, array: Settings.tenant.colors.array}.to_json %>
   service.impacTenantColors = <%= tenantColors %>
 
   return service
@@ -27,4 +27,4 @@ angular.module('maestrano.services.miscellaneous', []).factory('Miscellaneous', 
 
 # Increment version below to force
 # asset reload
-# 68
+# 69
