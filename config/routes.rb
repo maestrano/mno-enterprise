@@ -75,7 +75,7 @@ MnoEnterprise::Engine.routes.draw do
 
       namespace :impac do
         resources :dashboards, only: [:index,:show,:create,:update,:destroy] do
-          resources :widgets, shallow: true, only: [:show,:create,:destroy,:update]
+          resources :widgets, shallow: true, only: [:create,:destroy,:update]
         end
       end
     end
