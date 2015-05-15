@@ -19,7 +19,6 @@ module MnoEnterprise
         #        undefined method `empty?' for nil:NilClass
         xit 'logs the user in' do
           post '/mnoe/auth/users/sign_in', user: { email: user.email, password: 'securepassword' }
-          #puts controller.inspect
           #expect(controller).to be_user_signed_in
           expect(controller.current_user.id).to eq(user.id)
           #expect(controller.current_user.name).to eq(api_user[:name])

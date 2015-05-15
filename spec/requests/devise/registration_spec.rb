@@ -29,7 +29,6 @@ module MnoEnterprise
       get: '/users',
       params: { filter: { email: signup_attrs[:email] }, limit: 1 },
       response: -> {
-        puts "\n\n\n\nI have been called!!!!!!!\n\n\n\n"
         from_api(email_uniq_resp)
       } 
     )}

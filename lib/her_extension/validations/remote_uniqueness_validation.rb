@@ -7,7 +7,6 @@ module HerExtension
     # Validate the uniqueness of a field by performing a remote API call
     class RemoteUniquenessValidator < ::ActiveModel::EachValidator
       def validate_each(record,attribute,value)
-        puts "\n\n\n\nI AM IN REMOTE UNIQUENESS VALIDATOR\n\n\n\n"
         list = record.class.where({ attribute => value }).limit(1)
         
         if list.reject { |e| e.id == record.id }.any?

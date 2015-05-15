@@ -10,7 +10,6 @@ module Her
       # @private
       def parse(body)
         json = parse_json(body)
-        puts json
         parse_types({
           :data => json[:data] || {},
           :errors => json[:errors] || {},

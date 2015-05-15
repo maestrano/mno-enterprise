@@ -52,7 +52,6 @@ module Her
         end
         
         def method_missing(name, *args, &block)
-          puts "==========> method missing! #{name}"
           blank_relation.send(name, *args, &block)
         end
 

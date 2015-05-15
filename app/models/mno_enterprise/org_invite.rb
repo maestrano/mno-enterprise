@@ -19,7 +19,7 @@
 
 module MnoEnterprise
   class OrgInvite < BaseResource
-    scope :active, -> { puts self; where(status: 'pending') }
+    scope :active, -> { where(status: 'pending') }
     
     #==============================================================
     # Associations

@@ -43,9 +43,6 @@ module MnoEnterprise
       hash['categories'].delete('Most Popular')
       
       apps.each do |app|
-        puts "----------------------- Active APP ---------------------------------"
-        puts app.inspect
-        puts "--------------------------------------------------------------------"
         hash['apps'] << partial_hash_for_app(app)
       end
     

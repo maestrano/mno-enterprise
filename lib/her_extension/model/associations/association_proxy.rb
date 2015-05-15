@@ -18,8 +18,7 @@ module Her
             if Relation.scopes.keys.grep(::Regexp.new(name.to_s)).any?
               return self.association.send(name,*args,&block)
             end
-          rescue ::NoMethodError => e
-            puts e.backtrace.join("\n")          
+          rescue ::NoMethodError => e     
           end
           
           # create a proxy to the fetched object's method

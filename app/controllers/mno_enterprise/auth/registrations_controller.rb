@@ -13,12 +13,7 @@ module MnoEnterprise
       build_resource(sign_up_params)
       resource.password ||= Devise.friendly_token
       
-      
       resource_saved = resource.save
-      
-      puts "------------------------- User VALID???? ----------------------------"
-      puts resource.valid?
-      puts "------------------------- User VALID???? ----------------------------"
       
       yield resource if block_given?
       

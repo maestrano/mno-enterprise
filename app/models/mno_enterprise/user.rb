@@ -75,7 +75,6 @@ module MnoEnterprise
       u = self.post("user_sessions", auth_hash)
       
       if u && u.id
-        puts "MnoEnterprise::User | authenticate | u.changes: #{u.changes}"
         u.clear_attribute_changes!
         return u
       end

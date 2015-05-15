@@ -136,9 +136,6 @@ module MnoEnterpriseApiTestHelper
                 end
               end
               
-              puts "\nConsumed stub: 
-                #{stub[:method]} #{stub[:path]}#{stub[:params] && '?' + stub[:params].to_param} 
-                ==> #{resp}\n"
               [stub[:code] || 200, {}, resp.to_json] 
             }
           end
