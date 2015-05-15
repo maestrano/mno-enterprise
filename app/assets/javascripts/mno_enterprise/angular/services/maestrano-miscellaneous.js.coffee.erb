@@ -15,10 +15,10 @@ angular.module('maestrano.services.miscellaneous', []).factory('Miscellaneous', 
   service.countryCodes = <%= countryCodes %>
 
   # <% impacGetWidgetUrl = "#{Settings.impac.protocol}://#{Settings.impac.host}#{Settings.impac.paths.get_widget}" %>
-  <% impacUrls = {get_widget: "#{Settings.impac.protocol}://#{Settings.impac.host}#{Settings.impac.paths.get_widget}"}.to_json %>
+  <% impacUrls = {get_widget: "#{MnoEnterprise.impac_api_host}/#{MnoEnterprise.impac_api_get_widget_path}"}.to_json %>
   service.impacUrls = <%= impacUrls %>
 
-  <% tenantColors = {positive: Settings.tenant.colors.positive, negative: Settings.tenant.colors.negative, array: Settings.tenant.colors.array}.to_json %>
+  <% tenantColors = {positive: MnoEnterprise.impac_colors_positive, negative: MnoEnterprise.impac_colors_negative, array: MnoEnterprise.impac_colors_array}.to_json %>
   service.impacTenantColors = <%= tenantColors %>
 
   return service

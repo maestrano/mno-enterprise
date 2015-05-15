@@ -65,6 +65,27 @@ module MnoEnterprise
   # Maestrano Enterprise Tenant Key
   mattr_accessor :tenant_key
   @@tenant_key = nil
+
+  #====================================
+  # Impac
+  #====================================
+  mattr_accessor :impac_api_host
+  @@impac_api_host = 'https://uat.maestrano.io'
+
+  mattr_accessor :impac_api_root_path
+  @@impac_api_root_path = "/api/v1"
+
+  mattr_accessor :impac_api_get_widget_path
+  @@impac_api_get_widget_path = "/api/v1/get_widget"
+
+  mattr_accessor :impac_colors_array
+  @@impac_colors_array = ["#1de9b6","#7c4dff","#ffc928","#3fc4ff","#ff8e01","#c6ff00","#d500fa","#ff6e41","#ffeb3c","#ff1844"]
+
+  mattr_accessor :impac_colors_positive
+  @@impac_colors_positive = "#3FC4FF"
+
+  mattr_accessor :impac_colors_negative
+  @@impac_colors_negative = "#1DE9B6"
   
   #====================================
   # System
