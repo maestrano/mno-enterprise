@@ -13,7 +13,7 @@ module MnoEnterprise
     end
     
     it 'routes to #create' do
-      expect(post('/jpi/v1/organizations')).to route_to("mno_enterprise/jpi/v1/organizations#create", id: '1')
+      expect(post('/jpi/v1/organizations')).to route_to("mno_enterprise/jpi/v1/organizations#create")
     end
     
     it 'routes to #update' do

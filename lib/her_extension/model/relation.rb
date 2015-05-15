@@ -23,6 +23,7 @@ module Her
       # Doing more advanced caching out of the box may lead to undesirable 
       # results and should be left to the developer.
       def fetch
+        clear_cache! if defined?(Rails) && Rails.env.test? #reset cache in test env
         cache[query_checkum] ||= begin
           self.clear_cache!
           path = @parent.build_request_path(@params)

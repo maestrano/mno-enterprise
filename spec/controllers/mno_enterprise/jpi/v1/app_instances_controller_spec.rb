@@ -14,7 +14,7 @@ module MnoEnterprise
     
     # Stub user and user call
     let(:user) { build(:user) }
-    before { api_stub_for(MnoEnterprise::User, method: :get, path: "/users/#{user.id}", response: from_api(user)) }
+    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     
     # Stub organization/app_instance + associations
     let(:organization) { build(:organization) }
@@ -57,8 +57,8 @@ module MnoEnterprise
     
     describe 'DELETE #destroy' do
       let(:app_instance) { build(:app_instance) }
-      before { api_stub_for(MnoEnterprise::AppInstance, method: :get, path: "/app_instances/#{app_instance.id}", respond_with: app_instance)}
-      before { api_stub_for(MnoEnterprise::AppInstance, method: :delete, path: "/app_instances/#{app_instance.id}", response: ->{ app_instance.status = 'terminated'; from_api(app_instance) }) }
+      before { api_stub_for(get: "/app_instances/#{app_instance.id}", respond_with: app_instance)}
+      before { api_stub_for(delete: "/app_instances/#{app_instance.id}", response: ->{ app_instance.status = 'terminated'; from_api(app_instance) }) }
       before { sign_in user }
       subject { delete :destroy, id: app_instance.id }
     

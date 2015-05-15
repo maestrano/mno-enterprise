@@ -6,10 +6,10 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
     
-    let(:app) { build(:app) }
+    let!(:app) { build(:app) }
     
-    before { api_stub_for(MnoEnterprise::App, path: '/apps', response: from_api([app])) }
-    before { api_stub_for(MnoEnterprise::App, path: "/apps/#{app.id}", response: from_api(app)) }
+    before { api_stub_for(get: '/apps', response: from_api([app])) }
+    before { api_stub_for(get: "/apps/#{app.id}", response: from_api(app)) }
   
     def partial_hash_for_app(app)
       {
@@ -36,13 +36,16 @@ module MnoEnterprise
       }
     end
   
-    def hash_for_apps
+    def hash_for_apps(apps)
       hash = {}
       hash['apps'] = []
       hash['categories'] = App.categories
       hash['categories'].delete('Most Popular')
-    
-      App.active.each do |app|
+      
+      apps.each do |app|
+        puts "----------------------- Active APP ---------------------------------"
+        puts app.inspect
+        puts "--------------------------------------------------------------------"
         hash['apps'] << partial_hash_for_app(app)
       end
     
@@ -59,7 +62,7 @@ module MnoEnterprise
     
       it 'returns the right response' do
         subject
-        expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps.to_json))
+        expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app]).to_json))
       end
     end
   

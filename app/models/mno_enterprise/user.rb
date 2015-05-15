@@ -54,6 +54,11 @@ module MnoEnterprise
       :trackable, :validatable, :lockable, :confirmable
     
     #================================
+    # Validation
+    #================================
+    validates_uniqueness_of :email, allow_blank: true, if: :email_changed?
+    
+    #================================
     # Associations
     #================================
     has_many :organizations, class_name: 'MnoEnterprise::Organization'

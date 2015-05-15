@@ -15,6 +15,11 @@ module MnoEnterprise
       
       
       resource_saved = resource.save
+      
+      puts "------------------------- User VALID???? ----------------------------"
+      puts resource.valid?
+      puts "------------------------- User VALID???? ----------------------------"
+      
       yield resource if block_given?
       
       if resource_saved

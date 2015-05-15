@@ -10,6 +10,7 @@ json.current_user do
   json.phone_country_code @user.phone_country_code
   json.country_code @user.geo_country_code || 'US'
   json.website @user.website
+  json.sso_session @user.sso_session
   
   # Embed association if user is persisted
   if @user.id
@@ -28,5 +29,5 @@ json.current_user do
     end
   end
 
-  json.sso_session @user.sso_session
+  
 end

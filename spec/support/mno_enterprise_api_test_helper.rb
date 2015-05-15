@@ -35,6 +35,7 @@ module MnoEnterpriseApiTestHelper
   def api_stub_reset
     @_api_stub = nil
     @_stub_list = {}
+    api_stub_configure(Her::API.new)
   end
   
   # Example usage:
@@ -135,7 +136,9 @@ module MnoEnterpriseApiTestHelper
                 end
               end
               
-              puts "Consumed stub #{stub} with resp: #{resp}"
+              puts "\nConsumed stub: 
+                #{stub[:method]} #{stub[:path]}#{stub[:params] && '?' + stub[:params].to_param} 
+                ==> #{resp}\n"
               [stub[:code] || 200, {}, resp.to_json] 
             }
           end
