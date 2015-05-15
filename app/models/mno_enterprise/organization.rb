@@ -40,11 +40,6 @@ module MnoEnterprise
     # Return the list of users + active invites
     # TODO: specs
     def members
-      #list = [self.users]
-      #list << self.org_invites.respond_to?(:active) ? 
-      puts "-------------------- OrgInvite CLASS ------------------------------"
-      puts self.org_invites.class
-      puts "-------------------------------------------------------------------"
       [self.users,self.org_invites.active].flatten
     end
     
