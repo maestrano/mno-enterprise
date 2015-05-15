@@ -40,7 +40,7 @@ module MnoEnterprise
           'role' => user.role(organization)
         })
       end
-
+      
       organization.org_invites.each do |invite|
         list.push({
           'id' => invite.id,
@@ -166,7 +166,7 @@ module MnoEnterprise
     
     # Stub user and user call
     let(:user) { build(:user) }
-    before { api_stub_for(MnoEnterprise::User, method: :get, path: "/users/#{user.id}", response: from_api(user)) }
+    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     before { sign_in user }
     
     # Advanced features - currently disabled
@@ -177,15 +177,16 @@ module MnoEnterprise
     # Stub organization + associations
     let(:organization) { build(:organization) }
     before { allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) }
-    before { api_stub_for(MnoEnterprise::Organization, method: :get, path: "/organizations/#{organization.id}/users", response: from_api([user])) }
-    before { api_stub_for(MnoEnterprise::Organization, method: :put, path: "/organizations/#{organization.id}", response: from_api(organization)) }
     
-    before { allow(organization).to receive(:users).and_return([user]) }
-    before { allow(organization).to receive(:org_invites).and_return([org_invite]) }
+    before { api_stub_for(post: "/organizations", response: from_api(organization)) }    
+    before { api_stub_for(put: "/organizations/#{organization.id}", response: from_api(organization)) }
     
+    before { api_stub_for(get: "/organizations/#{organization.id}/org_invites", response: from_api([org_invite])) }
+    before { api_stub_for(get: "/organizations/#{organization.id}/users", response: from_api([user])) }
+    before { api_stub_for(post: "/organizations/#{organization.id}/users", response: from_api(user)) }
     
-    
-    
+    #before { allow(organization).to receive(:users).and_return([user]) }
+    #before { allow(organization).to receive(:org_invites).and_return([org_invite]) }
     
     #===============================================
     # Specs
@@ -228,7 +229,30 @@ module MnoEnterprise
         # end
       end
     end
+    
+    describe 'POST #create' do
+      let(:params) { { 'name' => organization.name } }
+      subject { post :create, organization: params }
+      
+      it_behaves_like "jpi v1 protected action"
+      
+      context 'success' do
+        before { subject }
+        
+        it 'creates the organization' do
+          expect(assigns(:organization).name).to eq(organization.name)
+        end
+        
+        it 'adds the user as Super Admin' do
+          expect(assigns(:organization).users).to eq([user])
+        end
 
+        it 'returns a partial representation of the entity' do
+          expect(JSON.parse(response.body)).to eq(hash_for_organization(organization,user))
+        end
+      end
+    end
+    
     describe 'PUT #update' do
       let(:params) { { 'name' => organization.name + 'a', 'soa_enabled' => !organization.soa_enabled } }
       subject { put :update, id: organization.id, organization: params }

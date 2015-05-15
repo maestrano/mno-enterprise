@@ -26,7 +26,8 @@ module MnoEnterprise
         'phone' => res.phone,
         'phone_country_code' => res.phone_country_code,
         'country_code' => res.geo_country_code || 'US',
-        'website' => res.website
+        'website' => res.website,
+        'sso_session' => res.sso_session
       }
       
       if res.id
@@ -38,12 +39,12 @@ module MnoEnterprise
           }
         end
         
-        if res.deletion_request.present?
-          hash['deletion_request'] = {
-            'id' => res.deletion_request.id,
-            'token' => res.deletion_request.token
-          }
-        end
+        # if res.deletion_request.present?
+        #   hash['deletion_request'] = {
+        #     'id' => res.deletion_request.id,
+        #     'token' => res.deletion_request.token
+        #   }
+        # end
       end
       
       hash
@@ -51,7 +52,7 @@ module MnoEnterprise
     
     # Stub user retrieval
     let!(:user) { build(:user, :with_deletion_request, :with_organizations) }
-    before { api_stub_for(MnoEnterprise::User, method: :get, path: "/users/#{user.id}", response: from_api(user)) }
+    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     
     describe "GET #show" do
       subject { get :show }
@@ -85,7 +86,7 @@ module MnoEnterprise
     
     describe 'PUT #update' do
       let(:attrs) { { name: user.name + 'aaa' } }
-      before { api_stub_for(MnoEnterprise::User, method: :put, path: "/users/#{user.id}", response: ->{ user.assign_attributes(attrs); from_api(user) }) }
+      before { api_stub_for(put: "/users/#{user.id}", response: ->{ user.assign_attributes(attrs); from_api(user) }) }
       
       subject { put :update, user: attrs }
       
@@ -103,7 +104,7 @@ module MnoEnterprise
     
     describe 'PUT #update_password' do
       let(:attrs) { { current_password: 'password', password: 'blablabla', password_confirmation: 'blablabla' } }
-      before { api_stub_for(MnoEnterprise::User, method: :put, path: "/users/#{user.id}", response:  from_api(user)) }
+      before { api_stub_for(put: "/users/#{user.id}", response:  from_api(user)) }
       
       subject { put :update_password, user: attrs }
       

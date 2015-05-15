@@ -27,7 +27,7 @@ module.controller('NewOrgModalCtrl',[
           modal.errors = ''
           modal.close()
           # Callback method
-          if $modalInstanceCB then $modalInstanceCB(success.data)
+          if $modalInstanceCB then $modalInstanceCB(success.data.organization)
         ,(errors) ->
           modal.errors = Utilities.processRailsError(errors)
       ).finally(-> modal.isLoading = false)

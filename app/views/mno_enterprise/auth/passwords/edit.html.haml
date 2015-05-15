@@ -1,15 +1,53 @@
-%h2 Change your password
-= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
-  = devise_error_messages!
-  = f.hidden_field :reset_password_token
-  .field
-    = f.label :password, "New password"
-    %br/
-    = f.password_field :password, autofocus: true, autocomplete: "off"
-  .field
-    = f.label :password_confirmation, "Confirm new password"
-    %br/
-    = f.password_field :password_confirmation, autocomplete: "off"
-  .actions
-    = f.submit "Change my password"
-= render "devise/shared/links"
+%div{ 'ng-init' => "user = {}" }
+
+.registration
+  .container
+    .row
+      .login-box-wrapper
+        .login-box-title
+          %h2 Change your password
+        .login-box
+          .brand-logo
+          = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: 'form-horizontal autofill-detect' }) do |f|
+            
+            - unless devise_error_messages!.empty?
+              .row
+                .alert.alert-error
+                  %button.close ×
+                  = devise_error_messages!
+            
+            = f.hidden_field :reset_password_token
+            
+            .row
+              .col-sm-12
+                = f.password_field :password, placeholder: "*Password", required: true, autofocus: true, autocomplete: "off", 'ng-model' => 'user.password', class: 'form-control'
+            
+            %br
+            
+            .row
+              .col-sm-12
+                = f.password_field :password_confirmation, placeholder: "*Confirm Password", required: true, autofocus: true, autocomplete: "off", 'ng-model' => 'user.password_confirmation', class: 'form-control'
+            
+            %br
+            
+            .row
+              .col-sm-12
+                .text-center
+                  %button{ :class => "btn btn-warning", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'form.$invalid', 'ng-hide' => 'hasClicked' } Change my password
+                  %img.ng-hide{ 'ng-src' => asset_path('mno_enterprise/loader-32x32-bg-inverse.gif'), 'ng-show' => 'hasClicked' }
+            
+            
+            / .field
+            /   = f.label :password, "New password"
+            /   %br/
+            /   = f.password_field :password, autofocus: true, autocomplete: "off", 'ng-model' => 'user.company', class: 'form-control'
+            / .field
+            /   = f.label :password_confirmation, "Confirm new password"
+            /   %br/
+            /   = f.password_field :password_confirmation, autocomplete: "off"
+            / .actions
+            /   = f.submit "Change my password"
+            
+            %hr
+            
+            = render "devise/shared/links"

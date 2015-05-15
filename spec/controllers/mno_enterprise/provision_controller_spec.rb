@@ -8,7 +8,7 @@ module MnoEnterprise
     # Create user and organization + mutual associations
     let(:organization) { build(:organization) }
     let(:user) { build(:user) }
-    before { api_stub_for(MnoEnterprise::User, method: :get, path: "/users/#{user.id}", response: from_api(user)) }
+    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     before { allow(organization).to receive(:users).and_return([user]) }
     before { allow_any_instance_of(User).to receive(:organizations).and_return([organization]) }
     
@@ -46,11 +46,8 @@ module MnoEnterprise
       let(:app_instance) { build(:app_instance) }
       let(:params) { { apps: ['vtiger'], organization_id: params_org_id } }
       subject { post :create, params }
-      before { api_stub_for(MnoEnterprise::AppInstance, 
-        method: :post, 
-        path: "/organizations/#{params_org_id}/app_instances",
-        response: from_api(user)
-      )}
+      before { api_stub_for( get: "/organizations/#{params_org_id}/app_instances", response: from_api([app_instance])) }
+      before { api_stub_for( post: "/organizations/#{params_org_id}/app_instances", response: from_api(app_instance)) }
       
       describe 'guest' do
         before { subject }

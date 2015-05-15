@@ -7,19 +7,22 @@ angular.module('maestrano.services.miscellaneous', []).factory('Miscellaneous', 
   service.currencies = <%= currencies %>
 
   # Countries
-  <% countries = Country.all.map { |c| c[0] } %>
-  service.countries = <%= countries %>
+  service.countries = <%= Country.all.map { |c| c[0] } %>
 
   # Phone country code
-  <% countryCodes = Country.all.map { |c| [c[1],"(#{c[1]}) +#{Country[c[1]].country_code}"] } %>
-  service.countryCodes = <%= countryCodes %>
+  service.countryCodes = <%= Country.all.map { |c| [c[1],"(#{c[1]}) +#{Country[c[1]].country_code}"] } %>
 
-  # <% impacGetWidgetUrl = "#{Settings.impac.protocol}://#{Settings.impac.host}#{Settings.impac.paths.get_widget}" %>
-  <% impacUrls = {get_widget: "#{MnoEnterprise.impac_api_host}/#{MnoEnterprise.impac_api_get_widget_path}"}.to_json %>
-  service.impacUrls = <%= impacUrls %>
+  # Impac! API URL
+  service.impacUrls = <%= {
+    get_widget:  "#{MnoEnterprise.router.impac_root_url}/get_widget"
+  }.to_json %>
 
-  <% tenantColors = {positive: MnoEnterprise.impac_colors_positive, negative: MnoEnterprise.impac_colors_negative, array: MnoEnterprise.impac_colors_array}.to_json %>
-  service.impacTenantColors = <%= tenantColors %>
+  # tenantColors = }.to_json
+  service.impacTenantColors = <%= {
+    positive: MnoEnterprise.impac_colors_positive, 
+    negative: MnoEnterprise.impac_colors_negative, 
+    array: MnoEnterprise.impac_colors_array
+  }.to_json %>
 
   return service
 
@@ -27,4 +30,4 @@ angular.module('maestrano.services.miscellaneous', []).factory('Miscellaneous', 
 
 # Increment version below to force
 # asset reload
-# 69
+# 71

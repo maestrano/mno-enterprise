@@ -9,7 +9,7 @@ module MnoEnterprise
     end
     
     it 'routes to #finalize' do
-      expect(post('/auth/users/confirmation/finalize')).to route_to("mno_enterprise/auth/confirmations#finalize")
+      expect(patch('/auth/users/confirmation/finalize')).to route_to("mno_enterprise/auth/confirmations#finalize")
     end
     
     it 'routes to #lounge' do

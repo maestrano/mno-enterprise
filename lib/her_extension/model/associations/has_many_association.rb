@@ -20,7 +20,6 @@ module Her
           klass.associations[:has_many] << opts
 
           klass.class_eval <<-RUBY, __FILE__, __LINE__ + 1
-            puts "I am defining the association method #{name}"
             def #{name}
               cached_name = :"@_her_association_#{name}"
               cached_data = (instance_variable_defined?(cached_name) && instance_variable_get(cached_name))
@@ -47,9 +46,6 @@ module Her
         #   new_comment # => #<Comment body="Hello!">
         #
         def build(attributes = {})
-          puts "I am in association > build"
-          puts "my attributes are: #{attributes}"
-          puts "my klass is: #{@klass}"
           @klass.build(attributes)
         end
 
@@ -70,26 +66,22 @@ module Her
         #   user.comments.create(:body => "Hello!")
         #   user.comments # => [#<Comment id=2 user_id=1 body="Hello!">]
         def create(attributes = {})
-          puts "I am in association > create"
           resp = self.execute_request(:create,attributes)
           @klass.build(resp)
         end
         
         # Consider removing - not sure this method on a has_many collection has any meaning
         def update(attributes = {})
-          puts "I am in association > update"
           self.execute_request(:update,attributes)
         end
         
         # Consider removing - not sure this method on a has_many collection has any meaning
         def destroy(attributes = {})
-          puts "I am in association > destroy"
           self.execute_request(:destroy,attributes)
         end
         
         def execute_request(action, attrs)
           attributes = HashWithIndifferentAccess.new(attrs)
-          puts "I am in association > execute_request"
           
           # Post data to the collection endpoint
           resource = nil
@@ -103,7 +95,6 @@ module Her
           
           params = self.to_params(attributes).merge(:_method => method, :_path => path)
           self.request(params) do |parsed_data, response|
-            puts "Execute request success?: #{response.success?}"
             resource = parsed_data if response.success?
           end
           

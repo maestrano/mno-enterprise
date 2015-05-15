@@ -1,10 +1,31 @@
-%h2 Resend confirmation instructions
-= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
-  = devise_error_messages!
-  .field
-    = f.label :email
-    %br/
-    = f.email_field :email, autofocus: true
-  .actions
-    = f.submit "Resend confirmation instructions"
-= render "devise/shared/links"
+%div{ 'ng-init' => "user = {}" }
+
+.registration
+  .container
+    .row
+      .login-box-wrapper
+        .login-box-title
+          %h2 Confirmation
+        .login-box
+          .brand-logo
+          = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, class: 'form-horizontal autofill-detect' }) do |f|
+            
+            - unless devise_error_messages!.empty?
+              .row
+                .alert.alert-error
+                  %button.close ×
+                  = devise_error_messages!
+            
+            .row
+              .col-sm-12
+                = f.email_field :email, placeholder: "*Email", autofocus: true, required: true, 'ng-model' => 'user.email', :class => 'form-control'
+            
+            %br
+            
+            .row
+              .col-sm-12
+                .text-center
+                  %button{ :class => "btn btn-warning", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'form.$invalid', 'ng-hide' => 'hasClicked' } Resend confirmation instructions
+                  %img.ng-hide{ 'ng-src' => asset_path('mno_enterprise/loader-32x32-bg-inverse.gif'), 'ng-show' => 'hasClicked' }
+          %hr
+          = render "devise/shared/links"

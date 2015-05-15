@@ -116,7 +116,7 @@ angular.module('maestrano.services.dashboard.organization-svc', []).factory('Dhb
     data = opts
     q = $http.post(self.routes.createPath(),data)
     q.then (success) ->
-      CurrentUserSvc.addOrg(success.data)
+      CurrentUserSvc.addOrg(success.data.organization)
     return q
 
 

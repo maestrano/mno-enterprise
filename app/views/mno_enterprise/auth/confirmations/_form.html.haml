@@ -1,6 +1,6 @@
 %div{ 'ng-init' => "user = { $pwdScore: {}, name: '#{resource.name}', surname: '#{resource.surname}' }" }
 
-= form_for(resource, as: resource_name, :url => user_confirmation_finalize_path, :html => { 'name' => 'loginForm', :class => 'autofill-detect text-center' }) do |f|
+= form_for(resource, as: resource_name, :url => mno_enterprise.user_confirmation_finalize_path, :html => { 'name' => 'loginForm', :class => 'autofill-detect text-center' }) do |f|
 
   .row
     .col-sm-12

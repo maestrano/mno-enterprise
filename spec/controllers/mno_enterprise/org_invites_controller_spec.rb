@@ -6,8 +6,8 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
   
     let(:user) { build(:user) }
-    #before { api_stub_for(MnoEnterprise::User, method: :get, path: "/users/#{user.id}", response: from_api(user)) }
-    #before { api_stub_for(MnoEnterprise::User, method: :put, path: "/users/#{user.id}", response: from_api(user)) }
+    #before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    #before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
   
     describe "GET #show" do
       before { sign_in user }

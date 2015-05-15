@@ -16,7 +16,6 @@ module MnoEnterprise
       else
         message = { alert: "Unfortunately, this invite does not seem to be valid." }
       end
-      puts redirect_path
       
       redirect_to redirect_path, message
     end

@@ -108,7 +108,7 @@ module MnoEnterprise
       # Confirm any outstanding organization invite
       # TODO: invite acceptance logic should be moved to the 'show' action
       def after_confirmation_path_for(resource_name, resource)
-        return new_session_path(resource_name) unless signed_in?
+        return new_user_session_path unless signed_in?
       
         # 3 days is the duration of an invite.
         if resource.created_at > 3.days.ago

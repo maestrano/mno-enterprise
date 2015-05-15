@@ -4,6 +4,8 @@ FactoryGirl.define do
   factory :app, class: MnoEnterprise::App do
     sequence(:id) { |n| n }
     sequence(:name) { |n| "TestApp#{n}" }
+    nid { name.parameterize }
+    
     description "This is a description"
     created_at 1.day.ago
     updated_at 2.hours.ago

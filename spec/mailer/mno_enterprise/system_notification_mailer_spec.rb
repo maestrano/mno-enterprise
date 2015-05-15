@@ -31,15 +31,33 @@ module MnoEnterprise
     end
     
     describe 'confirmation_instructions' do
-      it 'sends the right email' do
-        expect(MandrillClient).to receive(:deliver).with('confirmation-instructions',
-          SystemNotificationMailer::DEFAULT_SENDER,
-          { name: "#{user.name} #{user.surname}".strip, email: user.email },
-          user_vars(user).merge(confirmation_link: routes.user_confirmation_url(host: host, confirmation_token: token))
-        )
+      describe 'new user' do
+        it 'sends the right email' do
+          expect(MandrillClient).to receive(:deliver).with('confirmation-instructions',
+            SystemNotificationMailer::DEFAULT_SENDER,
+            { name: "#{user.name} #{user.surname}".strip, email: user.email },
+            user_vars(user).merge(confirmation_link: routes.user_confirmation_url(host: host, confirmation_token: token))
+          )
         
-        subject.confirmation_instructions(user,token).deliver_now
+          subject.confirmation_instructions(user,token).deliver_now
+        end
       end
+      
+      describe 'existing user with new email address' do
+        before { allow_any_instance_of(MnoEnterprise::User).to receive(:confirmed?).and_return(true) }
+        before { allow_any_instance_of(MnoEnterprise::User).to receive(:unconfirmed_email?).and_return(true) }
+        
+        it 'sends the right email' do
+          expect(MandrillClient).to receive(:deliver).with('reconfirmation-instructions',
+            SystemNotificationMailer::DEFAULT_SENDER,
+            { name: "#{user.name} #{user.surname}".strip, email: user.email },
+            user_vars(user).merge(confirmation_link: routes.user_confirmation_url(host: host, confirmation_token: token))
+          )
+        
+          subject.confirmation_instructions(user,token).deliver_now
+        end
+      end
+      
     end
     
     describe 'reset_password_instructions' do

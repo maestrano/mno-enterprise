@@ -22,6 +22,7 @@ module HerExtension
       def self.included(base)
         base.extend(ClassMethods)
       end
+      
       module ClassMethods
         def validates_uniqueness_of(*attr_names)
           validates_with RemoteUniquenessValidator, _merge_attributes(attr_names)

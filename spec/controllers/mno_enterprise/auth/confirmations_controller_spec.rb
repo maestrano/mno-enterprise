@@ -16,10 +16,12 @@ module MnoEnterprise
       
       before { allow(MnoEnterprise::User).to receive(:find_for_confirmation).with(any_args).and_return(user) }
       
-      before { api_stub_for(MnoEnterprise::User, method: :get, path: "/users", params: email_params, respond_with: []) }
-      before { api_stub_for(MnoEnterprise::User, method: :get, path: "/users", respond_with: [user]) }
+      before { api_stub_for(get: "/users", params: email_params, respond_with: []) }
+      before { api_stub_for(get: "/users", respond_with: [user]) }
+      before { api_stub_for(get: "/org_invites", respond_with: []) }
+      before { api_stub_for(get: "/users/#{user.id}/organizations", respond_with: []) }
       
-      before { api_stub_for(MnoEnterprise::User, method: :put, path: "/users/#{user.id}", respond_with: user) }
+      before { api_stub_for(put: "/users/#{user.id}", respond_with: user) }
       
     
       describe 'GET #show' do
