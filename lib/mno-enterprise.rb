@@ -37,6 +37,11 @@ module MnoEnterprise
       url
     end
     
+    def impac_root_url
+      URI.join(MnoEnterprise.impac_api_host,MnoEnterprise.impac_api_root_path)
+      #"#{}#{}"
+    end
+    
     private      
       def base_path
         MnoEnterprise.mno_api_root_path
@@ -70,13 +75,10 @@ module MnoEnterprise
   # Impac
   #====================================
   mattr_accessor :impac_api_host
-  @@impac_api_host = 'https://uat.maestrano.io'
+  @@impac_api_host = 'https://api-impac-uat.maestrano.io'
 
   mattr_accessor :impac_api_root_path
   @@impac_api_root_path = "/api/v1"
-
-  mattr_accessor :impac_api_get_widget_path
-  @@impac_api_get_widget_path = "/api/v1/get_widget"
 
   mattr_accessor :impac_colors_array
   @@impac_colors_array = ["#1de9b6","#7c4dff","#ffc928","#3fc4ff","#ff8e01","#c6ff00","#d500fa","#ff6e41","#ffeb3c","#ff1844"]

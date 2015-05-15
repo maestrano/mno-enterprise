@@ -35,10 +35,39 @@ MnoEnterprise.configure do |config|
   # API Configuration
   #===============================================
   # ==> Maestrano Enterprise API Configuration
-  # Configure the API host and root path
+  # Configure the API host
   # config.mno_api_host = "https://api-enterprise.maestrano.com"
   
   # Configure the API root path
   # config.mno_api_root_path = "/v1"
   
+  #===============================================
+  # Impac! Reporting Configuration
+  #===============================================
+  # ==> Impac! API Configuration
+  # Configure the API host
+  # config.impac_api_host = "https://api-impac-uat.maestrano.io"
+  
+  # Configure the API root path
+  # config.impac_api_root_path = "/api/v1"
+  
+  # General chart colors
+  # config.impac_colors_array = [
+  #   "#1de9b6",
+  #   "#7c4dff",
+  #   "#ffc928",
+  #   "#3fc4ff",
+  #   "#ff8e01",
+  #   "#c6ff00",
+  #   "#d500fa",
+  #   "#ff6e41",
+  #   "#ffeb3c",
+  #   "#ff1844"
+  # ]
+  
+  # Color used for positive values
+  # config.impac_colors_positive = "#3FC4FF"
+  
+  # Color used for negative values
+  # config.impac_colors_negative = "#1DE9B6"
 end
