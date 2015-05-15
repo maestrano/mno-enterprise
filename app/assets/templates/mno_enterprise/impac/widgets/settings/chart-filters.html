@@ -1,0 +1,19 @@
+<h5>Chart filters</h5>
+<div class="row chart-filters">
+  <div class="col-md-6">
+    <input type="radio" ng-model="filterCriteria" value="customersNumber">
+    <label for="customersNumber" ng-click="filterCriteria = 'customersNumber'">Top {{filterValueCust}} {{parentWidget.entityType}}</label>
+  </div>
+  <div class="col-md-6">
+    <input type="range" ng-model="filterValueCust" ng-change="filterCriteria = 'customersNumber'" min="3" max="{{maxEntities}}" step="1">
+  </div>
+</div>
+<div class="row chart-filters">
+  <div class="col-md-6">
+    <input type="radio" ng-model="filterCriteria" value="invoicedAmount">
+    <label for="invoicedAmount" ng-click="filterCriteria = 'invoicedAmount'">Top {{filterValueInv}}% invoiced amount</label>
+  </div>
+  <div class="col-md-6">
+    <input type="range" ng-model="filterValueInv" ng-change="filterCriteria = 'invoicedAmount'" min="20" max="100" step="5">
+  </div>
+</div>

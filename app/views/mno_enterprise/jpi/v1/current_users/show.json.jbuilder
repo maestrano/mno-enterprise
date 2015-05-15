@@ -27,4 +27,6 @@ json.current_user do
       end
     end
   end
+
+  json.sso_session @user.sso_session
 end

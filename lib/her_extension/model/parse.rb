@@ -16,7 +16,7 @@ module Her
         def to_params(attributes, changes = nil)
           filtered_attributes = attributes.dup.symbolize_keys
           filtered_attributes.merge!(embeded_params(attributes) || {})
-          if her_api.options[:send_only_modified_attributes] && !changes.nil?
+          if her_api && her_api.options[:send_only_modified_attributes] && !changes.nil?
             filtered_attributes = changes.symbolize_keys.keys.inject({}) do |hash, attribute|
               hash[attribute] = filtered_attributes[attribute]
               hash

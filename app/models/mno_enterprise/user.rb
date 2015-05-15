@@ -58,8 +58,8 @@ module MnoEnterprise
     #================================
     has_many :organizations, class_name: 'MnoEnterprise::Organization'
     has_one :deletion_request, class_name: 'MnoEnterprise::DeletionRequest'
-    
-    
+    has_many :dashboards, class_name: 'MnoEnterprise::Impac::Dashboard'
+
     
     #================================
     # Class Methods

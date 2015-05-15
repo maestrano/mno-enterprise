@@ -64,6 +64,13 @@ angular.module('maestrano.services.current-user-svc', []).factory('CurrentUserSv
     self = service
     $http.post(self.config.signUpPath,{user: hash})
       .then(-> self.loadDocument(true))
+
+  service.getSsoSessionId = ->
+    self = service
+    if self.document?
+      return self.document.current_user.sso_session
+    else
+      return null  
   
   return service
 
