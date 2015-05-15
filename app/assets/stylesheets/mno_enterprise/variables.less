@@ -86,11 +86,11 @@
 @dashboard-side-menu-link-color:                @text-inverse-color;
 @dashboard-side-menu-link-bg-color:             @dashboard-side-menu-bg-color;
 
+@dashboard-side-menu-link-hover-color:          @dashboard-side-menu-bg-color;
+@dashboard-side-menu-link-hover-bg-color:       lighten(@bg-main-color,15%);
+
 @dashboard-side-menu-link-active-color:         @dashboard-side-menu-bg-color;
 @dashboard-side-menu-link-active-bg-color:      @bg-main-color;
-
-@dashboard-side-menu-link-hover-color:          @bg-main-color;
-@dashboard-side-menu-link-hover-bg-color:       lighten(@bg-inverse-color,5%);
 
 @_default_style:                                { .fa-2x; margin-top: 6px; margin-left: 2px; color: @dashboard-side-menu-link-color; };
 @_default_style_active:                         { @_default_style(); color: @dashboard-side-menu-link-active-color; };
