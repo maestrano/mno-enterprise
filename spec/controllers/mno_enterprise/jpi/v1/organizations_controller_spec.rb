@@ -41,10 +41,6 @@ module MnoEnterprise
         })
       end
       
-      puts "---------------------- FUCKING ORG_INVITES ---------------------------"
-      puts organization.org_invites
-      puts "----------------------------------------------------------------------"
-      
       organization.org_invites.each do |invite|
         list.push({
           'id' => invite.id,
