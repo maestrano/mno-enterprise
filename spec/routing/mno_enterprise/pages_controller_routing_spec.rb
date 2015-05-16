@@ -18,6 +18,10 @@ module MnoEnterprise
       expect(get("/app_access_unauthorized")).to route_to("mno_enterprise/pages#app_access_unauthorized")
     end
     
+    it 'routes to #billing_details_required' do
+      expect(get("/billing_details_required")).to route_to("mno_enterprise/pages#billing_details_required")
+    end
+    
     it 'routes to #app_logout' do
       expect(get("/app_logout")).to route_to("mno_enterprise/pages#app_logout")
     end

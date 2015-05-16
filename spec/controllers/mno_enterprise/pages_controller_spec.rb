@@ -43,6 +43,12 @@ module MnoEnterprise
       it { expect(response).to be_success }
     end
     
+    describe 'GET #billing_details_required' do
+      subject { get :billing_details_required }
+      before { subject }
+      it { expect(response).to be_success }
+    end
+    
     describe 'GET #app_logout' do
       subject { get :app_logout }
       before { subject }

@@ -40,6 +40,11 @@ module MnoEnterprise
       @meta[:description] = "Application access not granted"
     end
     
+    def billing_details_required
+      @meta[:title] = "Billing Details Required"
+      @meta[:description] = "Billing details have not been provided"
+    end
+    
     # GET /app_logout
     def app_logout
       @meta[:title] = "Logged out"
@@ -59,7 +64,7 @@ module MnoEnterprise
           created_at: app_instance.created_at,
           server_time: Time.now.utc,
           is_online: app_instance.online?,
-          errors: app_instance.errors.full_messages,
+          errors: app_instance.errors ? app_instance.errors.full_messages : [],
         }
       end
   end
