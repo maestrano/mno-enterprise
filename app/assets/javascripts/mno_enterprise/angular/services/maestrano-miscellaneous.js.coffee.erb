@@ -19,9 +19,9 @@ angular.module('maestrano.services.miscellaneous', []).factory('Miscellaneous', 
 
   # tenantColors = }.to_json
   service.impacTenantColors = <%= {
-    positive: MnoEnterprise.impac_colors_positive, 
-    negative: MnoEnterprise.impac_colors_negative, 
-    array: MnoEnterprise.impac_colors_array
+    positive: MnoEnterprise.style.palette.impac.positive, 
+    negative: MnoEnterprise.style.palette.impac.negative, 
+    array: MnoEnterprise.style.palette.impac.pool
   }.to_json %>
 
   return service
