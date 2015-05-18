@@ -1,0 +1,64 @@
+#
+# General Design Style
+design:
+  # Whether to enable angular-material or not
+  material: true
+
+#
+# Color Theme Palette
+# This section configures the overall theme. Any fine-tuning should be performed in the
+# variable.css file
+palette:
+  # Material colors
+  primary: indigo
+  accent: pink
+  warn: red
+  background: grey
+  
+  # Main regular colors
+  bg_main_color:                  '#aeb5bf' # Dashboard background color
+  decorator_main_color:           '#758192' # Elements placed on top of bg-main-color
+  decorator_alt_color:            '#977bf0' # Elements placed on top of bg-main-color (secondary)
+  text_strong_color:              '#17262d' # Used for text used in the context of bg-main-color
+  
+  # Main inverse colors
+  bg_inverse_color:               '#ffffff' # Background color used for dashboard menu. top banners, inverse modals
+  bg_on_bg_inverse_color:         '#cacfd6' # Background color for elements displayed on top of inverse elements
+  bg_inverse_intense_color:       '#17262d' # Background color used for elements on top of bg-inverse-color
+  decorator_inverse_color:        '#977bf0' # Design elements (lines, borders) on top of bg-inverse-color
+  text_inverse_color:             '#17262d' # Text used on top of bg-inverse-color such as inverse modals
+
+  # Color used in small/isolated elements
+  elem_positive_color:            '#d1e55c' # used to reflect a positive action or point (e.g: tick icon)
+  elem_positive_flash_color:      '#47ff00' # stronger version of elem-positive-color (barely used)
+  elem_cozy_color:                '#977bf0' # used for regular design element - fits well with both main and inverse backgrounds
+
+
+#
+# General Application Layout
+# Option should disappear - replaced by a templating option
+#
+layout:
+  dashboard_menu_orientation: 'vertical'
+  
+#
+# Templates configuration
+# 
+# templates:
+#   auth:
+#     confirmations:
+#       lounge: 'mno_enterprise/auth/confirmations/lounge'
+#       new: 'mno_enterprise/auth/confirmations/new'
+#       show: 'mno_enterprise/auth/confirmations/show'
+#     passwords:
+#       new: 'mno_enterprise/auth/passwords/new'
+#       edit: 'mno_enterprise/auth/passwords/edit'
+#     registrations:
+#       new: 'mno_enterprise/auth/registrations/new'
+#     unlocks:
+#       unlocks: 'mno_enterprise/auth/unlocks/new'
+#   pages:
+#     app_access_unauthorized: 'mno_enterprise/pages/app_access_unauthorized'
+#     app_logout: 'mno_enterprise/pages/app_logout'
+#     billing_details_required: 'mno_enterprise/pages/billing_details_required'
+#     loading: 'mno_enterprise/pages/loading'

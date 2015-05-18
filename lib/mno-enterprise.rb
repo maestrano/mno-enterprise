@@ -1,3 +1,4 @@
+require 'deepstruct'
 require 'less-rails'
 require 'jwt'
 require 'jquery-rails'
@@ -128,11 +129,17 @@ module MnoEnterprise
   # Default sender email
   mattr_accessor :default_sender_email
   @@default_sender_email = "no-reply@example.com"
-
+  
 
   #====================================
-  # Layout
+  # Layout & Styling
   #====================================
+  # Nested structure defining the general style of the application
+  mattr_accessor :styleguide
+  mattr_accessor :style
+  @@styleguide = nil
+  @@style = nil
+  
   # Menu orientation: horizontal or vertical (default)
   mattr_accessor :layout_menu_orientation
   @@layout_menu_orientation = 'vertical'
@@ -142,6 +149,7 @@ module MnoEnterprise
   # a fresh initializer with all configuration values.
   def self.configure
     yield self
+    self.configure_styleguide
     self.configure_api
   end
   
@@ -162,6 +170,21 @@ module MnoEnterprise
     # Return the options to use in the setup of the API
     def self.api_options
       { url: "#{URI.join(@@mno_api_host,@@mno_api_root_path).to_s}", send_only_modified_attributes: true }
+    end
+    
+    # Load the provided styleguide hash into nested structure or load a default one
+    def self.configure_styleguide
+      # Load default gem configuration
+      hash = YAML.load(File.read(File.join(MnoEnterprise::Engine.root,'config','styleguide.yml')))
+      
+      # Load default app styleguide, unless explicitly specified
+      default_path = File.join(Rails.root,'config','mno_enterprise_styleguide.yml')
+      if !@@styleguide && File.exists?(default_path)
+        @@styleguide = YAML.load(File.read(default_path))
+      end
+      
+      @@styleguide.is_a?(Hash) && hash.deep_merge!(@@styleguide)
+      @@style = DeepStruct.wrap(hash)
     end
     
     # Configure the Her for Maestrano Enterprise API V1

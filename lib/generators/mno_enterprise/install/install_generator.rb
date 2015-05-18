@@ -9,7 +9,9 @@ module MnoEnterprise
       def copy_initializer
         template "Procfile", "Procfile"
         template "initializers/mno_enterprise.rb", "config/initializers/mno_enterprise.rb"
+        template "config/mno_enterprise_styleguide.yml", "config/initializers/mno_enterprise_styleguide.yml"
         template "stylesheets/main.less", "app/assets/stylesheets/main.less"
+        template "stylesheets/theme.less.erb", "app/assets/stylesheets/theme.less.erb"
         template "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
         
         # Require main stylesheet file
