@@ -130,7 +130,12 @@ module MnoEnterprise
   mattr_accessor :style
   @@styleguide = nil
   @@style = nil
-
+  
+  # Always reload style in development
+  def self.style
+    self.configure_styleguide if Rails.env.development?
+    @@style
+  end
 
   # Default way to setup MnoEnterprise. Run rails generate mno-enterprise:install to create
   # a fresh initializer with all configuration values.
