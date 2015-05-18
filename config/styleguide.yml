@@ -25,7 +25,7 @@ palette:
   decorator_main_color:           '#758192' # dark gray
   
   # Elements placed on top of bg-main-color (secondary)
-  decorator_alt_color:            '#17262d' # purple
+  decorator_alt_color:            '#977bf0' # purple
   
   # Used for text used in the context of bg-main-color
   text_strong_color:              '#17262d' # dark blue
@@ -42,7 +42,7 @@ palette:
   bg_inverse_intense_color:       '#17262d' # dark blue
   
   # Design elements (lines, borders) on top of bg-inverse-color
-  decorator_inverse_color:        '#17262d' # purple
+  decorator_inverse_color:        '#977bf0' # purple
   
   # Text used on top of bg-inverse-color such as inverse modals
   text_inverse_color:             '#17262d' # dark blue
