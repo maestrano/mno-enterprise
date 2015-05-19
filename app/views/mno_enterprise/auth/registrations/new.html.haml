@@ -1,11 +1,4 @@
-.registration
-  .container
-    .row
-      .login-box-wrapper
-        .login-box-title
-          %h2 Sign Up
-        .login-box
-          .brand-logo
-          = render "form"
-          %hr
-          = render "devise/shared/links"
+- if MnoEnterprise.style.design.material
+  = render "mno_enterprise/auth/registrations/material/new"
+- else
+  = render "mno_enterprise/auth/registrations/default/new"

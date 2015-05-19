@@ -11,18 +11,11 @@
   %md-input-container
     %label Password
     = f.password_field :password, :placeholder => "Password", :required => true, 'ng-model' => 'user.password', :autocomplete => "off"
-
-  %br
   
   - if devise_mapping.rememberable? && MnoEnterprise.style.devise.remember_checkbox_shown
     %br/
     %md-checkbox{ 'ng-model' => 'user.rememberMe', name: 'user[remember_me]' } 
       Remember Me
-    //= f.check_box :remember_me, { checked: true, 'md-checkbox' => true }
-    
-    / %div.form-inline.checkbox-section
-    /   = f.check_box :remember_me, { checked: true, 'md-checkbox' => true }
-    /   = f.label :remember_me
   
   %br
   
