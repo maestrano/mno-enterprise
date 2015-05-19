@@ -12,9 +12,9 @@ module MnoEnterprise
         template "config/mno_enterprise_styleguide.yml", "config/initializers/mno_enterprise_styleguide.yml"
         
         # Stylesheets
-        template "stylesheets/main.less_erb", "app/assets/stylesheets/main.less.erb"
-        template "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
-        template "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
+        copy_file "stylesheets/main.less_erb", "app/assets/stylesheets/main.less.erb"
+        copy_file "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
+        copy_file "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
         
         # Require main stylesheet file
         inject_into_file 'app/assets/stylesheets/application.css', before: " */" do
