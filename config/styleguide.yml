@@ -95,26 +95,3 @@ devise:
   
   # User fields
   phone_required: false
-  
-  
-#
-# Templates configuration
-# 
-# templates:
-#   auth:
-#     confirmations:
-#       lounge: 'mno_enterprise/auth/confirmations/lounge'
-#       new: 'mno_enterprise/auth/confirmations/new'
-#       show: 'mno_enterprise/auth/confirmations/show'
-#     passwords:
-#       new: 'mno_enterprise/auth/passwords/new'
-#       edit: 'mno_enterprise/auth/passwords/edit'
-#     registrations:
-#       new: 'mno_enterprise/auth/registrations/new'
-#     unlocks:
-#       unlocks: 'mno_enterprise/auth/unlocks/new'
-#   pages:
-#     app_access_unauthorized: 'mno_enterprise/pages/app_access_unauthorized'
-#     app_logout: 'mno_enterprise/pages/app_logout'
-#     billing_details_required: 'mno_enterprise/pages/billing_details_required'
-#     loading: 'mno_enterprise/pages/loading'
