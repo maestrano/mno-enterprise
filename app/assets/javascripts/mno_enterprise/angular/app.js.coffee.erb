@@ -1,25 +1,31 @@
 # This is the app declaration
 
-# Declare the module
-@maestranoApp = angular.module('maestrano',
-  [
-    'ngRoute',
-    'ngSanitize',
-    'xeditable',
-    'ngReallyClick',
-    'ui.bootstrap',
-    'maestrano.assets',
-    'maestrano.utilities',
-    'maestrano.components',
-    'maestrano.controllers',
-    'maestrano.message-bus',
-    'maestrano.exchange-rates',
-    'maestrano.notifications',
-    'maestrano.services',
-    'maestrano.filters',
-    'maestrano.dashboard',
-    'maestrano.impac',
-  ])
+mnoAppModules = [
+  'ngRoute',
+  'ngSanitize',
+  'xeditable',
+  'ngReallyClick',
+  'ui.bootstrap',
+  'maestrano.assets',
+  'maestrano.utilities',
+  'maestrano.components',
+  'maestrano.controllers',
+  'maestrano.message-bus',
+  'maestrano.exchange-rates',
+  'maestrano.notifications',
+  'maestrano.services',
+  'maestrano.filters',
+  'maestrano.dashboard',
+  'maestrano.impac',
+]
+
+# Add Angular Material if requested
+<% if MnoEnterprise.style.design.material %>
+mnoAppModules.push('ngMaterial')
+<% end %>
+
+# Declare the application
+@maestranoApp = angular.module('maestrano',mnoAppModules)
 
 # Configure the http headers for AJAX requests
 # Define content type and set csrf token
@@ -49,6 +55,7 @@
   return $httpProvider
 ])
 
+# Configure routes
 @maestranoApp.config(['$routeProvider', ($routeProvider) ->
   if window.location.pathname == '/mnoe/myspace'
     $routeProvider.
@@ -80,6 +87,18 @@
         redirectTo: '/'
       })
 ])
+
+# Configure Angular Material Theme
+<% if MnoEnterprise.style.design.material %>
+@maestranoApp.config(['$mdThemingProvider', ($mdThemingProvider) ->
+  $mdThemingProvider.theme('default')
+    .primaryPalette('<%= MnoEnterprise.style.palette.primary %>')
+    .accentPalette('<%= MnoEnterprise.style.palette.accent %>')
+    .warnPalette('<%= MnoEnterprise.style.palette.warn %>')
+    .backgroundPalette('<%= MnoEnterprise.style.palette.background %>')
+])
+<% end %>
+
 
 # Configure asset in rootScope
 @maestranoApp.run(['$rootScope', 'AssetPath', 'TemplatePath','editableOptions', ($rootScope, AssetPath, TemplatePath, editableOptions) ->
