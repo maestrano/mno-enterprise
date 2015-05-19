@@ -12,7 +12,7 @@
     .col-sm-12
       = f.text_field :surname, placeholder: "*Last Name", required: true, 'ng-model' => 'user.surname', class: 'form-control'
   
-  - if @phone_required
+  - if @phone_required && MnoEnterprise.style.devise.phone_required
     %br
     .row
       .col-sm-12

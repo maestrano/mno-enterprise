@@ -86,11 +86,16 @@ layout:
   
 # Devise Configuration
 devise:
+  # Links
   remember_checkbox_shown: true
   unlock_link_shown: false
   forgot_password_link_shown: false
   confirmation_link_shown: false
   omniauth_link_shown: false
+  
+  # User fields
+  phone_required: false
+  
   
 #
 # Templates configuration

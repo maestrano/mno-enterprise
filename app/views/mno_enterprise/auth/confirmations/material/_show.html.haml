@@ -1,0 +1,21 @@
+.registration-material  
+  .action-box{ layout: "row", 'layout-align' => "center center" }
+    %md-content.md-whiteframe-z1{ "layout-padding" => "", flex: '33' }
+      %div{ layout: 'row', 'layout-align' => 'center center' }
+        %h2 Verify my account
+  
+      %div{ layout: 'column' }
+        = render "mno_enterprise/auth/confirmations/material/form"
+
+
+
+/ .registration
+/   .container
+/     .row
+/       //.col-md-6.col-md-offset-3
+/       .login-box-wrapper
+/         .login-box-title
+/           %h2 Almost there
+/         .login-box
+/           .brand-logo
+/           = render "mno_enterprise/auth/confirmations/material/form"
