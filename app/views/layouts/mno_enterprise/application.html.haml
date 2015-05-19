@@ -10,6 +10,9 @@
   %body
     %div{ 'mno-notification-widget' => [notice_hash(notice),alert_hash(alert)].to_json, 'user-logged-in' => "#{user_signed_in?}" }
     
+    - if MnoEnterprise.style.layout.public_page_header
+      = render partial: 'layouts/mno_enterprise/public_page_header'
+    
     = yield
     
     = render partial: 'layouts/mno_enterprise/footer_files'

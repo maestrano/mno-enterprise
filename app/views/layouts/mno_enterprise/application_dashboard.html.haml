@@ -8,7 +8,7 @@
     = render 'layouts/mno_enterprise/header_files'
   
   %body
-    //%div{ 'mno-notification-widget' => [notice_hash(notice),alert_hash(alert)].to_json, 'user-logged-in' => "#{user_signed_in?}" }
+    %div{ 'mno-notification-widget' => [notice_hash(notice),alert_hash(alert)].to_json, 'user-logged-in' => "#{user_signed_in?}" }
     
     = yield
     

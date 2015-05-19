@@ -1,3 +1,26 @@
+//---------------------------------------------------------------------------
+// Material Style
+//---------------------------------------------------------------------------
+.registration-material {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: @login-bg-color;
+  
+  .action-box {
+    height: 100%;
+  }
+  
+  .action-box md-input-container {
+    text-align: left;
+  }
+  
+  .action-box md-checkbox {
+    text-align: left;
+  }
+}
+
+// Default style
 .registration {
   height: 100%;
   width: 100%;
@@ -7,6 +30,10 @@
   .login-box-wrapper {
     text-align: center;
     @login-box-grid-position();
+  }
+  
+  .login-box-wrapper md-input-container {
+    text-align: left;
   }
   
   .login-box-wrapper .login-box-title {

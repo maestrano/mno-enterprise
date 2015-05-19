@@ -1,0 +1,33 @@
+%div{ 'ng-init' => "user = { }" }
+
+= form_for(resource, :as => resource_name, :url => "#{session_path(resource_name)}?ltype=#{@login_type}", :html => { 'name' => 'loginForm', :class => 'autofill-detect text-center' }) do |f|
+
+  %md-input-container
+    %label Email
+    = f.email_field :email, :placeholder => "Email", :required => true, 'ng-model' => 'user.email'
+
+  %br
+
+  %md-input-container
+    %label Password
+    = f.password_field :password, :placeholder => "Password", :required => true, 'ng-model' => 'user.password', :autocomplete => "off"
+
+  %br
+  
+  - if devise_mapping.rememberable? && MnoEnterprise.style.devise.remember_checkbox_shown
+    %br/
+    %md-checkbox{ 'ng-model' => 'user.rememberMe', name: 'user[remember_me]' } 
+      Remember Me
+    //= f.check_box :remember_me, { checked: true, 'md-checkbox' => true }
+    
+    / %div.form-inline.checkbox-section
+    /   = f.check_box :remember_me, { checked: true, 'md-checkbox' => true }
+    /   = f.label :remember_me
+  
+  %br
+  
+  %div
+    %button{ class: "md-raised md-primary", 'md-button' => true, type: "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'loginForm.$invalid' } Sign in
+    %md-progress-linear{ 'md-mode' => "indeterminate", 'ng-show' => 'hasClicked' }
+
+  

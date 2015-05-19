@@ -1,0 +1,11 @@
+.registration-material  
+  .action-box{ layout: "row", 'layout-align' => "center center" }
+    %md-content.md-whiteframe-z1{ "layout-padding" => "", flex: '33' }
+      %div{ layout: 'row', 'layout-align' => 'center center' }
+        %h2 Log in
+  
+      %div{ layout: 'column' }
+        = render "mno_enterprise/auth/sessions/material/form"
+        %hr
+        = render "mno_enterprise/auth/shared/links"
+

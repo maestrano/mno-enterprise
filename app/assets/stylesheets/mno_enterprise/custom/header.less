@@ -1,3 +1,29 @@
+//--------------------------------------------------------------
+// Header used for public/external pages
+//--------------------------------------------------------------
+.public-page-header {
+  z-index: 1;
+  display: block;
+  margin-bottom: 60px;
+  position: absolute;
+  width: 100%;
+  background-color: @public-page-header-bg-color;
+  padding: @public-page-header-padding inherit;
+}
+  
+.public-page-header .brand-logo {
+  min-width: 170px;
+  min-height: 80px;
+  background-repeat: no-repeat;
+  background-image: asset-url(@public-page-header-logo-img);
+  background-size: 100%;
+  
+  @public-page-header-logo();
+}
+
+//--------------------------------------------------------------
+// Navbar
+//--------------------------------------------------------------
 .lock-login-link {
   float: right;
   margin: 12px 18px 0px 0px;

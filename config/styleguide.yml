@@ -76,10 +76,21 @@ palette:
 
 #
 # General Application Layout
-# Option should disappear - replaced by a templating option
 #
 layout:
+  # Whether to display a header on public pages
+  public_page_header: true
+  
+  # Which layout for the dashboard
   dashboard_menu_orientation: 'vertical'
+  
+# Devise Configuration
+devise:
+  remember_checkbox_shown: true
+  unlock_link_shown: false
+  forgot_password_link_shown: false
+  confirmation_link_shown: false
+  omniauth_link_shown: false
   
 #
 # Templates configuration
