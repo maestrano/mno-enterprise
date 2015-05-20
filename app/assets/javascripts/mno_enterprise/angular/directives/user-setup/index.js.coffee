@@ -1,13 +1,14 @@
 module = angular.module('maestrano.user-setup.index',['maestrano.assets'])
 
 module.controller('UserSetupIndexCtrl',[
-  '$scope','$http','$q','$filter','$modal','$log','AssetPath','Utilities','Miscellaneous','DhbOrganizationSvc','CurrentUserSvc','MarketplaceSvc','TemplatePath',
-  ($scope, $http, $q, $filter, $modal, $log, AssetPath, Utilities, Miscellaneous, DhbOrganizationSvc, CurrentUserSvc, MarketplaceSvc, TemplatePath) ->
+  '$scope','$http','$q','$filter','$modal','$mdToast','$timeout','$log','AssetPath','Utilities','Miscellaneous','DhbOrganizationSvc','CurrentUserSvc','MarketplaceSvc','TemplatePath',
+  ($scope, $http, $q, $filter, $modal, $mdToast, $timeout, $log, AssetPath, Utilities, Miscellaneous, DhbOrganizationSvc, CurrentUserSvc, MarketplaceSvc, TemplatePath) ->
     
     #====================================
     # Construction
     #====================================
     $scope.isLoading = true
+    $scope.myApps = []
     
     $scope.lists = {
       industries: [
@@ -53,17 +54,60 @@ module.controller('UserSetupIndexCtrl',[
     #====================================
     # Functions
     #====================================
+    # Go to the next step - potentially perform an action
     $scope.next = ->
       $scope.isLoading = true
       DhbOrganizationSvc.organization.update($scope.company).then ->
         $scope.step += 1
         $scope.isLoading = false
     
+    # Skip the current step - no action performed
     $scope.skip = ->
       $scope.step += 1
     
+    # Return the list of popular apps in the order specified by the configuration array
     $scope.popularApps = ->
       _.map $scope.lists.popularApps, (e) -> _.findWhere($scope.apps, nid: e)
+    
+    
+    $scope.showMessageToast = (msg)->
+      $mdToast.show(
+        $mdToast.simple()
+          .content(msg)
+          .position("top right")
+          .hideDelay(4000)
+          .parent(angular.element('.user-setup'))
+      )
+    
+    #====================================
+    # Connect Pane
+    #====================================
+    $scope.connectPane = {}
+    
+    # Switch to the connect screen
+    $scope.connectApp = (app) ->
+      $scope.connectPane.currentApp = app
+      $timeout(
+        ->
+          $scope.connectPane.shown = true
+        ,300)
+    
+    $scope.connectPane.connect = ->
+      self = $scope.connectPane
+      self.loading = true
+      $timeout(
+        -> 
+          $scope.successMessage = "#{self.currentApp.name} has been successfully added to your free trial"
+          $scope.showMessageToast($scope.successMessage)
+          $scope.myApps.push(self.currentApp)
+          self.cancel()
+        , 2000)
+      
+    $scope.connectPane.cancel = ->
+      self = $scope.connectPane
+      self.loading = false
+      self.shown = false
+      self.currentApp = undefined
     
     #====================================
     # Initialization

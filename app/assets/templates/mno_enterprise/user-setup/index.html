@@ -5,7 +5,9 @@
   <md-progress-circular md-mode="indeterminate"></md-progress-circular>
 </div>
 
-<!-- Step 1 -->
+<!-- 
+  Step 1: Fill additional company details
+-->
 <div ng-show="!isLoading && step == 1">
   <div layout="column" layout-align="center center">
     <h2>Hi {{user.name}}. Let's get you started...</h2>
@@ -61,8 +63,11 @@
   </div>
 </div>
 
-<!-- Step 2 -->
-<div ng-show="!isLoading && step == 2">
+
+<!-- 
+  Step 2: Connect existing apps 
+-->
+<div ng-show="!isLoading && !connectPane.shown && step == 2">
   <div layout="column" layout-align="center center">
     <h1>Do you currently use any business apps?</h1>
   </div>
@@ -84,17 +89,32 @@
     </div>
   </div>
   
-  <div layout="row" layout-align="start center" style="margin-top: 40px;">
-    <div flex></div>
+  <!-- My Apps section -->
+  <div ng-show="myApps.length > 0">
+    <div layout="row" layout-align="center center" style="margin-top: 40px;" >
+      <div flex="50">
+        <h3 style="margin-left: 8px;">My Existing Apps</h3>
+      </div>
+    </div>
+  
+    <div layout="row" layout-align="center center" ng-show="myApps.length > 0">
+      <div layout="row" layout-align="start center" style="center" flex="50">
+        <md-card class="md-raised md-img" ng-repeat="app in myApps track by $index" flex="15">
+          <img ng-src="{{app.logo}}" class="md-card-image" ng-alt="{{app.name}}">
+        </md-card>
+      </div>
+    </div>
+  </div>
+  
+  <div layout="row" layout-align="center center" style="margin-top: 40px;">
     <div flex="50">
       <h3 style="margin-left: 8px;">Popular Apps</h3>
     </div>
-    <div flex></div>
   </div>
   
   <div layout="row" layout-align="center center">
     <div layout="row" layout-align="space-between center" style="center" flex="50">
-      <md-button class="md-raised md-img" ng-repeat="app in popularApps().slice(0,5) track by $index">
+      <md-button class="md-raised md-img" ng-repeat="app in popularApps().slice(0,5) track by $index" ng-click="connectApp(app)">
         <img ng-src="{{app.logo}}" class="md-card-image" ng-alt="{{app.name}}">
       </md-button>
     </div>
@@ -102,7 +122,7 @@
   
   <div layout="row" layout-align="center center">
     <div layout="row" layout-align="space-between center" style="center" flex="50">
-      <md-button class="md-raised md-img" ng-repeat="app in popularApps().slice(5,10) track by $index">
+      <md-button class="md-raised md-img" ng-repeat="app in popularApps().slice(5,10) track by $index" ng-click="connectApp(app)">
         <img ng-src="{{app.logo}}" class="md-card-image" ng-alt="{{app.name}}">
       </md-button>
     </div>
@@ -111,3 +131,39 @@
 </div>
 
 
+<!-- 
+  Step 2: App Connection Screen 
+-->
+<div ng-show="!isLoading && connectPane.shown && step == 2">
+  <div layout="column" layout-align="center center">
+    <h1>Securely Connect</h1>
+  </div>
+  
+  <div layout="row" layout-align="center center" style="margin-top: 20px;">
+    <md-content layout-padding class="md-whiteframe-z1" flex="33">
+      <div layout="row" layout-align="center center">
+        <img ng-src="{{connectPane.currentApp.logo}}" ng-alt="{{connectPane.currentApp.name}}" flex="30">
+      </div>
+      
+      <md-input-container>
+        <label>Username</label>
+        <input type="text" ng-model="connectPane.currentApp._username">
+      </md-input-container>
+      
+      <md-input-container>
+        <label>Password</label>
+        <input type="password" ng-model="connectPane.currentApp._password">
+      </md-input-container>
+      
+      <div layout="row" layout-align="center center">
+        <md-button class="md-raised md-accent" ng-click="connectPane.connect()">Connect Securely</md-button>
+      </div>
+      <div layout="row" layout-align="center center">
+        <md-button class="md-mini" ng-click="connectPane.cancel()">Cancel</md-button>
+      </div>
+      
+      <md-progress-linear md-mode="indeterminate" ng-show="connectPane.loading"></md-progress-linear>
+      
+    </md-content>
+  </div>
+</div>
