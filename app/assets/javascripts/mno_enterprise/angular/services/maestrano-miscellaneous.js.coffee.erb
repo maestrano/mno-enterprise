@@ -17,12 +17,15 @@ angular.module('maestrano.services.miscellaneous', []).factory('Miscellaneous', 
     get_widget:  "#{MnoEnterprise.router.impac_root_url}/get_widget"
   }.to_json %>
 
-  # tenantColors = }.to_json
+  # Impac! Colors configuration
   service.impacTenantColors = <%= {
     positive: MnoEnterprise.style.palette.impac.positive, 
     negative: MnoEnterprise.style.palette.impac.negative, 
     array: MnoEnterprise.style.palette.impac.pool
   }.to_json %>
+  
+  # Maestrano Style Configuration
+  service.style = <%= MnoEnterprise.style.to_json %>
 
   return service
 
