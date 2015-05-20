@@ -71,15 +71,16 @@
   <div layout="row" layout-align="center center" style="margin-top: 20px;">
     <div layout="row" layout-align="space-around center" layout-padding flex="50">
       
-      <md-button ng-click="next()">No, I don't have any apps</md-button>
-      <span flex="5"></span>
+      <md-button ng-click="next()" flex="45">No, I don't have any apps</md-button>
       
-      <md-input-container flex="50" class="md-icon-float">
+      
+      <md-input-container flex="45" class="md-icon-float">
         <label>Search for apps</label>
         <md-icon md-font-icon="fa fa-search" class="name" style='font-size: 22px; margin-top: -3px;'></md-icon>
         <input type="text" ng-model="locals.search" style="padding-top:14px;">
-      
       </md-input-container>
+      <span flex></span>
+      
     </div>
   </div>
   
