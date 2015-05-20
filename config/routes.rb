@@ -24,8 +24,9 @@ MnoEnterprise::Engine.routes.draw do
   resources :org_invites, only: [:show]
   
   #============================================================
-  # Devise Configuration
+  # Devise/User Configuration
   #============================================================
+  # Main devise configuration
   devise_for :users, { 
     class_name: "MnoEnterprise::User",
     module: :devise, 
@@ -40,12 +41,17 @@ MnoEnterprise::Engine.routes.draw do
     }
   }
   
+  # Additional devise routes
   # TODO: routing specs
   devise_scope :user do
     get "/auth/users/confirmation/lounge", to: "auth/confirmations#lounge", as: :user_confirmation_lounge
     patch "/auth/users/confirmation/finalize", to: "auth/confirmations#finalize", as: :user_confirmation_finalize
     patch "/auth/users/confirmation", to: "auth/confirmations#update"
   end
+  
+  # User Setup process
+  # ==> Currently NOT prod ready
+  resources :user_setup, only: [:show]
   
   
   #============================================================

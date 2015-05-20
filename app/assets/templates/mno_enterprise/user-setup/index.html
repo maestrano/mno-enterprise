@@ -1,0 +1,112 @@
+<div class="spacer2"></div>
+
+<!-- Loading Icon -->
+<div layout="row" layout-align="center center" ng-show="isLoading" style="height:300px;">
+  <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>
+
+<!-- Step 1 -->
+<div ng-show="!isLoading && step == 1">
+  <div layout="column" layout-align="center center">
+    <h2>Hi {{user.name}}. Let's get you started...</h2>
+    <h3>Tell us about your business so we can customise your experience</h3>
+  </div>
+  
+  
+  <div layout="row" layout-align="center center" style="margin-top: 20px;">
+    <md-content layout-padding class="md-whiteframe-z1" flex="50">
+        <div layout="row" layout-align="end center">
+          <div class="md-toolbar-tools">
+            <span flex></span>
+            <md-button ng-click="skip()">Skip</md-button>
+          </div>
+          
+        </div>
+        
+        <!-- Business Setup form-->
+        <form name="userForm" flex>
+          
+          <div layout="row" style="margin-bottom:10px;">
+            <md-select placeholder="Industry" ng-model="company.industry" style="width:100%;">
+              <md-option ng-value="opt" ng-repeat="opt in lists.industries">{{opt}}</md-option>
+            </md-select>
+          </div>
+    
+          <md-input-container>
+            <label>Company name</label>
+            <input type="text" ng-model="company.name">
+          </md-input-container>
+    
+          <p>My business is:</p>
+          <md-radio-group ng-model="company.growth_type">
+            <md-radio-button value="startup">Starting up</md-radio-button>
+            <md-radio-button value="sme">Growing</md-radio-button>
+            <md-radio-button value="agency">Ticking along</md-radio-button>
+          </md-radio-group>
+          
+          <div layout="row" style="margin-bottom:10px;">
+            <md-select placeholder="Number of employees" ng-model="company.employee_size" style="width:100%;">
+              <md-option ng-value="opt.value" ng-repeat="opt in lists.sizes">{{opt.label}}</md-option>
+            </md-select>
+          </div>
+          
+          <br/>
+          
+          <div layout="row" layout-align="center center">
+            <md-button class="md-raised md-accent" ng-click="next()">Done</md-button>
+          </div>
+        </form>
+      
+    </md-content>
+  </div>
+</div>
+
+<!-- Step 2 -->
+<div ng-show="!isLoading && step == 2">
+  <div layout="column" layout-align="center center">
+    <h1>Do you currently use any business apps?</h1>
+  </div>
+  
+  <!-- Skip or search -->
+  <div layout="row" layout-align="center center" style="margin-top: 20px;">
+    <div layout="row" layout-align="space-around center" layout-padding flex="50">
+      
+      <md-button ng-click="next()">No, I don't have any apps</md-button>
+      <span flex="5"></span>
+      
+      <md-input-container flex="50" class="md-icon-float">
+        <label>Search for apps</label>
+        <md-icon md-font-icon="fa fa-search" class="name" style='font-size: 22px; margin-top: -3px;'></md-icon>
+        <input type="text" ng-model="locals.search" style="padding-top:14px;">
+      
+      </md-input-container>
+    </div>
+  </div>
+  
+  <div layout="row" layout-align="start center" style="margin-top: 40px;">
+    <div flex></div>
+    <div flex="50">
+      <h3 style="margin-left: 8px;">Popular Apps</h3>
+    </div>
+    <div flex></div>
+  </div>
+  
+  <div layout="row" layout-align="center center">
+    <div layout="row" layout-align="space-between center" style="center" flex="50">
+      <md-button class="md-raised md-img" ng-repeat="app in popularApps().slice(0,5) track by $index">
+        <img ng-src="{{app.logo}}" class="md-card-image" ng-alt="{{app.name}}">
+      </md-button>
+    </div>
+  </div>
+  
+  <div layout="row" layout-align="center center">
+    <div layout="row" layout-align="space-between center" style="center" flex="50">
+      <md-button class="md-raised md-img" ng-repeat="app in popularApps().slice(5,10) track by $index">
+        <img ng-src="{{app.logo}}" class="md-card-image" ng-alt="{{app.name}}">
+      </md-button>
+    </div>
+  </div>
+  
+</div>
+
+

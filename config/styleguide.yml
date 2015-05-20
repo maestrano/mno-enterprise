@@ -98,3 +98,9 @@ devise:
   
   # User fields
   phone_required: false
+  
+# Workflow configuration
+workflow:
+  # Enable/Disable Signup onboarding - a series of screens guiding users through
+  # entering more details and setting their dashboard up
+  signup_onboarding: true
