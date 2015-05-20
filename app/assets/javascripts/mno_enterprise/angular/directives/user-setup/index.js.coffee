@@ -96,9 +96,8 @@ module.controller('UserSetupIndexCtrl',[
       self = $scope.connectPane
       self.loading = true
       $timeout(
-        -> 
-          $scope.successMessage = "#{self.currentApp.name} has been successfully added to your free trial"
-          $scope.showMessageToast($scope.successMessage)
+        ->
+          $scope.showMessageToast("#{self.currentApp.name} has been successfully added to your free trial!")
           $scope.myApps.push(self.currentApp)
           self.cancel()
         , 2000)
