@@ -174,9 +174,7 @@ module.directive('dashboardMenu', ['TemplatePath', 'Miscellaneous', (TemplatePat
       
       # We need to manually close the collapse menu as we actually stay on the same page
       link: (scope,element,attrs) ->
-        if attrs.orientation == 'horizontal'
-
-        else
+        unless Miscellaneous.style.layout.dashboard_menu_orientation == 'horizontal'
           element.find(".menu").on("mouseenter", ->
             angular.element(this).stop()
             angular.element(this).find(".brand-logo").addClass('expanded')
