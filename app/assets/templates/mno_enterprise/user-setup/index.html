@@ -90,18 +90,19 @@
   </div>
   
   <!-- My Apps section -->
-  <div ng-show="myApps.length > 0">
+  <div ng-show="myApps.length > 0" class="fade-in-out">
     <div layout="row" layout-align="center center" style="margin-top: 40px;" >
       <div flex="50">
         <h3 style="margin-left: 8px;">My Existing Apps</h3>
       </div>
     </div>
   
-    <div layout="row" layout-align="center center" ng-show="myApps.length > 0">
-      <div layout="row" layout-align="start center" style="center" flex="50">
-        <md-card class="md-raised md-img" ng-repeat="app in myApps track by $index" flex="15">
+    <div layout="row" layout-align="center center">
+      <div layout="row" layout-align="start center" style="center" flex="50">        
+        <md-button class="md-raised md-img fade-in-out-repeat" ng-repeat="app in myApps" ng-click="toggleAppInBasket(app)" flex="15">
           <img ng-src="{{app.logo}}" class="md-card-image" ng-alt="{{app.name}}">
-        </md-card>
+          <md-icon md-font-icon="fa fa-check" class="md-icon-check" ng-show="isAppInBasket(app)"></md-icon>
+        </md-button>
       </div>
     </div>
   </div>
@@ -114,16 +115,18 @@
   
   <div layout="row" layout-align="center center">
     <div layout="row" layout-align="space-between center" style="center" flex="50">
-      <md-button class="md-raised md-img" ng-repeat="app in popularApps().slice(0,5) track by $index" ng-click="connectApp(app)">
+      <md-button class="md-raised md-img" ng-repeat="app in popularApps().slice(0,5) track by $index" ng-click="toggleOrConnect(app)">
         <img ng-src="{{app.logo}}" class="md-card-image" ng-alt="{{app.name}}">
+        <md-icon md-font-icon="fa fa-check" class="md-icon-check" ng-show="isAppInBasket(app)"></md-icon>
       </md-button>
     </div>
   </div>
   
   <div layout="row" layout-align="center center">
     <div layout="row" layout-align="space-between center" style="center" flex="50">
-      <md-button class="md-raised md-img" ng-repeat="app in popularApps().slice(5,10) track by $index" ng-click="connectApp(app)">
+      <md-button class="md-raised md-img" ng-repeat="app in popularApps().slice(5,10) track by $index" ng-click="toggleOrConnect(app)">
         <img ng-src="{{app.logo}}" class="md-card-image" ng-alt="{{app.name}}">
+        <md-icon md-font-icon="fa fa-check" class="md-icon-check" ng-show="isAppInBasket(app)"></md-icon>
       </md-button>
     </div>
   </div>
@@ -131,7 +134,7 @@
   <!-- Next Button -->
   <div class="spacer2"></div>
   <div layout="row" layout-align="center center">
-    <md-button class="md-raised md-accent" ng-click="skip()">Done</md-button>
+    <md-button class="md-raised md-accent" ng-click="next()">Done</md-button>
   </div>
 </div>
 
@@ -171,4 +174,139 @@
       
     </md-content>
   </div>
+</div>
+
+<!-- 
+  Step 3: Explore more apps
+-->
+<div ng-show="!isLoading && step == 3">
+  <div layout="column" layout-align="center center">
+    <h1>Do you want to explore more apps?</h1>
+  </div>
+  
+  <div layout="row" layout-align="center center" style="margin-top: 20px;">
+    <div layout="row" layout-align="space-around center" layout-padding flex="50">
+      <md-button ng-click="finishSetup()" flex="45">Not right now</md-button>
+      <md-button class="md-raised md-primary" ng-click="next()" flex="45">Yes</md-button>
+    </div>
+  </div>
+  
+  <div layout="column" layout-align="center center">
+    <h3>No stress, if you want to go straight to the site, we can do this later...</h3>
+  </div>
+</div>
+
+
+<!-- 
+  Step 4: Bundle questions
+-->
+<div ng-show="!isLoading && step == 4">
+  <div layout="column" layout-align="center center">
+    <h2>Tell us about your needs so we can better recommend apps for you...</h2>
+  </div>
+  
+  <div layout="row" layout-align="center center" style="margin-top: 20px;">
+    <md-content layout-padding class="md-whiteframe-z1" flex="50">
+      <h3>I need help with:</h3>
+      
+      <div ng-repeat="(category,subCategorylist) in lists.bundleCategories">
+        <md-list-item>
+          <p ng-style="selectedCategories[category] && {'font-weight':600 }"> {{ category }} </p>
+          <md-checkbox class="md-secondary md-primary" ng-model="selectedCategories[category]"></md-checkbox>
+        </md-list-item>
+        
+        <div class='md-sublist' ng-show="selectedCategories[category]">
+          <md-list-item ng-repeat="subcategory in subCategorylist">
+            <p> {{ subcategory }} </p>
+            <md-checkbox class="md-secondary" ng-model="selectedSubCategories[subcategory]"></md-checkbox>
+          </md-list-item>
+        </div>
+      </div>
+      
+      <!-- Next Button -->
+      <div class="spacer2"></div>
+      <div layout="row" layout-align="center center">
+        <md-button class="md-raised md-accent" ng-click="next()">Get recommendations</md-button>
+      </div>
+      
+    </md-content>
+  </div>
+</div>
+
+
+<!-- 
+  Step 5: Recommendation
+-->
+<div ng-show="!isLoading && step == 5">
+  <div layout="column" layout-align="center center">
+    <h1>Our recommendation</h1>
+  </div>
+  
+  <!-- Skip -->
+  <!-- <div layout="row" layout-align="center center" style="margin-top: 20px;">
+    <div layout="row" layout-align="space-around center" layout-padding flex="50">
+
+      <md-button ng-click="finishSetup()" flex="45">Skip</md-button>
+
+    </div>
+  </div> -->
+  
+  <!-- No recommendations available -->
+  <div ng-show="recommendedApps().length == 0">
+    <div layout="row" layout-align="center center" style="margin-top: 20px;">
+      <md-content layout-align="center center" layout-padding class="md-whiteframe-z1" flex="50">
+        <div layout="row" layout-align="center center">
+          <p>It looks like we do not have enough information to be able to recommend any app!</p>
+        </div>
+        <div layout="row" layout-align="center center">
+          <md-button ng-click="back()">Try again?</md-button>
+          <md-button ng-click="finishSetup()">Skip</md-button>
+        </div>
+      </md-content>
+    </div>
+  </div>
+  
+  
+  <!-- Recommended Apps section -->
+  <div ng-show="recommendedApps().length > 0">
+    <div layout="row" layout-align="center center" style="margin-top: 40px;" >
+      <h3 style="margin-left: 8px;">Based on your profile we recommend</h3>
+    </div>
+    
+    <div class="spacer1"></div>
+    
+    <div layout="row" layout-align="center center">
+      <div layout="row" layout-align="center center" style="center" flex="50">
+        <md-button class="md-raised md-img" ng-repeat="app in recommendedApps() track by $index" ng-click="toggleAppInBasket(app)" flex="15">
+          <img ng-src="{{app.logo}}" class="md-card-image" ng-alt="{{app.name}}">
+          <md-icon md-font-icon="fa fa-check" class="md-icon-check" ng-show="isAppInBasket(app)"></md-icon>
+        </md-button>
+      </div>
+    </div>
+    
+    <!-- Next Button -->
+    <div class="spacer2"></div>
+    <div layout="row" layout-align="center center">
+      <md-button ng-click="finishSetup()">Skip</md-button>
+      <md-button class="md-raised md-accent" ng-click="finishSetup()">Done</md-button>
+    </div>
+  </div>
+  
+  <!-- My Apps section -->
+  <div ng-show="myApps.length > 0">
+    <hr/>
+    <div layout="row" layout-align="center center" style="margin-top: 40px;" >
+      <h4 style="margin-left: 8px;">My Existing Apps</h4>
+    </div>
+  
+    <div layout="row" layout-align="center center">
+      <div layout="row" layout-align="center center" style="center" flex="50">
+        <md-button class="md-raised md-img" ng-repeat="app in myApps track by $index" ng-click="toggleAppInBasket(app)" flex="5">
+          <img ng-src="{{app.logo}}" class="md-card-image" ng-alt="{{app.name}}">
+          <md-icon md-font-icon="fa fa-check" class="md-icon-check" ng-show="isAppInBasket(app)"></md-icon>
+        </md-button>
+      </div>
+    </div>
+  </div>
+  
 </div>

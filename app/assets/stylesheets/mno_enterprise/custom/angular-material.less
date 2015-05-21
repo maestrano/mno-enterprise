@@ -31,3 +31,26 @@ md-toolbar.success {
   width: 100%;
   height: 100%;
 }
+
+// Check icon inside button - position top right
+.md-button .md-icon-check {
+  position: absolute;
+  top: 0px;
+  right: -2px;
+  color: @brand-success;
+  font-size: 22px;
+}
+
+//-------------------------------------------
+// md-item
+//-------------------------------------------
+// Create sublist style with left margin and smaller md-items
+.md-sublist {
+  margin-top: -10px;
+  margin-left: 20px;
+}
+
+.md-sublist > md-list-item,
+.md-sublist > md-list-item > .md-list-item-inner {
+  min-height: 30px;
+}

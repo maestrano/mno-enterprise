@@ -4,8 +4,7 @@ module MnoEnterprise
     
     # GET /user_setup/:id
     # Display a specific step for the user setup
-    def show
-      @id = params[:id]
+    def index
     end
   end
 end

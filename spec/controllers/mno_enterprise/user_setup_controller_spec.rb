@@ -14,9 +14,8 @@ module MnoEnterprise
     
     
     
-    describe 'GET #show' do
-      let(:step_id) { '1' }
-      subject { get :show, id: step_id }
+    describe 'GET #index' do
+      subject { get :index }
       
       describe 'guest' do
         before { subject }
@@ -26,7 +25,6 @@ module MnoEnterprise
       describe 'signed in' do
         before { sign_in user }
         before { subject }
-        it { expect(assigns(:id)).to eq(step_id)}
         it { expect(response).to be_success }
       end
     end

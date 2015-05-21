@@ -51,7 +51,7 @@ MnoEnterprise::Engine.routes.draw do
   
   # User Setup process
   # ==> Currently NOT prod ready
-  resources :user_setup, only: [:show]
+  resources :user_setup, only: [:index]
   
   
   #============================================================
