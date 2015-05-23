@@ -136,7 +136,16 @@ module MnoEnterpriseApiTestHelper
                 end
               end
               
-              [stub[:code] || 200, {}, resp.to_json] 
+              # Response code
+              if stub[:code].is_a?(Proc)
+                args = stub[:code].arity > 0 ? [body] : []
+                resp_code = stub[:code].call(*args)
+              else
+                resp_code = stub[:code] || 200
+              end
+                 
+              
+              [resp_code, {}, resp.to_json] 
             }
           end
         end

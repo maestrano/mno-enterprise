@@ -15,20 +15,22 @@ module MnoEnterprise
     
     # Stub call checking if another user already has the confirmation token provided
     # by devise
-    before { allow(OpenSSL::HMAC).to receive(:hexdigest).and_return(confirmation_token) }
+    # before { allow(OpenSSL::HMAC).to receive(:hexdigest).and_return(confirmation_token) }
     before { api_stub_for(
       get:'/users',
-      params: { filter: { confirmation_token: confirmation_token }, limit: 1 },
+      params: { filter: { confirmation_token: '**' }, limit: 1 },
       response: from_api([])
     )}
     
     # Stub user email uniqueness check
     # TODO: The email uniqueness validation (using RemoteUniquenessValidator) does not seem
-    # to be called....when user is saved. This is extremely weird as it worked in real life.
+    # to be called....when user is saved. This is extremely weird as it works in real life.
     before { api_stub_for( 
       get: '/users',
-      params: { filter: { email: signup_attrs[:email] }, limit: 1 },
+      params: { filter: { email: '**' }, limit: 1 },
       response: -> {
+        puts "---------------- email validation called -----------------"
+        puts "---------- response will be #{email_uniq_resp}"
         from_api(email_uniq_resp)
       } 
     )}
@@ -46,7 +48,7 @@ module MnoEnterprise
         # Obscure failure happens when running all specs
         # NoMethodError:
         #        undefined method `clear' for nil:NilClass
-        xit 'signs the user up' do  
+        it 'signs the user up' do  
           expect(controller).to be_user_signed_in
           curr_user = controller.current_user
           expect(curr_user.id).to eq(user.id)
@@ -59,10 +61,10 @@ module MnoEnterprise
         let(:email_uniq_resp) { [from_api(user)] }
         before { subject }
         
-        xit 'does not log the user in' do
-          user.email = "bla@tamere.com"
-          user.save
-          #expect(controller).to_not be_user_signed_in
+        it 'does not log the user in' do
+          #user.email = "bla@tamere.com"
+          #user.save
+          expect(controller).to_not be_user_signed_in
           expect(controller.current_user).to be_nil
         end
       end
