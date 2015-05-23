@@ -2,7 +2,7 @@
 # General Design Style
 design:
   # Whether to enable angular-material or not
-  material: true
+  material: false
 
 #
 # Color Theme Palette
@@ -82,7 +82,7 @@ palette:
 #
 layout:
   # Whether to display a header on public pages
-  public_page_header: true
+  public_page_header: false
   
   # Which layout for the dashboard
   dashboard_menu_orientation: 'vertical'
@@ -91,10 +91,10 @@ layout:
 devise:
   # Links
   remember_checkbox_shown: true
-  unlock_link_shown: false
-  forgot_password_link_shown: false
-  confirmation_link_shown: false
-  omniauth_link_shown: false
+  unlock_link_shown: true
+  forgot_password_link_shown: true
+  confirmation_link_shown: true
+  omniauth_link_shown: true
   
   # User fields
-  phone_required: false
+  phone_required: true
