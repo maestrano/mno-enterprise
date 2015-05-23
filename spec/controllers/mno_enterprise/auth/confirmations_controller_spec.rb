@@ -50,7 +50,7 @@ module MnoEnterprise
         describe 'confirmed user' do
           before { subject }
           it { expect(user.name).to_not eq(user_params[:name]) }
-          it { expect(response).to redirect_to(new_user_session_path) }
+          it { expect(response).to redirect_to(root_path) }
         end
         
         describe 'unconfirmed user' do

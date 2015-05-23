@@ -19,7 +19,7 @@ module MnoEnterprise
       
       describe 'guest' do
         before { subject }
-        it { expect(response).to redirect_to(new_user_registration_path) }
+        it { expect(response).to redirect_to(new_user_session_path) }
       end
       
       describe 'signed in' do
