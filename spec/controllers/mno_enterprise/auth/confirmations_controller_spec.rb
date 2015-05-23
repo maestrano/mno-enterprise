@@ -44,9 +44,12 @@ module MnoEnterprise
       end
     
       describe 'PATCH #finalize' do
+        let(:previous_url) { nil }
         let(:user_params) {{ name: 'Robert', surname: 'Jack', password: 'somepassword', confirmation_token: user.confirmation_token }}
         subject { patch :finalize, user: user_params }
-      
+        
+        before { session[:previous_url] = previous_url }
+        
         describe 'confirmed user' do
           before { subject }
           it { expect(user.name).to_not eq(user_params[:name]) }
@@ -59,7 +62,12 @@ module MnoEnterprise
           it { expect(user.name).to eq(user_params[:name]) }
           it { expect(user.surname).to eq(user_params[:surname]) }
           it { expect(user.password).to eq(user_params[:password]) }
-          it { expect(response).to redirect_to(root_path) }
+          it { expect(response).to redirect_to('/mnoe/myspace') }
+          
+          describe 'with previous url' do
+            let(:previous_url) { "/some/redirection" }
+            it { expect(response).to redirect_to(previous_url) }
+          end
         end
         
         describe 'invalid confirmation token ' do

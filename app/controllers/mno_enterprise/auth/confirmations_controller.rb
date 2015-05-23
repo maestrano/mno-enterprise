@@ -135,6 +135,8 @@ module MnoEnterprise
         
         if MnoEnterprise.style.workflow.signup_onboarding && opts[:new_user]
           mno_enterprise.user_setup_index_path
+        elsif opts[:new_user]
+          after_sign_in_path_for(resource)
         else
           signed_in_root_path(resource)
         end

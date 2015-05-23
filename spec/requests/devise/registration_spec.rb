@@ -44,6 +44,10 @@ module MnoEnterprise
           expect(curr_user.name).to eq(user.name)
           expect(curr_user.surname).to eq(user.surname)
         end
+        
+        it 'redirects to the confirmation lounge' do
+          expect(response).to redirect_to('/mnoe/auth/users/confirmation/lounge')
+        end
       end
       
       describe 'failure' do
