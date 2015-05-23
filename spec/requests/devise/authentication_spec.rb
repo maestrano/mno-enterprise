@@ -22,7 +22,6 @@ module MnoEnterprise
         before { subject }
         
         it 'logs the user in' do
-          #post '/mnoe/auth/users/sign_in', user: { email: user.email, password: 'securepassword' }
           expect(controller).to be_user_signed_in
           expect(controller.current_user.id).to eq(user.id)
           expect(controller.current_user.name).to eq(user.name)
@@ -30,7 +29,6 @@ module MnoEnterprise
       end
       
       describe 'failure' do
-        #before { api_stub_for(post: '/user_sessions', code: 404, response: { errors: "does not exist"}) }
         let(:session_resp_code) { 404 }
         let(:session_resp) {{ errors: "does not exist" }}
         before { subject }

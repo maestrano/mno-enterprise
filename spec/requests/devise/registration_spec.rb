@@ -13,9 +13,7 @@ module MnoEnterprise
     before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
     
-    # Stub call checking if another user already has the confirmation token provided
-    # by devise
-    # before { allow(OpenSSL::HMAC).to receive(:hexdigest).and_return(confirmation_token) }
+    # Stub user retrieval using confirmation token
     before { api_stub_for(
       get:'/users',
       params: { filter: { confirmation_token: '**' }, limit: 1 },
@@ -23,12 +21,10 @@ module MnoEnterprise
     )}
     
     # Stub user email uniqueness check
-    # TODO: The email uniqueness validation (using RemoteUniquenessValidator) does not seem
-    # to be called....when user is saved. This is extremely weird as it works in real life.
     before { api_stub_for( 
       get: '/users',
       params: { filter: { email: '**' }, limit: 1 },
-      response: -> { from_api(email_uniq_resp) } 
+      response: -> { from_api(email_uniq_resp) }
     )}
     
     # Stub org_invites retrieval
