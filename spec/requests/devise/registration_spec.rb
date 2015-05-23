@@ -28,11 +28,7 @@ module MnoEnterprise
     before { api_stub_for( 
       get: '/users',
       params: { filter: { email: '**' }, limit: 1 },
-      response: -> {
-        puts "---------------- email validation called -----------------"
-        puts "---------- response will be #{email_uniq_resp}"
-        from_api(email_uniq_resp)
-      } 
+      response: -> { from_api(email_uniq_resp) } 
     )}
     
     # Stub org_invites retrieval
@@ -45,9 +41,6 @@ module MnoEnterprise
       describe 'success' do
         before { subject }
         
-        # Obscure failure happens when running all specs
-        # NoMethodError:
-        #        undefined method `clear' for nil:NilClass
         it 'signs the user up' do  
           expect(controller).to be_user_signed_in
           curr_user = controller.current_user
@@ -62,8 +55,6 @@ module MnoEnterprise
         before { subject }
         
         it 'does not log the user in' do
-          #user.email = "bla@tamere.com"
-          #user.save
           expect(controller).to_not be_user_signed_in
           expect(controller.current_user).to be_nil
         end
