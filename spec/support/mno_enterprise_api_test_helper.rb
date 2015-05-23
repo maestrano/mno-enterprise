@@ -113,7 +113,7 @@ module MnoEnterpriseApiTestHelper
         c.use Her::Middleware::MnoeApiV1ParseJson
       
         # Add stubs on the test adapter
-        c.adapter(:test) do |receiver|
+        c.use MnoeFaradayTestAdapter do |receiver|
           @_stub_list.each do |key,stub|
             params = stub[:params] && stub[:params].any? ? "?#{stub[:params].to_param}" : ""
             path = "#{stub[:path]}#{params}"
