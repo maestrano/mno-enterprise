@@ -33,7 +33,7 @@
             apps: #{@apps.to_json}
           }
         }).always(function() {
-          window.location.href = "#{myspace_path}"
+          window.location.href = "#{myspace_path}#/?dhbRefId=#{@organization.id}"
         });
     
       });
