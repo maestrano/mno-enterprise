@@ -1,3 +1,6 @@
+require 'prawn'
+require 'prawn-table'
+require 'money'
 require 'deepstruct'
 require 'less-rails'
 require 'jwt'
