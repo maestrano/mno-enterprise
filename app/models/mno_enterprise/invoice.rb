@@ -37,6 +37,17 @@ module MnoEnterprise
     #==============================================================
     belongs_to :organization, class_name: 'MnoEnterprise::Organization'
     
+    # Return a label describing the time period
+    # this invoice covers
+    def period_label
+      return '' unless self.started_at && self.ended_at
+      "#{self.started_at.strftime("%b %d,%Y")} to #{self.ended_at.strftime("%b %d,%Y")}"
+    end
     
+    # Return true if the invoice has been paid
+    # false otherwise
+    def paid?
+      !self.paid_at.blank?
+    end
   end
 end

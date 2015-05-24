@@ -27,9 +27,6 @@ module.controller('DashboardOrganizationBillingCtrl',[
       b.credit &&
       b.credit.value > 0
     
-    $scope.isFreeTrialStatusShown = ->
-      $scope.billing.under_free_trial
-    
     #====================================
     # Post-Initialization
     #==================================== 

@@ -2,15 +2,11 @@
   Credit Card Form
 -->
 <div class="row">
-  <h4 class="cc-header-eft"><em>Prefer to pay via bank transfer? <a href="/electronic-fund-transfer" target="_blank">Just click here</a></em></h4>
   <h4 class="cc-header">
     Credit Card Details
     <small>
       <em class="text-muted">
       - This is a secured, 128-bit SSL encrypted credit card form
-      <img ng-src="{{ assetPath['eway_logo.png'] }}" alt="eWay Logo Shield"/>
-      <img ng-src="{{ assetPath['cba_logo.png'] }}" alt="CBA Logo"/>
-      <img style="cursor:pointer;" src="https://seal.godaddy.com/images/3/en/siteseal_gd_3_h_l_m.gif" ng-click="openGodaddySslSeal()">
       </em>
     </small>
   </h4>
@@ -18,15 +14,6 @@
   <div class="clearfix"></div>
   <hr>
   <form name="forms.creditCard" role="form" novalidate class="form-horizontal inverse">
-  
-    <div class="form-group cc-icons">
-      <div class="col-xs-6">
-        <span class="glyphicon icon-mno-cc-visa" ng-class="classForIconType('visa')"></span>
-        <span class="glyphicon icon-mno-cc-mastercard" ng-class="classForIconType('mastercard')"></span>
-        <span class="glyphicon icon-mno-cc-amex" ng-class="classForIconType('amex')"></span>
-        <span class="glyphicon icon-mno-cc-jcb" ng-class="classForIconType('jcb')"></span>
-      </div>
-    </div>
   
     <div class="form-group">
       <label class="col-sm-2 control-label">Title</label>

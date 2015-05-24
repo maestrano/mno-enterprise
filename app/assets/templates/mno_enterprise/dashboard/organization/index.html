@@ -41,6 +41,67 @@
     <div tabset>
       
       <!-------------------------------------->
+      <!--         Billing Section          -->
+      <!-------------------------------------->
+      <div tab ng-show="isBillingShown()" active="tabs.billing">
+        <div tab-heading>Billing</div>
+      
+
+        <!-- Directive: DashboardOrganizationArrears -->
+        <!-- <div dashboard-organization-arrears></div> -->
+
+
+        <div accordion class="accordion">
+          <div accordion-group is-open="isCrbgOpen">
+            <div accordion-heading>
+                Current Billing <span class="caret pull-right" ng-class="{'caret-down': !isCrbgOpen, 'caret-up': isCrbgOpen}"></span>
+            </div>
+            
+            <!-- Directive: DashboardOrganizationBilling -->
+            <div class="col-md-12">
+              <div dashboard-organization-billing></div>
+            </div>
+            
+            <!-- End: accordion-group current billing -->
+          </div>
+          
+          <div accordion-group is-open="isBdtOpen">
+            <div accordion-heading>
+                Billing Details <span class="caret pull-right" ng-class="{'caret-down': !isBdtOpen, 'caret-up': isBdtOpen}"></span>
+            </div>
+            
+            <!-- Directive: DashboardOrganizationBilling -->
+            <div class="col-md-12">
+              <div dashboard-organization-credit-card></div>
+            </div>
+            
+            
+            <!-- End: accordion-group credit card form -->
+          </div>
+          
+          
+          
+          <div accordion-group is-open="isPsIvOpen">
+            <div accordion-heading>
+                Past Invoices <span class="caret pull-right" ng-class="{'caret-down': !isPsIvOpen, 'caret-up': isPsIvOpen}"></span>
+            </div>
+            
+            <!-- Directive: DashboardOrganizationInvoices -->
+            <div class="col-md-12">
+              <div dashboard-organization-invoices></div>
+            </div>
+            
+            <!-- End: accordion-group past invoices -->
+          </div>
+          
+                  
+          <!-- End: accordion -->
+        </div>
+        
+        <!-- End: tab billing section -->
+      </div>
+      
+      <!-------------------------------------->
       <!--        Members Section           -->
       <!-------------------------------------->
       <div tab active="tabs.members">
