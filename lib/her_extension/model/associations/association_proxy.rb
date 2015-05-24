@@ -5,7 +5,7 @@ module Her
       class AssociationProxy < (ActiveSupport.const_defined?('ProxyObject') ? ActiveSupport::ProxyObject : ActiveSupport::BasicObject)
         
         install_proxy_methods :association,
-          :build, :create, :update, :destroy, :where, :find, :all, :assign_nested_attributes, :reload
+          :build, :create, :update, :destroy, :where, :find, :all, :assign_nested_attributes, :reload, :order, :order_by, :limit
         
         
         def method_missing(name, *args, &block)
