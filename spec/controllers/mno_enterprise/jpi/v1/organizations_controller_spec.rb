@@ -8,25 +8,25 @@ module MnoEnterprise
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
     #before { allow_any_instance_of(CreditCard).to receive(:save_to_gateway).and_return(true) }
     
-    # def partial_hash_for_credit_card(cc)
-    #   {
-    #     'credit_card' => {
-    #       'id' => cc.id,
-    #       'title' => cc.title,
-    #       'first_name' => cc.first_name,
-    #       'last_name' => cc.last_name,
-    #       'number' => cc.masked_number,
-    #       'month' => cc.month,
-    #       'year' => cc.year,
-    #       'country' => cc.country,
-    #       'verification_value' => 'CVV',
-    #       'billing_address' => cc.billing_address,
-    #       'billing_city' => cc.billing_city,
-    #       'billing_postcode' => cc.billing_postcode,
-    #       'billing_country' => cc.billing_country
-    #     }
-    #   }
-    # end
+    def partial_hash_for_credit_card(cc)
+      {
+        'credit_card' => {
+          'id' => cc.id,
+          'title' => cc.title,
+          'first_name' => cc.first_name,
+          'last_name' => cc.last_name,
+          'number' => cc.masked_number,
+          'month' => cc.month,
+          'year' => cc.year,
+          'country' => cc.country,
+          'verification_value' => 'CVV',
+          'billing_address' => cc.billing_address,
+          'billing_city' => cc.billing_city,
+          'billing_postcode' => cc.billing_postcode,
+          'billing_country' => cc.billing_country
+        }
+      }
+    end
 
     def partial_hash_for_members(organization)
       list = []
@@ -95,30 +95,28 @@ module MnoEnterprise
       }
     end
 
-    # def partial_hash_for_billing(organization)
-    #   {
-    #     'billing' => {
-    #       'current' => organization.current_billing,
-    #       'credit' => organization.current_credit,
-    #       'free_trial_end_at' => organization.free_trial_end_at,
-    #       'under_free_trial' => organization.under_free_trial?
-    #     }
-    #   }
-    # end
-    #
-    # def partial_hash_for_invoices(organization)
-    #   hash = {'invoices' => []}
-    #   organization.invoices.order("ended_at DESC").each do |invoice|
-    #     hash['invoices'].push({
-    #       'period' => invoice.period_label,
-    #       'amount' => invoice.total_due,
-    #       'paid' => invoice.paid?,
-    #       'link' => invoice_path(invoice.slug),
-    #     })
-    #   end
-    #
-    #   return hash
-    # end
+    def partial_hash_for_billing(organization)
+      {
+        'billing' => {
+          'current' => organization.current_billing,
+          'credit' => organization.current_credit
+        }
+      }
+    end
+
+    def partial_hash_for_invoices(organization)
+      hash = {'invoices' => []}
+      organization.invoices.order("ended_at DESC").each do |invoice|
+        hash['invoices'].push({
+          'period' => invoice.period_label,
+          'amount' => invoice.total_due,
+          'paid' => invoice.paid?,
+          'link' => mnoe_enterprise.invoice_path(invoice.slug),
+        })
+      end
+
+      return hash
+    end
     
     def hash_for_organizations(organizations)
       { 
@@ -141,18 +139,18 @@ module MnoEnterprise
         'members' => partial_hash_for_members(organization)
       )
 
-      # if user.role(organization) == 'Super Admin'
-      #   hash.merge!(partial_hash_for_billing(organization))
-      #   hash.merge!(partial_hash_for_invoices(organization))
-      #
-      #   if (cc = organization.credit_card)
-      #     hash.merge!(partial_hash_for_credit_card(cc))
-      #   end
-      #
-      #   if (situations = organization.arrears_situations)
-      #     hash.merge!(partial_hash_for_arrears_situations(situations))
-      #   end
-      # end
+      if user.role(organization) == 'Super Admin'
+        hash.merge!(partial_hash_for_billing(organization))
+        hash.merge!(partial_hash_for_invoices(organization))
+
+        if (cc = organization.credit_card)
+          hash.merge!(partial_hash_for_credit_card(cc))
+        end
+
+        if (situations = organization.arrears_situations)
+          hash.merge!(partial_hash_for_arrears_situations(situations))
+        end
+      end
 
       return hash
     end
@@ -170,8 +168,8 @@ module MnoEnterprise
     before { sign_in user }
     
     # Advanced features - currently disabled
-    # let!(:credit_card) { build(:credit_card, owner: organization) }
-    # let!(:invoice) { build(:invoice, invoicable: organization) }
+    let!(:credit_card) { build(:credit_card, organization_id: organization.id) }
+    let!(:invoice) { build(:invoice, organization_id: organization.id) }
     let!(:org_invite) { build(:org_invite, organization: organization) }
     
     # Stub organization + associations
@@ -181,12 +179,14 @@ module MnoEnterprise
     before { api_stub_for(post: "/organizations", response: from_api(organization)) }    
     before { api_stub_for(put: "/organizations/#{organization.id}", response: from_api(organization)) }
     
+    before { api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api(credit_card)) }
+    before { api_stub_for(put: "/credit_cards/#{credit_card.id}", response: from_api(credit_card)) }
+    
+    
+    before { api_stub_for(get: "/organizations/#{organization.id}/invoices", response: from_api([invoice])) }
     before { api_stub_for(get: "/organizations/#{organization.id}/org_invites", response: from_api([org_invite])) }
     before { api_stub_for(get: "/organizations/#{organization.id}/users", response: from_api([user])) }
     before { api_stub_for(post: "/organizations/#{organization.id}/users", response: from_api(user)) }
-    
-    #before { allow(organization).to receive(:users).and_return([user]) }
-    #before { allow(organization).to receive(:org_invites).and_return([org_invite]) }
     
     #===============================================
     # Specs
@@ -333,50 +333,25 @@ module MnoEnterprise
     #   end
     # end
 
-    # describe 'PUT #update_billing' do
-    #   let(:user) { build(:user) }
-    #   let(:organization) { build(:organization) }
-    #   let(:params) { attributes_for(:credit_card) }
-    #
-    #   before { allow_any_instance_of(CreditCard).to receive(:save_to_gateway).and_return(true) }
-    #   subject { put :update_billing, id: organization.id, credit_card: params }
-    #
-    #   context 'guest' do
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'unauthorized as guest' do
-    #     before { sign_in user }
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'unauthorized as member' do
-    #     let(:role) { 'Admin' }
-    #     before { sign_in user }
-    #     before { organization.add_user(user,role) }
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'authorized' do
-    #     let(:role) { 'Super Admin' }
-    #     before { sign_in user }
-    #     before { organization.add_user(user,role) }
-    #     before { subject }
-    #
-    #     it 'updates the entity credit card' do
-    #       organization.reload
-    #       expect(organization.credit_card).to_not be_nil
-    #     end
-    #
-    #     it 'returns a partial representation of the entity' do
-    #       organization.reload
-    #       expect(JSON.parse(response.body)).to eq(partial_hash_for_credit_card(organization.credit_card))
-    #     end
-    #   end
-    # end
+    describe 'PUT #update_billing' do
+      let(:params) { attributes_for(:credit_card) }
+      subject { put :update_billing, id: organization.id, credit_card: params }
+
+      it_behaves_like "jpi v1 protected action"
+
+      context 'authorized' do
+        it 'updates the entity credit card' do
+          expect_any_instance_of(MnoEnterprise::CreditCard).to receive(:save).and_return(true)
+          subject
+          expect(organization.credit_card).to_not be_nil
+        end
+
+        it 'returns a partial representation of the entity' do
+          subject
+          expect(JSON.parse(response.body)).to eq(partial_hash_for_credit_card(organization.credit_card))
+        end
+      end
+    end
 
     # describe 'PUT #invite_members' do
     #   let(:team) { build(:org_team, organization: organization) }

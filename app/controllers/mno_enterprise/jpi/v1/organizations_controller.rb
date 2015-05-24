@@ -64,24 +64,23 @@ module MnoEnterprise
     # end
 
     # PUT /mnoe/jpi/v1/organizations/:id/update_billing
-    # def update_billing
-    #   whitelist = ['title','first_name','last_name','number','month','year','country','verification_value','billing_address','billing_city','billing_postcode', 'billing_country']
-    #   attributes = params[:credit_card].select { |k,v| whitelist.include?(k.to_s) }
-    #
-    #   # Authorize and upsert
-    #   authorize! :update, organization
-    #   if (@credit_card = organization.credit_card)
-    #     @credit_card.smart_update_attributes(attributes)
-    #   else
-    #     @credit_card = organization.create_credit_card(attributes)
-    #   end
-    #
-    #   if @credit_card.errors.empty?
-    #     render partial: 'credit_card'
-    #   else
-    #     render json: @credit_card.errors, status: :bad_request
-    #   end
-    # end
+    def update_billing
+      whitelist = ['title','first_name','last_name','number','month','year','country','verification_value','billing_address','billing_city','billing_postcode', 'billing_country']
+      attributes = params[:credit_card].select { |k,v| whitelist.include?(k.to_s) }
+      authorize! :manage_billing, organization
+      
+      # Upsert
+      if @credit_card = organization.credit_card
+        @credit_card.assign_attributes(attributes.merge(organization_id: @credit_card.organization_id))
+        @credit_card.save
+      end
+
+      if @credit_card.errors.empty?
+        render 'credit_card'
+      else
+        render json: @credit_card.errors, status: :bad_request
+      end
+    end
     
     # TODO: specs
     # PUT /mnoe/jpi/v1/organizations/:id/invite_members
