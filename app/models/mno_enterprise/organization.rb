@@ -36,6 +36,7 @@ module MnoEnterprise
     has_many :users, class_name: 'MnoEnterprise::User'
     has_many :org_invites, class_name: 'MnoEnterprise::OrgInvite'
     has_many :app_instances, class_name: 'MnoEnterprise::AppInstance'
+    has_many :invoices, class_name: 'MnoEnterprise::Invoice'
     
     # Return the list of users + active invites
     # TODO: specs
