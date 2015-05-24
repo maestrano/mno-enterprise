@@ -3,6 +3,6 @@ json.invoices do
     json.period invoice.period_label
     json.amount invoice.total_due
     json.paid invoice.paid?
-    json.link "/bla" #invoice_path(invoice.slug)
+    json.link mno_enterprise.invoice_path(invoice.slug)
   end
 end

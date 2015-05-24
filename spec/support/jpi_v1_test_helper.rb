@@ -1,12 +1,5 @@
 module JpiV1TestHelper
   
-  def stub_ability
-    ability = Object.new
-    ability.extend(::CanCan::Ability)
-    allow(controller).to receive(:current_ability).and_return(ability)
-    ability
-  end
-  
   # Expect 'user' to be assigned
   shared_examples "jpi v1 protected action" do
     context "with guest user" do

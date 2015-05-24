@@ -23,6 +23,9 @@ MnoEnterprise::Engine.routes.draw do
   # Organization Invites
   resources :org_invites, only: [:show]
   
+  # Invoices
+  resources :invoices, only: [:show], constraints: { id: /[\w\-]+/ }
+  
   #============================================================
   # Devise/User Configuration
   #============================================================
