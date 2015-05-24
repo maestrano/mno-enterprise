@@ -26,6 +26,7 @@ require "mno_enterprise/engine"
 require 'mandrill'
 require "mandrill_client"
 
+require 'accountingjs_serializer'
 
 module MnoEnterprise
   

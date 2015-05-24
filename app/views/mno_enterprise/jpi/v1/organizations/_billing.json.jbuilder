@@ -1,4 +1,4 @@
 json.billing do
-  json.current organization.current_billing
-  json.credit organization.current_credit
+  json.current AccountingjsSerializer.serialize(organization.current_billing)
+  json.credit AccountingjsSerializer.serialize(organization.current_credit)
 end
