@@ -1,5 +1,5 @@
 require 'prawn'
-require 'prawn-table'
+require 'prawn/table'
 require 'money'
 require 'deepstruct'
 require 'less-rails'
@@ -43,7 +43,6 @@ module MnoEnterprise
     
     def impac_root_url
       URI.join(MnoEnterprise.impac_api_host,MnoEnterprise.impac_api_root_path)
-      #"#{}#{}"
     end
     
     private      
