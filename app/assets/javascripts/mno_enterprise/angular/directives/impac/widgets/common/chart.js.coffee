@@ -4,7 +4,7 @@ module = angular.module('maestrano.impac.widgets.common.chart',['maestrano.asset
 # Component
 #============================================
 
-module.directive('widgetCommonChart', ['TemplatePath','$compile', (TemplatePath,$compile) ->
+module.directive('widgetCommonChart', ['TemplatePath','$compile','$timeout', (TemplatePath,$compile,$timeout) ->
   return {
       restrict: 'A',
       scope: {
@@ -42,6 +42,7 @@ module.directive('widgetCommonChart', ['TemplatePath','$compile', (TemplatePath,
           ,(value) ->
             if value?
               scope.draw()
+              $timeout((-> scope.draw()),100)
         ,true)
     }
 ])

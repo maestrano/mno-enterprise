@@ -20,6 +20,10 @@ module MnoEnterprise
       expect(put('/jpi/v1/organizations/1')).to route_to("mno_enterprise/jpi/v1/organizations#update", id: '1')
     end
     
+    it "routes to #update_billing" do
+      expect(put("/jpi/v1/organizations/1/update_billing")).to route_to("mno_enterprise/jpi/v1/organizations#update_billing",id: '1')
+    end
+    
     it "routes to #invite_members" do
       expect(put("/jpi/v1/organizations/1/invite_members")).to route_to("mno_enterprise/jpi/v1/organizations#invite_members",id: '1')
     end

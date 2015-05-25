@@ -46,6 +46,9 @@ RSpec.configure do |config|
   # Enable API stub helpers (e.g.: api_stub_for)
   config.include MnoEnterpriseApiTestHelper
   
+  # Include ability test helper
+  config.include AbilityTestHelper, type: :controller
+  
   # Include devise tests
   config.include Devise::TestHelpers, type: :controller
   

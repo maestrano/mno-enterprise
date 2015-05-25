@@ -57,7 +57,7 @@ module MnoEnterprise
       end
       
       def capture_previous_url
-        if request.format == 'text/html' && request.fullpath =~ /\/(myspace|deletion_requests|org_invites)/
+        if request.format == 'text/html' && request.fullpath =~ /\/(myspace|deletion_requests|org_invites|provision)/
           session[:previous_url] = request.original_url
         end
       end
@@ -82,6 +82,8 @@ module MnoEnterprise
 
       # Redirect to previous url and reset it
       def after_sign_in_path_for(resource)
+        puts "CALLLEEEED: after_sign_in_path_for"
+        puts "MYSPACE URL: #{mno_enterprise.myspace_url}"
         previous_url = session.delete(:previous_url)
         return (return_to_url(resource) || previous_url || mno_enterprise.myspace_url)
       end

@@ -1,3 +1,7 @@
+require 'prawn'
+require 'prawn/table'
+require 'money'
+require 'deepstruct'
 require 'less-rails'
 require 'jwt'
 require 'jquery-rails'
@@ -22,6 +26,7 @@ require "mno_enterprise/engine"
 require 'mandrill'
 require "mandrill_client"
 
+require 'accountingjs_serializer'
 
 module MnoEnterprise
   
@@ -39,7 +44,6 @@ module MnoEnterprise
     
     def impac_root_url
       URI.join(MnoEnterprise.impac_api_host,MnoEnterprise.impac_api_root_path)
-      #"#{}#{}"
     end
     
     private      
@@ -79,18 +83,9 @@ module MnoEnterprise
 
   mattr_accessor :impac_api_root_path
   @@impac_api_root_path = "/api/v1"
-
-  mattr_accessor :impac_colors_array
-  @@impac_colors_array = ["#1de9b6","#7c4dff","#ffc928","#3fc4ff","#ff8e01","#c6ff00","#d500fa","#ff6e41","#ffeb3c","#ff1844"]
-
-  mattr_accessor :impac_colors_positive
-  @@impac_colors_positive = "#3FC4FF"
-
-  mattr_accessor :impac_colors_negative
-  @@impac_colors_negative = "#1DE9B6"
   
   #====================================
-  # System
+  # Enterprise API
   #====================================
   # The Maestrano Enterprise API Host
   mattr_accessor :mno_api_host
@@ -114,7 +109,7 @@ module MnoEnterprise
   #====================================
   # Mandrill Key for sending emails
   # Points to the default maestrano enterprise account
-  mattr_reader :mandrill_key
+  mattr_accessor :mandrill_key
   @@mandrill_key = 'QcrLVdukhBi7iYrTeWHRPQ'
   
   # The support email address
@@ -128,20 +123,28 @@ module MnoEnterprise
   # Default sender email
   mattr_accessor :default_sender_email
   @@default_sender_email = "no-reply@example.com"
-
+  
 
   #====================================
-  # Layout
+  # Layout & Styling
   #====================================
-  # Menu orientation: horizontal or vertical (default)
-  mattr_accessor :layout_menu_orientation
-  @@layout_menu_orientation = 'vertical'
-
+  # Nested structure defining the general style of the application
+  mattr_accessor :styleguide
+  mattr_accessor :style
+  @@styleguide = nil
+  @@style = nil
+  
+  # Always reload style in development
+  def self.style
+    self.configure_styleguide if Rails.env.development?
+    @@style
+  end
 
   # Default way to setup MnoEnterprise. Run rails generate mno-enterprise:install to create
   # a fresh initializer with all configuration values.
   def self.configure
     yield self
+    self.configure_styleguide
     self.configure_api
   end
   
@@ -164,6 +167,21 @@ module MnoEnterprise
       { url: "#{URI.join(@@mno_api_host,@@mno_api_root_path).to_s}", send_only_modified_attributes: true }
     end
     
+    # Load the provided styleguide hash into nested structure or load a default one
+    def self.configure_styleguide
+      # Load default gem configuration
+      hash = YAML.load(File.read(File.join(MnoEnterprise::Engine.root,'config','styleguide.yml')))
+      
+      # Load default app styleguide, unless explicitly specified
+      default_path = File.join(Rails.root,'config','mno_enterprise_styleguide.yml')
+      if !@@styleguide && File.exists?(default_path)
+        @@styleguide = YAML.load(File.read(default_path))
+      end
+      
+      @@styleguide.is_a?(Hash) && hash.deep_merge!(@@styleguide)
+      @@style = DeepStruct.wrap(hash)
+    end
+    
     # Configure the Her for Maestrano Enterprise API V1
     def self.configure_api
       # Configure HER for Maestrano Enterprise Endpoints
@@ -180,4 +198,5 @@ module MnoEnterprise
         c.use Faraday::Adapter::NetHttp
       end
     end
+    
 end

@@ -23,9 +23,13 @@ MnoEnterprise::Engine.routes.draw do
   # Organization Invites
   resources :org_invites, only: [:show]
   
+  # Invoices
+  resources :invoices, only: [:show], constraints: { id: /[\w\-]+/ }
+  
   #============================================================
-  # Devise Configuration
+  # Devise/User Configuration
   #============================================================
+  # Main devise configuration
   devise_for :users, { 
     class_name: "MnoEnterprise::User",
     module: :devise, 
@@ -40,12 +44,17 @@ MnoEnterprise::Engine.routes.draw do
     }
   }
   
+  # Additional devise routes
   # TODO: routing specs
   devise_scope :user do
     get "/auth/users/confirmation/lounge", to: "auth/confirmations#lounge", as: :user_confirmation_lounge
     patch "/auth/users/confirmation/finalize", to: "auth/confirmations#finalize", as: :user_confirmation_finalize
     patch "/auth/users/confirmation", to: "auth/confirmations#update"
   end
+  
+  # User Setup process
+  # ==> Currently NOT prod ready
+  resources :user_setup, only: [:index]
   
   
   #============================================================
@@ -62,6 +71,7 @@ MnoEnterprise::Engine.routes.draw do
       
       resources :organizations, only: [:index, :show, :create, :update] do
         member do
+          put :update_billing
           put :invite_members
           put :update_member
           put :remove_member

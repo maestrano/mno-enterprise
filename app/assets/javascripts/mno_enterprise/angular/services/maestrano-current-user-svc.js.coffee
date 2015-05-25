@@ -10,16 +10,16 @@ angular.module('maestrano.services.current-user-svc', []).factory('CurrentUserSv
   }
   
   # Load User
-  service.then = () ->
+  service.then = (fn = nil) ->
+    service.loadDocument().then(fn)
+    
   service.loadDocument = (force = false)->
     self = service
     if self.document == undefined || force
       self.query = $http.get("/mnoe/jpi/v1/current_user")
-      self.then = self.query.then
       self.query.success (data) ->
         self.document = data
-    else
-      return self.query
+    return self.query
 
   
   # Sign user in

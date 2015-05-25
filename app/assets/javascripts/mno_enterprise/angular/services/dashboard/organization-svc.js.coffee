@@ -39,6 +39,7 @@ angular.module('maestrano.services.dashboard.organization-svc', []).factory('Dhb
   service.configure = (opts) ->
     angular.copy(opts,service.config)
     angular.extend(service.config,service.defaultConfig)
+    return service
 
   # Load the organization details
   # Document structure

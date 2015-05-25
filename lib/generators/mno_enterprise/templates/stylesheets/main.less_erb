@@ -11,6 +11,10 @@
 /*                           Customization                               */
 /*-----------------------------------------------------------------------*/
 
+// Import theme colors
+//--------------------------------------------
+<%= Tilt.new(File.expand_path('../theme.less.erb',__FILE__)).render %>
+
 // Import custom variables
 //--------------------------------------------
 @import "variables";

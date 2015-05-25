@@ -4,6 +4,7 @@
 
 // Core variables and mixins
 @import "twitter-bootstrap/variables.less";
+//@import "theme.less"; // Modify this for custom colors, font-sizes, etc
 @import "variables.less"; // Modify this for custom colors, font-sizes, etc
 @import "twitter-bootstrap/mixins.less";
 @import "mixins.less"; // Modify this for custom mixins
@@ -96,7 +97,9 @@
 @import "custom/views/apps";
 @import "custom/views/registration";
 @import "custom/views/star";
+@import "custom/views/user-setup";
 @import "custom/views/pages/confirmation_lounge";
+
 
 /*-----------------------------------------------------------------------*/
 /*       Include the stylsheets specific to angular templates            */
@@ -113,3 +116,9 @@
 @import "custom/views/templates/dashboard/tickets";
 @import "custom/views/templates/dashboard/support";
 @import "custom/views/templates/dashboard/bootstrap-wizard";
+
+/*-----------------------------------------------------------------------*/
+/*       Include the stylsheets specific to Angular                      */
+/*-----------------------------------------------------------------------*/
+@import "custom/angular-material";
+@import "custom/angular-animate";

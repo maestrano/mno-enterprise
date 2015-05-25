@@ -118,6 +118,12 @@ module MnoEnterprise
       self.confirmation_token = confirmation_token
     end
     
+    # It may happen that that the errors attribute become nil, which breaks the controller logic (rails responder)
+    # This getter ensures that 'errors' is always initialized
+    def errors
+      @errors ||= ActiveModel::Errors.new(self)
+    end
+    
     #================================
     # Instance Methods
     #================================

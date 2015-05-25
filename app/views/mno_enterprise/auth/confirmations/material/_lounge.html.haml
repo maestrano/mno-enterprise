@@ -1,0 +1,18 @@
+.registration-material
+  .action-box{ layout: "row", 'layout-align' => "center center" }
+    
+    .md-whiteframe-z1{ layout: "column", flex: '33' }
+      
+      %md-toolbar.success
+        .md-toolbar-tools
+          %md-icon{ 'md-font-icon' => 'fa fa-check-circle', style: 'font-size: 28px; margin-right: 10px;' }
+          %h3 Thanks for signing up!
+          %span{ flex: '' }
+      
+      %md-content{ "layout-padding" => "", style: 'min-height: 300px; padding: 40px; text-align: left;' }
+        %p 
+          We have just sent an email to 
+          = @resource.email
+        
+        %p 
+          Please check your email and click on the 'Verify my Account' link.

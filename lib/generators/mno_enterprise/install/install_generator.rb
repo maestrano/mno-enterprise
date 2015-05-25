@@ -9,8 +9,12 @@ module MnoEnterprise
       def copy_initializer
         template "Procfile", "Procfile"
         template "initializers/mno_enterprise.rb", "config/initializers/mno_enterprise.rb"
-        template "stylesheets/main.less", "app/assets/stylesheets/main.less"
-        template "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
+        template "config/mno_enterprise_styleguide.yml", "config/mno_enterprise_styleguide.yml"
+        
+        # Stylesheets
+        copy_file "stylesheets/main.less_erb", "app/assets/stylesheets/main.less.erb"
+        copy_file "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
+        copy_file "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
         
         # Require main stylesheet file
         inject_into_file 'app/assets/stylesheets/application.css', before: " */" do

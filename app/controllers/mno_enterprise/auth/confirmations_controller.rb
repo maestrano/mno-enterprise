@@ -52,12 +52,13 @@ module MnoEnterprise
       end
       
       if resource.errors.empty?
-        resource.update_attributes(params[:user]) unless resource.confirmed?
+        resource.assign_attributes(params[:user]) unless resource.confirmed?
         resource.perform_confirmation(@confirmation_token)
         resource.save
-        sign_in resource
+        sign_in resource, bypass: true
+        
         set_flash_message(:notice, :confirmed) if is_flashing_format?
-        respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+        respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource, new_user: true) }
       else
         respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
       end
@@ -107,8 +108,8 @@ module MnoEnterprise
       # The path used after confirmation.
       # Confirm any outstanding organization invite
       # TODO: invite acceptance logic should be moved to the 'show' action
-      def after_confirmation_path_for(resource_name, resource)
-        return new_user_session_path unless signed_in?
+      def after_confirmation_path_for(resource_name, resource, opts = {})
+        return new_user_session_path unless resource
       
         # 3 days is the duration of an invite.
         if resource.created_at > 3.days.ago
@@ -131,8 +132,14 @@ module MnoEnterprise
             org_invite.accept!(resource) unless org_invite.expired?
           end
         end
-      
-        signed_in_root_path(resource)
+        
+        if MnoEnterprise.style.workflow.signup_onboarding && opts[:new_user]
+          mno_enterprise.user_setup_index_path
+        elsif opts[:new_user]
+          after_sign_in_path_for(resource)
+        else
+          signed_in_root_path(resource)
+        end
       end
     
       # Redirects unless user is signed in and not confirmed yet

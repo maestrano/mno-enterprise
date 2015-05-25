@@ -16,39 +16,6 @@
 @normal:                         13px;
 
 /*-----------------------------------------------------------------------*/
-/*                          Color Palette                                */
-/*-----------------------------------------------------------------------*/
-@white:                          #ffffff;
-@black:                          #000000;
-@darkblue:                       #17262d;
-@lightgray:                      #aeb5bf;
-@lightergray:                    lighten(@lightgray,10%);
-@darkgray:                       darken(@lightgray,20%);
-@purple:                         #977bf0;
-@flurogreen:                     #47ff00;
-@green:                          #d1e55c;
-
-/*-----------------------------------------------------------------------*/
-/*                       General Theme Colors                            */
-/*-----------------------------------------------------------------------*/
-// Main Background and text colors
-@bg-main-color:                  @lightgray;   // Dashboard background color
-@decorator-main-color:           @darkgray;   // Elements placed on top of bg-main-color
-@decorator-alt-color:            @purple;  // Elements placed on top of bg-main-color (secondary)
-@text-strong-color:              @darkblue;  // Used for text used in the context of bg-main-color
-
-@bg-inverse-color:               @white;   // Background color used for dashboard side menu. top banners, inverse modals
-@bg-on-bg-inverse-color:         @lightergray;
-@bg-inverse-intense-color:       @darkblue; // Background color used for elements on top of bg-inverse-color
-@decorator-inverse-color:        @purple;  // Design elements (lines, borders) on top of bg-inverse-color
-@text-inverse-color:             @darkblue; // Text used on top of bg-inverse-color such as inverse modals
-
-// Color used in small/isolated elements
-@elem-positive-color:            @green;      // used to reflect a positive action or point (e.g: tick icon)
-@elem-positive-flash-color:      @flurogreen; // stronger version of elem-positive-color (barely used)
-@elem-cozy-color:                @purple;     // used for regular design element - fits well with both main and inverse backgrounds
-
-/*-----------------------------------------------------------------------*/
 /*                              Login Page                               */
 /*-----------------------------------------------------------------------*/
 @login-bg-color:                     @bg-main-color;
@@ -314,4 +281,4 @@
 /*                            Footer                                     */
 /*-----------------------------------------------------------------------*/
 
-@footer-bg:                      @lightgray;
+@footer-bg:                      @bg-main-color;

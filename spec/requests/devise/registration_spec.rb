@@ -13,24 +13,18 @@ module MnoEnterprise
     before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
     
-    # Stub call checking if another user already has the confirmation token provided
-    # by devise
-    before { allow(OpenSSL::HMAC).to receive(:hexdigest).and_return(confirmation_token) }
+    # Stub user retrieval using confirmation token
     before { api_stub_for(
       get:'/users',
-      params: { filter: { confirmation_token: confirmation_token }, limit: 1 },
+      params: { filter: { confirmation_token: '**' }, limit: 1 },
       response: from_api([])
     )}
     
     # Stub user email uniqueness check
-    # TODO: The email uniqueness validation (using RemoteUniquenessValidator) does not seem
-    # to be called....when user is saved. This is extremely weird as it worked in real life.
     before { api_stub_for( 
       get: '/users',
-      params: { filter: { email: signup_attrs[:email] }, limit: 1 },
-      response: -> {
-        from_api(email_uniq_resp)
-      } 
+      params: { filter: { email: '**' }, limit: 1 },
+      response: -> { from_api(email_uniq_resp) }
     )}
     
     # Stub org_invites retrieval
@@ -43,15 +37,16 @@ module MnoEnterprise
       describe 'success' do
         before { subject }
         
-        # Obscure failure happens when running all specs
-        # NoMethodError:
-        #        undefined method `clear' for nil:NilClass
-        xit 'signs the user up' do  
+        it 'signs the user up' do  
           expect(controller).to be_user_signed_in
           curr_user = controller.current_user
           expect(curr_user.id).to eq(user.id)
           expect(curr_user.name).to eq(user.name)
           expect(curr_user.surname).to eq(user.surname)
+        end
+        
+        it 'redirects to the confirmation lounge' do
+          expect(response).to redirect_to('/mnoe/auth/users/confirmation/lounge')
         end
       end
       
@@ -59,10 +54,8 @@ module MnoEnterprise
         let(:email_uniq_resp) { [from_api(user)] }
         before { subject }
         
-        xit 'does not log the user in' do
-          user.email = "bla@tamere.com"
-          user.save
-          #expect(controller).to_not be_user_signed_in
+        it 'does not log the user in' do
+          expect(controller).to_not be_user_signed_in
           expect(controller.current_user).to be_nil
         end
       end

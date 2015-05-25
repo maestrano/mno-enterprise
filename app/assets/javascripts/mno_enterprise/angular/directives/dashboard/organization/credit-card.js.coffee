@@ -4,8 +4,8 @@ module = angular.module('maestrano.dashboard.dashboard-organization-credit-card'
 #
 #============================================
 module.controller('DashboardOrganizationCreditCardCtrl',[
-  '$scope','$window','DhbOrganizationSvc', 'Utilities','AssetPath'
-  ($scope, $window, DhbOrganizationSvc, Utilities,AssetPath) ->
+  '$scope','$window','DhbOrganizationSvc', 'Miscellaneous', 'Utilities','AssetPath'
+  ($scope, $window, DhbOrganizationSvc, Miscellaneous, Utilities,AssetPath) ->
 
     #====================================
     # Pre-Initialization
@@ -19,7 +19,7 @@ module.controller('DashboardOrganizationCreditCardCtrl',[
       validTitles: ['Mr.', 'Ms.', 'Mrs.', 'Miss', 'Dr.', 'Sir.', 'Prof.']
       validMonths: [1..12]
       validYears: [d = (new Date).getFullYear()..d+20]
-      validCountries: $window.Countries
+      validCountries: Miscellaneous.countries
     }
 
     #====================================

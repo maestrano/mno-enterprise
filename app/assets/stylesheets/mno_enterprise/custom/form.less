@@ -25,12 +25,16 @@ form label {
   background-color: @input-bg;
 }
 
-// Remove dropdown arrow (IE and Firefox)
+// Remove dropdown arrow (Chrome, Firefox and IE)
 select {
     -webkit-appearance: none;
     -moz-appearance: none;
     text-indent: 1px;
     text-overflow: '';
+}
+
+select::-ms-expand {
+    display: none;
 }
 
 //----------------------------------------

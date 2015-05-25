@@ -1,6 +1,6 @@
 .myspace
   .container
     .row
-      %div.dashboard-menu{ 'dashboard-menu'=>true, 'background-color'=>'backgroundColor', 'orientation'=>"#{MnoEnterprise.layout_menu_orientation}" }
-      .col-xs-12
+      %div.dashboard-menu{ 'dashboard-menu'=>true, 'background-color'=>'backgroundColor' }
+      %div{ class: MnoEnterprise.style.layout.dashboard_menu_orientation == 'horizontal' ? 'col-xs-12' : 'col-xs-11' }
         %div{ 'ng-view'=>true }

@@ -22,4 +22,26 @@ module MnoEnterprise
     end
   end
   
+  shared_examples "a user protected resource" do
+    context "with guest user" do
+      before { sign_out(user) }
+      before { subject }
+      it { expect(response).to redirect_to(new_user_session_path) }
+    end
+    
+    context 'with authorized user' do
+      before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
+      before { sign_in user }
+      before { subject }
+      it { expect(response.code).to match(/20\d/) }
+    end
+    
+    context 'with unauthorized user' do
+      before { allow(ability).to receive(:can?).with(any_args).and_return(false) }
+      before { sign_in user }
+      before { subject }
+      it { expect(response.code).to match(/(302|401)/) }
+    end
+  end
+  
 end

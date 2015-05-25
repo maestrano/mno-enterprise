@@ -1,0 +1,56 @@
+// Material Design Extensions
+// TODO: color values are currently harcoded - need to align with theme
+
+//-------------------------------------------
+// Toolbar
+//-------------------------------------------
+
+// Neutral style
+md-toolbar.neutral {
+  background: #f2f2f2 !important;
+  color: #616161;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+md-toolbar.success {
+  background: @brand-success !important;
+  color: darken(@brand-success,40%);
+  border-bottom: 1px solid darken(@brand-success,20%);
+}
+
+
+//-------------------------------------------
+// Buttons
+//-------------------------------------------
+// Fix image size when inside a button
+.md-button.md-img {
+  padding: 0;
+}
+
+.md-button.md-img img {
+  width: 100%;
+  height: 100%;
+}
+
+// Check icon inside button - position top right
+.md-button .md-icon-check {
+  position: absolute;
+  top: 0px;
+  right: -2px;
+  color: @brand-success;
+  font-size: 22px;
+}
+
+//-------------------------------------------
+// md-item
+//-------------------------------------------
+// Create sublist style with left margin and smaller md-items
+.md-sublist {
+  margin-top: -10px;
+  margin-left: 20px;
+}
+
+.md-sublist > md-list-item,
+.md-sublist > md-list-item > .md-list-item-inner {
+  min-height: 30px;
+}

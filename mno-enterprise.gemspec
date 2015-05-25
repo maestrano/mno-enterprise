@@ -33,6 +33,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'mandrill-api', '~> 1.0.53'
   s.add_dependency 'sprockets', '~> 2.12.3'
   s.add_dependency 'sprockets-rails', '~> 2.2.4'
+  s.add_dependency 'deepstruct', '~> 0.0.7'
+  s.add_dependency 'prawn', '~> 2.0.1'
+  s.add_dependency 'prawn-table', '~> 0.2.1'
+  s.add_dependency 'money', '~> 6.5.1'
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"

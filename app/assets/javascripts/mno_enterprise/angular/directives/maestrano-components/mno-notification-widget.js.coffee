@@ -24,8 +24,8 @@ module = angular.module('maestrano.components.mno-notification-widget',['maestra
 # }
 #
 module.controller('MnoNotificationWidgetCtrl',[
-  '$scope', '$rootScope', 'Utilities', 'MsgBus', '$timeout', 'notificationsForApps', '$window','$modal', '$sce',
-  ($scope, $rootScope, Utilities, MsgBus, $timeout, notificationsForApps, $window, $modal, $sce) ->
+  '$scope', '$rootScope', 'Utilities', 'MsgBus', '$timeout', '$window','$modal', '$sce',
+  ($scope, $rootScope, Utilities, MsgBus, $timeout, $window, $modal, $sce) ->
     $scope.assetPath = $rootScope.assetPath
     $scope.windowHeight = $window.innerHeight
 
@@ -113,11 +113,6 @@ module.controller('MnoNotificationWidgetCtrl',[
         )
       return true
 
-    # Enable notifications if user is logged in and path
-    # is not on loading page or auth page
-    notifWidget.isAppsNotificationsEnabled = () ->
-      $scope.userLoggedIn() && !$window.location.pathname.match(/^\/(loading|auth)/)
-
     #===================================
     # notifPopup methods
     #===================================
@@ -169,10 +164,7 @@ module.controller('MnoNotificationWidgetCtrl',[
                 notifWidget.pushMsg(notifWidget.inboundQueue().shift())
           ,(->)
         )
-
-        # Enable the apps notifications if required
-        if notifWidget.isAppsNotificationsEnabled()
-          notificationsForApps.enable()
+        
       ,1500
     )
 

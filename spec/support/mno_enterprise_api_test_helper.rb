@@ -23,6 +23,8 @@ module MnoEnterpriseApiTestHelper
         hash[k] = serialize_type(v)
       end
       return hash
+    when res.kind_of?(Money)
+      return { cents: res.cents, currency: res.currency_as_string }
     when res.respond_to?(:iso8601)
       return res.iso8601
     else
@@ -113,7 +115,7 @@ module MnoEnterpriseApiTestHelper
         c.use Her::Middleware::MnoeApiV1ParseJson
       
         # Add stubs on the test adapter
-        c.adapter(:test) do |receiver|
+        c.use MnoeFaradayTestAdapter do |receiver|
           @_stub_list.each do |key,stub|
             params = stub[:params] && stub[:params].any? ? "?#{stub[:params].to_param}" : ""
             path = "#{stub[:path]}#{params}"
@@ -136,7 +138,16 @@ module MnoEnterpriseApiTestHelper
                 end
               end
               
-              [stub[:code] || 200, {}, resp.to_json] 
+              # Response code
+              if stub[:code].is_a?(Proc)
+                args = stub[:code].arity > 0 ? [body] : []
+                resp_code = stub[:code].call(*args)
+              else
+                resp_code = stub[:code] || 200
+              end
+                 
+              
+              [resp_code, {}, resp.to_json] 
             }
           end
         end
