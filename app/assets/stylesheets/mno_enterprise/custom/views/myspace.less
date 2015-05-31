@@ -141,7 +141,8 @@
   }
 
   // Dashboard Button Content > Normal State
-  .dashboard-button, .dashboard-button .content {
+  .dashboard-button, 
+  .dashboard-button .content {
     color: @dashboard-side-menu-link-color;
     background-color: @dashboard-side-menu-link-bg-color;
   }
@@ -265,18 +266,53 @@
   
   
   // Icon configuration for each dashboard button
-  .dashboard-button i.dhb-icon-dashboard { @dashboard-side-menu-btn-dashboard(); };
-  .dashboard-button.active i.dhb-icon-dashboard { @dashboard-side-menu-btn-dashboard-active(); };
-  .dashboard-button i.dhb-icon-impac { @dashboard-side-menu-btn-impac(); };
-  .dashboard-button.active i.dhb-icon-impac { @dashboard-side-menu-btn-impac-active(); };
-  .dashboard-button i.dhb-icon-account { @dashboard-side-menu-btn-account(); };
-  .dashboard-button.active i.dhb-icon-account { @dashboard-side-menu-btn-account-active(); };
-  .dashboard-button i.dhb-icon-company { @dashboard-side-menu-btn-company(); };
-  .dashboard-button.active i.dhb-icon-company { @dashboard-side-menu-btn-company-active(); };
-  .dashboard-button i.dhb-icon-marketplace { @dashboard-side-menu-btn-marketplace(); };
-  .dashboard-button.active i.dhb-icon-marketplace { @dashboard-side-menu-btn-marketplace-active(); };
-  .dashboard-button i.dhb-icon-logout { @dashboard-side-menu-btn-logout(); };
-  .dashboard-button.active i.dhb-icon-logout { @dashboard-side-menu-btn-logout-active(); };
+  .dashboard-button i.dhb-icon-dashboard { 
+    @dashboard-side-menu-btn-dashboard(); 
+  };
+  .dashboard-button:hover i.dhb-icon-dashboard,
+  .dashboard-button.active i.dhb-icon-dashboard { 
+    @dashboard-side-menu-btn-dashboard-active(); 
+  };
+  
+  .dashboard-button i.dhb-icon-impac { 
+    @dashboard-side-menu-btn-impac(); 
+  };
+  .dashboard-button.active i.dhb-icon-impac,
+  .dashboard-button:hover i.dhb-icon-impac { 
+    @dashboard-side-menu-btn-impac-active(); 
+  };
+  
+  .dashboard-button i.dhb-icon-account { 
+    @dashboard-side-menu-btn-account(); 
+  };
+  .dashboard-button:hover i.dhb-icon-account,
+  .dashboard-button.active i.dhb-icon-account { 
+    @dashboard-side-menu-btn-account-active(); 
+  };
+  
+  .dashboard-button i.dhb-icon-company { 
+    @dashboard-side-menu-btn-company(); 
+  };
+  .dashboard-button:hover i.dhb-icon-company,
+  .dashboard-button.active i.dhb-icon-company { 
+    @dashboard-side-menu-btn-company-active(); 
+  };
+  
+  .dashboard-button i.dhb-icon-marketplace { 
+    @dashboard-side-menu-btn-marketplace(); 
+  };
+  .dashboard-button:hover i.dhb-icon-marketplace,
+  .dashboard-button.active i.dhb-icon-marketplace { 
+    @dashboard-side-menu-btn-marketplace-active(); 
+  };
+  
+  .dashboard-button i.dhb-icon-logout { 
+    @dashboard-side-menu-btn-logout(); 
+  };
+  .dashboard-button:hover i.dhb-icon-logout,
+  .dashboard-button.active i.dhb-icon-logout { 
+    @dashboard-side-menu-btn-logout-active(); 
+  };
 }
 
 .myspace .app-dashboard {
@@ -397,8 +433,9 @@
       border:0px;
       box-shadow:none;
       margin:25px 0px;
+      
       .panel-heading {
-        background-color:white;
+        background-color: white;
       }
     }
   }
