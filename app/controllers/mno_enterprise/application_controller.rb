@@ -82,8 +82,6 @@ module MnoEnterprise
 
       # Redirect to previous url and reset it
       def after_sign_in_path_for(resource)
-        puts "CALLLEEEED: after_sign_in_path_for"
-        puts "MYSPACE URL: #{mno_enterprise.myspace_url}"
         previous_url = session.delete(:previous_url)
         return (return_to_url(resource) || previous_url || mno_enterprise.myspace_url)
       end
