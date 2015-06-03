@@ -24,10 +24,7 @@
   
   .row
     .col-sm-12
-      .input-group
-        = f.password_field :password, :placeholder => "*Choose Password", 'ng-model' => 'user.password', class: 'form-control', 'ng-minlength' => 6, 'mno-password-strength' => true, "password-score" => 'user.$pwdScore', :required => true
-        %span.input-group-addon.pw-strength-indicator{'ng-class' => 'user.$pwdScore.class' }
-          {{ user.$pwdScore.value }}
+      %div{'mno-password' => 'user', form: "loginForm"}
       
       .text-center.ng-hide{ 'ng-show' => 'user.$pwdScore.showTip' }
         %small.text-danger Password is not strong enough. Try mixing letters, numbers and cases
