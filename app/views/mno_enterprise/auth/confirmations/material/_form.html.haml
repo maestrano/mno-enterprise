@@ -27,14 +27,11 @@
         %label Phone
         = f.text_field :phone, required: true, 'ng-model' => 'user.phone_number'
   
-  %md-input-container
-    %label Password
-    = f.password_field :password, required: true, 'ng-model' => 'user.password', autocomplete: "off"
-  
-  
+  %div{'mno-password' => 'user', form: "loginForm"}
+
+
   %div
     %button{ class: "md-raised md-accent", 'md-button' => true, type: "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'loginForm.$invalid' } Create Account
-    %md-progress-linear{ 'md-mode' => "indeterminate", 'ng-show' => 'hasClicked' }
   
   %br
   
@@ -43,3 +40,5 @@
       By clicking 'Create Account' you are agreeing to
       = "#{MnoEnterprise.app_name}'s"
       Terms of Use and Privacy Policy
+  
+  %md-progress-linear{ 'md-mode' => "indeterminate", 'ng-show' => 'hasClicked' }
