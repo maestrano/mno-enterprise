@@ -17,7 +17,8 @@ maestranoComponents = angular.module('maestrano.components', [
   'maestrano.components.mno-password-strength',
   'maestrano.components.mno-editable',
   'maestrano.components.mno-typeahead',
-  'maestrano.components.mno-message-modal'
-  'maestrano.components.mno-compile'
+  'maestrano.components.mno-message-modal',
+  'maestrano.components.mno-compile',
+  'maestrano.components.mno-password',
   ]
 )
