@@ -17,6 +17,7 @@ module MnoEnterprise
     before { api_stub_for(get: "/app_instances", response: from_api([app_instance])) }
     
     describe 'GET #authorize' do
+      let(:redirect_url) { MnoEnterprise.router.authorize_oauth_url(app_instance.uid, wtk: MnoEnterprise.jwt(user_id: user.uid)) }
       before { sign_in user }
       subject { get :authorize, id: app_instance.uid }
       
@@ -24,7 +25,35 @@ module MnoEnterprise
       it_behaves_like "a user protected resource"
       
       it { subject; expect(response).to be_success }
+      it { subject; expect(assigns(:redirect_to)).to eq(redirect_url)}
     end
     
+    describe 'GET #callback' do
+      subject { get :callback, id: app_instance.uid }
+      
+      it { subject; expect(response).to redirect_to(myspace_path) }
+    end
+    
+    describe 'GET #disconnect' do
+      let(:redirect_url) { MnoEnterprise.router.disconnect_oauth_url(app_instance.uid, wtk: MnoEnterprise.jwt(user_id: user.uid)) }
+      before { sign_in user }
+      subject { get :disconnect, id: app_instance.uid }
+      
+      it_behaves_like "a navigatable protected user action"
+      it_behaves_like "a user protected resource"
+      
+      it { subject; expect(response).to redirect_to(redirect_url) }
+    end
+    
+    describe 'GET #sync' do
+      let(:redirect_url) { MnoEnterprise.router.sync_oauth_url(app_instance.uid, wtk: MnoEnterprise.jwt(user_id: user.uid)) }
+      before { sign_in user }
+      subject { get :sync, id: app_instance.uid }
+      
+      it_behaves_like "a navigatable protected user action"
+      it_behaves_like "a user protected resource"
+      
+      it { subject; expect(response).to redirect_to(redirect_url) }
+    end
   end
 end

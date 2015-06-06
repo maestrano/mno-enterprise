@@ -66,6 +66,9 @@ MnoEnterprise::Engine.routes.draw do
     resources :oauth, only: [], constraints: { id: /[\w\-\.:]+/ }, controller: "o_auth" do
       member do
         get :authorize
+        get :callback
+        get :disconnect
+        get :sync
       end
     end
     

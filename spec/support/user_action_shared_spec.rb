@@ -33,7 +33,7 @@ module MnoEnterprise
       before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
       before { sign_in user }
       before { subject }
-      it { expect(response.code).to match(/20\d/) }
+      it { expect(response.code).to match(/20\d|302/) }
     end
     
     context 'with unauthorized user' do
