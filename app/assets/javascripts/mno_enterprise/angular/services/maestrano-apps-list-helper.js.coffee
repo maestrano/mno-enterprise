@@ -311,7 +311,7 @@ angular.module('maestrano.services.apps-list-helper', []).factory( 'AppsListHelp
         "/mnoe/webhook/oauth/#{instance.uid}/authorize"
       
       dataDisconnectPath: (instance) ->
-        "/webhook/oauth/#{instance.uid}/disconnect"
+        "/mnoe/webhook/oauth/#{instance.uid}/disconnect"
 
       dataDisconnectClick: (instance) ->
         $window.location.href = this.dataDisconnectPath(instance)
