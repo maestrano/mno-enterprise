@@ -34,7 +34,7 @@ module MnoEnterprise
     
     attributes :id, :uid, :name, :status, :app_id, :created_at, :updated_at, :started_at, :stack, :owner_id,
     :owner_type, :terminated_at, :stopped_at, :billing_type, :autostop_at, :autostop_interval,
-    :next_status, :soa_enabled
+    :next_status, :soa_enabled, :oauth_keys_valid, :oauth_company
     
     #==============================================================
     # Constants
@@ -67,5 +67,13 @@ module MnoEnterprise
     def online?
       running?
     end
+    
+    # Define connector_stack?, cloud_stack? etc. methods
+    [:cube,:cloud,:connector].each do |stackname|
+      define_method("#{stackname}_stack?") do
+        self.stack == stackname.to_s
+      end
+    end
+    
   end
 end

@@ -42,6 +42,12 @@ module MnoEnterprise
       url
     end
     
+    def authorize_oauth_url(id,opts = {})
+      url = URI.join(host,"#{base_path}/oauth/#{id}/authorize").to_s
+      url += "?#{opts.to_query}" if opts.any?
+      url
+    end
+    
     def impac_root_url
       URI.join(MnoEnterprise.impac_api_host,MnoEnterprise.impac_api_root_path)
     end

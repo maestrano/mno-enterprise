@@ -22,6 +22,8 @@
     <div class='row'>
       <div ng-repeat="app in apps" class='col-md-3'>
         <div class='app-dashboard'>
+          
+          <!-- Backface -->
           <div ng-switch="displayOptions[app.id]">
 
             <div ng-switch-when="true">
@@ -47,7 +49,8 @@
                 <button ng-click="deletionModal = deletionModal + 1" ng-show="helper.canDeleteApp()" class="btn btn-danger">Delete</button>
               </div>
             </div>
-
+            
+            <!-- Frontface -->
             <div ng-switch-default>
               <a ng-click="displayOptions[app.id] = !displayOptions[app.id]" ng-show="helper.displayCogwheel()" class="options" href=""><i class="fa fa-cog"></i></a>
               <br>
@@ -64,27 +67,34 @@
                 </div>
               </div>
 
-              <!-- Connected company name -->
+              <!-- Connector Version -->
               <div ng-show="appsListHelper.connectorVersion(app)">
                 <div class='app-line' style="border:0px;">MYOB Version: {{appsListHelper.connectorVersion(app)}}</div>
               </div>
-
+              
+              <!-- OAuth Connect Button -->
+              <div ng-show="appsListHelper.isOauthConnectBtnShown(app)">
+                <a class="btn btn-warning" ng-href="{{appsListHelper.oAuthConnectPath(app)}}">
+                  Connect
+                </a>
+              </div>
+              
               <!-- Office365 Connect Button -->
-              <div ng-show="appsListHelper.isMicrosoftSetupShown(app)">
+              <!-- <div ng-show="appsListHelper.isMicrosoftSetupShown(app)">
                 <a ng-href="{{appsListHelper.microsoftTrialUrl(app)}}" target="_blank">
                   <img class="connector-logo office365-connector-logo" ng-src="{{assetPath['office365/connect_office365.jpg']}}" alt="Connect Office 365 and Maestrano"/>
                 </a>
-              </div>
+              </div> -->
 
               <!-- QuickBooks Connect Button -->
-              <div ng-show="appsListHelper.isQuickBooksConnectShown(app)">
+              <!-- <div ng-show="appsListHelper.isQuickBooksConnectShown(app)">
                 <a href="" ng-click="appsListHelper.connectToQuickBooks(app)" class="intuitPlatformConnectButton">
                   <ipp:connecttointuit></ipp:connecttointuit>
                 </a>
-              </div>
+              </div> -->
 
               <!-- Xero Connect Button -->
-              <div ng-show="appsListHelper.isXeroConnectShown(app)">
+              <!-- <div ng-show="appsListHelper.isXeroConnectShown(app)">
                 <div style="margin-top:-5px;">
                   <label>
                     <input style="position: relative; vertical-align: middle; bottom: 1px; margin-right: 5px; height: 10px;" type="checkbox" ng-click="extra_params = (extra_params ? '' : '?extra_params=payroll')">
@@ -94,20 +104,20 @@
                 <a href="{{ appsListHelper.dataSyncPath(app) }}{{ extra_params }}">
                   <img ng-src="{{assetPath['xero/connect_xero_button_blue1.png']}}" alt="Connect Xero and Maestrano"/>
                 </a>
-              </div>
+              </div> -->
 
               <!-- MYOB Connect Button -->
-              <div ng-show="appsListHelper.isMYOBConnectShown(app)">
+              <!-- <div ng-show="appsListHelper.isMYOBConnectShown(app)">
                 <a ng-click="displayCustomInfo[app.id] = !displayCustomInfo[app.id]"
                   popover-placement="top" popover-trigger="mouseenter" popover="You must have an existing MYOB Account, if you don't click on Launch App button below to create one">
                   <img class="connector-logo" ng-src="{{assetPath['myob/connect_myob.png']}}" alt="Connect MYOB and Maestrano"/>
                 </a>
-              </div>
+              </div> -->
 
               <!-- Custom application information -->
               <div class="app-custom-info" ng-show="displayCustomInfo[app.id]">
                 <!-- MYOB version selection -->
-                <div ng-show="appsListHelper.isMYOBConnectShown(app)">
+                <!-- <div ng-show="appsListHelper.isMYOBConnectShown(app)">
                   <span>Select your MYOB Product</span>
                   <div>
                     <a class="btn" href="{{ appsListHelper.myobEssentialsConnectPath(app) }}"
@@ -124,7 +134,7 @@
                   <div>
                     <a class="btn btn-default" ng-click="displayCustomInfo[app.id] = !displayCustomInfo[app.id]">Cancel</a>
                   </div>
-                </div>
+                </div> -->
               </div>
 
               <a ng-href="{{appsListHelper.appActionUrl(app)}}" target="_blank" ng-hide="displayCustomInfo[app.id] || appsListHelper.isLaunchHidden(app)" class="btn btn-warning">Launch App</a>

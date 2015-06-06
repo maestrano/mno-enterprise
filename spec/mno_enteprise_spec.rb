@@ -43,5 +43,10 @@ describe MnoEnterprise do
       it { expect(MnoEnterprise.router.launch_url(id)).to eq(url) }
     end
     
+    describe 'authorize_oauth_url' do
+      let(:id) { "cld-1d45e6" }
+      let(:url) { "#{MnoEnterprise.mno_api_host}#{MnoEnterprise.mno_api_root_path}/oauth/#{id}/authorize" }
+      it { expect(MnoEnterprise.router.authorize_oauth_url(id)).to eq(url) }
+    end
   end
 end

@@ -58,6 +58,20 @@ MnoEnterprise::Engine.routes.draw do
   
   
   #============================================================
+  # Webhooks
+  #============================================================
+  namespace :webhook do
+    
+    # OAuth Management
+    resources :oauth, only: [], constraints: { id: /[\w\-\.:]+/ }, controller: "o_auth" do
+      member do
+        get :authorize
+      end
+    end
+    
+  end
+  
+  #============================================================
   # JPI V1
   #============================================================
   namespace :jpi do
