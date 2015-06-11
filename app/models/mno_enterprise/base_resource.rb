@@ -160,7 +160,8 @@ module MnoEnterprise
       # ActiveRecord Compatibility for Her
       def perform_validations(options={}) # :nodoc:
         # errors.blank? to avoid the unexpected case when errors is nil...
-        options[:validate] == false || valid?(options[:context])
+        # -> THIS IS A TEMPORARY UGLY FIX
+        options[:validate] == false || self.errors.blank? || valid?(options[:context])
       end
       
   end
