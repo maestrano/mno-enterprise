@@ -18,19 +18,28 @@ module MnoEnterprise
     
     # Return the application root path
     def self.root_path
+      Rails.root
+    end
+    
+    # Return the engine root path
+    def self.engine_root_path
       MnoEnterprise::Engine.root
     end
     
     def self.images
-      Dir.glob(self.root_path.join("app/assets/images/**/*.*")).map do |path| 
-        path.gsub(MnoEnterprise::Engine.root.join("app/assets/images/").to_s, "")
-      end
+      [self.root_path, self.engine_root_path].map do |base_path|
+        Dir.glob(base_path.join("app/assets/images/**/*.*")).map do |path| 
+          path.gsub(base_path.join("app/assets/images/").to_s, "")
+        end
+      end.flatten.uniq
     end
   
     def self.templates
-      Dir.glob(self.root_path.join("app/assets/templates/**/*.*")).map do |path| 
-        path.gsub(self.root_path.join("app/assets/templates/").to_s, "")
-      end
+      [self.root_path, self.engine_root_path].map do |base_path|
+        Dir.glob(base_path.join("app/assets/templates/**/*.*")).map do |path| 
+          path.gsub(base_path.join("app/assets/templates/").to_s, "")
+        end
+      end.flatten.uniq
     end
   end
 end
