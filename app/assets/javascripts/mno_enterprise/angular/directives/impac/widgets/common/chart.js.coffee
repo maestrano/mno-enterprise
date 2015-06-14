@@ -41,7 +41,6 @@ module.directive('widgetCommonChart', ['TemplatePath','$compile','$timeout', (Te
         scope.$watch((-> scope.data)
           ,(value) ->
             if value?
-              scope.draw()
               $timeout((-> scope.draw()),100)
         ,true)
     }
