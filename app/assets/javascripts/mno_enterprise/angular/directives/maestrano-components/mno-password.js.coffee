@@ -32,9 +32,9 @@ module.directive('mnoPassword', ['TemplatePath', (TemplatePath) ->
 
             # Will raise an error is form is not defined when the directive is used (in this case, we can't modify the validity of the form)
             if scope.hasEightChars && scope.hasOneNumber && scope.hasOneUpper && scope.hasOneLower
-              scope.form.$setValidity("password", true)
+              scope.form[scope.fieldName].$setValidity("password", true)
             else
-              scope.form.$setValidity("password", false)
+              scope.form[scope.fieldName].$setValidity("password", false)
 
     }
 ])
