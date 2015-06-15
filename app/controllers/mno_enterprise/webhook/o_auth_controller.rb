@@ -4,9 +4,17 @@ module MnoEnterprise
     before_filter :redirect_to_lounge_if_unconfirmed
     before_filter :check_permissions, only: [:authorize, :disconnect, :sync]
     
+    PROVIDERS_WITH_OPTIONS = ['xero','myob']
+    
     # GET /mnoe/webhook/oauth/:id/authorize
-    def authorize      
-      @redirect_to = MnoEnterprise.router.authorize_oauth_url(params[:id], wtk: MnoEnterprise.jwt(user_id: current_user.uid))
+    def authorize
+      # Certain providers require options to be selected
+      if !params[:perform] && app_instance.app && PROVIDERS_WITH_OPTIONS.include?(app_instance.app.nid.to_s)
+        render "mno_enterprise/webhook/o_auth/providers/#{app_instance.app.nid}"
+        return
+      end
+      
+      @redirect_to = MnoEnterprise.router.authorize_oauth_url(params[:id], extra_params.merge(wtk: wtk))
     end
     
     # GET /mnoe/webhook/oauth/:id/callback
@@ -16,12 +24,12 @@ module MnoEnterprise
     
     # GET /mnoe/webhook/oauth/:id/disconnect
     def disconnect
-      redirect_to MnoEnterprise.router.disconnect_oauth_url(params[:id], wtk: MnoEnterprise.jwt(user_id: current_user.uid))
+      redirect_to MnoEnterprise.router.disconnect_oauth_url(params[:id], extra_params.merge(wtk: wtk))
     end
     
     # GET /mnoe/webhook/oauth/:id/sync
     def sync
-      redirect_to MnoEnterprise.router.sync_oauth_url(params[:id], wtk: MnoEnterprise.jwt(user_id: current_user.uid))
+      redirect_to MnoEnterprise.router.sync_oauth_url(params[:id], extra_params.merge(wtk: wtk))
     end
     
     private
@@ -36,6 +44,17 @@ module MnoEnterprise
           return false
         end
         true
+      end
+      
+      # Return a hash of extra parameters that were passed along with
+      # the request
+      def extra_params
+        params.reject { |k,v|  [:controller,:action,:id].include?(k.to_sym) }
+      end
+      
+      # Current user web token
+      def wtk
+        MnoEnterprise.jwt(user_id: current_user.uid)
       end
   end
 end
