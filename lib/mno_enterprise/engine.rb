@@ -14,5 +14,12 @@ module MnoEnterprise
       g.fixture_replacement :factory_girl, :dir => 'spec/factories'
     end
     
+    # Allow class overriding using decorator pattern
+    # See: http://edgeguides.rubyonrails.org/engines.html#overriding-models-and-controllers
+    config.to_prepare do
+      Dir.glob(Rails.root + "app/decorators/**/*_decorator*.rb").each do |c|
+        require_dependency(c)
+      end
+    end
   end
 end
