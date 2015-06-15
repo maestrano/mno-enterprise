@@ -103,7 +103,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
   # GET /resource/confirmation/lounge
   def lounge
     self.resource = @resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
-    yield(resource,:success) if block_given?
+    yield(:success,resource) if block_given?
   end
 
   # TODO: specs
@@ -125,12 +125,12 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
   
     if @resource.save
       @resource.resend_confirmation_instructions
-
+      yield(:success,resource) if block_given?
       redirect_to mno_enterprise.user_confirmation_lounge_path, notice: "'Email updated! A confirmation email has been resent."
     else
       # Rollback
       #@resource.restore_email!
-
+      yield(resource,:error) if block_given?
       render 'lounge'
     end
   end
