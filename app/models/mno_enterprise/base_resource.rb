@@ -50,6 +50,27 @@ module MnoEnterprise
       def find_by(hash)
         self.where(hash).limit(1).first
       end
+      
+      # ActiveRecord Compatibility for Her
+      # Returns the class descending directly from MnoEnterprise::BaseResource, or
+      # an abstract class, if any, in the inheritance hierarchy.
+      #
+      # If A extends MnoEnterprise::BaseResource, A.base_class will return A. If B descends from A
+      # through some arbitrarily deep hierarchy, B.base_class will return A.
+      #
+      # If B < A and C < B and if A is an abstract_class then both B.base_class
+      # and C.base_class would return B as the answer since A is an abstract_class.
+      def base_class
+        unless self < BaseResource
+          raise Error, "#{name} doesn't belong in a hierarchy descending from BaseResource"
+        end
+
+        if superclass == BaseResource || superclass.abstract_class?
+          self
+        else
+          superclass.base_class
+        end
+      end
     end
     
     #======================================================================
