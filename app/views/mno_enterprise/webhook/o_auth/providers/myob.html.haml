@@ -1,12 +1,29 @@
-.banners
-  .spacer5.hidden-xs.hidden-sm
-  .container
-    .row
-      .col-md-6.text-center.col-md-offset-3
-        %h3 How do you want to connect to MYOB?
+.oauth-config-page
+  .banners
+    .spacer1
+    .container
+      .row
+        .col-md-6.text-center.col-md-offset-3
+          = image_tag 'mno_enterprise/main-logo.png', class: 'top-picture'
+          .spacer2
+          %h3 Which version of MYOB do you use?
         
-        .spacer1
+          .spacer1
         
-        %hr
+          %hr
         
-        - # form with options
+          - # form with options
+          .align-center
+            = form_tag authorize_webhook_oauth_path, method: :get do
+              = hidden_field_tag :perform, true
+              
+              .spacer1
+              
+              .form-group
+                %p My version of MYOB is:
+                = select_tag :version, options_for_select([["Account Right (Desktop)","account_right"],["Essentials (Cloud)","essentials"]], "essentials")
+              
+              %hr
+              
+              .form-group
+              %button{ class: 'btn btn-warning', type: 'submit' } Connect
