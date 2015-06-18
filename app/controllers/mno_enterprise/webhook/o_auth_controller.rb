@@ -49,7 +49,7 @@ module MnoEnterprise
       # Return a hash of extra parameters that were passed along with
       # the request
       def extra_params
-        params.reject { |k,v|  [:controller,:action,:id].include?(k.to_sym) }
+        params.reject { |k,v|  [:controller,:action,:id, :perform].include?(k.to_sym) }
       end
       
       # Current user web token
