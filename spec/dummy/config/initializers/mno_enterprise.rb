@@ -30,6 +30,12 @@ MnoEnterprise.configure do |config|
   config.default_sender_email = 'no-reply@enterprise-demo-mnoe.maestrano.io'
   
   #===============================================
+  # Third Party Plugins
+  #===============================================
+  # Google Tag Manager
+  # config.google_tag_container = nil
+  
+  #===============================================
   # API Configuration
   #===============================================
   # ==> Maestrano Enterprise API Configuration

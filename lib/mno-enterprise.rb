@@ -140,6 +140,11 @@ module MnoEnterprise
   mattr_accessor :default_sender_email
   @@default_sender_email = "no-reply@example.com"
   
+  #====================================
+  # Third Party Plugins
+  #====================================
+  mattr_accessor :google_tag_container
+  @@google_tag_container = nil
 
   #====================================
   # Layout & Styling
