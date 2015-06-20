@@ -1,1 +1,5 @@
 = render 'layouts/mno_enterprise/application_js'
+
+-# Google Tag Manager
+- if MnoEnterprise.google_tag_container.present?
+  = render 'layouts/mno_enterprise/third_party/google_tag_container'
