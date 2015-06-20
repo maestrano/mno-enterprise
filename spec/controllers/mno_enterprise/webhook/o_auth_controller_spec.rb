@@ -20,7 +20,8 @@ module MnoEnterprise
     before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:app).and_return(app) }
     
     describe 'GET #authorize' do
-      let(:redirect_url) { MnoEnterprise.router.authorize_oauth_url(app_instance.uid, extra_params.merge(wtk: MnoEnterprise.jwt(user_id: user.uid))) }
+      let(:redir_params) { extra_params.reject { |k,v| k.to_sym == :perform } }
+      let(:redirect_url) { MnoEnterprise.router.authorize_oauth_url(app_instance.uid, redir_params.merge(wtk: MnoEnterprise.jwt(user_id: user.uid))) }
       subject { get :authorize, extra_params.merge(id: app_instance.uid) }
       before { sign_in user }
       
