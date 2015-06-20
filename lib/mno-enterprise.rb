@@ -37,9 +37,19 @@ module MnoEnterprise
   class Router
     
     def launch_url(id,opts = {})
-      url = URI.join(host,"#{base_path}/launch/#{id}").to_s
-      url += "?#{opts.to_query}" if opts.any?
-      url
+      host_url("/launch/#{id}",opts)
+    end
+    
+    def authorize_oauth_url(id,opts = {})
+      host_url("/oauth/#{id}/authorize",opts)
+    end
+    
+    def disconnect_oauth_url(id,opts = {})
+      host_url("/oauth/#{id}/disconnect",opts)
+    end
+    
+    def sync_oauth_url(id,opts = {})
+      host_url("/oauth/#{id}/sync",opts)
     end
     
     def impac_root_url
@@ -53,6 +63,12 @@ module MnoEnterprise
       
       def host
         MnoEnterprise.mno_api_host
+      end
+      
+      def host_url(path,opts = {})
+        url = URI.join(host,"#{base_path}#{path}").to_s
+        url += "?#{opts.to_query}" if opts.any?
+        url
       end
   end
   

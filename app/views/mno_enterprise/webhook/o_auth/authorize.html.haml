@@ -1,0 +1,26 @@
+.banners
+  .spacer5.hidden-xs.hidden-sm
+  .container
+    .row
+      .col-md-6.text-center.col-md-offset-3
+        %h3 You are about to be connected via our integration partner
+        = image_tag('mno_enterprise/maestrano/logo-whitebg.png')
+        
+        .spacer1
+        
+        %hr
+        = image_tag('mno_enterprise/loader-32x32-bg-inverse.gif')
+        %hr
+
+
+- # Defer redirection to Maestrano Enterprise for the oauth handshake
+:javascript
+  function defer(method) {
+    setTimeout(method, 3000);
+  }
+
+  function doRedirect() {
+    window.location.href = "#{@redirect_to}";
+  }
+
+  defer(doRedirect);

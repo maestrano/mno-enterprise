@@ -125,7 +125,10 @@ angular.module('maestrano.services.apps-list-helper', []).factory( 'AppsListHelp
           return "<span class='text-warning'>#{instance.status}</span>"
 
       isLaunchHidden: (instance) ->
-        instance.status == 'terminating' || instance.status == 'terminated' || this.isNewOfficeApp(instance)
+        instance.status == 'terminating' || 
+        instance.status == 'terminated' ||
+        this.isOauthConnectBtnShown(instance) ||
+        this.isNewOfficeApp(instance)
       
       # Deprecated?
       isStartShown: (instance) ->
@@ -253,13 +256,16 @@ angular.module('maestrano.services.apps-list-helper', []).factory( 'AppsListHelp
         instance.stack == 'connector'
 
       isQuickBooksConnectShown: (instance) ->
-        instance.stack == 'connector' && instance.appName == 'QuickBooks' && !instance.oauthKeysValid
+        instance.stack == 'connector' && instance.app_nid == 'quickbooks' && !instance.oauth_keys_valid
 
       isXeroConnectShown: (instance) ->
-        instance.stack == 'connector' && instance.appName == 'Xero' && !instance.oauthKeysValid
+        instance.stack == 'connector' && instance.app_nid == 'xero' && !instance.oauth_keys_valid
 
       isMYOBConnectShown: (instance) ->
-        instance.stack == 'connector' && instance.appName == 'MYOB' && !instance.oauthKeysValid
+        instance.stack == 'connector' && instance.app_nid == 'myob' && !instance.oauth_keys_valid
+
+      isOauthConnectBtnShown: (instance) ->
+        instance.stack == 'connector' && !instance.oauth_keys_valid
 
       connectToQuickBooks: (instance) ->
         instance.status = 'updating'
@@ -267,10 +273,10 @@ angular.module('maestrano.services.apps-list-helper', []).factory( 'AppsListHelp
         intuit.ipp.anywhere.controller.onConnectToIntuitClicked()
 
       isDataSyncShown: (instance) ->
-        instance.stack == 'connector' && instance.oauthKeysValid
+        instance.stack == 'connector' && instance.oauth_keys_valid
 
       isDataDisconnectShown: (instance) ->
-        instance.stack == 'connector' && instance.oauthKeysValid
+        instance.stack == 'connector' && instance.oauth_keys_valid
 
       quickbooksGrantUrl: (instance) ->
         arr = $window.location.href.split("/");
@@ -289,20 +295,23 @@ angular.module('maestrano.services.apps-list-helper', []).factory( 'AppsListHelp
         return instance.microsoftTrialUrl
 
       companyName: (instance) ->
-        if instance.stack == 'connector' && instance.oauthKeysValid && instance.oauthCompanyName
-          return instance.oauthCompanyName
+        if instance.stack == 'connector' && instance.oauth_keys_valid && instance.oauth_company_name
+          return instance.oauth_company_name
         false
 
       connectorVersion: (instance) ->
-        if instance.stack == 'connector' && instance.oauthKeysValid && instance.connectorVersion
+        if instance.stack == 'connector' && instance.oauth_keys_valid && instance.connectorVersion
           return capitalize(instance.connectorVersion)
         false
 
       dataSyncPath: (instance) ->
         "/webhook/sync/#{instance.uid}/perform"
-
+      
+      oAuthConnectPath: (instance)->
+        "/mnoe/webhook/oauth/#{instance.uid}/authorize"
+      
       dataDisconnectPath: (instance) ->
-        "/webhook/oauth/#{instance.uid}/disconnect"
+        "/mnoe/webhook/oauth/#{instance.uid}/disconnect"
 
       dataDisconnectClick: (instance) ->
         $window.location.href = this.dataDisconnectPath(instance)

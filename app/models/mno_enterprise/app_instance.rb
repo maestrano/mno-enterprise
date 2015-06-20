@@ -31,41 +31,6 @@
 
 module MnoEnterprise
   class AppInstance < BaseResource
-    
-    attributes :id, :uid, :name, :status, :app_id, :created_at, :updated_at, :started_at, :stack, :owner_id,
-    :owner_type, :terminated_at, :stopped_at, :billing_type, :autostop_at, :autostop_interval,
-    :next_status, :soa_enabled
-    
-    #==============================================================
-    # Constants
-    #==============================================================
-    ACTIVE_STATUSES = [:running,:stopped,:staged,:provisioning,:starting,:stopping]
-    TERMINATION_STATUSES = [:terminating,:terminated]
-    
-    #==============================================================
-    # Associations
-    #==============================================================
-    belongs_to :owner, class_name: 'MnoEnterprise::Organization'
-    belongs_to :app, class_name: 'MnoEnterprise::App'
-    
-    # Send a request to terminate the AppInstance
-    # Alias of destroy
-    # TODO: specs
-    def terminate
-      self.destroy
-    end
-    
-    # Return true if the instance can be considered active
-    def active?
-      ACTIVE_STATUSES.include?(self.status.to_sym)
-    end
-    
-    def running?
-      self.status == 'running'
-    end
-    
-    def online?
-      running?
-    end
+    include MnoEnterprise::Concerns::Models::AppInstance
   end
 end
