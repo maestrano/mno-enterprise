@@ -11,6 +11,10 @@ module MnoEnterprise
         template "initializers/mno_enterprise.rb", "config/initializers/mno_enterprise.rb"
         template "config/mno_enterprise_styleguide.yml", "config/mno_enterprise_styleguide.yml"
         
+        # JavaScript
+        copy_file "javascripts/mno_enterprise_extensions.js", "app/assets/javascripts/mno_enterprise_extensions.js"
+        
+        
         # Stylesheets
         copy_file "stylesheets/main.less_erb", "app/assets/stylesheets/main.less.erb"
         copy_file "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
