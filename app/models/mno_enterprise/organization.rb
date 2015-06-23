@@ -38,6 +38,7 @@ module MnoEnterprise
     has_many :app_instances, class_name: 'MnoEnterprise::AppInstance'
     has_many :invoices, class_name: 'MnoEnterprise::Invoice'
     has_one :credit_card, class_name: 'MnoEnterprise::CreditCard'
+    has_many :teams, class_name: 'MnoEnterprise::Team'
     
     # Return the list of users + active invites
     # TODO: specs
