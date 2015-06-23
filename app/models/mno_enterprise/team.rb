@@ -21,6 +21,7 @@ module MnoEnterprise
     #=====================================
     belongs_to :organization, class_name: 'MnoEnterprise::Organization'
     has_many :users, class_name: 'MnoEnterprise::User'
+    has_many :app_instances, class_name: 'MnoEnterprise::AppInstance'
     
     
     # Add a user to the team
@@ -41,10 +42,8 @@ module MnoEnterprise
     def set_access_to(collection_or_array)
       # Empty arrays do not seem to be passed in the request. Force value in this case
       list = collection_or_array.empty? ? [""] : collection_or_array
-      resp = self.put(data: { set_access_to: list })
-      if resp && resp[:data]
-        self.app_instances = resp[:data][:app_instances]
-      end
+      self.put(data: { set_access_to: list })
+      self.reload
       self
     end
   end

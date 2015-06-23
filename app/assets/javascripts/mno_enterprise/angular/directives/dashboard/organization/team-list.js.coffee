@@ -62,6 +62,7 @@ module.controller('DashboardOrganizationTeamListCtrl',[
       self.team = team
       self.users = []
       self.userList = self.getAvailableUsers(team)
+      console.log(DhbOrganizationSvc.data)
       self.$instance = $modal.open(self.config.instance)
       self.isLoading = false
     
@@ -72,7 +73,7 @@ module.controller('DashboardOrganizationTeamListCtrl',[
     memberAddModal.getAvailableUsers = (team) ->
       self = memberAddModal
       list = []
-      _.each DhbOrganizationSvc.data.members, (m) ->
+      _.each DhbOrganizationSvc.data.organization.members, (m) ->
         unless _.find(team.users,(u)-> u.id == m.id)?
           list.push(m) if m.entity == 'User'
       return list
@@ -142,7 +143,7 @@ module.controller('DashboardOrganizationTeamListCtrl',[
     memberRemovalModal.proceed = ->
       self = memberRemovalModal
       self.isLoading = true
-      DhbTeamSvc.members.remove(self.team.id,self.user).then(
+      DhbTeamSvc.members.remove(self.team.id,[self.user]).then(
         (users) ->
           self.errors = ''
           angular.copy(users,self.team.users)

@@ -97,8 +97,14 @@ MnoEnterprise::Engine.routes.draw do
         # AppInstances
         resources :app_instances, only: [:index,:destroy], shallow: true
         
-        # Currently stubbed
-        resources :teams, only: [:index]
+        # Teams
+        resources :teams, only: [:index,:show,:create,:update,:destroy], shallow: true do
+          member do
+            put :add_users
+            put :remove_users
+          end
+        end
+        
       end
 
       namespace :impac do

@@ -55,19 +55,6 @@ module.controller('DashboardMenuCtrl',[
         MsgBus.publish('params', {new_app: $routeParams.new_app})
         $location.search('new_app', null )
 
-      # Welcome messages - Currently disabled (too intrusive)
-      # if $routeParams.new_app 
-      #   # Remove parameter from url
-      #   $location.search('new_app', null )
-        
-      #   # Star video 
-      #   body = $sce.trustAsHtml("<div class='video-banner'><div class='video-content'><div class='content youtube-video'><iframe allowfullscreen='' frameborder='0' src='//www.youtube.com/embed/GsZsecMaEII?autoplay=1&rel=0' width='500' height='281'></iframe></div></div></div>")
-      #   MessageSvc.putMessage({category:'default',body: body})
-        
-      #   # Star Wizard - Currently disabled (too intrusive)
-      #   msgbusStarWizard = MsgBus.subscribe('starWizardModal')
-      #   MessageSvc.putMessage({type:'external-modal',msgbus:msgbusStarWizard})
-
       # Attempt to load organization from param
       if (val = $routeParams.dhbRefId)
         val = parseInt(val)
@@ -96,12 +83,6 @@ module.controller('DashboardMenuCtrl',[
       else
         # Switch dashboard to organization
         selectBox.changeTo(self.organization)
-
-      # Display an information message about being a reseller and being connected
-      # to the dashboard of a customer
-      $scope.displayResellerConnectionMessage = ->
-        body = $sce.trustAsHtml("<p>When you are assigned to a client as a consultant, you will have full access to your client's account. Any change you make on your client's account will be live and affect their applications and/or account. This feature allows you, the consultant, to provide the highest level of support.</p><p>As a consultant, you will have full access to your client's account. This means you can manage their applications as well as their Maestrano account,  including user permissions and billing.</p>")
-        MessageSvc.putMessage({title:'Information',category:'information',body: body})
 
     selectBox.toggle = ->
       selectBox.isClosed = !selectBox.isClosed
@@ -135,7 +116,6 @@ module.controller('DashboardMenuCtrl',[
     selectBox.createNewOrga = ->
       newOrgModal.open()
       selectBox.close()
-    
 
     # Analytics tab is only enabled for certain users
     # To enable access, do:

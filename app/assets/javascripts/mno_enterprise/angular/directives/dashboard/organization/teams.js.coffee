@@ -252,7 +252,7 @@ module.controller('DashboardOrganizationTeamsCtrl',[
     
     # Watch organization id and reload on change
     $scope.$watch DhbOrganizationSvc.getId, (orgId) ->
-      $q.all(DhbTeamSvc.load(),DashboardAppsDocument.load()).then (values)->
+      $q.all([DhbTeamSvc.load(),DashboardAppsDocument.load()]).then (values)->
         $scope.initialize(DhbTeamSvc.data,_.values(DashboardAppsDocument.data))
         
 ])

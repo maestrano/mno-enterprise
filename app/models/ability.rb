@@ -17,7 +17,13 @@ class Ability
       user.role(organization) == 'Super Admin'
     end
     
-    can [:upload,:purchase,:invite_member,:administrate,:access_analytics_data,:manage_app_instances], MnoEnterprise::Organization do |organization|
+    can [:upload,
+      :purchase,
+      :invite_member,
+      :administrate,
+      :access_analytics_data,
+      :manage_app_instances,
+      :manage_teams], MnoEnterprise::Organization do |organization|
       ['Super Admin','Admin'].include? user.role(organization)
     end
     
