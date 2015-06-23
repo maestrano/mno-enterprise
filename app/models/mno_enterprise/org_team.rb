@@ -13,5 +13,12 @@
 
 module MnoEnterprise
   class OrgTeam < BaseResource
+    
+    attributes :id, :name, :organization_id
+    
+    #=====================================
+    # Associations
+    #=====================================
+    belongs_to :organization, class_name: 'MnoEnterprise::Organization'
   end
 end
