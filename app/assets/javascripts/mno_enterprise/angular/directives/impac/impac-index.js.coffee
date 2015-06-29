@@ -129,7 +129,11 @@ module.controller('ImpacIndexCtrl',[
     $scope.getWidgetsForSelectedCategory = ->
       if $scope.selectedCategory? && $scope.widgetsList?
         return _.select $scope.widgetsList, (aWidgetTemplate) ->
-          aWidgetTemplate.path.split('/')[0] == $scope.selectedCategory
+          
+          splittedPath = angular.copy(aWidgetTemplate).path.replace("_","-").split("/").splice(0,2)
+          templateElems = "mno_enterprise/impac/widgets/".concat(splittedPath.join("-"))
+
+          angular.isDefined(TemplatePath[templateElems.concat(".html")]) && (aWidgetTemplate.path.split('/')[0] == $scope.selectedCategory)
       else
         return []
 
