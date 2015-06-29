@@ -1,8 +1,8 @@
 module = angular.module('maestrano.impac.index',['maestrano.assets'])
 
 module.controller('ImpacIndexCtrl',[
-  '$scope','$http','$q','$filter','$modal','$log','AssetPath','Utilities','Miscellaneous','DhbOrganizationSvc','ImpacDashboardingSvc','CurrentUserSvc','TemplatePath',
-  ($scope, $http, $q, $filter, $modal, $log, AssetPath, Utilities, Miscellaneous, DhbOrganizationSvc, ImpacDashboardingSvc, CurrentUserSvc, TemplatePath) ->
+  '$scope','$http','$q','$filter','$modal','$log', '$timeout', 'AssetPath','Utilities','Miscellaneous','DhbOrganizationSvc','ImpacDashboardingSvc','CurrentUserSvc','TemplatePath',
+  ($scope, $http, $q, $filter, $modal, $log, $timeout, AssetPath, Utilities, Miscellaneous, DhbOrganizationSvc, ImpacDashboardingSvc, CurrentUserSvc, TemplatePath) ->
 
     #====================================
     # Initialization
@@ -78,6 +78,79 @@ module.controller('ImpacIndexCtrl',[
     $scope.selectDashboard = (dhbId) ->
       $scope.currentDhbId = dhbId
       $scope.refreshDashboards()
+
+    #====================================
+    # Dashboard management - widget selector
+    #==================================== 
+
+    $scope.selectedCategory = 'accounts'
+    $scope.isCategorySelected = (aCatName) ->
+      if $scope.selectedCategory? && aCatName?
+        return $scope.selectedCategory == aCatName
+      else
+        return false
+
+    $scope.getSelectedCategoryName = ->
+      if $scope.selectedCategory?
+        switch $scope.selectedCategory
+          when 'accounts'
+            return 'Accounting'
+          when 'invoices'
+            return 'Invoicing'
+          when 'hr'
+            return 'HR / Payroll'
+          when 'sales'
+            return 'Sales'
+          else
+            return false
+      else
+        return false
+
+    $scope.getSelectedCategoryTop = ->
+      if $scope.selectedCategory?
+        switch $scope.selectedCategory
+          when 'accounts'
+            return {top: '33px'}
+          when 'invoices'
+            return {top: '64px'}
+          when 'hr'
+            return {top: '95px'}
+          when 'sales'
+            return {top: '126px'}
+          else
+            return {top: '9999999px'}
+      else
+        return false
+
+    $scope.getWidgetsForSelectedCategory = ->
+      if $scope.selectedCategory? && $scope.widgetsList?
+        return _.select $scope.widgetsList, (aWidgetTemplate) ->
+          aWidgetTemplate.path.split('/')[0] == $scope.selectedCategory
+      else
+        return []
+
+    $scope.addWidget = (widgetPath, widgetMetadata=null) ->
+      params = {widget_category: widgetPath}
+      if widgetMetadata?
+        angular.extend(params, {metadata: widgetMetadata})
+      angular.element('#widget-selector').css('cursor', 'progress')
+      angular.element('#widget-selector .top-container .row.lines p').css('cursor', 'progress')
+      ImpacDashboardingSvc.widgets.create($scope.currentDhbId,params).then(
+        () ->
+          $scope.errors = ''
+          angular.element('#widget-selector').css('cursor', 'auto')
+          angular.element('#widget-selector .top-container .row.lines p').css('cursor', 'pointer')
+          angular.element('#widget-selector .badge.confirmation').fadeTo(250,1)
+          $timeout ->
+            angular.element('#widget-selector .badge.confirmation').fadeTo(700,0)
+          ,4000
+        , (errors) ->
+          $scope.errors = Utilities.processRailsError(errors)
+          angular.element('#widget-selector').css('cursor', 'auto')
+          angular.element('#widget-selector .top-container .row.lines p').css('cursor', 'pointer')
+      ).finally( ->
+        $scope.setDisplay()
+      )
 
 
     #====================================
