@@ -5,11 +5,11 @@ angular.module('maestrano.services.dashboard.team-svc', []).factory('DhbTeamSvc'
     basePath: -> "/mnoe/jpi/v1/organizations/#{service.config.id}/teams"
     loadPath: -> "#{service.routes.basePath()}"
     createPath: -> "#{service.routes.basePath()}"
-    showPath: (id) -> "#{service.routes.basePath()}/#{id}"
-    updatePath: (id) -> "#{service.routes.basePath()}/#{id}"
-    addMembersPath: (id) -> "#{service.routes.basePath()}/#{id}/add_users"
-    removeMembersPath: (id) -> "#{service.routes.basePath()}/#{id}/remove_users"
-    destroyPath: (id) -> "#{service.routes.basePath()}/#{id}"
+    showPath: (id) -> "/mnoe/jpi/v1/teams/#{id}"
+    updatePath: (id) -> service.routes.showPath(id)
+    addMembersPath: (id) -> "#{service.routes.showPath(id)}/add_users"
+    removeMembersPath: (id) -> "#{service.routes.showPath(id)}/remove_users"
+    destroyPath: (id) -> service.routes.showPath(id)
   }
 
   service.defaultConfig = {

@@ -7,6 +7,8 @@
 -# Application JS - changing quite often
 = javascript_include_tag "mno_enterprise/application"
 
--# Main application javascript
-= javascript_include_tag "mno_enterprise_extensions"
+-# Maestrano Enterprise extensions
+-# Only loaded if the file has been included in the list of files to compile
+- if Rails.application.config.assets.precompile.include?("mno_enterprise_extensions")
+  = javascript_include_tag "mno_enterprise_extensions"
   

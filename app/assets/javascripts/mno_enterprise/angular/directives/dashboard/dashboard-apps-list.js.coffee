@@ -12,6 +12,7 @@ module.controller('DashboardAppsListCtrl',[
     # Pre-Initialization
     #====================================
     $scope.loading = true
+    $scope.assetPath = AssetPath
     $scope.starWizardModal = { value:false }
     MsgBus.publish('starWizardModal',$scope.starWizardModal)
 
@@ -28,10 +29,10 @@ module.controller('DashboardAppsListCtrl',[
       $scope.displayOptions = {}
       $scope.displayCustomInfo = {}
       $scope.helper = {}
-      $scope.assetPath = AssetPath
       $scope.appsListHelper = AppsListHelper.new()
       can = DhbOrganizationSvc.can
       angular.copy(DashboardAppsDocument.data,$scope.originalApps)
+      $scope.loading = false
 
 
       # ----------------------------------------------------------
@@ -106,7 +107,6 @@ module.controller('DashboardAppsListCtrl',[
     # Post-Initialization
     #====================================
     $scope.$watch DashboardAppsDocument.getId, (val) ->
-      $scope.loading = true
       if val?
         DashboardAppsDocument.load(val).then () ->
           init()
