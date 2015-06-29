@@ -11,7 +11,7 @@ FactoryGirl.define do
       user { build(:user).attributes }
       organization { build(:organization).attributes }
       referrer { build(:user).attributes }
-      team { build(:org_team).attributes }
+      team { build(:team).attributes }
       user_role 'Member'
       
       created_at 3.days.ago

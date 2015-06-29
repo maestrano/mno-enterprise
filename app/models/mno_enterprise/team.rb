@@ -1,8 +1,8 @@
 # == Schema Information
 #
 # Endpoint:
-#  - /v1/org_teams
-#  - /v1/organizations/:organization_id/org_teams
+#  - /v1/teams
+#  - /v1/organizations/:organization_id/teams
 #
 #  id              :integer         not null, primary key
 #  name            :string(255)

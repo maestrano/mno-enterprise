@@ -354,7 +354,7 @@ module MnoEnterprise
     end
 
     # describe 'PUT #invite_members' do
-    #   let(:team) { build(:org_team, organization: organization) }
+    #   let(:team) { build(:team, organization: organization) }
     #   let(:params) { [{email: 'newmember@maestrano.com', role: 'Power User', team_id: team.id}] }
     #   subject { put :invite_members, id: organization.id, invites: params }
     #
