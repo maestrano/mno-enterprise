@@ -62,7 +62,6 @@ module.controller('DashboardOrganizationTeamListCtrl',[
       self.team = team
       self.users = []
       self.userList = self.getAvailableUsers(team)
-      console.log(DhbOrganizationSvc.data)
       self.$instance = $modal.open(self.config.instance)
       self.isLoading = false
     
