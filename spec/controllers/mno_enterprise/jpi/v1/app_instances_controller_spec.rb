@@ -39,6 +39,12 @@ module MnoEnterprise
         before { subject }
         it { expect(assigns(:app_instances)).to be_empty }
       end
+      
+      describe 'with no access to the app_instance' do
+        before { allow(ability).to receive(:can?).with(any_args).and_return(false) }
+        before { subject }
+        it { expect(assigns(:app_instances)).to be_empty }
+      end
     
       describe 'with timestamp' do
         describe 'before instance updated_at' do
