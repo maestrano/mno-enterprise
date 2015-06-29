@@ -1,8 +1,8 @@
 module = angular.module('maestrano.impac.index',['maestrano.assets'])
 
 module.controller('ImpacIndexCtrl',[
-  '$scope','$http','$q','$filter','$modal','$log','AssetPath','Utilities','Miscellaneous','DhbOrganizationSvc','ImpacDashboardingSvc','CurrentUserSvc','TemplatePath',
-  ($scope, $http, $q, $filter, $modal, $log, AssetPath, Utilities, Miscellaneous, DhbOrganizationSvc, ImpacDashboardingSvc, CurrentUserSvc, TemplatePath) ->
+  '$scope','$http','$q','$filter','$modal','$log', '$timeout', 'AssetPath','Utilities','Miscellaneous','DhbOrganizationSvc','ImpacDashboardingSvc','CurrentUserSvc','TemplatePath',
+  ($scope, $http, $q, $filter, $modal, $log, $timeout, AssetPath, Utilities, Miscellaneous, DhbOrganizationSvc, ImpacDashboardingSvc, CurrentUserSvc, TemplatePath) ->
 
     #====================================
     # Initialization
@@ -56,9 +56,13 @@ module.controller('ImpacIndexCtrl',[
       aDashboardExists = $scope.currentDhbId?
       severalDashboardsExist = aDashboardExists && $scope.dashboardsList.length > 1
       if (aDashboardExists)
-        aWidgetExist = $scope.currentDhb.widgets.length > 0
+        aWidgetExists = $scope.currentDhb.widgets.length > 0
       else
-        aWidgetExist = false
+        aWidgetExists = false
+
+      if aDashboardExists && !aWidgetExists
+        # add a timer to make sure the dom is loaded before the collapse directive is called
+        $timeout (-> $scope.showWidgetSelector = true), 200
 
       # Permissions and 'show helpers'
       # dashboard name
@@ -69,7 +73,7 @@ module.controller('ImpacIndexCtrl',[
       $scope.showCreateWidget = aDashboardExists
       # messages      
       $scope.showChooseDhbMsg = !aDashboardExists
-      $scope.showNoWidgetsMsg = aDashboardExists && !aWidgetExist
+      $scope.showNoWidgetsMsg = aDashboardExists && !aWidgetExists
       #widgets
       $scope.canManageWidgets = true
 
@@ -79,6 +83,83 @@ module.controller('ImpacIndexCtrl',[
       $scope.currentDhbId = dhbId
       $scope.refreshDashboards()
 
+    #====================================
+    # Dashboard management - widget selector
+    #==================================== 
+
+    $scope.selectedCategory = 'accounts'
+    $scope.isCategorySelected = (aCatName) ->
+      if $scope.selectedCategory? && aCatName?
+        return $scope.selectedCategory == aCatName
+      else
+        return false
+
+    $scope.getSelectedCategoryName = ->
+      if $scope.selectedCategory?
+        switch $scope.selectedCategory
+          when 'accounts'
+            return 'Accounting'
+          when 'invoices'
+            return 'Invoicing'
+          when 'hr'
+            return 'HR / Payroll'
+          when 'sales'
+            return 'Sales'
+          else
+            return false
+      else
+        return false
+
+    $scope.getSelectedCategoryTop = ->
+      if $scope.selectedCategory?
+        switch $scope.selectedCategory
+          when 'accounts'
+            return {top: '33px'}
+          when 'invoices'
+            return {top: '64px'}
+          when 'hr'
+            return {top: '95px'}
+          when 'sales'
+            return {top: '126px'}
+          else
+            return {top: '9999999px'}
+      else
+        return false
+
+    $scope.getWidgetsForSelectedCategory = ->
+      if $scope.selectedCategory? && $scope.widgetsList?
+        return _.select $scope.widgetsList, (aWidgetTemplate) ->
+          
+          splittedPath = angular.copy(aWidgetTemplate).path.replace("_","-").split("/").splice(0,2)
+          templateElems = "mno_enterprise/impac/widgets/".concat(splittedPath.join("-"))
+
+          angular.isDefined(TemplatePath[templateElems.concat(".html")]) && (aWidgetTemplate.path.split('/')[0] == $scope.selectedCategory)
+      else
+        return []
+
+    $scope.addWidget = (widgetPath, widgetMetadata=null) ->
+      params = {widget_category: widgetPath}
+      if widgetMetadata?
+        angular.extend(params, {metadata: widgetMetadata})
+      angular.element('#widget-selector').css('cursor', 'progress')
+      angular.element('#widget-selector .top-container .row.lines p').css('cursor', 'progress')
+      ImpacDashboardingSvc.widgets.create($scope.currentDhbId,params).then(
+        () ->
+          $scope.errors = ''
+          angular.element('#widget-selector').css('cursor', 'auto')
+          angular.element('#widget-selector .top-container .row.lines p').css('cursor', 'pointer')
+          angular.element('#widget-selector .badge.confirmation').fadeTo(250,1)
+          $timeout ->
+            angular.element('#widget-selector .badge.confirmation').fadeTo(700,0)
+          ,4000
+        , (errors) ->
+          $scope.errors = Utilities.processRailsError(errors)
+          angular.element('#widget-selector').css('cursor', 'auto')
+          angular.element('#widget-selector .top-container .row.lines p').css('cursor', 'pointer')
+      ).finally( ->
+        $scope.setDisplay()
+      )
+
 
     #====================================
     # Dashboard management - Modals
@@ -87,59 +168,8 @@ module.controller('ImpacIndexCtrl',[
     # Would it be possible to manage modals in a separate module ? 
     # -> Check maestrano-modal (modal-svc) for further update
     $scope.modal = {}
-    $scope.modal.addWidget = modalAddWidget = $scope.$new(true)
     $scope.modal.createDashboard = modalCreateDashboard = $scope.$new(true)
     $scope.modal.deleteDashboard = modalDeleteDashboard = $scope.$new(true)
-
-
-    # Modal Add Widget
-    modalAddWidget.config = {
-      action: 'add',
-      instance: {
-        backdrop: 'static',
-        templateUrl: TemplatePath['mno_enterprise/impac/modals/add.html'],
-        size: 'md',
-        windowClass: 'inverse',
-        scope: modalAddWidget
-      }
-    }
-
-    modalAddWidget.open = ->
-      self = modalAddWidget
-      self.model = {}
-      self.widgetsList = $scope.widgetsList
-      self.loadingGif = $scope.assetPath['mno_enterprise/loader-32x32-bg-inverse.gif']
-      self.$instance = $modal.open(self.config.instance)
-      self.isLoading = false
-
-    modalAddWidget.close = ->
-      modalAddWidget.$instance.close()
-
-    modalAddWidget.proceed = (widgetPath, widgetMetadata=null) ->
-      self = modalAddWidget
-      self.isLoading = true
-      params = {widget_category: widgetPath}
-      if widgetMetadata?
-        angular.extend(params, {metadata: widgetMetadata})
-      ImpacDashboardingSvc.widgets.create($scope.currentDhbId,params).then(
-        () ->
-          self.errors = ''
-          self.close()
-        , (errors) ->
-          self.errors = Utilities.processRailsError(errors)
-      ).finally(-> $scope.setDisplay())
-    
-    modalAddWidget.isAccount = (aPath) ->
-      if aPath.match(/accounts/)
-        true
-      else
-        false
-    
-    modalAddWidget.isInvoices = (aPath) ->
-      if aPath.match(/invoices/)
-        true
-      else
-        false
 
     # Modal Create Dashboard
     modalCreateDashboard.config = {
