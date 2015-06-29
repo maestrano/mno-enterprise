@@ -27,7 +27,7 @@ module MnoEnterprise
     belongs_to :user, class_name: 'MnoEnterprise::User'
     belongs_to :referrer, class_name: 'MnoEnterprise::User'
     belongs_to :organization, class_name: 'MnoEnterprise::Organization'
-    belongs_to :team, class_name: 'MnoEnterprise::OrgTeam'
+    belongs_to :team, class_name: 'MnoEnterprise::Team'
     
     # TODO: specs
     # Add the user to the organization and update the status of the invite
