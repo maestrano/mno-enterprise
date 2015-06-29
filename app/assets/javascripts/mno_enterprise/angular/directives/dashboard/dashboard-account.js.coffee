@@ -56,7 +56,6 @@ module.controller('DashboardAccountCtrl',[
               $scope.success.user = "Saved! A confirmation email will be sent to your new email address. You will need to click on the link enclosed in this email in order to validate this new address."
             
             displayEmail = $scope.user.model.email
-            console.log(userResp)
             setUserModel(userResp)
 
             # Email not changed in backend until confirmation

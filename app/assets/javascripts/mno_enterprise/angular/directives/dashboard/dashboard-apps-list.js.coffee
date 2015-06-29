@@ -115,7 +115,6 @@ module.controller('DashboardAppsListCtrl',[
 ])
 
 module.directive('dashboardAppsList', ['TemplatePath', (TemplatePath) ->
-  console.log(TemplatePath['mno_enterprise/dashboard/apps_list.html'])
   return {
       restrict: 'A',
       scope: {
