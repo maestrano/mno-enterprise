@@ -30,6 +30,13 @@ MnoEnterprise.configure do |config|
   config.default_sender_email = 'no-reply@enterprise-demo-mnoe.maestrano.io'
   
   #===============================================
+  # External Routes
+  #===============================================
+  # URL of the Terms and Conditions page. 
+  # Used on Devise Registration pages
+  config.router.terms_url = '#' 
+  
+  #===============================================
   # Third Party Plugins
   #===============================================
   # Google Tag Manager

@@ -91,10 +91,14 @@ layout:
 devise:
   # Links
   remember_checkbox_shown: true
-  unlock_link_shown: true
+  unlock_link_shown: false
   forgot_password_link_shown: true
   confirmation_link_shown: true
   omniauth_link_shown: true
   
   # User fields
   phone_required: true
+  
+  # Password complexity check style
+  # If set to true, will check that it contains one letter, one number etc..
+  password_complexity_deep_check: false

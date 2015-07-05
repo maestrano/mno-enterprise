@@ -8,6 +8,10 @@ MnoEnterprise.configure do |config|
   # Name of your company/application
   config.app_name = "My Company"
   
+  # Fallback default country.
+  # Used as default in geolocalised fields (e.g.: country, phone number)
+  # config.app_country = 'US'
+  
   #===============================================
   # Maestrano Enterprise Tenant Authentication
   #===============================================
@@ -30,6 +34,13 @@ MnoEnterprise.configure do |config|
   # Default sender for system generated emails
   config.default_sender_name = 'My Company'
   config.default_sender_email = 'no-reply@example.com'
+  
+  #===============================================
+  # External Routes
+  #===============================================
+  # URL of the Terms and Conditions page. 
+  # Used on Devise Registration pages
+  # config.router.terms_url = 'http://mywebsite.com/terms' 
   
   #===============================================
   # Third Party Plugins

@@ -35,6 +35,7 @@ module MnoEnterprise
   # Centralizes all URLs available on the Maestrano Enterprise side
   #==================================================================
   class Router
+    attr_accessor :terms_url
     
     def launch_url(id,opts = {})
       host_url("/launch/#{id}",opts)
@@ -82,6 +83,10 @@ module MnoEnterprise
   # Maestrano Enterprise Tenant name
   mattr_accessor :app_name
   @@tenant_name = 'Maestrano Enterprise'
+  
+  # Maestrano Enterprise Default Country
+  mattr_accessor :app_country
+  @@app_country = 'US'
   
   # Maestrano Enterprise Tenant ID
   mattr_accessor :tenant_id
