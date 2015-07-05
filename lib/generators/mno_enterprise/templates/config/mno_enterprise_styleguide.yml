@@ -98,3 +98,7 @@ devise:
   
   # User fields
   phone_required: true
+  
+  # Password complexity check style
+  # If set to true, will check that it contains one letter, one number etc..
+  password_complexity_deep_check: false
