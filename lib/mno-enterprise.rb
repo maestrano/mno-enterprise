@@ -35,6 +35,7 @@ module MnoEnterprise
   # Centralizes all URLs available on the Maestrano Enterprise side
   #==================================================================
   class Router
+    attr_accessor :terms_url
     
     def launch_url(id,opts = {})
       host_url("/launch/#{id}",opts)
