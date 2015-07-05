@@ -12,7 +12,10 @@ angular.module('maestrano.services.miscellaneous', []).factory('Miscellaneous', 
      { label:"<%= country %>", val: "<%= code %>", ext: "<%= Country.new(code).country_code %>" }
     <% end %>
   ]
-
+  
+  # Default country
+  service.defaultCountry = "<%= MnoEnterprise.app_country %>"
+  
   # Phone country code
   service.countryCodes = <%= Country.all.map { |c| [c[1],"(#{c[1]}) +#{Country[c[1]].country_code}"] } %>
 

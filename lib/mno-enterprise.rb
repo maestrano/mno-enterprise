@@ -84,6 +84,10 @@ module MnoEnterprise
   mattr_accessor :app_name
   @@tenant_name = 'Maestrano Enterprise'
   
+  # Maestrano Enterprise Default Country
+  mattr_accessor :app_country
+  @@app_country = 'US'
+  
   # Maestrano Enterprise Tenant ID
   mattr_accessor :tenant_id
   @@tenant_id = nil
