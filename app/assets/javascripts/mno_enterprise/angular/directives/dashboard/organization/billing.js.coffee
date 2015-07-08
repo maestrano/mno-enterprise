@@ -4,14 +4,15 @@ module = angular.module('maestrano.dashboard.dashboard-organization-billing',['m
 # Current Billing Directive
 #============================================
 module.controller('DashboardOrganizationBillingCtrl',[
-  '$scope','$window','DhbOrganizationSvc', 'Utilities','AssetPath'
-  ($scope, $window, DhbOrganizationSvc, Utilities,AssetPath) ->
+  '$scope','$window','DhbOrganizationSvc', 'Utilities','AssetPath','Miscellaneous'
+  ($scope, $window, DhbOrganizationSvc, Utilities,AssetPath,Miscellaneous) ->
     #====================================
     # Pre-Initialization
     #====================================
     $scope.assetPath = AssetPath
     $scope.isLoading = true
     $scope.billing = {}
+    $scope.defaultCurrency = Miscellaneous.defaultCurrency
     
     #====================================
     # Scope Management

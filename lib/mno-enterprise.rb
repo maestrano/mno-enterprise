@@ -88,6 +88,10 @@ module MnoEnterprise
   mattr_accessor :app_country
   @@app_country = 'US'
   
+  # Maestrano Enterprise Default Currency
+  mattr_accessor :app_currency
+  @@app_currency = 'USD'
+  
   # Maestrano Enterprise Tenant ID
   mattr_accessor :tenant_id
   @@tenant_id = nil

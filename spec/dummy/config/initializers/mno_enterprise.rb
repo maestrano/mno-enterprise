@@ -6,6 +6,13 @@ MnoEnterprise.configure do |config|
   # Name of your company/application
   config.app_name = "Enterprise Demo"
   
+  # Fallback default country.
+  # Used as default in geolocalised fields (e.g.: country, phone number)
+  config.app_country = 'US'
+  
+  # Fallback default currency.
+  config.app_currency = 'USD'
+  
   #===============================================
   # Maestrano Enterprise Tenant Authentication
   #===============================================

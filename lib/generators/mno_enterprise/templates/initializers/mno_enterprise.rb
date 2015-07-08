@@ -12,6 +12,9 @@ MnoEnterprise.configure do |config|
   # Used as default in geolocalised fields (e.g.: country, phone number)
   # config.app_country = 'US'
   
+  # Fallback default currency.
+  # config.app_currency = 'USD'
+  
   #===============================================
   # Maestrano Enterprise Tenant Authentication
   #===============================================
