@@ -1,0 +1,104 @@
+#
+# General Design Style
+design:
+  # Whether to enable angular-material or not
+  material: false
+
+#
+# Color Theme Palette
+# This section configures the overall theme. Any fine-tuning should be performed in the
+# variable.css file
+palette:
+  # Material colors
+  # Available palettes: 
+  # red, pink, purple, deep-purple, indigo, blue, light-blue, cyan, teal, green, 
+  # light-green, lime, yellow, amber, orange, deep-orange, brown, grey, blue-grey
+  #-------------------------
+  primary: indigo
+  accent: pink
+  warn: red
+  background: grey
+  
+  # Main regular colors
+  #-------------------------------------------
+  # Dashboard background color
+  bg_main_color:                  '#aeb5bf' # light gray
+  
+  # Elements placed on top of bg-main-color
+  decorator_main_color:           '#758192' # dark gray
+  
+  # Elements placed on top of bg-main-color (secondary)
+  decorator_alt_color:            '#977bf0' # purple
+  
+  # Used for text used in the context of bg-main-color
+  text_strong_color:              '#17262d' # dark blue
+  
+  # Main inverse colors
+  #-------------------------------------------
+  # Background color used for dashboard menu. top banners, inverse modals
+  bg_inverse_color:               '#ffffff' # white
+  
+  # Background color for elements displayed on top of inverse elements
+  bg_on_bg_inverse_color:         '#cacfd6' # lighter gray
+  
+  # Background color used for elements on top of bg-inverse-color
+  bg_inverse_intense_color:       '#17262d' # dark blue
+  
+  # Design elements (lines, borders) on top of bg-inverse-color
+  decorator_inverse_color:        '#977bf0' # purple
+  
+  # Text used on top of bg-inverse-color such as inverse modals
+  text_inverse_color:             '#17262d' # dark blue
+
+  # Color used in small/isolated elements
+  #-------------------------------------------
+  # used to reflect a positive action or point (e.g: tick icon)
+  elem_positive_color:            '#d1e55c' # green
+  
+  # stronger version of elem-positive-color (barely used)
+  elem_positive_flash_color:      '#47ff00' # fluro-green
+  
+  # used for regular design element - fits well with both main and inverse backgrounds
+  elem_cozy_color:                '#977bf0' # purple
+
+  # Impac!
+  impac:
+    positive: '#3fc4ff' # light blue
+    negative: '#1de9b6' # light green
+    pool:
+      - '#1de9b6' # light green
+      - '#7c4dff' # fluro-purple
+      - '#ffc928' # yellow-orange
+      - '#3fc4ff' # light blue
+      - '#ff8e01' # fluro-orange
+      - '#c6ff00' # fluro-green
+      - '#d500fa' # fluro-purple
+      - '#ff6e41' # red-orange
+      - '#ffeb3c' # fluro-yellow
+      - '#ff1844' # fluro-pink
+
+#
+# General Application Layout
+#
+layout:
+  # Whether to display a header on public pages
+  public_page_header: false
+  
+  # Which layout for the dashboard
+  dashboard_menu_orientation: 'vertical'
+  
+# Devise Configuration
+devise:
+  # Links
+  remember_checkbox_shown: true
+  unlock_link_shown: false
+  forgot_password_link_shown: true
+  confirmation_link_shown: true
+  omniauth_link_shown: true
+  
+  # User fields
+  phone_required: true
+  
+  # Password complexity check style
+  # If set to true, will check that it contains one letter, one number etc..
+  password_complexity_deep_check: false
