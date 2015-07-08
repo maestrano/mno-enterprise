@@ -5,7 +5,10 @@ angular.module('maestrano.services.miscellaneous', []).factory('Miscellaneous', 
   <% currencies = Country.all.map { |country| Country[country[1]].data['currency'] }.select { |e| e != nil }.sort %>
   <% currencies = (["USD","AUD","EUR"] + currencies).uniq %>
   service.currencies = <%= currencies %>
-
+  
+  # Default currency
+  service.defaultCurrency = "<%= MnoEnterprise.app_currency %>"
+  
   # Countries
   service.countries = [
     <% Country.all.sort.each do |country,code| %>

@@ -265,7 +265,9 @@ angular.module('maestrano.services.apps-list-helper', []).factory( 'AppsListHelp
         instance.stack == 'connector' && instance.app_nid == 'myob' && !instance.oauth_keys_valid
 
       isOauthConnectBtnShown: (instance) ->
-        instance.stack == 'connector' && !instance.oauth_keys_valid
+        instance.app_nid != 'office-365' && 
+        instance.stack == 'connector' && 
+        !instance.oauth_keys_valid
 
       connectToQuickBooks: (instance) ->
         instance.status = 'updating'
