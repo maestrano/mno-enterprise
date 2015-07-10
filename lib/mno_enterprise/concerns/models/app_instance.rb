@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Endpoint: 
+# Endpoint:
 #  - /v1/app_instances
 #  - /v1/organizations/:organization_id/app_instances
 #
@@ -31,7 +31,7 @@
 
 module MnoEnterprise::Concerns::Models::AppInstance
   extend ActiveSupport::Concern
-  
+
   #==================================================================
   # Included methods
   #==================================================================
@@ -41,19 +41,19 @@ module MnoEnterprise::Concerns::Models::AppInstance
     attributes :id, :uid, :name, :status, :app_id, :created_at, :updated_at, :started_at, :stack, :owner_id,
     :owner_type, :terminated_at, :stopped_at, :billing_type, :autostop_at, :autostop_interval,
     :next_status, :soa_enabled, :oauth_keys_valid, :oauth_company
-    
+
     #==============================================================
     # Constants
     #==============================================================
-    ACTIVE_STATUSES = [:running,:stopped,:staged,:provisioning,:starting,:stopping]
+    ACTIVE_STATUSES = [:running,:stopped,:staged,:provisioning,:starting,:stopping,:updating]
     TERMINATION_STATUSES = [:terminating,:terminated]
-    
+
     #==============================================================
     # Associations
     #==============================================================
     belongs_to :owner, class_name: 'MnoEnterprise::Organization'
     belongs_to :app, class_name: 'MnoEnterprise::App'
-    
+
     # Define connector_stack?, cloud_stack? etc. methods
     [:cube,:cloud,:connector].each do |stackname|
       define_method("#{stackname}_stack?") do
@@ -61,7 +61,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
       end
     end
   end
-  
+
   #==================================================================
   # Class methods
   #==================================================================
@@ -70,7 +70,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
     #   'some text'
     # end
   end
-  
+
   #==================================================================
   # Instance methods
   #==================================================================
@@ -80,18 +80,18 @@ module MnoEnterprise::Concerns::Models::AppInstance
   def terminate
     self.destroy
   end
-  
+
   # Return true if the instance can be considered active
   def active?
     ACTIVE_STATUSES.include?(self.status.to_sym)
   end
-  
+
   def running?
     self.status == 'running'
   end
-  
+
   def online?
     running?
   end
-  
+
 end

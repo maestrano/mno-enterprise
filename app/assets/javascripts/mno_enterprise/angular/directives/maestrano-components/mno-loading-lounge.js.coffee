@@ -13,11 +13,11 @@ module.controller('MnoLoadingLoungeCtrl',[
     #==========================
     # Init
     #==========================
-    #$scope.appInstance = appInstance = new AppInstances($scope.mnoLoadingLounge())
+    $scope.assetPath = AssetPath
     $scope.appInstance = appInstance = $scope.mnoLoadingLounge()
     appInstanceId = $scope.mnoLoadingLounge().id
 
-    $scope.redirectionCounter = 10 #seconds
+    $scope.redirectionCounter = 5 #seconds
     $scope.scheduler = null
     $scope.redirectScheduler = null
 
@@ -33,6 +33,8 @@ module.controller('MnoLoadingLoungeCtrl',[
           'online'
         else if (appInstance.status == 'provisioning' || appInstance.status == 'staged')
           'creating'
+        else if appInstance.status == 'updating'
+          'updating'
         else
           # starting/stopping
           # Note: If 'stopping' and no errors it means that a start has been
@@ -103,7 +105,7 @@ module.controller('MnoLoadingLoungeCtrl',[
       return q
 
     $scope.startAutoRefresh = () ->
-      intervalMilliSec = 15 * 1000
+      intervalMilliSec = 5 * 1000 # 15s
       # Make sure we cancel any previous
       # scheduler first
       if $scope.scheduler?
@@ -118,10 +120,10 @@ module.controller('MnoLoadingLoungeCtrl',[
     $scope.stopAutoRefresh = () ->
       if $scope.scheduler?
         $timeout.cancel($scope.scheduler)
-    
+
     $scope.redirectUrl = ->
       "/mnoe/launch/#{appInstance.uid}"
-    
+
     $scope.performRedirection = () ->
       # Then reload the page
       window.location = $scope.redirectUrl()
@@ -144,7 +146,7 @@ module.controller('MnoLoadingLoungeCtrl',[
     $scope.stopRedirectCountdown = () ->
       if $scope.redirectScheduler?
         $timeout.cancel($scope.redirectScheduler)
-        $scope.redirectionCounter = 10
+        $scope.redirectionCounter = 5
 
     #==========================
     # Watchers
@@ -154,7 +156,7 @@ module.controller('MnoLoadingLoungeCtrl',[
       (-> currentStatus())
       ,(status)->
         # Enable appInstance refresh?
-        if status == 'loading' || status == 'creating'
+        if status == 'loading' || status == 'creating' || status == 'updating'
           $scope.startAutoRefresh() unless $scope.scheduler
         else
           $scope.stopAutoRefresh() if $scope.scheduler
