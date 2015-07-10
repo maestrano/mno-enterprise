@@ -13,11 +13,11 @@ module.controller('MnoLoadingLoungeCtrl',[
     #==========================
     # Init
     #==========================
-    #$scope.appInstance = appInstance = new AppInstances($scope.mnoLoadingLounge())
+    $scope.assetPath = AssetPath
     $scope.appInstance = appInstance = $scope.mnoLoadingLounge()
     appInstanceId = $scope.mnoLoadingLounge().id
 
-    $scope.redirectionCounter = 10 #seconds
+    $scope.redirectionCounter = 5 #seconds
     $scope.scheduler = null
     $scope.redirectScheduler = null
 
@@ -105,7 +105,7 @@ module.controller('MnoLoadingLoungeCtrl',[
       return q
 
     $scope.startAutoRefresh = () ->
-      intervalMilliSec = 15 * 1000
+      intervalMilliSec = 5 * 1000 # 15s
       # Make sure we cancel any previous
       # scheduler first
       if $scope.scheduler?
@@ -146,7 +146,7 @@ module.controller('MnoLoadingLoungeCtrl',[
     $scope.stopRedirectCountdown = () ->
       if $scope.redirectScheduler?
         $timeout.cancel($scope.redirectScheduler)
-        $scope.redirectionCounter = 10
+        $scope.redirectionCounter = 5
 
     #==========================
     # Watchers
