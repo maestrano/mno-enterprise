@@ -33,6 +33,8 @@ module.controller('MnoLoadingLoungeCtrl',[
           'online'
         else if (appInstance.status == 'provisioning' || appInstance.status == 'staged')
           'creating'
+        else if appInstance.status == 'updating'
+          'updating'
         else
           # starting/stopping
           # Note: If 'stopping' and no errors it means that a start has been
@@ -118,10 +120,10 @@ module.controller('MnoLoadingLoungeCtrl',[
     $scope.stopAutoRefresh = () ->
       if $scope.scheduler?
         $timeout.cancel($scope.scheduler)
-    
+
     $scope.redirectUrl = ->
       "/mnoe/launch/#{appInstance.uid}"
-    
+
     $scope.performRedirection = () ->
       # Then reload the page
       window.location = $scope.redirectUrl()
@@ -154,7 +156,7 @@ module.controller('MnoLoadingLoungeCtrl',[
       (-> currentStatus())
       ,(status)->
         # Enable appInstance refresh?
-        if status == 'loading' || status == 'creating'
+        if status == 'loading' || status == 'creating' || status == 'updating'
           $scope.startAutoRefresh() unless $scope.scheduler
         else
           $scope.stopAutoRefresh() if $scope.scheduler
