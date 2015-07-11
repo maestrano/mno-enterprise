@@ -29,9 +29,11 @@ module.controller('MnoLoadingLoungeCtrl',[
       if appInstance.id
         if appInstance.errors && appInstance.errors.length > 0
           'errors'
+        else if appInstance.status in ['terminating','terminated']
+          'terminated'
         else if appInstance.status == 'running' && appInstance.is_online
           'online'
-        else if (appInstance.status == 'provisioning' || appInstance.status == 'staged')
+        else if appInstance.status in ['provisioning','staged']
           'creating'
         else if appInstance.status == 'updating'
           'updating'
