@@ -5,12 +5,16 @@ module MnoEnterprise
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
-    
+
     let!(:app) { build(:app) }
-    
-    before { api_stub_for(get: '/apps', response: from_api([app])) }
+
+    before { api_stub_for(
+      get: '/apps',
+      params: { filter: { 'nid.in' => MnoEnterprise.marketplace_listing } },
+      response: from_api([app])
+    )}
     before { api_stub_for(get: "/apps/#{app.id}", response: from_api(app)) }
-  
+
     def partial_hash_for_app(app)
       {
         'id' => app.id,
@@ -29,48 +33,48 @@ module MnoEnterprise
         'pictures' => app.pictures
       }
     end
-  
+
     def hash_for_app(app)
       {
         'app' => partial_hash_for_app(app)
       }
     end
-  
+
     def hash_for_apps(apps)
       hash = {}
       hash['apps'] = []
-      hash['categories'] = App.categories
+      hash['categories'] = App.categories(apps)
       hash['categories'].delete('Most Popular')
-      
+
       apps.each do |app|
         hash['apps'] << partial_hash_for_app(app)
       end
-    
+
       return hash
     end
-  
+
     describe 'GET #index' do
       subject { get :index }
-    
+
       it 'is successful' do
         subject
         expect(response).to be_success
       end
-    
+
       it 'returns the right response' do
         subject
         expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app]).to_json))
       end
     end
-  
+
     describe 'GET #show' do
       subject { get :show, id: app.id }
-    
+
       it 'is successful' do
         subject
         expect(response).to be_success
       end
-    
+
       it 'returns the right response' do
         subject
         expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_app(app).to_json))
