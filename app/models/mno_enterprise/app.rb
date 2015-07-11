@@ -26,14 +26,15 @@
 module MnoEnterprise
   class App < BaseResource
     scope :active, -> { where(active: true) }
-    
+
     attributes :id,:nid, :name, :description, :created_at, :updated_at, :logo, :website, :slug,
     :categories, :key_benefits, :key_features, :testimonials, :worldwide_usage, :tiny_description,
     :popup_description, :stack, :terms_url, :pictures
-    
+
     # Return the list of available categories
-    def self.categories
-      self.all.to_a.select { |a| a if a.categories }.map(&:categories).flatten.uniq { |e| e.downcase }.sort
+    def self.categories(list = nil)
+      app_list = list || self.all.to_a
+      app_list.select { |a| a.categories.present? }.map(&:categories).flatten.uniq { |e| e.downcase }.sort
     end
   end
 end
