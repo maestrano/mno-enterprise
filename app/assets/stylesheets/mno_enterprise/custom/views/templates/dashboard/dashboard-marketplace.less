@@ -1,23 +1,29 @@
 .dashboard-marketplace {
-  
+
   .marketplace-nav input, select {
     color: @dashboard-marketplace-search-text-color;
     border: solid 1px @dashboard-marketplace-search-border-color;
     background: transparent;
     .box-shadow(none);
     height: 35px;
-    
+
     // Placeholder
     .placeholder(@dashboard-marketplace-search-text-color);
   }
-  
+
+  // Fix Windows (Chrome/FF/IE) bug on dropdown options colors
+  // when parent "select" color is set to white
+  .marketplace-nav select option {
+    color: black;
+  }
+
   //-------------------------------
   // Marketplace list
   //-------------------------------
   .marketplace-list {
     margin-top: 20px;
   }
-  
+
   //-------------------------------
   // App Card
   //-------------------------------
@@ -32,7 +38,7 @@
       background-color: @dashboard-marketplace-tile-hover-bg-color;
     }
   }
-  
+
   // Application logo
   .marketplace-app-card img.media-object {
     max-width: 100px;
@@ -42,7 +48,7 @@
   .marketplace-app-card:hover img.media-object {
     border: solid 1px darken(@dashboard-marketplace-tile-hover-img-border-color,5%);
   }
-  
+
   // Application Description
   .marketplace-app-card .media-body {
     padding-right: 10px;
@@ -51,7 +57,7 @@
   .marketplace-app-card:hover .media-body {
     color: @dashboard-marketplace-tile-hover-text-color;
   }
-  
+
   // App tile arrow right
   .marketplace-app-card .arrow {
     position: absolute;
@@ -63,14 +69,14 @@
   .marketplace-app-card:hover .arrow {
     visibility: visible;
   }
-  
+
 }
 
 //-------------------------------
 // Show View
 //-------------------------------
 .dashboard-marketplace-app {
-  
+
   //-------------------------------
   // Header
   //-------------------------------
@@ -79,12 +85,12 @@
     .border-radius(5px);
     border: solid 1px darken(@bg-main-color,5%);
   }
-  
+
   .show-header .media-body h2 {
     line-height: 80px;
     color: @dashboard-marketplace-show-header-text-color;
   }
-  
+
   //-------------------------------
   // Content - General
   //-------------------------------
@@ -93,7 +99,7 @@
     border: none;
     .border-radius(2px);
   }
-  
+
   //-------------------------------
   // Content - Carousel
   //-------------------------------
@@ -101,34 +107,34 @@
     max-height: 300px;
     margin: auto;
   }
-  
+
   .show-content .carousel .carousel-inner {
     text-align: center;
   }
-  
+
   .show-content .carousel .carousel-control {
     background: transparent;
     cursor: pointer;
     max-height: 300px;
   }
-  
+
   .show-content .carousel .carousel-indicators {
     visibility: hidden;
   }
-  
+
   .show-content .carousel .carousel-control .glyphicon-chevron-left, .carousel-control .icon-prev {
     margin-left: 0px;
   }
-  
+
   //-------------------------------
   // Content
   // Height of columns in desktop
   //-------------------------------
-  @media (min-width: @screen-md-min) { 
+  @media (min-width: @screen-md-min) {
     .show-content .carousel { height: 340px; }
     .show-content .well-details { height: 340px; }
   }
-  
+
   //-------------------------------
   // Content - Features
   //-------------------------------
@@ -138,16 +144,16 @@
     text-align: left;
     margin-top: 20px;
   }
-  
+
   .show-content ul.app-features li {
     margin-top: 5px;
     margin-bottom: 5px;
   }
-  
+
   .show-content ul.app-features li > img {
     margin-right: 5px;
   }
-  
+
   //-------------------------------
   // Content - Benefits
   //-------------------------------
@@ -157,24 +163,24 @@
     text-align: left;
     margin-top: 20px;
   }
-  
+
   .show-content ul.key-benefits > li {
     margin-top: 5px;
     margin-bottom: 5px;
   }
-  
+
   .show-content ul.key-benefits > li > .fa.fa-check {
     color: @elem-positive-color;
     margin-right: 5px;
   }
-  
+
   //-------------------------------
   // Content - Testimonials
   //-------------------------------
   .show-content .ribbon-testimonial .body {
     color: @dashboard-marketplace-tile-text-color;
   }
-  
+
   .show-content .ribbon-testimonial .from .name {
     color: @bg-inverse-color;
   }
