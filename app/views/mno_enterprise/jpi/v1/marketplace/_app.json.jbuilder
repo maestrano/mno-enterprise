@@ -9,7 +9,7 @@ json.is_responsive app.responsive?
 json.is_star_ready app.star_ready?
 json.is_connec_ready app.connec_ready?
 json.tiny_description app.tiny_description
-json.description app.description
+json.description app.sanitized_description
 json.testimonials app.testimonials
 json.pictures app.pictures
 

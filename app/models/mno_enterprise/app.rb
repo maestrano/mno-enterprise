@@ -36,5 +36,11 @@ module MnoEnterprise
       app_list = list || self.all.to_a
       app_list.select { |a| a.categories.present? }.map(&:categories).flatten.uniq { |e| e.downcase }.sort
     end
+
+    # Sanitize the app description
+    # E.g.: replace any mention of Maestrano by the tenant name
+    def sanitized_description
+      @sanitized_description ||= (self.description || '').gsub(/maestrano/i,MnoEnterprise.app_name)
+    end
   end
 end
