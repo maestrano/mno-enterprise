@@ -28,7 +28,7 @@ module MnoEnterprise
         'is_star_ready' => false && app.star_ready?,
         'is_connec_ready' => false && app.connec_ready?,
         'tiny_description' => app.tiny_description,
-        'description' => app.description,
+        'description' => app.sanitized_description,
         'testimonials' => app.testimonials,
         'pictures' => app.pictures
       }
