@@ -35,7 +35,7 @@ module.controller('MnoLoadingLoungeCtrl',[
           'online'
         else if appInstance.status in ['provisioning','staged']
           'creating'
-        else if appInstance.status == 'updating'
+        else if appInstance.status == 'updating' || (appInstance.status == 'running' && !appInstance.is_online)
           'updating'
         else
           # starting/stopping

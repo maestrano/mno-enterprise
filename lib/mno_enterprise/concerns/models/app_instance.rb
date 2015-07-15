@@ -82,6 +82,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
   end
 
   # Return true if the instance can be considered active
+  # Route53 DNS propagation may take up to a minute, so we force a minimum of 60 seconds before considering the application online
   def active?
     ACTIVE_STATUSES.include?(self.status.to_sym)
   end
@@ -91,7 +92,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
   end
 
   def online?
-    running?
+    running? && [self.created_at, self.started_at].compact.max < 70.seconds.ago
   end
 
 end
