@@ -10,8 +10,6 @@ maestranoComponents = angular.module('maestrano.components', [
   'maestrano.components.mno-scroll-to',
   'maestrano.components.mno-currency-widget',
   'maestrano.components.file-model',
-  'maestrano.components.mno-sync-config',
-  'maestrano.components.mno-shopping-cart'
   'maestrano.components.mno-price-converter',
   'maestrano.components.mno-current-currency',
   'maestrano.components.mno-password-strength',

@@ -1,15 +1,13 @@
-<!-- <div mno-shopping-cart="cart.isOpen" bundle="cart.bundle" config="cart.config"></div> -->
-
 <div class="dashboard-marketplace-app">
     <div class="spacer1"></div>
-    
+
     <!-- Header -->
     <div class="row show-header">
       <div class="col-md-12">
         <a href="#/marketplace" class="text-muted">
           < Back
         </a>
-        
+
         <div class="media">
           <div class="pull-left">
             <img class="media-object" ng-src="{{app.logo}}" ng-alt="{{app.name}}">
@@ -18,18 +16,18 @@
             <h2 class="media-heading">{{app.name}}</h2>
           </div>
         </div>
-        
+
       </div>
     </div>
-    
+
     <div class="spacer1"></div>
-    
+
     <!-- Content -->
     <div class="show-content">
-        
+
         <!-- Pics/details row -->
         <div class="row">
-      
+
           <div class="col-md-8">
             <div class="well carousel">
               <div carousel interval="3000">
@@ -38,11 +36,11 @@
                 </div>
               </div>
             </div>
-        
+
           </div>
-      
+
           <div class="col-md-4">
-          
+
               <div class="well text-center well-details">
                 <div class="row">
                   <div class="col-xs-12 col-sm-4 col-sm-offset-4 col-md-8 col-md-offset-2">
@@ -53,9 +51,9 @@
                     </div>
                   </div>
                 </div>
-            
+
                 <div class="row">
-            
+
                   <div class="col-xs-12 col-sm-4 col-sm-offset-4 col-md-8 col-md-offset-2">
                     <ul class="app-features">
                       <li ng-show="app.is_responsive">
@@ -73,27 +71,27 @@
                     </ul>
                   </div>
                 </div>
-            
+
                 <div class="row">
                   <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-12 col-md-offset-0">
-              
+
                     <ul class="key-benefits">
                       <li ng-repeat="benefit in app.key_benefits track by $index">
                         <i class="fa fa-check"></i>
                         {{benefit}}
                       </li>
                     </ul>
-              
+
                   </div>
                 </div>
-            
+
               </div>
-        
+
           </div>
-          
+
           <!-- End pics/details row -->
         </div>
-        
+
         <!-- Testimonials row -->
         <div class="row">
           <div class="col-md-6" ng-repeat="testimonial in app.testimonials | limitTo:2" ng-show="isTestimonialShown(testimonial)">
@@ -108,19 +106,19 @@
               </div>
             </div>
           </div>
-          
+
           <div class="spacer1"></div>
         </div>
-        
+
         <!-- Description row -->
         <div class="row">
           <div class="col-md-12">
             <div class="well" ng-bind-html="app.description"></div>
           </div>
         </div>
-        
+
         <!-- End show-content -->
     </div>
-    
-    
+
+
 </div>

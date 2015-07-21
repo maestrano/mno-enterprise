@@ -27,7 +27,6 @@ module.controller('DashboardAppsListCtrl',[
     init = () ->
       # Scope initialization
       $scope.displayOptions = {}
-      $scope.displayCustomInfo = {}
       $scope.helper = {}
       $scope.appsListHelper = AppsListHelper.new()
       can = DhbOrganizationSvc.can
