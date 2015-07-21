@@ -125,11 +125,11 @@ angular.module('maestrano.services.apps-list-helper', []).factory( 'AppsListHelp
           return "<span class='text-warning'>#{instance.status}</span>"
 
       isLaunchHidden: (instance) ->
-        instance.status == 'terminating' || 
+        instance.status == 'terminating' ||
         instance.status == 'terminated' ||
         this.isOauthConnectBtnShown(instance) ||
         this.isNewOfficeApp(instance)
-      
+
       # Deprecated?
       isStartShown: (instance) ->
         if instance.stack? && instance.stack.match(/^(cloud|connector)$/i)
@@ -265,8 +265,8 @@ angular.module('maestrano.services.apps-list-helper', []).factory( 'AppsListHelp
         instance.stack == 'connector' && instance.app_nid == 'myob' && !instance.oauth_keys_valid
 
       isOauthConnectBtnShown: (instance) ->
-        instance.app_nid != 'office-365' && 
-        instance.stack == 'connector' && 
+        instance.app_nid != 'office-365' &&
+        instance.stack == 'connector' &&
         !instance.oauth_keys_valid
 
       connectToQuickBooks: (instance) ->
@@ -307,11 +307,11 @@ angular.module('maestrano.services.apps-list-helper', []).factory( 'AppsListHelp
         false
 
       dataSyncPath: (instance) ->
-        "/webhook/sync/#{instance.uid}/perform"
-      
+        "/mnoe/webhook/oauth/#{instance.uid}/sync"
+
       oAuthConnectPath: (instance)->
         "/mnoe/webhook/oauth/#{instance.uid}/authorize"
-      
+
       dataDisconnectPath: (instance) ->
         "/mnoe/webhook/oauth/#{instance.uid}/disconnect"
 
