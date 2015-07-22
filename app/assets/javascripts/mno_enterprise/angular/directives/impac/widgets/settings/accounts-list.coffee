@@ -54,7 +54,10 @@ module.controller('WidgetSettingAccountsListCtrl', ['$scope', ($scope) ->
           acc = _.find(w.content.complete_list, (acc) ->
             acc.uid == accUid
           )
-          w.moveAccountToAnotherList(acc,w.remainingAccounts,w.selectedAccounts,false)
+          # Quick-fix: replace after update of settings update process
+          # w.moveAccountToAnotherList(acc,w.remainingAccounts,w.selectedAccounts,false)
+          removeAccountFromList(acc, w.remainingAccounts)
+          addAccountToList(acc, w.selectedAccounts)
         )
 
       setting.isInitialized = true
