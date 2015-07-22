@@ -15,7 +15,6 @@ module.controller('WidgetSettingAccountsListCtrl', ['$scope', ($scope) ->
     removeAccountFromList(account, src)
     addAccountToList(account, dst)
     # semi-discreet update of the Impac! object
-    # w.isChartLoading = true
     w.updateSettings(false)
 
   # ---------------------------------------------------------
@@ -39,24 +38,29 @@ module.controller('WidgetSettingAccountsListCtrl', ['$scope', ($scope) ->
 
   setting = {}
   setting.key = "accounts-list"
-  setting.isInitialized = false
 
   setting.initialize = ->
-    w.completeList = []
-    w.savedList = []
+    setting.isInitialized = false
+    w.remainingAccounts = []
+    w.selectedAccounts = []
+
     if w.content? && !_.isEmpty(w.content.complete_list)
-      w.completeList = angular.copy(w.content.complete_list)
-      if !_.isEmpty(w.content.saved_list)
-        w.savedList = angular.copy(w.content.saved_list)
-        # Impac! returns the list of all the accounts, and we want that:
-        # completeList + savedList = list of all accounts
-        angular.forEach(w.savedList, (account) ->
-          removeAccountFromList(account,w.completeList)
+      w.remainingAccounts = angular.copy(w.content.complete_list)
+
+      # Impac! returns the list of all the accounts, and we want that:
+      # completeList + savedList = list of all accounts
+      if !_.isEmpty(w.metadata.accounts_list)
+        angular.forEach(w.metadata.accounts_list, (accUid) ->
+          acc = _.find(w.content.complete_list, (acc) ->
+            acc.uid == accUid
+          )
+          w.moveAccountToAnotherList(acc,w.remainingAccounts,w.selectedAccounts,false)
         )
+
       setting.isInitialized = true
 
   setting.toMetadata = ->
-    return { account_list: w.savedList }
+    return { accounts_list: _.map(w.selectedAccounts, ((acc) -> acc.uid)) } if setting.isInitialized
 
   w.settings ||= []
   w.settings.push(setting)
