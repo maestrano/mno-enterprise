@@ -13,19 +13,24 @@ module.controller('WidgetSettingFormulaCtrl', ['$scope', '$filter', ($scope, $fi
   setting.isInitialized = false
 
   setting.initialize = ->
-    if w.content? && w.content.formula?
-      w.formula = w.content.formula
+    if w.metadata? && w.metadata.formula?
+      w.formula = w.metadata.formula
       setting.isInitialized = true
     else
       w.formula = ""
 
   setting.toMetadata = ->
     evaluateFormula()
-    return { formula: "" } unless w.isFormulaCorrect
-    return { formula: w.formula } 
+    if w.isFormulaCorrect
+      return { formula: w.formula }
+    else
+      return { formula: "" } 
 
   getFormula = ->
     return w.formula
+
+  w.formatAmount = (anAccount) ->
+    return $filter('mnoCurrency')(anAccount.current_balance,anAccount.currency)
 
   $scope.$watch getFormula, (e) ->
     evaluateFormula()
@@ -34,7 +39,7 @@ module.controller('WidgetSettingFormulaCtrl', ['$scope', '$filter', ($scope, $fi
     str = angular.copy(w.formula)
     legend = angular.copy(w.formula)
     i=1
-    angular.forEach(w.savedList, (account) ->
+    angular.forEach(w.selectedAccounts, (account) ->
       balancePattern = "\\{#{i}\\}"
       str = str.replace(new RegExp(balancePattern, 'g'), account.current_balance_no_format)
       legend = legend.replace(new RegExp(balancePattern, 'g'), account.name)
@@ -59,10 +64,10 @@ module.controller('WidgetSettingFormulaCtrl', ['$scope', '$filter', ($scope, $fi
       w.isFormulaCorrect = true
 
   formatFormula = ->
-    if !w.formula.match(/\//g) && w.savedList?
-      if firstAcc = w.savedList[0]
+    if !w.formula.match(/\//g) && w.selectedAccounts?
+      if firstAcc = w.selectedAccounts[0]
         if currency = firstAcc.currency
-          w.evaluatedFormula = $filter('currency')(w.evaluatedFormula)
+          w.evaluatedFormula = $filter('mnoCurrency')(w.evaluatedFormula, currency)
 
   w.settings ||= []
   w.settings.push(setting)

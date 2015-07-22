@@ -13,7 +13,7 @@ module.controller('WidgetInvoicesSummaryCtrl',[
       if $scope.isDataFound
         pieData = _.map w.content.summary, (entity) ->
           {
-            label: entity.label,
+            label: entity.name,
             value: entity.total,
           }
         pieOptions = {
@@ -21,15 +21,6 @@ module.controller('WidgetInvoicesSummaryCtrl',[
           tooltipFontSize: 12,
         }
         w.chart = ImpacChartFormatterSvc.pieChart(pieData, pieOptions)
-
-    # No need to put this under initContext because it won't change after a settings update
-    w.entityType = w.metadata.entity
-    # Not used at this moment, but could be used if we propose other chart (top unpaid, etc..)
-    if w.metadata.order_by == 'name' || w.metadata.order_by == 'total_invoiced'
-      $scope.orderBy = ''
-    else  
-      # returned by Impac!: "total_something"
-      $scope.orderBy = _.last(w.metadata.order_by.split('_')).concat(" ")
 
 
     # TODO: Refactor once we have understood exactly how the angularjs compilation process works:

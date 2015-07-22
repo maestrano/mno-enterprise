@@ -1,10 +1,8 @@
 module = angular.module('maestrano.impac.widgets.accounts.comparison',['maestrano.assets'])
 
 module.controller('WidgetAccountsComparisonCtrl',[
-  '$scope', 'ImpacDashboardingSvc', 'ImpacChartFormatterSvc',
-  ($scope, ImpacDashboardingSvc, ImpacChartFormatterSvc) ->
-
-    $scope.isChartLoading = false
+  '$scope', 'ImpacDashboardingSvc', 'ImpacChartFormatterSvc', '$filter',
+  ($scope, ImpacDashboardingSvc, ImpacChartFormatterSvc, $filter) ->
 
     w = $scope.widget
 
@@ -14,9 +12,9 @@ module.controller('WidgetAccountsComparisonCtrl',[
 
     w.format = ->
       inputData = {labels: [], values: []}
-      _.map w.savedList, (account) ->
+      _.map w.selectedAccounts, (account) ->
         inputData.labels.push account.name
-        inputData.values.push account.current_balance_no_format
+        inputData.values.push account.current_balance
       while inputData.values.length < 15
         inputData.labels.push ""
         inputData.values.push null
@@ -28,16 +26,22 @@ module.controller('WidgetAccountsComparisonCtrl',[
       }
       w.chart = ImpacChartFormatterSvc.barChart(inputData,options)
 
+    $scope.hasAccountsSelected = ->
+      return w.selectedAccounts && w.selectedAccounts.length > 0
+
     $scope.getAccountColor = (anAccount) ->
-      ImpacChartFormatterSvc.getColor(_.indexOf(w.savedList, anAccount))
+      ImpacChartFormatterSvc.getColor(_.indexOf(w.selectedAccounts, anAccount))
 
     $scope.addAccount = (anAccount) ->
-      w.moveAccountToAnotherList(anAccount,w.completeList,w.savedList)
+      w.moveAccountToAnotherList(anAccount,w.remainingAccounts,w.selectedAccounts)
       w.format()
 
     $scope.removeAccount = (anAccount) ->
-      w.moveAccountToAnotherList(anAccount,w.savedList,w.completeList)
+      w.moveAccountToAnotherList(anAccount,w.selectedAccounts,w.remainingAccounts)
       w.format()
+
+    $scope.formatAmount = (anAccount) ->
+      return $filter('mnoCurrency')(anAccount.current_balance,anAccount.currency)
 
 
     # TODO: Refactor once we have understood exactly how the angularjs compilation process works:
@@ -54,7 +58,7 @@ module.controller('WidgetAccountsComparisonCtrl',[
         return 0
 
     $scope.$watch getSettingsCount, (total) ->
-      w.loadContent() if total == 2
+      w.loadContent() if total >= 2
 
     return w
 

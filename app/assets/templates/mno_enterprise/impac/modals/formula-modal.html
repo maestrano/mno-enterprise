@@ -31,20 +31,20 @@
         </div>
 
         <div ng-hide="widget.isLoading" class='col-md-6'>
-          <div class='widget-line' ng-repeat='account in widget.savedList'>
+          <div class='widget-line' ng-repeat='account in widget.selectedAccounts'>
             <div class='row'>
               <div class='col-md-6'>
                 {{$index+1}} - {{account.name}}
               </div>
               <div class='col-md-6'>
-                {{account.current_balance}}
+                {{account.current_balance | mnoCurrency : account.currency}}
                 <button class="close" ng-click="removeAccountFromFormula(account)" ng-show="widget.hasEditAbility"><span class='fa fa-times-circle'></span></button>
               </div>
             </div>
           </div>
 
           <div class='input-group' ng-show="widget.hasEditAbility">
-            <select ng-model="movedAccount" ng-options="account.name + ' (' + account.current_balance + ')' for account in widget.completeList" class='form-control' ng-change='addAccountToFormula(movedAccount)'><select>
+            <select ng-model="movedAccount" ng-options="account.name + ' (' + widget.formatAmount(account) + ')' for account in widget.remainingAccounts" class='form-control' ng-change='addAccountToFormula(movedAccount)'><select>
           </div>
         </div>
         

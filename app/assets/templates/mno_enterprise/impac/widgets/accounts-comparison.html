@@ -21,43 +21,45 @@
     <div ng-hide="widget.isEditMode">
 
       <div ng-show="isDataFound">
-        <div ng-show='widget.savedList.length == 0' class='row'>
+        <div ng-hide='hasAccountsSelected()' class='row'>
           <h5>Select which accounts you wish to compare.</h5>
           <div class='col-md-6'>
             <div class='input-group'>
-              <select ng-model="movedAccount" ng-options="account.name + ' (' + account.current_balance + ')' for account in widget.completeList" class='form-control' ng-show="widget.hasEditAbility" ng-change='addAccount(movedAccount)'></select>
+              <select ng-model="movedAccount" ng-options="account.name + ' (' + formatAmount(account) + ')' for account in widget.remainingAccounts" class='form-control' ng-show="widget.hasEditAbility" ng-change='addAccount(movedAccount)'></select>
             </div>
           </div>
         </div>
         
-        <div ng-if='widget.savedList.length > 0 && !widget.isLoading' class='row chart'>
-          <div class='col-md-12 chart-container'>
-            <div widget-common-chart data="widget.chart" />
+        <div ng-if='hasAccountsSelected()'>
+          <div class='row'>
+            <div class='col-md-12 chart-container'>
+              <div widget-common-chart data="widget.chart" />
+            </div>
           </div>
-        </div>
 
-        <div ng-hide='widget.savedList.length == 0' class='row'>
-          <div class='col-md-12'>
-            <div class='widget-lines-container'>
-              <div class='widget-line' ng-repeat="account in widget.savedList">
-                <button class="close" ng-click="removeAccount(account)" ng-show="widget.hasDeleteAbility">
-                  x
-                </button>
-                <i style="float: right; margin-right: 10px;">{{account.current_balance}}</i>
-                <i class="fa fa-circle" style="margin: 0px 8px; color: {{getAccountColor(account)}}" />
-                {{account.name}}
+          <div class='row'>
+            <div class='col-md-12'>
+              <div class='widget-lines-container'>
+                <div class='widget-line' ng-repeat="account in widget.selectedAccounts">
+                  <button class="close" ng-click="removeAccount(account)" ng-show="widget.hasDeleteAbility">
+                    x
+                  </button>
+                  <i style="float: right; margin-right: 10px;">{{formatAmount(account)}}</i>
+                  <i class="fa fa-circle" style="margin: 0px 8px; color: {{getAccountColor(account)}}" />
+                  {{account.name}}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div ng-hide='widget.savedList.length == 0' class='row'>
-          <div class="border" />
-          <div class='add-account'>
-            <div class='input-group'>
-              <select ng-model="movedAccount" ng-options="account.name + ' (' + account.current_balance + ')' for account in widget.completeList track by account.uid" class='form-control' ng-show="widget.hasDeleteAbility" ng-change='addAccount(movedAccount)' ng-disabled="widget.savedList.length >= 15 || widget.completeList.length == 0">
-                <option value="" disabled selected>+ ADD ACCOUNT</option>
-              </select>
+          <div class='row'>
+            <div class="border" />
+            <div class='add-account'>
+              <div class='input-group'>
+                <select ng-model="movedAccount" ng-options="account.name + ' (' + formatAmount(account) + ')' for account in widget.remainingAccounts track by account.uid" class='form-control' ng-show="widget.hasDeleteAbility" ng-change='addAccount(movedAccount)' ng-disabled="widget.selectedAccounts.length >= 15 || widget.remainingAccounts.length == 0">
+                  <option value="" disabled selected>+ ADD ACCOUNT</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
