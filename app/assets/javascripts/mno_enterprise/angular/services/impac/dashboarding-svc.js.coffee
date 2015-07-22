@@ -128,6 +128,7 @@ angular.module('maestrano.services.impac.dashboarding-svc', []).factory('ImpacDa
           return widget
       )
     
+    # Call Impac! API to retrieve the widget content (will be stored in widget.content)
     service.widgets.show = (widget) ->
       self = service
       data = { owner: widget.owner, sso_session: CurrentUserSvc.getSsoSessionId(), metadata: widget.metadata, engine: widget.category }
@@ -137,24 +138,6 @@ angular.module('maestrano.services.impac.dashboarding-svc', []).factory('ImpacDa
         (failure) ->
           return failure
       )
-    
-    # LOCKER / 1 WIDGET AT A TIME
-    # service.widgets.show = (widget) ->
-    #   self = service
-    #   if !self.isLocked
-    #     self.isLocked = true
-    #     data = { owner: widget.owner, sso_session: CurrentUserSvc.getSsoSessionId(), metadata: widget.metadata, engine: widget.category }
-    #     $http.post(self.routes.showWidgetPath, data).then(
-    #       (success) ->
-    #         self.isLocked = false
-    #         return success.data
-    #       (failure) ->
-    #         self.isLocked = false
-    #     )
-    #   else
-    #     $timeout( ->
-    #       self.widgets.show(widget)
-    #     ,300)
 
     # Delete a widget
     # TODO: currentDhbId should be stored in the service
@@ -165,6 +148,7 @@ angular.module('maestrano.services.impac.dashboarding-svc', []).factory('ImpacDa
           currentDhb.widgets = _.reject(currentDhb.widgets, (widget) -> widget.id == widgetId  )
       )
 
+    # Call the Maestrano API interface to update (mainly the metadata)
     service.widgets.update = (widget,opts) ->
       self = service
       data = { widget: opts }
