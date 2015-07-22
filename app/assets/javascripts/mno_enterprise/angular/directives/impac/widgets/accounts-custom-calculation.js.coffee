@@ -10,15 +10,8 @@ module.controller('WidgetAccountsCustomCalculationCtrl',[
 
     w.initContext = ->
       $scope.movedAccount = {}
-      $scope.isDataFound = w.content? && !_.isEmpty(w.content.complete_list) && w.content.formula?
+      $scope.isDataFound = w.content? && !_.isEmpty(w.content.complete_list)
 
-    getSelectedOrganizations = ->
-      return w.selectedOrganizations
-
-    # Reload the accounts lists on organizations list change
-    $scope.$watch getSelectedOrganizations, (result) ->
-      w.updateSettings(false) if !_.isEmpty(result)
-    ,true
 
     # #====================================
     # # Formula management
@@ -26,17 +19,16 @@ module.controller('WidgetAccountsCustomCalculationCtrl',[
 
     $scope.addAccountToFormula = (account) ->
       # When some accounts are already in savedList
-      if w.savedList.length > 0
-        w.formula += " + {#{w.savedList.length + 1}}"
+      if w.selectedAccounts.length > 0
+        w.formula += " + {#{w.selectedAccounts.length + 1}}"
       # Otherwise
       else
         w.formula = "{1}"
 
-      # Will trigger updateSettings()
-      w.moveAccountToAnotherList(account,w.completeList,w.savedList)
+      w.moveAccountToAnotherList(account,w.remainingAccounts,w.selectedAccounts,false)
 
     $scope.removeAccountFromFormula = (account) ->
-      prevUids = _.map(w.savedList, (e) ->
+      prevUids = _.map(w.selectedAccounts, (e) ->
         e.uid
       )
       nextUids = _.reject(prevUids, (e) ->
@@ -62,8 +54,7 @@ module.controller('WidgetAccountsCustomCalculationCtrl',[
         i++
 
       w.formula = angular.copy(newFormula)
-      # Will trigger updateSettings()
-      w.moveAccountToAnotherList(account,w.savedList,w.completeList)
+      w.moveAccountToAnotherList(account,w.selectedAccounts,w.remainingAccounts,false)
 
     #====================================
     # Modal management
@@ -89,27 +80,28 @@ module.controller('WidgetAccountsCustomCalculationCtrl',[
       self = $scope.formulaModal
       self.$instance = $modal.open(self.config.instance)
       $timeout ->
-        w.initSettings(false)
+        w.initSettings()
       ,200
+
+    # # # Reload the accounts lists on organizations list change
+    $scope.$watch (-> w.selectedOrganizations), (result) ->
+      w.updateSettings() if !_.isEmpty(result)
+    ,true
 
     $scope.formulaModal.cancel = ->
       w.initSettings()
       $scope.formulaModal.close()
 
     $scope.formulaModal.proceed = ->
-      w.updateSettings()
+      w.updateSettings(false)
       $scope.formulaModal.close()
     
     $scope.formulaModal.close = ->
       $scope.formulaModal.$instance.close()
 
-    getEditMode = ->
-      return w.isEditMode
-
     # Open the modal on toogleEditMode()
-    $scope.$watch getEditMode, (result, prev) ->
-      if result && !prev
-        $scope.formulaModal.open()
+    $scope.$watch (-> w.isEditMode), (result, prev) ->
+      $scope.formulaModal.open() if result && !prev
 
 
     # TODO: Refactor once we have understood exactly how the angularjs compilation process works:
@@ -126,7 +118,9 @@ module.controller('WidgetAccountsCustomCalculationCtrl',[
         return 0
 
     $scope.$watch getSettingsCount, (total) ->
-      w.loadContent() if total == 3
+      if total == 3 && !$scope.blockLoadContent
+        w.loadContent()
+        $scope.blockLoadContent = true
 
     return w
 ])
