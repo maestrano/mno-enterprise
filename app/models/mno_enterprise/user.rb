@@ -115,7 +115,7 @@ module MnoEnterprise
     
     # Confirm the user and store confirmation_token
     def perform_confirmation(confirmation_token)
-      self.confirm! if self.persisted?
+      self.confirm if self.persisted?
       self.confirmation_token = confirmation_token
     end
     
