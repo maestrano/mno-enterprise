@@ -1,0 +1,83 @@
+MnoEnterprise::Engine.routes.draw do
+  #============================================================
+  # Devise/User Configuration
+  #============================================================
+  # Main devise configuration
+  devise_for :users, {
+    class_name: "MnoEnterprise::User",
+    module: :devise,
+    path_prefix: 'auth',
+    controllers: {
+      confirmations: "mno_enterprise/auth/confirmations",
+      #omniauth_callbacks: "auth/omniauth_callbacks",
+      passwords: "mno_enterprise/auth/passwords",
+      registrations: "mno_enterprise/auth/registrations",
+      sessions: "mno_enterprise/auth/sessions",
+      unlocks: "mno_enterprise/auth/unlocks"
+    }
+  }
+
+  # Additional devise routes
+  # TODO: routing specs
+  devise_scope :user do
+    get "/auth/users/confirmation/lounge", to: "auth/confirmations#lounge", as: :user_confirmation_lounge
+    patch "/auth/users/confirmation/finalize", to: "auth/confirmations#finalize", as: :user_confirmation_finalize
+    patch "/auth/users/confirmation", to: "auth/confirmations#update"
+  end
+
+  #============================================================
+  # Webhooks
+  #============================================================
+  namespace :webhook do
+    # OAuth Management
+    resources :oauth, only: [], constraints: { id: /[\w\-\.:]+/ }, controller: "o_auth" do
+      member do
+        get :authorize
+        get :callback
+        get :disconnect
+        get :sync
+      end
+    end
+  end
+
+  #============================================================
+  # JPI V1
+  #============================================================
+  namespace :jpi do
+    namespace :v1 do
+      resources :marketplace, only: [:index,:show]
+      resource :current_user, only: [:show, :update] do
+        put :update_password
+        #post :deletion_request, action: :create_deletion_request
+        #delete :deletion_request, action: :cancel_deletion_request
+      end
+
+      resources :organizations, only: [:index, :show, :create, :update] do
+        member do
+          put :update_billing
+          put :invite_members
+          put :update_member
+          put :remove_member
+        end
+
+        # AppInstances
+        resources :app_instances, only: [:index,:destroy], shallow: true
+
+        # Teams
+        resources :teams, only: [:index,:show,:create,:update,:destroy], shallow: true do
+          member do
+            put :add_users
+            put :remove_users
+          end
+        end
+
+      end
+
+      namespace :impac do
+        resources :dashboards, only: [:index,:show,:create,:update,:destroy] do
+          resources :widgets, shallow: true, only: [:create,:destroy,:update]
+        end
+      end
+    end
+  end
+end
