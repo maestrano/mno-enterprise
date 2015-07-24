@@ -21,19 +21,11 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", "~> 4.2.0"
   s.add_dependency "her", "~> 0.7.3"
   s.add_dependency "devise", "~> 3.0"
-  s.add_dependency "less-rails"
-  s.add_dependency "therubyracer"
   s.add_dependency "jbuilder", '~> 2.2.12'
   s.add_dependency 'cancancan', '~> 1.10'
-  s.add_dependency 'haml', '~> 4.0.6'
-  s.add_dependency 'haml-rails', '~> 0.9.0'
-  s.add_dependency 'coffee-rails', '~> 4.1.0'
   s.add_dependency 'countries', '~> 0.11.3'
-  s.add_dependency 'jquery-rails', '~> 4.0.3'
   s.add_dependency 'jwt', '~> 1.4.1'
   s.add_dependency 'mandrill-api', '~> 1.0.53'
-  s.add_dependency 'sprockets', '~> 2.12.3'
-  s.add_dependency 'sprockets-rails', '~> 2.2.4'
   s.add_dependency 'deepstruct', '~> 0.0.7'
   s.add_dependency 'prawn', '~> 2.0.1'
   s.add_dependency 'prawn-table', '~> 0.2.1'
