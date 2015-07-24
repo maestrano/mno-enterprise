@@ -6,13 +6,13 @@ version = MnoEnterprise::VERSION.to_s
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "mno-enterprise-frontend"
+  s.name        = "mno-enterprise-api"
   s.version     = version
   s.authors     = ["Arnaud Lachaume"]
   s.email       = ["arnaud.lachaume@maestrano.com"]
   s.homepage    = "https://maestrano.com"
-  s.summary     = "Maestrano Enterprise - Frontend"
-  s.description = "Angular/Bootstrap frontend for MNOE"
+  s.summary     = "Maestrano Enterprise - API"
+  s.description = "Maestrano Enterprise - essentials API"
   s.license     = "Maestrano Enterprise License V1"
 
   s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.rdoc"]
@@ -20,13 +20,6 @@ Gem::Specification.new do |s|
 
   # TODO: add dependencies
   s.add_dependency 'mno-enterprise-core', version
-  s.add_dependency 'mno-enterprise-api', version
 
-  s.add_dependency 'less-rails'
-  s.add_dependency "therubyracer"
-  s.add_dependency 'haml', '~> 4.0.6'
-  s.add_dependency 'haml-rails', '~> 0.9.0'
-  s.add_dependency 'coffee-rails', '~> 4.1.0'
-  s.add_dependency 'jquery-rails', '~> 4.0.3'
-  s.add_dependency 'sprockets-rails', '~> 2.2.4'
+  s.add_dependency 'jbuilder', '~> 2.2.12'
 end

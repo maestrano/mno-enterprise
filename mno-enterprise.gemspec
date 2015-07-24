@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency 'mno-enterprise-core', version
+  s.add_dependency 'mno-enterprise-api', version
   s.add_dependency 'mno-enterprise-frontend', version
 
   # TODO: move?
