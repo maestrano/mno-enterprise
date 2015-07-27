@@ -2,7 +2,7 @@ maestranoAssets = angular.module('maestrano.assets', [])
 
 maestranoAssets.factory('AssetPath', ->
   return {
-    <% MnoEnterprise::AssetsUtil.images.each do |asset| %>
+    <% MnoEnterprise::Frontend::AssetsUtil.images.each do |asset| %>
       "<%= asset %>" : "<%= asset_path(asset) %>"
     <% end %>
   }
@@ -10,7 +10,7 @@ maestranoAssets.factory('AssetPath', ->
 
 maestranoAssets.factory('TemplatePath', ->
   return {
-    <% MnoEnterprise::AssetsUtil.templates.each do |asset| %>
+    <% MnoEnterprise::Frontend::AssetsUtil.templates.each do |asset| %>
       "<%= asset %>" : "<%= asset_path(asset) %>"
     <% end %>
   }
