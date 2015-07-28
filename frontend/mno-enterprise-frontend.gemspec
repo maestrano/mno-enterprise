@@ -29,4 +29,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'coffee-rails', '~> 4.1.0'
   s.add_dependency 'jquery-rails', '~> 4.0.3'
   s.add_dependency 'sprockets-rails', '~> 2.2.4'
+
+  #TODO: DRY to common dev dependencies
+  s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'factory_girl_rails'
 end

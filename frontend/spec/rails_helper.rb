@@ -4,12 +4,20 @@ require 'spec_helper'
 require 'her'
 require 'factory_girl_rails'
 
+require 'mno_enterprise/testing_support/user_action_shared'
+
 # Load the Dummy application
-require File.expand_path("../../spec/dummy/config/environment.rb",  __FILE__)
+begin
+  require File.expand_path("../dummy/config/environment", __FILE__)
+rescue LoadError
+  puts "Could not load dummy application. Please ensure you have run `bundle exec rake test_app`"
+end
+# require File.expand_path("../../spec/dummy/config/environment.rb",  __FILE__)
+
 require 'rspec/rails'
 
 # Check Dummy application migrations
-ActiveRecord::Migrator.migrations_paths = [File.expand_path("../../test/dummy/db/migrate", __FILE__)]
+ActiveRecord::Migrator.migrations_paths = [File.expand_path("../../spec/dummy/db/migrate", __FILE__)]
 ActiveRecord::Migrator.migrations_paths << File.expand_path('../../db/migrate', __FILE__)
 
 
@@ -23,6 +31,7 @@ ActiveRecord::Migrator.migrations_paths << File.expand_path('../../db/migrate', 
 Dir[Rails.root.join("../..","spec/support/**/*.rb")].each { |f| require f }
 
 # Require all factories
+# Dir[Rails.root.join("../..", "spec/factories/**/*.rb")].each {|f| require f }
 require 'mno_enterprise/testing_support/factories'
 
 # Checks for pending migrations before tests are run.
