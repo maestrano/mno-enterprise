@@ -33,6 +33,10 @@ module MnoEnterprise
   class Router
     attr_accessor :terms_url
 
+    def terms_url
+      @terms_url || '#'
+    end
+
     def launch_url(id,opts = {})
       host_url("/launch/#{id}",opts)
     end
