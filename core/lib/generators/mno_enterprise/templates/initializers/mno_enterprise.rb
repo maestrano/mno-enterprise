@@ -1,4 +1,4 @@
-require 'mno-enterprise'
+# require 'mno-enterprise'
 
 MnoEnterprise.configure do |config|
 

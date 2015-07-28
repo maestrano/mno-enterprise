@@ -83,7 +83,8 @@ module MnoEnterprise
       # Redirect to previous url and reset it
       def after_sign_in_path_for(resource)
         previous_url = session.delete(:previous_url)
-        return (return_to_url(resource) || previous_url || mno_enterprise.myspace_url)
+        url = mno_enterprise.respond_to?(:myspace_url) ? mno_enterprise.myspace_url : main_app.root_url
+        return (return_to_url(resource) || previous_url || url)
       end
   end
 end
