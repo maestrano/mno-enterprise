@@ -5,6 +5,7 @@ module MnoEnterprise
   class DummyGenerator < Rails::Generators::Base
     desc "Creates blank Rails application, installs MNOE"
 
+    class_option :lib_name, default: ''
     class_option :database, default: ''
 
     def self.source_paths
@@ -35,12 +36,14 @@ module MnoEnterprise
     end
 
     def test_dummy_config
+      @lib_name = options[:lib_name]
       @database = options[:database]
 
       template "rails/database.yml", "#{dummy_path}/config/database.yml", force: true
       template "rails/boot.rb.erb", "#{dummy_path}/config/boot.rb", force: true
       template "rails/application.rb.erb", "#{dummy_path}/config/application.rb", force: true
       template "rails/routes.rb", "#{dummy_path}/config/routes.rb", force: true
+      template "rails/test-env.rb", "#{dummy_path}/config/environments/test.rb", force: true
     end
 
     def test_dummy_clean
@@ -58,6 +61,7 @@ module MnoEnterprise
       end
     end
 
+    attr :lib_name
     attr :database
 
     protected

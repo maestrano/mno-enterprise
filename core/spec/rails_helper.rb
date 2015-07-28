@@ -24,7 +24,7 @@ ActiveRecord::Migrator.migrations_paths << File.expand_path('../../db/migrate', 
 Dir[Rails.root.join("../..","spec/support/**/*.rb")].each { |f| require f }
 
 # Require all factories
-Dir[Rails.root.join("../..", "spec/factories/**/*.rb")].each {|f| require f }
+require 'mno_enterprise/testing_support/factories'
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
