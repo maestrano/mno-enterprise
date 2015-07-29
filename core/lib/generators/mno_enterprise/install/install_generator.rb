@@ -3,7 +3,7 @@ require 'rails/generators/rails/app/app_generator'
 module MnoEnterprise
   module Generators
     class InstallGenerator < ::Rails::Generators::Base
-      source_root File.expand_path("../../templates", __FILE__)
+      source_root File.expand_path("../templates", __FILE__)
       desc "Description:\n  Install Maestrano Enterprise Engine in your application\n\n"
 
       class_option :skip_rspec, type: :boolean, default: false, desc: 'Skip rspec-rails installation'
@@ -13,41 +13,43 @@ module MnoEnterprise
 
 
       def copy_initializer
-        template "Procfile", "Procfile"
-        template "initializers/mno_enterprise.rb", "config/initializers/mno_enterprise.rb"
-        template "config/mno_enterprise_styleguide.yml", "config/mno_enterprise_styleguide.yml"
+        template "Procfile"
+        template "config/initializers/mno_enterprise.rb"
+        template "config/mno_enterprise_styleguide.yml"
       end
 
       def setup_assets
-        # JavaScript
-        copy_file "javascripts/mno_enterprise_extensions.js", "app/assets/javascripts/mno_enterprise_extensions.js"
+        if defined?(MnoEnterprise::Frontend) || Rails.env.test?
+          # JavaScript
+          copy_file "javascripts/mno_enterprise_extensions.js", "app/assets/javascripts/mno_enterprise_extensions.js"
 
 
-        # Stylesheets
-        copy_file "stylesheets/main.less_erb", "app/assets/stylesheets/main.less.erb"
-        copy_file "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
-        copy_file "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
+          # Stylesheets
+          copy_file "stylesheets/main.less_erb", "app/assets/stylesheets/main.less.erb"
+          copy_file "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
+          copy_file "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
 
-        # Require main stylesheet file
-        inject_into_file 'app/assets/stylesheets/application.css', before: " */" do
-          " *= require main\n"
+          # Require main stylesheet file
+          inject_into_file 'app/assets/stylesheets/application.css', before: " */" do
+            " *= require main\n"
+          end
+
+          # Disable require_tree which breaks the app
+          gsub_file 'app/assets/stylesheets/application.css', /\*= require_tree ./, '* require_tree .'
         end
-
-        # Disable require_tree which breaks the app
-        gsub_file 'app/assets/stylesheets/application.css', /\*= require_tree ./, '* require_tree .'
       end
 
       # Inject engine routes
       def notify_about_routes
         if (routes_file = destination_path.join('config', 'routes.rb')).file? && (routes_file.read !~ %r{mount\ MnoEnterprise::Engine})
           mount = %Q{
-    # This line mount Maestrano Enterprise routes in your application under /mnoe.
-    # If you would like to change where this engine is mounted, simply change the :at option to something different
-    #
-    # We ask that you don't use the :as option here, as Mnoe relies on it being the default of "mno_enterprise"
-    mount MnoEnterprise::Engine, at: "/mnoe\", as: :mno_enterprise
+  # This line mount Maestrano Enterprise routes in your application under /mnoe.
+  # If you would like to change where this engine is mounted, simply change the :at option to something different
+  #
+  # We ask that you don't use the :as option here, as Mnoe relies on it being the default of "mno_enterprise"
+  mount MnoEnterprise::Engine, at: "/mnoe\", as: :mno_enterprise
 
-          }
+}
           inject_into_file routes_file, mount, after: "Rails.application.routes.draw do\n"
         end
 
@@ -60,7 +62,7 @@ module MnoEnterprise
       end
 
       def install_sprite_generator
-        unless options[:skip_sprite]
+        if (defined?(MnoEnterprise::Frontend) || Rails.env.test?) && !options[:skip_sprite]
           say("\n")
           @install_sprite = ask_with_default('Would you like to install sprite-factory?')
           if @install_sprite
