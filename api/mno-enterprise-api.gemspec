@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   # TODO: add dependencies
   s.add_dependency 'mno-enterprise-core', version
 
-  s.add_dependency 'jbuilder', '~> 2.2.12'
+  s.add_dependency 'jbuilder', '~> 2.3.1'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails'
