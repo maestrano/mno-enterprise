@@ -1,7 +1,6 @@
 # require 'mno-enterprise'
 
 MnoEnterprise.configure do |config|
-
   #===============================================
   # General Configuration
   #===============================================

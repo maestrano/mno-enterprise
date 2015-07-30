@@ -47,7 +47,7 @@ module MnoEnterprise
   # If you would like to change where this engine is mounted, simply change the :at option to something different
   #
   # We ask that you don't use the :as option here, as Mnoe relies on it being the default of "mno_enterprise"
-  mount MnoEnterprise::Engine, at: "/mnoe\", as: :mno_enterprise
+  mount MnoEnterprise::Engine, at: '/mnoe', as: :mno_enterprise
 
 }
           inject_into_file routes_file, mount, after: "Rails.application.routes.draw do\n"
