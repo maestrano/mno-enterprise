@@ -15,9 +15,9 @@ module MnoEnterprise
     # PUT /mnoe/jpi/v1/organizations/:id
     def update
       # Filter
-      whitelist = [:name,:soa_enabled]
-      attributes = (params[:organization] || {}).select { |k,v| whitelist.include?(k.to_sym) }
-      
+      whitelist = %w{name soa_enabled industry size}
+      attributes = (params[:organization] || {}).slice(*whitelist)
+
       # Update and Authorize
       organization.assign_attributes(attributes)
       authorize! :update, organization

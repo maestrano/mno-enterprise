@@ -22,14 +22,16 @@
 #  geo_tz                   :string(255)
 #  geo_currency             :string(255)
 #  meta_data                :text
+#  industry                 :string(255)
+#  size                     :string(255)
 #
 
 module MnoEnterprise
   class Organization < BaseResource    
     attributes :uid, :name, :account_frozen, :free_trial_end_at, :soa_enabled, :mails, :logo,
       :latitude, :longitude, :geo_country_code, :geo_state_code, :geo_city, :geo_tz, :geo_currency,
-      :meta_data
-    
+      :meta_data, :industry, :size
+
     #================================
     # Associations
     #================================
