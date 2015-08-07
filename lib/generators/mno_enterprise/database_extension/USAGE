@@ -1,0 +1,11 @@
+Description:
+    Create a database extension of an existing Mnoe model
+
+Example:
+    rails generate mno_enterprise:database_extension Organization growth_type:string
+
+    This will create:
+        Model:      app/models/mno_enterprise/organization.rb
+        Model:      app/models/mno_enterprise/organization_extension.rb
+        Spec:       spec/models/mno_enterprise/organization_extension_spec.rb
+        Migration:  db/migrate/XXX_create_mno_enterprise_organization_extensions.rb
