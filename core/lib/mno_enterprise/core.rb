@@ -19,6 +19,8 @@ require "her_extension/model/associations/has_many_association"
 require "her_extension/middleware/mnoe_api_v1_parse_json"
 require "mno_enterprise/engine"
 
+require 'mno_enterprise/database_extendable'
+
 require 'mandrill'
 require "mandrill_client"
 
