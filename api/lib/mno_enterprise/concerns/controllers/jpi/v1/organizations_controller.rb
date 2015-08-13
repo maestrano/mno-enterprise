@@ -25,12 +25,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
   # PUT /mnoe/jpi/v1/organizations/:id
   def update
-    # Filter
-    whitelist = %w{name soa_enabled industry size}
-    attributes = (params[:organization] || {}).slice(*whitelist)
-
     # Update and Authorize
-    organization.assign_attributes(attributes)
+    organization.assign_attributes(organization_update_params)
     authorize! :update, organization
 
     # Save
@@ -43,12 +39,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
   # POST /mnoe/jpi/v1/organizations
   def create
-    # Filter
-    whitelist = %w{name soa_enabled industry size}
-    attributes = (params[:organization] || {}).slice(*whitelist)
-
     # Create new organization
-    @organization = MnoEnterprise::Organization.create(attributes)
+    @organization = MnoEnterprise::Organization.create(organization_update_params)
 
     # Add the current user as Super Admin
     @organization.add_user(current_user,'Super Admin')
@@ -159,6 +151,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   protected
     def organization
       @organization ||= current_user.organizations.to_a.find { |o| o.id.to_s == params[:id].to_s }
+    end
+
+    def organization_permitted_update_params
+      [:name, :soa_enabled, :industry, :size]
+    end
+
+    def organization_update_params
+      params.fetch(:organization, {}).permit(*organization_permitted_update_params)
     end
 
 end
