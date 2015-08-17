@@ -15,7 +15,7 @@ module MnoEnterprise
       
       # Redirect to dashboard if no applications
       unless @apps && @apps.any?
-        redirect_to myspace_path
+        redirect_to after_provision_path
       end
     end
     
