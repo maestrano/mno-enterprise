@@ -149,6 +149,13 @@ module MnoEnterprise
   mattr_accessor :default_sender_email
   @@default_sender_email = "no-reply@example.com"
 
+  #===============================================
+  # Optional Modules
+  #===============================================
+  # Angular CSRF
+  mattr_accessor :include_angular_csrf
+  @@include_angular_csrf = false
+
   #====================================
   # Third Party Plugins
   #====================================

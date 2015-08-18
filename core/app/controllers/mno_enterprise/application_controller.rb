@@ -7,7 +7,12 @@ module MnoEnterprise
     before_filter :set_default_meta
     before_filter :store_location
     before_filter :perform_return_to
-    
+
+    # Angular CSRF
+    if MnoEnterprise.include_angular_csrf
+      include MnoEnterprise::Concerns::Controllers::AngularCSRF
+    end
+
     #============================================
     # CanCan Authorization Rescue
     #============================================

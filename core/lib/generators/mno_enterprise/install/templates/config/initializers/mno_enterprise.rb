@@ -45,6 +45,13 @@ MnoEnterprise.configure do |config|
   # config.router.terms_url = 'http://mywebsite.com/terms'
 
   #===============================================
+  # Optional Modules
+  #===============================================
+  # Angular CSRF protection - Only needed if the AngularJS App
+  # is not served through Rails asset pipeline
+  # config.include_angular_csrf = false
+
+  #===============================================
   # Third Party Plugins
   #===============================================
   # Google Tag Manager
