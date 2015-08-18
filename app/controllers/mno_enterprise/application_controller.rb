@@ -85,14 +85,5 @@ module MnoEnterprise
         previous_url = session.delete(:previous_url)
         return (return_to_url(resource) || previous_url || mno_enterprise.myspace_url)
       end
-
-    #==========================================================
-    # Maestrano routes - Manage redirections
-    #==========================================================
-      # The path used after purchased apps have been provisionned
-      def after_provision_path
-        myspace_path(anchor: '/')
-      end
-      helper_method :after_provision_path # To use in the provision view
   end
 end
