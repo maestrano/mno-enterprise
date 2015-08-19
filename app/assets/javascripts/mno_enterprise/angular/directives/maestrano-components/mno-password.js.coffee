@@ -18,12 +18,12 @@ module.directive('mnoPassword', ['TemplatePath', (TemplatePath) ->
         scope.fieldName = "#{attrs.mnoPassword}[password]"
 
         scope.check = ->
+          scope.hasEightChars = scope.baseObject.password? && (scope.baseObject.password.length >= 8)
+          scope.hasOneNumber = false
+          scope.hasOneUpper = false
+          scope.hasOneLower = false
+
           if angular.isString(scope.baseObject.password)
-            scope.hasEightChars = (scope.baseObject.password.length >= 8)
-            scope.hasOneNumber = false
-            scope.hasOneUpper = false
-            scope.hasOneLower = false
-          
             angular.forEach(scope.baseObject.password.split(""), (letter) ->
               scope.hasOneNumber = true if parseInt(letter)
               scope.hasOneUpper = true if (letter == letter.toUpperCase() && letter != letter.toLowerCase() && !parseInt(letter))
