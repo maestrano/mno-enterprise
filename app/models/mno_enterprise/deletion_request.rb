@@ -11,5 +11,12 @@
 
 module MnoEnterprise
   class DeletionRequest < BaseResource
+    #============================================
+    # Instance methods
+    #============================================
+    # We want to use the token instead of the id
+    def to_param
+      self.token
+    end
   end
 end
