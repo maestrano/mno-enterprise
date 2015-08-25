@@ -11,6 +11,13 @@
 
 module MnoEnterprise
   class DeletionRequest < BaseResource
+    attributes :id, :token, :status, :user_id
+
+    #==============================================================
+    # Associations
+    #==============================================================
+    belongs_to :user, class_name: 'MnoEnterprise::User'
+
     #============================================
     # Instance methods
     #============================================

@@ -30,8 +30,8 @@ module.controller('DashboardAccountCtrl',[
           website: model.website
           phone_country_code: model.phone_country_code
         }
-      if userDocument.deletionRequest
-        $scope.user.currentDeletionRequestToken = userDocument.deletionRequest.token
+      if userDocument.deletion_request
+        $scope.user.currentDeletionRequestToken = userDocument.deletion_request.token
       else
         $scope.user.currentDeletionRequestToken = -1
 

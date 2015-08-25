@@ -24,13 +24,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::DeletionRequestsController
   #==================================================================
   # POST /deletion_request.json
   def create
-    @deletion_request = MnoEnterprise::DeletionRequest.new(:deletable => current_user)
+    @deletion_request = MnoEnterprise::DeletionRequest.new(user_id: current_user.id)
 
     if @deletion_request.save
-      # AccountMailer.delay.deletion_request_instructions(current_user,{deletion_request:@deletion_request})
-      # SystemNotificationMailer.organization_invite(@org_invite).deliver_now
-      # deliver_later
-      # SystemNotificationMailer.deletion_request_instructions(current_user,{deletion_request:@deletion_request}).deliver_now
+      # TODO: deliver_later => need to use user#id and deletion_request#id
+      MnoEnterprise::SystemNotificationMailer.deletion_request_instructions(current_user, @deletion_request).deliver_now
       render json: @deletion_request, status: :created
     else
       render json: @deletion_request.errors, status: :unprocessable_entity
