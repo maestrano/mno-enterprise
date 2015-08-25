@@ -1,0 +1,131 @@
+.container
+  .row
+    .col-md-8.col-md-offset-2
+      %div{ "mno-flash-msg" => true }
+      %h4 Account termination
+      %p You have requested the termination of your account. This page will proceed to the checkout of any amount due and delete your account permanently.
+
+  - if @deletion_request.status == 'pending'
+    .row
+      .col-md-8.col-md-offset-2
+        %hr
+        %h4 Step 1 - Freeze my account
+        %p
+          First we need to freeze your account. Upon clicking the button below
+          %strong all your apps (and apps from organizations you are the sole member) will be terminated.
+          The final invoices for your account and organizations you are the sole member will be generated and displayed.
+        %p After clicking the button below you will not be able to launch apps anymore or access your dashboard.
+
+        %h5 Termination Checklist
+        %ol
+          %li I have transferred all my personal critical apps to coworkers via organizations
+          %li I have transferred all critical apps from organizations I am the sole member to coworkers via organizations
+          %li I have verified that all my transfer requests of critical apps have been accepted
+
+        %label
+          %input{ type: 'checkbox', id: "deletion-request-before-freeze-checklist", 'ng-click' => 'checklistAccepted = !checklistAccepted' } &nbsp; I have verified all the items of the termination checklist
+
+        .align-center
+          = form_for @deletion_request, url: freeze_account_deletion_request_path(@deletion_request) do |f|
+            %button.btn.btn-danger{type: "submit", id: "deletion-request-freeze-button", 'ng-disabled' => '!checklistAccepted' }
+              %i.fa.fa-lock.fa-inverse
+              &nbsp; Freeze my account
+
+  - if @deletion_request.status == 'account_frozen'
+    .row
+      .col-md-8.col-md-offset-2
+        %hr
+        %h4 Step 2 - Pay your final invoices
+        %p The table below shows you the final invoices created for your personal account and organizations for which you are the sole member.
+        %p Please click on each invoice to review/update the credit card details that should be used for checkout. You do not need to provide credit card details for $0 invoices.
+        - # List of invoices with Credit Cards
+        = form_for @deletion_request, url: checkout_deletion_request_path(@deletion_request), html: { class: 'form-horizontal'} do |f|
+          .accordion{ accordion:true, 'close-others'=>'true' }
+            - @final_invoices.each_with_index do |record, index|
+              %div#invoices_list{ 'accordion-group'=>true }
+                %div{ 'accordion-heading'=>true }
+                  = record[:invoice].total_due.format
+                  = " - "
+                  = record[:description]
+                  = " - Paid" if record[:invoice].paid?
+
+                %h5 Invoice PDF
+                %p
+                  %a.btn.btn-info{ href: invoice_path(record[:invoice]), target: '_blank' }
+                    %i.fa.fa-file
+                    View Invoice
+                  %em.muted
+                    Click this button to see/download a detailed PDF version of this final invoice
+
+                - unless record[:invoice].paid?
+                  %hr
+                  %h5 Edit Credit Card information
+                  = f.fields_for "credit_card[#{index}]", record[:invoicable].credit_card || MnoEnteprise::CreditCard.new do |cc|
+                    .hidden
+                      = cc.hidden_field :owner_id, value: record[:invoicable].id
+                      = cc.hidden_field :owner_type, value: record[:invoicable].class
+                    .input-group
+                      .input-group-addon Title
+                      =# cc.select :title, CreditCard::VALID_TITLES, {}, :class => 'form-control'
+                    %br
+                    .input-group
+                      .input-group-addon First Name
+                      = cc.text_field :first_name, class: 'form-control'
+                    %br
+                    .input-group
+                      .input-group-addon Last Name
+                      = cc.text_field :last_name, class: 'form-control'
+                    %br
+                    .input-group
+                      .input-group-addon Country
+                      =# cc.select :country, Country::Data.map { |k,v| [v['name'],k] }, {}, {:class => 'form-control'}
+                    %br
+                    .input-group
+                      .input-group-addon Number
+                      = cc.text_field :number, value: cc.object.masked_number, class: 'form-control'
+                    %br
+                    .input-group
+                      .input-group-addon Month
+                      = cc.select :month, (1..12), {}, class: 'form-control'
+                    %br
+                    .input-group
+                      .input-group-addon Year
+                      = cc.select :year, ((Time.now.year)..(Time.now.year + 20)), {}, class: 'form-control'
+                    %br
+                    .input-group
+                      .input-group-addon CVV
+                      = cc.text_field :verification_value, value: 'cvv', class: 'form-control'
+                    %br
+                    %hr
+                    %h6 Billing Address
+                    .input-group
+                      .input-group-addon Address
+                      = cc.text_field :billing_address, class: 'form-control'
+                    %br
+                    .input-group
+                      .input-group-addon City
+                      = cc.text_field :billing_city, class: 'form-control'
+                    %br
+                    .input-group
+                      .input-group-addon Postcode
+                      = cc.text_field :billing_postcode, class: 'form-control'
+                    %br
+                    .input-group
+                      .input-group-addon Country
+                      =# cc.select :billing_country, Country::Data.map { |k,v| [v['name'],k] }, {}, :class => 'form-control'
+                    %br
+
+          .align-center
+            %button.btn.btn-success{type: "submit"}
+              %i.fa.fa-shopping-cart.fa-inverse
+              &nbsp; Checkout
+
+
+  .row
+    .col-md-8.col-md-offset-2
+      %hr
+      %p.muted
+        / = image_tag('question_pic.png')
+        %i.fa.fa-question-circle.fa-lg
+        Need help during the termination process? Just send us an email at:
+        = mail_to support_email

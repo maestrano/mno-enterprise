@@ -1,7 +1,5 @@
 module MnoEnterprise
   class DeletionRequestsController < ApplicationController
-    def show
-    end
-
+    include MnoEnterprise::Concerns::Controllers::DeletionRequestsController
   end
 end

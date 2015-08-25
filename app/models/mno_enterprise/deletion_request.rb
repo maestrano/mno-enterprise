@@ -25,5 +25,11 @@ module MnoEnterprise
     def to_param
       self.token
     end
+
+    # TODO: specs
+    # Freeze user acocunt and update the deletion request
+    def freeze_account!
+      self.put(operation: 'freeze')
+    end
   end
 end
