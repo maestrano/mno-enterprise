@@ -24,6 +24,7 @@ module MnoEnterprise
         'logo' => app.logo.to_s,
         'key_benefits' => app.key_benefits,
         'categories' => ["CRM"],
+        'tags' => ['Foo', 'Bar'],
         'is_responsive' => false && app.responsive?,
         'is_star_ready' => false && app.star_ready?,
         'is_connec_ready' => false && app.connec_ready?,

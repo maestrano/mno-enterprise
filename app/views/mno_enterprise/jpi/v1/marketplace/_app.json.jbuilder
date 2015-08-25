@@ -4,6 +4,7 @@ json.name app.name
 json.stack app.stack
 json.key_benefits app.key_benefits
 json.categories app.categories
+json.tags app.tags
 
 json.is_responsive app.responsive?
 json.is_star_ready app.star_ready?

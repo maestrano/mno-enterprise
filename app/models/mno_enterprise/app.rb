@@ -21,6 +21,7 @@
 #  popup_description        :text
 #  stack                    :string(255)
 #  terms_url                :string(255)
+#  tags                     :text
 #
 
 module MnoEnterprise
@@ -29,7 +30,7 @@ module MnoEnterprise
 
     attributes :id,:nid, :name, :description, :created_at, :updated_at, :logo, :website, :slug,
     :categories, :key_benefits, :key_features, :testimonials, :worldwide_usage, :tiny_description,
-    :popup_description, :stack, :terms_url, :pictures
+    :popup_description, :stack, :terms_url, :pictures, :tags
 
     # Return the list of available categories
     def self.categories(list = nil)
