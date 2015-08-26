@@ -38,13 +38,13 @@ module MnoEnterprise
             'current_user_role' => o.role
           }
         end
-        
-        # if res.deletion_request.present?
-        #   hash['deletion_request'] = {
-        #     'id' => res.deletion_request.id,
-        #     'token' => res.deletion_request.token
-        #   }
-        # end
+
+        if res.deletion_request.present?
+          hash['deletion_request'] = {
+            'id' => res.deletion_request.id,
+            'token' => res.deletion_request.token
+          }
+        end
       end
       
       hash

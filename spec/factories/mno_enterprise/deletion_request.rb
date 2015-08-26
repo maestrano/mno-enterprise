@@ -8,7 +8,8 @@ FactoryGirl.define do
   factory :deletion_request, class: MnoEnterprise::DeletionRequest do
     sequence(:id)
     sequence(:token) { |n| "1dfg567fda44f87ds89F7DS8#{n}" }
-    
+    status 'pending'
+
     # Properly build the resource with Her
     initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
   end

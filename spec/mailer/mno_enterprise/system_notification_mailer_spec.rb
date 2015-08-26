@@ -3,11 +3,12 @@ require 'rails_helper'
 module MnoEnterprise
   RSpec.describe SystemNotificationMailer do
     subject { SystemNotificationMailer }
+    before { MnoEnterprise::Engine.routes.default_url_options = {host: 'http://localhost:3000'} }
     let(:routes) { MnoEnterprise::Engine.routes.url_helpers }
     let(:user) { build(:user) }
     let(:token) { "1sd5f323S1D5AS" }
-    let(:host) { 'http://localhost:3000' }
-    
+    let(:deletion_request) { build(:deletion_request) }
+
     # Commonly used mandrill variables
     def user_vars(user)
       { first_name: user.name, last_name: user.surname, full_name: "#{user.name} #{user.surname}".strip }
@@ -36,7 +37,7 @@ module MnoEnterprise
           expect(MandrillClient).to receive(:deliver).with('confirmation-instructions',
             SystemNotificationMailer::DEFAULT_SENDER,
             { name: "#{user.name} #{user.surname}".strip, email: user.email },
-            user_vars(user).merge(confirmation_link: routes.user_confirmation_url(host: host, confirmation_token: token))
+            user_vars(user).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: token))
           )
         
           subject.confirmation_instructions(user,token).deliver_now
@@ -51,7 +52,7 @@ module MnoEnterprise
           expect(MandrillClient).to receive(:deliver).with('reconfirmation-instructions',
             SystemNotificationMailer::DEFAULT_SENDER,
             { name: "#{user.name} #{user.surname}".strip, email: user.email },
-            user_vars(user).merge(confirmation_link: routes.user_confirmation_url(host: host, confirmation_token: token))
+            user_vars(user).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: token))
           )
         
           subject.confirmation_instructions(user,token).deliver_now
@@ -65,7 +66,7 @@ module MnoEnterprise
         expect(MandrillClient).to receive(:deliver).with('reset-password-instructions',
           SystemNotificationMailer::DEFAULT_SENDER,
           { name: "#{user.name} #{user.surname}".strip, email: user.email },
-          user_vars(user).merge(reset_password_link: routes.edit_user_password_url(host: host, reset_password_token: token))
+          user_vars(user).merge(reset_password_link: routes.edit_user_password_url(reset_password_token: token))
         )
         
         subject.reset_password_instructions(user,token).deliver_now
@@ -77,7 +78,7 @@ module MnoEnterprise
         expect(MandrillClient).to receive(:deliver).with('unlock-instructions',
           SystemNotificationMailer::DEFAULT_SENDER,
           { name: "#{user.name} #{user.surname}".strip, email: user.email },
-          user_vars(user).merge(unlock_link: routes.user_unlock_url(host: host, unlock_token: token))
+          user_vars(user).merge(unlock_link: routes.user_unlock_url(unlock_token: token))
         )
         
         subject.unlock_instructions(user,token).deliver_now
@@ -93,7 +94,7 @@ module MnoEnterprise
           expect(MandrillClient).to receive(:deliver).with('organization-invite-existing-user',
             SystemNotificationMailer::DEFAULT_SENDER,
             { name: "#{invitee.name} #{invitee.surname}".strip, email: invitee.email },
-            invite_vars(org_invite).merge(confirmation_link: routes.org_invite_url(host: host, id: org_invite.id, token: org_invite.token))
+            invite_vars(org_invite).merge(confirmation_link: routes.org_invite_url(id: org_invite.id, token: org_invite.token))
           )
         
           subject.organization_invite(org_invite).deliver_now
@@ -107,13 +108,25 @@ module MnoEnterprise
           expect(MandrillClient).to receive(:deliver).with('organization-invite-new-user',
             SystemNotificationMailer::DEFAULT_SENDER,
             { email: invitee.email },
-            invite_vars(org_invite).merge(confirmation_link: routes.user_confirmation_url(host: host, confirmation_token: invitee.confirmation_token))
+            invite_vars(org_invite).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: invitee.confirmation_token))
           )
         
           subject.organization_invite(org_invite).deliver_now
         end
       end
-      
+
+    end
+
+    describe 'deletion_request_instructions' do
+      it 'sends the correct email' do
+        expect(MandrillClient).to receive(:deliver).with('deletion-request-instructions',
+          SystemNotificationMailer::DEFAULT_SENDER,
+          { name: "#{user.name} #{user.surname}".strip, email: user.email },
+          user_vars(user).merge(terminate_account_link: routes.deletion_request_url(deletion_request))
+        )
+
+        subject.deletion_request_instructions(user,deletion_request).deliver_now
+      end
     end
   end
 end
