@@ -110,7 +110,7 @@ module.controller('DashboardAccountCtrl',[
         DashboardUser.deletionRequest().then(
           (success) ->
             $scope.user.loading = false
-            $scope.user.currentDeletionRequestToken = success.data.token
+            $scope.user.currentDeletionRequestToken = success.data.attributes.token
           ,(error) ->
             $scope.user.loading = false
             $scope.errors.deletionReq = Utilities.processRailsError(error)

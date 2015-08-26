@@ -33,6 +33,37 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::DeletionRequestsController
     else
       render json: @deletion_request.errors, status: :unprocessable_entity
     end
+  end
 
+  # PUT /deletion_request/1/resend.json
+  def resend
+    @deletion_request = current_user.deletion_request
+
+    # Check that the user has a deletion_request in progress
+    # and that the token provided (params[:id]) matches the
+    # deletion_request token
+    if @deletion_request.present? && @deletion_request.token == params[:id]
+      MnoEnterprise::SystemNotificationMailer.deletion_request_instructions(current_user, @deletion_request).deliver_now
+      render json: @deletion_request
+    else
+      head :bad_request
+    end
+  end
+
+  # DELETE /deletion_request/1.json
+  def destroy
+    @deletion_request = current_user.deletion_request
+
+    # Check that the user has a deletion_request in progress
+    # and that the token provided (params[:id]) matches the
+    # deletion_request token
+    if @deletion_request.present? && @deletion_request.token == params[:id]
+      # Work around
+      MnoEnterprise::DeletionRequest.find(@deletion_request.id).destroy
+
+      head :no_content
+    else
+      head :bad_request
+    end
   end
 end

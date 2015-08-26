@@ -12,9 +12,13 @@ module MnoEnterprise
       expect(post('/jpi/v1/deletion_requests')).to route_to('mno_enterprise/jpi/v1/deletion_requests#create')
     end
 
-    it 'routes to #resend'
+    it 'routes to #resend' do
+      expect(put('/jpi/v1/deletion_requests/1/resend')).to route_to('mno_enterprise/jpi/v1/deletion_requests#resend', id: '1')
+    end
 
-    it 'routes to #destroy'
+    it 'routes to #destroy' do
+      expect(delete('/jpi/v1/deletion_requests/1')).to route_to('mno_enterprise/jpi/v1/deletion_requests#destroy', id: '1')
+    end
   end
 end
 
