@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Endpoint: 
+# Endpoint:
 #  - /v1/organizations
 #  - /v1/users/:user_id/organizations
 #
@@ -25,37 +25,7 @@
 #
 
 module MnoEnterprise
-  class Organization < BaseResource    
-    attributes :uid, :name, :account_frozen, :free_trial_end_at, :soa_enabled, :mails, :logo,
-      :latitude, :longitude, :geo_country_code, :geo_state_code, :geo_city, :geo_tz, :geo_currency,
-      :meta_data
-    
-    #================================
-    # Associations
-    #================================
-    has_many :users, class_name: 'MnoEnterprise::User'
-    has_many :org_invites, class_name: 'MnoEnterprise::OrgInvite'
-    has_many :app_instances, class_name: 'MnoEnterprise::AppInstance'
-    has_many :invoices, class_name: 'MnoEnterprise::Invoice'
-    has_one :credit_card, class_name: 'MnoEnterprise::CreditCard'
-    has_many :teams, class_name: 'MnoEnterprise::Team'
-    
-    # Return the list of users + active invites
-    # TODO: specs
-    def members
-      [self.users,self.org_invites.active].flatten
-    end
-    
-    # Add a user to the organization with the provided role
-    # TODO: specs
-    def add_user(user,role = 'Member')
-      self.users.create(id: user.id, role: role)
-    end
-    
-    # Remove a user from the organization
-    # TODO: specs
-    def remove_user(user)
-      self.users.destroy(id: user.id)
-    end
+  class Organization < BaseResource
+    include MnoEnterprise::Concerns::Models::Organization
   end
 end
