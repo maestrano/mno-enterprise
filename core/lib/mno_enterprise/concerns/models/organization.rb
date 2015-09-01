@@ -9,7 +9,7 @@ module MnoEnterprise::Concerns::Models::Organization
   included do
     attributes :uid, :name, :account_frozen, :free_trial_end_at, :soa_enabled, :mails, :logo,
       :latitude, :longitude, :geo_country_code, :geo_state_code, :geo_city, :geo_tz, :geo_currency,
-      :meta_data
+      :meta_data, :industry, :size
 
     #================================
     # Associations

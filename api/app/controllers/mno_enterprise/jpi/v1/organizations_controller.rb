@@ -29,19 +29,19 @@ module MnoEnterprise
         render json: organization.errors, status: :bad_request
       end
     end
-    
+
     # POST /mnoe/jpi/v1/organizations
     def create
       # Filter
-      whitelist = [:name,:soa_enabled]
-      attributes = (params[:organization] || {}).select { |k,v| whitelist.include?(k.to_sym) }
-      
+      whitelist = %w{name soa_enabled industry size}
+      attributes = (params[:organization] || {}).slice(*whitelist)
+
       # Create new organization
       @organization = MnoEnterprise::Organization.create(attributes)
-      
+
       # Add the current user as Super Admin
       @organization.add_user(current_user,'Super Admin')
-      
+
       render 'show'
     end
 
@@ -144,11 +144,11 @@ module MnoEnterprise
 
       render 'members'
     end
-    
+
     protected
       def organization
         @organization ||= current_user.organizations.to_a.find { |o| o.id.to_s == params[:id].to_s }
       end
-      
+
   end
 end

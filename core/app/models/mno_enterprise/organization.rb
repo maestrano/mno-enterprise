@@ -22,6 +22,8 @@
 #  geo_tz                   :string(255)
 #  geo_currency             :string(255)
 #  meta_data                :text
+#  industry                 :string(255)
+#  size                     :string(255)
 #
 
 module MnoEnterprise
