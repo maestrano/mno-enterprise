@@ -1,6 +1,7 @@
 require 'active_support/concern'
 require 'active_support/core_ext'
 
+# TODO: specs
 module MnoEnterprise::DatabaseExtendable
   extend ActiveSupport::Concern
 
@@ -18,7 +19,7 @@ module MnoEnterprise::DatabaseExtendable
 
   module InstanceMethods
     def extension
-      @extension ||= klass.where(foreign_key => self.uid).first_or_create
+      @extension ||= klass.where(foreign_key => self.uid).first_or_initialize
     end
 
     def klass
@@ -30,8 +31,11 @@ module MnoEnterprise::DatabaseExtendable
     end
 
     protected
-
     def save_extensions
+      # Set extension foreign key
+      if extension.send(foreign_key).blank?
+        extension.send("#{foreign_key}=", self.uid)
+      end
       extension.save if extension.changed?
     end
   end
