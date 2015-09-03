@@ -3,7 +3,7 @@ require 'rails_helper'
 # TODO: spec AppInstance response
 module MnoEnterprise
   describe Jpi::V1::AppInstancesController, type: :controller do
-    include JpiV1TestHelper
+    include MnoEnterprise::TestingSupport::JpiV1TestHelper
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
