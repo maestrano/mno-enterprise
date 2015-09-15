@@ -11,5 +11,25 @@
 
 module MnoEnterprise
   class DeletionRequest < BaseResource
+    attributes :id, :token, :status, :user_id
+
+    #==============================================================
+    # Associations
+    #==============================================================
+    belongs_to :user, class_name: 'MnoEnterprise::User'
+
+    #============================================
+    # Instance methods
+    #============================================
+    # We want to use the token instead of the id
+    def to_param
+      self.token
+    end
+
+    # TODO: specs
+    # Freeze user acocunt and update the deletion request
+    def freeze_account!
+      self.put(operation: 'freeze')
+    end
   end
 end

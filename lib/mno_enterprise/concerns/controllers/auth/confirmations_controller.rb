@@ -114,7 +114,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
     # Redirect straight away if no changes
     if @resource.email == params[:user][:email] 
       @resource.resend_confirmation_instructions
-      redirect_to :user_confirmation_lounge
+      redirect_to mno_enterprise.user_confirmation_lounge_path, notice: "The confirmation email has been resent."
       return
     end
   

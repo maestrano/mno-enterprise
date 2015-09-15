@@ -13,13 +13,13 @@ angular.module('maestrano.services.dashboard.user', []).factory('DashboardUser',
     } })
 
   service.deletionRequest = ->
-    return $http.post("/deletion_requests")
+    return $http.post("/mnoe/jpi/v1/deletion_requests")
 
   service.cancelDeletionRequest = (token) ->
-    return $http.delete("/deletion_requests/#{token}")
+    return $http.delete("/mnoe/jpi/v1/deletion_requests/#{token}")
 
   service.resendDeletionRequest = (token) ->
-    return $http.put("/deletion_requests/#{token}/resend")
+    return $http.put("/mnoe/jpi/v1/deletion_requests/#{token}/resend")
 
 
   return service
