@@ -116,6 +116,12 @@ module MnoEnterprise
   mattr_accessor :mno_api_host
   @@mno_api_host = "https://api-enterprise.maestrano.com"
 
+  # The Maestrano Enterprise API Private Host
+  # Used within VPCs for making calls to mno_api using
+  # private DNS
+  mattr_accessor :mno_api_private_host
+  @@mno_api_private_host = nil
+
   # The Maestrano Enterprise API base path
   mattr_accessor :mno_api_root_path
   @@mno_api_root_path = "/v1"
@@ -247,7 +253,11 @@ module MnoEnterprise
   private
     # Return the options to use in the setup of the API
     def self.api_options
-      { url: "#{URI.join(@@mno_api_host,@@mno_api_root_path).to_s}", send_only_modified_attributes: true }
+      api_host = @@mno_api_private_host || @@mno_api_host
+      {
+        url: "#{URI.join(api_host,@@mno_api_root_path).to_s}",
+        send_only_modified_attributes: true
+      }
     end
 
     # Load the provided styleguide hash into nested structure or load a default one
