@@ -9,6 +9,9 @@ MnoEnterprise::Engine.routes.draw do
   get '/billing_details_required', to: 'pages#billing_details_required'
   get '/app_logout', to: 'pages#app_logout'
 
+  # App Provisioning
+  resources :provision, only: [:new,:create]
+
   #============================================================
   # Devise/User Configuration
   #============================================================
