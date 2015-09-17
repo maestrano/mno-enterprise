@@ -60,6 +60,8 @@ module MnoEnterprise::Concerns::Models::AppInstance
         self.stack == stackname.to_s
       end
     end
+
+    scope :active, -> { where('status.in' => ACTIVE_STATUSES) }
   end
 
   #==================================================================
