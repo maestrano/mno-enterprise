@@ -2,6 +2,13 @@ MnoEnterprise::Engine.routes.draw do
   # Organization Invites
   resources :org_invites, only: [:show]
 
+  # Generic routes
+  get '/launch/:id', to: 'pages#launch', constraints: { id: /[\w\-\.:]+/ }
+  get '/loading/:id', to: 'pages#loading', constraints: { id: /[\w\-\.]+/ }
+  get '/app_access_unauthorized', to: 'pages#app_access_unauthorized'
+  get '/billing_details_required', to: 'pages#billing_details_required'
+  get '/app_logout', to: 'pages#app_logout'
+
   #============================================================
   # Devise/User Configuration
   #============================================================

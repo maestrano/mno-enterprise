@@ -2,7 +2,7 @@ require 'less-rails'
 require 'jquery-rails'
 require 'haml'
 
-require 'mno_enterprise/core'
+require 'mno_enterprise/api'
 
 module MaestranoEnterprise
   module Frontend

@@ -23,8 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'mno-enterprise-api', version
 
   s.add_dependency 'less-rails'
-  s.add_dependency "therubyracer"
-  s.add_dependency 'haml', '~> 4.0.6'
+  s.add_dependency 'therubyracer'
   s.add_dependency 'haml-rails', '~> 0.9.0'
   s.add_dependency 'coffee-rails', '~> 4.1.0'
   s.add_dependency 'jquery-rails', '~> 4.0.3'

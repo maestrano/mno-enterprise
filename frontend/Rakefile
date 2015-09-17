@@ -8,6 +8,6 @@ task default: :spec
 
 desc "Generates a dummy app for testing"
 task :test_app do
-  ENV['LIB_NAME'] = 'mno_enterprise/api'
+  ENV['LIB_NAME'] = 'mno_enterprise/frontend'
   Rake::Task['mno_enterprise:testing:create_dummy_app'].invoke
 end
