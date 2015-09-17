@@ -21,7 +21,10 @@ Gem::Specification.new do |s|
   # TODO: add dependencies
   s.add_dependency 'mno-enterprise-core', version
 
+  # Views
+  # TODO: get rid of the haml dependency? and replace with html template
   s.add_dependency 'jbuilder', '~> 2.2.12'
+  s.add_dependency 'haml', '~> 4.0.6'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails'
