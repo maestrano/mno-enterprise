@@ -180,6 +180,7 @@ module MnoEnterprise
   mattr_accessor :marketplace_listing
   @@marketplace_listing = [
     "allocpsa",
+    "boxsuite",
     "bugzilla",
     "collabtive",
     "dolibarr",
@@ -195,6 +196,7 @@ module MnoEnterprise
     "joomla",
     "limesurvey",
     "mantisbt",
+    "magento",
     "megaventory",
     "moodle",
     "myob",
@@ -210,6 +212,7 @@ module MnoEnterprise
     "processmaker",
     "projectpier",
     "quickbooks",
+    "ranqx",
     "receipt-bank",
     "signmee",
     "simpleinvoices",
