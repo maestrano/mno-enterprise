@@ -27,10 +27,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   # POST /mnoe/jpi/v1/impac/dashboards
   #  -> POST /api/mnoe/v1/users/282/dashboards
   def create
-    whitelist = ['name','organization_ids']
-    attrs = (params[:dashboard] || {}).select { |k,v| whitelist.include?(k.to_s) }
-
-    if @dashboard = dashboards.create(attrs)
+    if @dashboard = dashboards.create(dashboard_create_params)
       # authorize! :create, @dashboard
       render 'show'
     else
@@ -40,10 +37,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
 
   # PUT /mnoe/jpi/v1/impac/dashboards/1
   def update
-    whitelist = ['name','widgets_order','organization_ids']
-    attrs = (params[:dashboard] || {}).select { |k,v| whitelist.include?(k.to_s) }
-
-    if dashboard.update(attrs)
+    if dashboard.update(dashboard_update_params)
       # dashboard.assign_attributes(attrs)
       # authorize! :update, dashboard
       render 'show'
@@ -71,4 +65,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   def dashboards
     @dashboards ||= current_user.dashboards
   end
+
+  def dashboard_params
+    params.require(:dashboard).permit(:name, :widgets_order, {organization_ids: []})
+  end
+  alias :dashboard_update_params  :dashboard_params
+  alias :dashboard_create_params  :dashboard_params
 end
