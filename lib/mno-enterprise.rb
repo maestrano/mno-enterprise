@@ -195,6 +195,7 @@ module MnoEnterprise
     "joomla",
     "limesurvey",
     "mantisbt",
+    "magento",
     "megaventory",
     "moodle",
     "myob",
