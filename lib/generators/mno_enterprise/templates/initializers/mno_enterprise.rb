@@ -45,6 +45,9 @@ MnoEnterprise.configure do |config|
   # Used on Devise Registration pages
   # config.router.terms_url = 'http://mywebsite.com/terms'
 
+  # After sign out URL. Default to the root_path
+  # config.router.after_sign_out_url = 'http://mywebsite.com/'
+
   #===============================================
   # Third Party Plugins
   #===============================================

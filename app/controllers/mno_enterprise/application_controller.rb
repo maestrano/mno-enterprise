@@ -85,5 +85,10 @@ module MnoEnterprise
         previous_url = session.delete(:previous_url)
         return (return_to_url(resource) || previous_url || mno_enterprise.myspace_url)
       end
+
+      # Overwriting the sign_out redirect path method
+      def after_sign_out_path_for(resource_or_scope)
+        MnoEnterprise.router.after_sign_out_url || super
+      end
   end
 end

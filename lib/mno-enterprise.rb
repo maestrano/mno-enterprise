@@ -39,6 +39,9 @@ module MnoEnterprise
   class Router
     attr_accessor :terms_url
 
+    # Customise after_sign_out url
+    attr_accessor :after_sign_out_url
+
     def launch_url(id,opts = {})
       host_url("/launch/#{id}",opts)
     end
