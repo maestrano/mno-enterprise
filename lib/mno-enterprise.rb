@@ -224,6 +224,7 @@ module MnoEnterprise
     "sugarcrm",
     "timetrex",
     "vtiger6",
+    "xero",
     "wordpress"
   ]
 
