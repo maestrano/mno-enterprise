@@ -2,19 +2,7 @@ module MnoEnterprise
   class Jpi::V1::Impac::KpisController < ApplicationController
     respond_to :json
     
-    def show
-      @kpi = MnoEnterprise::Impac::Kpi.find_by_id(params[:id])
-      if @kpi
-        authorize! :read, @kpi
-      else
-        render json: { errors: "Kpi id #{params[:id]} doesn't exist" }, status: :not_found
-      end
-    end
-    
-    # TODO: Once we change the analytics namespace to impac, should change to:
-    # POST /js_api/v1/impac/dashboards/1/kpis
-    # In the meantime:
-    # POST /js_api/v1/impac/kpis
+    # POST /jpi/v1/impac/dashboards/:dashboard_id/kpis
     def create
       whitelist = %w(dashboard_id name endpoint source element_watched target metadata extra_param)
       attrs = (params[:kpi] || {}).select { |k,v| whitelist.include?(k.to_s) } 
@@ -33,7 +21,7 @@ module MnoEnterprise
       end
     end
     
-    # PUT /js_api/v1/impac/kpis/1
+    # PUT /jpi/v1/impac/kpis/:id
     def update
       whitelist = %w(name element_watched target extra_param)
       attrs = (params[:kpi] || {}).select { |k,v| whitelist.include?(k.to_s) }.symbolize_keys 
@@ -59,7 +47,7 @@ module MnoEnterprise
       end
     end
     
-    # DELETE /js_api/v1/impac/kpis/1
+    # DELETE /jpi/v1/impac/kpis/:id
     def destroy
       @kpi = MnoEnterprise::Impac::Kpi.find_by_id(params[:id])
       authorize! :destroy, @kpi
