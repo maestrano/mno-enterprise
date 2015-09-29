@@ -12,8 +12,7 @@ module.controller('DashboardOrganizationInvoicesCtrl',[
     $scope.assetPath = AssetPath
     $scope.isLoading = true
     $scope.invoices = []
-    $scope.defaultCurrency = Miscellaneous.defaultCurrency
-    
+
     #====================================
     # Scope Management
     #====================================
@@ -21,7 +20,7 @@ module.controller('DashboardOrganizationInvoicesCtrl',[
     $scope.initialize = (invoices) ->
       angular.copy(invoices,$scope.invoices)
       $scope.isLoading = false
-    
+
     #====================================
     # Post-Initialization
     #====================================

@@ -1,11 +1,3 @@
-<div class="row">
-  <p>
-    <small>
-      <em>All amounts are displayed in {{ defaultCurrency }}</em>
-    </small>
-  </p>
-</div>
-
 <div class="table-cell">
   <div class="row th-row hidden-xs">
     <div class="cell col-sm-3">Period</div>
@@ -19,12 +11,12 @@
       <span class="cell-label visible-xs-inline">Period: <br/></span>
       {{ invoice.period }}
     </div>
-    
+
     <div class="cell col-sm-3">
-      <span class="cell-label visible-xs-inline">Amount: </span>{{ invoice.amount.value | currency }}</div>
-    
+      <span class="cell-label visible-xs-inline">Amount: </span>{{ invoice.amount.value | currency: invoice.amount.options.symbol }} ({{ invoice.amount.options.iso_code }})</div>
+
     <div class="cell col-sm-3"><span class="cell-label visible-xs-inline">Paid: </span>{{ {true: 'Yes', false:'No'}[invoice.paid] }}</div>
-    
+
     <div class="cell col-sm-3 text-center">
       <a ng-href="{{invoice.link}}" target="_blank" class="btn btn-sm">
         <i class="fa fa-cloud-download"></i>

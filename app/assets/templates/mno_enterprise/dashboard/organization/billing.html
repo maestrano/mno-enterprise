@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <p>
       Your billing for the current invoicing period is:
-      <b>{{ billing.current.value | currency: defaultCurrency + "$" }}</b>
+      <b>{{ billing.current.value | currency: billing.current.options.symbol }} ({{ billing.current.options.iso_code }})</b>
     </p>
   </div>
 </div>
@@ -10,7 +10,7 @@
 <div class="row" ng-show="isCreditShown()">
   <div class="col-md-12">
     <p>
-      You have <b>{{ billing.credit.value | currency: defaultCurrency + "$"}}</b> credit on your account to be used for the next payment. Note that this credit account will also be linked to any organization you create.
+      You have <b>{{ billing.credit.value | currency: billing.credit.options.symbol }} ({{ billing.credit.options.iso_code }})</b> credit on your account to be used for the next payment. Note that this credit account will also be linked to any organization you create.
     </p>
   </div>
 </div>
@@ -35,4 +35,3 @@
     </p>
   </div>
 </div>
-      
