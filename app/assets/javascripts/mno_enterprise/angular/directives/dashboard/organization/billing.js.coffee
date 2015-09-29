@@ -12,8 +12,7 @@ module.controller('DashboardOrganizationBillingCtrl',[
     $scope.assetPath = AssetPath
     $scope.isLoading = true
     $scope.billing = {}
-    $scope.defaultCurrency = Miscellaneous.defaultCurrency
-    
+
     #====================================
     # Scope Management
     #====================================
@@ -21,16 +20,16 @@ module.controller('DashboardOrganizationBillingCtrl',[
     $scope.initialize = (billing) ->
       angular.copy(billing,$scope.billing)
       $scope.isLoading = false
-    
+
     $scope.isCreditShown = () ->
       b = $scope.billing
       b &&
       b.credit &&
       b.credit.value > 0
-    
+
     #====================================
     # Post-Initialization
-    #==================================== 
+    #====================================
     $scope.$watch DhbOrganizationSvc.getId, (val) ->
       $scope.isLoading = true
       if val?
