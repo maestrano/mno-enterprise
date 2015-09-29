@@ -54,7 +54,7 @@ module MnoEnterprise
       @data[:billing_report] = @invoice.billing_summary.map do |item|
         item_label = item[:label]
         price_label = item[:price_tag]
-        
+
         (item[:lines] || []).each do |item_line|
           item_label += "<font size='4'>\n\n</font><font size='8'><color rgb='999999'><i>#{Prawn::Text::NBSP * 3}#{item_line[:label]}</i></color></font>"
           price_label += "<font size='4'>\n\n</font><font size='8'><color rgb='999999'>#{item_line[:price_tag]}</color></font>"
@@ -109,8 +109,8 @@ module MnoEnterprise
     def image_path(name)
       path = "/app/assets/images/#{name}"
       engine_path = "#{MnoEnterprise::Engine.root}#{path}"
-      app_path = "#{Rails.root}/app/assets/images/#{path}"
-      
+      app_path = "#{Rails.root}#{path}"
+
       File.exists?(app_path) ? app_path : engine_path
     end
 
