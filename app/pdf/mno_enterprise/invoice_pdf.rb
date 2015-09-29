@@ -38,6 +38,8 @@ module MnoEnterprise
 
       # Financial values
       @data[:invoice_price] = @invoice.price
+      @data[:invoice_currency] = @invoice.price.currency_as_string
+      @data[:invoice_currency_name] = @invoice.price.currency.name
       @data[:invoice_credit_paid] = @invoice.credit_paid
       @data[:invoice_total_due] = @invoice.total_due
       @data[:invoice_total_payable] = @invoice.total_payable
@@ -138,7 +140,7 @@ module MnoEnterprise
           @pdf.font_size(8) do
             @pdf.text "<color rgb='999999'>Maestrano is a service of Maestrano Pty Ltd (ABN: 80 152 564 424),</color>", inline_format: true
             @pdf.text "<color rgb='999999'>Suite 102, 410 Elizabeth Street, Surry Hills 2010, Sydney, Australia.</color>", inline_format: true
-            @pdf.text "<color rgb='999999'>All charges are in Australian Dollars.</color>", inline_format: true
+            @pdf.text "<color rgb='999999'>All charges are in #{@data[:invoice_currency_name]} (#{@data[:invoice_currency]}).</color>", inline_format: true
           end
         end
       end
@@ -234,6 +236,7 @@ module MnoEnterprise
       @pdf.move_down 10
       @pdf.indent(5) do
         @pdf.font_size(8) do
+          @pdf.text "<color rgb='999999'> Charges are all displayed in #{@data[:invoice_currency_name]} (#{@data[:invoice_currency]})</color>", inline_format: true
           if @data[:invoice_fully_paid]
             @pdf.text "<color rgb='999999'>  No credit card payments required for this invoice</color>", inline_format: true
           else
