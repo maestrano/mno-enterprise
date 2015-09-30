@@ -4,62 +4,34 @@ module MnoEnterprise
     
     # POST /jpi/v1/impac/dashboards/:dashboard_id/kpis
     def create
-      whitelist = %w(dashboard_id name endpoint source element_watched target metadata extra_param)
-      attrs = (params[:kpi] || {}).select { |k,v| whitelist.include?(k.to_s) } 
-
-      if dashboard
-        @kpi = dashboard.kpis.build(attrs)
-        authorize! :create, @kpi
-        
-        if @kpi.save
+      if kpis
+        whitelist = %w(dashboard_id name endpoint source element_watched target metadata extra_param)
+        if @kpi = kpis.create(format_attrs(whitelist))
           render 'show'
         else
           render json: @kpi.errors, status: :bad_request
         end
       else
-        render json: { errors: "Dashboard id #{params[:dashboard_id]} doesn't exist" }, status: :not_found
+        render json: { errors: "Dashboard id #{params[:id]} doesn't exist" }, status: :not_found
       end
     end
     
     # PUT /jpi/v1/impac/kpis/:id
     def update
       whitelist = %w(name element_watched target extra_param)
-      attrs = (params[:kpi] || {}).select { |k,v| whitelist.include?(k.to_s) }.symbolize_keys 
-      
-      # Find kpi and assign
-      @kpi = Impac::Kpi.find_by_id(params[:id])
-      if @kpi
-        authorize! :update, @kpi
-
-        # metadata will me merged instead of replaced
-        p = HashWithIndifferentAccess.new(params[:kpi])
-        if p[:metadata] && p[:metadata].is_a?(Hash)
-          attrs[:metadata] = @kpi.metadata.merge(p[:metadata])
-        end
-
-        if @kpi.update_attributes(attrs)
-          render 'show'
-        else
-          render json: @kpi.errors, status: :bad_request
-        end
+      if kpi.update(format_attrs(whitelist))
+        render 'show'
       else
-        render json: { errors: "Kpi id #{params[:id]} doesn't exist" }, status: :not_found
+        render json: @kpi.errors, status: :bad_request
       end
     end
     
     # DELETE /jpi/v1/impac/kpis/:id
     def destroy
-      @kpi = MnoEnterprise::Impac::Kpi.find_by_id(params[:id])
-      authorize! :destroy, @kpi
-      
-      if @kpi
-        if @kpi.destroy
-          head status: :ok
-        else
-          render json: { errors: 'Unable to delete this widget' }, status: :bad_request
-        end
+      if kpi.destroy
+        head status: :ok
       else
-        render json: {errors: "Kpi id #{params[:id]} doesn't exist" }, status: :not_found
+        render json: 'Unable to destroy kpi', status: :bad_request
       end
     end
     
@@ -69,9 +41,19 @@ module MnoEnterprise
     #=================================================
     private
 
-      def dashboard
-        return false unless params[:dashboard_id]
-        @dashboard ||= MnoEnterprise::Impac::Dashboard.find(params[:dashboard_id])
+      def kpi
+        @kpi ||= MnoEnterprise::Impac::Kpi.find(params[:id])
+      end
+
+      def kpis
+        @kpis ||= MnoEnterprise::Impac::Dashboard.find(params[:dashboard_id]).kpis
+      end
+
+      def format_attrs(whitelist)
+        attrs = (params[:kpi] || {}).select { |k,v| whitelist.include?(k.to_s) }
+        attrs['settings'] = kpi ? kpi.settings || {} : {}
+        attrs['settings'].merge!(attrs['metadata']) if attrs['metadata']
+        attrs.except!('metadata')
       end
 
   end
