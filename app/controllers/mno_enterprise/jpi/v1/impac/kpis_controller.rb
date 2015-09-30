@@ -71,7 +71,7 @@ module MnoEnterprise
 
       def dashboard
         return false unless params[:dashboard_id]
-        @dashboard ||= MnoEnterprise::Impac::Dashboard.find_by_id(params[:dashboard_id])
+        @dashboard ||= MnoEnterprise::Impac::Dashboard.find(params[:dashboard_id])
       end
 
   end
