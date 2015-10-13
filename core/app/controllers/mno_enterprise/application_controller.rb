@@ -91,5 +91,17 @@ module MnoEnterprise
         url = mno_enterprise.respond_to?(:myspace_url) ? mno_enterprise.myspace_url : main_app.root_url
         return (return_to_url(resource) || previous_url || url)
       end
+
+      # Some controllers needs to redirect to 'MySpace' which breaks if you dont use mnoe-frontend
+      # Rather than relying on the MainApp to define myspace_path we check it here
+      # The MainApp can redefine this two methods to fit its structure
+      # Some of these are extracted to individuals methods like after_provision_path.
+      def mnoe_home_path
+        mno_enterprise.respond_to?(:myspace_path) ? mno_enterprise.myspace_path : main_app.root_path
+      end
+
+      def mnoe_home_url
+        mno_enterprise.respond_to?(:myspace_url) ? mno_enterprise.myspace_url : main_app.root_url
+      end
   end
 end

@@ -1,11 +1,14 @@
 require 'rails_helper'
 
-# Test here in addition to mnoe-api to see that it's working properly with myspace_url
+def main_app
+  Rails.application.class.routes.url_helpers
+end
+
 module MnoEnterprise
   describe Webhook::OAuthController, type: :controller do
     render_views
     routes { MnoEnterprise::Engine.routes }
-
+    
     # Stub controller ability
     let!(:ability) { stub_ability }
     let(:extra_params) {{ some: 'param' }}
@@ -26,8 +29,8 @@ module MnoEnterprise
       subject { get :authorize, extra_params.merge(id: app_instance.uid) }
       before { sign_in user }
       
-      it_behaves_like "a navigatable protected user action"
-      it_behaves_like "a user protected resource"
+      it_behaves_like 'a navigatable protected user action'
+      it_behaves_like 'a user protected resource'
       
       it { subject; expect(response).to be_success }
       it { subject; expect(assigns(:redirect_to)).to eq(redirect_url)}
@@ -48,7 +51,7 @@ module MnoEnterprise
     describe 'GET #callback' do
       subject { get :callback, id: app_instance.uid }
       
-      it { subject; expect(response).to redirect_to(myspace_path) }
+      it { subject; expect(response).to redirect_to(main_app.root_path) }
     end
     
     describe 'GET #disconnect' do
@@ -56,8 +59,8 @@ module MnoEnterprise
       subject { get :disconnect, extra_params.merge(id: app_instance.uid) }
       before { sign_in user }
       
-      it_behaves_like "a navigatable protected user action"
-      it_behaves_like "a user protected resource"
+      it_behaves_like 'a navigatable protected user action'
+      it_behaves_like 'a user protected resource'
       
       it { subject; expect(response).to redirect_to(redirect_url) }
     end
@@ -67,8 +70,8 @@ module MnoEnterprise
       before { sign_in user }
       subject { get :sync, extra_params.merge(id: app_instance.uid) }
       
-      it_behaves_like "a navigatable protected user action"
-      it_behaves_like "a user protected resource"
+      it_behaves_like 'a navigatable protected user action'
+      it_behaves_like 'a user protected resource'
       
       it { subject; expect(response).to redirect_to(redirect_url) }
     end

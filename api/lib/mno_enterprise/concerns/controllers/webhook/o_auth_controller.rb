@@ -21,7 +21,7 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
       # Redirect with an error if user is unauthorized
       def check_permissions
         unless can?(:manage_app_instances, app_instance.owner)
-          redirect_to myspace_path, alert: "You are not authorized to perform this action"
+          redirect_to mnoe_home_path, alert: "You are not authorized to perform this action"
           return false
         end
         true
@@ -55,7 +55,7 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
 
   # GET /mnoe/webhook/oauth/:id/callback
   def callback
-    redirect_to myspace_path
+    redirect_to mnoe_home_path
   end
 
   # GET /mnoe/webhook/oauth/:id/disconnect
