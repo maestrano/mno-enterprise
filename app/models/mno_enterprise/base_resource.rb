@@ -24,8 +24,7 @@ module MnoEnterprise
       [:all, :where, :create, :find, :first_or_create, :first_or_initialize, :limit, :order_by, :sort_by, :order, :sort].each do |method|
         class_eval <<-RUBY, __FILE__, __LINE__ + 1
           def #{method}(*params)
-            scoped.reset_params
-            scoped.send(#{method.to_sym.inspect}, *params)
+            Her::Model::Relation.new(self).send(#{method.to_sym.inspect}, *params)
           end
         RUBY
       end
