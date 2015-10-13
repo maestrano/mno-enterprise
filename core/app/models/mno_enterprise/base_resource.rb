@@ -6,17 +6,17 @@ module MnoEnterprise
   class BaseResource
     include Her::Model
     include HerExtension::Validations::RemoteUniquenessValidation
-    
+
     include_root_in_json :data
     use_api MnoEnterprise.mnoe_api_v1
-    
+
     # TODO: spec that changed_attributes is empty
     # after a KLASS.all / KLASS.where etc..
     after_find { |res| res.instance_variable_set(:@changed_attributes, {}) }
-    
+
     # Attributes common to all classes
     attributes :id, :created_at, :updated_at
-    
+
     # Class query methods
     class << self
       # Delegate the following methods to `scoped`
@@ -29,28 +29,26 @@ module MnoEnterprise
           end
         RUBY
       end
-      
+
       # ActiveRecord Compatibility for Her
       def first(n = 1)
         return [] unless n > 0
-        scoped.clear_fetch_cache!
         q = self.order_by('id.asc').limit(n)
         n == 1 ? q.to_a.first : q.to_a
       end
-    
+
       # ActiveRecord Compatibility for Her
       def last(n = 1)
         return [] unless n > 0
-        scoped.clear_fetch_cache!
         q = self.order_by('id.desc').limit(n)
         n == 1 ? q.to_a.first : q.to_a
       end
-      
+
       # Find first record using a hash of attributes
       def find_by(hash)
         self.where(hash).limit(1).first
       end
-      
+
       # ActiveRecord Compatibility for Her
       # Returns the class descending directly from MnoEnterprise::BaseResource, or
       # an abstract class, if any, in the inheritance hierarchy.
@@ -72,7 +70,7 @@ module MnoEnterprise
         end
       end
     end
-    
+
     #======================================================================
     # Instance methods
     #======================================================================
@@ -80,16 +78,16 @@ module MnoEnterprise
     def read_attribute(attr_name)
       get_attribute(attr_name)
     end
-    
+
     # ActiveRecord Compatibility for Her
     def write_attribute(attr_name, value)
       assign_attributes(attr_name => value)
     end
     alias []= write_attribute
-    
+
     # ActiveRecord Compatibility for Her
     def save(options={})
-      if perform_validations(options) 
+      if perform_validations(options)
         ret = super()
         process_response_errors
         ret
@@ -97,10 +95,10 @@ module MnoEnterprise
         false
       end
     end
-    
+
     # ActiveRecord Compatibility for Her
     def save!(options={})
-      if perform_validations(options) 
+      if perform_validations(options)
         ret = super()
         process_response_errors
         raise_record_invalid
@@ -108,27 +106,27 @@ module MnoEnterprise
         false
       end
     end
-    
+
     # ActiveRecord Compatibility for Her
     def reload(options = nil)
       @attributes.update(self.class.find(self.id).attributes)
       self.run_callbacks :find
       self
     end
-    
+
     # ActiveRecord Compatibility for Her
     def update(attributes)
       assign_attributes(attributes)
       save
     end
-    
+
     # Reset the ActiveModel hash containing all attribute changes
     # Useful when initializing a existing resource using a hash fetched
     # via http call (e.g.: MnoEnterprise::User.authenticate)
     def clear_attribute_changes!
       self.instance_variable_set(:@changed_attributes, {})
     end
-    
+
     # Returns true if +comparison_object+ is the same exact object, or +comparison_object+
     # is of the same type and +self+ has an ID and it is equal to +comparison_object.id+.
     #
@@ -145,15 +143,15 @@ module MnoEnterprise
         comparison_object.id == id
     end
     alias :eql? :==
-    
+
     protected
       # Process errors from the servers and add them to the
       # model
       # Servers are returned using the jsonapi format
-      # E.g.: 
+      # E.g.:
       # errors: [
       #   {
-      #     :id=>"f720ca10-b104-0132-dbc0-600308937d74", 
+      #     :id=>"f720ca10-b104-0132-dbc0-600308937d74",
       #     :href=>"http://maestrano.github.io/enterprise/#users-users-list-post",
       #     :status=>"400",
       #     :code=>"name-can-t-be-blank",
@@ -172,7 +170,7 @@ module MnoEnterprise
           end
         end
       end
-      
+
       # ActiveRecord Compatibility for Her
       def raise_record_invalid
         raise(Her::Errors::ResourceInvalid.new(self))
@@ -184,6 +182,6 @@ module MnoEnterprise
         # -> THIS IS A TEMPORARY UGLY FIX
         options[:validate] == false || self.errors.nil? || valid?(options[:context])
       end
-      
+
   end
 end
