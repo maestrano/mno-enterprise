@@ -1,4 +1,4 @@
-# PR: 
+# PR:
 # fixed options loading in dynamically defined method
 # changed build to not add the parent key automatically
 # changed create to send raw parameters instead of doing smart stuff
@@ -69,41 +69,41 @@ module Her
           resp = self.execute_request(:create,attributes)
           @klass.build(resp)
         end
-        
+
         # Consider removing - not sure this method on a has_many collection has any meaning
         def update(attributes = {})
           self.execute_request(:update,attributes)
         end
-        
+
         # Consider removing - not sure this method on a has_many collection has any meaning
         def destroy(attributes = {})
           self.execute_request(:destroy,attributes)
         end
-        
+
         def execute_request(action, attrs)
           attributes = HashWithIndifferentAccess.new(attrs)
-          
+
           # Post data to the collection endpoint
           resource = nil
           path = self.build_request_path
           method = self.method_for(action.to_sym)
-          
+
           # Add ID to path if resource method
           if [:put, :patch, :delete].include?(method.to_sym)
             path += "/#{attributes[@klass.primary_key]}"
           end
-          
+
           params = self.to_params(attributes).merge(:_method => method, :_path => path)
           self.request(params) do |parsed_data, response|
             resource = parsed_data if response.success?
           end
-          
+
           # Reload nested collection
           self.reload if resource
 
           resource
         end
-        
+
         # Override fetch to not do any smart stuff...
         def fetch
           super
