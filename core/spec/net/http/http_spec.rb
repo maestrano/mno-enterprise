@@ -13,14 +13,14 @@ describe Net::HTTP do
    context 'without proxy' do
      before { load 'config/initializers/net_http_proxy.rb' }
 
-     it { expect(subject.proxy?).to be_false }
+     it { expect(subject.proxy?).to be false }
    end
 
    context 'with environment proxy' do
      before { ENV['http_proxy'] = http_proxy }
      before { load 'config/initializers/net_http_proxy.rb' }
 
-     it { expect(subject.proxy?).to be_true }
+     it { expect(subject.proxy?).to be true }
    end
 
    context 'with environment proxy and no_proxy setting' do
@@ -28,7 +28,7 @@ describe Net::HTTP do
      before { ENV['no_proxy'] = 'example.com' }
      before { load 'config/initializers/net_http_proxy.rb' }
 
-     it { expect(subject.proxy?).to be_false }
+     it { expect(subject.proxy?).to be false }
    end
 
    context 'with environment proxy and no_proxy setting several hosts' do
@@ -36,7 +36,7 @@ describe Net::HTTP do
      before { ENV['no_proxy'] = 'localhost,example.com' }
      before { load 'config/initializers/net_http_proxy.rb' }
 
-     it { expect(subject.proxy?).to be_false }
+     it { expect(subject.proxy?).to be false }
    end
  end
 end
