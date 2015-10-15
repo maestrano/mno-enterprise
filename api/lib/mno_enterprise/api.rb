@@ -10,3 +10,5 @@ module MaestranoEnterprise
   end
 end
 
+# Needs Rails::Engine to be loaded
+require 'health_check'

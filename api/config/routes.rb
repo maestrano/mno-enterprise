@@ -12,6 +12,7 @@ MnoEnterprise::Engine.routes.draw do
   # Health Status
   get '/ping', to: 'status#ping'
   get '/version', to: 'status#version'
+  get 'health_check(/:checks)(.:format)', to: '/health_check/health_check#index'
 
   # App Provisioning
   resources :provision, only: [:new,:create]

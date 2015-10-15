@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'jbuilder', '~> 2.2.12'
   s.add_dependency 'haml', '~> 4.0.6'
   s.add_dependency 'coffee-rails', '~> 4.1.0'
+  s.add_dependency 'health_check', '~> 1.5.1'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails'
