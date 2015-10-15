@@ -5,6 +5,7 @@ FactoryGirl.define do
     
     factory :organization, class: MnoEnterprise::Organization do
       sequence(:id)
+      sequence(:uid) { |n| "org-fab3#{n}" }
       name "Doe Inc"
       role "Admin"
       created_at 3.days.ago

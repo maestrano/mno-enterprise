@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'prawn-table', '~> 0.2.1'
   s.add_dependency 'money', '~> 6.5.1'
 
-  s.add_development_dependency "sqlite3"
-  s.add_development_dependency "rspec-rails"
-  s.add_development_dependency "factory_girl_rails"
+  s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'factory_girl_rails'
 end

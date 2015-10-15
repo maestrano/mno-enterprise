@@ -52,4 +52,10 @@ module MnoEnterprise::Concerns::Models::Organization
   def remove_user(user)
     self.users.destroy(id: user.id)
   end
+
+  # Change a user role in the organization
+  # TODO: specs
+  def update_user(user, role = 'Member')
+    self.users.update(id: user.id, role: role)
+  end
 end
