@@ -15,6 +15,7 @@ end
 # require File.expand_path("../../spec/dummy/config/environment.rb",  __FILE__)
 
 require 'rspec/rails'
+require 'shoulda/matchers'
 
 # Check Dummy application migrations
 ActiveRecord::Migrator.migrations_paths = [File.expand_path("../../spec/dummy/db/migrate", __FILE__)]
@@ -79,4 +80,11 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
 end
