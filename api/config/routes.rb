@@ -9,6 +9,10 @@ MnoEnterprise::Engine.routes.draw do
   get '/billing_details_required', to: 'pages#billing_details_required'
   get '/app_logout', to: 'pages#app_logout'
 
+  # Health Status
+  get '/ping', to: 'status#ping'
+  get '/version', to: 'status#version'
+
   # App Provisioning
   resources :provision, only: [:new,:create]
 
