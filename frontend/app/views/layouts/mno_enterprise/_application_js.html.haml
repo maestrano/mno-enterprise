@@ -11,4 +11,7 @@
 -# Only loaded if the file has been included in the list of files to compile
 - if Rails.application.config.assets.precompile.include?("mno_enterprise_extensions.js")
   = javascript_include_tag "mno_enterprise_extensions"
-  
+
+-# Development extension
+-  if Rails.env.development?
+  = javascript_include_tag "ng-performance/ngPerformance"

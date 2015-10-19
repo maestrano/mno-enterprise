@@ -33,11 +33,10 @@
             apps: #{@apps.to_json}
           }
         }).always(function() {
-          window.location.href = "#{after_provision_path}#/?dhbRefId=#{@organization.id}"
+          window.location.href = "#{after_provision_path}?dhbRefId=#{@organization.id}"
         });
     
       });
     }
   
     defer(provisionApps);
-    

@@ -89,7 +89,24 @@ module MnoEnterprise
         invite_vars(org_invite,new_user).merge(confirmation_link: confirmation_link)
       )
     end
-    
+
+    # Description:
+    #   Email providing instructions + link to initiate the account termination
+    #   process.
+    #
+    # Mandrill vars:
+    #   :first_name
+    #   :last_name
+    #   :full_name
+    #   :terminate_account_link
+    def deletion_request_instructions(record, deletion_request)
+      MandrillClient.deliver('deletion-request-instructions',
+        DEFAULT_SENDER,
+        recipient(record),
+        user_vars(record).merge(terminate_account_link: deletion_request_url(deletion_request))
+      )
+    end
+
     protected
       def recipient(record, new_user = false)
         hash = { email: record.email }

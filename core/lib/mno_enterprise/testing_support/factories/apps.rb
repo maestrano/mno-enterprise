@@ -13,6 +13,7 @@ FactoryGirl.define do
     website "https://www.testapp.com"
     slug { "#{id}-myapp" }
     categories ["CRM"]
+    tags ['Foo', 'Bar']
     key_benefits ['Super','Hyper','Good']
     key_features ['Super','Hyper','Good']
     testimonials [{text:'Bla', company:'Doe Pty Ltd', author: 'John'}]

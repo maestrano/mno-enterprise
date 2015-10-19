@@ -15,6 +15,11 @@ module MnoEnterprise
     )}
     before { api_stub_for(get: "/apps/#{app.id}", response: from_api(app)) }
 
+    def markdown(text)
+      return text unless text.present?
+      HtmlProcessor.new(text, format: :markdown).html.html_safe
+    end
+
     def partial_hash_for_app(app)
       {
         'id' => app.id,
@@ -24,11 +29,12 @@ module MnoEnterprise
         'logo' => app.logo.to_s,
         'key_benefits' => app.key_benefits,
         'categories' => ["CRM"],
+        'tags' => ['Foo', 'Bar'],
         'is_responsive' => false && app.responsive?,
         'is_star_ready' => false && app.star_ready?,
         'is_connec_ready' => false && app.connec_ready?,
         'tiny_description' => app.tiny_description,
-        'description' => app.sanitized_description,
+        'description' => markdown(app.sanitized_description),
         'testimonials' => app.testimonials,
         'pictures' => app.pictures
       }

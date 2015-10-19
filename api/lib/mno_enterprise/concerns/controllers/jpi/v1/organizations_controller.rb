@@ -105,7 +105,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
         referrer_id: current_user.id
       )
 
-      SystemNotificationMailer.organization_invite(@org_invite).deliver_now
+      MnoEnterprise::SystemNotificationMailer.organization_invite(@org_invite).deliver_now
     end
 
     render 'members'

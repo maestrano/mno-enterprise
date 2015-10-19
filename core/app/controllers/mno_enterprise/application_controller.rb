@@ -103,5 +103,10 @@ module MnoEnterprise
       def mnoe_home_url
         mno_enterprise.respond_to?(:myspace_url) ? mno_enterprise.myspace_url : main_app.root_url
       end
+
+      # Overwriting the sign_out redirect path method
+      def after_sign_out_path_for(resource_or_scope)
+        MnoEnterprise.router.after_sign_out_url || super
+      end
   end
 end
