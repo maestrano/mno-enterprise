@@ -9,8 +9,8 @@ module MnoEnterprise
 
       if dashboard
         @kpi = dashboard.kpis.build(attrs)
-        authorize! :create, @kpi
-        
+        authorize! :manage_impac, @kpi
+
         if @kpi.save
           render 'show'
         else
@@ -28,10 +28,9 @@ module MnoEnterprise
       
       # Find kpi and assign
       @kpi = Impac::Kpi.find_by_id(params[:id])
+      authorize! :manage_impac, @kpi
       if @kpi
-        authorize! :update, @kpi
-
-        # metadata will me merged instead of replaced
+        # metadata will be merged instead of replaced
         p = HashWithIndifferentAccess.new(params[:kpi])
         if p[:metadata] && p[:metadata].is_a?(Hash)
           attrs[:metadata] = @kpi.metadata.merge(p[:metadata])
@@ -50,9 +49,9 @@ module MnoEnterprise
     # DELETE /jpi/v1/impac/kpis/:id
     def destroy
       @kpi = MnoEnterprise::Impac::Kpi.find_by_id(params[:id])
-      authorize! :destroy, @kpi
       
       if @kpi
+        authorize! :manage_impac, @kpi
         if @kpi.destroy
           head status: :ok
         else

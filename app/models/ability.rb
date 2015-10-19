@@ -21,7 +21,6 @@ class Ability
       :purchase,
       :invite_member,
       :administrate,
-      :access_analytics_data,
       :manage_app_instances,
       :manage_teams], MnoEnterprise::Organization do |organization|
       ['Super Admin','Admin'].include? user.role(organization)
@@ -38,6 +37,15 @@ class Ability
       )
     end
     
+    #===================================================
+    # Impac
+    #===================================================
+    can :manage_impac, MnoEnterprise::Impac::Kpi do |kpi|
+      kpi.dashboard.organizations.each do |org|
+        !!user.role(org) && ['Super Admin','Admin'].include?(user.role(org))
+      end
+    end
+
     # Define abilities for the passed in user here. For example:
     #
     #   user ||= User.new # guest user (not logged in)
