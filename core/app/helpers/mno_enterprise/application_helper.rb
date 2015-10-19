@@ -56,5 +56,12 @@ module MnoEnterprise
         timeout: -1
       }
     end
+
+    # This helper converts markdown content
+    # to html, using the HtmlProcessor (see /lib)
+    def markdown(text)
+      return text unless text.present?
+      HtmlProcessor.new(text, format: :markdown).html.html_safe
+    end
   end
 end

@@ -19,15 +19,15 @@
               
               %p Do you want to connect any of the following extra modules?
               .form-inline
-                = check_box_tag 'extra_params[]', :payroll
+                = check_box_tag 'extra_params[]', :payroll, false, {'ng-model' => 'payroll'}
                 = label_tag :payroll
               
               .spacer1
-              
-              .form-group
+
+              .form-group{'ng-if' => 'payroll', 'ng-cloak' => true}
                 %p What is the country associated with your Xero account?
-                = select_tag :xero_country, options_for_select([["Australia","AU"],["USA","US"]], "US")
-              
+                = select_tag :xero_country, options_for_select([["Australia","AU"],["USA","US"]], "AU")
+
               %hr
               
               .form-group

@@ -69,6 +69,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
         server_time: Time.now.utc,
         is_online: app_instance.online?,
         errors: app_instance.errors ? app_instance.errors.full_messages : [],
+        logo: app_instance.app.logo
       }
     end
 

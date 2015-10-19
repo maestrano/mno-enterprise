@@ -69,7 +69,14 @@
     
     <!-- Enter Emails step -->
     <div ng-switch-when="enterEmails" class="text-center">
-      
+
+      <div class="alert alert-error" ng-show="inviteModal.invalidEmails.length > 0">
+        <ng-pluralize count="inviteModal.invalidEmails.length"
+                      when="{'one': 'The following email address is invalid: ',
+                       'other': 'The following email addresses are invalid: '}">
+        </ng-pluralize> '{{inviteModal.invalidEmails.join("', '")}}'
+      </div>
+
       <div class="row">
         <div class="col-sm-12">
             <p>Enter the email addresses of the people you want to invite in your company</p>
@@ -145,6 +152,7 @@
           Cancel
         </button>
         <button class="btn btn-warning" ng-disabled="!inviteModal.isNextEnabled()" ng-click="inviteModal.next()">
+          <i ng-show="inviteModal.isLoading" class="fa fa-spinner fa-pulse fa-fw"></i>
           {{inviteModal.labelForAction()}}
         </button>
       </div>

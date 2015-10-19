@@ -1,7 +1,4 @@
 MnoEnterprise::Engine.routes.draw do
-  # Organization Invites
-  resources :org_invites, only: [:show]
-
   # Generic routes
   get '/launch/:id', to: 'pages#launch', constraints: { id: /[\w\-\.:]+/ }
   get '/loading/:id', to: 'pages#loading', constraints: { id: /[\w\-\.]+/ }
@@ -16,6 +13,17 @@ MnoEnterprise::Engine.routes.draw do
 
   # App Provisioning
   resources :provision, only: [:new,:create]
+ 
+  # Organization Invites
+  resources :org_invites, only: [:show] 
+
+  resources :deletion_requests, only: [:show] do
+    member do
+      patch :freeze_account
+      patch :checkout
+      put :terminate_account
+    end
+  end
 
   #============================================================
   # Devise/User Configuration
@@ -89,6 +97,12 @@ MnoEnterprise::Engine.routes.draw do
           end
         end
 
+      end
+
+      resources :deletion_requests, only: [:show, :create, :destroy] do
+        member do
+          put :resend
+        end
       end
 
       namespace :impac do

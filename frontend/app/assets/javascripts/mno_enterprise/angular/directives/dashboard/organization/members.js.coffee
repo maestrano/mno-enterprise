@@ -136,7 +136,7 @@ module.controller('DashboardOrganizationMembersCtrl',[
     
     deletionModal.confirmationText = ->
       m = deletionModal.member
-      if m.entity == 'User'
+      if m.entity == 'User' && m.name?
         return "Do you really want to remove <strong>#{m.name} #{m.surname}</strong> from your company?"
       else
         return "Do you really want to remove <strong>#{m.email}</strong> from your company?"
@@ -184,6 +184,7 @@ module.controller('DashboardOrganizationMembersCtrl',[
       self.step = 'enterEmails'
       self.roleList = self.config.roles()
       self.teamList = self.config.teams()
+      self.invalidEmails = []
     
     inviteModal.close = ->
       self = inviteModal
@@ -209,21 +210,39 @@ module.controller('DashboardOrganizationMembersCtrl',[
       self = inviteModal
       if self.step == 'enterEmails'
         inviteModal.processEmails()
-        self.step = 'defineRoles'
+
       else
         inviteModal.inviteMembers()
     
     inviteModal.isNextEnabled = ->
       self = inviteModal
       self.step == 'defineRoles' || (self.step == 'enterEmails' && self.userEmails.length > 0)
-     
+
+    inviteModal.oneValidEmail = ->
+      self = inviteModal
+      res = false
+      _.each self.userEmails.split("\n"), (email) ->
+
+        res = true if email.match(email_regexp)
+      return res
+
     inviteModal.processEmails = ->
       self = inviteModal
       self.isLoading = true
+      self.members = []
+      self.invalidEmails = []
+
       _.each self.userEmails.split("\n"), (email) ->
-        self.members.push({email: email, role: self.config.defaultRole })
+        email_regexp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+        if email.match(email_regexp)
+          self.members.push({email: email, role: self.config.defaultRole })
+        else
+          self.invalidEmails.push(email)
+
       self.isLoading = false
-      
+      if self.invalidEmails.length == 0
+        self.step = 'defineRoles'
+
     inviteModal.inviteMembers = ->
       self = inviteModal
       self.isLoading = true
