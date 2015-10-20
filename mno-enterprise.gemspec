@@ -23,8 +23,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'mno-enterprise-api', version
   s.add_dependency 'mno-enterprise-frontend', version
 
-  # TODO: move?
-  s.add_development_dependency "sqlite3"
-  s.add_development_dependency "rspec-rails"
-  s.add_development_dependency "factory_girl_rails"
+  # TODO: move? DRY to common dev dependencies
+  s.add_development_dependency 'sqlite3'
+  s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'factory_girl_rails'
+  s.add_development_dependency 'shoulda-matchers'
 end
