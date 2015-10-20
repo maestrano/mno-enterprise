@@ -1,5 +1,5 @@
 module MnoEnterprise
-  class Jpi::V1::Impac::WidgetsController < ApplicationController
+  class Jpi::V1::Impac::WidgetsController < Jpi::V1::BaseResourceController
     respond_to :json
     
     # POST /mnoe/jpi/v1/impac/dashboards/:id/widgets

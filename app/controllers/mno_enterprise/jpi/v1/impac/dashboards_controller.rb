@@ -1,5 +1,5 @@
 module MnoEnterprise
-  class Jpi::V1::Impac::DashboardsController < ApplicationController
+  class Jpi::V1::Impac::DashboardsController < Jpi::V1::BaseResourceController
     respond_to :json
 
 	  # GET /mnoe/jpi/v1/impac/dashboards

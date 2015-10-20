@@ -40,8 +40,8 @@ class Ability
     #===================================================
     # Impac
     #===================================================
-    can :manage_impac, MnoEnterprise::Impac::Kpi do |kpi|
-      kpi.dashboard.organizations.each do |org|
+    can :manage_impac, MnoEnterprise::Impac::Dashboard do |dhb|
+      dhb.organizations.each do |org|
         !!user.role(org) && ['Super Admin','Admin'].include?(user.role(org))
       end
     end
