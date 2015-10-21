@@ -58,11 +58,7 @@ module MnoEnterprise::Concerns::Models::Ability
     #===================================================
     # Impac
     #===================================================
-    can :manage_impac, MnoEnterprise::Impac::Dashboard do |dhb|
-      dhb.organizations.each do |org|
-        !!user.role(org) && ['Super Admin','Admin'].include?(user.role(org))
-      end
-    end
+    impac_abilities(user)
 
     # Define abilities for the passed in user here. For example:
     #
@@ -90,5 +86,13 @@ module MnoEnterprise::Concerns::Models::Ability
     #
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
+  end
+
+  def impac_abilities(user)
+    can :manage_impac, MnoEnterprise::Impac::Dashboard do |dhb|
+      dhb.organizations.any? && dhb.organizations.all? do |org|
+        !!user.role(org) && ['Super Admin', 'Admin'].include?(user.role(org))
+      end
+    end
   end
 end
