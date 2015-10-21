@@ -1,17 +1,18 @@
 module MnoEnterprise
-  class Jpi::V1::Impac::KpisController < ApplicationController
+  class Jpi::V1::Impac::KpisController < Jpi::V1::BaseResourceController
     respond_to :json
     
     # POST /jpi/v1/impac/dashboards/:dashboard_id/kpis
     def create
-      whitelist = %w(dashboard_id name endpoint source element_watched target metadata extra_param)
+      whitelist = %w(name endpoint source element_watched targets metadata extra_params)
       attrs = (params[:kpi] || {}).select { |k,v| whitelist.include?(k.to_s) } 
 
       if dashboard
-        @kpi = dashboard.kpis.build(attrs)
-        authorize! :create, @kpi
-        
-        if @kpi.save
+        authorize! :manage_impac, dashboard
+
+        # TODO: Her will perform a request there which could be avoided
+        @kpi = dashboard.kpis.create(attrs)
+        if @kpi
           render 'show'
         else
           render json: @kpi.errors, status: :bad_request
@@ -23,15 +24,15 @@ module MnoEnterprise
     
     # PUT /jpi/v1/impac/kpis/:id
     def update
-      whitelist = %w(name element_watched target extra_param)
+      whitelist = %w(name element_watched targets extra_params)
       attrs = (params[:kpi] || {}).select { |k,v| whitelist.include?(k.to_s) }.symbolize_keys 
       
       # Find kpi and assign
-      @kpi = Impac::Kpi.find_by_id(params[:id])
+      # Will call GET kpi route on Maestrano
+      @kpi = Impac::Kpi.find(params[:id])
+      authorize! :manage_impac, dashboard
       if @kpi
-        authorize! :update, @kpi
-
-        # metadata will me merged instead of replaced
+        # metadata will be merged instead of replaced
         p = HashWithIndifferentAccess.new(params[:kpi])
         if p[:metadata] && p[:metadata].is_a?(Hash)
           attrs[:metadata] = @kpi.metadata.merge(p[:metadata])
@@ -49,10 +50,11 @@ module MnoEnterprise
     
     # DELETE /jpi/v1/impac/kpis/:id
     def destroy
-      @kpi = MnoEnterprise::Impac::Kpi.find_by_id(params[:id])
-      authorize! :destroy, @kpi
+      # Will call GET kpi route on Maestrano
+      @kpi = MnoEnterprise::Impac::Kpi.find(params[:id])
       
       if @kpi
+        authorize! :manage_impac, dashboard
         if @kpi.destroy
           head status: :ok
         else
