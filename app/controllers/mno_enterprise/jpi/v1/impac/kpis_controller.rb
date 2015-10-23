@@ -35,7 +35,7 @@ module MnoEnterprise
         # metadata will be merged instead of replaced
         p = HashWithIndifferentAccess.new(params[:kpi])
         if p[:metadata] && p[:metadata].is_a?(Hash)
-          attrs[:metadata] = @kpi.metadata.merge(p[:metadata])
+          attrs[:metadata] = @kpi.settings.merge(p[:metadata])
         end
 
         if @kpi.update_attributes(attrs)
