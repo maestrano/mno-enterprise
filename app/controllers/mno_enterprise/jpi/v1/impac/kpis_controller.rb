@@ -30,12 +30,12 @@ module MnoEnterprise
       # Find kpi and assign
       # Will call GET kpi route on Maestrano
       @kpi = Impac::Kpi.find(params[:id])
-      authorize! :manage_impac, dashboard
+      authorize! :manage_impac, @kpi.dashboard
       if @kpi
         # metadata will be merged instead of replaced
         p = HashWithIndifferentAccess.new(params[:kpi])
         if p[:metadata] && p[:metadata].is_a?(Hash)
-          attrs[:metadata] = @kpi.metadata.merge(p[:metadata])
+          attrs[:metadata] = @kpi.settings.merge(p[:metadata])
         end
 
         if @kpi.update_attributes(attrs)
@@ -54,7 +54,7 @@ module MnoEnterprise
       @kpi = MnoEnterprise::Impac::Kpi.find(params[:id])
       
       if @kpi
-        authorize! :manage_impac, dashboard
+        authorize! :manage_impac, @kpi.dashboard
         if @kpi.destroy
           head status: :ok
         else
