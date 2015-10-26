@@ -44,6 +44,10 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
   #==================================================================
   # GET /mnoe/webhook/oauth/:id/authorize
   def authorize
+    if params[:redirect_path].present?
+      session[:redirect_path] = params[:redirect_path]
+    end
+
     # Certain providers require options to be selected
     if !params[:perform] && app_instance.app && PROVIDERS_WITH_OPTIONS.include?(app_instance.app.nid.to_s)
       render "mno_enterprise/webhook/o_auth/providers/#{app_instance.app.nid}"
@@ -55,7 +59,11 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
 
   # GET /mnoe/webhook/oauth/:id/callback
   def callback
-    redirect_to mnoe_home_path
+    if session[:redirect_path].present?
+      redirect_to session.delete(:redirect_path)
+    else
+      redirect_to mnoe_home_path
+    end
   end
 
   # GET /mnoe/webhook/oauth/:id/disconnect
