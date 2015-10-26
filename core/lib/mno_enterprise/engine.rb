@@ -6,6 +6,12 @@ module MnoEnterprise
     # lib
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
+    # Remove testing support when not in test
+    unless Rails.env.test?
+      path_rejector = lambda { |s| s.include?('/testing_support/') }
+      config.autoload_paths.reject!(&path_rejector)
+    end
+
     config.generators do |g|
       g.test_framework :rspec, fixture: true
       g.fixture_replacement :factory_girl, :dir => 'spec/factories'
