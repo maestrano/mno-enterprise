@@ -38,7 +38,7 @@ module MnoEnterprise
           attrs[:metadata] = @kpi.settings.merge(p[:metadata])
         end
 
-        if @kpi.update_attributes(attrs)
+        if @kpi.update(attrs)
           render 'show'
         else
           render json: @kpi.errors, status: :bad_request
