@@ -18,7 +18,11 @@ module MnoEnterprise
         format.json { render :json => 'Unauthorized Action', :status => :forbidden }
       end
     end
-    
+
+    def current_ability
+      MnoEnterprise::Ability.new(current_user)
+    end
+
     def set_default_meta
       @meta = {}
       @meta[:title] = "Application"
