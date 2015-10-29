@@ -13,7 +13,7 @@ module MnoEnterprise
       @user = current_user
       
       if @user.update(user_params)
-        render :show
+        render 'show'
       else
         render json: @user.errors, status: :bad_request
       end
@@ -23,9 +23,9 @@ module MnoEnterprise
     def update_password
       @user = current_user
       
-      if @user.update(password_params.merge(current_password_required: true))
+      if @user.update(password_params)
         sign_in @user, bypass: true
-        render :show
+        render 'show'
       else
         render json: @user.errors, status: :bad_request
       end
