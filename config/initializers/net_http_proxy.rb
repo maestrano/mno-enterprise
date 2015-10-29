@@ -8,7 +8,7 @@ if ENV['http_proxy'] || ENV['HTTP_PROXY']
   # If you just upgraded Ruby and faced the error below, please if ruby class net/http/http.rb now supports
   # the use of no_proxy. If it doesn't and the patch below is still working for your ruby version, just add
   # your current ruby version to the array below
-  if !['2.1.2','2.2.0'].include?(RUBY_VERSION)
+  if !['2.1.2','2.1.7','2.2.0'].include?(RUBY_VERSION)
     raise "Your Ruby version #{RUBY_VERSION} may not allow monkey patching Net::HTTP.Proxy, please check config/initializers/net_http_proxy.rb"
   end
 
