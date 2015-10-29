@@ -17,13 +17,17 @@ module MnoEnterprise
     # CanCan Authorization Rescue
     #============================================
     # Rescue the CanCan permission denied error
-    rescue_from CanCan::AccessDenied do |exception|
+    rescue_from CanCan::AccessDenied do |_exception|
       respond_to do |format|
-        format.html { redirect_to root_url, :alert => 'Unauthorized Action' }
-        format.json { render :json => 'Unauthorized Action', :status => :forbidden }
+        format.html { redirect_to root_url, alert: 'Unauthorized Action' }
+        format.json { render nothing: true, status: :forbidden }
       end
     end
-    
+
+    def current_ability
+      MnoEnterprise::Ability.new(current_user)
+    end
+
     def set_default_meta
       @meta = {}
       @meta[:title] = "Application"
