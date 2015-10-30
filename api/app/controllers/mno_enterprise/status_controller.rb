@@ -12,12 +12,14 @@ module MnoEnterprise
     # Returns:
     #   {
     #     'app-version': '9061048-6811c4a',
-    #     'mno-enterprise-version': '0.0.1'
+    #     'mno-enterprise-version': '0.0.1',
+    #     'env': 'test'
     #   }
     def version
       data = {
           'app-version' => MnoEnterprise::APP_VERSION,
-          'mno-enteprise-version' => MnoEnterprise::VERSION
+          'mno-enteprise-version' => MnoEnterprise::VERSION,
+          'env' => Rails.env
       }
       render json: data
     end

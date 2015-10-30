@@ -25,6 +25,10 @@ module MnoEnterprise
       it 'returns the mnoe-version' do
         expect(data['mno-enteprise-version']).to eq(MnoEnterprise::VERSION)
       end
+
+      it 'returns the environment' do
+        expect(data['env']).to eq('test')
+      end
     end
   end
 end
