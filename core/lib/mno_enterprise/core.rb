@@ -304,7 +304,7 @@ module MnoEnterprise
         c.use Her::Middleware::MnoeApiV1ParseJson
 
         # Adapter
-        c.use Faraday::Adapter::NetHttp
+        c.use Faraday::Adapter::NetHttpNoProxy
       end
     end
 
