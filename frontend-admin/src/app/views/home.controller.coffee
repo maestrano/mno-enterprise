@@ -1,5 +1,5 @@
 angular.module 'frontendAdmin'
-  .controller 'HomeController', () ->
+  .controller 'HomeController', ($state) ->
     'ngInject'
     vm = this
 
