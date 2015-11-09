@@ -1,9 +1,9 @@
 angular.module 'frontendAdmin'
-  .controller 'DashboardController', ($timeout, toastr) ->
+  .controller 'DashboardController', ->
     'ngInject'
     main = this
 
-    main.user = 'Alex'
+    main.user = 'Alex Jarnoux'
     main.toggle = true
 
     main.toggleSidebar = () ->
