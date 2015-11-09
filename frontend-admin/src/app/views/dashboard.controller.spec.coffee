@@ -1,11 +1,9 @@
 describe 'controllers', () ->
-  vm = undefined
+  main = undefined
 
   beforeEach module 'frontendAdmin'
 
-  beforeEach inject ($controller, webDevTec, toastr) ->
-    spyOn(webDevTec, 'getTec').and.returnValue [{}, {}, {}, {}, {}]
-    spyOn(toastr, 'info').and.callThrough()
+  beforeEach inject ($controller) ->
     main = $controller 'DashboardController'
 
   it 'make sur the sidebar is toggled on init', () ->
