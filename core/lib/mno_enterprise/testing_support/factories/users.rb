@@ -33,7 +33,7 @@ FactoryGirl.define do
     trait :admin do
       admin_role true
     end
-    
+
     trait :with_deletion_request do
       deletion_request { build(:deletion_request).attributes }
     end

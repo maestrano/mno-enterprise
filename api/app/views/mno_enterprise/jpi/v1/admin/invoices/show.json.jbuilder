@@ -1,0 +1,1 @@
+json.invoices @invoice, :id, :uid, :email, :name, :surname, :admin_role

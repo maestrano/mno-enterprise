@@ -1,0 +1,1 @@
+json.tenant_invoices @tenant_invoice, :id, :uid, :email, :name, :surname, :admin_role
