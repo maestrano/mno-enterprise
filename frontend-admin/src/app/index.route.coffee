@@ -2,10 +2,13 @@ angular.module 'frontendAdmin'
   .config ($stateProvider, $urlRouterProvider) ->
     'ngInject'
     $stateProvider
-      .state 'home',
-        url: '/'
-        templateUrl: 'app/main/main.html'
-        controller: 'MainController'
+      .state 'dashboard',
+        abstract: true
+        templateUrl: 'app/views/dashboard.layout.html'
+        controller: 'DashboardController'
         controllerAs: 'main'
+      .state 'dashboard.home',
+        url: '/home'
+        templateUrl: 'app/views/home.html'
 
-    $urlRouterProvider.otherwise '/'
+    $urlRouterProvider.otherwise '/home'

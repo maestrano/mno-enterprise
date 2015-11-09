@@ -1,3 +1,3 @@
-angular.module('frontendAdmin')
-  .constant 'malarkey', malarkey
-  .constant 'moment', moment
+# angular.module('frontendAdmin')
+#   .constant 'malarkey', malarkey
+#   .constant 'moment', moment
