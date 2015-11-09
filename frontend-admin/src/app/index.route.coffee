@@ -3,12 +3,23 @@ angular.module 'frontendAdmin'
     'ngInject'
     $stateProvider
       .state 'dashboard',
-        abstract: true
+        abstract: true,
         templateUrl: 'app/views/dashboard.layout.html'
         controller: 'DashboardController'
         controllerAs: 'main'
       .state 'dashboard.home',
         url: '/home'
         templateUrl: 'app/views/home.html'
+        controller: 'HomeController'
+        controllerAs: 'vm'
+        ncyBreadcrumb:
+          label: 'Home'
+      .state 'dashboard.finance',
+        url: '/finance'
+        templateUrl: 'app/views/finance.html'
+        controller: 'FinanceController'
+        controllerAs: 'vm'
+        ncyBreadcrumb:
+          label: 'Finance'
 
     $urlRouterProvider.otherwise '/home'

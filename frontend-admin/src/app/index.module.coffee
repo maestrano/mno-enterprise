@@ -5,5 +5,6 @@ angular.module 'frontendAdmin', [
   'restangular',
   'ui.router',
   'ui.bootstrap',
-  'toastr'
+  'toastr',
+  'ncy-angular-breadcrumb'
 ]
