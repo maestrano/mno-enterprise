@@ -33,12 +33,16 @@ function browserSyncInit(baseDir, browser) {
    *
    * For more details and option, https://github.com/chimurai/http-proxy-middleware/blob/v0.0.5/README.md
    */
-  // server.middleware = proxyMiddleware('/users', {target: 'http://jsonplaceholder.typicode.com', proxyHost: 'jsonplaceholder.typicode.com'});
+  server.middleware = proxyMiddleware(['/mnoe', '/assets'], { target: 'http://localhost:7000' });
 
   browserSync.instance = browserSync.init({
+    port: 7001,
     startPath: '/',
     server: server,
-    browser: browser
+    browser: browser,
+    ui: {
+      port: 7002
+    }
   });
 }
 
