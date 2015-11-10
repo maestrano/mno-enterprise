@@ -25,6 +25,13 @@
 .top-buffer-9 { margin-top: 9*@top-buffer-height; }
 .top-buffer-10 { margin-top: 10*@top-buffer-height; }
 
+// RDash overload bootstrap rows...
+// This is the real bootstrap class
+.bs-row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
 body {
   background: #f3f3f3;
   font-family: Montserrat;
@@ -34,6 +41,12 @@ body {
   padding: 0px;
   margin: 0px;
   background-color: transparent;
+}
+
+.label-cell {
+  border-bottom: 1px dashed @brand-primary;
+  margin-left: 15px;
+  padding-left: 0px;
 }
 
 // Fix RDash widgets header height
