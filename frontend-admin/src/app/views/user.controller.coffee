@@ -1,8 +1,7 @@
-angular.module 'frontendAdmin'
-  .controller 'UserController', () ->
-    'ngInject'
-    vm = this
+@App.controller 'UserController', () ->
+  'ngInject'
+  vm = this
 
-    console.log 'in UserController'
+  console.log 'in UserController'
 
-    return
+  return

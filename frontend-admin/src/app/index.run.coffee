@@ -1,4 +1,3 @@
-angular.module 'frontendAdmin'
-  .run ($log) ->
-    'ngInject'
-    $log.debug 'runBlock end'
+@App.run ($log) ->
+  'ngInject'
+  $log.debug 'runBlock end'

@@ -1,4 +1,4 @@
-angular.module 'frontendAdmin', [
+@App = angular.module 'frontendAdmin', [
   'ngAnimate',
   'ngMessages',
   'ngAria',
