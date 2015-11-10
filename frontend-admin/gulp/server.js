@@ -2,6 +2,7 @@
 
 var path = require('path');
 var gulp = require('gulp');
+var url  = require("url");
 var conf = require('./conf');
 
 var browserSync = require('browser-sync');
@@ -26,6 +27,12 @@ function browserSyncInit(baseDir, browser) {
     routes: routes
   };
 
+  // Rewrite /admin/xxx => /xxx after the proxy
+  var adminRewriteMiddleware = function (req, res, next) {
+    req.url = req.url.replace(/^\/admin\//, "/");
+    next();
+  }
+
   /*
    * You can add a proxy to your backend by uncommenting the line below.
    * You just have to configure a context which will we redirected and the target url.
@@ -33,7 +40,10 @@ function browserSyncInit(baseDir, browser) {
    *
    * For more details and option, https://github.com/chimurai/http-proxy-middleware/blob/v0.0.5/README.md
    */
-  server.middleware = proxyMiddleware('/mnoe', { target: 'http://localhost:7000' });
+  server.middleware = [
+    proxyMiddleware('!/(admin|bower_components)/**', {target: 'http://localhost:7000'}),
+    adminRewriteMiddleware
+  ];
 
   browserSync.instance = browserSync.init({
     port: 7001,
