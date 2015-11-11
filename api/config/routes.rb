@@ -1,7 +1,7 @@
 MnoEnterprise::Engine.routes.draw do
   # Generic routes
-  get '/launch/:id', to: 'pages#launch', constraints: { id: /[\w\-\.:]+/ }
-  get '/loading/:id', to: 'pages#loading', constraints: { id: /[\w\-\.]+/ }
+  get '/launch/:id', to: 'pages#launch', constraints: {id: /[\w\-\.:]+/}
+  get '/loading/:id', to: 'pages#loading', constraints: {id: /[\w\-\.]+/}
   get '/app_access_unauthorized', to: 'pages#app_access_unauthorized'
   get '/billing_details_required', to: 'pages#billing_details_required'
   get '/app_logout', to: 'pages#app_logout'
@@ -12,10 +12,10 @@ MnoEnterprise::Engine.routes.draw do
   get 'health_check(/:checks)(.:format)', to: '/health_check/health_check#index'
 
   # App Provisioning
-  resources :provision, only: [:new,:create]
- 
+  resources :provision, only: [:new, :create]
+
   # Organization Invites
-  resources :org_invites, only: [:show] 
+  resources :org_invites, only: [:show]
 
   resources :deletion_requests, only: [:show] do
     member do
@@ -25,22 +25,27 @@ MnoEnterprise::Engine.routes.draw do
     end
   end
 
+
+  get "/impersonate/user/:user_id", to: "impersonate#create", as: :impersonate_user
+  delete "/impersonate/revert", to: "impersonate#destroy", as: :revert_impersonate_user
+
+
   #============================================================
   # Devise/User Configuration
   #============================================================
   # Main devise configuration
   devise_for :users, {
-    class_name: "MnoEnterprise::User",
-    module: :devise,
-    path_prefix: 'auth',
-    controllers: {
-      confirmations: "mno_enterprise/auth/confirmations",
-      #omniauth_callbacks: "auth/omniauth_callbacks",
-      passwords: "mno_enterprise/auth/passwords",
-      registrations: "mno_enterprise/auth/registrations",
-      sessions: "mno_enterprise/auth/sessions",
-      unlocks: "mno_enterprise/auth/unlocks"
-    }
+      class_name: "MnoEnterprise::User",
+      module: :devise,
+      path_prefix: 'auth',
+      controllers: {
+          confirmations: "mno_enterprise/auth/confirmations",
+          #omniauth_callbacks: "auth/omniauth_callbacks",
+          passwords: "mno_enterprise/auth/passwords",
+          registrations: "mno_enterprise/auth/registrations",
+          sessions: "mno_enterprise/auth/sessions",
+          unlocks: "mno_enterprise/auth/unlocks"
+      }
   }
 
   # Additional devise routes
@@ -56,7 +61,7 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   namespace :webhook do
     # OAuth Management
-    resources :oauth, only: [], constraints: { id: /[\w\-\.:]+/ }, controller: "o_auth" do
+    resources :oauth, only: [], constraints: {id: /[\w\-\.:]+/}, controller: "o_auth" do
       member do
         get :authorize
         get :callback
@@ -71,7 +76,7 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   namespace :jpi do
     namespace :v1 do
-      resources :marketplace, only: [:index,:show]
+      resources :marketplace, only: [:index, :show]
       resource :current_user, only: [:show, :update] do
         put :update_password
         #post :deletion_request, action: :create_deletion_request
@@ -87,10 +92,10 @@ MnoEnterprise::Engine.routes.draw do
         end
 
         # AppInstances
-        resources :app_instances, only: [:index,:destroy], shallow: true
+        resources :app_instances, only: [:index, :destroy], shallow: true
 
         # Teams
-        resources :teams, only: [:index,:show,:create,:update,:destroy], shallow: true do
+        resources :teams, only: [:index, :show, :create, :update, :destroy], shallow: true do
           member do
             put :add_users
             put :remove_users
@@ -106,9 +111,9 @@ MnoEnterprise::Engine.routes.draw do
       end
 
       namespace :impac do
-        resources :dashboards, only: [:index,:show,:create,:update,:destroy] do
-          resources :widgets, shallow: true, only: [:create,:destroy,:update]
-          resources :kpis, shallow: true, only: [:create,:destroy,:update]
+        resources :dashboards, only: [:index, :show, :create, :update, :destroy] do
+          resources :widgets, shallow: true, only: [:create, :destroy, :update]
+          resources :kpis, shallow: true, only: [:create, :destroy, :update]
         end
       end
     end
