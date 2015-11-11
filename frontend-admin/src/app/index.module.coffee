@@ -6,5 +6,6 @@
   'ui.router',
   'ui.bootstrap',
   'toastr',
-  'ncy-angular-breadcrumb'
+  'ncy-angular-breadcrumb',
+  'platanus.inflector'
 ]
