@@ -1,0 +1,1 @@
+json.invoices @invoices, partial: 'invoice', as: :invoice

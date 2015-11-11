@@ -116,6 +116,12 @@ MnoEnterprise::Engine.routes.draw do
           resources :kpis, shallow: true, only: [:create, :destroy, :update]
         end
       end
+      namespace :admin, defaults: { format: 'json' } do
+        resources :users, only: [:index, :show]
+        resources :organizations, only: [:index, :show]
+        resources :tenant_invoices, only: [:index, :show]
+        resources :invoices, only: [:index, :show]
+      end
     end
   end
 end
