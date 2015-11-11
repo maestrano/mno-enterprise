@@ -69,7 +69,7 @@
   </div>
   <div class="col-lg-6">
     <rd-widget>
-      <rd-widget-header icon="fa-users" title="Last 10 organisations">
+      <rd-widget-header icon="fa-sitemap" title="Last 10 organisations">
         <input type="text" placeholder="Search" class="form-control input-sm" />
       </rd-widget-header>
       <rd-widget-body classes="medium no-padding">
@@ -79,7 +79,7 @@
               <tr><th class="text-center">ID</th><th>Username</th><th>Role</th><th>Account</th></tr>
             </thead>
             <tbody>
-              <tr><td class="text-center">1</td><td>Joe Bloggs</td><td>Super Admin</td><td>AZ23045</td></tr>
+              <tr><td class="text-center">1</td><td><a ui-sref="dashboard.home.organization({orgId: 1})">Joe Bloggs</a></td><td>Super Admin</td><td>AZ23045</td></tr>
               <tr><td class="text-center">2</td><td>Timothy Hernandez</td><td>Admin</td><td>AU24783</td></tr>
               <tr><td class="text-center">3</td><td>Joe Bickham</td><td>User</td><td>AM23781</td></tr>
             </tbody>

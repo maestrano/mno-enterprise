@@ -21,6 +21,14 @@
         controllerAs: 'vm'
       ncyBreadcrumb:
         label: 'User'
+    .state 'dashboard.home.organization',
+      url: '^/organization/:orgId'
+      views: '@dashboard':
+        templateUrl: 'app/views/organization.html'
+        controller: 'OrganizationController'
+        controllerAs: 'vm'
+      ncyBreadcrumb:
+        label: 'Organisation'
     .state 'dashboard.finance',
       url: '/finance'
       templateUrl: 'app/views/finance.html'
