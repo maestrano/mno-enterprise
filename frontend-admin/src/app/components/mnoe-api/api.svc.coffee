@@ -1,6 +1,6 @@
 @App.factory 'MnoeApiSvc', ($log, Restangular, inflector) ->
   return Restangular.withConfig((RestangularProvider) ->
-    RestangularProvider.setBaseUrl('/mnoe/jpi/v1')
+    RestangularProvider.setBaseUrl('/mnoe/jpi/v1/admin')
     RestangularProvider.setDefaultHeaders({Accept: "application/json"})
 
     # Unwrap api response
