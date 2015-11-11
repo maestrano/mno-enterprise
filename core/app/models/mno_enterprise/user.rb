@@ -128,7 +128,11 @@ module MnoEnterprise
     #================================
     # Instance Methods
     #================================
-    
+
+    def to_s
+      "#{name} #{surname}"
+    end
+
     # Default value for failed attempts
     def failed_attempts
       read_attribute(:failed_attempts) || 0
