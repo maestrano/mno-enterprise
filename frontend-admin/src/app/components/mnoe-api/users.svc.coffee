@@ -6,6 +6,6 @@
     MnoeApiSvc.all('users').getList()
 
   @get = (id) ->
-    MnoeApiSvc.one('users', id)
+    MnoeApiSvc.one('users', id).get()
 
   return @
