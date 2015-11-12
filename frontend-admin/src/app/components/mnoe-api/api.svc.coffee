@@ -9,7 +9,7 @@
         extractedData = null
         if (operation == 'getList')
           extractedData = data[what]
-        else if (operation == 'put' || operation == 'post')
+        else if (operation == 'get' || operation == 'put' || operation == 'post')
           what = inflector.singularize(what)
           extractedData = data[what]
         else
