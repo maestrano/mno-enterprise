@@ -11,13 +11,16 @@
     # Variables initialization
     scope.organizations =
       displayList: []
+      widgetTitle: 'Last 10 users'
       search: ''
 
     setLastOrganizationsList = () ->
+      scope.organizations.widgetTitle = 'Last 10 organisations'
       scope.organizations.displayList = $filter('orderBy')(scope.list, '-created_at')
       scope.organizations.displayList = $filter('limitTo')(scope.organizations.displayList, 10)
 
     setSearchOrganizationsList = () ->
+      scope.organizations.widgetTitle = 'Search result'
       searchToLowerCase = scope.organizations.search.toLowerCase()
       scope.organizations.displayList = _.filter(scope.list, (user) ->
         name = _.startsWith(user.name.toLowerCase(), searchToLowerCase)

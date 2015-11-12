@@ -12,13 +12,16 @@
     # Variables initialization
     scope.users =
       displayList: []
+      widgetTitle: 'Last 10 users'
       search: ''
 
     setLastUsersList = () ->
+      scope.users.widgetTitle = 'Last 10 users'
       scope.users.displayList = $filter('orderBy')(scope.list, '-created_at')
       scope.users.displayList = $filter('limitTo')(scope.users.displayList, 10)
 
     setSearchUsersList = () ->
+      scope.users.widgetTitle = 'Search result'
       searchToLowerCase = scope.users.search.toLowerCase()
       scope.users.displayList = _.filter(scope.list, (user) ->
         email = _.startsWith(user.email.toLowerCase(), searchToLowerCase)
