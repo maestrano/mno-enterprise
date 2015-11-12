@@ -21,7 +21,7 @@
       scope.users.displayList = $filter('orderBy')(scope.list, '-created_at')
       scope.users.displayList = $filter('limitTo')(scope.users.displayList, 10)
 
-    setSearchUsersList = (ro) ->
+    setSearchUsersList = () ->
       scope.users.state = LIST_STATE.search
       searchToLowerCase = scope.users.search.toLowerCase()
       scope.users.displayList = _.filter(scope.list, (user) ->
