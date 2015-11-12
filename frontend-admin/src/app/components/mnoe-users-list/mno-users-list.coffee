@@ -35,7 +35,6 @@
         setSearchUsersList()
 
     scope.$watch('list', (newVals, oldVals) ->
-      console.log newVals, oldVals
       setLastUsersList()
     , true)
 )

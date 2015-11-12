@@ -1,0 +1,23 @@
+<rd-widget>
+  <rd-widget-header icon="fa-organizations" title="Last 10 organizations">
+    <input type="text" ng-model="organizations.search" ng-change="searchChange()" placeholder="Search" class="form-control input-sm" />
+  </rd-widget-header>
+  <rd-widget-body loading="!list" classes="medium no-padding">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>UID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="organization in organizations.displayList">
+            <td><a ui-sref="dashboard.home.organization({orgId: organization.id})">{{organization.name}}</a></td>
+            <td>{{organization.uid}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </rd-widget-body>
+<rd-widget>

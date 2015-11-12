@@ -11,20 +11,25 @@
             when="{
               '0': 'user',
               'one': 'user',
-              'other': '{} users'}">
+              'other': 'users'}">
           </ng-pluralize>
         </div>
       </rd-widget-body>
     </rd-widget>
   </div>
-  <div class="col-lg-3 col-md-6 col-xs-12">
+  <div ng-show="vm.organizations.list" class="col-lg-3 col-md-6 col-xs-12">
     <rd-widget>
       <rd-widget-body>
         <div class="widget-icon red pull-left">
           <i class="fa fa-sitemap"></i>
         </div>
-        <div class="title">16</div>
-        <div class="comment">Organisations</div>
+        <div class="title">{{vm.organizations.list.length}}</div>
+        <ng-pluralize count="vm.organizations.list.length"
+          when="{
+            '0': 'organization',
+            'one': 'organization',
+            'other': 'organizations'}">
+        </ng-pluralize>
       </rd-widget-body>
     </rd-widget>
   </div>
@@ -57,24 +62,6 @@
     <mnoe-users-list list="vm.users.list"></mnoe-users-list>
   </div>
   <div class="col-lg-6">
-    <rd-widget>
-      <rd-widget-header icon="fa-sitemap" title="Last 10 organisations">
-        <input type="text" placeholder="Search" class="form-control input-sm" />
-      </rd-widget-header>
-      <rd-widget-body classes="medium no-padding">
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr><th class="text-center">ID</th><th>Username</th><th>Role</th><th>Account</th></tr>
-            </thead>
-            <tbody>
-              <tr><td class="text-center">1</td><td><a ui-sref="dashboard.home.organization({orgId: 1})">Joe Bloggs</a></td><td>Super Admin</td><td>AZ23045</td></tr>
-              <tr><td class="text-center">2</td><td>Timothy Hernandez</td><td>Admin</td><td>AU24783</td></tr>
-              <tr><td class="text-center">3</td><td>Joe Bickham</td><td>User</td><td>AM23781</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </rd-widget-body>
-    <rd-widget>
+    <mnoe-organizations-list list="vm.organizations.list"></mnoe-users-list>
   </div>
 </div>
