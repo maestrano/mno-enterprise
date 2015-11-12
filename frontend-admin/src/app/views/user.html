@@ -20,15 +20,15 @@
         </div>
         <div class="bs-row row">
           <div class="col-sm-3"><div class="label-cell">Creation date</div></div>
-          <div class="col-sm-3">{{::vm.user.created_at}}</div>
+          <div class="col-sm-3">{{vm.user.created_at | amCalendar }}</div>
         </div>
         <div class="bs-row row">
           <div class="col-sm-3"><div class="label-cell">Confirmed</div></div>
-          <div class="col-sm-3">{{::vm.user.confirmed_at || '(Not confirmed yet)'}}</div>
+          <div class="col-sm-3">{{(vm.user.confirmed_at | amCalendar) || '(Not confirmed yet)'}}</div>
         </div>
         <div class="bs-row row">
           <div class="col-sm-3"><div class="label-cell">Last sign in</div></div>
-          <div class="col-sm-3">{{::vm.user.last_sign_in_at || '(Never signed in yet)'}}</div>
+          <div class="col-sm-3">{{(vm.user.last_sign_in_at | amCalendar) || '(Never signed in yet)'}}</div>
         </div>
       </div>
     </div>

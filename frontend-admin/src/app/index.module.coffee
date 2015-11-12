@@ -7,5 +7,6 @@
   'ui.bootstrap',
   'toastr',
   'ncy-angular-breadcrumb',
-  'platanus.inflector'
+  'platanus.inflector',
+  'angularMoment'
 ]
