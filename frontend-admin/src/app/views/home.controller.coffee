@@ -2,10 +2,7 @@
   'ngInject'
   vm = this
 
-  # Variables initialization
-  vm.users =
-    list: []
-    search: ''
+  vm.users = {}
 
   # API calls
   MnoeUsers.list().then(

@@ -1,5 +1,5 @@
 <div class="row">
-  <div ng-show="vm.users.list.length > 0" class="col-lg-3 col-md-6 col-xs-12">
+  <div ng-show="vm.users.list" class="col-lg-3 col-md-6 col-xs-12">
     <rd-widget>
       <rd-widget-body>
         <div class="widget-icon green pull-left">
@@ -54,31 +54,7 @@
 
 <div class="row">
   <div class="col-lg-6">
-    <rd-widget>
-      <rd-widget-header icon="fa-users" title="Last 10 users">
-        <input type="text" ng-model="vm.users.search" placeholder="Search" class="form-control input-sm" />
-      </rd-widget-header>
-      <rd-widget-body classes="medium no-padding">
-        <div class="table-responsive">
-          <table class="table">
-            <thead>
-              <tr><th class="text-center">ID</th>
-                <th>Username</th>
-                <th>Role</th>
-                <th>UID</th></tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="user in vm.users.list | orderBy:'-created_at' | limitTo:10">
-                <td class="text-center">{{user.id}}</td>
-                <td><a ui-sref="dashboard.home.user({userId: user.id})">{{user.name + ' ' + user.surname}}</a></td>
-                <td>{{user.admin_role || '(none)'}}</td>
-                <td>{{user.uid}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </rd-widget-body>
-    <rd-widget>
+    <mnoe-users-list list="vm.users.list"></mnoe-users-list>
   </div>
   <div class="col-lg-6">
     <rd-widget>

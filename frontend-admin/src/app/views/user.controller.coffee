@@ -1,7 +1,11 @@
-@App.controller 'UserController', () ->
+@App.controller 'UserController', ($stateParams, MnoeUsers) ->
   'ngInject'
   vm = this
 
-  console.log 'in UserController'
+  # Get the user
+  MnoeUsers.get($stateParams.userId).then(
+    (response) ->
+      vm.user = response
+  )
 
   return

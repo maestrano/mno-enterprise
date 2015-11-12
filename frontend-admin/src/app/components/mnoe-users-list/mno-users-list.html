@@ -1,0 +1,25 @@
+<rd-widget>
+  <rd-widget-header icon="fa-users" title="Last 10 users">
+    <input type="text" ng-model="users.search" ng-change="searchChange()" placeholder="Search" class="form-control input-sm" />
+  </rd-widget-header>
+  <rd-widget-body loading="!list" classes="medium no-padding">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Username</th>
+            <th>UID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="user in users.displayList">
+            <td><a ui-sref="dashboard.home.user({userId: user.id})">{{user.email}}</a></td>
+            <td><a ui-sref="dashboard.home.user({userId: user.id})">{{user.name + ' ' + user.surname}}</a></td>
+            <td>{{user.uid}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </rd-widget-body>
+<rd-widget>
