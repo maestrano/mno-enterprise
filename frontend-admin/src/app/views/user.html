@@ -3,26 +3,38 @@
     <h1><i class="fa fa-users"></i> User info</h1>
     <div class="panel panel-default top-buffer-2">
       <div class="panel-heading">
-        <h3 class="panel-title">Alexandre Jarnoux</h3>
+        <h3 class="panel-title">{{::vm.user.name}} {{::vm.user.surname}}</h3>
       </div>
       <div class="panel-body">
         <div class="bs-row row">
           <div class="col-md-3"><div class="label-cell">Email</div></div>
-          <div class="col-md-3">alex.jarnoux@gmail.com</div>
+          <div class="col-md-3">{{::vm.user.email}}</div>
+        </div>
+        <div class="bs-row row">
+          <div class="col-md-3"><div class="label-cell">Phone</div></div>
+          <div class="col-md-3">{{::vm.user.phone || '(none)'}}</div>
+        </div>
+        <div class="bs-row row">
+          <div class="col-sm-3"><div class="label-cell">Admin role</div></div>
+          <div class="col-sm-3">{{::vm.user.admin_role || '(none)'}}</div>
         </div>
         <div class="bs-row row">
           <div class="col-sm-3"><div class="label-cell">Creation date</div></div>
-          <div class="col-sm-3">11/12/2014</div>
+          <div class="col-sm-3">{{::vm.user.created_at}}</div>
         </div>
         <div class="bs-row row">
           <div class="col-sm-3"><div class="label-cell">Confirmed</div></div>
-          <div class="col-sm-3">True</div>
+          <div class="col-sm-3">{{::vm.user.confirmed_at || '(Not confirmed yet)'}}</div>
+        </div>
+        <div class="bs-row row">
+          <div class="col-sm-3"><div class="label-cell">Last sign in</div></div>
+          <div class="col-sm-3">{{::vm.user.last_sign_in_at || '(Never signed in yet)'}}</div>
         </div>
       </div>
     </div>
     <div class="bs-row">
       <div class="col-sm-4 col-sm-offset-4">
-        <a class="btn btn-primary center-block" href="/mnoe/impersonate/user/34">Impersonate</a>
+        <a class="btn btn-primary center-block" href="/mnoe/impersonate/user/{{::vm.user.id}}">Impersonate</a>
       </div>
     </div>
   </div>
