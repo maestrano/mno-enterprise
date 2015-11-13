@@ -3,26 +3,18 @@
     <h1><i class="fa fa-sitemap"></i> Organisation info</h1>
     <div class="panel panel-default top-buffer-2">
       <div class="panel-heading">
-        <h3 class="panel-title">Organisation Acme</h3>
+        <h3 class="panel-title">{{vm.organization.name}}</h3>
       </div>
       <div class="panel-body">
         <div class="bs-row row">
-          <div class="col-md-3"><div class="label-cell">Email</div></div>
-          <div class="col-md-3">alex.jarnoux@gmail.com</div>
-        </div>
-        <div class="bs-row row">
-          <div class="col-sm-3"><div class="label-cell">Creation date</div></div>
-          <div class="col-sm-3">11/12/2014</div>
-        </div>
-        <div class="bs-row row">
-          <div class="col-sm-3"><div class="label-cell">Confirmed</div></div>
-          <div class="col-sm-3">True</div>
+          <div class="col-md-3"><div class="label-cell">UID</div></div>
+          <div class="col-md-3">{{vm.organization.uid}}</div>
         </div>
       </div>
     </div>
     <div class="bs-row">
       <div class="col-sm-4 col-sm-offset-4">
-        <a class="btn btn-primary center-block" href="/mnoe/impersonate/user/34">Impersonate</a>
+        <a class="btn btn-primary center-block">Impersonate</a>
       </div>
     </div>
   </div>
