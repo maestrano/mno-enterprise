@@ -2,7 +2,6 @@
   'ngInject'
   main = this
 
-  main.user = 'Alex Jarnoux'
   main.toggle = true
 
   main.toggleSidebar = () ->
