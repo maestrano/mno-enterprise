@@ -10,7 +10,7 @@ describe('Service: MnoeInvoices', ->
     $httpBackend = _$httpBackend_
 
     # Backend interceptors
-    $httpBackend.when('GET', '/mnoe/jpi/v1/admin/invoices/current_billing').respond(200,
+    $httpBackend.when('GET', '/mnoe/jpi/v1/admin/invoices/current_billing_amount').respond(200,
       {
         current_billing_amount: { amount: 2000, currency: 'AUD' }
       })
@@ -30,9 +30,9 @@ describe('Service: MnoeInvoices', ->
   )
 
   describe('@currentBilling', ->
-    it('GETs /mnoe/jpi/v1/admin/invoices/current_billing', ->
-      $httpBackend.expectGET('/mnoe/jpi/v1/admin/invoices/current_billing')
-      MnoeInvoices.currentBilling()
+    it('GETs /mnoe/jpi/v1/admin/invoices/current_billing_amount', ->
+      $httpBackend.expectGET('/mnoe/jpi/v1/admin/invoices/current_billing_amount')
+      MnoeInvoices.currentBillingAmount()
       $httpBackend.flush()
     )
   )

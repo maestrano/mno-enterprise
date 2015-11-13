@@ -19,7 +19,7 @@
 
   MnoeInvoices.lastInvoicingAmount().then(
     (response) ->
-      vm.invoices.currentBilling = response
+      vm.invoices.lastInvoicingAmount = response
   )
 
   MnoeInvoices.outstandingAmount().then(

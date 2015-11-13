@@ -11,7 +11,7 @@ module MnoEnterprise
       @invoice = MnoEnterprise::Invoice.find(params[:id])
     end
 
-    # GET /mnoe/jpi/v1/admin/invoices/current_billing
+    # GET /mnoe/jpi/v1/admin/invoices/current_billing_amount
     def current_billing_amount
       billing = MnoEnterprise::Organization.all.map(&:current_billing).sum(Money.new(0))
       render json: {current_billing_amount: {amount: billing.amount, currency: billing.currency_as_string}}
@@ -27,7 +27,7 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/admin/invoices/outstanding_amount
     def outstanding_amount
       org_invoice = MnoEnterprise::Organization.all.map(&:last_invoice)
-      not_paid = org_invoice.compact.select {|invoice| invoice.ended_at == nil }
+      not_paid = org_invoice.compact.select {|invoice| invoice.paid_at == nil }
       # binding.pry
       invoices_sum = not_paid.map(&:price).sum(Money.new(0))
       render json: {outstanding_amount: {amount: invoices_sum.amount, currency: invoices_sum.currency_as_string}}

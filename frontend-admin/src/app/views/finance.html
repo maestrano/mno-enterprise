@@ -1,11 +1,11 @@
 <div class="row">
-  <div class="col-lg-3 col-md-6 col-xs-12">
+  <div ng-show="vm.invoices.currentBillingAmount" class="col-lg-3 col-md-6 col-xs-12">
     <rd-widget>
       <rd-widget-body>
-        <div class="widget-icon green pull-left">
-          <i class="fa fa-tasks"></i>
+        <div class="widget-icon orange pull-left">
+          <i class="fa fa-file-text-o"></i>
         </div>
-        <div class="title">16</div>
+        <div class="title">{{vm.invoices.currentBillingAmount.amount | isoCurrency: vm.invoices.currentBillingAmount.currency}}</div>
         <div class="comment">Total billing</div>
       </rd-widget-body>
     </rd-widget>
