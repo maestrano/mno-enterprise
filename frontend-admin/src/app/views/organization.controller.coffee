@@ -1,7 +1,11 @@
-@App.controller 'OrganizationController', () ->
+@App.controller 'OrganizationController', ($stateParams, MnoeOrganizations) ->
   'ngInject'
   vm = this
 
-  console.log 'in OrganizationController'
+  # Get the user
+  MnoeOrganizations.get($stateParams.orgId).then(
+    (response) ->
+      vm.organization = response
+  )
 
   return
