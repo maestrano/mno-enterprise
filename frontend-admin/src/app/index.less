@@ -48,9 +48,18 @@ body {
 }
 
 // Fix RDash widgets header height
-.widget .widget-header {
-  .row > div {
-    margin-bottom: 0px;
+.widget {
+  .widget-header {
+    .row > div {
+      margin-bottom: 0px;
+    }
+  }
+  .widget-body.medium {
+      min-height: 352px;
+
+      .table {
+        margin-bottom: 0px;
+      }
   }
 }
 
