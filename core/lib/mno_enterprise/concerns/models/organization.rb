@@ -46,9 +46,10 @@ module MnoEnterprise::Concerns::Models::Organization
     has_many :org_invites, class_name: 'MnoEnterprise::OrgInvite'
     has_many :app_instances, class_name: 'MnoEnterprise::AppInstance'
     has_many :invoices, class_name: 'MnoEnterprise::Invoice'
-    has_one :credit_card, class_name: 'MnoEnterprise::CreditCard'
+    has_one  :credit_card, class_name: 'MnoEnterprise::CreditCard'
     has_many :teams, class_name: 'MnoEnterprise::Team'
     has_many :dashboards, class_name: 'MnoEnterprise::Impac::Dashboard'
+    has_one :last_invoice, class_name: 'MnoEnterprise::Invoice'
   end
 
   #==================================================================
