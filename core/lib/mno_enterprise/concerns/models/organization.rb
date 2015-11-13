@@ -49,7 +49,7 @@ module MnoEnterprise::Concerns::Models::Organization
     has_one  :credit_card, class_name: 'MnoEnterprise::CreditCard'
     has_many :teams, class_name: 'MnoEnterprise::Team'
     has_many :dashboards, class_name: 'MnoEnterprise::Impac::Dashboard'
-    has_one :last_invoice, class_name: 'MnoEnterprise::Invoice'
+    has_one :raw_last_invoice, class_name: 'MnoEnterprise::Invoice', path: '/last_invoice'
   end
 
   #==================================================================
@@ -75,6 +75,15 @@ module MnoEnterprise::Concerns::Models::Organization
   def add_user(user,role = 'Member')
     self.users.create(id: user.id, role: role)
   end
+
+  def last_invoice
+    inv = self.raw_last_invoice
+    inv.id ? inv : nil
+  end
+  # def last_invoice_with_nil
+  #   last_invoice.respond_to?(:id) ? last_invoice : nil
+  # end
+  # alias_method_chain :last_invoice, :nil
 
   # Remove a user from the organization
   # TODO: specs
