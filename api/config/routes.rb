@@ -116,11 +116,17 @@ MnoEnterprise::Engine.routes.draw do
           resources :kpis, shallow: true, only: [:create, :destroy, :update]
         end
       end
-      namespace :admin, defaults: { format: 'json' } do
+      namespace :admin, defaults: {format: 'json'} do
         resources :users, only: [:index, :show]
         resources :organizations, only: [:index, :show]
         resources :tenant_invoices, only: [:index, :show]
-        resources :invoices, only: [:index, :show]
+        resources :invoices, only: [:index, :show] do
+          collection do
+            get :current_billing_amount
+            get :last_invoicing_amount
+            get :outstanding_amount
+          end
+        end
       end
     end
   end
