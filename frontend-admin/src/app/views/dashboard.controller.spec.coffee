@@ -6,7 +6,7 @@ describe 'controllers', () ->
   beforeEach inject ($controller) ->
     main = $controller 'DashboardController'
 
-  it 'make sur the sidebar is toggled on init', () ->
+  it 'make sure the sidebar is toggled on init', () ->
     expect(main.toggle).toEqual true
 
   it 'toggle the sidebar', () ->
