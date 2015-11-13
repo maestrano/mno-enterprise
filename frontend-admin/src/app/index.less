@@ -1,0 +1,71 @@
+/**
+ *  Do not remove the comments below. It's the markers used by wiredep to inject
+ *  less dependencies when defined in the bower.json of your dependencies
+ */
+// bower:less
+// endbower
+
+/**
+ *  If you want to override some bootstrap variables, you have to change values here.
+ *  The list of variables are listed here bower_components/bootstrap/less/variables.less
+ */
+@icon-font-path: '../../bower_components/bootstrap/fonts/';
+@fa-font-path: "../../bower_components/font-awesome/fonts";
+
+// Spacers
+@top-buffer-height: @grid-gutter-width/2;
+.top-buffer-1 { margin-top: @top-buffer-height; }
+.top-buffer-2 { margin-top: 2*@top-buffer-height; }
+.top-buffer-3 { margin-top: 3*@top-buffer-height; }
+.top-buffer-4 { margin-top: 4*@top-buffer-height; }
+.top-buffer-5 { margin-top: 5*@top-buffer-height; }
+.top-buffer-6 { margin-top: 6*@top-buffer-height; }
+.top-buffer-7 { margin-top: 7*@top-buffer-height; }
+.top-buffer-8 { margin-top: 8*@top-buffer-height; }
+.top-buffer-9 { margin-top: 9*@top-buffer-height; }
+.top-buffer-10 { margin-top: 10*@top-buffer-height; }
+
+// RDash overload bootstrap rows...
+// This is the real bootstrap class
+.bs-row {
+  margin-left: -15px !important;
+  margin-right: -15px !important;
+}
+
+body {
+  background: #f3f3f3;
+  font-family: Montserrat;
+}
+
+.breadcrumb {
+  padding: 0px;
+  margin: 0px;
+  background-color: transparent;
+}
+
+.label-cell {
+  border-bottom: 1px dashed @brand-primary;
+}
+
+// Fix RDash widgets header height
+.widget {
+  .widget-header {
+    .row > div {
+      margin-bottom: 0px;
+    }
+  }
+  .widget-body.medium {
+      min-height: 352px;
+
+      .table {
+        margin-bottom: 0px;
+      }
+  }
+}
+
+/**
+ *  Do not remove the comments below. It's the markers used by gulp-inject to inject
+ *  all your less files automatically
+ */
+// injector
+// endinjector

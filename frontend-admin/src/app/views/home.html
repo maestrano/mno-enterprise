@@ -1,0 +1,73 @@
+<div class="row">
+  <div ng-show="vm.users.list" class="col-lg-3 col-md-6 col-xs-12">
+    <rd-widget>
+      <rd-widget-body>
+        <div class="widget-icon green pull-left">
+          <i class="fa fa-users"></i>
+        </div>
+        <div class="title">{{vm.users.list.length}}</div>
+        <div class="comment">
+          <ng-pluralize count="vm.users.list.length"
+            when="{
+              '0': 'user',
+              'one': 'user',
+              'other': 'users'}">
+          </ng-pluralize>
+        </div>
+      </rd-widget-body>
+    </rd-widget>
+  </div>
+  <div ng-show="vm.organizations.list" class="col-lg-3 col-md-6 col-xs-12">
+    <rd-widget>
+      <rd-widget-body>
+        <div class="widget-icon red pull-left">
+          <i class="fa fa-sitemap"></i>
+        </div>
+        <div class="title">{{vm.organizations.list.length}}</div>
+        <ng-pluralize count="vm.organizations.list.length"
+          when="{
+            '0': 'organization',
+            'one': 'organization',
+            'other': 'organizations'}">
+        </ng-pluralize>
+      </rd-widget-body>
+    </rd-widget>
+  </div>
+
+  <div ng-show="vm.invoices.lastInvoicingAmount" class="col-lg-3 col-md-6 col-xs-12">
+    <a ui-sref="dashboard.finance">
+      <rd-widget>
+        <rd-widget-body>
+          <div class="widget-icon orange pull-left">
+            <i class="fa fa-file-text-o"></i>
+          </div>
+          <div class="title">{{vm.invoices.lastInvoicingAmount.amount | isoCurrency: vm.invoices.lastInvoicingAmount.currency}}</div>
+          <div class="comment">Last invoice</div>
+        </rd-widget-body>
+      </rd-widget>
+    </a>
+  </div>
+
+  <div ng-show="vm.invoices.outstandingAmount" class="col-lg-3 col-md-6 col-xs-12">
+    <a ui-sref="dashboard.finance">
+      <rd-widget>
+        <rd-widget-body>
+          <div class="widget-icon blue pull-left">
+            <i class="fa fa-line-chart"></i>
+          </div>
+          <div class="title">{{vm.invoices.outstandingAmount.amount | isoCurrency: vm.invoices.outstandingAmount.currency}}</div>
+          <div class="comment">Outstanding</div>
+        </rd-widget-body>
+      </rd-widget>
+    </a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <mnoe-users-list list="vm.users.list"></mnoe-users-list>
+  </div>
+  <div class="col-md-6">
+    <mnoe-organizations-list list="vm.organizations.list"></mnoe-users-list>
+  </div>
+</div>

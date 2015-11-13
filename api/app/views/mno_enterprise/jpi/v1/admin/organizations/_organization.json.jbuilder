@@ -1,1 +1,1 @@
-json.extract! organization, :id, :name, :soa_enabled
+json.extract! organization, :id, :name, :uid, :soa_enabled
