@@ -8,5 +8,6 @@
   'toastr',
   'ncy-angular-breadcrumb',
   'platanus.inflector',
-  'angularMoment'
+  'angularMoment',
+  'isoCurrency'
 ]

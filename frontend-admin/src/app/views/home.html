@@ -33,24 +33,24 @@
       </rd-widget-body>
     </rd-widget>
   </div>
-  <div class="col-lg-3 col-md-6 col-xs-12">
+  <div ng-show="vm.invoices.currentBilling" class="col-lg-3 col-md-6 col-xs-12">
     <rd-widget>
       <rd-widget-body>
         <div class="widget-icon orange pull-left">
           <i class="fa fa-file-text-o"></i>
         </div>
-        <div class="title">$2,250</div>
+        <div class="title">{{vm.invoices.currentBilling.amount | isoCurrency: vm.invoices.currentBilling.currency}}</div>
         <div class="comment">Last invoice</div>
       </rd-widget-body>
     </rd-widget>
   </div>
-  <div class="col-lg-3 col-md-6 col-xs-12">
+  <div ng-show="vm.invoices.outstandingAmount" class="col-lg-3 col-md-6 col-xs-12">
     <rd-widget>
       <rd-widget-body>
         <div class="widget-icon blue pull-left">
           <i class="fa fa-line-chart"></i>
         </div>
-        <div class="title">$600</div>
+        <div class="title">{{vm.invoices.outstandingAmount.amount | isoCurrency: vm.invoices.outstandingAmount.currency}}</div>
         <div class="comment">Outstanding</div>
       </rd-widget-body>
     </rd-widget>
@@ -58,10 +58,10 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-6">
+  <div class="col-md-6">
     <mnoe-users-list list="vm.users.list"></mnoe-users-list>
   </div>
-  <div class="col-lg-6">
+  <div class="col-md-6">
     <mnoe-organizations-list list="vm.organizations.list"></mnoe-users-list>
   </div>
 </div>
