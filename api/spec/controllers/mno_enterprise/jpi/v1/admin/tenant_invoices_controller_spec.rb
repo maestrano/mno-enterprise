@@ -17,8 +17,7 @@ module MnoEnterprise
           'paid_at' => tenant_invoice.paid_at,
           'total_portfolio_amount' => AccountingjsSerializer.serialize(tenant_invoice.total_portfolio_amount),
           'total_commission_amount' => AccountingjsSerializer.serialize(tenant_invoice.total_commission_amount),
-          'non_commissionable_amount' => AccountingjsSerializer.serialize(tenant_invoice.non_commissionable_amount),
-          'unpaid' => true
+          'non_commissionable_amount' => AccountingjsSerializer.serialize(tenant_invoice.non_commissionable_amount)
       }
     end
 
