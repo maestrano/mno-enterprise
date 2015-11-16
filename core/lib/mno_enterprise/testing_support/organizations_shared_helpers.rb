@@ -77,6 +77,15 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     return ret
   end
 
+  def partial_hash_for_organization_in_arrears(organization)
+    {
+        'id' => organization.id,
+        'name' => organization.name,
+        'soa_enabled' => organization.soa_enabled,
+        'in_arrears?' => organization.in_arrears?
+    }
+  end
+
   def partial_hash_for_current_user(organization, user)
     {
         'id' => user.id,
@@ -113,6 +122,12 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
   def hash_for_organizations(organizations)
     {
         'organizations' => organizations.map { |o| partial_hash_for_organization(o) }
+    }
+  end
+
+  def hash_for_organizations_in_arrears(organizations)
+    {
+        'organizations' => organizations.map { |o| partial_hash_for_organization_in_arrears(o) }
     }
   end
 

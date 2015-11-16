@@ -24,19 +24,22 @@ module MnoEnterprise
 
     # Stub organization + associations
     let(:organization) { build(:organization) }
-    let!(:org_invite) { build(:org_invite, organization: organization) }
-    before do
+    let(:org_invite) { build(:org_invite, organization: organization) }
+    let(:app_instance) { build(:app_instance, organization: organization) }
+    let(:credit_card) { build(:credit_card, organization: organization) }
 
+    before do
       allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) # ???
       api_stub_for(get: "/organizations", response: from_api([organization]))
       api_stub_for(get: "/organizations/#{organization.id}", response: from_api(organization))
       api_stub_for(get: "/organizations/#{organization.id}/users", response: from_api([user]))
       api_stub_for(get: "/organizations/#{organization.id}/org_invites", response: from_api([org_invite]))
+      api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
+      api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api([credit_card]))
     end
 
 
-    #==========================
-    # =====================
+    #===============================================
     # Specs
     #===============================================
     describe '#index' do
@@ -61,6 +64,19 @@ module MnoEnterprise
         it 'returns a complete description of the organization' do
           expect(response).to be_success
           expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_organization(organization, user).to_json))
+        end
+      end
+    end
+
+    describe 'GET #in_arrears' do
+      subject { get :in_arrears }
+
+      context 'success' do
+        before { subject }
+
+        it 'returns a complete description of the organization with arrears status' do
+          expect(response).to be_success
+          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_organizations_in_arrears([organization]).to_json))
         end
       end
     end
