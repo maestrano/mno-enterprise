@@ -1,4 +1,4 @@
-@App.controller 'OrganizationController', ($stateParams, MnoeOrganizations) ->
+@App.controller 'OrganizationController', ($filter, $stateParams, MnoeOrganizations) ->
   'ngInject'
   vm = this
 
@@ -6,6 +6,7 @@
   MnoeOrganizations.get($stateParams.orgId).then(
     (response) ->
       vm.organization = response
+      vm.organization.invoices = $filter('orderBy')(vm.organization.invoices, '-started_at')
   )
 
   return

@@ -13,7 +13,7 @@
   MnoeTenantInvoices.list().then(
     (response) ->
       vm.invoices.tenantInvoices = response
-      $filter('orderBy')(vm.invoices.tenantInvoices, '-started_at')
+      vm.invoices.tenantInvoices = $filter('orderBy')(vm.invoices.tenantInvoices, '-started_at')
   )
 
   return
