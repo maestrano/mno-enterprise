@@ -6,7 +6,7 @@
           <i class="fa fa-file-text-o"></i>
         </div>
         <div class="title">{{vm.invoices.currentBillingAmount.amount | isoCurrency: vm.invoices.currentBillingAmount.currency}}</div>
-        <div class="comment">Total billing</div>
+        <div class="comment">Current billing</div>
       </rd-widget-body>
     </rd-widget>
   </div>
@@ -15,7 +15,7 @@
 <div class="row">
   <div class="col-lg-6">
     <rd-widget>
-      <rd-widget-header icon="fa-tasks" title="Accounts in arrears"></rd-widget-header>
+      <rd-widget-header icon="fa-exclamation-circle" title="Accounts in arrears"></rd-widget-header>
       <rd-widget-body classes="medium no-padding">
         <div class="table-responsive">
           <table class="table">
@@ -38,20 +38,29 @@
   </div>
   <div class="col-lg-6">
     <rd-widget>
-      <rd-widget-header icon="fa-users" title="Tenant invoices"></rd-widget-header>
+      <rd-widget-header icon="fa-file-text-o" title="Tenant invoices"></rd-widget-header>
       <rd-widget-body loading="!vm.invoices.tenantInvoices" classes="medium no-padding">
         <div class="table-responsive">
           <table class="table">
             <thead>
-              <tr><th class="text-center">ID</th><th>Start</th><th>End</th><th>Paid</th></tr>
+              <tr>
+                <th>Start</th>
+                <th>End</th>
+                <th>Revenue</th>
+                <th>Comission</th>
+                <th>Paid</th>
+              </tr>
             </thead>
             <tbody>
               <tr ng-repeat="invoice in vm.invoices.tenantInvoices">
-                <td class="text-center">{{invoice.id}}</td>
                 <td>{{invoice.started_at | date: 'dd/MM/yyyy'}}</td>
                 <td>{{invoice.ended_at | date: 'dd/MM/yyyy'}}</td>
-                <td ng-if="invoice.paid_at"><span class="text-success"><i class="fa fa-check"></i></span></td>
-                <td ng-if="!invoice.paid_at"><span class="text-danger"><i class="fa fa-times"></i></span></td>
+                <td>{{invoice.total_commission_amount.value | isoCurrency: invoice.total_portfolio_amount.options.iso_code}}</td>
+                <td>{{invoice.total_commission_amount.value | isoCurrency: invoice.total_commission_amount.options.iso_code}}</td>
+                <td class="text-center">
+                  <span ng-if="invoice.paid_at" class="text-success"><i class="fa fa-check"></i></span>
+                  <span ng-if="!invoice.paid_at" class="text-danger"><i class="fa fa-times"></i></span>
+                </td>
               </tr>
             </tbody>
           </table>
