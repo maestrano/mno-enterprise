@@ -17,14 +17,12 @@
 
     # Display all the users
     setAllUsersList = () ->
-      console.log 'setAllUsersList'
       scope.users.widgetTitle = 'All users (' + scope.list.length + ')'
       scope.users.displayList = $filter('orderBy')(scope.list, '-created_at')
       scope.users.displayList = $filter('limitTo')(scope.users.displayList, 10)
 
     # Display only the last 10 users
     setLastUsersList = () ->
-      console.log 'setLastUsersList'
       scope.users.widgetTitle = 'Last 10 users'
       scope.users.displayList = $filter('orderBy')(scope.list, 'email')
 
@@ -55,7 +53,6 @@
 
     scope.$watch('list', (newVal, oldVal) ->
       if newVal
-        console.log 'test', attrs.all
         displayNormalState()
     , true)
 )
