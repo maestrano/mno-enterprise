@@ -11,6 +11,18 @@ module MnoEnterprise
     it 'routes to #show' do
       expect(get('/jpi/v1/admin/invoices/1')).to route_to("mno_enterprise/jpi/v1/admin/invoices#show", format: "json", id: '1')
     end
+
+    it 'routes to #current_billing_amount' do
+      expect(get('/jpi/v1/admin/invoices/current_billing_amount')).to route_to("mno_enterprise/jpi/v1/admin/invoices#current_billing_amount", format: "json")
+    end
+
+    it 'routes to #last_invoicing_amount' do
+      expect(get('/jpi/v1/admin/invoices/last_invoicing_amount')).to route_to("mno_enterprise/jpi/v1/admin/invoices#last_invoicing_amount", format: "json")
+    end
+
+    it 'routes to #outstanding_amount' do
+      expect(get('/jpi/v1/admin/invoices/outstanding_amount')).to route_to("mno_enterprise/jpi/v1/admin/invoices#outstanding_amount", format: "json")
+    end
   end
 end
 

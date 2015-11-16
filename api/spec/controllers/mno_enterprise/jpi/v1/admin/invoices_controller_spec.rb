@@ -7,7 +7,7 @@ module MnoEnterprise
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
     def partial_hash_for_invoice(invoice)
-      ret = {
+      {
           'id' => invoice.id,
           'price' => invoice.price,
           'started_at' => invoice.started_at,
@@ -19,7 +19,6 @@ module MnoEnterprise
           'tax_pips_applied' => invoice.tax_pips_applied,
           'billing_address' => invoice.billing_address
       }
-      return ret
     end
 
     def hash_for_invoices(invoices)
@@ -29,27 +28,24 @@ module MnoEnterprise
     end
 
     def hash_for_invoice(invoice)
-      hash = {
+      {
           'invoice' => partial_hash_for_invoice(invoice)
       }
-
-      return hash
     end
 
     #===============================================
     # Assignments
     #===============================================
-    # Stub controller ability
-    # let!(:ability) { stub_ability }
-    # before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
-
     # Stub invoice and invoice call
-    let(:invoice) { build(:invoice, :admin) }
+    let!(:invoice) { build(:invoice) }
+    let!(:user) { build(:user, :admin) }
     before do
       api_stub_for(get: "/invoices", response: from_api([invoice]))
-      # api_stub_for(put: "/invoices/#{invoice.id}", response: from_api(invoice))
       api_stub_for(get: "/invoices/#{invoice.id}", response: from_api(invoice))
-      sign_in invoice
+      api_stub_for(get: "/users", response: from_api([user]))
+      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      api_stub_for(get: "/organizations")
+      sign_in user
     end
 
     #==========================
@@ -78,6 +74,50 @@ module MnoEnterprise
         it 'returns a complete description of the invoice' do
           expect(response).to be_success
           expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_invoice(invoice).to_json))
+        end
+      end
+    end
+
+    describe 'GET #current_billing_amount' do
+      subject { get :current_billing_amount }
+
+      context 'success' do
+        before { subject }
+
+        let(:current_billing_amount) { {'current_billing_amount' => {"amount"=>"0.0", "currency"=>"USD"}} }
+
+        it 'returns the sum of the invoices' do
+          expect(response).to be_success
+          expect(JSON.parse(response.body)).to eq(JSON.parse(current_billing_amount.to_json))
+        end
+      end
+    end
+
+    describe 'GET #last_invoicing_amount' do
+      subject { get :last_invoicing_amount }
+
+      context 'success' do
+        before { subject }
+
+        let(:last_invoicing_amount) { {'last_invoicing_amount' => {"amount"=>"0.0", "currency"=>"USD"}} }
+
+        it 'returns the sum of the last invoices' do
+          expect(response).to be_success
+          expect(JSON.parse(response.body)).to eq(JSON.parse(last_invoicing_amount.to_json))
+        end
+      end
+    end
+
+    describe 'GET #outstanding_amount' do
+      subject { get :outstanding_amount }
+
+      context 'success' do
+        before { subject }
+        let(:outstanding_amount) { {'outstanding_amount' => {"amount"=>"0.0", "currency"=>"USD"}} }
+
+        it 'returns the sum of unpaid invoices' do
+          expect(response).to be_success
+          expect(JSON.parse(response.body)).to eq(JSON.parse(outstanding_amount.to_json))
         end
       end
     end

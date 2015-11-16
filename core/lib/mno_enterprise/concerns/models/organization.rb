@@ -39,6 +39,8 @@ module MnoEnterprise::Concerns::Models::Organization
       :latitude, :longitude, :geo_country_code, :geo_state_code, :geo_city, :geo_tz, :geo_currency,
       :meta_data, :industry, :size
 
+    scope :in_arrears, -> { where(in_arrears?: true) }
+
     #================================
     # Associations
     #================================

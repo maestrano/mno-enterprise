@@ -11,5 +11,10 @@ module MnoEnterprise
       @organization = MnoEnterprise::Organization.find(params[:id])
       @organization_active_apps = @organization.app_instances.select { |app| app.status == "running" }
     end
+
+    # GET /mnoe/jpi/v1/admin/organizations/in_arrears
+    def in_arrears
+      @organizations = MnoEnterprise::Organization.in_arrears.all
+    end
   end
 end

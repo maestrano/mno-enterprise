@@ -118,7 +118,11 @@ MnoEnterprise::Engine.routes.draw do
       end
       namespace :admin, defaults: {format: 'json'} do
         resources :users, only: [:index, :show]
-        resources :organizations, only: [:index, :show]
+        resources :organizations, only: [:index, :show] do
+          collection do
+            get :in_arrears
+          end
+        end
         resources :tenant_invoices, only: [:index, :show]
         resources :invoices, only: [:index, :show] do
           collection do

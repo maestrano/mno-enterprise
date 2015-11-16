@@ -7,20 +7,35 @@ module MnoEnterprise
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
     def partial_hash_for_user(user)
-      ret = {
+      {
+          'id' => user.id,
+          'uid' => user.uid,
+          'email' => user.email,
+          'phone' => user.phone,
+          'name' => user.name,
+          'surname' => user.surname,
+          'admin_role' => user.admin_role,
+          'created_at' => user.created_at,
+          'last_sign_in_at' => user.last_sign_in_at,
+          'confirmed_at' => user.confirmed_at
+      }
+    end
+
+    def partial_hash_for_users(user)
+      {
           'id' => user.id,
           'uid' => user.uid,
           'email' => user.email,
           'name' => user.name,
           'surname' => user.surname,
-          'admin_role' => user.admin_role
+          'admin_role' => user.admin_role,
+          'created_at' => user.created_at
       }
-      return ret
     end
 
     def hash_for_users(users)
       {
-          'users' => users.map { |o| partial_hash_for_user(o) }
+          'users' => users.map { |o| partial_hash_for_users(o) }
       }
     end
 
@@ -43,7 +58,6 @@ module MnoEnterprise
     let(:user) { build(:user, :admin) }
     before do
       api_stub_for(get: "/users", response: from_api([user]))
-      # api_stub_for(put: "/users/#{user.id}", response: from_api(user))
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
       sign_in user
     end

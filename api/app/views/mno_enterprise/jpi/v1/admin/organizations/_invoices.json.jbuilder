@@ -4,6 +4,5 @@ json.invoices do
     json.ended_at invoice.ended_at
     json.amount AccountingjsSerializer.serialize(invoice.total_due)
     json.paid invoice.paid?
-    json.link mno_enterprise.invoice_path(invoice.slug)
   end
 end
