@@ -90,7 +90,7 @@ mnoAppModules.push('blndspt.ngPerformance')
         template: "<div dashboard-marketplace-app></div>"
       }).
       when('/impac', {
-        template: "<div impac-index></div>"
+        template: "<div impac-dashboard ></div>"
       }).
       otherwise({
         redirectTo: '/'
@@ -115,3 +115,58 @@ mnoAppModules.push('blndspt.ngPerformance')
   $rootScope.templatePath = TemplatePath
   editableOptions.theme = 'bs3'
 ])
+
+
+# ----- IMPAC ANGULAR PROVIDER CONFIGURATIONS
+#======================================================================================
+# IMPAC-LINKING: Require core data
+#======================================================================================
+@maestranoApp.run (ImpacLinking, ImpacConfigSvc) ->
+
+  data =
+    user: ImpacConfigSvc.getUserData
+    organizations: ImpacConfigSvc.getOrganizations
+
+  ImpacLinking.linkData(data)
+
+#======================================================================================
+# IMPAC-ROUTES: Configuring API routes
+#======================================================================================
+@maestranoApp.run (ImpacRoutes) ->
+
+  data =
+    dhbBasePath: '/mnoe/jpi/v1/analytics/dashboards'
+    widgetBasePath: '/mnoe/jpi/v1/analytics/widgets'
+    showWidgetPath: '<%= "#{MnoEnterprise.impac_api_host}://#{MnoEnterprise.impac_api_root_path}/get_widget" %>'
+    sendWidgetSuggestionPath: 'mnoe/jpi/v1/mailers'
+    impacKpisBasePath: '<%= "#{MnoEnterprise.impac_api_host}://#{MnoEnterprise.impac_api_root_path}/kpis" %>'
+    kpiBasePath: '/mnoe/jpi/v1/impac/kpis'
+
+  ImpacRoutes.configureRoutes(data)
+
+#======================================================================================
+# IMPAC-ASSETS: Configuring static assets
+#======================================================================================
+@maestranoApp.run (ImpacAssets, AssetPath) ->
+
+  paths =
+    dataNotFound: '<%= image_path("impac/data_not_found") %>'
+    # impacTitleLogo: '<%= image_path("impac/transparent-logo.png") %>'
+    # impacDashboardBackground: '<%= image_path("impac/impac_background.png") %>'
+
+  ImpacAssets.configure(paths)
+
+#======================================================================================
+# IMPAC-THEMES: Configuring colour themes, and enabling/disabling UI functionality.
+#======================================================================================
+@maestranoApp.run (ImpacTheming) ->
+
+  data =
+    dhbConfig:
+      showDhbHeading: true
+      dhbHeadingText: ''
+    # kpis options
+    dhbKpisConfig:
+      enableKpis: false
+
+  ImpacTheming.configure(data)
