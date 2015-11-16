@@ -1,5 +1,7 @@
 module MnoEnterprise
   class Jpi::V1::Admin::BaseResourceController < ApplicationController
+    ADMIN_CACHE_DURATION = 12.hours
+
     before_filter :check_authorization
 
     protected
