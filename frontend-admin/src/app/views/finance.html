@@ -6,7 +6,7 @@
           <i class="fa fa-file-text-o"></i>
         </div>
         <div class="title">{{vm.invoices.currentBillingAmount.amount | isoCurrency: vm.invoices.currentBillingAmount.currency}}</div>
-        <div class="comment">Total billing</div>
+        <div class="comment">Current billing</div>
       </rd-widget-body>
     </rd-widget>
   </div>
@@ -15,24 +15,21 @@
 <div class="row">
   <div class="col-lg-6">
     <rd-widget>
-      <rd-widget-header icon="fa-tasks" title="Accounts in arrears">
-        <a href="#">Manage</a>
-      </rd-widget-header>
+      <rd-widget-header icon="fa-exclamation-circle" title="Accounts in arrears"></rd-widget-header>
       <rd-widget-body classes="medium no-padding">
         <div class="table-responsive">
           <table class="table">
+            <thead>
+              <tr>
+                <th>Organisation</th>
+                <th>UID</th>
+              </tr>
+            </thead>
             <tbody>
-              <tr><td>RDVMPC001</td><td>238.103.133.37</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-              <tr><td>RDVMPC002</td><td>68.66.63.170</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-              <tr><td>RDVMPC003</td><td>76.117.212.33</td><td><span tooltip="Server Down!" class="text-danger"><i class="fa fa-warning"></i></span></td></tr>
-              <tr><td>RDPHPC001</td><td>91.88.224.5</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-              <tr><td>RDESX001</td><td>197.188.15.93</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-              <tr><td>RDESX002</td><td>168.85.154.251</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-              <tr><td>RDESX003</td><td>209.25.191.61</td><td><span tooltip="Server Down!" class="text-danger"><i class="fa fa-warning"></i></span></td></tr>
-              <tr><td>RDESX004</td><td>252.37.192.235</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-              <tr><td>RDTerminal01</td><td>139.71.18.207</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
-              <tr><td>RDTerminal02</td><td>136.80.122.212</td><td><span tooltip="Could not connect!" class="text-warning"><i class="fa fa-flash"></i></span></td></tr>
-              <tr><td>RDDomainCont01</td><td>196.80.245.33</td><td><span class="text-success"><i class="fa fa-check"></i></span></td></tr>
+              <tr>
+                <td><a ui-sref="dashboard.home.organization({orgId: 9})">Marvel</a></td>
+                <td>org-fbc1</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -41,19 +38,30 @@
   </div>
   <div class="col-lg-6">
     <rd-widget>
-      <rd-widget-header icon="fa-users" title="Tenant invoices">
-        <input type="text" placeholder="Search" class="form-control input-sm" />
-      </rd-widget-header>
-      <rd-widget-body classes="medium no-padding">
+      <rd-widget-header icon="fa-file-text-o" title="Tenant invoices"></rd-widget-header>
+      <rd-widget-body loading="!vm.invoices.tenantInvoices" classes="medium no-padding">
         <div class="table-responsive">
           <table class="table">
             <thead>
-              <tr><th class="text-center">ID</th><th>Username</th><th>Role</th><th>Account</th></tr>
+              <tr>
+                <th>Start</th>
+                <th>End</th>
+                <th>Revenue</th>
+                <th>Commission</th>
+                <th class="text-center">Paid</th>
+              </tr>
             </thead>
             <tbody>
-              <tr><td class="text-center">1</td><td>Joe Bloggs</td><td>Super Admin</td><td>AZ23045</td></tr>
-              <tr><td class="text-center">2</td><td>Timothy Hernandez</td><td>Admin</td><td>AU24783</td></tr>
-              <tr><td class="text-center">3</td><td>Joe Bickham</td><td>User</td><td>AM23781</td></tr>
+              <tr ng-repeat="invoice in vm.invoices.tenantInvoices">
+                <td>{{invoice.started_at | date: 'dd/MM/yyyy'}}</td>
+                <td>{{invoice.ended_at | date: 'dd/MM/yyyy'}}</td>
+                <td>{{invoice.total_commission_amount.value | isoCurrency: invoice.total_portfolio_amount.options.iso_code}}</td>
+                <td>{{invoice.total_commission_amount.value | isoCurrency: invoice.total_commission_amount.options.iso_code}}</td>
+                <td class="text-center">
+                  <span ng-if="invoice.paid_at" class="text-success"><i class="fa fa-check"></i></span>
+                  <span ng-if="!invoice.paid_at" class="text-danger"><i class="fa fa-times"></i></span>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

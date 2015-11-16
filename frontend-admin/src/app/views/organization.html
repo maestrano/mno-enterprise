@@ -1,21 +1,82 @@
-<div id="user" class="row">
-  <div class="col-xs-12">
-    <h1><i class="fa fa-sitemap"></i> Organisation info</h1>
-    <div class="panel panel-default top-buffer-2">
-      <div class="panel-heading">
-        <h3 class="panel-title">{{vm.organization.name}}</h3>
-      </div>
-      <div class="panel-body">
-        <div class="bs-row row">
-          <div class="col-md-3"><div class="label-cell">UID</div></div>
-          <div class="col-md-3">{{vm.organization.uid}}</div>
+<div id="organization">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1><i class="fa fa-sitemap"></i> Organisation info</h1>
+      <div class="panel panel-default top-buffer-2">
+        <div class="panel-heading" ng-show="vm.organization">
+          <h3 class="panel-title">{{vm.organization.name}}</h3>
+        </div>
+        <div class="panel-body">
+          <rd-loading ng-show="!vm.organization"></rd-loading>
+          <div ng-show="vm.organization">
+            <div class="bs-row row">
+              <div class="col-md-3"><div class="label-cell">UID</div></div>
+              <div class="col-md-3">{{vm.organization.uid}}</div>
+            </div>
+            <div class="bs-row row">
+              <div class="col-md-3"><div class="label-cell">Credit Card</div></div>
+              <div class="col-md-3">
+                <span ng-if="vm.organization.credit_card.presence" class="text-success"><i class="fa fa-check"></i></span>
+                <span ng-if="!vm.organization.credit_card.presence" class="text-danger"><i class="fa fa-times"></i></span>
+              </div>
+            </div>
+            <div class="bs-row row">
+              <div class="col-md-3"><div class="label-cell">Active apps</div></div>
+              <div class="col-md-9">
+                <div class="bs-row row">
+                  <div class="app-wrapper col-sm-2" ng-repeat="app in vm.organization.active_apps">
+                    <div class="small-app-card">
+                      <img ng-src="{{app.app_logo}}" width="60">
+                      <span>{{app.app_name}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <!-- <div class="bs-row">
+        <div class="col-sm-4 col-sm-offset-4">
+          <a class="btn btn-primary center-block">Impersonate</a>
+        </div>
+      </div> -->
     </div>
-    <div class="bs-row">
-      <div class="col-sm-4 col-sm-offset-4">
-        <a class="btn btn-primary center-block">Impersonate</a>
-      </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <mnoe-users-list list="vm.organization.members" all="true"></mnoe-users-list>
+    </div>
+    <div class="col-md-6">
+      <rd-widget>
+        <rd-widget-header icon="fa-file-text-o" title="Tenant invoices"></rd-widget-header>
+        <rd-widget-body loading="!vm.organization.invoices" classes="medium no-padding">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Start</th>
+                  <th>End</th>
+                  <th>Amount</th>
+                  <th class="text-center">Paid</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="invoice in vm.organization.invoices">
+                  <td>{{invoice.started_at | date: 'dd/MM/yyyy'}}</a></td>
+                  <td>{{invoice.ended_at | date: 'dd/MM/yyyy'}}</td>
+                  <td>{{invoice.amount.value | isoCurrency: invoice.amount.options.iso_code}}</td>
+                  <td class="text-center">
+                    <span ng-if="invoice.paid" class="text-success"><i class="fa fa-check"></i></span>
+                    <span ng-if="!invoice.paid" class="text-danger"><i class="fa fa-times"></i></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </rd-widget-body>
+      <rd-widget>
     </div>
   </div>
 </div>
