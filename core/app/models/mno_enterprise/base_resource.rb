@@ -73,6 +73,12 @@ module MnoEnterprise
     #======================================================================
     # Instance methods
     #======================================================================
+    # Simple cache_key
+    # TODO: use the timestamp for better expiration
+    def cache_key()
+      "#{model_name.cache_key}/#{id}"
+    end
+
     # ActiveRecord Compatibility for Her
     def read_attribute(attr_name)
       get_attribute(attr_name)
