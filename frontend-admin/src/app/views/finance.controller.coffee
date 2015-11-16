@@ -1,4 +1,4 @@
-@App.controller 'FinanceController', (MnoeInvoices) ->
+@App.controller 'FinanceController', ($filter, MnoeInvoices, MnoeTenantInvoices) ->
   'ngInject'
   vm = this
 
@@ -8,6 +8,12 @@
   MnoeInvoices.currentBillingAmount().then(
     (response) ->
       vm.invoices.currentBillingAmount = response
+  )
+
+  MnoeTenantInvoices.list().then(
+    (response) ->
+      vm.invoices.tenantInvoices = response
+      $filter('orderBy')(vm.invoices.tenantInvoices, '-started_at')
   )
 
   return
