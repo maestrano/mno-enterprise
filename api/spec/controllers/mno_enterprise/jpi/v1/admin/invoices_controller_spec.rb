@@ -84,7 +84,7 @@ module MnoEnterprise
       context 'success' do
         before { subject }
 
-        let(:current_billing_amount) { {'current_billing_amount' => {"amount" => nil, "currency" => nil}} }
+        let(:current_billing_amount) { {'current_billing_amount' => {"amount"=>"0.0", "currency"=>"USD"}} }
 
         it 'returns the sum of the invoices' do
           expect(response).to be_success
@@ -99,7 +99,7 @@ module MnoEnterprise
       context 'success' do
         before { subject }
 
-        let(:last_invoicing_amount) { {'last_invoicing_amount' => {"amount" => nil, "currency" => nil}} }
+        let(:last_invoicing_amount) { {'last_invoicing_amount' => {"amount"=>"0.0", "currency"=>"USD"}} }
 
         it 'returns the sum of the last invoices' do
           expect(response).to be_success
@@ -113,7 +113,7 @@ module MnoEnterprise
 
       context 'success' do
         before { subject }
-        let(:outstanding_amount) { {'outstanding_amount' => {"amount" => nil, "currency" => nil}} }
+        let(:outstanding_amount) { {'outstanding_amount' => {"amount"=>"0.0", "currency"=>"USD"}} }
 
         it 'returns the sum of unpaid invoices' do
           expect(response).to be_success

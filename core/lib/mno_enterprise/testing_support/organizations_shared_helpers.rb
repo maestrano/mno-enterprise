@@ -150,7 +150,11 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
       hash.merge!(partial_hash_for_invoices(organization))
 
       if (cc = organization.credit_card)
-        hash.merge!(partial_hash_for_credit_card(cc))
+        if admin
+          hash.merge!("credit_card" => {"presence" => false})
+        else
+          hash.merge!(partial_hash_for_credit_card(cc))
+        end
       end
 
       if (situations = organization.arrears_situations)

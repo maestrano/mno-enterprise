@@ -8,12 +8,17 @@ module MnoEnterprise
 
     def partial_hash_for_tenant_invoices(tenant_invoice)
       {
+          'id' => tenant_invoice.id,
           'started_at' => tenant_invoice.started_at,
           'ended_at' => tenant_invoice.ended_at,
-          'total_portfolio_amount' => tenant_invoice.total_portfolio_amount,
-          'total_commission_amount' => tenant_invoice.total_commission_amount,
-          'non_commissionable_amount' => tenant_invoice.non_commissionable_amount,
-          'mno_commission_amount' => tenant_invoice.mno_commission_amount
+          'created_at' => tenant_invoice.created_at,
+          'updated_at' => tenant_invoice.updated_at,
+          'slug' => tenant_invoice.slug,
+          'paid_at' => tenant_invoice.paid_at,
+          'total_portfolio_amount' => AccountingjsSerializer.serialize(tenant_invoice.total_portfolio_amount),
+          'total_commission_amount' => AccountingjsSerializer.serialize(tenant_invoice.total_commission_amount),
+          'non_commissionable_amount' => AccountingjsSerializer.serialize(tenant_invoice.non_commissionable_amount),
+          'unpaid' => true
       }
     end
 
@@ -21,7 +26,7 @@ module MnoEnterprise
       {
           'id' => tenant_invoice.id,
           'started_at' => tenant_invoice.started_at,
-          'create_at' => tenant_invoice.created_at,
+          'created_at' => tenant_invoice.created_at,
           'ended_at' => tenant_invoice.ended_at,
           'updated_at' => tenant_invoice.updated_at,
           'paid_at' => tenant_invoice.paid_at,
@@ -33,6 +38,7 @@ module MnoEnterprise
       {
           'tenant_invoices' => tenant_invoices.map { |o| partial_hash_for_tenant_invoices(o) }
       }
+
     end
 
     def hash_for_tenant_invoice(tenant_invoice)

@@ -5,10 +5,9 @@ module MnoEnterprise
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
-    before { ActiveSupport::JSON::Encoding.time_precision = 0 }
 
     def partial_hash_for_user(user)
-      ret = {
+      {
           'id' => user.id,
           'uid' => user.uid,
           'email' => user.email,
@@ -20,12 +19,23 @@ module MnoEnterprise
           'last_sign_in_at' => user.last_sign_in_at,
           'confirmed_at' => user.confirmed_at
       }
-      return ret
+    end
+
+    def partial_hash_for_users(user)
+      {
+          'id' => user.id,
+          'uid' => user.uid,
+          'email' => user.email,
+          'name' => user.name,
+          'surname' => user.surname,
+          'admin_role' => user.admin_role,
+          'created_at' => user.created_at
+      }
     end
 
     def hash_for_users(users)
       {
-          'users' => users.map { |o| partial_hash_for_user(o) }
+          'users' => users.map { |o| partial_hash_for_users(o) }
       }
     end
 

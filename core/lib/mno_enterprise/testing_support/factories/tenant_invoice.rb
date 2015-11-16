@@ -12,7 +12,7 @@ FactoryGirl.define do
       started_at 28.days.ago
       ended_at 3.days.ago
       created_at 3.days.ago 
-      updated_at 1.hour.ago 
+      updated_at 1.hour.ago
       paid_at nil
 
       total_commission_amount Money.new(0,'AUD')
