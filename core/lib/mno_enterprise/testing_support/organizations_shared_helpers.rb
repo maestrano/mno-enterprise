@@ -60,24 +60,23 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
 #   return { arrears_situations: array }
 # end
 
-  def partial_hash_for_organization(organization)
+  def partial_hash_for_organization(organization, admin = false)
     ret = {
         'id' => organization.id,
         'name' => organization.name,
         'soa_enabled' => organization.soa_enabled
-        #'current_support_plan' => organization.current_support_plan,
     }
 
-    # if organization.support_plan
-    #   ret['organization'].merge!({
-    #     'custom_training_credits' => organization.support_plan.custom_training_credits
-    #   })
-    # end
+    if admin
+      ret.merge!({
+                     'uid' => organization.uid
+                 })
+    end
 
-    return ret
+    ret
   end
 
-  def partial_hash_for_organization_in_arrears(organization)
+  def partial_hash_for_organization_in_arrears(organization, admin = false)
     {
         'id' => organization.id,
         'name' => organization.name,
@@ -119,15 +118,15 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     return hash
   end
 
-  def hash_for_organizations(organizations)
+  def hash_for_organizations(organizations, admin = false)
     {
-        'organizations' => organizations.map { |o| partial_hash_for_organization(o) }
+        'organizations' => organizations.map { |o| partial_hash_for_organization(o, admin) }
     }
   end
 
-  def hash_for_organizations_in_arrears(organizations)
+  def hash_for_organizations_in_arrears(organizations, admin = false)
     {
-        'organizations' => organizations.map { |o| partial_hash_for_organization_in_arrears(o) }
+        'organizations' => organizations.map { |o| partial_hash_for_organization_in_arrears(o, admin) }
     }
   end
 
@@ -137,9 +136,9 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     }
   end
 
-  def hash_for_organization(organization, user)
+  def hash_for_organization(organization, user, admin = false)
     hash = {
-        'organization' => partial_hash_for_organization(organization),
+        'organization' => partial_hash_for_organization(organization, admin),
         'current_user' => partial_hash_for_current_user(organization, user)
     }
     hash['organization'].merge!(

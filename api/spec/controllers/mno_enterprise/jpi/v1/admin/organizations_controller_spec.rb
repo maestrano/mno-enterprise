@@ -50,7 +50,7 @@ module MnoEnterprise
 
         it 'returns a list of organizations' do
           expect(response).to be_success
-          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_organizations([organization]).to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_organizations([organization], true).to_json))
         end
       end
     end
@@ -76,7 +76,7 @@ module MnoEnterprise
 
         it 'returns a complete description of the organization with arrears status' do
           expect(response).to be_success
-          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_organizations_in_arrears([organization]).to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_organizations_in_arrears([organization], true).to_json))
         end
       end
     end
