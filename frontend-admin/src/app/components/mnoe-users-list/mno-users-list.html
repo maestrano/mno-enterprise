@@ -15,7 +15,10 @@
         <tbody>
           <tr ng-repeat="user in users.displayList">
             <td><a ui-sref="dashboard.home.user({userId: user.id})">{{user.email}}</a></td>
-            <td><a ui-sref="dashboard.home.user({userId: user.id})">{{user.name + ' ' + user.surname}}</a></td>
+            <td>
+              <a ng-show="user.name && user.surname" ui-sref="dashboard.home.user({userId: user.id})">{{user.name + ' ' + user.surname}}</a>
+              <span ng-show="!user.name && !user.surname">nc</span>
+            </td>
             <td>{{user.uid}}</td>
           </tr>
         </tbody>
