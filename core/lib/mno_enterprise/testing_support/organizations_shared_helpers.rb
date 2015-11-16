@@ -20,18 +20,21 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     }
   end
 
-  def partial_hash_for_members(organization)
+  def partial_hash_for_members(organization, admin = false)
     list = []
     organization.users.each do |user|
-      list.push({
-                    'id' => user.id,
-                    'entity' => 'User',
-                    'name' => user.name,
-                    'surname' => user.surname,
-                    'email' => user.email,
-                    'role' => user.role(organization)
-                })
+      u = {
+          'id' => user.id,
+          'entity' => 'User',
+          'name' => user.name,
+          'surname' => user.surname,
+          'email' => user.email,
+          'role' => user.role(organization)
+      }
+      u.merge!('uid' => user.uid) if admin
+      list.push(u)
     end
+
 
     organization.org_invites.each do |invite|
       list.push({
@@ -138,7 +141,7 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
 
   def hash_for_organization(organization, user, admin = false)
     hash = {
-        'organization' => partial_hash_for_organization(organization, admin),
+        'organization' => partial_hash_for_organization(organization),
         'current_user' => partial_hash_for_current_user(organization, user)
     }
     hash['organization'].merge!(
@@ -150,11 +153,7 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
       hash.merge!(partial_hash_for_invoices(organization))
 
       if (cc = organization.credit_card)
-        if admin
-          hash.merge!("credit_card" => {"presence" => false})
-        else
-          hash.merge!(partial_hash_for_credit_card(cc))
-        end
+        hash.merge!(partial_hash_for_credit_card(cc))
       end
 
       if (situations = organization.arrears_situations)
@@ -164,4 +163,43 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
 
     return hash
   end
+
+  def admin_hash_for_organization(organization)
+    hash = {}
+    hash['organization'] = partial_hash_for_organization(organization, true)
+    hash['organization'].merge!('members' => partial_hash_for_members(organization, true))
+    hash['organization'].merge!('credit_card' => {'presence' => false})
+    hash['organization'].merge!(admin_partial_hash_for_invoices(organization))
+    hash['organization'].merge!(admin_partial_hash_for_active_apps(organization))
+    hash
+  end
+
+  def admin_partial_hash_for_invoices(organization)
+    hash = {'invoices' => []}
+    organization.invoices.order("ended_at DESC").each do |invoice|
+      hash['invoices'].push({
+                                'started_at' => invoice.started_at,
+                                'ended_at' => invoice.ended_at,
+                                'amount' => AccountingjsSerializer.serialize(invoice.total_due),
+                                'paid' => invoice.paid?
+                            })
+    end
+    hash
+  end
+
+  def admin_partial_hash_for_active_apps(organization)
+    hash = {'active_apps' => []}
+    organization.app_instances.select { |app| app.status == "running" }.each do |active_apps|
+      hash['active_apps'].push({
+                                   'id' => active_apps.id,
+                                   'name' => active_apps.name,
+                                   'stack' => active_apps.stack,
+                                   'uid' => active_apps.uid,
+                                   'app_name' => active_apps.app.name,
+                                   'app_logo' => active_apps.app.logo
+                               })
+    end
+    hash
+  end
+
 end
