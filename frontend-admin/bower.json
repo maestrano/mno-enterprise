@@ -33,6 +33,12 @@
         "dist/fonts/glyphicons-halflings-regular.woff",
         "dist/fonts/glyphicons-halflings-regular.woff2"
       ]
+    },
+    "font-awesome": {
+      "main": [
+        "less/font-awesome.less",
+        "./fonts/*"
+      ]
     }
   },
   "resolutions": {
