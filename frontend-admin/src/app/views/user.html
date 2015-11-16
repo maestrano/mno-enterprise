@@ -6,35 +6,43 @@
         <h3 class="panel-title">{{::vm.user.name}} {{::vm.user.surname}}</h3>
       </div>
       <div class="panel-body">
-        <div class="bs-row row">
-          <div class="col-md-3"><div class="label-cell">Email</div></div>
-          <div class="col-md-3">{{::vm.user.email}}</div>
-        </div>
-        <div class="bs-row row">
-          <div class="col-md-3"><div class="label-cell">Phone</div></div>
-          <div class="col-md-3">{{::vm.user.phone || '(none)'}}</div>
-        </div>
-        <div class="bs-row row">
-          <div class="col-sm-3"><div class="label-cell">Admin role</div></div>
-          <div class="col-sm-3">{{::vm.user.admin_role || '(none)'}}</div>
-        </div>
-        <div class="bs-row row">
-          <div class="col-sm-3"><div class="label-cell">Creation date</div></div>
-          <div class="col-sm-3">{{vm.user.created_at | amCalendar }}</div>
-        </div>
-        <div class="bs-row row">
-          <div class="col-sm-3"><div class="label-cell">Confirmed</div></div>
-          <div class="col-sm-3">{{(vm.user.confirmed_at | amCalendar) || '(Not confirmed yet)'}}</div>
-        </div>
-        <div class="bs-row row">
-          <div class="col-sm-3"><div class="label-cell">Last sign in</div></div>
-          <div class="col-sm-3">{{(vm.user.last_sign_in_at | amCalendar) || '(Never signed in yet)'}}</div>
+        <rd-loading ng-show="!vm.user"></rd-loading>
+        <div ng-show="vm.user">
+          <div class="bs-row row">
+            <div class="col-md-3"><div class="label-cell">Email</div></div>
+            <div class="col-md-3">{{::vm.user.email}}</div>
+          </div>
+          <div class="bs-row row">
+            <div class="col-md-3"><div class="label-cell">Phone</div></div>
+            <div class="col-md-3">{{::vm.user.phone || '(none)'}}</div>
+          </div>
+          <div class="bs-row row">
+            <div class="col-sm-3"><div class="label-cell">Admin role</div></div>
+            <div class="col-sm-3">{{::vm.user.admin_role || '(none)'}}</div>
+          </div>
+          <div class="bs-row row">
+            <div class="col-sm-3"><div class="label-cell">Creation date</div></div>
+            <div class="col-sm-3">{{vm.user.created_at | amCalendar }}</div>
+          </div>
+          <div class="bs-row row">
+            <div class="col-sm-3"><div class="label-cell">Confirmed</div></div>
+            <div class="col-sm-3">{{(vm.user.confirmed_at | amCalendar) || '(Not confirmed yet)'}}</div>
+          </div>
+          <div class="bs-row row">
+            <div class="col-sm-3"><div class="label-cell">Last sign in</div></div>
+            <div class="col-sm-3">{{(vm.user.last_sign_in_at | amCalendar) || '(Never signed in yet)'}}</div>
+          </div>
         </div>
       </div>
     </div>
     <div class="bs-row">
       <div class="col-sm-4 col-sm-offset-4">
-        <a class="btn btn-primary center-block" href="/mnoe/impersonate/user/{{::vm.user.id}}">Impersonate</a>
+        <button class="btn btn-primary center-block"
+          ng-click="vm.impersonateUser()"
+          ng-disabled="!vm.user.confirmed_at">Impersonate</button>
+        <div style="position:absolute; left:0; right:0; top:0; bottom:0;"
+          tooltip="User is not confirmed"
+          ng-show="!vm.user.confirmed_at"></div>
       </div>
     </div>
   </div>
