@@ -1,5 +1,6 @@
 if member.is_a?(MnoEnterprise::User)
   json.id member.id
+  json.uid member.uid
   json.entity 'User'
   json.name member.name
   json.surname member.surname
