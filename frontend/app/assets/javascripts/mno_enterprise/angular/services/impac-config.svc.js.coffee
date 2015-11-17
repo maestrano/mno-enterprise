@@ -21,7 +21,8 @@ angular
 
         CurrentUserSvc.getOrganizations().then (orgs) ->
           userOrgs = orgs
-          
+          currentOrgId ||= orgs[0].id if orgs.length > 0
+
           if userOrgs && currentOrgId
             deferred.resolve({organizations: userOrgs, currentOrgId: currentOrgId})
           else

@@ -135,11 +135,11 @@ mnoAppModules.push('blndspt.ngPerformance')
 @maestranoApp.run (ImpacRoutes) ->
 
   data =
-    dhbBasePath: '/mnoe/jpi/v1/analytics/dashboards'
-    widgetBasePath: '/mnoe/jpi/v1/analytics/widgets'
-    showWidgetPath: '<%= "#{MnoEnterprise.impac_api_host}://#{MnoEnterprise.impac_api_root_path}/get_widget" %>'
+    dhbBasePath: '/mnoe/jpi/v1/impac/dashboards'
+    widgetBasePath: '/mnoe/jpi/v1/impac/widgets'
+    showWidgetPath: '<%= "#{MnoEnterprise.impac_api_host}/#{MnoEnterprise.impac_api_root_path}/v1/get_widget" %>'
     sendWidgetSuggestionPath: 'mnoe/jpi/v1/mailers'
-    impacKpisBasePath: '<%= "#{MnoEnterprise.impac_api_host}://#{MnoEnterprise.impac_api_root_path}/kpis" %>'
+    impacKpisBasePath: '<%= "#{MnoEnterprise.impac_api_host}/#{MnoEnterprise.impac_api_root_path}/v2/kpis" %>'
     kpiBasePath: '/mnoe/jpi/v1/impac/kpis'
 
   ImpacRoutes.configureRoutes(data)
