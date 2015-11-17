@@ -78,7 +78,7 @@ MnoEnterprise.configure do |config|
   # config.impac_api_host = "https://api-impac-uat.maestrano.io"
 
   # Configure the API root path
-  # config.impac_api_root_path = "/api/v1"
+  # config.impac_api_root_path = "/api"
 
   #===============================================
   # Marketplace Listing
