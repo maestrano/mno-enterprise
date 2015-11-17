@@ -34,7 +34,7 @@
     box-shadow:none;
     height:45px;
   }
-  
+
   .input-group-addon {
     border:0px;
   }
@@ -107,27 +107,41 @@
     text-align: center;
     color: @dashboard-cpy-select-link-color;
   }
-  
-  // Create new company 
+
+  // Create new company
   .box-content .create-new {
     text-align: center;
   }
   .box-content .create-new a {
     color: @dashboard-cpy-select-link-create-color;
   }
-  
+
   // Play well with menu at the top in responsive mode
   @media (max-width: @screen-sm-min) { top: 46px; }
 }
 
+/*-----------------------------------------------------------------------*/
+/*                         Impersonate top bar                           */
+/*-----------------------------------------------------------------------*/
+#impersonate-bar {
+  padding: 5px 0 5px 80px;
+
+  @media (max-width: @screen-xs-max) {
+    padding: 46px 0 5px 0;
+  }
+
+  button {
+    margin-top: 3px;
+  }
+}
 
 /*-----------------------------------------------------------------------*/
 /*                         Dashboard Left Navbar                         */
 /*-----------------------------------------------------------------------*/
 .myspace .menu {
-  
+
   a:hover { text-decoration: none; }
-  
+
   // Dashboard Button > Active State
   .dashboard-button.active, .dashboard-button.active:hover {
     color: @dashboard-side-menu-link-active-color;
