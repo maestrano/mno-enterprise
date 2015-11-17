@@ -39,17 +39,18 @@ module MnoEnterprise
     # Stub invoice and invoice call
     let!(:invoice) { build(:invoice) }
     let!(:user) { build(:user, :admin) }
+    let!(:tenant) { build(:tenant) }
     before do
       api_stub_for(get: "/invoices", response: from_api([invoice]))
       api_stub_for(get: "/invoices/#{invoice.id}", response: from_api(invoice))
       api_stub_for(get: "/users", response: from_api([user]))
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
       api_stub_for(get: "/organizations")
+      api_stub_for(get: "/tenant", response: from_api(tenant))
       sign_in user
     end
 
-    #==========================
-    # =====================
+    #===============================================
     # Specs
     #===============================================
     describe '#index' do
@@ -84,7 +85,7 @@ module MnoEnterprise
       context 'success' do
         before { subject }
 
-        let(:current_billing_amount) { {'current_billing_amount' => {"amount"=>"0.0", "currency"=>"USD"}} }
+        let(:current_billing_amount) { {'current_billing_amount' => {"amount"=>"656.44", "currency"=>"AUD"}} }
 
         it 'returns the sum of the invoices' do
           expect(response).to be_success
@@ -99,7 +100,7 @@ module MnoEnterprise
       context 'success' do
         before { subject }
 
-        let(:last_invoicing_amount) { {'last_invoicing_amount' => {"amount"=>"0.0", "currency"=>"USD"}} }
+        let(:last_invoicing_amount) { {'last_invoicing_amount' => {"amount"=>"6879.94", "currency"=>"AUD"}} }
 
         it 'returns the sum of the last invoices' do
           expect(response).to be_success
@@ -113,11 +114,25 @@ module MnoEnterprise
 
       context 'success' do
         before { subject }
-        let(:outstanding_amount) { {'outstanding_amount' => {"amount"=>"0.0", "currency"=>"USD"}} }
+        let(:outstanding_amount) { {'outstanding_amount' => {"amount"=>"1789.86", "currency"=>"AUD"}} }
 
         it 'returns the sum of unpaid invoices' do
           expect(response).to be_success
           expect(JSON.parse(response.body)).to eq(JSON.parse(outstanding_amount.to_json))
+        end
+      end
+    end
+
+    describe 'GET #last_commission_amount' do
+      subject { get :last_commission_amount }
+
+      context 'success' do
+        before { subject }
+        let(:last_commission_amount) { {'last_commission_amount' => {"amount"=>"4123.45", "currency"=>"AUD"}} }
+
+        it 'returns the sum of commissions' do
+          expect(response).to be_success
+          expect(JSON.parse(response.body)).to eq(JSON.parse(last_commission_amount.to_json))
         end
       end
     end

@@ -31,7 +31,7 @@ module MnoEnterprise
       else
         flash[:notice] = "You weren't impersonating anyone"
       end
-      redirect_to mnoe_home_path
+      redirect_to '/admin/'
     end
 
     private
