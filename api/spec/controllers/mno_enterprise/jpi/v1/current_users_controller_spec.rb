@@ -34,6 +34,7 @@ module MnoEnterprise
         hash['organizations'] = (res.organizations || []).map do |o|
           {
             'id' => o.id,
+            'uid' => o.uid,
             'name' => o.name,
             'current_user_role' => o.role
           }
