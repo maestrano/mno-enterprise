@@ -22,8 +22,8 @@
     setSearchOrganizationsList = () ->
       scope.organizations.widgetTitle = 'Search result'
       searchToLowerCase = scope.organizations.search.toLowerCase()
-      scope.organizations.displayList = _.filter(scope.list, (user) ->
-        name = _.startsWith(user.name.toLowerCase(), searchToLowerCase)
+      scope.organizations.displayList = _.filter(scope.list, (org) ->
+        name = _.contains(org.name.toLowerCase(), searchToLowerCase) if org.name
         (name)
       )
       scope.organizations.displayList = $filter('orderBy')(scope.organizations.displayList, 'name')

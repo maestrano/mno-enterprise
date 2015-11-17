@@ -31,9 +31,9 @@
       scope.users.widgetTitle = 'Search result'
       searchToLowerCase = scope.users.search.toLowerCase()
       scope.users.displayList = _.filter(scope.list, (user) ->
-        email = _.startsWith(user.email.toLowerCase(), searchToLowerCase)
-        name = _.startsWith(user.name.toLowerCase(), searchToLowerCase)
-        surname = _.startsWith(user.surname.toLowerCase(), searchToLowerCase)
+        email = _.contains(user.email.toLowerCase(), searchToLowerCase) if user.email
+        name = _.contains(user.name.toLowerCase(), searchToLowerCase) if user.name
+        surname = _.contains(user.surname.toLowerCase(), searchToLowerCase) if user.surname
         (email || name || surname)
       )
       scope.users.displayList = $filter('orderBy')(scope.users.displayList, 'email')

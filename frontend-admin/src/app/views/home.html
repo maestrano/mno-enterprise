@@ -41,8 +41,8 @@
           <div class="widget-icon orange pull-left">
             <i class="fa fa-file-text-o"></i>
           </div>
-          <div class="title">{{vm.invoices.lastInvoicingAmount.amount | isoCurrency: vm.invoices.lastInvoicingAmount.currency}}</div>
-          <div class="comment">Last invoice</div>
+          <div class="title">{{vm.invoices.lastInvoicingAmount.currency}} {{vm.invoices.lastInvoicingAmount.amount}}</div>
+          <div class="comment">Last customer invoicing</div>
         </rd-widget-body>
       </rd-widget>
     </a>
@@ -55,8 +55,8 @@
           <div class="widget-icon blue pull-left">
             <i class="fa fa-line-chart"></i>
           </div>
-          <div class="title">{{vm.invoices.outstandingAmount.amount | isoCurrency: vm.invoices.outstandingAmount.currency}}</div>
-          <div class="comment">Outstanding</div>
+          <div class="title">{{vm.invoices.outstandingAmount.currency}} {{vm.invoices.outstandingAmount.amount}}</div>
+          <div class="comment">Still to be paid</div>
         </rd-widget-body>
       </rd-widget>
     </a>
