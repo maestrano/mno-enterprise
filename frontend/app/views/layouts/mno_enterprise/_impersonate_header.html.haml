@@ -1,14 +1,15 @@
-%div#impersonate-bar.row
-  .col-sm-6.col-sm-offset-3.col-md-8.col-md-offset-2.text-center
-    You (
-    %span.admin_name= current_impersonator.name
-    %span.admin_email= current_impersonator.email
-    ) are impersonating
-    %span.user_name= current_user.name
-    %span.admin_email= current_user.email
-    ( User id:
-    %span.user_id= current_user.id
-    )
+%div#impersonate-bar
+  .row
+    .col-sm-6.col-sm-offset-3.col-md-8.col-md-offset-2.text-center
+      You (
+      %span.admin_name= current_impersonator.name
+      %span.admin_email= current_impersonator.email
+      ) are impersonating
+      %span.user_name= current_user.name
+      %span.admin_email= current_user.email
+      ( User id:
+      %span.user_id= current_user.id
+      )
 
-    = form_tag  revert_impersonate_user_path , :method => :delete, :class => 'revert-form' do
-      %button{:type => "submit", :class => "btn btn-sm btn-warning"} Revert to admin
+      = form_tag  revert_impersonate_user_path , :method => :delete, :class => 'revert-form' do
+        %button{:type => "submit", :class => "btn btn-sm btn-warning"} Revert to admin

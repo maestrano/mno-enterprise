@@ -5,7 +5,7 @@
         <div class="widget-icon orange pull-left">
           <i class="fa fa-file-text-o"></i>
         </div>
-        <div class="title">{{vm.invoices.currentBillingAmount.amount | isoCurrency: vm.invoices.currentBillingAmount.currency}}</div>
+        <div class="title">{{vm.invoices.currentBillingAmount.currency}} {{vm.invoices.currentBillingAmount.amount}}</div>
         <div class="comment">Current billing</div>
       </rd-widget-body>
     </rd-widget>
@@ -55,8 +55,8 @@
               <tr ng-repeat="invoice in vm.invoices.tenantInvoices">
                 <td>{{invoice.started_at | date: 'dd/MM/yyyy'}}</td>
                 <td>{{invoice.ended_at | date: 'dd/MM/yyyy'}}</td>
-                <td>{{invoice.total_commission_amount.value | isoCurrency: invoice.total_portfolio_amount.options.iso_code}}</td>
-                <td>{{invoice.total_commission_amount.value | isoCurrency: invoice.total_commission_amount.options.iso_code}}</td>
+                <td>{{invoice.total_portfolio_amount.options.iso_code}} {{invoice.total_commission_amount.value}}</td>
+                <td>{{invoice.total_commission_amount.options.iso_code}} {{invoice.total_commission_amount.value}}</td>
                 <td class="text-center">
                   <span ng-if="invoice.paid_at" class="text-success">Yes</span>
                   <span ng-if="!invoice.paid_at" class="text-danger">No</span>

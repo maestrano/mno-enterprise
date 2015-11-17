@@ -16,8 +16,8 @@
             <div class="bs-row row">
               <div class="col-md-3"><div class="label-cell">Credit Card</div></div>
               <div class="col-md-3">
-                <span ng-if="vm.organization.credit_card.presence" class="text-success"><i class="fa fa-check"></i></span>
-                <span ng-if="!vm.organization.credit_card.presence" class="text-danger"><i class="fa fa-times"></i></span>
+                <span ng-if="vm.organization.credit_card.presence" class="text-success">Yes</span>
+                <span ng-if="!vm.organization.credit_card.presence" class="text-danger">No</span>
               </div>
             </div>
             <div class="bs-row row">
@@ -66,10 +66,10 @@
                 <tr ng-repeat="invoice in vm.organization.invoices">
                   <td>{{invoice.started_at | date: 'dd/MM/yyyy'}}</a></td>
                   <td>{{invoice.ended_at | date: 'dd/MM/yyyy'}}</td>
-                  <td>{{invoice.amount.value | isoCurrency: invoice.amount.options.iso_code}}</td>
+                  <td>{{invoice.amount.options.iso_code}} {{invoice.amount.value}}</td>
                   <td class="text-center">
-                    <span ng-if="invoice.paid" class="text-success"><i class="fa fa-check"></i></span>
-                    <span ng-if="!invoice.paid" class="text-danger"><i class="fa fa-times"></i></span>
+                    <span ng-if="invoice.paid" class="text-success">Yes</span>
+                    <span ng-if="!invoice.paid" class="text-danger">No</span>
                   </td>
                 </tr>
               </tbody>
