@@ -22,14 +22,25 @@
             <thead>
               <tr>
                 <th>Organisation</th>
-                <th>UID</th>
+                <th>Amount</th>
+                <th>Reason</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><a ui-sref="dashboard.home.organization({orgId: 9})">Marvel</a></td>
-                <td>org-fbc1</td>
+                <td><a ui-sref="dashboard.home.organization({orgId: 3})">Organisation A</a></td>
+                <td>AUD 56.00</td>
+                <td>Payment failed</td>
               </tr>
+              <tr>
+                <td><a ui-sref="dashboard.home.organization({orgId: 4})">My company</a></td>
+                <td>AUD 80.50</td>
+                <td>Payment failed</td>
+              </tr>
+              <!-- <tr ng-repeat="orgaInArrear in vm.invoices.organizationsInArrears">
+                <td><a ui-sref="dashboard.home.organization({orgId: orgaInArrear.id})">{{orgaInArrear.name}}</a></td>
+                <td>AUD 56.00</td>
+              </tr> -->
             </tbody>
           </table>
         </div>

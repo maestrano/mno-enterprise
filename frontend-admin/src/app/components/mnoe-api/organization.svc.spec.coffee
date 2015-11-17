@@ -19,6 +19,14 @@ describe('Service: MnoeOrganizations', ->
       })
 
     # Backend interceptors
+    $httpBackend.when('GET', '/mnoe/jpi/v1/admin/organizations/in_arrears').respond(200,
+      {
+        "organization": [
+          { "id": 9, "uid": "usr-fbbw", "name": "Marvel" }
+        ]
+      })
+
+    # Backend interceptors
     $httpBackend.when('GET', '/mnoe/jpi/v1/admin/organizations/9').respond(200,
       {
         "organization": [
@@ -36,6 +44,14 @@ describe('Service: MnoeOrganizations', ->
     it('GETs /mnoe/jpi/v1/admin/organizations', ->
       $httpBackend.expectGET('/mnoe/jpi/v1/admin/organizations')
       MnoeOrganizations.list()
+      $httpBackend.flush()
+    )
+  )
+
+  describe('@inArrears', ->
+    it('GETs /mnoe/jpi/v1/admin/in_arrears', ->
+      $httpBackend.expectGET('/mnoe/jpi/v1/admin/organizations/in_arrears')
+      MnoeOrganizations.inArrears()
       $httpBackend.flush()
     )
   )

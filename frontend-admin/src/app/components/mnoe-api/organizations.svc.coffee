@@ -5,6 +5,9 @@
   @list = () ->
     MnoeApiSvc.all('organizations').getList()
 
+  @inArrears = () ->
+    MnoeApiSvc.all('organizations').customGET('in_arrears')
+
   @get = (id) ->
     MnoeApiSvc.one('organizations', id).get()
 
