@@ -1,14 +1,8 @@
 <div class="row">
-  <div ng-show="vm.invoices.currentBillingAmount" class="col-lg-3 col-md-6 col-xs-12">
-    <rd-widget>
-      <rd-widget-body>
-        <div class="widget-icon orange pull-left">
-          <i class="fa fa-file-text-o"></i>
-        </div>
-        <div class="title">{{vm.invoices.currentBillingAmount.currency}} {{vm.invoices.currentBillingAmount.amount}}</div>
-        <div class="comment">Current billing</div>
-      </rd-widget-body>
-    </rd-widget>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <rd-kpi class="kpi-color-1" description="Current billing" icon="fa-file-text-o" loading="!vm.invoices.currentBillingAmount">
+      <rd-kpi-body-currency amount="{{vm.invoices.currentBillingAmount.amount}}" currency="{{vm.invoices.currentBillingAmount.currency}}"><rd-kpi-body-currency>
+    </rd-kpi>
   </div>
 </div>
 

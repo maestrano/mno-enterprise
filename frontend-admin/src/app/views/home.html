@@ -1,65 +1,26 @@
 <div class="row">
-  <div ng-show="vm.users.list" class="col-lg-3 col-md-6 col-xs-12">
-    <rd-widget>
-      <rd-widget-body>
-        <div class="widget-icon green pull-left">
-          <i class="fa fa-users"></i>
-        </div>
-        <div class="title">{{vm.users.list.length}}</div>
-        <div class="comment">
-          <ng-pluralize count="vm.users.list.length"
-            when="{
-              '0': 'user',
-              'one': 'user',
-              'other': 'users'}">
-          </ng-pluralize>
-        </div>
-      </rd-widget-body>
-    </rd-widget>
-  </div>
-  <div ng-show="vm.organizations.list" class="col-lg-3 col-md-6 col-xs-12">
-    <rd-widget>
-      <rd-widget-body>
-        <div class="widget-icon red pull-left">
-          <i class="fa fa-sitemap"></i>
-        </div>
-        <div class="title">{{vm.organizations.list.length}}</div>
-        <ng-pluralize count="vm.organizations.list.length"
-          when="{
-            '0': 'organization',
-            'one': 'organization',
-            'other': 'organizations'}">
-        </ng-pluralize>
-      </rd-widget-body>
-    </rd-widget>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <rd-kpi class="kpi-color-1" description="Users" icon="fa-users" loading="!vm.users.list">
+      <rd-kpi-body-number number="{{vm.users.list.length}}"><rd-kpi-body-number>
+    </rd-kpi>
   </div>
 
-  <div ng-show="vm.invoices.lastInvoicingAmount" class="col-lg-3 col-md-6 col-xs-12">
-    <a ui-sref="dashboard.finance">
-      <rd-widget>
-        <rd-widget-body>
-          <div class="widget-icon orange pull-left">
-            <i class="fa fa-file-text-o"></i>
-          </div>
-          <div class="title">{{vm.invoices.lastInvoicingAmount.currency}} {{vm.invoices.lastInvoicingAmount.amount}}</div>
-          <div class="comment">Last customer invoicing</div>
-        </rd-widget-body>
-      </rd-widget>
-    </a>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <rd-kpi class="kpi-color-2" description="Organizations" icon="fa-sitemap" loading="!vm.organizations.list">
+      <rd-kpi-body-number number="{{vm.organizations.list.length}}"><rd-kpi-body-number>
+    </rd-kpi>
   </div>
 
-  <div ng-show="vm.invoices.outstandingAmount" class="col-lg-3 col-md-6 col-xs-12">
-    <a ui-sref="dashboard.finance">
-      <rd-widget>
-        <rd-widget-body>
-          <div class="widget-icon blue pull-left">
-            <i class="fa fa-line-chart"></i>
-          </div>
-          <div class="title">{{vm.invoices.outstandingAmount.currency}} {{vm.invoices.outstandingAmount.amount}}</div>
-          <div class="comment">Still to be paid</div>
-        </rd-widget-body>
-      </rd-widget>
-    </a>
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <rd-kpi class="kpi-color-3" description="Last customer invoicing" icon="fa-file-text-o" link="#/finance" loading="!vm.invoices.lastInvoicingAmount">
+      <rd-kpi-body-currency amount="{{vm.invoices.lastInvoicingAmount.amount}}" currency="{{vm.invoices.lastInvoicingAmount.currency}}"><rd-kpi-body-currency>
+    </rd-kpi>
+  </div>
+
+  <div class="col-lg-3 col-md-6 col-xs-12">
+    <rd-kpi class="kpi-color-4" description="Still to be paid" icon="fa-money" link="#/finance" loading="!vm.invoices.outstandingAmount">
+      <rd-kpi-body-currency amount="{{vm.invoices.outstandingAmount.amount}}" currency="{{vm.invoices.outstandingAmount.currency}}"><rd-kpi-body-currency>
+    </rd-kpi>
   </div>
 </div>
 
