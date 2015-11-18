@@ -1,5 +1,5 @@
 module MnoEnterprise
-  class  TenantInvoice < BaseResource
+  class TenantInvoice < BaseResource
 
   end
 end

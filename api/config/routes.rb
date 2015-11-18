@@ -129,6 +129,7 @@ MnoEnterprise::Engine.routes.draw do
             get :current_billing_amount
             get :last_invoicing_amount
             get :outstanding_amount
+            get :last_commission_amount
           end
         end
       end
