@@ -18,13 +18,13 @@
     # Display all the users
     setAllUsersList = () ->
       scope.users.widgetTitle = 'All users (' + scope.list.length + ')'
-      scope.users.displayList = $filter('orderBy')(scope.list, '-created_at')
+      scope.users.displayList = $filter('orderBy')(scope.list, 'email')
       scope.users.displayList = $filter('limitTo')(scope.users.displayList, 10)
 
     # Display only the last 10 users
     setLastUsersList = () ->
       scope.users.widgetTitle = 'Last 10 users'
-      scope.users.displayList = $filter('orderBy')(scope.list, 'email')
+      scope.users.displayList = $filter('orderBy')(scope.list, '-created_at')
 
     # Display only the search results
     setSearchUsersList = () ->

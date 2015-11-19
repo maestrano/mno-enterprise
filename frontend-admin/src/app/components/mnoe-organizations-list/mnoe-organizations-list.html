@@ -8,13 +8,13 @@
         <thead>
           <tr>
             <th>Name</th>
-            <th>UID</th>
+            <th>Creation</th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="organization in organizations.displayList">
             <td><a ui-sref="dashboard.home.organization({orgId: organization.id})">{{organization.name}}</a></td>
-            <td>{{organization.uid}}</td>
+            <td>{{organization.created_at | date: 'dd/MM/yyyy'}}</td>
           </tr>
         </tbody>
       </table>
