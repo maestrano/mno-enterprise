@@ -1,6 +1,7 @@
 <rd-widget>
   <rd-widget-header icon="fa-sitemap" title="{{organizations.widgetTitle}}">
-    <input type="text" ng-model="organizations.search" ng-change="searchChange()" placeholder="Search all" class="form-control input-sm" />
+    &nbsp;<a href="" ng-click="switchState()" ng-show="list && organizations.switchLinkTitle">{{organizations.switchLinkTitle}}</a>
+    <input type="text" ng-model="organizations.search" ng-change="searchChange()" placeholder="Search all" class="form-control input-sm search-bar" />
   </rd-widget-header>
   <rd-widget-body loading="!list" classes="medium no-padding">
     <div class="table-responsive">
