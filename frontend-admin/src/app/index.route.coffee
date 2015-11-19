@@ -36,5 +36,12 @@
       controllerAs: 'vm'
       ncyBreadcrumb:
         label: 'Finance'
+    .state 'dashboard.customers',
+      url: '/customers'
+      templateUrl: 'app/views/customers.html'
+      controller: 'CustomersController'
+      controllerAs: 'vm'
+      ncyBreadcrumb:
+        label: 'Customers'
 
   $urlRouterProvider.otherwise '/home'
