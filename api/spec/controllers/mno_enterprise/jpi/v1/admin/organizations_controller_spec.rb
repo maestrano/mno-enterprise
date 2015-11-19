@@ -7,6 +7,21 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
+    def hash_for_arrears(arrears)
+      {
+          'arrears_situation' => arrears.map { |a| partial_hash_for_arrears(a) }
+      }
+    end
+
+    def partial_hash_for_arrears(arrear)
+      {
+          'name' => arrear.name,
+          'amount' => AccountingjsSerializer.serialize(arrear.payment),
+          'category' => arrear.category,
+          'status' => arrear.status
+      }
+    end
+
     #===============================================
     # Assignments
     #===============================================
@@ -22,6 +37,7 @@ module MnoEnterprise
     # Stub organization + associations
     let!(:invoice) { build(:invoice, organization_id: organization.id) }
     let(:organization) { build(:organization) }
+    let(:arrears) { build(:arrears_situation) }
     let(:org_invite) { build(:org_invite, organization: organization) }
     let(:app_instance) { build(:app_instance, organization: organization) }
     let(:credit_card) { build(:credit_card, organization: organization) }
@@ -35,6 +51,7 @@ module MnoEnterprise
       api_stub_for(get: "/organizations/#{organization.id}/org_invites", response: from_api([org_invite]))
       api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
       api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api([credit_card]))
+      api_stub_for(get: "/arrears_situations", response: from_api([arrears]))
     end
 
 
@@ -73,9 +90,9 @@ module MnoEnterprise
       context 'success' do
         before { subject }
 
-        it 'returns a complete description of the organization with arrears status' do
+        it 'returns arrears with the organization name' do
           expect(response).to be_success
-          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_organizations_in_arrears([organization], true).to_json))
+          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_arrears([arrears]).to_json))
         end
       end
     end

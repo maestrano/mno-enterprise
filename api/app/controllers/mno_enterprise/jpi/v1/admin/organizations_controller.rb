@@ -14,7 +14,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/organizations/in_arrears
     def in_arrears
-      @organizations = MnoEnterprise::Organization.in_arrears.all
+      @arrears = MnoEnterprise::ArrearsSituation.all
     end
   end
 end

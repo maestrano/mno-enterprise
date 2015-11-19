@@ -48,21 +48,6 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     return list
   end
 
-# def partial_hash_for_arrears_situations(situations)
-#   array = []
-#   situations.each do |sit|
-#     array.push({
-#       id: sit.id,
-#       owner_id: sit.owner_id,
-#       owner_type: sit.owner_type,
-#       status: sit.status,
-#       category: sit.category
-#       })
-#   end
-#
-#   return { arrears_situations: array }
-# end
-
   def partial_hash_for_organization(organization, admin = false)
     ret = {
         'id' => organization.id,
@@ -77,15 +62,6 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     end
 
     ret
-  end
-
-  def partial_hash_for_organization_in_arrears(organization, admin = false)
-    {
-        'id' => organization.id,
-        'name' => organization.name,
-        'soa_enabled' => organization.soa_enabled,
-        'in_arrears?' => organization.in_arrears?
-    }
   end
 
   def partial_hash_for_current_user(organization, user)
@@ -124,12 +100,6 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
   def hash_for_organizations(organizations, admin = false)
     {
         'organizations' => organizations.map { |o| partial_hash_for_organization(o, admin) }
-    }
-  end
-
-  def hash_for_organizations_in_arrears(organizations, admin = false)
-    {
-        'organizations' => organizations.map { |o| partial_hash_for_organization_in_arrears(o, admin) }
     }
   end
 
