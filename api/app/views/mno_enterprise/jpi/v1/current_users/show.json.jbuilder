@@ -17,6 +17,7 @@ json.current_user do
     json.organizations do
       json.array! (@user.organizations || []) do |o|
         json.id o.id
+        json.uid o.uid
         json.name o.name
         json.current_user_role o.role
       end

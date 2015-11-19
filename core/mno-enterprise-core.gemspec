@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 4.2.0"
   s.add_dependency "her", "~> 0.7.3"
+  s.add_dependency "faraday_middleware", "~> 0.10.0"
   s.add_dependency "devise", "~> 3.0"
   s.add_dependency 'cancancan', '~> 1.10'
   s.add_dependency 'countries', '~> 0.11.3'

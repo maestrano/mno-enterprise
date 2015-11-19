@@ -1,4 +1,4 @@
-angular.module('maestrano.services.current-user-svc', []).factory('CurrentUserSvc', ['$http', ($http) ->
+angular.module('maestrano.services.current-user-svc', []).factory('CurrentUserSvc', ['$http', '$q', ($http, $q) ->
   service = {}
   
   # Configuration
@@ -71,6 +71,28 @@ angular.module('maestrano.services.current-user-svc', []).factory('CurrentUserSv
       return self.document.current_user.sso_session
     else
       return null  
+
+  service.getUserData = ->
+    self = service
+    deferred = $q.defer()
+    self.loadDocument().then(
+      (success) ->
+        deferred.resolve(success.data.current_user)
+      ->
+        deferred.reject()
+    )
+    return deferred.promise
+
+  service.getOrganizations = ->
+    self = service
+    deferred = $q.defer()
+    
+    self.loadDocument().then (success) ->
+      deferred.resolve(success.data.current_user.organizations)
+    ,(error) ->
+      deferred.reject("Error while trying to retrieve current user organizations")
+
+    return deferred.promise  
   
   return service
 

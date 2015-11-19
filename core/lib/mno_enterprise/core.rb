@@ -17,6 +17,7 @@ require "her_extension/model/associations/association"
 require "her_extension/model/associations/association_proxy"
 require "her_extension/model/associations/has_many_association"
 require "her_extension/middleware/mnoe_api_v1_parse_json"
+require "faraday_middleware"
 require "mno_enterprise/engine"
 
 require 'mno_enterprise/database_extendable'
@@ -298,7 +299,8 @@ module MnoEnterprise
       @@mnoe_api_v1.setup self.api_options  do |c|
         # Request
         c.use Faraday::Request::BasicAuthentication, @@tenant_id, @@tenant_key
-        c.use Faraday::Request::UrlEncoded
+        # c.use Faraday::Request::UrlEncoded
+        c.request :json
 
         # Response
         c.use Her::Middleware::MnoeApiV1ParseJson

@@ -3,7 +3,7 @@ angular.module('maestrano.services.dashboard.organization-svc', []).factory('Dhb
   service = {}
   service.routes = {
     createPath: -> "/mnoe/jpi/v1/organizations"
-    basePath: -> "/mnoe/jpi/v1/organizations/#{service.config.id}"
+    basePath: -> "/mnoe/jpi/v1/organizations/#{service.config.id || ""}"
     arrearsSituationsPath: -> "#{service.routes.basePath()}/charge"
     loadPath: -> "#{service.routes.basePath()}"
     updatePath: -> "#{service.routes.basePath()}"
