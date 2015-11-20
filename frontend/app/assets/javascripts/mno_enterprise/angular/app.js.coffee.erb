@@ -1,0 +1,172 @@
+# This is the app declaration
+
+mnoAppModules = [
+  # External libraries
+  'ngRoute',
+  'ngSanitize',
+  'xeditable',
+  'ngReallyClick',
+  'ui.bootstrap',
+  
+  # Internal libraries
+  'maestrano.assets',
+  'maestrano.utilities',
+  'maestrano.components',
+  'maestrano.controllers',
+  'maestrano.message-bus',
+  'maestrano.exchange-rates',
+  'maestrano.services',
+  'maestrano.filters',
+  
+  # Frontend modules
+  'maestrano.dashboard',
+  'maestrano.impac',
+  'maestrano.user-setup'
+]
+
+# Add Angular Material if requested
+<% if MnoEnterprise.style.design.material %>
+mnoAppModules.push('ngMaterial')
+<% end %>
+
+<% if Rails.env.development? %>
+mnoAppModules.push('blndspt.ngPerformance')
+<% end %>
+
+# Declare the application
+@maestranoApp = angular.module('maestrano',mnoAppModules)
+
+# Configure the http headers for AJAX requests
+# Define content type and set csrf token
+# TODO: properly configure SCE
+@maestranoApp.config(['$httpProvider', '$sceDelegateProvider', ($httpProvider,$sceDelegateProvider) ->
+  $httpProvider.defaults.headers.common['Accept'] = 'application/json'
+  $httpProvider.defaults.headers.common['Content-Type'] = 'application/json'
+
+  if token = $("meta[name='csrf-token']").attr("content")
+    $httpProvider.defaults.headers.common['X-CSRF-Token'] = token
+
+  # Configure SCE to authorize the Maestrano domains
+  #$sceProvider.enabled(false);
+  $sceDelegateProvider.resourceUrlWhitelist([
+      # Allow same origin resource loads.
+      'self'
+      # Allow UAT asset server
+      #'https://assets-apse1-uat-maestrano.s3.amazonaws.com/assets/**',
+      # Allow UAT Cloudfront distribution
+      #'https://dbu1g4tv4k5kk.cloudfront.net/web/mno/assets/**',
+      # Allow PROD asset server
+      #'https://assets-apse1-prd-maestrano.s3.amazonaws.com/assets/**',
+      # Allow PROD Cloudfront distribution
+      #'https://cdn.maestrano.com/web/mno/assets/**'
+  ]);
+
+  return $httpProvider
+])
+
+# Configure routes
+@maestranoApp.config(['$routeProvider', ($routeProvider) ->
+  if window.location.pathname == '/mnoe/myspace'
+    $routeProvider.
+      when('/', {
+        template: "<div dashboard-apps-list></div>"
+      }).
+      when('/account', {
+        template: "<div dashboard-account></div>"
+      }).
+      when('/company', {
+        template: "<div dashboard-organization-index></div>"
+      }).
+      when('/support', {
+        template: "<div dashboard-support></div>"
+      }).
+      when('/billing', {
+        redirectTo: '/company'
+      }).
+      when('/marketplace', {
+        template: "<div dashboard-marketplace></div>"
+      }).
+      when('/marketplace/:appId', {
+        template: "<div dashboard-marketplace-app></div>"
+      }).
+      when('/impac', {
+        template: "<div impac-dashboard ></div>"
+      }).
+      otherwise({
+        redirectTo: '/'
+      })
+])
+
+# Configure Angular Material Theme
+<% if MnoEnterprise.style.design.material %>
+@maestranoApp.config(['$mdThemingProvider', ($mdThemingProvider) ->
+  $mdThemingProvider.theme('default')
+    .primaryPalette('<%= MnoEnterprise.style.palette.primary %>')
+    .accentPalette('<%= MnoEnterprise.style.palette.accent %>')
+    .warnPalette('<%= MnoEnterprise.style.palette.warn %>')
+    .backgroundPalette('<%= MnoEnterprise.style.palette.background %>')
+])
+<% end %>
+
+
+# Configure asset in rootScope
+@maestranoApp.run(['$rootScope', 'AssetPath', 'TemplatePath','editableOptions', ($rootScope, AssetPath, TemplatePath, editableOptions) ->
+  $rootScope.assetPath = AssetPath
+  $rootScope.templatePath = TemplatePath
+  editableOptions.theme = 'bs3'
+])
+
+
+# ----- IMPAC ANGULAR PROVIDER CONFIGURATIONS
+#======================================================================================
+# IMPAC-LINKING: Require core data
+#======================================================================================
+@maestranoApp.run (ImpacLinking, ImpacConfigSvc) ->
+
+  data =
+    user: ImpacConfigSvc.getUserData
+    organizations: ImpacConfigSvc.getOrganizations
+
+  ImpacLinking.linkData(data)
+
+#======================================================================================
+# IMPAC-ROUTES: Configuring API routes
+#======================================================================================
+@maestranoApp.run (ImpacRoutes) ->
+
+  data =
+    dhbBasePath: '/mnoe/jpi/v1/impac/dashboards'
+    widgetBasePath: '/mnoe/jpi/v1/impac/widgets'
+    showWidgetPath: '<%= "#{MnoEnterprise.impac_api_host}#{MnoEnterprise.impac_api_root_path}/v1/get_widget" %>'
+    sendWidgetSuggestionPath: 'mnoe/jpi/v1/mailers'
+    impacKpisBasePath: '<%= "#{MnoEnterprise.impac_api_host}#{MnoEnterprise.impac_api_root_path}/v2/kpis" %>'
+    kpiBasePath: '/mnoe/jpi/v1/impac/kpis'
+
+  ImpacRoutes.configureRoutes(data)
+
+#======================================================================================
+# IMPAC-ASSETS: Configuring static assets
+#======================================================================================
+@maestranoApp.run (ImpacAssets, AssetPath) ->
+
+  paths =
+    dataNotFound: '<%= image_path("impac/data_not_found") %>'
+    # impacTitleLogo: '<%= image_path("impac/transparent-logo.png") %>'
+    # impacDashboardBackground: '<%= image_path("impac/impac_background.png") %>'
+
+  ImpacAssets.configure(paths)
+
+#======================================================================================
+# IMPAC-THEMES: Configuring colour themes, and enabling/disabling UI functionality.
+#======================================================================================
+@maestranoApp.run (ImpacTheming) ->
+
+  data =
+    dhbConfig:
+      showDhbHeading: true
+      dhbHeadingText: ''
+    # kpis options
+    dhbKpisConfig:
+      enableKpis: false
+
+  ImpacTheming.configure(data)

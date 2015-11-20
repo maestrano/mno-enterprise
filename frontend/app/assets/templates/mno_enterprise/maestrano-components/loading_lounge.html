@@ -1,0 +1,63 @@
+<div>
+
+  <div class="spacer3 hidden-xs hidden-sm"></div>
+
+  <div class='align-center'>
+    <img ng-src="{{assetPath['mno_enterprise/main-logo.png']}}">
+    <div class="spacer2"></div>
+
+    <!-- Status Details -->
+    <div ng-switch on="currentStatus()">
+      <div ng-switch-when='online'>
+        <h3 class='mgreen'>Redirecting to {{appInstance.name}}</h3>
+        <h4 class='muted'>You will be automatically redirected in {{redirectionCounter}}s (or click the link below)</h4>
+        <br>
+        <a class='fbtn fbtn-large fbtn-success' ng-href="{{redirectUrl()}}"><b>Go to my app now!</b></a>
+      </div>
+      <div ng-switch-when='updating'>
+        <h3 class='mgreen'>{{appInstance.name}} is getting configured</h3>
+        <h4 class='muted'>Don't worry, it should be available in a few seconds.</h4>
+        <div class="spacer2"></div>
+        <hr/>
+        <img ng-src="{{assetPath['mno_enterprise/loader-32x32-bg-inverse.gif']}}" alt="Loader">
+      </div>
+      <div ng-switch-when='loading'>
+        <h3 class='mgreen'>{{appInstance.name}} is loading</h3>
+        <h4 class='muted'>{{appInstance.name}} has been idle for a long time. We are currently loading it. It should be available soon!</h4>
+      </div>
+      <div ng-switch-when='creating'>
+        <h3 class='mgreen'>{{appInstance.name}} is getting setup</h3>
+        <h4 class='muted'>{{appInstance.name}} is preparing for the first use. It should be available soon!</h4>
+      </div>
+      <div ng-switch-when='terminated'>
+        <h3 class='mgreen'>{{appInstance.name}} has been deleted</h3>
+        <h4 class='muted'>{{appInstance.name}} has been removed by your administrator and is no more accessible.</h4>
+      </div>
+      <div ng-switch-when='errors'>
+        <h3 class='muted'>{{appInstance.name}} is idle</h3>
+        <br>
+        <div class='alert alert-danger align-left'>
+          <p><b>Unfortunately we cannot switch this app ON for you:</b></p>
+          <ul>
+            <li ng-repeat="error in appInstance.errors">{{error}}</li>
+          </ul>
+        </div>
+      </div>
+      <div ng-switch-when='not_found'>
+        <h3 class='mgreen'>Application not found</h3>
+        <h4 class='muted'>The app you requested does not seem to be managed by us. <br/>Are you sure you typed the right url?</h4>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Loading Bar -->
+    <div ng-show="isProgressBarShown()">
+      <div class="muted progress-indicator" style='margin-left:11px;'>{{progressBarPercent()}}</div>
+      <div class="progress progress-mno progress-striped active">
+        <div class="progress-bar" ng-style="{width: progressBarPercent()}"></div>
+      </div>
+    </div>
+
+  </div>
+</div>

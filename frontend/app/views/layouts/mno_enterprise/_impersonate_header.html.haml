@@ -1,0 +1,7 @@
+%div#impersonate-bar
+  .row
+    .col-sm-6.col-sm-offset-3.col-md-8.col-md-offset-2.text-center
+      = "You are impersonating #{current_user.name} #{current_user.surname} (#{current_user.email})"
+
+      = form_tag  revert_impersonate_user_path , :method => :delete, :class => 'revert-form' do
+        %button{:type => "submit", :class => "btn btn-sm btn-warning"} Revert to admin

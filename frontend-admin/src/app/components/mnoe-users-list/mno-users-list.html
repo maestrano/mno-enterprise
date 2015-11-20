@@ -1,0 +1,29 @@
+<rd-widget>
+  <rd-widget-header icon="fa-users" title="{{users.widgetTitle}}">
+    &nbsp;<a href="" ng-click="switchState()" ng-show="list && users.switchLinkTitle">{{users.switchLinkTitle}}</a>
+    <input type="text" ng-model="users.search" ng-change="searchChange()" placeholder="Search all" class="form-control input-sm search-bar" />
+  </rd-widget-header>
+  <rd-widget-body loading="!list" classes="medium no-padding">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Creation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="user in users.displayList">
+            <td><a ui-sref="dashboard.home.user({userId: user.id})">{{user.email}}</a></td>
+            <td>
+              <a ng-show="user.name && user.surname" ui-sref="dashboard.home.user({userId: user.id})">{{user.name + ' ' + user.surname}}</a>
+              <span ng-show="!user.name && !user.surname">nc</span>
+            </td>
+            <td>{{user.created_at | date: 'dd/MM/yyyy'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </rd-widget-body>
+<rd-widget>
