@@ -1,0 +1,24 @@
+<rd-widget>
+  <rd-widget-header icon="fa-sitemap" title="{{organizations.widgetTitle}}">
+    &nbsp;<a href="" ng-click="switchState()" ng-show="list && organizations.switchLinkTitle">{{organizations.switchLinkTitle}}</a>
+    <input type="text" ng-model="organizations.search" ng-change="searchChange()" placeholder="Search all" class="form-control input-sm search-bar" />
+  </rd-widget-header>
+  <rd-widget-body loading="!list" classes="medium no-padding">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Creation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="organization in organizations.displayList">
+            <td><a ui-sref="dashboard.home.organization({orgId: organization.id})">{{organization.name}}</a></td>
+            <td>{{organization.created_at | date: 'dd/MM/yyyy'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </rd-widget-body>
+<rd-widget>
