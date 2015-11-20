@@ -9,7 +9,7 @@ module MnoEnterprise
 
     def hash_for_arrears(arrears)
       {
-          'arrears_situation' => arrears.map { |a| partial_hash_for_arrears(a) }
+          'in_arrears' => arrears.map { |a| partial_hash_for_arrears(a) }
       }
     end
 

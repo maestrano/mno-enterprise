@@ -11,6 +11,30 @@
  */
 @icon-font-path: '../../bower_components/bootstrap/fonts/';
 @fa-font-path: "../../bower_components/font-awesome/fonts";
+@font-path: "../fonts";
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('@{font-path}/OpenSans-Regular.eot');
+  src: url('@{font-path}/OpenSans-Regular.eot?#iefix') format('embedded-opentype'),
+  url('@{font-path}/OpenSans-Regular.woff') format('woff'),
+  url('@{font-path}/OpenSans-Regular.ttf') format('truetype'),
+  url('@{font-path}/OpenSans-Regular.svg#OpenSansRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Colors (https://color.adobe.com/Elemental-color-theme-7207545/)
+@elemental-pink: #E54661;
+@elemental-orange: #FFA644;
+@elemental-green: #998A2F;
+@elemental-aqua: #2C594F;
+@elemental-blue: #002D40;
+
+@kpi-color-1: @elemental-pink;
+@kpi-color-2: @elemental-orange;
+@kpi-color-3: @elemental-green;
+@kpi-color-4: @elemental-aqua;
 
 // Spacers
 @top-buffer-height: @grid-gutter-width/2;
@@ -53,13 +77,18 @@ body {
     .row > div {
       margin-bottom: 0px;
     }
+
+    .search-bar {
+      width: inherit;
+      float: right;
+    }
   }
   .widget-body.medium {
-      min-height: 352px;
+    min-height: 387px; // 10 lines
 
-      .table {
-        margin-bottom: 0px;
-      }
+    .table {
+      margin-bottom: 0px;
+    }
   }
 }
 

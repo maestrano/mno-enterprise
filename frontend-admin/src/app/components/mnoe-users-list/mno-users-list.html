@@ -1,6 +1,7 @@
 <rd-widget>
   <rd-widget-header icon="fa-users" title="{{users.widgetTitle}}">
-    <input type="text" ng-model="users.search" ng-change="searchChange()" placeholder="Search" class="form-control input-sm" />
+    &nbsp;<a href="" ng-click="switchState()" ng-show="list && users.switchLinkTitle">{{users.switchLinkTitle}}</a>
+    <input type="text" ng-model="users.search" ng-change="searchChange()" placeholder="Search all" class="form-control input-sm search-bar" />
   </rd-widget-header>
   <rd-widget-body loading="!list" classes="medium no-padding">
     <div class="table-responsive">
@@ -9,7 +10,7 @@
           <tr>
             <th>Email</th>
             <th>Username</th>
-            <th>UID</th>
+            <th>Creation</th>
           </tr>
         </thead>
         <tbody>
@@ -19,7 +20,7 @@
               <a ng-show="user.name && user.surname" ui-sref="dashboard.home.user({userId: user.id})">{{user.name + ' ' + user.surname}}</a>
               <span ng-show="!user.name && !user.surname">nc</span>
             </td>
-            <td>{{user.uid}}</td>
+            <td>{{user.created_at | date: 'dd/MM/yyyy'}}</td>
           </tr>
         </tbody>
       </table>
