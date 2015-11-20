@@ -1,1 +1,8 @@
-json.organizations @organizations, :id, :name, :soa_enabled, :in_arrears?
+json.arrears_situation do
+  json.array!(@arrears) do |arrear|
+    json.name arrear.name
+    json.amount AccountingjsSerializer.serialize(arrear.payment) if arrear.payment
+    json.category arrear.category
+    json.status arrear.status
+  end
+end
