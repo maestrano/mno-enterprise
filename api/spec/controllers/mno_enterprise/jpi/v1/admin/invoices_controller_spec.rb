@@ -37,15 +37,18 @@ module MnoEnterprise
     # Assignments
     #===============================================
     # Stub invoice and invoice call
-    let!(:invoice) { build(:invoice) }
-    let!(:user) { build(:user, :admin) }
-    let!(:tenant) { build(:tenant) }
+    let(:invoice) { build(:invoice) }
+    let(:user) { build(:user, :admin) }
+    let(:tenant) { build(:tenant) }
+    let(:org1) { build(:organization, current_billing: Money.new(10_000,'AUD')) }
+    let(:org2) { build(:organization, current_billing: Money.new(1000,'AUD')) }
+
     before do
       api_stub_for(get: "/invoices", response: from_api([invoice]))
       api_stub_for(get: "/invoices/#{invoice.id}", response: from_api(invoice))
       api_stub_for(get: "/users", response: from_api([user]))
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(get: "/organizations")
+      api_stub_for(get: "/organizations", response: from_api([org1, org2]))
       api_stub_for(get: "/tenant", response: from_api(tenant))
       sign_in user
     end
@@ -85,11 +88,11 @@ module MnoEnterprise
       context 'success' do
         before { subject }
 
-        let(:current_billing_amount) { {'current_billing_amount' => {"amount"=>"656.44", "currency"=>"AUD"}} }
+        it { expect(response).to be_success }
 
-        it 'returns the sum of the invoices' do
-          expect(response).to be_success
-          expect(JSON.parse(response.body)).to eq(JSON.parse(current_billing_amount.to_json))
+        it 'returns the sum of the current_billing' do
+          expected =  {'current_billing_amount' => {"amount"=>"110.0", "currency"=>"AUD"}}
+          expect(response.body).to eq(expected.to_json)
         end
       end
     end
@@ -119,6 +122,22 @@ module MnoEnterprise
         it 'returns the sum of unpaid invoices' do
           expect(response).to be_success
           expect(JSON.parse(response.body)).to eq(JSON.parse(outstanding_amount.to_json))
+        end
+      end
+    end
+
+    describe 'GET #last_portfolio_amount' do
+      subject { get :last_portfolio_amount }
+
+      context 'success' do
+        before { subject }
+
+        it { expect(response).to be_success }
+
+        it 'returns a valid amount' do
+          expected = {'last_portfolio_amount' => {'amount' => tenant.last_portfolio_amount.amount, 'currency' => tenant.last_portfolio_amount.currency_as_string}}
+
+          expect(response.body).to eq(expected.to_json)
         end
       end
     end

@@ -13,8 +13,11 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/invoices/current_billing_amount
     def current_billing_amount
-      tenant_billing = MnoEnterprise::Tenant.get('tenant').last_portfolio_amount
-      render json: {current_billing_amount: {amount: tenant_billing.amount, currency: tenant_billing.currency_as_string}}
+      data = Rails.cache.fetch('tenant_admin/current_billing_amount', expires_in: ADMIN_CACHE_DURATION) do
+        billing = MnoEnterprise::Organization.all.map(&:current_billing).sum(Money.new(0))
+        {current_billing_amount: {amount: billing.amount, currency: billing.currency_as_string}}
+      end
+      render json: data
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/last_invoicing_amount
@@ -27,6 +30,12 @@ module MnoEnterprise
     def outstanding_amount
       tenant_billing = MnoEnterprise::Tenant.get('tenant').last_customers_outstanding_amount
       render json: {outstanding_amount: {amount: tenant_billing.amount, currency: tenant_billing.currency_as_string}}
+    end
+
+    # GET /mnoe/jpi/v1/admin/invoices/last_portfolio_amount
+    def last_portfolio_amount
+      tenant_billing = MnoEnterprise::Tenant.get('tenant').last_portfolio_amount
+      render json: {last_portfolio_amount: {amount: tenant_billing.amount, currency: tenant_billing.currency_as_string}}
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/last_commission_amount

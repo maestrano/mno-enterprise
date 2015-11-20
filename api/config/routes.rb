@@ -130,6 +130,7 @@ MnoEnterprise::Engine.routes.draw do
             get :last_invoicing_amount
             get :outstanding_amount
             get :last_commission_amount
+            get :last_portfolio_amount
           end
         end
       end

@@ -23,6 +23,15 @@ module MnoEnterprise
     it 'routes to #outstanding_amount' do
       expect(get('/jpi/v1/admin/invoices/outstanding_amount')).to route_to("mno_enterprise/jpi/v1/admin/invoices#outstanding_amount", format: "json")
     end
+
+    it 'routes to #last_portfolio_amount' do
+      expect(get('/jpi/v1/admin/invoices/last_portfolio_amount')).to route_to('mno_enterprise/jpi/v1/admin/invoices#last_portfolio_amount', format: 'json')
+    end
+
+    it 'routes to #last_commission_amount' do
+      expect(get('/jpi/v1/admin/invoices/last_commission_amount')).to route_to('mno_enterprise/jpi/v1/admin/invoices#last_commission_amount', format: 'json')
+    end
+
   end
 end
 
