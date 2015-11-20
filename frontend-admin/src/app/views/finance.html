@@ -21,15 +21,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><a ui-sref="dashboard.home.organization({orgId: 3})">Organisation A</a></td>
-                <td>AUD 56.00</td>
-                <td>Payment failed</td>
-              </tr>
-              <tr>
-                <td><a ui-sref="dashboard.home.organization({orgId: 4})">My company</a></td>
-                <td>AUD 80.50</td>
-                <td>Payment failed</td>
+              <tr ng-repeat="arrear in vm.organizations.inArrears">
+                <td>{{arrear.name}}</td>
+                <td ng-if="arrear.amount">{{arrear.amount.options.iso_code}} {{arrear.amount.value}}</td>
+                <td ng-if="!arrear.amount">-</td>
+                <td>{{arrear.category}}</td>
               </tr>
               <!-- <tr ng-repeat="orgaInArrear in vm.invoices.organizationsInArrears">
                 <td><a ui-sref="dashboard.home.organization({orgId: orgaInArrear.id})">{{orgaInArrear.name}}</a></td>

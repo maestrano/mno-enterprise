@@ -3,6 +3,7 @@
   vm = this
 
   vm.invoices = {}
+  vm.organizations = {}
 
   # API calls
   MnoeInvoices.currentBillingAmount().then(
@@ -18,8 +19,12 @@
 
   MnoeOrganizations.inArrears().then(
     (response) ->
-      vm.invoices.organizationsInArrears = response
-      vm.invoices.organizationsInArrears = $filter('orderBy')(vm.invoices.tenantInvoices, '-started_at')
+      vm.organizations.inArrears = response
+      # Humanize (payment_failed -> Payment failed)
+      _.forEach(vm.organizations.inArrears, (org) ->
+        org.category = _.capitalize(org.category.replace("_", " "))
+      )
+      vm.organizations.inArrears = $filter('orderBy')(vm.organizations.inArrears, '-started_at')
   )
 
   return
