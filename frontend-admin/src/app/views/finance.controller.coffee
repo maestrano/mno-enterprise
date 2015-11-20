@@ -20,6 +20,7 @@
   MnoeOrganizations.inArrears().then(
     (response) ->
       vm.organizations.inArrears = response
+      # TODO: in backend
       # Humanize (payment_failed -> Payment failed)
       _.forEach(vm.organizations.inArrears, (org) ->
         org.category = _.capitalize(org.category.replace("_", " "))

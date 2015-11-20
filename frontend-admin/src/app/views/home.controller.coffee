@@ -9,8 +9,8 @@
   # TODO: endpoint in backend
   countNewUsersLastMonth = () ->
     _.countBy(vm.users.list, (u) ->
-      dateFrom = moment(_.now()).subtract(1,'months').startOf('month')
-      dateTo = moment(_.now()).subtract(1,'months').endOf('month')
+      dateFrom = moment(_.now()).startOf('month')
+      dateTo = moment(_.now()).endOf('month')
       moment(u.created_at).isBetween(dateFrom, dateTo)
     )
 
