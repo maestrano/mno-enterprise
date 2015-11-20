@@ -25,7 +25,15 @@ MnoEnterprise::Engine.routes.draw do
   
   # Invoices
   resources :invoices, only: [:show], constraints: { id: /[\w\-]+/ }
-  
+
+  resources :deletion_requests, only: [:show] do
+    member do
+      patch :freeze_account
+      patch :checkout
+      put :terminate_account
+    end
+  end
+
   #============================================================
   # Devise/User Configuration
   #============================================================
@@ -104,12 +112,19 @@ MnoEnterprise::Engine.routes.draw do
             put :remove_users
           end
         end
-        
+
+      end
+
+      resources :deletion_requests, only: [:show, :create, :destroy] do
+        member do
+          put :resend
+        end
       end
 
       namespace :impac do
         resources :dashboards, only: [:index,:show,:create,:update,:destroy] do
           resources :widgets, shallow: true, only: [:create,:destroy,:update]
+          resources :kpis, shallow: true, only: [:create,:destroy,:update]
         end
       end
     end

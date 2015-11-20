@@ -14,6 +14,21 @@ Run the install script
 $ rails g mno_enterprise:install
 ```
 
+## Generate a database extension
+
+If you want to add fields to existing models, you can create a database extension for it.
+
+```
+rails g mno_enterprise:database_extension Model field:type
+```
+
+eg:
+
+```
+rails g mno_enterprise:database_extension Organization growth_type:string
+```
+
+
 ## Deploy a Puma stack on EC2 via Webistrano/Capistrano
 First, prepare your server. You will find a pre-made AMI on our AWS accounts called "AppServer" or "Rails Stack" that you can use.
 

@@ -12,13 +12,17 @@ module MnoEnterprise
     # CanCan Authorization Rescue
     #============================================
     # Rescue the CanCan permission denied error
-    rescue_from CanCan::AccessDenied do |exception|
+    rescue_from CanCan::AccessDenied do |_exception|
       respond_to do |format|
-        format.html { redirect_to root_url, :alert => 'Unauthorized Action' }
-        format.json { render :json => 'Unauthorized Action', :status => :forbidden }
+        format.html { redirect_to root_url, alert: 'Unauthorized Action' }
+        format.json { render nothing: true, status: :forbidden }
       end
     end
-    
+
+    def current_ability
+      MnoEnterprise::Ability.new(current_user)
+    end
+
     def set_default_meta
       @meta = {}
       @meta[:title] = "Application"
@@ -84,6 +88,11 @@ module MnoEnterprise
       def after_sign_in_path_for(resource)
         previous_url = session.delete(:previous_url)
         return (return_to_url(resource) || previous_url || mno_enterprise.myspace_url)
+      end
+
+      # Overwriting the sign_out redirect path method
+      def after_sign_out_path_for(resource_or_scope)
+        MnoEnterprise.router.after_sign_out_url || super
       end
   end
 end

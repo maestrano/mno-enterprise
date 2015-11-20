@@ -38,6 +38,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'prawn-table', '~> 0.2.1'
   s.add_dependency 'money', '~> 6.5.1'
 
+  # Markdown parsing
+  s.add_dependency 'redcarpet', '2.1.1'
+  s.add_dependency 'sanitize'
+
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "factory_girl_rails"

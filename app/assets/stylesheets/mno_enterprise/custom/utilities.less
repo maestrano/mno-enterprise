@@ -292,7 +292,7 @@ hr.thin {
 .height-1500 { height: 1500px; }
 
 //-----------------------------------------
-// Spacers
+// Spacers (deprecated, see Top-buffers instead)
 //-----------------------------------------
 @baseSpacerHeight: 20px;
 .spacer1 { clear: both; margin-bottom: @baseSpacerHeight; }
@@ -310,6 +310,25 @@ hr.thin {
 .spacer13 { clear: both; margin-bottom: 13*@baseSpacerHeight; }
 .spacer14 { clear: both; margin-bottom: 14*@baseSpacerHeight; }
 .spacer15 { clear: both; margin-bottom: 15*@baseSpacerHeight; }
+
+//-----------------------------------------
+// Top-buffers
+// <div class="top-buffer-1">
+//   <span>...</span>
+//   ...
+// </div>)
+//-----------------------------------------
+@top-buffer-height: @grid-gutter-width/2;
+.top-buffer-1 { margin-top: @top-buffer-height; }
+.top-buffer-2 { margin-top: 2*@top-buffer-height; }
+.top-buffer-3 { margin-top: 3*@top-buffer-height; }
+.top-buffer-4 { margin-top: 4*@top-buffer-height; }
+.top-buffer-5 { margin-top: 5*@top-buffer-height; }
+.top-buffer-6 { margin-top: 6*@top-buffer-height; }
+.top-buffer-7 { margin-top: 7*@top-buffer-height; }
+.top-buffer-8 { margin-top: 8*@top-buffer-height; }
+.top-buffer-9 { margin-top: 9*@top-buffer-height; }
+.top-buffer-10 { margin-top: 10*@top-buffer-height; }
 
 //-----------------------------------------
 // Grid

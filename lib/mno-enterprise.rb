@@ -23,6 +23,8 @@ require "her_extension/model/associations/has_many_association"
 require "her_extension/middleware/mnoe_api_v1_parse_json"
 require "mno_enterprise/engine"
 
+require 'mno_enterprise/database_extendable'
+
 require 'mandrill'
 require "mandrill_client"
 
@@ -36,6 +38,9 @@ module MnoEnterprise
   #==================================================================
   class Router
     attr_accessor :terms_url
+
+    # Customise after_sign_out url
+    attr_accessor :after_sign_out_url
 
     def launch_url(id,opts = {})
       host_url("/launch/#{id}",opts)
@@ -210,6 +215,7 @@ module MnoEnterprise
     "processmaker",
     "projectpier",
     "quickbooks",
+    "ranqx",
     "receipt-bank",
     "signmee",
     "simpleinvoices",
@@ -218,6 +224,7 @@ module MnoEnterprise
     "sugarcrm",
     "timetrex",
     "vtiger6",
+    "xero",
     "wordpress"
   ]
 
