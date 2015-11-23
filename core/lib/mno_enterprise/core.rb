@@ -7,6 +7,7 @@ require 'countries'
 require 'cancancan'
 require 'devise'
 require 'devise/strategies/remote_authenticatable'
+require 'devise_extension'
 require "her"
 require "her_extension/her_orm_adapter"
 require "her_extension/model/orm"
