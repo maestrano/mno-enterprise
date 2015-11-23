@@ -109,11 +109,20 @@
   }
 
   // Create new company
-  .box-content .create-new {
+  .box-content .create-new, .box-content .admin-link {
     text-align: center;
   }
   .box-content .create-new a {
     color: @dashboard-cpy-select-link-create-color;
+  }
+
+  // Admin platform link
+  .box-content .admin-link {
+    margin-top: 3px;
+
+    a {
+      color: @dashboard-cpy-select-link-admin-color;
+    }
   }
 
   // Play well with menu at the top in responsive mode
