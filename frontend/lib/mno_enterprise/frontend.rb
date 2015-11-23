@@ -1,6 +1,7 @@
 require 'less-rails'
 require 'jquery-rails'
 require 'haml'
+require 'ngannotate-rails'
 
 require 'mno_enterprise/api'
 
