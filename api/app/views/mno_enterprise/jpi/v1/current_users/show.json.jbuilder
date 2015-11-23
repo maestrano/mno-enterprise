@@ -11,7 +11,8 @@ json.current_user do
   json.country_code @user.geo_country_code || 'US'
   json.website @user.website
   json.sso_session @user.sso_session
-  
+  json.admin_role @user.admin_role
+
   # Embed association if user is persisted
   if @user.id
     json.organizations do
