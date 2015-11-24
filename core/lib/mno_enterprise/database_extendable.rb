@@ -12,6 +12,7 @@ module MnoEnterprise::DatabaseExtendable
       end
 
       after_save :save_extensions
+      after_destroy :delete_extension
 
       include MnoEnterprise::DatabaseExtendable::InstanceMethods
     end
@@ -37,6 +38,10 @@ module MnoEnterprise::DatabaseExtendable
         extension.send("#{foreign_key}=", self.uid)
       end
       extension.save if extension.changed?
+    end
+
+    def delete_extension
+      extension.destroy
     end
   end
 
