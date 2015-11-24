@@ -37,6 +37,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     end
   end
 
+  # DELETE /mnoe/jpi/v1/organizations/1
+  def destroy
+    if organization
+      authorize! :destroy, organization
+      organization.destroy
+    end
+
+    head :no_content
+  end
+
   # POST /mnoe/jpi/v1/organizations
   def create
     # Create new organization

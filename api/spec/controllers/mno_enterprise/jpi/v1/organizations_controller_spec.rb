@@ -31,9 +31,10 @@ module MnoEnterprise
     # Stub organization + associations
     let(:organization) { build(:organization) }
     before { allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) }
-    
-    before { api_stub_for(post: "/organizations", response: from_api(organization)) }    
+
+    before { api_stub_for(post: "/organizations", response: from_api(organization)) }
     before { api_stub_for(put: "/organizations/#{organization.id}", response: from_api(organization)) }
+    before { api_stub_for(delete: "/organizations/#{organization.id}", response: from_api(nil)) }
     
     before { api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api(credit_card)) }
     before { api_stub_for(put: "/credit_cards/#{credit_card.id}", response: from_api(credit_card)) }
@@ -126,6 +127,19 @@ module MnoEnterprise
         it 'returns a partial representation of the entity' do
           subject
           expect(JSON.parse(response.body)).to eq(hash_for_reduced_organization(organization))
+        end
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      subject { delete :destroy, id: organization.id }
+
+      it_behaves_like 'jpi v1 authorizable action'
+
+      context 'success' do
+        it 'deletes the organization' do
+          expect(organization).to receive(:destroy)
+          subject
         end
       end
     end
