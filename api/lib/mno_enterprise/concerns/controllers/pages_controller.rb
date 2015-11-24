@@ -24,7 +24,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
   # mandatory as Mno Enterprise will do it anyway
   def launch
     app = MnoEnterprise::AppInstance.find_by(uid: params[:id])
-    MnoEnterprise::EventLogger.new_event('app_launch', current_user.id, "App launched", app.name, app)
+    MnoEnterprise::EventLogger.info('app_launch', current_user.id, "App launched", app.name, app)
     redirect_to MnoEnterprise.router.launch_url(params[:id], wtk: MnoEnterprise.jwt(user_id: current_user.uid))
   end
 

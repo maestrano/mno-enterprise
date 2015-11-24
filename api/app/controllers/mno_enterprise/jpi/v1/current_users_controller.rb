@@ -15,7 +15,7 @@ module MnoEnterprise
       @user.assign_attributes(user_params)
       changes = @user.changes
       if @user.update(user_params)
-        MnoEnterprise::EventLogger.new_event('user_update', current_user.id, "User update", changes, @user)
+        MnoEnterprise::EventLogger.info('user_update', current_user.id, "User update", changes, @user)
         render :show
       else
         render json: @user.errors, status: :bad_request
@@ -27,7 +27,7 @@ module MnoEnterprise
       @user = current_user
       
       if @user.update(password_params.merge(current_password_required: true))
-        MnoEnterprise::EventLogger.new_event('user_update_password', current_user.id, "User password change", @user.email, @user)
+        MnoEnterprise::EventLogger.info('user_update_password', current_user.id, "User password change", @user.email, @user)
         sign_in @user, bypass: true
         render :show
       else

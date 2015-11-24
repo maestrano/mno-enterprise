@@ -27,9 +27,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'haml', '~> 4.0.6'
   s.add_dependency 'coffee-rails', '~> 4.1.0'
   s.add_dependency 'health_check', '~> 1.5.1'
+  s.add_dependency 'httparty', '~> 0.13.7'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'factory_girl_rails'
   s.add_development_dependency 'shoulda-matchers'
+  s.add_development_dependency 'fakeweb', '~> 1.3'
 end

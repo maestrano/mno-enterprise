@@ -29,7 +29,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'prawn', '~> 2.0.1'
   s.add_dependency 'prawn-table', '~> 0.2.1'
   s.add_dependency 'money', '~> 6.5.1'
-  s.add_dependency 'httparty', '~> 0.13.7'
 
   # Markdown parsing
   s.add_dependency 'redcarpet', '~> 3.3.3'
