@@ -41,7 +41,12 @@ module MnoEnterprise::DatabaseExtendable
       if extension.send(foreign_key).blank?
         extension.send("#{foreign_key}=", self.uid)
       end
-      extension.save if extension.changed?
+      # Save at all time to 'touch' to  expire the cache
+      if extension.changed?
+        extension.save
+      else
+        extension.touch
+      end
     end
 
     def delete_extension
