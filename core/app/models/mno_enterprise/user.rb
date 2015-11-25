@@ -71,7 +71,12 @@ module MnoEnterprise
     has_one :deletion_request, class_name: 'MnoEnterprise::DeletionRequest'
     has_many :dashboards, class_name: 'MnoEnterprise::Impac::Dashboard'
     has_many :teams, class_name: 'MnoEnterprise::Team'
-    
+
+    #================================
+    # Callbacks
+    #================================
+    before_save :expire_user_cache
+
     #================================
     # Class Methods
     #================================
@@ -156,6 +161,11 @@ module MnoEnterprise
       
       org = self.organizations.to_a.find { |o| o.id.to_s == organization.id.to_s }
       org ? org.role : nil
+    end
+
+    private
+    def expire_user_cache
+      Rails.cache.delete(['user', self.to_key])
     end
   end
 end

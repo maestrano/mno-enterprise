@@ -28,7 +28,9 @@ module Devise
         #
         # Recreates a resource from session data
         def serialize_from_session(key,salt)
-          record = to_adapter.get(key)
+          record = Rails.cache.fetch(['user', key], expires_in: 5.minutes) do
+            to_adapter.get(key)
+          end
           record if record && record.authenticatable_salt == salt
         end
         

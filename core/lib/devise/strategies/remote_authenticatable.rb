@@ -34,3 +34,11 @@ end
 
 Warden::Strategies.add :remote_authenticatable, Devise::Strategies::RemoteAuthenticatable
 Devise.add_module :remote_authenticatable, strategy: true, controller: :sessions, route: :session
+
+Warden::Manager.after_authentication do |user,auth,opts|
+  Rails.cache.delete(['user', user.to_key])
+end
+
+Warden::Manager.before_logout do |user,auth,opts|
+  Rails.cache.delete(['user', user.to_key])
+end
