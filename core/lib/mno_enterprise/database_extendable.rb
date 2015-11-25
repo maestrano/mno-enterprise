@@ -23,6 +23,10 @@ module MnoEnterprise::DatabaseExtendable
       @extension ||= klass.where(foreign_key => self.uid).first_or_initialize
     end
 
+    def extension=(extension)
+      @extension = extension
+    end
+
     def klass
       "#{self.class}Extension".constantize
     end
