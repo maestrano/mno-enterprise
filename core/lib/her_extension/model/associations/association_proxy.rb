@@ -22,8 +22,8 @@ module Her
           end
           
           # create a proxy to the fetched object's method
-          metaclass = (class << self; self; end)
-          metaclass.install_proxy_methods 'association.fetch', name
+          # https://github.com/remiprev/her/pull/377
+          AssociationProxy.install_proxy_methods 'association.fetch', name
 
           # resend message to fetched object
           __send__(name, *args, &block)
