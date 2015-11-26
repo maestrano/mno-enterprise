@@ -37,7 +37,8 @@ module MnoEnterprise
             'id' => o.id,
             'uid' => o.uid,
             'name' => o.name,
-            'current_user_role' => o.role
+            'current_user_role' => o.role,
+            'has_myob_essentials_only' => o.has_myob_essentials_only?
           }
         end
 
