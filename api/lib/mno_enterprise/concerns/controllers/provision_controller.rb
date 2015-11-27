@@ -39,10 +39,10 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
   # GET /provision/new?apps[]=vtiger&organization_id=1
   # TODO: check organization accessibility via ability
   def new
-    authorize! :create, MnoEnterprise::AppInstance
     @apps = params[:apps]
     @organizations = current_user.organizations.to_a
     @organization = @organizations.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
+    authorize! :manage_app_instances, @organization
 
     unless @organization
       @organization = @organizations.one? ? @organizations.first : nil
@@ -57,8 +57,8 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
   # POST /provision
   # TODO: check organization accessibility via ability
   def create
-    authorize! :create, MnoEnterprise::AppInstance
     @organization = current_user.organizations.to_a.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
+    authorize! :manage_app_instances, @organization
 
     app_instances = []
     params[:apps].each do |product_name|
