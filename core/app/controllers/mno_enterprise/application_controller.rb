@@ -19,7 +19,7 @@ module MnoEnterprise
     # Rescue the CanCan permission denied error
     rescue_from CanCan::AccessDenied do |_exception|
       respond_to do |format|
-        format.html { redirect_to root_url, alert: 'Unauthorized Action' }
+        format.html { redirect_to  main_app.root_path, alert: 'Unauthorized Action' }
         format.json { render nothing: true, status: :forbidden }
       end
     end

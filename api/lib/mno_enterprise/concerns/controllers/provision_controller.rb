@@ -42,11 +42,11 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     @apps = params[:apps]
     @organizations = current_user.organizations.to_a
     @organization = @organizations.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
-    authorize! :manage_app_instances, @organization
 
     unless @organization
       @organization = @organizations.one? ? @organizations.first : nil
     end
+    authorize! :manage_app_instances, @organization
 
     # Redirect to dashboard if no applications
     unless @apps && @apps.any?

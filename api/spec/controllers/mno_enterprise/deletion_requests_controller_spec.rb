@@ -14,7 +14,10 @@ module MnoEnterprise
     let(:deletion_req) { build(:deletion_request) }
     let(:user) { build(:user, deletion_request: deletion_req) }
 
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    before do
+      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      api_stub_for(get: "/users/#{user.id}/deletion_request", response: from_api(user))
+    end
 
     describe "GET #show'" do
       before { sign_in user }
