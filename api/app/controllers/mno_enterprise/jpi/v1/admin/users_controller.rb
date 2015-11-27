@@ -9,6 +9,7 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/admin/@users/1
     def show
       @user = MnoEnterprise::User.find(params[:id])
+      @user_organizations = @user.organizations
     end
   end
 end
