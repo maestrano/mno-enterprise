@@ -10,17 +10,18 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     before_filter :authenticate_user_or_signup!
 
     protected
-      # The path used after purchased apps have been provisionned
-      def after_provision_path
-        # MySpace only defined in frontend
-        # This should be overriden by the main app when not loading frontend
-        if mno_enterprise.respond_to?(:myspace_path)
-          mno_enterprise.myspace_path(anchor: '/')
-        else
-          main_app.root_path
-        end
+    # The path used after purchased apps have been provisionned
+    def after_provision_path
+      # MySpace only defined in frontend
+      # This should be overriden by the main app when not loading frontend
+      if mno_enterprise.respond_to?(:myspace_path)
+        mno_enterprise.myspace_path(anchor: '/')
+      else
+        main_app.root_path
       end
-      helper_method :after_provision_path # To use in the provision view
+    end
+
+    helper_method :after_provision_path # To use in the provision view
   end
 
   #==================================================================
@@ -38,6 +39,7 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
   # GET /provision/new?apps[]=vtiger&organization_id=1
   # TODO: check organization accessibility via ability
   def new
+    authorize! :create, MnoEnterprise::AppInstance
     @apps = params[:apps]
     @organizations = current_user.organizations.to_a
     @organization = @organizations.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
@@ -55,6 +57,7 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
   # POST /provision
   # TODO: check organization accessibility via ability
   def create
+    authorize! :create, MnoEnterprise::AppInstance
     @organization = current_user.organizations.to_a.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
 
     app_instances = []

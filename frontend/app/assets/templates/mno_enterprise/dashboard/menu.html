@@ -38,7 +38,7 @@
         <li ng-show="!selectBoxisEmpty()">
           <a href="#/company">My company</a>
         </li>
-        <li ng-show="!selectBoxisEmpty()">
+        <li ng-show="!selectBoxisEmpty() || helper.canCreateApp">
           <a href="#/marketplace">Marketplace</a>
         </li>
         <!-- <li ng-show="!selectBoxisEmpty()">

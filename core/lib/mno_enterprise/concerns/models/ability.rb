@@ -54,6 +54,9 @@ module MnoEnterprise::Concerns::Models::Ability
           user.teams.map(&:app_instances).compact.flatten.map(&:id).include?(app_instance.id)
       )
     end
+    can :create,  MnoEnterprise::AppInstance do |organization|
+      user.role(organization).include? ['Super Admin', 'Admin']
+    end
 
     #===================================================
     # Impac

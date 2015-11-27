@@ -20,6 +20,14 @@ module.controller('DashboardMarketplaceAppCtrl',[
     $scope.initialize = (app) ->
       angular.copy(app,$scope.app)
       $scope.isLoading = false
+      $scope.helper = {}
+      can = DhbOrganizationSvc.can
+
+      # ----------------------------------------------------------
+      # Permissions helper
+      # ----------------------------------------------------------
+      $scope.helper.canCreateApp = ->
+        can.create.appInstance()
       
     $scope.backLink = ->
       "#/marketplace"
