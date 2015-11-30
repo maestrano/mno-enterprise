@@ -3,6 +3,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
 require 'her'
 require 'factory_girl_rails'
+require 'fakeweb'
 
 require 'mno_enterprise/testing_support/user_action_shared'
 
@@ -63,6 +64,15 @@ RSpec.configure do |config|
   # Reset API stubs before each step
   config.before :each do
     api_stub_reset
+  end
+
+  config.before(:suite) do
+    FakeWeb.allow_net_connect = false
+    FakeWeb.register_uri(:post, 'https://my_tenant_id:my_tenant_access_key@api-enterprise.maestrano.com/api/mnoe/v1/audit_events', status: 200)
+  end
+
+  config.after(:suite) do
+    FakeWeb.allow_net_connect = true
   end
 
   # RSpec Rails can automatically mix in different behaviours to your tests

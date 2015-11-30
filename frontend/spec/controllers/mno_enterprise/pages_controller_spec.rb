@@ -28,6 +28,7 @@ module MnoEnterprise
     describe 'GET #launch' do
       let(:app_instance) { build(:app_instance) }
       before { sign_in user }
+      before { api_stub_for(get: "/app_instances", response: from_api([app_instance])) }
       subject { get :launch, id: app_instance.uid }
 
       it_behaves_like "a navigatable protected user action"
