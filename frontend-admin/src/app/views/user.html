@@ -48,6 +48,9 @@
           tooltip="User is not confirmed"
           ng-show="!vm.user.confirmed_at"></div>
       </div>
+      <div class="col-sm-12 top-buffer-2">
+        <mnoe-organizations-list list="vm.user.organizations" view="all"></mnoe-organizations-list>
+      </div>
     </div>
   </div>
 </div>
