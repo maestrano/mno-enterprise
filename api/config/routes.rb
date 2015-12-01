@@ -101,7 +101,6 @@ MnoEnterprise::Engine.routes.draw do
             put :remove_users
           end
         end
-
       end
 
       resources :deletion_requests, only: [:show, :create, :destroy] do
@@ -117,6 +116,7 @@ MnoEnterprise::Engine.routes.draw do
         end
       end
       namespace :admin, defaults: {format: 'json'} do
+        resources :audit_events, only: [:index]
         resources :users, only: [:index, :show]
         resources :organizations, only: [:index, :show] do
           collection do
