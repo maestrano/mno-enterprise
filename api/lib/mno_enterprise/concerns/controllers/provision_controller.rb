@@ -10,17 +10,18 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     before_filter :authenticate_user_or_signup!
 
     protected
-      # The path used after purchased apps have been provisionned
-      def after_provision_path
-        # MySpace only defined in frontend
-        # This should be overriden by the main app when not loading frontend
-        if mno_enterprise.respond_to?(:myspace_path)
-          mno_enterprise.myspace_path(anchor: '/')
-        else
-          main_app.root_path
-        end
+    # The path used after purchased apps have been provisionned
+    def after_provision_path
+      # MySpace only defined in frontend
+      # This should be overriden by the main app when not loading frontend
+      if mno_enterprise.respond_to?(:myspace_path)
+        mno_enterprise.myspace_path(anchor: '/')
+      else
+        main_app.root_path
       end
-      helper_method :after_provision_path # To use in the provision view
+    end
+
+    helper_method :after_provision_path # To use in the provision view
   end
 
   #==================================================================
@@ -45,6 +46,7 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     unless @organization
       @organization = @organizations.one? ? @organizations.first : nil
     end
+    authorize! :manage_app_instances, @organization
 
     # Redirect to dashboard if no applications
     unless @apps && @apps.any?
@@ -56,6 +58,7 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
   # TODO: check organization accessibility via ability
   def create
     @organization = current_user.organizations.to_a.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
+    authorize! :manage_app_instances, @organization
 
     app_instances = []
     params[:apps].each do |product_name|

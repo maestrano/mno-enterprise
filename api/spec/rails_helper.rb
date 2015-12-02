@@ -61,6 +61,9 @@ RSpec.configure do |config|
   # Include devise tests
   config.include Devise::TestHelpers, type: :controller
 
+  # Include Rails route helpers
+  config.include Rails.application.routes.url_helpers, type: :controller
+
   # Reset API stubs before each step
   config.before :each do
     api_stub_reset

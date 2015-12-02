@@ -40,6 +40,9 @@ module.controller('DashboardAppsListCtrl',[
       $scope.helper.displayCogwheel = ->
         can.update.appInstance()
 
+      $scope.helper.canCreateApp = ->
+        can.create.appInstance()
+
       $scope.helper.canRestartApp = ->
         can.update.appInstance()
 
