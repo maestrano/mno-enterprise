@@ -2,7 +2,7 @@
 module MnoEnterprise
   class Jpi::V1::TeamsController < Jpi::V1::BaseResourceController
     respond_to :json
-    
+
     # GET /mnoe/jpi/v1/organizations/:organization_id/teams
     def index
       authorize! :read, parent_organization
@@ -18,24 +18,18 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/organizations/:organization_id/teams
     def create
       authorize! :manage_teams, parent_organization
-      
-      whitelist = ['name']
-      attributes = params[:team].select { |k,v| whitelist.include?(k.to_s) }
-      @team = parent_organization.teams.create(attributes)
-      
+      @team = parent_organization.teams.create(team_params)
+
       render 'show'
     end
 
     # PUT /mnoe/jpi/v1/teams/:id
     def update
-      whitelist = ['name']
-      attributes = params[:team].select { |k,v| whitelist.include?(k.to_s) }
-
       @team = MnoEnterprise::Team.find(params[:id])
       authorize! :manage_teams, @team.organization
-      
+
       # Update regular attributes
-      @team.update_attributes(attributes)
+      @team.update_attributes(team_params)
 
       # # Update permissions
       if params[:team] && params[:team][:app_instances]
@@ -54,7 +48,7 @@ module MnoEnterprise
       # Add users
       if params[:team] && params[:team][:users]
         id_list = params[:team][:users].map { |h| h[:id] }.compact
-        users = @team.organization.users.where(id: id_list)
+        users = @team.organization.users.where('id.in' => id_list)
         users.each { |u| @team.add_user(u) }
       end
 
@@ -69,7 +63,7 @@ module MnoEnterprise
       # Add users
       if params[:team] && params[:team][:users]
         id_list = params[:team][:users].map { |h| h[:id] }.compact
-        users = @team.organization.users.where(id: id_list)
+        users = @team.organization.users.where('id.in' => id_list)
         users.each { |u| @team.remove_user(u) }
       end
 
@@ -84,6 +78,11 @@ module MnoEnterprise
 
       head :no_content
     end
-  
+
+    private
+
+    def team_params
+      params.require(:team).permit(:name)
+    end
   end
 end
