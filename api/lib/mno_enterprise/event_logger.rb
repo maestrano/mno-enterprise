@@ -3,7 +3,7 @@ require 'httparty'
 module MnoEnterprise
   class EventLogger
     include HTTParty
-    base_uri "#{MnoeEnterprise.mno_api_private_host || MnoEnterprise.mno_api_host}/api/mnoe/v1/audit_events"
+    base_uri "#{MnoEnterprise.mno_api_private_host || MnoEnterprise.mno_api_host}/api/mnoe/v1/audit_events"
     read_timeout 0.1
     basic_auth MnoEnterprise.tenant_id, MnoEnterprise.tenant_key
 
