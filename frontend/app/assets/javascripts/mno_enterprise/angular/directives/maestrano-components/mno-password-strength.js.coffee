@@ -67,7 +67,7 @@ angular.module("maestrano.components.mno-password-strength", [
         while i < letters.length - 2
           p2 = p.toLowerCase()
           forth = letters.substring(i, parseInt(i + 3))
-          back = _.str.reverse(forth)
+          back = _(forth).split("").reverse()
           counts.neg.seqLetter++  if p2.indexOf(forth) isnt -1 or p2.indexOf(back) isnt -1
           i++
         
@@ -75,7 +75,7 @@ angular.module("maestrano.components.mno-password-strength", [
         i = 0
         while i < numbers.length - 2
           forth = numbers.substring(i, parseInt(i + 3))
-          back = _.str.reverse(forth)
+          back = _(forth).split("").reverse()
           counts.neg.seqNumber++  if p.indexOf(forth) isnt -1 or p.toLowerCase().indexOf(back) isnt -1
           i++
         
@@ -83,7 +83,7 @@ angular.module("maestrano.components.mno-password-strength", [
         i = 0
         while i < symbols.length - 2
           forth = symbols.substring(i, parseInt(i + 3))
-          back = _.str.reverse(forth)
+          back = _(forth).split("").reverse()
           counts.neg.seqSymbol++  if p.indexOf(forth) isnt -1 or p.toLowerCase().indexOf(back) isnt -1
           i++
         
