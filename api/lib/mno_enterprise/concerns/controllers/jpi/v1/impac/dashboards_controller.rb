@@ -29,6 +29,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   def create
     if @dashboard = dashboards.create(dashboard_create_params)
       # authorize! :create, @dashboard
+      MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', @dashboard.name, @dashboard)
       render 'show'
     else
       render json: @dashboard.errors, status: :bad_request
@@ -50,6 +51,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   def destroy
     # authorize! :destroy, @dashboard
     if dashboard.destroy
+      MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', dashboard.name, dashboard)
       head status: :ok
     else
       render json: 'Unable to destroy dashboard', status: :bad_request
