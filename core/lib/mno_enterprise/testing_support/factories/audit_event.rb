@@ -5,6 +5,7 @@ FactoryGirl.define do
       sequence(:key) { |n| "event-fab3#{n}" }
       user_id 1
       description 'Blabla'
+      details 'Details'
       user { {name: 'John', surname: 'Doe'} }
 
       # Properly build the resource with Her
