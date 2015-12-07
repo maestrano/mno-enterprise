@@ -7,6 +7,7 @@ module MnoEnterprise
     def create
       if widgets
         if @widget = widgets.create(format_attrs(['widget_category','metadata']))
+          MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Widget Creation', @widget.name, @widget)
           @nocontent = true # no data fetch from Connec!
           render 'show'
         else
@@ -30,6 +31,7 @@ module MnoEnterprise
     # DELETE /mnoe/jpi/v1/impac/dashboards/1
     def destroy
       if widget.destroy
+        MnoEnterprise::EventLogger.info('widget_delete', current_user.id, 'Widget Deletion', widget.name, widget)
         head status: :ok
       else
         render json: 'Unable to destroy widget', status: :bad_request
