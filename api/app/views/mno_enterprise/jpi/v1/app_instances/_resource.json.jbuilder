@@ -8,7 +8,7 @@ json.oauth_keys_valid app_instance.oauth_keys_valid
 #json.microsoft_trial_url app_instance.microsoft_trial_url
 json.created_at app_instance.created_at
 
-if app_instance.connector_stack? && app_instance.oauth_keys_valid && app_instance.oauth_company
+if app_instance.oauth_company
   json.oauth_company_name app_instance.oauth_company
 end
 #
