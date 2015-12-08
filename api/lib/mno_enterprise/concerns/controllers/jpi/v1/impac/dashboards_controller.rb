@@ -69,7 +69,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   end
 
   def dashboard_params
-    params.require(:dashboard).permit(:name, {widgets_order: []}, {organization_ids: []})
+    params.require(:dashboard).permit(:name, :currency, {widgets_order: []}, {organization_ids: []})
   end
   alias :dashboard_update_params  :dashboard_params
   alias :dashboard_create_params  :dashboard_params
