@@ -59,7 +59,7 @@ module MnoEnterprise
     validates_uniqueness_of :email, allow_blank: true, if: :email_changed?
 
     if Devise.password_regex
-      validates :password, format: { with: Devise.password_regex, message: Devise.password_regex_message }
+      validates :password, format: { with: Devise.password_regex, message: Devise.password_regex_message }, if: :password_required?
     end
 
 
@@ -161,6 +161,13 @@ module MnoEnterprise
       
       org = self.organizations.to_a.find { |o| o.id.to_s == organization.id.to_s }
       org ? org.role : nil
+    end
+
+    # Checks whether a password is needed or not. For validations only.
+    # Passwords are always required if it's a new record, or if the password
+    # or confirmation are being set somewhere.
+    def password_required?
+      !persisted? || !password.nil? || !password_confirmation.nil?
     end
 
     private
