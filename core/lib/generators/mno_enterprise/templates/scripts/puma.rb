@@ -3,8 +3,8 @@ workers <%= @num_cpus %>
 threads 8,16
 worker_timeout 60
 
-# Preload application
-preload_app!
+# Detach master from bundler context
+prune_bundler
 
 # Configuration
 rails_env = ENV['RAILS_ENV'] || 'production'
