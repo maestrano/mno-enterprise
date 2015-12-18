@@ -31,6 +31,9 @@ Gem::Specification.new do |s|
 
   # Lock sprocket version
   s.add_dependency 'sprockets-rails', '~> 2.3'
+  # To allow recompilation of the style file
+  s.add_dependency 'less-rb'
+  s.add_dependency 'execjs'
 
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails'

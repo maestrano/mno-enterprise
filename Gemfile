@@ -12,3 +12,5 @@ gemspec
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
+
+gem 'less-rb', require: false, github: 'maccman/less-rb'

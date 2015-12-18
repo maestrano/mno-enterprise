@@ -133,6 +133,10 @@ MnoEnterprise::Engine.routes.draw do
             get :last_portfolio_amount
           end
         end
+
+        # Theme Previewer
+        post 'theme/save'
+        put 'theme/logo'
       end
     end
   end
