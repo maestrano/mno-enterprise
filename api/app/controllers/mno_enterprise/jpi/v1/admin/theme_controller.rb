@@ -1,4 +1,3 @@
-require 'less-rb'
 module MnoEnterprise
   class Jpi::V1::Admin::ThemeController < Jpi::V1::Admin::BaseResourceController
     # No xsrf
