@@ -29,6 +29,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'health_check', '~> 1.5.1'
   s.add_dependency 'httparty', '~> 0.13.7'
 
+  # Lock sprocket version
+  s.add_dependency 'sprockets-rails', '~> 2.3'
+
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'factory_girl_rails'
