@@ -29,5 +29,8 @@ module MnoEnterprise
 	    order.map { |id| self.widgets.to_a.find{ |w| w.id == id} }.compact
 	  end
 
+    def to_audit_event
+      name
+    end
   end
 end
