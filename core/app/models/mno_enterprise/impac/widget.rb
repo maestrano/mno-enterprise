@@ -5,5 +5,9 @@ module MnoEnterprise
 
     belongs_to :dashboard, class_name: 'MnoEnterprise::Impac::Dashboard'
 
+    def to_audit_event
+      name
+    end
+
   end
 end

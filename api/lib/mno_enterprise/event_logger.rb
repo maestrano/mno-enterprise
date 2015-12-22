@@ -13,12 +13,20 @@ module MnoEnterprise
               key: key,
               user_id: current_user_id,
               description: description,
-              metadata: metadata,
+              metadata: format_metadata(metadata, object),
               subject_type: object.class.name,
               subject_id: object.id
           }})
     rescue Net::ReadTimeout
       # Meant to fail
+    end
+
+    def self.format_metadata(metadata, object)
+      if metadata.blank? && object.respond_to?(:to_audit_event)
+        object.to_audit_event
+      else
+        metadata
+      end
     end
   end
 end
