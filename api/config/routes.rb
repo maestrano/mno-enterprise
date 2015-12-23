@@ -117,7 +117,7 @@ MnoEnterprise::Engine.routes.draw do
       end
       namespace :admin, defaults: {format: 'json'} do
         resources :audit_events, only: [:index]
-        resources :users, only: [:index, :show]
+        resources :users, only: [:index, :show, :destroy, :update]
         resources :organizations, only: [:index, :show] do
           collection do
             get :in_arrears
