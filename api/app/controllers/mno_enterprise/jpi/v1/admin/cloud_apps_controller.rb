@@ -3,21 +3,21 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/cloud_apps
     def index
-      @apps = MnoEnterprise::App.cloud.all
+      @cloud_apps = MnoEnterprise::App.cloud.all
     end
 
     # PUT /mnoe/jpi/v1/admin/cloud_apps/:id/regenerate_api_key
     def regenerate_api_key
-      @app = MnoEnterprise::App.find(params[:id])
-      @app.regenerate_api_key!
+      @cloud_app = MnoEnterprise::App.find(params[:id])
+      @cloud_app.regenerate_api_key!
 
       render :show
     end
 
     # PUT /mnoe/jpi/v1/admin/cloud_apps/:id/refresh_metadata
     def refresh_metadata
-      @app = MnoEnterprise::App.find(params[:id])
-      @app.refresh_metadata!
+      @cloud_app = MnoEnterprise::App.find(params[:id])
+      @cloud_app.refresh_metadata!
 
       render :show
     end
