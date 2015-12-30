@@ -1,0 +1,1 @@
+json.cloud_apps @cloud_apps, partial: 'cloud_app', as: :cloud_app

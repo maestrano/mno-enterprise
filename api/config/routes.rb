@@ -133,6 +133,12 @@ MnoEnterprise::Engine.routes.draw do
             get :last_portfolio_amount
           end
         end
+        resources :cloud_apps, only: [:index] do
+          member do
+            put :regenerate_api_key
+            put :refresh_metadata
+          end
+        end
       end
     end
   end

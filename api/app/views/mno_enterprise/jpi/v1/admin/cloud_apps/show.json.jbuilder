@@ -1,0 +1,1 @@
+json.cloud_app @cloud_app, :id, :uid, :name, :api_key
