@@ -27,11 +27,11 @@ module MnoEnterprise
         'phone_country_code' => res.phone_country_code,
         'country_code' => res.geo_country_code || 'US',
         'website' => res.website,
-        'sso_session' => res.sso_session,
-        'admin_role' => res.admin_role
+        'sso_session' => res.sso_session
       }
       
       if res.id
+        hash['admin_role'] = res.admin_role
         hash['organizations'] = (res.organizations || []).map do |o|
           {
             'id' => o.id,
