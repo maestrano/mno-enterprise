@@ -4,17 +4,19 @@ module MnoEnterprise
   describe PagesController, type: :controller do
     render_views
     routes { MnoEnterprise::Engine.routes }
-  
+
     let(:user) { build(:user) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
-    before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
-  
+    before do
+      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
+    end
+
     describe "GET #myspace" do
       before { sign_in user }
       subject { get :myspace }
-      
+
       it_behaves_like "a navigatable protected user action"
-      
+
       it "assigns the right meta information" do
         get :myspace
         meta = {}
@@ -35,7 +37,7 @@ module MnoEnterprise
 
       it 'redirect to the mno enterprise launch page with a web token' do
         subject
-        expect(response).to redirect_to(MnoEnterprise.router.launch_url(app_instance.uid, wtk: MnoEnterprise.jwt({user_id: user.uid })))
+        expect(response).to redirect_to(MnoEnterprise.router.launch_url(app_instance.uid, wtk: MnoEnterprise.jwt({user_id: user.uid})))
       end
     end
   end

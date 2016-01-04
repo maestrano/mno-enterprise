@@ -8,7 +8,10 @@ module MnoEnterprise
     # Create user and organization + mutual associations
     let(:organization) { build(:organization) }
     let(:user) { build(:user) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    before do
+      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
+    end
     before { allow(organization).to receive(:users).and_return([user]) }
     before { allow_any_instance_of(User).to receive(:organizations).and_return([organization]) }
     

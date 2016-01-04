@@ -13,6 +13,7 @@ module MnoEnterprise
       api_stub_for(put: "/users/#{user.id}", response: from_api(user))
       api_stub_for(get: "/users/#{user2.id}", response: from_api(user2))
       api_stub_for(put: "/users/#{user2.id}", response: from_api(user2))
+
     end
 
     context "admin user" do
