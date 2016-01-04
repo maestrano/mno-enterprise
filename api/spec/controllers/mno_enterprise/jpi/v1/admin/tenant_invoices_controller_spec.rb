@@ -57,6 +57,7 @@ module MnoEnterprise
       api_stub_for(get: "/tenant_invoices/#{tenant_invoice.id}", response: from_api(tenant_invoice))
       api_stub_for(get: "/users", response: from_api([user]))
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
       sign_in user
     end
 

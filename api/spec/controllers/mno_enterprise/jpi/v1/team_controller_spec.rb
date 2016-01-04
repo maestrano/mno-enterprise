@@ -56,6 +56,7 @@ module MnoEnterprise
     let(:app_instance) { build(:app_instance) }
     before do
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
       api_stub_for(get: "/users/#{user.id}/organizations", response: from_api(organization))
       api_stub_for(post: "/organizations", response: from_api(organization))
       api_stub_for(get: "/organizations/#{organization.id}/users", response: from_api([user]))

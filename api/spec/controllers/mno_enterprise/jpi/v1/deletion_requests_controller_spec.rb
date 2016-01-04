@@ -10,7 +10,10 @@ module MnoEnterprise
     # Stub model calls
     let(:deletion_request) { build(:deletion_request) }
     let(:user) { build(:user, deletion_request: deletion_request) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    before do
+      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
+    end
     before { sign_in user }
 
     describe 'POST #create' do
@@ -30,8 +33,8 @@ module MnoEnterprise
           expect(message_delivery).to receive(:deliver_now).with(no_args)
 
           expect(SystemNotificationMailer).to receive(:deletion_request_instructions)
-            .with(user, deletion_request)
-            .and_return(message_delivery)
+                                                  .with(user, deletion_request)
+                                                  .and_return(message_delivery)
 
           subject
         end
@@ -48,8 +51,8 @@ module MnoEnterprise
           expect(message_delivery).to receive(:deliver_now).with(no_args)
 
           expect(SystemNotificationMailer).to receive(:deletion_request_instructions)
-            .with(user, deletion_request)
-            .and_return(message_delivery)
+                                                  .with(user, deletion_request)
+                                                  .and_return(message_delivery)
 
           subject
         end
