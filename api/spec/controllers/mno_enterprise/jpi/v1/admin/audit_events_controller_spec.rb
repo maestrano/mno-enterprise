@@ -38,7 +38,7 @@ module MnoEnterprise
       context 'sucess' do
         it 'assigns @audit_events' do
           subject
-          expect(assigns(:audit_events)).to eq([audit_event])
+          expect(assigns(:audit_events).to_a).to eq([audit_event])
         end
 
         it 'renders the :index view' do

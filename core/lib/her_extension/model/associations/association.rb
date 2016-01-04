@@ -5,7 +5,7 @@ module Her
       class Association
         # @private
         attr_accessor :params
-        delegate :all, :order_by, :sort_by, :order, :sort, :limit, :where, to: :blank_relation
+        delegate :all, :order_by, :sort_by, :order, :sort, :limit, :skip, :where, to: :blank_relation
         
         # Required by Relation methods
         def build_request_path(params = {})
