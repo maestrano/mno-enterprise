@@ -30,6 +30,7 @@ module MnoEnterprise
     let(:user) { build(:user, admin_role: 'admin') }
     before do
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
       sign_in user
     end
 

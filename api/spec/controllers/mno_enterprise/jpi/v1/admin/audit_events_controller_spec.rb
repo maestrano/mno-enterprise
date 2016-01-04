@@ -16,7 +16,10 @@ module MnoEnterprise
 
     # # Stub user and user call
     let(:user) { FactoryGirl.build(:user, :admin) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    before do
+      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
+    end
     # before { api_stub_for(get: '/users?filter%5Bemail%5D&limit=1', response: from_api(nil)) }
 
     before { sign_in user }

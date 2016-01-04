@@ -50,6 +50,7 @@ module MnoEnterprise
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
       api_stub_for(get: "/organizations", response: from_api([org1, org2]))
       api_stub_for(get: "/tenant", response: from_api(tenant))
+      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
       sign_in user
     end
 
