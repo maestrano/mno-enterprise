@@ -21,7 +21,7 @@ module MnoEnterprise
     class << self
       # Delegate the following methods to `scoped`
       # Clear relation params for each class level query
-      [:all, :where, :create, :find, :first_or_create, :first_or_initialize, :limit, :order_by, :sort_by, :order, :sort].each do |method|
+      [:all, :where, :create, :find, :first_or_create, :first_or_initialize, :limit, :skip, :order_by, :sort_by, :order, :sort].each do |method|
         class_eval <<-RUBY, __FILE__, __LINE__ + 1
           def #{method}(*params)
             Her::Model::Relation.new(self).send(#{method.to_sym.inspect}, *params)

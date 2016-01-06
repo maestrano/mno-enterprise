@@ -60,6 +60,13 @@ module Her
         self
       end
 
+      # Skip result rows
+      def skip(nrows = nil)
+        return self if !nrows
+        self.params[:skip] = nrows
+        self
+      end
+
       # Reset the query parameters
       def reset_params
         @params.clear

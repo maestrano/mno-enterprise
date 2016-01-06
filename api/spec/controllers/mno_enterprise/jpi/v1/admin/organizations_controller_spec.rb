@@ -64,7 +64,8 @@ module MnoEnterprise
           'soa_enabled' => organization.soa_enabled,
           'created_at' => organization.created_at,
           'credit_card' => {'presence' => organization.credit_card?}
-        }]
+        }],
+        'metadata' => {}
       }
     }
 
