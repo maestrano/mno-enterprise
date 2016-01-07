@@ -3,11 +3,13 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/organizations
     def index
-      if params[:top] || params[:skip]
-        @organizations = MnoEnterprise::Organization.limit(params[:top]).skip(params[:skip]).all
-      else
-        @organizations = MnoEnterprise::Organization.all
-      end
+      @organizations = MnoEnterprise::Organization
+      @organizations = @organizations.limit(params[:limit]) if params[:limit]
+      @organizations = @organizations.skip(params[:offset]) if params[:offset]
+      @organizations = @organizations.order_by(params[:order_by]) if params[:order_by]
+      @organizations = @organizations.where(params[:where]) if params[:where]
+
+      @organizations = @organizations.all
     end
 
     # GET /mnoe/jpi/v1/admin/organizations/1
