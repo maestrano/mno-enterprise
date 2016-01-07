@@ -4,7 +4,7 @@ module MnoEnterpriseApiTestHelper
   # the resource as if it had been returned by the MnoEnterprise
   # API server
   def from_api(res)
-    { data: serialize_type(res) }
+    { data: serialize_type(res), metadata: {pagination: {count: entity_count(res)}} }
   end
   
   def serialize_type(res)
@@ -29,6 +29,17 @@ module MnoEnterpriseApiTestHelper
       return res.iso8601
     else
       return res
+    end
+  end
+
+  def entity_count(res)
+    case
+    when res.kind_of?(Array)
+      return res.count
+    when res.kind_of?(Hash)
+      return res.count
+    else
+      return 1
     end
   end
   
