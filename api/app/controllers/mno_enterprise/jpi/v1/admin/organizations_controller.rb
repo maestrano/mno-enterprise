@@ -9,6 +9,8 @@ module MnoEnterprise
       @organizations = @organizations.order_by(params[:order_by]) if params[:order_by]
       @organizations = @organizations.where(params[:where]) if params[:where]
       @organizations = @organizations.all
+
+      response.headers['X-Total-Count'] = @organizations.metadata[:pagination][:count]
     end
 
     # GET /mnoe/jpi/v1/admin/organizations/1

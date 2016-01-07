@@ -9,6 +9,8 @@ module MnoEnterprise
       @users = @users.order_by(params[:order_by]) if params[:order_by]
       @users = @users.where(params[:where]) if params[:where]
       @users = @users.all
+
+      response.headers['X-Total-Count'] = @users.metadata[:pagination][:count]
     end
 
     # GET /mnoe/jpi/v1/admin/users/1

@@ -9,6 +9,8 @@ module MnoEnterprise
       @audit_events = @audit_events.order_by(params[:order_by]) if params[:order_by]
       @audit_events = @audit_events.where(params[:where]) if params[:where]
       @audit_events = @audit_events.all
+
+      response.headers['X-Total-Count'] = @audit_events.metadata[:pagination][:count]
     end
   end
 end
