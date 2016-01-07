@@ -8,7 +8,6 @@ module MnoEnterprise
       @organizations = @organizations.skip(params[:offset]) if params[:offset]
       @organizations = @organizations.order_by(params[:order_by]) if params[:order_by]
       @organizations = @organizations.where(params[:where]) if params[:where]
-
       @organizations = @organizations.all
     end
 
