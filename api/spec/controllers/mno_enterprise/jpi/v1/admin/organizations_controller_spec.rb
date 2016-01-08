@@ -65,7 +65,7 @@ module MnoEnterprise
           'created_at' => organization.created_at,
           'credit_card' => {'presence' => organization.credit_card?}
         }],
-        'metadata' => {}
+        'metadata' => {'pagination' => {'count' => 1}}
       }
     }
 

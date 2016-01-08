@@ -48,7 +48,7 @@ module MnoEnterprise
     def hash_for_users(users)
       {
           'users' => users.map { |o| partial_hash_for_users(o) },
-          'metadata' => {}
+          'metadata' => {'pagination' => {'count' => users.count}}
       }
     end
 
