@@ -8,7 +8,7 @@ module MnoEnterprise
 
     # Stub model calls
     let(:admin) { build(:user, :admin) }
-    let(:app) { build(:app, stack: 'cloud', uid: 'cld-1234', name: 'My App', api_key: "28034234") }
+    let(:app) { build(:app, stack: 'cloud', uid: 'cld-1234', name: 'My App', api_key: '28034234') }
 
     before do
       api_stub_for(get: "/users/#{admin.id}", response: from_api(admin))
