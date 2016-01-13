@@ -1,1 +1,1 @@
-json.extract! cloud_app, :id, :uid, :name, :api_key
+json.extract! cloud_app, :id, :uid, :name, :tiny_description, :description, :api_key, :metadata_url, :details
