@@ -29,9 +29,9 @@ module MnoEnterprise
     scope :active, -> { where(active: true) }
     scope :cloud, -> { where(stack: 'cloud') }
 
-    attributes :id, :uid, :nid, :name, :description, :created_at, :updated_at, :logo, :website, :slug,
+    attributes :id, :uid, :nid, :name, :description, :tiny_description, :created_at, :updated_at, :logo, :website, :slug,
     :categories, :key_benefits, :key_features, :testimonials, :worldwide_usage, :tiny_description,
-    :popup_description, :stack, :terms_url, :pictures, :tags, :api_key
+    :popup_description, :stack, :terms_url, :pictures, :tags, :api_key, :metadata_url, :metadata, :details
 
     # Return the list of available categories
     def self.categories(list = nil)
@@ -49,8 +49,8 @@ module MnoEnterprise
       self.put(operation: 'regenerate_api_key')
     end
 
-    def refresh_metadata!
-      self.put(operation: 'refresh_metadata')
+    def refresh_metadata!(metadata_url)
+      self.put(operation: 'refresh_metadata', metadata_url: metadata_url)
     end
   end
 end
