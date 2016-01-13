@@ -173,6 +173,7 @@ module MnoEnterprise
     private
     def expire_user_cache
       Rails.cache.delete(['user', self.to_key])
+      true # Don't skip save if above return false (memory_store)
     end
   end
 end
