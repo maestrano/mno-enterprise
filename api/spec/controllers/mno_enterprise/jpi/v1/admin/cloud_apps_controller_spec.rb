@@ -8,7 +8,7 @@ module MnoEnterprise
 
     # Stub model calls
     let(:admin) { build(:user, :admin) }
-    let(:app) { build(:app, stack: 'cloud', uid: 'cld-1234', name: 'My App', api_key: '28034234') }
+    let(:app) { build(:app, stack: 'cloud', uid: 'cld-1234', name: 'My App', api_key: "28034234") }
 
     before do
       api_stub_for(get: "/users/#{admin.id}", response: from_api(admin))
@@ -28,7 +28,7 @@ module MnoEnterprise
         
         it 'returns the cloud aplications' do
           subject
-          expect(JSON.parse(response.body)).to eq({"cloud_apps"=>[{"id"=>app.id, "uid"=>app.uid, "name"=>app.name, "api_key"=>app.api_key}]})
+          expect(JSON.parse(response.body)).to eq({"cloud_apps"=>[{"id"=>app.id, "uid"=>app.uid, "name"=>app.name, "api_key"=>app.api_key, "tiny_description"=>app.tiny_description, "description"=>app.description, "metadata_url"=>nil, "details"=>nil}]})
         end
       end
 
