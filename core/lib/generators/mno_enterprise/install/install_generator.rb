@@ -117,12 +117,20 @@ module MnoEnterprise
           say_status("==> Maestrano Enterprise has been installed ==", nil)
           say("- You can generate deployment configs by running: 'rails g mno_enterprise:puma_stack'")
           say("- You can start the server with: 'foreman start'")
-          if @install_sprite =~ /y/i
+
+          say("\n\n")
+          say_status("==> Maestrano Enterprise Angular has been installed", nil)
+          say("- You can quickly customize the platform style in frontend/src/app/stylesheets")
+          say("- You can customize the whole frontend by overriding mno-enterprise-angular in frontend/src/")
+          say("- You can run 'rake mnoe:frontend:dist' to rebuild the frontend after changing frontend/src")
+
+          if @install_sprite
             say("\n\n")
-            say("==> Sprite Factory has been installed")
+            say_status("==> Sprite Factory has been installed", nil)
             say("- Drop your icons in vendor/sprites/icons then run: 'rake assets:resprite'")
             say("- Add more icons folders to vendor/sprites then modify lib/tasks/sprites.rake")
           end
+
           say("\n\n")
         end
       end
