@@ -40,6 +40,12 @@ module MnoEnterprise
     # Customise after_sign_out url
     attr_accessor :after_sign_out_url
 
+    attr_accessor :dashboard_path
+
+    def dashboard_path
+      @dashboard_path || '/dashboard/'
+    end
+
     def terms_url
       @terms_url || '#'
     end

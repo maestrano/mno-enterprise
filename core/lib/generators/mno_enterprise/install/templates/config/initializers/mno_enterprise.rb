@@ -1,5 +1,3 @@
-# require 'mno-enterprise'
-
 MnoEnterprise.configure do |config|
   #===============================================
   # General Configuration
@@ -40,6 +38,9 @@ MnoEnterprise.configure do |config|
   #===============================================
   # External Routes
   #===============================================
+  # Dashboard path
+  # config.router.dashboard_path = '/dashboard/'
+
   # URL of the Terms and Conditions page.
   # Used on Devise Registration pages
   # config.router.terms_url = 'http://mywebsite.com/terms'
@@ -52,7 +53,7 @@ MnoEnterprise.configure do |config|
   #===============================================
   # Angular CSRF protection - Only needed if the AngularJS App
   # is not served through Rails asset pipeline
-  # config.include_angular_csrf = false
+  config.include_angular_csrf = true
 
   #===============================================
   # Third Party Plugins

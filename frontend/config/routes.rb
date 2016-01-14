@@ -3,7 +3,7 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   # Static Pages
   #============================================================
-  root to: redirect { MnoEnterprise::Engine.routes.url_helpers.myspace_path }
+  root to: redirect { MnoEnterprise.router.dashboard_path }
 
   # MySpace routes
   get '/myspace', to: 'pages#myspace'
