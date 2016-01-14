@@ -11,6 +11,9 @@ namespace :mnoe do
 
     desc "Setup the Enterprise Express frontend"
     task :install do
+      # Install required tools
+      sh("npm install gulp gulp-util gulp-load-plugins del gulp-git")
+      
       # Setup bower and dependencies
       bower_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','bower.json')
       cp(bower_src, 'bower.json')
