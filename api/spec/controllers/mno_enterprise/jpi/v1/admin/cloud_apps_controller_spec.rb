@@ -42,11 +42,21 @@ module MnoEnterprise
       end
 
       describe "#refresh_metadata" do
-        subject { put :refresh_metadata, id: app.id }
+        subject { put :refresh_metadata, id: app.id, metadata_url: 'http://test.com' }
         
-        it 'refreshes the metadata' do
-          expect_any_instance_of(MnoEnterprise::App).to receive(:refresh_metadata!)
-          subject
+        context 'with a valid response' do
+          it 'refreshes the metadata' do
+            expect(subject).to render_template(:show)
+          end
+        end
+
+        context 'with an error response' do
+          before { expect_any_instance_of(MnoEnterprise::App).to receive(:refresh_metadata!).and_return({errors: [{detail: 'error'}]}) }
+
+          it 'returns the error message' do
+            subject
+            expect(JSON.parse(response.body)).to eq({"errors" => [{"detail"=>"error"}]})
+          end
         end
       end
     end

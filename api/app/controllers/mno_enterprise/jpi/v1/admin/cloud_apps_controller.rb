@@ -10,7 +10,6 @@ module MnoEnterprise
     def regenerate_api_key
       @cloud_app = MnoEnterprise::App.find params[:id]
       @cloud_app.regenerate_api_key!
-
       render :show
     end
 
@@ -19,9 +18,12 @@ module MnoEnterprise
     # - metadata_url: the metadata URL
     def refresh_metadata
       @cloud_app = MnoEnterprise::App.find params[:id]
-      @cloud_app.refresh_metadata! params[:metadata_url]
-
-      render :show
+      result = @cloud_app.refresh_metadata! params[:metadata_url]
+      if result && result[:errors].blank?
+        render :show
+      else
+        render json: result, status: 400
+      end
     end
   end
 end
