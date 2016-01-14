@@ -23,11 +23,10 @@ module MnoEnterprise
           # JavaScript
           copy_file "javascripts/mno_enterprise_extensions.js", "app/assets/javascripts/mno_enterprise_extensions.js"
 
-
           # Stylesheets
           copy_file "stylesheets/main.less_erb", "app/assets/stylesheets/main.less.erb"
-          copy_file "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
-          copy_file "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
+          #copy_file "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
+          #copy_file "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
 
           # Require main stylesheet file
           inject_into_file 'app/assets/stylesheets/application.css', before: " */" do
@@ -37,6 +36,18 @@ module MnoEnterprise
           # Disable require_tree which breaks the app
           gsub_file 'app/assets/stylesheets/application.css', /\*= require_tree ./, '* require_tree .'
         end
+      end
+
+      def setup_less_development_paths
+        if defined?(MnoEnterprise::Frontend) || Rails.env.test?
+          application(nil, env: "development") do
+            "# Reload frontend stylesheets on changes\n  config.less.paths << \"\#{Rails.root}/frontend/src/app/stylesheets\"\n"
+          end
+        end
+      end
+
+      def setup_frontend
+        rake "mnoe:frontend:install"
       end
 
       # Inject engine routes
