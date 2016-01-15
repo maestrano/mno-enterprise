@@ -16,10 +16,10 @@ MnoEnterprise.configure do |config|
   # Maestrano Enterprise Tenant Authentication
   #===============================================
   # Configure your tenant ID
-  config.tenant_id = "my_tenant_id"
+  config.tenant_id = ENV['tenant_id']
 
   # Configure your tenant Key
-  config.tenant_key = "my_tenant_access_key"
+  config.tenant_key = ENV['tenant_key']
 
   #===============================================
   # Emailing
@@ -67,9 +67,16 @@ MnoEnterprise.configure do |config|
   # ==> Maestrano Enterprise API Configuration
   # Configure the API host
   # config.mno_api_host = "https://api-enterprise.maestrano.com"
+  config.mno_api_host = "#{Settings.mno.protocol}://#{Settings.mno.host}"
+
+  # Configure private API host if defined
+  if Settings.mno.private_protocol && Settings.mno.private_host
+    config.mno_api_private_host = "#{Settings.mno.private_protocol}://#{Settings.mno.private_host}"
+  end
 
   # Configure the API root path
   # config.mno_api_root_path = "/v1"
+  config.mno_api_root_path = Settings.mno.paths.root
 
   #===============================================
   # Impac! Reporting Configuration
@@ -77,9 +84,11 @@ MnoEnterprise.configure do |config|
   # ==> Impac! API Configuration
   # Configure the API host
   # config.impac_api_host = "https://api-impac-uat.maestrano.io"
+  config.impac_api_host = "#{Settings.impac.protocol}://#{Settings.impac.host}"
 
   # Configure the API root path
   # config.impac_api_root_path = "/api"
+  config.impac_api_root_path = Settings.impac.paths.root
 
   #===============================================
   # Marketplace Listing
