@@ -37,12 +37,13 @@ namespace :mnoe do
 
       # Build the frontend
       Rake::Task['mnoe:frontend:dist'].invoke
+      #Rake::Task['assets:precompile'].invoke
     end
 
     desc "Rebuild the Enterprise Express frontend"
     task :dist do
       # Prepare the build folder
-      Rake::Task['mnoe:frontend:prepare_build_folder'].invoke
+      Rake::Task['mnoe:frontend:prepare_build_folder'].execute
 
       # Build frontend using Gulp
       Dir.chdir(frontend_tmp_folder) do
@@ -51,18 +52,25 @@ namespace :mnoe do
         sh "npm run gulp less-concat"
       end
 
-      # Distribute file in public
+      # Ensure distribution folder exists
       mkdir_p frontend_dist_folder
+
+      # Cleanup previously compiled files
       Dir.glob("#{frontend_dist_folder}/{styles,scripts}/app-*.{css,js}").each do |f|
         rm_f f
       end
+
+      # Copy assets to public
       cp_r("#{frontend_tmp_folder}/dist/.","#{frontend_dist_folder}/")
+
+      # Copy bower_components to public (used by live previewer)
+      cp_r("#{frontend_tmp_folder}/bower_components","#{frontend_dist_folder}/")
     end
 
     desc "Rebuild the Live Previewer Style"
     task :rebuild_previewer_style do
       # Prepare the build folder
-      Rake::Task['mnoe:frontend:prepare_build_folder'].invoke
+      Rake::Task['mnoe:frontend:prepare_build_folder'].execute
 
       # Build the previewer stylesheet
       Dir.chdir(frontend_tmp_folder) do
@@ -71,6 +79,9 @@ namespace :mnoe do
 
       # Copy stylesheet to public
       cp("#{frontend_tmp_folder}/dist/styles/app.less","#{frontend_dist_folder}/styles/")
+
+      # Copy bower_components to public (used by live previewer)
+      cp_r("#{frontend_tmp_folder}/bower_components","#{frontend_dist_folder}/")
     end
 
     desc "Reset the frontend build folder and apply local customisations"
