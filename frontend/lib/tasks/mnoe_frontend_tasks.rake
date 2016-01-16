@@ -12,6 +12,7 @@ namespace :mnoe do
     desc "Setup the Enterprise Express frontend"
     task :install do
       # Install required tools
+      sh("which bower || npm install -g bower")
       sh("npm install gulp gulp-util gulp-load-plugins del gulp-git")
 
       # Setup bower and dependencies
