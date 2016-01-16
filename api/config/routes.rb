@@ -143,6 +143,7 @@ MnoEnterprise::Engine.routes.draw do
 
         # Theme Previewer
         post 'theme/save'
+        post 'theme/reset'
         put 'theme/logo'
       end
     end

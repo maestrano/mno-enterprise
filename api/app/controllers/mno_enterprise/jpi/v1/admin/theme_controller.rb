@@ -1,52 +1,77 @@
+require 'rake'
+
+Rake::Task.clear # necessary to avoid tasks being loaded several times in dev mode
+Rails.application.load_tasks # load application tasks
+
 module MnoEnterprise
   class Jpi::V1::Admin::ThemeController < Jpi::V1::Admin::BaseResourceController
     # No xsrf
     skip_before_filter :verify_authenticity_token
 
+    # POST /mnoe/jpi/v1/admin/theme/save
     def save
-      save_theme_less
-      recompile_css
+      if params[:publish]
+        # Recompile style for production use
+        apply_previewer_style(params[:theme])
+        publish_style
+      else
+        # Save and rebuild previewer style only
+        # (so it is kept across page reloads)
+        save_previewer_style(params[:theme])
+        rebuild_previewer_style
+      end
 
       render json: {status:  'Ok'},  status: :created
     end
 
+    # POST /mnoe/jpi/v1/admin/theme/reset
+    def reset
+      reset_previewer_style
+      rebuild_previewer_style
+      render json: {status:  'Ok'}
+    end
+
+    # POST /mnoe/jpi/v1/admin/theme/logo
     def logo
       uploaded_io = params[:logo]
-      File.open(Rails.root.join('public/assets/images', 'main-logo.png'), 'wb') do |f|
+      File.open(Rails.root.join('public/dashboard/images', 'main-logo.png'), 'wb') do |f|
         f.write(uploaded_io.read)
       end
       render json: {status:  'Ok'},  status: :created
     end
 
+    #=====================================================
+    # Protected
+    #=====================================================
     protected
 
-    def save_theme_less
-      target = Rails.root.join('public', 'styles', 'theme.less')
-      File.open(target, 'w') { |f| f.write(params[:theme]) }
-    end
+      # Save current style to live-previewer-tmp.less stylesheet
+      # This file overrides live-previewer.less
+      def save_previewer_style(theme)
+        target = Rails.root.join('frontend', 'src','app','stylesheets','live-previewer-tmp.less')
+        File.open(target, 'w') { |f| f.write(params[:theme]) }
+      end
 
-    def recompile_css
-      # Concatenate the 2 less files
-      less = File.read(Rails.root.join('public', 'styles', 'app.less'))
-      less += File.read(Rails.root.join('public', 'styles', 'theme.less'))
+      # Save style to live-previewer.less and discard live-previewer-tmp.less
+      def apply_previewer_style(theme)
+        target = Rails.root.join('frontend', 'src','app','stylesheets','live-previewer.less')
+        File.open(target, 'w') { |f| f.write(params[:theme]) }
+        reset_previewer_style
+      end
 
-      # Compile to CSS
-      parser = Less::Parser.new paths: [Rails.root.join('public', 'styles').to_s], filename: 'app.less'
-      tree = parser.parse(less)
-      css = tree.to_css(compress: true)
+      def reset_previewer_style
+        target = Rails.root.join('frontend', 'src','app','stylesheets','live-previewer-tmp.less')
+        File.exist?(target) && File.delete(target)
+      end
 
-      # Write to the css file
-      write_css(css['css'])
-    end
+      def rebuild_previewer_style
+        Rake::Task['mnoe:frontend:rebuild_previewer_style'].reenable
+        Rake::Task['mnoe:frontend:rebuild_previewer_style'].invoke
+      end
 
-    # Extract the current app-*.css filepath by parsing index.html
-    def extract_app_css_path
-      filename = File.read(Rails.root.join('public/index.html')).scan(/(styles\/app-.*.css)/).flatten.first
-      Rails.root.join('public', filename)
-    end
-
-    def write_css(data)
-      File.open(extract_app_css_path, 'w') { |f| f.write(data) }
-    end
+      def publish_style
+        Rake::Task['mnoe:frontend:dist'].reenable
+        Rake::Task['mnoe:frontend:dist'].invoke
+      end
   end
 end
