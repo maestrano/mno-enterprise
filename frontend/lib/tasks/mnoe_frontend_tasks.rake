@@ -13,7 +13,7 @@ namespace :mnoe do
     task :install do
       # Install required tools
       sh("npm install gulp gulp-util gulp-load-plugins del gulp-git")
-      
+
       # Setup bower and dependencies
       bower_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','bower.json')
       cp(bower_src, 'bower.json')
@@ -41,6 +41,40 @@ namespace :mnoe do
 
     desc "Rebuild the Enterprise Express frontend"
     task :dist do
+      # Prepare the build folder
+      Rake::Task['mnoe:frontend:prepare_build_folder'].invoke
+
+      # Build frontend using Gulp
+      Dir.chdir(frontend_tmp_folder) do
+        sh "npm install"
+        sh "npm run gulp"
+        sh "npm run gulp less-concat"
+      end
+
+      # Distribute file in public
+      mkdir_p frontend_dist_folder
+      Dir.glob("#{frontend_dist_folder}/{styles,scripts}/app-*.{css,js}").each do |f|
+        rm_f f
+      end
+      cp_r("#{frontend_tmp_folder}/dist/.","#{frontend_dist_folder}/")
+    end
+
+    desc "Rebuild the Live Previewer Style"
+    task :rebuild_previewer_style do
+      # Prepare the build folder
+      Rake::Task['mnoe:frontend:prepare_build_folder'].invoke
+
+      # Build the previewer stylesheet
+      Dir.chdir(frontend_tmp_folder) do
+        sh "npm run gulp less-concat"
+      end
+
+      # Copy stylesheet to public
+      cp("#{frontend_tmp_folder}/dist/styles/app.less","#{frontend_dist_folder}/styles/")
+    end
+
+    desc "Reset the frontend build folder and apply local customisations"
+    task :prepare_build_folder do
       # Reset tmp folder from mno-enterprise-angular source
       rm_rf "#{frontend_tmp_folder}/src"
       rm_rf "#{frontend_tmp_folder}/e2e"
@@ -49,17 +83,6 @@ namespace :mnoe do
 
       # Apply frontend customisations
       cp_r("#{frontend_project_folder}/.","#{frontend_tmp_folder}/")
-
-      # Build frontend using Gulp
-      Dir.chdir(frontend_tmp_folder) do
-        sh "npm install"
-        sh "npm run gulp"
-      end
-
-      # Distribute file in public
-      mkdir_p frontend_dist_folder
-      cp_r("#{frontend_tmp_folder}/dist/.","#{frontend_dist_folder}/")
     end
-
   end
 end
