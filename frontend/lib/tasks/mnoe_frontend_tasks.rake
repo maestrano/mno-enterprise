@@ -79,7 +79,7 @@ namespace :mnoe do
       end
 
       # Copy stylesheet to public
-      cp("#{frontend_tmp_folder}/dist/styles/app.less","#{frontend_dist_folder}/styles/")
+      cp("#{frontend_tmp_folder}/dist/styles/theme-previewer.less","#{frontend_dist_folder}/styles/")
 
       # Copy bower_components to public (used by live previewer)
       cp_r("#{frontend_tmp_folder}/bower_components","#{frontend_dist_folder}/")
