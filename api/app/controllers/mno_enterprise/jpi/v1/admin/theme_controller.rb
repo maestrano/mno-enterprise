@@ -45,22 +45,22 @@ module MnoEnterprise
     #=====================================================
     protected
 
-      # Save current style to live-previewer-tmp.less stylesheet
-      # This file overrides live-previewer.less
+      # Save current style to theme-previewer-tmp.less stylesheet
+      # This file overrides theme-previewer-published.less
       def save_previewer_style(theme)
-        target = Rails.root.join('frontend', 'src','app','stylesheets','live-previewer-tmp.less')
+        target = Rails.root.join('frontend', 'src','app','stylesheets','theme-previewer-tmp.less')
         File.open(target, 'w') { |f| f.write(params[:theme]) }
       end
 
-      # Save style to live-previewer.less and discard live-previewer-tmp.less
+      # Save style to theme-previewer-published.less and discard theme-previewer-tmp.less
       def apply_previewer_style(theme)
-        target = Rails.root.join('frontend', 'src','app','stylesheets','live-previewer.less')
+        target = Rails.root.join('frontend', 'src','app','stylesheets','theme-previewer-published.less')
         File.open(target, 'w') { |f| f.write(params[:theme]) }
         reset_previewer_style
       end
 
       def reset_previewer_style
-        target = Rails.root.join('frontend', 'src','app','stylesheets','live-previewer-tmp.less')
+        target = Rails.root.join('frontend', 'src','app','stylesheets','theme-previewer-tmp.less')
         File.exist?(target) && File.delete(target)
       end
 
