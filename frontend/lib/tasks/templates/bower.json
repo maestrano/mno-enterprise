@@ -2,7 +2,7 @@
   "name": "enterprise-express",
   "description": "Maestrano Enterprise Express frontend",
   "dependencies": {
-    "mno-enterprise-angular": "git@github.com:maestrano/mno-enterprise-angular.git#master"
+    "mno-enterprise-angular": "git@github.com:alachaum/mno-enterprise-angular.git#master"
   },
   "resolutions": {
     "angular-bootstrap": "~0.14.3"

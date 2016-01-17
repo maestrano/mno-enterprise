@@ -22,7 +22,7 @@ namespace :mnoe do
 
       # Create frontend override folder
       mkdir_p(frontend_project_folder)
-      touch "#{frontend_project_folder}/.gitkeep"
+      touch "#{frontend_project_folder}/.keep"
 
       # Bootstrap override folder
       # Replace relative image path by absolute path in the LESS files

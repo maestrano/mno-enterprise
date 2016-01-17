@@ -46,6 +46,12 @@ module MnoEnterprise
         end
       end
 
+      def update_gitignore
+        append_file '.gitignore' do
+          "\n# Bower and Node packages\nbower_components\nnode_modules"
+        end
+      end
+
       def setup_frontend
         rake "mnoe:frontend:install"
       end
