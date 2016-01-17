@@ -33,9 +33,14 @@ module MnoEnterprise
 
     # POST /mnoe/jpi/v1/admin/theme/logo
     def logo
-      uploaded_io = params[:logo]
-      File.open(Rails.root.join('public/dashboard/images', 'main-logo.png'), 'wb') do |f|
-        f.write(uploaded_io.read)
+      logo_content = params[:logo].read
+      [
+        'frontend/src/images/main-logo.png',
+        'public/dashboard/images/main-logo.png',
+        'app/assets/images/mno_enterprise/main-logo.png'
+      ].each do |filepath|
+        FileUtils.mkdir_p(File.dirname(Rails.root.join(filepath)))
+        File.open(Rails.root.join(filepath),'wb') { |f| f.write(logo_content) }
       end
       render json: {status:  'Ok'},  status: :created
     end
