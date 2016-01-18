@@ -30,9 +30,10 @@ namespace :mnoe do
       ['src/app/stylesheets/theme.less','src/app/stylesheets/variables.less'].each do |path|
         cp("#{frontend_bower_folder}/#{path}","#{frontend_project_folder}/#{path}")
 
+        # Replace image relative path
         content = File.read("#{frontend_project_folder}/#{path}")
         File.open("#{frontend_project_folder}/#{path}", 'w') do |f|
-          f << content.gsub("../images", frontend_dist_folder.gsub("public",""))
+          f << content.gsub("../images", File.join(frontend_dist_folder.gsub("public",""),"images"))
         end
       end
 
