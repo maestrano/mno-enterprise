@@ -182,8 +182,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   def check_app_instances_sync
     authorize! :check_apps_sync, organization
 
-    # all will return a single object here
-    progress = organization.app_instances_sync.find(current_user.sso_session)
+    # find method is overriden in the mnoe interface to call organization.check_sync_apps_progress
+    progress = organization.app_instances_sync.find('anything')
     connectors = progress.connectors
     errors = progress.errors
 
