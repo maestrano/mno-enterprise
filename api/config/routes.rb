@@ -89,6 +89,8 @@ MnoEnterprise::Engine.routes.draw do
           put :invite_members
           put :update_member
           put :remove_member
+          post :app_instances_sync
+          get :app_instances_sync, to: 'organizations#check_app_instances_sync'
         end
 
         # AppInstances

@@ -44,6 +44,16 @@ module MnoEnterprise::Concerns::Models::Ability
       ['Super Admin','Admin'].include? user.role(organization)
     end
 
+    # To be updated
+    can :sync_apps, MnoEnterprise::Organization do |organization|
+      user.role(organization)
+    end
+
+    # To be updated
+    can :check_apps_sync, MnoEnterprise::Organization do |organization|
+      user.role(organization)
+    end
+
     #===================================================
     # AppInstance
     #===================================================
