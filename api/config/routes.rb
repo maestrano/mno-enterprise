@@ -115,9 +115,14 @@ MnoEnterprise::Engine.routes.draw do
           resources :kpis, shallow: true, only: [:create, :destroy, :update]
         end
       end
+
+
+      #============================================================
+      # Admin
+      #============================================================
       namespace :admin, defaults: {format: 'json'} do
         resources :audit_events, only: [:index]
-        resources :users, only: [:index, :show, :destroy, :update]
+        resources :users, only: [:index, :show, :destroy, :update, :create]
         resources :organizations, only: [:index, :show] do
           collection do
             get :in_arrears

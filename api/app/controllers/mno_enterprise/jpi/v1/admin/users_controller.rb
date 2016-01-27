@@ -19,6 +19,18 @@ module MnoEnterprise
       @user_organizations = @user.organizations
     end
 
+    # POST /mnoe/jpi/v1/admin/users
+    def create
+      @user = MnoEnterprise::User.build(user_create_params)
+      @user.admin_role = params[:user][:admin_role].presence
+
+      if @user.save
+        render :show
+      else
+        render json: @user.errors, status: :bad_request
+      end
+    end
+
     # PATCH /mnoe/jpi/v1/admin/users/:id
     def update
       @user = MnoEnterprise::User.find(params[:id])
@@ -39,6 +51,13 @@ module MnoEnterprise
 
     def user_params
       params.require(:user).permit(:admin_role)
+    end
+
+    def user_create_params
+      params.require(:user).permit(:name, :surname, :email, :phone).merge(
+        password: 'Password1',
+        confirmed_at: Time.zone.now
+      )
     end
   end
 end
