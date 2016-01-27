@@ -41,7 +41,8 @@ module MnoEnterprise
       authorize! :sync_apps, @parent_organization
 
       session[:pre_sync_url] = params[:return_url] if params[:return_url]
-      connectors = @parent_organization.app_instances_sync.create(mode: params[:mode]).connectors
+      app_instances_sync = @parent_organization.app_instances_sync.create(mode: params[:mode])
+      connectors = app_instances_sync.connectors
 
       if !connectors.include?(false) && connectors.count > 0
         msg = "Syncing your data. This process might take a few minutes."
