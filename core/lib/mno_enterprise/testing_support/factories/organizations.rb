@@ -11,6 +11,7 @@ FactoryGirl.define do
       created_at 3.days.ago
       updated_at 1.hour.ago
       in_arrears? false
+      billing_currency 'AUD'
 
       trait :with_org_invites do
         org_invites { [build(:org_invite).attributes] }
