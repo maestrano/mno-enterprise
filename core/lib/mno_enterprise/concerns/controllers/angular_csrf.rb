@@ -21,7 +21,7 @@ module MnoEnterprise::Concerns::Controllers::AngularCSRF
     # Clean up cookies on InvalidAuthenticityRequest
     rescue_from ActionController::InvalidAuthenticityToken do |exception|
       cookies['XSRF-TOKEN'] = form_authenticity_token if protect_against_forgery?
-      message = 'Rails CSRF token error, please try again'
+      message = 'CSRF token error, please try again'
       render_with_protection(message.to_json, {status: :unprocessable_entity})
     end
 
