@@ -158,67 +158,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     render 'members'
   end
 
-  # POST /mnoe/jpi/v1/organizations/:id/app_instances_sync
-  def app_instances_sync
-    authorize! :sync_apps, organization
-
-    session[:pre_sync_url] = params[:return_url] if params[:return_url]
-    connectors = organization.app_instances_sync.create(mode: params[:mode]).connectors
-
-    if !connectors.include?(false) && connectors.count > 0
-      msg = "Syncing your data. This process might take a few minutes."
-      # can flash be used on mnoe?
-      flash[:flash_options] = {timeout: 10000}
-    elsif connectors.count == 0
-      msg = "No apps available for synchronization! Please either add applications to your dashboard or check they're authenticated."
-    else
-      msg = "We were unable to sync your data. Please retry at a later time."
-    end
-
-    render :json => { msg: msg }
-  end
-
-  # GET /mnoe/jpi/v1/organizations/:id/app_instances_sync
-  def check_app_instances_sync
-    authorize! :check_apps_sync, organization
-
-    # find method is overriden in the mnoe interface to call organization.check_sync_apps_progress
-    progress = organization.app_instances_sync.find('anything')
-    connectors = progress.connectors
-    errors = progress.errors
-
-    # "Sync Failed" connectors are sorted to end of connectors array.
-    connectors.sort_by! do |c|
-      date = begin
-        c[:last_sync] ? Date.parse(c[:last_sync]) : nil
-      rescue ArgumentError => e
-        nil
-      end
-
-      date || DateTime.new
-    end
-    .reverse!
-
-    is_syncing = connectors.any? do |c|
-      c[:status] ? (c[:status] == 'RUNNING') : false
-    end
-
-    last_synced = connectors.first unless is_syncing || connectors.empty?
-
-    render :json => {
-      syncing: is_syncing,
-      connectors: connectors,
-      last_synced: last_synced,
-      errors: errors
-    }
-  end
-
   protected
     def organization
-      @organization ||= current_user.organizations.to_a.find do |o|
-        key = (params[:id].to_i == 0) ? o.uid : o.id.to_s
-        key == params[:id].to_s
-      end
+      @organization ||= current_user.organizations.to_a.find{ |o| o.id.to_s == params[:id].to_s }
     end
 
     def organization_permitted_update_params
