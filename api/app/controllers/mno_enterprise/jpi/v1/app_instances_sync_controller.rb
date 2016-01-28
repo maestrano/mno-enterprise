@@ -44,8 +44,6 @@ module MnoEnterprise
 
       if !connectors.include?(false) && connectors.count > 0
         msg = "Syncing your data. This process might take a few minutes."
-        # can flash be used on mnoe?
-        flash[:flash_options] = {timeout: 10000}
       elsif connectors.count == 0
         msg = "No apps available for synchronization! Please either add applications to your dashboard or check they're authenticated."
       else
