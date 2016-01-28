@@ -22,9 +22,7 @@ module MnoEnterprise
       end
       .reverse!
 
-      is_syncing = connectors.any? do |c|
-        c[:status] ? (c[:status] == 'RUNNING') : false
-      end
+      is_syncing = connectors.any? { |c| (c[:status] == 'RUNNING') }
 
       last_synced = connectors.first unless is_syncing || connectors.empty?
 
