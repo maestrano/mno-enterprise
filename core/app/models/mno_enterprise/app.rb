@@ -46,7 +46,8 @@ module MnoEnterprise
     end
 
     def regenerate_api_key!
-      self.put(operation: 'regenerate_api_key')
+      data = self.put(operation: 'regenerate_api_key')
+      self.api_key = data[:data][:api_key]
     end
 
     def refresh_metadata!(metadata_url)
