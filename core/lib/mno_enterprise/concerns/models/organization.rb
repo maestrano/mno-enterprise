@@ -52,6 +52,7 @@ module MnoEnterprise::Concerns::Models::Organization
     has_many :teams, class_name: 'MnoEnterprise::Team'
     has_many :dashboards, class_name: 'MnoEnterprise::Impac::Dashboard'
     has_one :raw_last_invoice, class_name: 'MnoEnterprise::Invoice', path: '/last_invoice'
+    has_one :app_instances_sync, class_name: 'MnoEnterprise::AppInstancesSync'
   end
 
   #==================================================================

@@ -160,7 +160,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
   protected
     def organization
-      @organization ||= current_user.organizations.to_a.find { |o| o.id.to_s == params[:id].to_s }
+      @organization ||= current_user.organizations.to_a.find{ |o| o.id.to_s == params[:id].to_s }
     end
 
     def organization_permitted_update_params

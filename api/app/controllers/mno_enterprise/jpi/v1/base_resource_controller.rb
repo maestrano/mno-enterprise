@@ -9,7 +9,10 @@ module MnoEnterprise
       end
 
       def parent_organization
-        @parent_organization ||= current_user.organizations.to_a.find { |o| o.id.to_s == params[:organization_id].to_s }
+        @parent_organization ||= current_user.organizations.to_a.find do |o|
+          key = (params[:organization_id].to_i == 0) ? o.uid : o.id.to_s
+          key == params[:organization_id].to_s
+        end
       end
 
       # Check current user is logged in

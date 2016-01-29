@@ -101,6 +101,8 @@ MnoEnterprise::Engine.routes.draw do
             put :remove_users
           end
         end
+
+        resources :app_instances_sync, only: [:create, :index]
       end
 
       resources :deletion_requests, only: [:show, :create, :destroy] do

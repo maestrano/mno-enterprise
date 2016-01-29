@@ -228,20 +228,22 @@
   padding: 2px;
   font-size: 12px;
 
-  .btn {
-    border-radius: 2px;
-    margin-right: 5px;
-    padding: 3px 13px;
-    text-transform: uppercase;
-    font-size: 12px;
+  .bottom-buttons {
+    .btn {
+      border-radius: 2px;
+      margin-right: 5px;
+      padding: 3px 13px;
+      text-transform: uppercase;
+      font-size: 12px;
 
-    &.btn-default {
-      background-color: #c2c4c4;
-      border: solid 1px darken(#c2c4c4,10%);
-      color: white;
-      &:hover {
-        border: solid 1px darken(#c2c4c4,20%);
-        background-color: darken(#c2c4c4,10%);
+      &.btn-default {
+        background-color: #c2c4c4;
+        border: solid 1px darken(#c2c4c4,10%);
+        color: white;
+        &:hover {
+          border: solid 1px darken(#c2c4c4,20%);
+          background-color: darken(#c2c4c4,10%);
+        }
       }
     }
   }
@@ -261,6 +263,7 @@
     border: solid 1px @impac-widget-borders-color;
 
     h5 {
+      display: block;
       margin: 0;
       margin-bottom: 10px;
       padding: 0px 15px;
@@ -786,7 +789,17 @@ body {
           margin: 0px;
           border-bottom: solid 1px @impac-dashboard-widget-selector-bg;
           cursor: pointer;
-          &:hover, &.selected {
+          &:hover, &.selected {& > div {
+      display: inline-block;
+      margin-left: 10px;
+    }
+    select {
+      margin: 0;
+    }
+    .btn {
+      height: 32px;
+      padding-top: 5px;
+    }
             color: @impac-dashboard-widget-selector-text-color;
           }
         }
@@ -824,13 +837,23 @@ body {
     }
   }
 
-  #dashboard-settings {
-    text-align: right;
-    margin: 0px 2px;
+  #dashboard-settings-panel {
+    position: relative;
+    margin: 5px 2px 0px 2px;
     min-height: 40px;
-
-    &> * {
+    & > * {
       float: right;
+    }
+    & > div {
+      display: inline-block;
+      margin-left: 10px;
+    }
+    select {
+      margin: 0;
+    }
+    .btn {
+      height: 32px;
+      padding-top: 5px;
     }
   }
 
@@ -1327,7 +1350,19 @@ impac-kpi .kpi {
 }
 
 .analytics .dashboard-settings.currency {
+  text-align: right;
+  select {
+    margin-top: 4px;
+  }
 }
+
+.analytics .dashboard-settings.sync-apps {
+  span {
+    margin-right: 5px;
+    color: @impac-widget-text-color-medium;
+  }
+}
+
 .analytics .widget-item .content .data-not-found {
   text-align: center;
   font-size: 18px;
@@ -1503,6 +1538,27 @@ impac-kpi .kpi {
     height: 20px;
   }
 }
+.analytics .settings.dates-picker {
+  h5 { display: none; }
+
+  .buttons {
+    margin-left: 5px;
+    button.btn.btn-sm {
+      line-height: 1;
+      &.btn-danger {
+        display: none;
+      }
+      &.btn-info {
+        border-radius: 3px;
+      }
+    }
+  }
+
+  .tooltip-inner {
+    text-transform: none;
+  }
+}
+
 .analytics .widget-item .content .settings.hist-mode-choser {
   .options {
     width: 150px;
@@ -1996,7 +2052,13 @@ impac-kpi .kpi {
   .right-panel .widget-lines-container {
       max-height: 175px;
   }
+  .no-element p {
+    // corrects alignment issues with the container, which caused text to overflow beyond parents.
+    max-width: 90% !important;
+    margin: auto !important;
+  }
 }
+
 .analytics .widget-item .content.hr-payroll-taxes {
   // Nothing special yet for this template
 }
