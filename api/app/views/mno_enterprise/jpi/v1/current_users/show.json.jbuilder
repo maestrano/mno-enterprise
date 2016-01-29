@@ -21,6 +21,7 @@ json.current_user do
         json.id o.id
         json.uid o.uid
         json.name o.name
+        json.currency o.billing_currency
         json.current_user_role o.role
         json.has_myob_essentials_only o.has_myob_essentials_only?
       end
