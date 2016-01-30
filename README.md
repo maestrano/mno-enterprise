@@ -1,3 +1,9 @@
+<p align="center">
+<img src="https://raw.github.com/maestrano/mno-enterprise/master/maestrano.png" alt="Maestrano Logo">
+<br/>
+<br/>
+</p>
+
 # Maestrano Enterprise Engine
 
 The Maestrano Enterprise Engine can be included in a Rails project to as to boostrap an instance of Maestrano Enterprise Express.
