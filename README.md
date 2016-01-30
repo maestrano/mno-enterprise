@@ -15,7 +15,7 @@ The goal of this engine is to provide a base that you can easily extend with cus
 3.  [Modifying the style - Theme Previewer](#modifying-the-style---theme-previewer)
 4.  [Extending the Frontend](#extending-the-frontend)
 5.  [Replacing the Frontend](#replacing-the-frontend)
-6.  [Generate a database extension](#generate-a-database-extension)
+6.  [Generating a database extension](#generating-a-database-extension)
 7.  [Deploy a Puma stack on EC2 via Webistrano/Capistrano](#deploy-a-puma-stack-on-ec2-via-webistranocapistrano)
 
 - - -
@@ -87,7 +87,7 @@ Once done you can replace the frontend source by specifying your frontend github
 bundle exec rake mnoe:frontend:dist
 ```
 
-## Generate a database extension
+## Generating a database extension
 
 If you want to add fields to existing models, you can create a database extension for it.
 
