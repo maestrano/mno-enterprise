@@ -1,5 +1,8 @@
-# mno-enterprise
-Maestrano Enterprise Engine
+# Maestrano Enterprise Engine
+
+The Maestrano Enterprise Engine can be included in a Rails project to as to boostrap an instance of Maestrano Enterprise Express. 
+
+The goal of this engine is to provide a base that you can easily extend with custom style or logic.
 
 ## Install
 
@@ -44,10 +47,10 @@ Under the hood this Theme Previewer will modify the LESS files located under the
 
 Two types of "save" actions are available in the Theme Previewer.
 
-*Save:*  
+**Save:**  
 This action will temporarily save the current style in /frontend/src/app/stylesheets/theme-previewer-tmp.less so as to keep it across page reloads on the Theme Previewer only. This action will NOT publish the style, meaning that it will NOT apply the style to the /dashboard/index.html page.
 
-*Publish*  
+**Publish:**  
 This action will save the current style in /frontend/src/app/stylesheets/theme-previewer-published.less and rebuild the whole frontend. This action WILL publish the style, meaning that it WILL apply the style to the /dashboard/index.html page.
 
 ## Extending the Frontend
