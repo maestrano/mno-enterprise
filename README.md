@@ -1,8 +1,20 @@
 # Maestrano Enterprise Engine
 
-The Maestrano Enterprise Engine can be included in a Rails project to as to boostrap an instance of Maestrano Enterprise Express. 
+The Maestrano Enterprise Engine can be included in a Rails project to as to boostrap an instance of Maestrano Enterprise Express.
 
 The goal of this engine is to provide a base that you can easily extend with custom style or logic.
+
+- - -
+
+1.  [Install](#install)
+2.  [Building the Frontend](#building-the-frontend)
+3.  [Modifying the style - Theme Previewer](#modifying-the-style---theme-previewer)
+4.  [Extending the Frontend](#extending-the-frontend)
+5.  [Replacing the Frontend](#replacing-the-frontend)
+6.  [Generate a database extension](#generate-a-database-extension)
+7.  [Deploy a Puma stack on EC2 via Webistrano/Capistrano](#deploy-a-puma-stack-on-ec2-via-webistranocapistrano)
+
+- - -
 
 ## Install
 
@@ -108,10 +120,3 @@ $ sh /apps/my-super-app/current/scripts/production/setup.sh
 This script will setup a bunch of symlinks for nginx, upstart and monit pointing to the config files located under the scripts directory created previously.
 
 That's it. You should be done!
-
-## Loader gif Reference
-**bg-main** - mno_enterprise/loader-32x32-bg-main.gif
-http://spiffygif.com/?color=ebe5ff&lines=8&bgColor=aeb5bf&length=4&radius=7&width=4&halo=false
-
-**bg-inverse** - mno_enterprise/loader-32x32-bg-inverse.gif
-http://spiffygif.com/?color=977bf0&lines=8&length=4&radius=7&width=4&halo=false
