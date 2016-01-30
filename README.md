@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.github.com/maestrano/mno-enterprise/master/maestrano.png" alt="Maestrano Logo">
+<img src="https://raw.github.com/maestrano/maestrano-ruby/master/maestrano.png" alt="Maestrano Logo">
 <br/>
 <br/>
 </p>
