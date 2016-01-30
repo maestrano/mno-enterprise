@@ -4,8 +4,6 @@
 <br/>
 </p>
 
-# Maestrano Enterprise Engine
-
 The Maestrano Enterprise Engine can be included in a Rails project to as to boostrap an instance of Maestrano Enterprise Express.
 
 The goal of this engine is to provide a base that you can easily extend with custom style or logic.
