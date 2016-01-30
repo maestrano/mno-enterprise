@@ -4,7 +4,7 @@
 <br/>
 </p>
 
-The Maestrano Enterprise Engine can be included in a Rails project to as to boostrap an instance of Maestrano Enterprise Express.
+The Maestrano Enterprise Engine can be included in a Rails project to bootstrap an instance of Maestrano Enterprise Express.
 
 The goal of this engine is to provide a base that you can easily extend with custom style or logic.
 
@@ -103,6 +103,9 @@ rails g mno_enterprise:database_extension Organization growth_type:string
 
 
 ## Deploy a Puma stack on EC2 via Webistrano/Capistrano
+
+**IMPORTANT NOTE:** These are legacy instructions. They will soon be replaced by Docker instructions.
+
 First, prepare your server. You will find a pre-made AMI on our AWS accounts called "AppServer" or "Rails Stack" that you can use.
 
 Then, setup your new project via webistrano/capistrano.
