@@ -13,12 +13,11 @@
 
 // Import theme colors
 //--------------------------------------------
-<%= Tilt.new(File.expand_path('../theme.less.erb',__FILE__)).render %>
+@import "../../../frontend/src/app/stylesheets/theme";
 
 // Import custom variables
 //--------------------------------------------
-@import "variables";
-
+@import "../../../frontend/src/app/stylesheets/variables";
 
 // Import any custom less file below
 //--------------------------------------------

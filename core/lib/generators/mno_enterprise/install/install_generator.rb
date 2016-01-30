@@ -23,11 +23,10 @@ module MnoEnterprise
           # JavaScript
           copy_file "javascripts/mno_enterprise_extensions.js", "app/assets/javascripts/mno_enterprise_extensions.js"
 
-
           # Stylesheets
-          copy_file "stylesheets/main.less_erb", "app/assets/stylesheets/main.less.erb"
-          copy_file "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
-          copy_file "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
+          copy_file "stylesheets/main.less", "app/assets/stylesheets/main.less"
+          #copy_file "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
+          #copy_file "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
 
           # Require main stylesheet file
           inject_into_file 'app/assets/stylesheets/application.css', before: " */" do
@@ -37,6 +36,24 @@ module MnoEnterprise
           # Disable require_tree which breaks the app
           gsub_file 'app/assets/stylesheets/application.css', /\*= require_tree ./, '* require_tree .'
         end
+      end
+
+      def setup_less_development_paths
+        if defined?(MnoEnterprise::Frontend) || Rails.env.test?
+          application(nil, env: "development") do
+            "# Reload frontend stylesheets on changes\n  config.less.paths << \"\#{Rails.root}/frontend/src/app/stylesheets\"\n"
+          end
+        end
+      end
+
+      def update_gitignore
+        append_file '.gitignore' do
+          "\n# Bower and Node packages\nbower_components\nnode_modules"
+        end
+      end
+
+      def setup_frontend
+        rake "mnoe:frontend:install"
       end
 
       # Inject engine routes
@@ -106,12 +123,20 @@ module MnoEnterprise
           say_status("==> Maestrano Enterprise has been installed ==", nil)
           say("- You can generate deployment configs by running: 'rails g mno_enterprise:puma_stack'")
           say("- You can start the server with: 'foreman start'")
-          if @install_sprite =~ /y/i
+
+          say("\n\n")
+          say_status("==> Maestrano Enterprise Angular has been installed", nil)
+          say("- You can quickly customize the platform style in frontend/src/app/stylesheets")
+          say("- You can customize the whole frontend by overriding mno-enterprise-angular in frontend/src/")
+          say("- You can run 'rake mnoe:frontend:dist' to rebuild the frontend after changing frontend/src")
+
+          if @install_sprite
             say("\n\n")
-            say("==> Sprite Factory has been installed")
+            say_status("==> Sprite Factory has been installed", nil)
             say("- Drop your icons in vendor/sprites/icons then run: 'rake assets:resprite'")
             say("- Add more icons folders to vendor/sprites then modify lib/tasks/sprites.rake")
           end
+
           say("\n\n")
         end
       end
