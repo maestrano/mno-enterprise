@@ -12,9 +12,13 @@ json.current_user do
   json.website @user.website
   json.sso_session @user.sso_session
 
+
   # Embed association if user is persisted
   if @user.id
     json.admin_role @user.admin_role
+    if current_impersonator
+      json.current_impersonator true
+    end
 
     json.organizations do
       json.array! (@user.organizations || []) do |o|
