@@ -161,8 +161,8 @@ After running this task a new "/frontend" directory will have appeared in the ro
 The way styling and frontend customisations are handled by the platform has changed. Everything is now located under the "/frontend" directory.
 
 In order to migrate your style, follow these instructions:
-1. Copy the content of your /app/assets/stylesheets/theme.less.erb into /frontend/src/app/stylesheets/theme.less. Replace any ERB variable by the actual LESS value
-2. Delete /app/assets/stylesheets/theme.less.erb
+1. Copy the content of your /app/assets/stylesheets/theme.less.erb into /frontend/src/app/stylesheets/theme.less. Replace any ERB variable by the actual LESS value  
+2. Delete /app/assets/stylesheets/theme.less.erb  
 3. Copy the content of your /app/assets/stylesheets/variables.less into /frontend/src/app/stylesheets/variables.less.
 4. Delete /app/assets/stylesheets/variables.less
 5. Create the file: /app/assets/stylesheets/main.less and copy the following content to it:
