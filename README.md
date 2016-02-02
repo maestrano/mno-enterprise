@@ -161,11 +161,12 @@ After running this task a new "/frontend" directory will have appeared in the ro
 The way styling and frontend customisations are handled by the platform has changed. Everything is now located under the "/frontend" directory.
 
 In order to migrate your style, follow these instructions:
-1. Copy the content of your /app/assets/stylesheets/theme.less.erb into /frontend/src/app/stylesheets/theme.less. Replace any ERB variable by the actual LESS value  
-2. Delete /app/assets/stylesheets/theme.less.erb  
-3. Copy the content of your /app/assets/stylesheets/variables.less into /frontend/src/app/stylesheets/variables.less.
-4. Delete /app/assets/stylesheets/variables.less
-5. Create the file: /app/assets/stylesheets/main.less and copy the following content to it:
+
+- Copy the content of your /app/assets/stylesheets/theme.less.erb into /frontend/src/app/stylesheets/theme.less. Replace any ERB variable by the actual LESS value
+- Delete /app/assets/stylesheets/theme.less.erb
+- Copy the content of your /app/assets/stylesheets/variables.less into /frontend/src/app/stylesheets/variables.less.
+- Delete /app/assets/stylesheets/variables.less
+- Create the file: /app/assets/stylesheets/main.less and copy the following content to it:
 ```less
 /*-----------------------------------------------------------------------*/
 /*                    Import Core LESS Framework                         */
@@ -193,12 +194,12 @@ In order to migrate your style, follow these instructions:
 //--------------------------------------------
 // @import 'homepage'
 ```
-6. Copy any CSS customization you have made in main.less.erb to main.less
-7. Rebuild the frontend with your style
+- Copy any CSS customization you have made in main.less.erb to main.less
+- Rebuild the frontend with your style
 ```bash
 rake mnoe:frontend:dist
 ```
-8. Copy your logo in /app/assets/images/mno_enterprise/main-logo.png to /public/dashboard/images/main-logo.png
+- Copy your logo in /app/assets/images/mno_enterprise/main-logo.png to /public/dashboard/images/main-logo.png
 
 Launch your application, your style should now be reapplied.
 
