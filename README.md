@@ -17,6 +17,7 @@ The goal of this engine is to provide a base that you can easily extend with cus
 5.  [Replacing the Frontend](#replacing-the-frontend)
 6.  [Generating a database extension](#generating-a-database-extension)
 7.  [Deploy a Puma stack on EC2 via Webistrano/Capistrano](#deploy-a-puma-stack-on-ec2-via-webistranocapistrano)
+8.  [Migrating from v2 to v3](#migrating-from-v2-to-v3)
 
 - - -
 
@@ -127,3 +128,82 @@ $ sh /apps/my-super-app/current/scripts/production/setup.sh
 This script will setup a bunch of symlinks for nginx, upstart and monit pointing to the config files located under the scripts directory created previously.
 
 That's it. You should be done!
+
+## Migrating from v2 to v3
+
+### a) Upgrade the gem
+First switch to a new branch such as v2-to-v3.
+```bash
+git co -b v2-to-v3
+```
+
+Open your Gemfile and ensure that your project points to the v3.0-dev of Maestrano Enterprise. You gemfile should look like this:
+```ruby
+gem 'mno-enterprise', git: 'https://some-token:x-oauth-basic@github.com/alachaum/mno-enterprise.git', branch: 'v3.0-dev'
+```
+
+Then update the gem by running
+```bash
+bundle update mno-enterprise
+```
+
+Ensure you've got node installed on your system. Some googling will surely provide you with the steps required to install Node on your machine.
+
+Rerun the Maestrano Enterprise task in your project. This task will download and compile the enterprise angular frontend.
+```bash
+bundle exec rake mno_enterprise:install
+```
+
+After running this task a new "/frontend" directory will have appeared in the root of your project. This folder will contain any customization you want to make the frontend. It should already contain a few LESS files with a default theme.
+
+### b) Reapply your style
+
+The way styling and frontend customisations are handled by the platform has changed. Everything is now located under the "/frontend" directory.
+
+In order to migrate your style, follow these instructions:
+1. Copy the content of your /app/assets/stylesheets/theme.less.erb into /frontend/src/app/stylesheets/theme.less. Replace any ERB variable by the actual LESS value
+2. Delete /app/assets/stylesheets/theme.less.erb
+3. Copy the content of your /app/assets/stylesheets/variables.less into /frontend/src/app/stylesheets/variables.less.
+4. Delete /app/assets/stylesheets/variables.less
+5. Create the file: /app/assets/stylesheets/main.less and copy the following content to it:
+```less
+/*-----------------------------------------------------------------------*/
+/*                    Import Core LESS Framework                         */
+/*-----------------------------------------------------------------------*/
+// Import Core LESS Framework
+@import "mno_enterprise/main";
+
+/*-----------------------------------------------------------------------*/
+/*                           Customization                               */
+/*-----------------------------------------------------------------------*/
+
+// Import theme colors
+//--------------------------------------------
+@import "../../../frontend/src/app/stylesheets/theme";
+
+// Import custom variables
+//--------------------------------------------
+@import "../../../frontend/src/app/stylesheets/variables";
+
+// Import theme published by Theme Previewer
+//--------------------------------------------
+// @import "../../../frontend/src/app/stylesheets/theme-previewer-published.less";
+
+// Import any custom less file below
+//--------------------------------------------
+// @import 'homepage'
+```
+6. Copy any CSS customization you have made in main.less.erb to main.less
+7. Rebuild the frontend with your style
+```bash
+rake mnoe:frontend:dist
+```
+8. Copy your logo in /app/assets/images/mno_enterprise/main-logo.png to /public/dashboard/images/main-logo.png
+
+Launch your application, your style should now be reapplied.
+
+### c) Caveat: Impac! endpoint
+
+The v3 is currently being finalised. There are some minor configuration options that still need to be implemented such as the "impact endpoint urls".
+
+If deploying to UAT, the Impac! URLs need to be manually replaced. Search the "/public" directory for "http://localhost:4000" and replace by "https://api-impac-uat.maestrano.io". Save the files and deploy.
