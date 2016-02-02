@@ -76,6 +76,13 @@ Files in this folder MUST follow the [mno-enterprise-angular](https://github.com
 
 You can also add new files to this directory such as adding new views. This allows you to easily extend the current frontend to suit your needs.
 
+While extending the frontend, you can run this command to start the frontend using gulp serve and automatically override the original files with the ones in the frontend folder:
+```bash
+foreman start -f Procfile.dev
+```
+
+This will accelerate your development as the gulp serve task use BrowserSync to reload the browser any time a file is changed.
+
 ## Replacing the Frontend
 
 In some cases you may decide that the current [mno-enterprise-angular](https://github.com/maestrano/mno-enterprise-angular) frontend is not appropriate at all.
