@@ -9,8 +9,8 @@ en:
           title: Almost there
           confirm: Confirm my account
         lounge:
-          title: Didn't receive the confirmation email?
-          subtitle: That's fine! Just check below that we got it right and hit resend!
+          title: Congratulations! We've sent you a confirmation link, please check your email inbox.
+          subtitle: If you did not receive the email please click resend.
           resend: Resend!
           support_tip_html: "Or if you prefer you can send an email to our %{email} directly and we'll activate it for you."
           support_team: customer care service
