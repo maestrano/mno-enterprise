@@ -33,10 +33,12 @@ module MnoEnterprise
         'is_responsive' => false && app.responsive?,
         'is_star_ready' => false && app.star_ready?,
         'is_connec_ready' => false && app.connec_ready?,
+        'is_coming_soon' => false && app.coming_soon?,
         'tiny_description' => app.tiny_description,
         'description' => markdown(app.sanitized_description),
         'testimonials' => app.testimonials,
-        'pictures' => app.pictures
+        'pictures' => app.pictures,
+        'pricing_plans' => app.pricing_plans
       }
     end
 
