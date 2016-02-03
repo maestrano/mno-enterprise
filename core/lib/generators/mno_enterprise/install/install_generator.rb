@@ -10,10 +10,9 @@ module MnoEnterprise
       class_option :skip_sprite, type: :boolean, default: false, desc: 'Skip sprite-factory installation'
       class_option :skip_factory_girl, type: :boolean, default: false, desc: 'Skip sprite-factory installation'
 
-
-
       def copy_initializer
         template "Procfile"
+        template "Procfile.dev"
         template "config/initializers/mno_enterprise.rb"
         template "config/mno_enterprise_styleguide.yml"
       end
