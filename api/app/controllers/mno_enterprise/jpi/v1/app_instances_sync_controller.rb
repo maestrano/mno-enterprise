@@ -12,7 +12,15 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/organizations/org-fbba/app_instances_sync
     def create
       authorize! :sync_apps, @parent_organization
-      connectors = @parent_organization.app_instances_sync.create(mode: params[:mode]).connectors
+
+      # Some weird behaviour with Her and has_one. If app_instances_sync.find is called somewhere before the create,
+      # Her won't detect the organization_id as dirty and won't submit it.
+      sync = @parent_organization.app_instances_sync.build(mode: params[:mode])
+      sync.organization_id_will_change!
+      sync.save
+
+      connectors = sync.connectors
+
       render json: results(connectors)
     end
 
