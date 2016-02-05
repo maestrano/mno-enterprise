@@ -3,10 +3,10 @@
   .container
     .row
       .col-md-6.text-center.col-md-offset-3
-        %h3 You order is being prepared
+        %h3 Your order is being prepared
         .spacer1
         = image_tag('mno_enterprise/loader-32x32-bg-inverse.gif')
-        
+
 - # Provision applications in the background and remove params
 - # Used to avoid double-provisioning on page reload and keep
 - # actual provisioning (create action) as POST
@@ -18,13 +18,13 @@
         else
             setTimeout(function() { defer(method) }, 50);
     }
-  
+
     function provisionApps() {
       $(document).ready( function() {
-      
+
         //window.location.href.replace(window.location.search,'');
         window.history.replaceState({}, 'Preparing Order', window.location.pathname + "?status=preparing");
-      
+
         $.ajax({
           url: "#{provision_index_path}",
           method: "POST",
@@ -35,8 +35,8 @@
         }).always(function() {
           window.location.href = "#{after_provision_path}?dhbRefId=#{@organization.id}"
         });
-    
+
       });
     }
-  
+
     defer(provisionApps);
