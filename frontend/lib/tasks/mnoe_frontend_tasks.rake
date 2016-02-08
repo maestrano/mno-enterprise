@@ -106,7 +106,7 @@ namespace :mnoe do
       cp_r("#{frontend_project_folder}/.","#{frontend_tmp_folder}/")
     end
 
-    desc "Update the frontend version if a new one is availbale and rebuild it"
+    desc "Update the frontend and rebuild it"
     task :update do
       # Run bower to get a new version of the frontend
       sh "bower update"
