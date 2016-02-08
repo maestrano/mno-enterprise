@@ -175,6 +175,10 @@ module MnoEnterprise
   mattr_accessor :include_angular_csrf
   @@include_angular_csrf = false
 
+  # I18n
+  mattr_accessor :i18n_enabled
+  @@i18n_enabled = false
+
   #====================================
   # Third Party Plugins
   #====================================

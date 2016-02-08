@@ -55,6 +55,11 @@ MnoEnterprise.configure do |config|
   # is not served through Rails asset pipeline
   config.include_angular_csrf = true
 
+  # I18n - Controls:
+  #   - Routing in development
+  #   - Filter and locale management in controllers
+  config.i18n_enabled = true
+
   #===============================================
   # Third Party Plugins
   #===============================================
