@@ -15,6 +15,14 @@ module MnoEnterprise
         template "Procfile.dev"
         template "config/initializers/mno_enterprise.rb"
         template "config/mno_enterprise_styleguide.yml"
+
+        # Settings
+        template "config/settings.yml", "config/settings.yml"
+        create_file "config/settings.local.yml"
+        directory "config/settings", "config/settings"
+
+        template "config/application.yml", "config/application.yml"
+        template "config/application.yml", "config/application.yml.sample"
       end
 
       def setup_assets
@@ -46,8 +54,19 @@ module MnoEnterprise
       end
 
       def update_gitignore
-        append_file '.gitignore' do
-          "\n# Bower and Node packages\nbower_components\nnode_modules"
+        create_file '.gitignore' unless File.exists? '.gitignore'
+
+        append_to_file '.gitignore' do
+          "\n"                                +
+          "# Ignore application configuration\n" +
+          "config/application.yml\n"          +
+          "config/settings.local.yml\n"       +
+          "config/settings/*.local.yml\n"     +
+          "config/environments/*.local.yml\n" +
+          "\n"                                +
+          "# Bower and Node packages\n"       +
+          "bower_components\n"                +
+          "node_modules\n"
         end
       end
 

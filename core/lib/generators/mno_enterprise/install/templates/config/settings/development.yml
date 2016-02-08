@@ -1,0 +1,6 @@
+impac:
+  protocol: http
+  host: localhost:4000
+mno:
+  protocol: http
+  host: localhost:3000

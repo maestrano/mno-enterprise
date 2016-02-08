@@ -1,0 +1,9 @@
+impac:
+  paths:
+    root: /api/v1
+    get_widget: /api/v1/get_widget
+    kpis: /api/v2/kpis
+mno:
+  paths:
+    root: /api/mnoe/v1
+frontend_host:
