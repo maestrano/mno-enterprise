@@ -9,6 +9,12 @@ module MnoEnterprise
     before_filter :perform_return_to
     before_filter :record_user_activity
 
+
+    # I18n
+    if MnoEnterprise.i18n_enabled?
+      include MnoEnterprise::Concerns::Controllers::I18n
+    end
+
     # Angular CSRF
     if MnoEnterprise.include_angular_csrf
       include MnoEnterprise::Concerns::Controllers::AngularCSRF
