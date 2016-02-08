@@ -11,7 +11,7 @@ module MnoEnterprise
 
 
     # I18n
-    if MnoEnterprise.i18n_enabled?
+    if MnoEnterprise.i18n_enabled
       include MnoEnterprise::Concerns::Controllers::I18n
     end
 
