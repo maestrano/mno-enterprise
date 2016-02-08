@@ -105,5 +105,14 @@ namespace :mnoe do
       # Apply frontend customisations
       cp_r("#{frontend_project_folder}/.","#{frontend_tmp_folder}/")
     end
+
+    desc "Update the frontend version if a new one is availbale and rebuild it"
+    task :update do
+      # Run bower to get a new version of the frontend
+      sh "bower update"
+
+      # Rebuild the frontend
+      Rake::Task['mnoe:frontend:dist'].execute
+    end
   end
 end
