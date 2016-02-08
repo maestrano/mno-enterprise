@@ -169,6 +169,10 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
         end
       end
 
+      new_user_signed_in_session_path
+    end
+
+    def new_user_signed_in_session_path
       if MnoEnterprise.style.workflow.signup_onboarding && opts[:new_user]
         mno_enterprise.user_setup_index_path
       elsif opts[:new_user]
