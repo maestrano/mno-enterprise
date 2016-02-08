@@ -13,7 +13,8 @@ namespace :mnoe do
     task :install do
       # Install required tools
       sh("which bower || npm install -g bower")
-      sh("npm install gulp gulp-util gulp-load-plugins del gulp-git")
+      sh("which gulp || npm install -g gulp")
+      sh("npm install -g gulp-util gulp-load-plugins del gulp-git")
 
       # Setup bower and dependencies
       bower_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','bower.json')
@@ -28,6 +29,9 @@ namespace :mnoe do
       # Replace relative image path by absolute path in the LESS files
       mkdir_p("#{frontend_project_folder}/src/app/stylesheets")
       ['src/app/stylesheets/theme.less','src/app/stylesheets/variables.less'].each do |path|
+        next if File.exists?("#{frontend_project_folder}/#{path}")
+
+        # Generate file from template
         cp("#{frontend_bower_folder}/#{path}","#{frontend_project_folder}/#{path}")
 
         # Replace image relative path
@@ -50,8 +54,8 @@ namespace :mnoe do
       # Build frontend using Gulp
       Dir.chdir(frontend_tmp_folder) do
         sh "npm install"
-        sh "npm run gulp"
-        sh "npm run gulp less-concat"
+        sh "gulp"
+        sh "gulp less-concat"
       end
 
       # Ensure distribution folder exists
@@ -76,7 +80,8 @@ namespace :mnoe do
 
       # Build the previewer stylesheet
       Dir.chdir(frontend_tmp_folder) do
-        sh "npm run gulp less-concat"
+        sh "npm install"
+        sh "gulp less-concat"
       end
 
       # Copy stylesheet to public
@@ -88,6 +93,9 @@ namespace :mnoe do
 
     desc "Reset the frontend build folder and apply local customisations"
     task :prepare_build_folder do
+      # Ensure frontend is downloaded
+      sh("[ -d #{frontend_bower_folder} ] || bower install")
+
       # Reset tmp folder from mno-enterprise-angular source
       rm_rf "#{frontend_tmp_folder}/src"
       rm_rf "#{frontend_tmp_folder}/e2e"

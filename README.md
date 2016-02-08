@@ -40,6 +40,13 @@ The install script will perform three things:
 - Install and build the mno-enterprise-angular frontend
 - Create a /frontend directory in your application for all frontend customisations/overrides
 
+**Manual Node setup (optional):**
+Building the frontend requires you to have nodejs and gulp install. While the rake task will attempt to install these dependencies, you may want to install these manually prior to running the install task. See the [nodejs website](https://nodejs.org/en/) for intructions on how to install node on your machine.
+
+Once node is installed, you can run the following commands to ensure that all dependencies are installed:
+```bash
+npm install -g bower gulp gulp-util gulp-load-plugins del gulp-git
+```
 
 ## Building the frontend
 The Maestrano Enterprise frontend is a Single Page Application (SPA) that is separate from the Rails project. The source code for this frontend can be found on the [mno-enterprise-angular Github repository](https://github.com/maestrano/mno-enterprise-angular)
