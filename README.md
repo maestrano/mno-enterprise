@@ -136,6 +136,26 @@ This script will setup a bunch of symlinks for nginx, upstart and monit pointing
 
 That's it. You should be done!
 
+## Sample nginx config for I18n
+
+We need to accept URIs like `/en/dashboard` and serve `public/dashboard/index.html`.
+A simple combination of location regex and try_files does the trick.
+
+```
+server {
+  listen       80;
+  server_name  mnoe.mno.local;
+
+  root /apps/<%= app_name %>/current/public;
+  index        index.html index.htm;
+
+  location ~* "^/[A-Za-z]{2}/dashboard(.*)" {
+    try_files  /dashboard$1/index.html /dashboard$1.html /dashboard$1 @backend;
+  }
+
+  try_files  $uri/index.html $uri.html $uri @backend;
+```
+
 ## Migrating from v2 to v3
 
 ### a) Upgrade the gem

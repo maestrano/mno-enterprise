@@ -30,6 +30,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'sprockets-rails', '~> 2.2'
   s.add_dependency 'ngannotate-rails'
 
+  # Development: Rewrite routes for I18N
+  s.add_dependency 'rack-rewrite'
+
   #TODO: DRY to common dev dependencies
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails'
