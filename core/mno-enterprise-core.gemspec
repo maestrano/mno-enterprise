@@ -35,6 +35,12 @@ Gem::Specification.new do |s|
   s.add_dependency 'redcarpet', '~> 3.3.3'
   s.add_dependency 'sanitize'
 
+  # Configuration & Settings
+  # Manage configuration via environment variables
+  s.add_dependency 'figaro'
+  # Config files per environment
+  s.add_dependency 'config', '~> 1.0.0'
+
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'factory_girl_rails'

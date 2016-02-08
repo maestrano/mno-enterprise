@@ -23,6 +23,10 @@ require "mno_enterprise/engine"
 
 require 'mno_enterprise/database_extendable'
 
+# Settings
+require 'config'
+require 'figaro'
+
 require 'mandrill'
 require "mandrill_client"
 
