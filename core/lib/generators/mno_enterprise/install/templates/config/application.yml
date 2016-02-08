@@ -1,0 +1,8 @@
+# Add configuration values here, as shown below.
+
+# Tenant Credentials
+tenant_id: changeme
+tenant_key: changeme
+
+# Emailing platform - Mandrill (default mandrill)
+mandrill_key: changeme

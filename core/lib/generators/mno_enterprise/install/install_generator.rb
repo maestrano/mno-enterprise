@@ -7,14 +7,21 @@ module MnoEnterprise
       desc "Description:\n  Install Maestrano Enterprise Engine in your application\n\n"
 
       class_option :skip_rspec, type: :boolean, default: false, desc: 'Skip rspec-rails installation'
-      class_option :skip_sprite, type: :boolean, default: false, desc: 'Skip sprite-factory installation'
-      class_option :skip_factory_girl, type: :boolean, default: false, desc: 'Skip sprite-factory installation'
+      class_option :skip_factory_girl, type: :boolean, default: false, desc: 'Skip factory_girl installation'
 
       def copy_initializer
         template "Procfile"
         template "Procfile.dev"
         template "config/initializers/mno_enterprise.rb"
         template "config/mno_enterprise_styleguide.yml"
+
+        # Settings
+        template "config/settings.yml", "config/settings.yml"
+        create_file "config/settings.local.yml"
+        directory "config/settings", "config/settings"
+
+        template "config/application.yml", "config/application.yml"
+        template "config/application.yml", "config/application.yml.sample"
       end
 
       def setup_assets
@@ -46,8 +53,19 @@ module MnoEnterprise
       end
 
       def update_gitignore
-        append_file '.gitignore' do
-          "\n# Bower and Node packages\nbower_components\nnode_modules"
+        create_file '.gitignore' unless File.exists? '.gitignore'
+
+        append_to_file '.gitignore' do
+          "\n"                                +
+          "# Ignore application configuration\n" +
+          "config/application.yml\n"          +
+          "config/settings.local.yml\n"       +
+          "config/settings/*.local.yml\n"     +
+          "config/environments/*.local.yml\n" +
+          "\n"                                +
+          "# Bower and Node packages\n"       +
+          "bower_components\n"                +
+          "node_modules\n"
         end
       end
 
@@ -74,20 +92,6 @@ module MnoEnterprise
           say "We added the following line to your application's config/routes.rb file:"
           say " "
           say "    mount MnoEnterprise::Engine, at: '/mnoe'"
-        end
-      end
-
-      def install_sprite_generator
-        if (defined?(MnoEnterprise::Frontend) || Rails.env.test?) && !options[:skip_sprite]
-          say("\n")
-          @install_sprite = ask_with_default('Would you like to install sprite-factory?')
-          if @install_sprite
-            gem_group :development do
-              gem "chunky_png"
-              gem "sprite-factory"
-            end
-            template "tasks/sprites.rake", "lib/tasks/sprites.rake"
-          end
         end
       end
 
@@ -128,13 +132,6 @@ module MnoEnterprise
           say("- You can quickly customize the platform style in frontend/src/app/stylesheets")
           say("- You can customize the whole frontend by overriding mno-enterprise-angular in frontend/src/")
           say("- You can run 'rake mnoe:frontend:dist' to rebuild the frontend after changing frontend/src")
-
-          if @install_sprite
-            say("\n\n")
-            say_status("==> Sprite Factory has been installed", nil)
-            say("- Drop your icons in vendor/sprites/icons then run: 'rake assets:resprite'")
-            say("- Add more icons folders to vendor/sprites then modify lib/tasks/sprites.rake")
-          end
 
           say("\n\n")
         end

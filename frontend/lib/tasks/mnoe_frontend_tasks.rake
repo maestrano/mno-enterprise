@@ -19,7 +19,7 @@ namespace :mnoe do
       # Setup bower and dependencies
       bower_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','bower.json')
       cp(bower_src, 'bower.json')
-      sh("bower install")
+      sh("bower install --quiet")
 
       # Create frontend override folder
       mkdir_p(frontend_project_folder)

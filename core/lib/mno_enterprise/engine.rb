@@ -29,5 +29,10 @@ module MnoEnterprise
     config.to_prepare do
       DeviseController.respond_to :html, :json
     end
+
+    # Use memory store
+    config.before_configuration do
+      ::Rails.configuration.cache_store = :memory_store, { size: 64.megabytes }
+    end
   end
 end
