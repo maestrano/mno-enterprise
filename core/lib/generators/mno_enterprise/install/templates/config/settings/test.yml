@@ -1,0 +1,6 @@
+impac:
+  protocol: http
+  host: localhost:4000
+mno:
+  protocol: https
+  host: api-enterprise.maestrano.com

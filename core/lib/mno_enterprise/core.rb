@@ -141,7 +141,7 @@ module MnoEnterprise
 
   # The Maestrano Enterprise API base path
   mattr_accessor :mno_api_root_path
-  @@mno_api_root_path = "/v1"
+  @@mno_api_root_path = "/api/mnoe/v1"
 
   # Hold the Her API configuration (see configure_api method)
   mattr_reader :mnoe_api_v1
