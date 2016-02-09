@@ -8,6 +8,7 @@ module MnoEnterprise
 
       class_option :skip_rspec, type: :boolean, default: false, desc: 'Skip rspec-rails installation'
       class_option :skip_factory_girl, type: :boolean, default: false, desc: 'Skip factory_girl installation'
+      class_option :skip_frontend, type: :boolean, default: false, desc: 'Skip frontend installation'
 
       def copy_initializer
         template "Procfile"
@@ -70,7 +71,13 @@ module MnoEnterprise
       end
 
       def setup_frontend
-        rake "mnoe:frontend:install"
+        unless options[:skip_frontend]
+          say("\n")
+          @install_frontend = ask_with_default("Would you like to install Maestrano Enterprise Angular (frontend)?")
+          if @install_frontend
+            rake "mnoe:frontend:install"
+          end
+        end
       end
 
       # Inject engine routes
@@ -128,11 +135,13 @@ module MnoEnterprise
           say("- You can generate deployment configs by running: 'rails g mno_enterprise:puma_stack'")
           say("- You can start the server with: 'foreman start'")
 
-          say("\n\n")
-          say_status("==> Maestrano Enterprise Angular has been installed", nil)
-          say("- You can quickly customize the platform style in frontend/src/app/stylesheets")
-          say("- You can customize the whole frontend by overriding mno-enterprise-angular in frontend/src/")
-          say("- You can run 'rake mnoe:frontend:dist' to rebuild the frontend after changing frontend/src")
+          if @install_frontend
+            say("\n\n")
+            say_status("==> Maestrano Enterprise Angular has been installed", nil)
+            say("- You can quickly customize the platform style in frontend/src/app/stylesheets")
+            say("- You can customize the whole frontend by overriding mno-enterprise-angular in frontend/src/")
+            say("- You can run 'rake mnoe:frontend:dist' to rebuild the frontend after changing frontend/src")
+          end
 
           say("\n\n")
         end
