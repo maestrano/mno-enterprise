@@ -6,7 +6,9 @@ module MnoEnterprise
       config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
       # Add assets
-      config.assets.precompile += %w( mno_enterprise/application_lib.js )
+      if config.respond_to? (:assets)
+        config.assets.precompile += %w( mno_enterprise/config.js )
+      end
     end
   end
 end
