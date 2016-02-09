@@ -26,12 +26,12 @@ module MnoEnterprise
       end
 
       def setup_assets
-        if defined?(MnoEnterprise::Frontend) || Rails.env.test?
+        if defined?(MnoEnterprise::Frontend)
           # JavaScript
           copy_file "javascripts/mno_enterprise_extensions.js", "app/assets/javascripts/mno_enterprise_extensions.js"
 
           # Stylesheets
-          copy_file "stylesheets/main.less", "app/assets/stylesheets/main.less"
+          copy_file "stylesheets/main.less", "app/assets/stylesheets/main.less", skip: true
           #copy_file "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
           #copy_file "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
 
