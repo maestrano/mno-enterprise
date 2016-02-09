@@ -4,54 +4,33 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/organization/org-fbba/app_instances_sync
     def index
       authorize! :check_apps_sync, @parent_organization
-
       # find method is overriden in the mnoe interface to call organization.check_sync_apps_progress
-      progress = @parent_organization.app_instances_sync.find('anything')
-      connectors = progress.connectors
-      errors = progress.errors
-
-      # "Sync Failed" connectors are sorted to end of connectors array.
-      connectors.sort_by! do |c|
-        date = begin
-          c[:last_sync] ? Date.parse(c[:last_sync]) : nil
-        rescue ArgumentError => e
-          nil
-        end
-
-        date || DateTime.new
-      end
-      .reverse!
-
-      is_syncing = connectors.any? { |c| (c[:status] == 'RUNNING') }
-
-      last_synced = connectors.first unless is_syncing || connectors.empty?
-
-      render :json => {
-        syncing: is_syncing,
-        connectors: connectors,
-        last_synced: last_synced,
-        errors: errors
-      }
+      connectors = @parent_organization.app_instances_sync.find('anything').connectors
+      render json: results(connectors)
     end
 
     # POST /mnoe/jpi/v1/organizations/org-fbba/app_instances_sync
     def create
       authorize! :sync_apps, @parent_organization
 
-      session[:pre_sync_url] = params[:return_url] if params[:return_url]
-      app_instances_sync = @parent_organization.app_instances_sync.create(mode: params[:mode])
-      connectors = app_instances_sync.connectors
+      # Some weird behaviour with Her and has_one. If app_instances_sync.find is called somewhere before the create,
+      # Her won't detect the organization_id as dirty and won't submit it.
+      sync = @parent_organization.app_instances_sync.build(mode: params[:mode])
+      sync.organization_id_will_change!
+      sync.save
 
-      if !connectors.include?(false) && connectors.count > 0
-        msg = "Syncing your data. This process might take a few minutes."
-      elsif connectors.count == 0
-        msg = "No apps available for synchronization! Please either add applications to your dashboard or check they're authenticated."
-      else
-        msg = "We were unable to sync your data. Please retry at a later time."
-      end
+      connectors = sync.connectors
 
-      render :json => { msg: msg }
+      render json: results(connectors)
     end
+
+    private
+      def results(connectors)
+        {
+          connectors: connectors,
+          is_syncing: connectors.any?{|c| c[:status]=="RUNNING" }
+        }
+      end
 
   end
 end
