@@ -21,7 +21,7 @@ module MnoEnterprise
         directory "config/settings", "config/settings"
 
         template "config/application.yml", "config/application.yml"
-        template "config/application.yml", "config/application.yml.sample"
+        template "config/application.yml", "config/application.sample.yml"
       end
 
       def setup_assets
