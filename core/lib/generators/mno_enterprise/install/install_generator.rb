@@ -59,6 +59,7 @@ module MnoEnterprise
           "\n"                                +
           "# Ignore application configuration\n" +
           "config/application.yml\n"          +
+          "config/application-*.yml\n"        +
           "config/settings.local.yml\n"       +
           "config/settings/*.local.yml\n"     +
           "config/environments/*.local.yml\n" +
