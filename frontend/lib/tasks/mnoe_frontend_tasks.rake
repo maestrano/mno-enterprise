@@ -41,6 +41,11 @@ namespace :mnoe do
         end
       end
 
+      # Setup theme previewer working files so we can safely include
+      # them in main.less
+      create_file "frontend/src/app/stylesheets/theme-previewer-published.less"
+      create_file "frontend/src/app/stylesheets/theme-previewer-tmp.less"
+
       # Build the frontend
       Rake::Task['mnoe:frontend:dist'].invoke
       #Rake::Task['assets:precompile'].invoke
