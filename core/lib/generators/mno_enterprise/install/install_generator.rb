@@ -91,15 +91,17 @@ module MnoEnterprise
   scope '(:locale)' do
     mount MnoEnterprise::Engine, at: '/mnoe', as: :mno_enterprise
   end
+
+  root to: redirect(MnoEnterprise.router.dashboard_path)
 }
           inject_into_file routes_file, mount, after: "Rails.application.routes.draw do\n"
         end
 
         unless options[:quiet]
-          say " "
+          say "\n"
           say "We added the following line to your application's config/routes.rb file:"
-          say " "
           say "    mount MnoEnterprise::Engine, at: '/mnoe'"
+          say "    root to: redirect(MnoEnterprise.router.dashboard_path)"
         end
       end
 
