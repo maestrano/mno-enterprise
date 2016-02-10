@@ -8,13 +8,6 @@ module MnoEnterprise
 
     let!(:app) { build(:app) }
 
-    before { api_stub_for(
-      get: '/apps',
-      params: { filter: { 'nid.in' => MnoEnterprise.marketplace_listing } },
-      response: from_api([app])
-    )}
-    before { api_stub_for(get: "/apps/#{app.id}", response: from_api(app)) }
-
     def markdown(text)
       return text unless text.present?
       HtmlProcessor.new(text, format: :markdown).html.html_safe
@@ -64,18 +57,47 @@ module MnoEnterprise
     describe 'GET #index' do
       subject { get :index }
 
-      it 'is successful' do
-        subject
-        expect(response).to be_success
+      context 'when marketplace_listing is set' do
+        before do
+          MnoEnterprise.marketplace_listing = [app.nid]
+          api_stub_for(
+            get: '/apps',
+            params: { filter: { 'nid.in' => MnoEnterprise.marketplace_listing } },
+            response: from_api([app])
+          )
+        end
+
+        it 'is successful' do
+          subject
+          expect(response).to be_success
+        end
+
+        it 'returns the right response' do
+          subject
+          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app]).to_json))
+        end
       end
 
-      it 'returns the right response' do
-        subject
-        expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app]).to_json))
+      context 'when marketplace_listing is not set' do
+        before do
+          MnoEnterprise.marketplace_listing = nil
+          api_stub_for(get: '/apps', response: from_api([app]))
+        end
+
+        it 'is successful' do
+          subject
+          expect(response).to be_success
+        end
+
+        it 'returns the right response' do
+          subject
+          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app]).to_json))
+        end
       end
     end
 
     describe 'GET #show' do
+      before { api_stub_for(get: "/apps/#{app.id}", response: from_api(app)) }
       subject { get :show, id: app.id }
 
       it 'is successful' do

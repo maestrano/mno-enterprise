@@ -4,7 +4,12 @@ module MnoEnterprise
 
     # GET /mnoe/mnoe/jpi/v1/marketplace
     def index
-      @apps = MnoEnterprise::App.where('nid.in' => MnoEnterprise.marketplace_listing).to_a
+      @apps = if MnoEnterprise.marketplace_listing
+        MnoEnterprise::App.where('nid.in' => MnoEnterprise.marketplace_listing).to_a
+      else
+        MnoEnterprise::App.all.to_a
+      end
+
       @categories = MnoEnterprise::App.categories(@apps)
       @categories.delete('Most Popular')
     end
