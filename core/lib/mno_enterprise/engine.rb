@@ -32,7 +32,12 @@ module MnoEnterprise
 
     # Use memory store
     config.before_configuration do
-      ::Rails.configuration.cache_store = :memory_store, { size: 64.megabytes }
+      ::Rails.configuration.cache_store = :memory_store, { size: 32.megabytes }
+    end
+
+    # Enable ActionController caching
+    config.before_initialize do
+      Rails.application.config.action_controller.perform_caching = true
     end
   end
 end

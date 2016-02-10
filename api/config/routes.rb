@@ -27,7 +27,7 @@ MnoEnterprise::Engine.routes.draw do
 
 
   get "/impersonate/user/:user_id", to: "impersonate#create", as: :impersonate_user
-  get "/impersonate/revert", to: "impersonate#revert", as: :revert_impersonate_user
+  get "/impersonate/revert", to: "impersonate#destroy", as: :revert_impersonate_user
 
 
   #============================================================

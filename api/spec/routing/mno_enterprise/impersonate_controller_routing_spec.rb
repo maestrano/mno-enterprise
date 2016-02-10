@@ -9,7 +9,7 @@ module MnoEnterprise
     end
 
     it "routes to #destroy" do
-      expect(delete("/impersonate/revert")).to route_to("mno_enterprise/impersonate#destroy")
+      expect(get("/impersonate/revert")).to route_to("mno_enterprise/impersonate#destroy")
     end
   end
 end

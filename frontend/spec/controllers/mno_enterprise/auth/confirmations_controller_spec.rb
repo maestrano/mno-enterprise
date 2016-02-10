@@ -62,7 +62,7 @@ module MnoEnterprise
           it { expect(user.name).to eq(user_params[:name]) }
           it { expect(user.surname).to eq(user_params[:surname]) }
           it { expect(user.password).to eq(user_params[:password]) }
-          it { expect(response).to redirect_to('/mnoe/myspace') }
+          it { expect(response).to redirect_to(MnoEnterprise.router.dashboard_path) }
           
           describe 'with previous url' do
             let(:previous_url) { "/some/redirection" }
