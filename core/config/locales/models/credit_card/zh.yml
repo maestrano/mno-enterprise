@@ -1,0 +1,23 @@
+zh:
+  activemodel:
+    models:
+      mno_enterprise/credit_card: "信用卡"
+    attributes:
+      mno_enterprise/credit_card:
+        billing_address: "帐单地址"
+        billing_city: "城市"
+        billing_country: "国家"
+        billing_postcode: "邮编"
+        country: "国家"
+        created_at: "创建于"
+        first_name: "名"
+        id: Id
+        last_name: "姓"
+        masked_number: "掩码"
+        month: "月"
+        number: "号码"
+        organization_id: "公司"
+        title: "标题"
+        updated_at: "更新于"
+        verification_value: CVV
+        year: "年"

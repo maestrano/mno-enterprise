@@ -1,0 +1,7 @@
+id:
+  mno_enterprise:
+    auth:
+      unlocks:
+        new:
+          title: "Kirim ulang petunjuk membuka kunci"
+          unlock: "Kirim ulang petunjuk membuka kunci"

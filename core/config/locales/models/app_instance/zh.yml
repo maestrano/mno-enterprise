@@ -1,0 +1,24 @@
+zh:
+  activemodel:
+    models:
+      mno_enterprise/app_instance: "应用程序实例"
+    attributes:
+      mno_enterprise/app_instance:
+        app_id: "应用程序"
+        autostop_at: "自动停止于"
+        autostop_interval: "自动停止间隔"
+        billing_type: "计费类型"
+        created_at: "创建于"
+        id: Id
+        name: "名称"
+        next_status: "下一个状态"
+        owner_id: "所有者"
+        owner_type: "所有者类型"
+        soa_enabled: "Soa已启用"
+        stack: "堆叠"
+        started_at: "开始于"
+        status: "状态"
+        stopped_at: "停止于"
+        terminated_at: "终止于"
+        uid: Uid
+        updated_at: "更新于"

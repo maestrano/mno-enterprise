@@ -1,0 +1,17 @@
+zh:
+  mno_enterprise:
+    auth:
+      confirmations:
+        new:
+          title: "确认"
+          resend: "重新发送确认指示 "
+        show:
+          title: "快完成了"
+          confirm: "确认我的帐户"
+        lounge:
+          title: "没有收到确认邮件吗？"
+          subtitle: "没关系！只需检查以下信息是否正确，然后点击重新发送！"
+          resend: "重新发送！"
+          support_tip_html: "您也可以直接发送一封电子邮件至我们的%{email}，我们将为您激活该帐户。"
+          support_team: "客户服务"
+          support_email_subject: "注册验证"

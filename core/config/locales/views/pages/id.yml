@@ -1,0 +1,18 @@
+id:
+  mno_enterprise:
+    pages:
+      app_access_unauthorized:
+        title: "Akses Aplikasi Tidak Diberikan"
+        explanation: "Maaf, namun sepertinya pemilik aplikasi ini belum memberikan izin akses kepada Anda."
+        recommendation: "Tanya administrator aplikasi ini untuk berbagi aplikasi dengan Anda melalui Maestrano maupun menambahkan Anda sebagai pengguna secara langsung dalam aplikasi."
+        support_help_html: "Jika Anda pikir ini adalah kesalahan, kirimkan email kepada kami di #{email}"
+      app_logout:
+        title: "Berhasil keluar dari Aplikasi"
+        explanation: "Anda berhasil keluar dari aplikasi Anda"
+        recommendation: "Kiat: jika Anda ingin keluar dari semua aplikasi sekaligus, keluar saja dari Maestrano!"
+        support_help_html: "Jika Anda pikir ini adalah kesalahan, kirimkan email kepada kami di #{email}"
+      billing_details_required:
+        title: "Detail Penagihan Dibutuhkan"
+        explanation: "Ups! Sepertinya uji coba gratis aplikasi ini telah berakhir dan tidak ada detail penagihan yang dimasukkan."
+        recommendation: "Minta administrator Anda untuk memasukkan detail penagihan untuk perusahaan Anda."
+        support_help_html: "Jika Anda pikir ini adalah kesalahan, kirimkan email kepada kami di #{email}"

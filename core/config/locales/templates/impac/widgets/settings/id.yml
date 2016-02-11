@@ -1,0 +1,19 @@
+id:
+  mno_enterprise:
+    templates:
+      impac:
+        widgets:
+          settings:
+            account:
+              title: Akun untuk memonitor
+            chart_filters:
+              title: Filter Grafik
+              label_top: Atas
+            hist_mode:
+              label_current: Saat Ini
+              label_history: Riwayat
+            organizations:
+              select_companies: Pilih Perusahaan
+            time_range:
+              title: Rentang waktu
+              show_last: Tampilkan terbaru

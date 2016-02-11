@@ -1,0 +1,7 @@
+id:
+  mno_enterprise:
+    auth:
+      sessions:
+        new:
+          title: Masuk
+          sign_in: Masuk

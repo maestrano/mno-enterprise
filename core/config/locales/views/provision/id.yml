@@ -1,0 +1,11 @@
+id:
+  mno_enterprise:
+    provision:
+      provision_apps:
+        title: "Pesanan Anda sedang dipersiapkan"
+        preparing: "Mempersiapkan Pesanan"
+      select_organization:
+        title: "Pilih organisasi"
+        explanation: "Anda termasuk anggota di banyak organisasi"
+        select: "Pilih organisasi yang menjadi tujuan Anda melakukan pemesanan baru ini"
+        submit: "Lanjutkan"

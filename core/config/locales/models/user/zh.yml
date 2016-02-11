@@ -1,0 +1,44 @@
+zh:
+  activemodel:
+    models:
+      mno_enterprise/user: "使用者"
+    attributes:
+      mno_enterprise/user:
+        authenticatable_salt: "可验证盐"
+        company: "公司"
+        confirmation_sent_at: "确认发送于"
+        confirmation_token: "确认令牌"
+        confirmed_at: "确认于"
+        created_at: "创建于"
+        current_password: "目前密码"
+        current_sign_in_at: "目前登录于"
+        current_sign_in_ip: "目前登录ip"
+        email: "电子邮件"
+        encrypted_password: "加密密码"
+        failed_attempts: "尝试失败次数"
+        geo_city: "城市"
+        geo_country_code: "国家"
+        geo_state_code: "州码"
+        id: Id
+        last_sign_in_at: "目前登录于"
+        last_sign_in_ip: "最后登录ip"
+        locked_at: "锁定于"
+        name: "名"
+        password: "密码"
+        password_confirmation: "密码确认"
+        phone: "电话"
+        phone_country_code: "分机"
+        remember_created_at: "记住创建于"
+        reset_password_sent_at: "重置密码发送于"
+        reset_password_token: "重置密码令牌"
+        sign_in_count: "登录次数"
+        sso_session: "Sso连线"
+        surname: "姓氏"
+        uid: Uid
+        unconfirmed_email: "未确认电子邮件"
+        unlock_token: "解锁令牌"
+        updated_at: "更新于"
+        website: "网址"
+    errors:
+      mno_enterprise/user:
+        password_weak: "密码不够强。尝试混合字母、数字和大小写"

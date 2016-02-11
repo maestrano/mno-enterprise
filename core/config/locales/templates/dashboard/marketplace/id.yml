@@ -1,0 +1,14 @@
+id:
+  mno_enterprise:
+    templates:
+      dashboard:
+        marketplace:
+          index:
+            title: "Pasar"
+            select_all: "Semua"
+          show:
+            back: "Kembali"
+            start_app: "Mulai Sekarang!"
+            tag_responsive: "Responsif"
+            tag_star: "Tutorial Star!™"
+            tag_connec: "Connec!™ Siap"

@@ -1,0 +1,10 @@
+id:
+  mno_enterprise:
+    auth:
+      passwords:
+        new:
+          title: "Pemulihan Kata Sandi"
+          recover: "Pulihkan kata sandi saya"
+        edit:
+          title: "Ubah kata sandi Anda"
+          change: "Ubah kata sandi saya"

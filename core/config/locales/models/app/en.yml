@@ -1,0 +1,25 @@
+en:
+  activemodel:
+    models:
+      mno_enterprise/app: App
+    attributes:
+      mno_enterprise/app:
+        categories: Categories
+        created_at: Created at
+        description: Description
+        id: Id
+        key_benefits: Key benefits
+        key_features: Key features
+        logo: Logo
+        name: Name
+        nid: Nid
+        pictures: Pictures
+        popup_description: Popup description
+        slug: Slug
+        stack: Stack
+        terms_url: Link to terms of use
+        testimonials: Testimonials
+        tiny_description: Short description
+        updated_at: Updated at
+        website: Website
+        worldwide_usage: Worldwide usage

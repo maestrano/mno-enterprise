@@ -1,0 +1,9 @@
+zh:
+  mno_enterprise:
+    templates:
+      modals:
+        new_organization:
+          title: 创建新公司
+          enter_new_company_name: 为您的新公司输入一个名称
+          cancel: 取消
+          create: 创建

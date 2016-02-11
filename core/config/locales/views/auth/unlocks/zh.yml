@@ -1,0 +1,7 @@
+zh:
+  mno_enterprise:
+    auth:
+      unlocks:
+        new:
+          title: "重新发送解锁指示 "
+          unlock: "重新发送解锁指示 "

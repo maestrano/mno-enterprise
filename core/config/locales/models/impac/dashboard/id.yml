@@ -1,0 +1,13 @@
+id:
+  activemodel:
+    models:
+      mno_enterprise/impac/dashboard: Dasbor
+    attributes:
+      mno_enterprise/impac/dashboard:
+        created_at: Dibuat pada
+        id: Id
+        name: Nama
+        organization_ids: Organisasi
+        updated_at: Diperbarui pada
+        widgets_order: Pesanan widget
+        widgets_templates: Templat widget

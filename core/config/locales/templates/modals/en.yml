@@ -1,0 +1,9 @@
+en:
+  mno_enterprise:
+    templates:
+      modals:
+        new_organization:
+          title: Create New Company
+          enter_new_company_name: Enter a name for your new company
+          cancel: Cancel
+          create: Create

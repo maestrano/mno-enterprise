@@ -1,0 +1,9 @@
+en:
+  activemodel:
+    models:
+      mno_enterprise/org_invite: Org invite
+    attributes:
+      mno_enterprise/org_invite:
+        created_at: Created at
+        id: Id
+        updated_at: Updated at

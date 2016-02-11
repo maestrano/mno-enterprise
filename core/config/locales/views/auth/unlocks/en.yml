@@ -1,0 +1,7 @@
+en:
+  mno_enterprise:
+    auth:
+      unlocks:
+        new:
+          title: Resend unlock instructions
+          unlock: Resend unlock instructions
