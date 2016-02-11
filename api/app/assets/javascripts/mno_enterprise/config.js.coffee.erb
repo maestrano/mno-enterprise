@@ -1,3 +1,7 @@
 # Configuration module
 angular.module('mnoEnterprise.configuration', [])
   .constant('IMPAC_CONFIG', <%= Settings.impac.to_json %>)
+  .constant('I18N_CONFIG', {
+    enabled: <%= MnoEnterprise.i18n_enabled %>,
+    available_locales: <%= I18n.available_locales.to_json %>
+  })
