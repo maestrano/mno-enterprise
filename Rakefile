@@ -21,7 +21,7 @@ task :test do
   Rake::Task['test_app'].invoke
   %w(api core frontend).each do |gem_name|
     Dir.chdir("#{File.dirname(__FILE__)}/#{gem_name}") do
-      system("bundle exec rspec") or exit!(1)
+      system("BUNDLE_GEMFILE=./Gemfile bundle exec rspec") or exit!(1)
     end
   end
 end
