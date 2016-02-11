@@ -21,7 +21,11 @@ FactoryGirl.define do
     tiny_description "A great app"
     stack 'cube'
     terms_url "http://opensource.org/licenses/MIT"
-    
+
+    pricing_plans {{
+      'default' =>[{name: 'Monthly Plan', price: '20.0', currency: 'AUD', factor: '/month'}]
+    }}
+
     trait :cloud do
       stack 'cloud'
     end

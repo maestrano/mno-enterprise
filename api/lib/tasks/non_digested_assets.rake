@@ -11,7 +11,7 @@ end
 
 namespace :mnoe do
   # TODO: extract to a config of the App/Engine
-  non_digest_named_assets = ['config.js']
+  non_digest_named_assets = ['mno_enterprise/config.js']
 
   # This seems to be basically how ordinary asset precompile
   # is logging, ugh.

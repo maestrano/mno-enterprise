@@ -5,8 +5,8 @@
         .row
           .align-center
             %i.fa.fa-envelope
-            %h4 Didn't receive the confirmation email?
-            %h5 That's fine! Just check below that we got it right and hit resend!
+            %h4 Congratulations! We've sent you a confirmation link, please check your email inbox.
+            %h5 If you did not receive the email please click resend.
           
           %div{ 'ng-init' => "email = '#{@resource.email}'"}
             = form_for(@resource, :as => resource_name, :url => mno_enterprise.user_confirmation_path, :html => { 'name' => 'form', :class => 'dark form-horizontal', :autocomplete => "off" }) do |f|

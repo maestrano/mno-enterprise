@@ -13,7 +13,7 @@ namespace :mno_enterprise do
       ENV["RAILS_ENV"] = 'test'
 
       MnoEnterprise::DummyGenerator.start %W[--quiet --lib_name=#{ENV['LIB_NAME']} --database=#{ENV['DB'].presence || 'sqlite3'}]
-      MnoEnterprise::Generators::InstallGenerator.start %w[--quiet --skip-rspec --skip-sprite --skip-factory-girl]
+      MnoEnterprise::Generators::InstallGenerator.start %w[--quiet --skip-rspec --skip-sprite --skip-factory-girl --skip-frontend]
     end
   end
 end

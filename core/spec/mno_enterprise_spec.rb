@@ -14,12 +14,12 @@ describe MnoEnterprise do
     before { MnoEnterprise.configure { |c| c.mno_api_private_host = private_host } }
 
     describe 'without private host' do
-      it { expect(subject).to eq('https://api-enterprise.maestrano.com/v1') }
+      it { expect(subject).to eq('https://api-enterprise.maestrano.com/api/mnoe/v1') }
     end
 
     describe 'with private host' do
       let(:private_host) { 'https://api-hub.account.local' }
-      it { expect(subject).to eq("#{private_host}/v1") }
+      it { expect(subject).to eq("#{private_host}/api/mnoe/v1") }
     end
   end
 
