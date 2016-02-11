@@ -6,6 +6,11 @@ module MnoEnterprise
     # lib
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
+    # Autoload all translations from config/locales/**/*.yml
+    config.before_configuration do
+      ::Rails.configuration.i18n.load_path += Dir[config.root.join('locales', '**/*.yml').to_s]
+    end
+
     # Remove testing support when not in test
     unless Rails.env.test?
       path_rejector = lambda { |s| s.include?('/testing_support/') }
