@@ -26,7 +26,7 @@ module MnoEnterprise
       end
 
       def setup_assets
-        if defined?(MnoEnterprise::Frontend) || Rails.env.test?
+        if defined?(MnoEnterprise::Frontend)
           # Stylesheets
           copy_file "stylesheets/main.less", "app/assets/stylesheets/main.less", skip: true
 
