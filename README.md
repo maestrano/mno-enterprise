@@ -18,6 +18,7 @@ The goal of this engine is to provide a base that you can easily extend with cus
 6.  [Generating a database extension](#generating-a-database-extension)
 7.  [Deploy a Puma stack on EC2 via Webistrano/Capistrano](#deploy-a-puma-stack-on-ec2-via-webistranocapistrano)
 8.  [Migrating from v2 to v3](#migrating-from-v2-to-v3)
+9.  [Contributing](#contributing)
 
 - - -
 
@@ -242,3 +243,54 @@ Launch your application, your style should now be reapplied.
 The v3 is currently being finalised. There are some minor configuration options that still need to be implemented such as the "impact endpoint urls".
 
 If deploying to UAT, the Impac! URLs need to be manually replaced. Search the "/public" directory for "http://localhost:4000" and replace by "https://api-impac-uat.maestrano.io". Save the files and deploy.
+
+## Contributing
+
+# Contributing to MnoEnterprise
+
+We love pull requests from everyone. Here are some ways *you* can contribute:
+
+* by using alpha, beta, and prerelease versions
+* by reporting bugs
+* by suggesting new features
+* by writing or editing documentation
+* by writing specifications
+* by writing code ( **no patch is too small** : fix typos, add comments, clean up inconsistent whitespace )
+* by refactoring code
+* by closing [issues][]
+* by reviewing patches
+
+[issues]: https://github.com/maestrano/mno-enterprise/issues
+
+## Submitting an Issue
+We use the [GitHub issue tracker][issues] to track bugs and features. Before
+submitting a bug report or feature request, check to make sure it hasn't
+already been submitted. When submitting a bug report, please include a [Gist][]
+that includes a stack trace and any details that may be necessary to reproduce
+the bug, including your gem version, Ruby version, and operating system.
+Ideally, a bug report should include a pull request with failing specs.
+
+[gist]: https://gist.github.com/
+
+## Submitting a Pull Request
+1. [Fork][fork] the [official repository][repo].
+2. [Create a topic branch.][branch]
+3. Write tests for your feature/bug.
+3. Implement your feature or bug fix.
+4. Run the specs with:
+```bash
+bundle exec rake test
+```
+4. Add, commit, and push your changes.
+5. [Submit a pull request.][pr]
+
+## Notes
+* Please add tests if you changed code. Contributions without tests won't be accepted.
+* Please don't update the Gem version.
+
+[repo]: https://github.com/maestrano/mno-enterprise/tree/master
+[fork]: https://help.github.com/articles/fork-a-repo/
+[branch]: https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/
+[pr]: https://help.github.com/articles/using-pull-requests/
+
+Inspired by https://github.com/thoughtbot/factory_girl/blob/master/CONTRIBUTING.md

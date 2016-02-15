@@ -5,4 +5,7 @@ tenant_id: my_tenant_id
 tenant_key: my_tenant_access_key
 
 # Emailing platform - Mandrill (default mandrill)
-mandrill_key: changeme
+# mandrill_key: changeme
+
+# Rails secret key
+SECRET_KEY_BASE: <%= SecureRandom.hex(64) %>

@@ -22,18 +22,13 @@ module MnoEnterprise
         directory "config/settings", "config/settings"
 
         template "config/application.yml", "config/application.yml"
-        template "config/application.yml", "config/application.yml.sample"
+        template "config/application.yml", "config/application.sample.yml"
       end
 
       def setup_assets
         if defined?(MnoEnterprise::Frontend)
-          # JavaScript
-          copy_file "javascripts/mno_enterprise_extensions.js", "app/assets/javascripts/mno_enterprise_extensions.js"
-
           # Stylesheets
           copy_file "stylesheets/main.less", "app/assets/stylesheets/main.less", skip: true
-          #copy_file "stylesheets/theme.less_erb", "app/assets/stylesheets/theme.less.erb"
-          #copy_file "stylesheets/variables.less", "app/assets/stylesheets/variables.less"
 
           # Require main stylesheet file
           inject_into_file 'app/assets/stylesheets/application.css', before: " */" do
@@ -60,6 +55,7 @@ module MnoEnterprise
           "\n"                                +
           "# Ignore application configuration\n" +
           "config/application.yml\n"          +
+          "config/application-*.yml\n"        +
           "config/settings.local.yml\n"       +
           "config/settings/*.local.yml\n"     +
           "config/environments/*.local.yml\n" +

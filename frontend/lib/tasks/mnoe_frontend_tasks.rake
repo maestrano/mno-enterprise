@@ -41,6 +41,11 @@ namespace :mnoe do
         end
       end
 
+      # Setup theme previewer working files so we can safely include
+      # them in main.less
+      create_file "frontend/src/app/stylesheets/theme-previewer-published.less"
+      create_file "frontend/src/app/stylesheets/theme-previewer-tmp.less"
+
       # Build the frontend
       Rake::Task['mnoe:frontend:dist'].invoke
       #Rake::Task['assets:precompile'].invoke
@@ -71,6 +76,13 @@ namespace :mnoe do
 
       # Copy bower_components to public (used by live previewer)
       cp_r("#{frontend_tmp_folder}/bower_components","#{frontend_dist_folder}/")
+
+      # Clear tmp cache in development - recompile assets otherwise
+      if Rails.env.development? || Rails.env.test?
+        Rake::Task['tmp:cache:clear'].execute
+      else
+        Rake::Task['assets:precompile'].execute
+      end
     end
 
     desc "Rebuild the Live Previewer Style"
@@ -89,6 +101,11 @@ namespace :mnoe do
 
       # Copy bower_components to public (used by live previewer)
       cp_r("#{frontend_tmp_folder}/bower_components","#{frontend_dist_folder}/")
+
+      # Clear tmp cache in development
+      if Rails.env.development? || Rails.env.test?
+        Rake::Task['tmp:cache:clear'].execute
+      end
     end
 
     desc "Reset the frontend build folder and apply local customisations"
