@@ -5,7 +5,7 @@
     .row
       .login-box-wrapper
         .login-box-title
-          %h2 Password Recovery
+          %h2= t('.title')
         .login-box
           .brand-logo
           
@@ -26,7 +26,7 @@
             .row
               .col-sm-12
                 .text-center
-                  %button{ :class => "btn btn-warning", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'form.$invalid', 'ng-hide' => 'hasClicked' } Recover my password
+                  %button{ :class => "btn btn-warning", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'form.$invalid', 'ng-hide' => 'hasClicked' }= t('.title')
                   %img.ng-hide{ 'ng-src' => asset_path('mno_enterprise/loader-32x32-bg-inverse.gif'), 'ng-show' => 'hasClicked' }
           
           %hr

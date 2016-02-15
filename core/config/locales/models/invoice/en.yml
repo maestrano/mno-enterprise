@@ -1,0 +1,9 @@
+en:
+  activemodel:
+    models:
+      mno_enterprise/invoice: Invoice
+    attributes:
+      mno_enterprise/invoice:
+        created_at: Created at
+        id: Id
+        updated_at: Updated at

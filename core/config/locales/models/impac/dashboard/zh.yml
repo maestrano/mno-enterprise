@@ -1,0 +1,13 @@
+zh:
+  activemodel:
+    models:
+      mno_enterprise/impac/dashboard: "仪表板"
+    attributes:
+      mno_enterprise/impac/dashboard:
+        created_at: "创建于"
+        id: Id
+        name: "名称"
+        organization_ids: "公司"
+        updated_at: "更新于"
+        widgets_order: "小工具顺序"
+        widgets_templates: "小工具模板"

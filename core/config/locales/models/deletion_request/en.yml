@@ -1,0 +1,9 @@
+en:
+  activemodel:
+    models:
+      mno_enterprise/deletion_request: Deletion request
+    attributes:
+      mno_enterprise/deletion_request:
+        created_at: Created at
+        id: Id
+        updated_at: Updated at

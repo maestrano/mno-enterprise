@@ -1,0 +1,28 @@
+zh:
+  mno_enterprise:
+    templates:
+        modals:
+          create:
+            title: 创建新的仪表板
+            label_name: 名称
+            label_current_company: 当前公司
+            label_multi_company: 多公司
+            unauthorized_to_access_company_reporting: 对不起！只有管理员和超级管理员可以为%{companyname}创建仪表板。
+            please_select_multi_company: 请选择一个“多公司”仪表板，以选择其他公司的数据。
+            label_companies: 公司
+            cancel: 取消
+            add: 添加
+          delete:
+            title: 删除仪表板
+            are_you_sure: 您确定要删除这个分析仪表板吗？
+            cancel: 取消
+            add: 删除
+          formula_modal:
+            title: 定制计算公式
+            calculation_explanation: 为您的帐户创建一个定制公式，并保存为一个小工具。您只需从列表中选择您的帐户，然后使用标准的运算符创建一个公式（例如： ({1} + {2}) / {3}）
+            data_being_retrieved: 您的数据正在检索中...
+            type_formula_below: 在下面输入您的公式
+            formula_result: 结果
+            formula_legend: 图例
+            cancel: 取消
+            save: 保存

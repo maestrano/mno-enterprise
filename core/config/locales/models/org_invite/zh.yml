@@ -1,0 +1,9 @@
+zh:
+  activemodel:
+    models:
+      mno_enterprise/org_invite: "公司邀请"
+    attributes:
+      mno_enterprise/org_invite:
+        created_at: "创建于"
+        id: Id
+        updated_at: "更新于"

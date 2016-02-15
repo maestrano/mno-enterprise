@@ -4,12 +4,13 @@
   %br
   %div
     = f.password_field :password, :placeholder => "Password", :required => true, 'ng-model' => 'password', :class => 'form-control', :autocomplete => "off"
-  
+
   %br/
   %div
-    %button{ :class => "btn btn-warning btn-login", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'loginForm.$invalid', 'ng-hide' => 'hasClicked' } Sign in
+    %button{ :class => "btn btn-warning btn-login", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'loginForm.$invalid', 'ng-hide' => 'hasClicked' }
+      = t('mno_enterprise.auth.sessions.new.sign_in')
     %img.ng-hide{ 'ng-src' => asset_path('mno_enterprise/loader-32x32-bg-inverse.gif'), 'ng-show' => 'hasClicked' }
-  
+
   - if devise_mapping.rememberable? && MnoEnterprise.style.devise.remember_checkbox_shown
     %br/
     %div.form-inline.checkbox-section

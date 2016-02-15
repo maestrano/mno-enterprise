@@ -1,0 +1,16 @@
+en:
+  mno_enterprise:
+    templates:
+      dashboard:
+        marketplace:
+          index:
+            title: Marketplace
+            select_all: All
+            search: Search
+
+          show:
+            back: Back
+            start_app: Start Now!
+            tag_responsive: Responsive
+            tag_star: Star!™ Tutorials
+            tag_connec: Connec!™ Ready

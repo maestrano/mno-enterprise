@@ -1,0 +1,24 @@
+zh:
+  mno_enterprise:
+    templates:
+      impac:
+        index:
+          dashboard: 仪表板
+          new_dashboard: 新仪表板
+          source: 来源
+          add_widget: 添加小工具
+          delete_dashboard: 删除
+          widget_added: 小工具已添加！
+          select_widgets_to_add: 选择您要添加至您的仪表板的小工具。
+          all_categories: 全部类别
+          cat_accounting: 会计
+          cat_invoicing: 发票管理
+          cat_hr_payroll: 人力资源/薪资
+          cat_sales: 销售
+          no_dashboard_warning: 您似乎还没有任何仪表板！
+          benefits_of_dashboards_html: 仪表板是将您的数据视觉化及监控您的业务的理想方式。我们的智能小工具将会对您的企业每天的绩效提供实时的深入洞察，这一切都归功于我们持有专利的数据共享平台<span>Connec!??/span>
+          create_dashboard: 创建一个仪表板！
+          note_on_permissions: 附注：您创建的仪表板只有您本人可访问。我们将尽快添加用户之间的仪表板共享功能。
+          no_widgets_warning: 是的。让我们为这个仪表板热身！
+          click_below_to_add_widgets: 点击以下按钮，将一个新的小工具添加至您的仪表板。目前我们的小工具主要聚焦于财务数据，但近期内就会推出更多小工具！
+          add_new_widget: 添加新的小工具

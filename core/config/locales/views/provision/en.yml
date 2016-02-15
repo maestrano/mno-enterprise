@@ -1,0 +1,12 @@
+en:
+  mno_enterprise:
+    provision:
+      provision_apps:
+        title: Your order is being prepared
+        preparing: Preparing Order
+
+      select_organization:
+        title: Choose an organization
+        explanation: You belong to multiple organizations
+        select: Please select the organization you are making this new order for
+        submit: Go

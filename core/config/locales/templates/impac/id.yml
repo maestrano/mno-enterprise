@@ -1,0 +1,24 @@
+id:
+  mno_enterprise:
+    templates:
+      impac:
+        index:
+          dashboard: Dasbor
+          new_dashboard: Dasbor Baru
+          source: Sumber
+          add_widget: Tambahkan Widget
+          delete_dashboard: Hapus
+          widget_added: Widget ditambahkan!
+          select_widgets_to_add: Pilih widget yang ingin ditambahkan ke dasbor Anda.
+          all_categories: Semua kategori
+          cat_accounting: Akuntansi
+          cat_invoicing: Penagihan
+          cat_hr_payroll: SDM / Payroll
+          cat_sales: Penjualan
+          no_dashboard_warning: Tampaknya Anda belum memiliki dasbor!
+          benefits_of_dashboards_html: Dasbor adalah cara yang hebat untuk memvisualisasi data dan memonitor bisnis Anda. Widget cerdas kami akan memberikan pengetahuan lengkap mengenai kinerja bisnis Anda setiap hari secara langsung, semuanya karena platform berbagi data kami yang telah dipatenkan <span>Connec!™</span>
+          create_dashboard: Buat Dasbor!
+          note_on_permissions: 'Catatan:  dasbor yang Anda buat hanya dapat diakses oleh Anda. Berbagi dasbor antarpengguna akan segera ditambahkan.'
+          no_widgets_warning: Tepat sekali. Ayo mulai gunakan dasbor ini!
+          click_below_to_add_widgets: Klik tombol di bawah ini untuk menambahkan widget baru ke dasbor Anda. Widget kami saat ini berfokus pada data keuangan, tetapi akan segera ditambahkan yang lain!
+          add_new_widget: Tambahkan Widget baru

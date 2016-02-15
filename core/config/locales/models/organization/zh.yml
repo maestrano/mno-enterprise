@@ -1,0 +1,24 @@
+zh:
+  activemodel:
+    models:
+      mno_enterprise/organization: "公司"
+    attributes:
+      mno_enterprise/organization:
+        account_frozen: "冻结帐户？"
+        created_at: "创建于"
+        free_trial_end_at: "免费试用结束于"
+        geo_city: "城市"
+        geo_country_code: "国码"
+        geo_currency: "货币"
+        geo_state_code: "州码"
+        geo_tz: "时区"
+        id: Id
+        latitude: "纬度"
+        logo: "图标"
+        longitude: "经度"
+        mails: "联系电子邮箱"
+        meta_data: "元数据"
+        name: "名称"
+        soa_enabled: "Connec!™已启用"
+        uid: Uid
+        updated_at: "更新于"

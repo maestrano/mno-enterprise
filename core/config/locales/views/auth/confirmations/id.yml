@@ -1,0 +1,17 @@
+id:
+  mno_enterprise:
+    auth:
+      confirmations:
+        new:
+          title: "Konfirmasi"
+          resend: "Kirim ulang petunjuk konfirmasi"
+        show:
+          title: "Hampir selesai"
+          confirm: "Konfirmasi akun saya"
+        lounge:
+          title: "Tidak menerima email konfirmasi?"
+          subtitle: "Tidak masalah! Periksa saja di bawah untuk melihat konfirmasi kami sudah benar dan pilih kirim ulang!"
+          resend: "Kirim ulang!"
+          support_tip_html: "Atau jika berkenan, Anda dapat mengirimkan email kepada kami langsung ke %{email} dan kami akan mengaktifkannya untuk Anda."
+          support_team: "layanan pelanggan"
+          support_email_subject: "Verifikasi Pendaftaran"

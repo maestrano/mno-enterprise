@@ -1,0 +1,21 @@
+en:
+  mno_enterprise:
+    templates:
+      components:
+        loading_lounge:
+          redirecting_to_app: "Redirecting to %{appname}"
+          you_will_be_redirected_in: "You will be automatically redirected in %{counter}s (or click the link below)"
+          go_to_my_app: Go to my app now!
+          app_is_getting_configured: "%{appname} is getting configured"
+          app_should_be_available_soon: Don't worry, it should be available in a few seconds.
+          app_is_loading: "%{appname} is loading"
+          app_has_been_idle_for_long: "%{appname} has been idle for a long time. We are currently loading it. It should be available soon!"
+          app_is_getting_setup: "%{appname} is getting setup"
+          app_is_preparing_for_first_use: "%{appname} is preparing for the first use. It should be available soon!"
+          app_has_been_deleted: "%{appname} has been deleted"
+          app_has_been_removed_by_admin: "%{appname} has been removed by your administrator and is no more accessible."
+          app_is_idle: "%{appname} is idle"
+          cannot_start_app: Unfortunately we cannot switch this app ON for you
+          app_not_found: Application not found
+          app_not_managed_by_us: The app you requested does not seem to be managed by us.
+          did_you_type_the_right_url: Are you sure you typed the right url?

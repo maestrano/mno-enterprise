@@ -1,0 +1,7 @@
+en:
+  mno_enterprise:
+    auth:
+      sessions:
+        new:
+          title: Sign In
+          sign_in: Sign in

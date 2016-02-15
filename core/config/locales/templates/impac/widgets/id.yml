@@ -1,0 +1,58 @@
+id:
+  mno_enterprise:
+    templates:
+      impac:
+        widgets:
+          accounts_accounting_values:
+            widget_settings: Penyetelan widget
+            cancel: Batalkan
+            save: Simpan
+            data_being_retrieved: Data Anda sedang diambil...
+          accounts_assets_summary:
+            widget_settings: Penyetelan widget
+            cancel: Batalkan
+            save: Simpan
+            data_being_retrieved: Data Anda sedang diambil...
+          accounts_balance:
+            widget_settings: Penyetelan widget
+            cancel: Batalkan
+            save: Simpan
+            data_being_retrieved: Data Anda sedang diambil...
+          accounts_comparison:
+            widget_settings: Penyetelan widget
+            select_accounts_to_compare: Pilih akun yang ingin Anda bandingkan.
+            cancel: Batalkan
+            save: Simpan
+            add_account: + Tambahkan Akun
+            data_being_retrieved: Data Anda sedang diambil...
+          accounts_custom_calculation:
+            data_being_retrieved: Data Anda sedang diambil...
+          accounts_expenses_revenue:
+            widget_settings: Penyetelan widget
+            cancel: Batalkan
+            save: Simpan
+            label_expenses: Pengeluaran
+            label_revenue: Pendapatan
+          accounts_payable_receivable:
+            widget_settings: Penyetelan widget
+            cancel: Batalkan
+            save: Simpan
+            label_payable: Utang
+            label_receivable: Piutang
+            label_accounts_receivable: Piutang Usaha
+            label_accounts_payable: Utang Usaha
+            data_being_retrieved: Data Anda sedang diambil...
+          invoices_list:
+            widget_settings: Penyetelan widget
+            cancel: Batalkan
+            save: Simpan
+            data_being_retrieved: Data Anda sedang diambil...
+            label_paid: Sudah Dibayar
+            label_due: Jatuh Tempo
+            label_invoiced: Ditagih
+            no_invoices_found_for: Tidak ditemukan tagihan %{orderby} untuk %{entitytype} Anda
+          invoices_summary:
+            widget_settings: Penyetelan widget
+            cancel: Batalkan
+            save: Simpan
+            data_being_retrieved: Data Anda sedang diambil...

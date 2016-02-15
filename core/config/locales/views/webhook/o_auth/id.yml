@@ -1,0 +1,6 @@
+id:
+  mno_enterprise:
+    webhook:
+      o_auth:
+        authorize:
+          you_are_redirected: Anda sedang disambungkan melalui patner kami

@@ -1,0 +1,48 @@
+en:
+  mno_enterprise:
+    templates:
+      dashboard:
+        teams:
+          index:
+            no_teams_warning: You do not have any team! Teams are a great way of controlling who has access to applications within your company.
+            add_team: Add a Team Now!
+            add_team_light: add team
+            admin_permission_warning: Admins and Super Admins always have access to all apps. Members unallocated to any team will have access to all apps by default.
+            all: All
+            no_apps_warning: It looks like you do not have any application at the moment.
+            add_app: Add an App Now!
+
+          member_add_modal:
+            title: Add Team Members
+            all_belong_to_team_warning: All your company members already belong to this team
+            select_company_members: Select the company members your wish to add to this team
+            close: Close
+            cancel: Cancel
+            add: Add
+
+          member_removal_modal:
+            title: Confirm action
+            confirmation: "Are you sure you want to remove %{fullname} from %{teamname}?"
+            cancel: Cancel
+            remove: Remove
+
+          team_add_modal:
+            title: Create New Team
+            enter_team_name: Enter a name for your new team
+            cancel: Cancel
+            create: Create
+
+          team_delete_modal:
+            title: Confirm action
+            confirmation: "Are you really sure you want to remove %{teamname}?"
+            cancel: Cancel
+            remove: Remove
+
+          team_list:
+            no_team_member_warning: "%{teamname} does not have any team member yet!"
+            add_team_members: Add Team Members
+            tbl_name: Name
+            tbl_surname: Surname
+            tbl_email: Email
+            tbl_role: Role
+            remove: Remove

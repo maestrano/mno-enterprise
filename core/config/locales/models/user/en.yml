@@ -1,0 +1,45 @@
+en:
+  activemodel:
+    models:
+      mno_enterprise/user: User
+    attributes:
+      mno_enterprise/user:
+        authenticatable_salt: Authenticatable salt
+        company: Company
+        confirmation_sent_at: Confirmation sent at
+        confirmation_token: Confirmation token
+        confirmed_at: Confirmed at
+        created_at: Created at
+        current_password: Current password
+        current_sign_in_at: Current sign in at
+        current_sign_in_ip: Current sign in ip
+        email: Email
+        encrypted_password: Encrypted password
+        failed_attempts: Failed attempts
+        geo_city: City
+        geo_country_code: Country
+        geo_state_code: State code
+        id: Id
+        last_sign_in_at: Last sign in at
+        last_sign_in_ip: Last sign in ip
+        locked_at: Locked at
+        name: First name
+        password: Password
+        password_confirmation: Password confirmation
+        phone: Phone
+        phone_country_code: Ext.
+        remember_me: Remember me
+        remember_created_at: Remember created at
+        reset_password_sent_at: Reset password sent at
+        reset_password_token: Reset password token
+        sign_in_count: Login count
+        sso_session: Sso session
+        surname: Surname
+        uid: Uid
+        unconfirmed_email: Unconfirmed email
+        unlock_token: Unlock token
+        updated_at: Updated at
+        website: Website
+    errors:
+      mno_enterprise/user:
+        password_weak: "Password is not strong enough. Try mixing letters, numbers and cases"

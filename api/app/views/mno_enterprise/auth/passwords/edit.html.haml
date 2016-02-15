@@ -5,7 +5,7 @@
     .row
       .login-box-wrapper
         .login-box-title
-          %h2 Change your password
+          %h2= t('.title')
         .login-box
           .brand-logo
           = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, class: 'form-horizontal autofill-detect' }) do |f|
@@ -33,20 +33,9 @@
             .row
               .col-sm-12
                 .text-center
-                  %button{ :class => "btn btn-warning", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'form.$invalid', 'ng-hide' => 'hasClicked' } Change my password
+                  %button{ :class => "btn btn-warning", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'form.$invalid', 'ng-hide' => 'hasClicked' }= t('.change')
                   %img.ng-hide{ 'ng-src' => asset_path('mno_enterprise/loader-32x32-bg-inverse.gif'), 'ng-show' => 'hasClicked' }
             
-            
-            / .field
-            /   = f.label :password, "New password"
-            /   %br/
-            /   = f.password_field :password, autofocus: true, autocomplete: "off", 'ng-model' => 'user.company', class: 'form-control'
-            / .field
-            /   = f.label :password_confirmation, "Confirm new password"
-            /   %br/
-            /   = f.password_field :password_confirmation, autocomplete: "off"
-            / .actions
-            /   = f.submit "Change my password"
             
             %hr
             

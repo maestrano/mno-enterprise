@@ -1,0 +1,9 @@
+id:
+  activemodel:
+    models:
+      mno_enterprise/org_team: Tim organisasi
+    attributes:
+      mno_enterprise/org_team:
+        created_at: Dibuat pada
+        id: Id
+        updated_at: Diperbarui pada

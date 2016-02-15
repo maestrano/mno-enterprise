@@ -1,0 +1,105 @@
+en:
+  mno_enterprise:
+    templates:
+      dashboard:
+        organization:
+          arrears:
+            title: Sorry we couldn't process this payment
+            explanation: Your account is currently in arrears as we were unable to charge your designated credit card.
+            recommendation: "Please make sure your credit card details are up to date, then click the button below."
+            warning: "Unfortunately if we are unable to charge your credit card by %{date}, your applications will be automatically shut down."
+            retry: Retry Payment
+
+          billing:
+            current_billing_html: "Your billing for the current invoicing period is: <b>{{amount}}</b>"
+            current_credit_html: "You have <b>{{amount}}</b> credit on your account to be used for the next payment. Note that this credit account will also be linked to any organization you create."
+            disclaimer: Note that the amount for your current invoicing period is indicative and might not reflect the latest changes in your current billing.
+            about_title: About our billing cycle
+            about_body: Our invoicing period runs from the 25th of the previous month to the 24th of the current month. Any amount due (current spending minus credit) is charged on the 2nd of the following month.
+
+          credit_card:
+            title: Credit Card Details
+            subtitle: "This is a secured, 128-bit SSL encrypted credit card form"
+            cancel: Cancel
+            save: Save
+            cc_form:
+              title: Title
+              title_select: "-- SELECT --"
+              name: Name on card
+              placeholder_name: Name
+              placeholder_surname: Surname
+              number: Card Number
+              cvv: CVV
+              country: Country
+              country_select: "-- SELECT --"
+              expiry: Expiry
+              month_select: "-- MONTH --"
+              year_select: "-- YEAR --"
+            billing_form:
+              header: Billing Address
+              street: Street Address
+              city: City
+              postcode: Postcode
+              country: Country
+              country_select: "-- SELECT --"
+
+          index:
+            title: Company
+            billing:
+              title: Billing
+              current_billing: Current Billing
+              billing_details: Billing Details
+              past_invoices: Past Invoices
+            members:
+              title: Members
+            teams:
+              title: Teams
+              subtitle: Team Management
+              control_access: Control access to your apps
+            settings:
+              title: Settings
+
+          invoices:
+            disclaimer: All amounts are displayed in %{currency}
+            period: Period
+            amount: Amount
+            paid: Paid
+            download: Download
+
+          members:
+            invite_users: Invite Users
+            name: Name
+            surname: Surname
+            email: Email
+            role: Role
+            team: Team
+            team_select: "-- Select Team --"
+            edit: Edit
+            remove: Remove
+            invite_modal:
+              description: Enter the email addresses of the people you want to invite in your company
+              example: "One address per line, e.g.:"
+              disclaimer: Please note that for security reasons unaccepted invites will automatically expire after 3 days.
+              cancel: Cancel
+              next: Next
+              invite: Invite
+            edition_modal:
+              cancel: Cancel
+              change: Change
+              roles:
+                member: A member can see other members and access the company apps
+                power_user: A Power User can see other members and start idle company apps (on per hour plan)
+                admin: An Admin can manage other members (except Super Admin users) and manage the company apps
+                super_admin: A Super Admin has all power within the company including access to billing management
+            removal_modal:
+              title: Confirm action
+              cancel: Cancel
+              remove: Remove
+
+          settings:
+            company_name: Company name
+            connec_data_sharing: Connec!™ Data Sharing
+            enable: On
+            disable: Off
+            cancel: Cancel
+            save: Save

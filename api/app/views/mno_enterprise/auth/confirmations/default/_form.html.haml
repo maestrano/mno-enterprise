@@ -5,13 +5,13 @@
   .row
     .col-sm-12
       = f.text_field :name, placeholder: "*First Name", required: true, 'ng-model' => 'user.name', class:'form-control'
-  
+
   %br
-  
+
   .row
     .col-sm-12
       = f.text_field :surname, placeholder: "*Last Name", required: true, 'ng-model' => 'user.surname', class: 'form-control'
-  
+
   - if @phone_required && MnoEnterprise.style.devise.phone_required
     %br
     .row
@@ -19,31 +19,27 @@
         .phone
           = f.select :phone_country_code, options_for_select(Country.all.map { |country,code| c = Country.new(code); ["#{c.alpha2} +#{c.country_code}", code]}, MnoEnterprise.app_country), {}, class: 'form-control unstyled'
           = f.text_field :phone, placeholder: "*Phone", required: true, 'ng-model' => 'user.phone_number', class: 'form-control'
-  
+
   %br
-  
+
   - # Password: two validation styles offered
   .row
     .col-sm-12
       - if !!MnoEnterprise.style.devise.password_complexity_deep_check
         %div{'mno-password' => 'user', form: "loginForm"}
-    
-        .text-center.ng-hide{ 'ng-show' => 'user.$pwdScore.showTip' }
-          %small.text-danger Password is not strong enough. Try mixing letters, numbers and cases
-      
+
       - else
         .input-group
           = f.password_field :password, :placeholder => "*Choose Password", 'ng-model' => 'user.password', class: 'form-control', 'ng-minlength' => 6, 'mno-password-strength' => true, "password-score" => 'user.$pwdScore', :required => true
           %span.input-group-addon.classic.pw-strength-indicator{'ng-class' => 'user.$pwdScore.class' }
             {{ user.$pwdScore.value }}
-          
-        .text-center.ng-hide{ 'ng-show' => 'user.$pwdScore.showTip' }
-          %small.text-danger Password is not strong enough. Try mixing letters, numbers and cases
-      
-  
+
+      .text-center.ng-hide{ 'ng-show' => 'user.$pwdScore.showTip' }
+        %small.text-danger= t('activemodel.errors.mno_enterprise/user.password_weak')
+
   = f.hidden_field :confirmation_token, value: @confirmation_token
-  
+
   %br/
   %div
-    %button{ :class => "btn btn-warning btn-login", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'loginForm.$invalid', 'ng-hide' => 'hasClicked' } Confirm my account
+    %button{ :class => "btn btn-warning btn-login", :type => "submit", 'ng-click' => 'hasClicked = true', 'ng-disabled' => 'loginForm.$invalid', 'ng-hide' => 'hasClicked' }= t('mno_enterprise.auth.confirmations.show.confirm')
     %img.ng-hide{ 'ng-src' => asset_path('mno_enterprise/loader-32x32-bg-inverse.gif'), 'ng-show' => 'hasClicked' }

@@ -1,0 +1,45 @@
+id:
+  activemodel:
+    models:
+      mno_enterprise/user: Pengguna
+    attributes:
+      mno_enterprise/user:
+        authenticatable_salt: Salt terautentikasi
+        company: Perusahaan
+        confirmation_sent_at: Konfirmasi dikirim pada
+        confirmation_token: Token konfirmasi
+        confirmed_at: Dikonfirmasi pada
+        created_at: Dibuat pada
+        current_password: Kata sandi saat ini
+        current_sign_in_at: Masuk saat ini pada
+        current_sign_in_ip: Ip masuk saat ini
+        email: Email
+        encrypted_password: Kata sandi terenkripsi
+        failed_attempts: Percobaan gagal
+        geo_city: Kota
+        geo_country_code: Negara
+        geo_state_code: Kode negara bagian
+        id: Id
+        last_sign_in_at: Masuk terakhir pada
+        last_sign_in_ip: Ip masuk terakhir
+        locked_at: Dikunci pada
+        name: Nama depan
+        password: Kata sandi
+        password_confirmation: Konfirmasi kata sandi
+        phone: Telepon
+        phone_country_code: Ekstensi
+        remember_me: Ingat saya
+        remember_created_at: Ingat dibuat pada
+        reset_password_sent_at: Penyetelan ulang kata sandi dikirim pada
+        reset_password_token: Token penyetelan ulang kata sandi
+        sign_in_count: Hitungan login
+        sso_session: Sesi Sso
+        surname: Nama belakang
+        uid: Uid
+        unconfirmed_email: Email tidak terkonfirmasi
+        unlock_token: Token buka kunci
+        updated_at: Diperbarui pada
+        website: Situs web
+    errors:
+      mno_enterprise/user:
+        password_weak: "Kata sandi kurang kuat. Cobalah menggabungkan huruf, angka dan huruf besar"

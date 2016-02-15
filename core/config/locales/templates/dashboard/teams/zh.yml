@@ -1,0 +1,43 @@
+zh:
+  mno_enterprise:
+    templates:
+      dashboard:
+        teams:
+          index:
+            no_teams_warning: 您没有任何团队！团队是控制您公司应用程序访问权的一个很好的方法。
+            add_team: 立即添加团队！
+            add_team_light: 添加团队
+            admin_permission_warning: 管理员和超级管理员永远都有权访问所有应用程序。未分配至任何团队的成员默认为有权访问所有应用程序。
+            all: 全部
+            no_apps_warning: 您目前似乎没有任何应用程序。
+            add_app: 立即添加应用程序！
+          member_add_modal:
+            title: 添加团队成员
+            all_belong_to_team_warning: 您的所有公司成员已属于此团队
+            select_company_members: 选择您想要添加至此团队的公司成员
+            close: 关闭
+            cancel: 取消
+            add: 添加
+          member_removal_modal:
+            title: 确认操作
+            confirmation: 您确定要从%{teamname}移除%{fullname}？
+            cancel: 取消
+            remove: 移除
+          team_add_modal:
+            title: 创建新团队
+            enter_team_name: 为您的新团队输入一个名称
+            cancel: 取消
+            create: 创建
+          team_delete_modal:
+            title: 确认操作
+            confirmation: 您真的确定要移除%{teamname}？
+            cancel: 取消
+            remove: 移除
+          team_list:
+            no_team_member_warning: '%{teamname}尚无任何成员！'
+            add_team_members: 添加团队成员
+            tbl_name: 名字
+            tbl_surname: 姓氏
+            tbl_email: 电子邮件
+            tbl_role: 角色
+            remove: 移除
