@@ -7,8 +7,12 @@ module MnoEnterprise
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
     # Autoload all translations from config/locales/**/*.yml
-    config.before_configuration do
-      ::Rails.configuration.i18n.load_path += Dir[config.root.join('locales', '**/*.yml').to_s]
+    initializer "mnoe.load_locales" do |app|
+      # Engine:
+      app.config.i18n.load_path += Dir[config.root.join('config', 'locales', '**/*.yml').to_s]
+
+      # Host app:
+      app.config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**/*.yml').to_s]
     end
 
     # Remove testing support when not in test
