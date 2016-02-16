@@ -97,7 +97,7 @@ zh:
           settings:
             company_name: 公司名称
             connec_data_sharing: Connec!??数据分享
-            enable: "1"
-            disable: 关闭
+            enable: "On"
+            disable: "Off"
             cancel: 取消
             save: 保存
