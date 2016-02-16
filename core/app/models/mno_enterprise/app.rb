@@ -45,6 +45,13 @@ module MnoEnterprise
       @sanitized_description ||= (self.description || '').gsub(/maestrano/i,MnoEnterprise.app_name)
     end
 
+    # Methods for appinfo flags
+    %w(coming_soon single_billing).each do |method|
+      define_method "#{method}?" do
+        appinfo.presence && appinfo[method]
+      end
+    end
+
     def regenerate_api_key!
       data = self.put(operation: 'regenerate_api_key')
       self.api_key = data[:data][:api_key]
