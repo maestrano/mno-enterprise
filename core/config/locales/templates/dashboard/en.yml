@@ -17,7 +17,7 @@ en:
           passwd_form_confirm: Confirm Password
           passwd_form_save: Save
           passwd_form_cancel: Cancel
-          language: Language
+          settings: Settings
 
         app_deletion:
           title: Confirm app deletion
