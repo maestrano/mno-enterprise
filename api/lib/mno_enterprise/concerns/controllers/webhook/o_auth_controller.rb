@@ -51,6 +51,17 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
         uri.fragment = fragment.to_s
         uri.to_s
       end
+
+      def error_message(error_key)
+        case error_key.to_sym
+          when :bad_relinking
+            %{A different account "#{app_instance.oauth_company}" was previously linked to this application, please re-link the same account.}
+          when :unauthorized
+            'We could not validate your credentials, please try again'
+          else
+            error_key
+        end
+      end
   end
 
   #==================================================================
@@ -75,8 +86,9 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
   def callback
     path = session.delete(:redirect_path).presence || mnoe_home_path
 
-    if error = params.fetch(:oauth, {})[:error]
-      path = add_param_to_fragment(path.to_s, 'flash', [{msg: error,  type: :error}.to_json])
+    if error_key = params.fetch(:oauth, {})[:error]
+
+      path = add_param_to_fragment(path.to_s, 'flash', [{msg: error_message(error_key),  type: :error}.to_json])
     end
 
     redirect_to path

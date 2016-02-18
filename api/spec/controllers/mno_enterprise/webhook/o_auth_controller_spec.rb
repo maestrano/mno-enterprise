@@ -63,7 +63,7 @@ module MnoEnterprise
       context 'when there is on oauth error' do
         subject { get :callback, id: app_instance.uid, oauth: {error: :unauthorized} }
 
-        let(:fragment) { "#?#{URI.encode_www_form([['flash', {msg: 'unauthorized', type: :error}.to_json]])}" }
+        let(:fragment) { "#?#{URI.encode_www_form([['flash', {msg: 'We could not validate your credentials, please try again', type: :error}.to_json]])}" }
 
         it { subject; expect(response).to redirect_to(main_app.root_path + fragment) }
       end
