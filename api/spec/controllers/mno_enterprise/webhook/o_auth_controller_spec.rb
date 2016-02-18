@@ -54,6 +54,20 @@ module MnoEnterprise
     describe 'GET #callback' do
       subject { get :callback, id: app_instance.uid }
 
+      context 'when session has redirect_path' do
+        before { session[:redirect_path] = 'http://www.example.com/redirect' }
+
+        it { subject; expect(response).to redirect_to('http://www.example.com/redirect') }
+      end
+
+      context 'when there is on oauth error' do
+        subject { get :callback, id: app_instance.uid, oauth: {error: :unauthorized} }
+
+        let(:fragment) { "#?#{URI.encode_www_form([['flash', {msg: 'unauthorized', type: :error}.to_json]])}" }
+
+        it { subject; expect(response).to redirect_to(main_app.root_path + fragment) }
+      end
+
       it { subject; expect(response).to redirect_to(main_app.root_path) }
     end
 
@@ -83,6 +97,7 @@ module MnoEnterprise
       let(:controller) { described_class.new }
 
       it { expect(subject.send(:add_param_to_fragment, '/#/platform/accounts', 'foo', 'bar')).to eq('/#/platform/accounts?foo=bar') }
+      it { expect(subject.send(:add_param_to_fragment, '/', 'foo', 'bar')).to eq('/#?foo=bar') }
       it { expect(subject.send(:add_param_to_fragment, '/#/platform/dashboard/he/43?en=690', 'foo', 'bar')).to eq('/#/platform/dashboard/he/43?en=690&foo=bar') }
       it { expect(subject.send(:add_param_to_fragment, '/#/platform/dashboard/he/43?en=690', 'foo', [{msg: 'yolo'}])).to eq('/#/platform/dashboard/he/43?en=690&foo=%7B%3Amsg%3D%3E%22yolo%22%7D') }
 

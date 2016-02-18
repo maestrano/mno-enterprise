@@ -45,7 +45,7 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
       #     => "/#/platform/dashboard/he/43?en=690&foo=bar"
       def add_param_to_fragment(url, param_name, param_value)
         uri = URI(url)
-        fragment = URI(uri.fragment)
+        fragment = URI(uri.fragment || "")
         params = URI.decode_www_form(fragment.query || "") << [param_name, param_value]
         fragment.query = URI.encode_www_form(params)
         uri.fragment = fragment.to_s
