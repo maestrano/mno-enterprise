@@ -1,3 +1,5 @@
+require 'fileutils'
+
 #=============================================
 # Enterprise Express Tasks
 #=============================================
@@ -43,8 +45,9 @@ namespace :mnoe do
 
       # Setup theme previewer working files so we can safely include
       # them in main.less
-      create_file "frontend/src/app/stylesheets/theme-previewer-published.less"
-      create_file "frontend/src/app/stylesheets/theme-previewer-tmp.less"
+      ['theme-previewer-tmp.less','theme-previewer-published.less'].each do |filename|
+        FileUtils.touch(File.join(Rails.root,"frontend/src/app/stylesheets/#{filename}"))
+      end
 
       # Build the frontend
       Rake::Task['mnoe:frontend:dist'].invoke
