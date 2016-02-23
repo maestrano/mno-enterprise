@@ -93,8 +93,4 @@ module MnoEnterprise::Concerns::Models::AppInstance
     self.status == 'running'
   end
 
-  def online?
-    running?
-  end
-
 end
