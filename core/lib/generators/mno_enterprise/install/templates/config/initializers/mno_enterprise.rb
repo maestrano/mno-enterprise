@@ -84,18 +84,6 @@ MnoEnterprise.configure do |config|
   config.mno_api_root_path = Settings.mno.paths.root
 
   #===============================================
-  # Impac! Reporting Configuration
-  #===============================================
-  # ==> Impac! API Configuration
-  # Configure the API host
-  # config.impac_api_host = "https://api-impac-uat.maestrano.io"
-  config.impac_api_host = "#{Settings.impac.protocol}://#{Settings.impac.host}"
-
-  # Configure the API root path
-  # config.impac_api_root_path = "/api"
-  config.impac_api_root_path = Settings.impac.paths.root
-
-  #===============================================
   # Marketplace Listing
   #===============================================
   # config.marketplace_listing = [
