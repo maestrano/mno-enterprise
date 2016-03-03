@@ -14,10 +14,7 @@ module MnoEnterprise
 
     # Stub user and user call
     let(:user) { build(:user) }
-    before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
-    end
+    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
 
     # Stub organization/app_instance + associations
     let(:organization) { build(:organization) }

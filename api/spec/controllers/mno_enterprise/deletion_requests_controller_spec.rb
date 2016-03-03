@@ -17,7 +17,6 @@ module MnoEnterprise
     before do
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
       api_stub_for(get: "/users/#{user.id}/deletion_request", response: from_api(user))
-      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
     end
 
     describe "GET #show'" do

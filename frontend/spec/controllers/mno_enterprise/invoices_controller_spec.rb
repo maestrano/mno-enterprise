@@ -13,13 +13,10 @@ module MnoEnterprise
     let(:user) { build(:user) }
     let(:organization) { build(:organization) }
     let(:invoice) { build(:invoice, organization_id: organization.id) }
-    before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(get: "/organizations/#{organization.id}", response: from_api(organization))
-      api_stub_for(get: "/users/#{user.id}/organizations/#{organization.id}", response: from_api(organization))
-      api_stub_for(get: "/invoices", params: {filter: {slug: '**'}}, response: from_api([invoice]))
-      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
-    end
+    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    before { api_stub_for(get: "/organizations/#{organization.id}", response: from_api(organization)) }
+    before { api_stub_for(get: "/users/#{user.id}/organizations/#{organization.id}", response: from_api(organization)) }
+    before { api_stub_for(get: "/invoices", params: { filter: { slug: '**' } }, response: from_api([invoice])) }
 
 
     describe "GET #show" do
