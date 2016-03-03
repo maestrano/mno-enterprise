@@ -8,6 +8,11 @@ module MnoEnterprise
       # Add assets
       if config.respond_to? (:assets)
         config.assets.precompile += %w( mno_enterprise/config.js )
+
+        # Allow sprockets to find file in the config/ path
+        config.before_configuration do
+          config.assets.paths.unshift Rails.root.join('config').to_s
+        end
       end
     end
   end

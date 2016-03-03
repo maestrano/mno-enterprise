@@ -1,4 +1,7 @@
 # Configuration module
+#
+# Recompile if the settings change
+# = depend_on_config
 angular.module('mnoEnterprise.configuration', [])
   .constant('IMPAC_CONFIG', <%= Settings.impac.to_json %>)
   .constant('I18N_CONFIG', {
