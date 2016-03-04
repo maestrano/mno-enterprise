@@ -32,6 +32,34 @@ module MnoEnterprise
         end
       end
 
+      describe '#update' do
+        let(:params) { {name: 'CloudApp', terms_url: 'terms.com'} }
+        subject { put :update, id: app.id, cloud_app: params }
+
+        before { allow(MnoEnterprise::App).to receive(:find) { app } }
+
+        it 'assigns the cloud app' do
+          subject
+          expect(assigns[:cloud_app]).to eq(app)
+        end
+
+        it 'updates the cloud app' do
+          expect(app).to receive(:save) { true }
+          subject
+          expect(app.terms_url).to eq(params[:terms_url])
+        end
+
+        it 'only updates authorized fields' do
+          subject
+          expect(app.name).to eq('My App')
+        end
+
+        it 'is successful' do
+          subject
+          expect(response).to be_success
+        end
+      end
+
       describe "#regenerate_api_key" do
         subject { put :regenerate_api_key, id: app.id }
         

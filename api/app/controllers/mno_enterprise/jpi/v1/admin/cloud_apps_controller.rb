@@ -6,6 +6,17 @@ module MnoEnterprise
       @cloud_apps = MnoEnterprise::App.cloud.all
     end
 
+    # PUT /mnoe/jpi/v1/admin/cloud_apps/:id
+    def update
+      @cloud_app = MnoEnterprise::App.find params[:id]
+
+      if @cloud_app.update(cloud_app_params)
+        render :show, status: :ok
+      else
+        render json: @cloud_app.errors, status: :unprocessable_entity
+      end
+    end
+
     # PUT /mnoe/jpi/v1/admin/cloud_apps/:id/regenerate_api_key
     def regenerate_api_key
       @cloud_app = MnoEnterprise::App.find params[:id]
@@ -24,6 +35,12 @@ module MnoEnterprise
       else
         render json: result, status: 400
       end
+    end
+
+    private
+
+    def cloud_app_params
+      params.require(:cloud_app).permit(:terms_url, :description)
     end
   end
 end
