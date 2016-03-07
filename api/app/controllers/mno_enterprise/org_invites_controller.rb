@@ -3,10 +3,11 @@ module MnoEnterprise
     before_filter :authenticate_user!
     
     # GET /org_invites/1?token=HJuiofjpa45A73255a74F534FDfds
+    # TODO: improve integration with new frontends
     def show
       @current_user = current_user
       @org_invite = MnoEnterprise::OrgInvite.active.where(id: params[:id], token: params[:token]).first
-      redirect_path = myspace_path
+      redirect_path = mnoe_home_path
       
       if @org_invite && !@org_invite.expired? && @org_invite.accept!(current_user)
         redirect_path += "#/?dhbRefId=#{ @org_invite.organization.id}"

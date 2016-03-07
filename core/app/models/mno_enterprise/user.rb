@@ -163,13 +163,6 @@ module MnoEnterprise
       org ? org.role : nil
     end
 
-    # Checks whether a password is needed or not. For validations only.
-    # Passwords are always required if it's a new record, or if the password
-    # or confirmation are being set somewhere.
-    def password_required?
-      !persisted? || !password.nil? || !password_confirmation.nil?
-    end
-
     private
     def expire_user_cache
       Rails.cache.delete(['user', self.to_key])
