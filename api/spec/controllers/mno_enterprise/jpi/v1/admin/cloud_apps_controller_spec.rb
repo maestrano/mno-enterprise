@@ -28,7 +28,7 @@ module MnoEnterprise
         
         it 'returns the cloud aplications' do
           subject
-          expect(JSON.parse(response.body)).to eq({"cloud_apps"=>[{"id"=>app.id, "uid"=>app.uid, "name"=>app.name, "api_key"=>app.api_key, "tiny_description"=>app.tiny_description, "description"=>app.description, "metadata_url"=>nil, "details"=>nil}]})
+          expect(JSON.parse(response.body)).to eq({"cloud_apps"=>[{"id"=>app.id, "uid"=>app.uid, "name"=>app.name, "api_key"=>app.api_key, "tiny_description"=>app.tiny_description, "description"=>app.description, "metadata_url"=>nil, "details"=>nil, "terms_url"=>app.terms_url}]})
         end
       end
 
