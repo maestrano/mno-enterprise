@@ -40,7 +40,7 @@ module MnoEnterprise
     private
 
     def cloud_app_params
-      params.require(:cloud_app).permit(:terms_url, :description)
+      params.require(:cloud_app).permit(:terms_url, :description, :tiny_description)
     end
   end
 end
