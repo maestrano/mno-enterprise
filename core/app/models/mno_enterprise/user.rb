@@ -62,7 +62,6 @@ module MnoEnterprise
       validates :password, format: { with: Devise.password_regex, message: Devise.password_regex_message }, if: :password_required?
     end
 
-
     #================================
     # Associations
     #================================
@@ -134,7 +133,7 @@ module MnoEnterprise
     def errors
       @errors ||= ActiveModel::Errors.new(self)
     end
-    
+
     #================================
     # Instance Methods
     #================================

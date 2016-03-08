@@ -15,6 +15,12 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   # Instance methods
   #==================================================================
 
+  # Default email sender
+  # Override to allow dynamic sender
+  def default_sender
+    DEFAULT_SENDER
+  end
+
   # ==> Devise Email
   # Description:
   #   Email asking users to confirm their email
@@ -28,7 +34,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   def confirmation_instructions(record, token, opts={})
     template = record.confirmed? && record.unconfirmed_email? ? 'reconfirmation-instructions' : 'confirmation-instructions'
     MandrillClient.deliver(template,
-      DEFAULT_SENDER,
+      default_sender,
       recipient(record),
       user_vars(record).merge(confirmation_link: user_confirmation_url(confirmation_token: token))
     )
@@ -46,7 +52,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   #
   def reset_password_instructions(record, token, opts={})
     MandrillClient.deliver('reset-password-instructions',
-      DEFAULT_SENDER,
+      default_sender,
       recipient(record),
       user_vars(record).merge(reset_password_link: edit_user_password_url(reset_password_token: token))
     )
@@ -64,7 +70,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   #
   def unlock_instructions(record, token, opts={})
     MandrillClient.deliver('unlock-instructions',
-      DEFAULT_SENDER,
+      default_sender,
       recipient(record),
       user_vars(record).merge(unlock_link: user_unlock_url(unlock_token: token))
     )
@@ -96,7 +102,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     email_template = new_user ? 'organization-invite-new-user' : 'organization-invite-existing-user'
 
     MandrillClient.deliver(email_template,
-      DEFAULT_SENDER,
+      default_sender,
       recipient(org_invite.user,new_user),
       invite_vars(org_invite,new_user).merge(confirmation_link: confirmation_link)
     )
@@ -113,7 +119,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   #   :terminate_account_link
   def deletion_request_instructions(record, deletion_request)
     MandrillClient.deliver('deletion-request-instructions',
-      DEFAULT_SENDER,
+      default_sender,
       recipient(record),
       user_vars(record).merge(terminate_account_link: deletion_request_url(deletion_request))
     )
