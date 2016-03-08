@@ -143,6 +143,14 @@ module MnoEnterprise
       "#{name} #{surname}"
     end
 
+    # Format for audit log
+    def to_audit_event
+      {
+        user_name: to_s,
+        user_email: email
+      }
+    end
+
     # Default value for failed attempts
     def failed_attempts
       read_attribute(:failed_attempts) || 0
