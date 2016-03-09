@@ -16,11 +16,8 @@ module MnoEnterprise
     let(:organization) { build(:organization) }
     let(:app) { build(:app) }
     let(:app_instance) { build(:app_instance) }
-    before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(get: "/app_instances", response: from_api([app_instance]))
-    end
+    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    before { api_stub_for(get: "/app_instances", response: from_api([app_instance])) }
     before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:app).and_return(app) }
 
     describe 'GET #authorize' do

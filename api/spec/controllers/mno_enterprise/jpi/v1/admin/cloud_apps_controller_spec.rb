@@ -15,7 +15,6 @@ module MnoEnterprise
       api_stub_for(get: "/apps", response: from_api([app]))
       api_stub_for(get: "/apps/#{app.id}", response: from_api(app))
       api_stub_for(put: "/apps/#{app.id}", response: from_api(app))
-      api_stub_for(put: "/users/#{admin.id}", response: from_api(admin))
     end
 
     context "admin user" do
