@@ -73,10 +73,40 @@ module MnoEnterprise
     #======================================================================
     # Instance methods
     #======================================================================
-    # Simple cache_key
-    # TODO: use the timestamp for better expiration
-    def cache_key()
-      "#{model_name.cache_key}/#{id}"
+    # Returns a cache key that can be used to identify this record.
+    #
+    #   Product.new.cache_key     # => "products/new"
+    #   Product.find(5).cache_key # => "products/5" (updated_at not available)
+    #   Person.find(5).cache_key  # => "people/5-20071224150000" (updated_at available)
+    #
+    # You can also pass a list of named timestamps, and the newest in the list will be
+    # used to generate the key:
+    #
+    #   Person.find(5).cache_key(:updated_at, :last_reviewed_at)
+    #
+    # Notes: copied from ActiveRecord
+    def cache_key(*timestamp_names)
+      case
+        when new?
+          "#{model_name.cache_key}/new"
+        when timestamp_names.any?
+          timestamp = max_updated_column_timestamp(timestamp_names)
+          timestamp = timestamp.utc.to_s(:nsec)
+          "#{model_name.cache_key}/#{id}-#{timestamp}"
+        when timestamp = max_updated_column_timestamp
+          timestamp = timestamp.utc.to_s(:nsec)
+          "#{model_name.cache_key}/#{id}-#{timestamp}"
+        else
+          "#{model_name.cache_key}/#{id}"
+      end
+    end
+
+    def max_updated_column_timestamp(timestamp_names = [:updated_at])
+      timestamp_names
+          .map { |attr| self[attr] }
+          .compact
+          .map(&:to_time)
+          .max
     end
 
     # ActiveRecord Compatibility for Her

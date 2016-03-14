@@ -86,6 +86,9 @@ MnoEnterprise.configure do |config|
   #===============================================
   # Marketplace Listing
   #===============================================
+  # List of applications that should be offered on the marketplace
+  # Set to nil to offer everything
+  # config.marketplace_listing = nil
   # config.marketplace_listing = [
   #   "allocpsa",
   #   "boxsuite",

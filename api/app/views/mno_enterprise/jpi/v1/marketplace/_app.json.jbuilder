@@ -7,6 +7,7 @@ json.is_responsive app.responsive?
 json.is_star_ready app.star_ready?
 json.is_connec_ready app.connec_ready?
 json.is_coming_soon app.coming_soon?
+json.single_billing app.single_billing?
 
 if app.logo
   json.logo app.logo.to_s

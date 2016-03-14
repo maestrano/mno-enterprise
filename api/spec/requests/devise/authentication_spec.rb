@@ -4,10 +4,8 @@ module MnoEnterprise
   RSpec.describe "Remote Authentication", type: :request do
 
     let(:user) { build(:user) }
-    before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
-    end
+    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
 
     # Stub session authentication
     let(:session_resp_code) { 200 }

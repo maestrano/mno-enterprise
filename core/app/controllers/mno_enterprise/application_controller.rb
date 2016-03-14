@@ -7,7 +7,6 @@ module MnoEnterprise
     before_filter :set_default_meta
     before_filter :store_location
     before_filter :perform_return_to
-    before_filter :record_user_activity
 
 
     # I18n
@@ -118,13 +117,6 @@ module MnoEnterprise
     # Overwriting the sign_out redirect path method
     def after_sign_out_path_for(resource_or_scope)
       MnoEnterprise.router.after_sign_out_url || super
-    end
-
-    def record_user_activity
-      if current_user
-        current_user.last_active_at = Time.now.utc
-        current_user.save
-      end
     end
   end
 end

@@ -25,6 +25,12 @@ module MnoEnterprise
       end
     end
 
+    describe 'appinfo methods' do
+      %i(single_billing? coming_soon?).each do |method|
+        it { expect(described_class.new).to respond_to(method) }
+      end
+    end
+
     describe '#sanitized_description' do
       let(:app) { build(:app, description: "Some description by Maestrano") }
       it 'replaces any mention of maestrano by the name of the platform' do

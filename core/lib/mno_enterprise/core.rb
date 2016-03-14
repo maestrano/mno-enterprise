@@ -208,52 +208,7 @@ module MnoEnterprise
   # List of applications that should be offered on
   # the marketplace
   mattr_accessor :marketplace_listing
-  @@marketplace_listing = [
-    "allocpsa",
-    "boxsuite",
-    "bugzilla",
-    "collabtive",
-    "dolibarr",
-    "drupal",
-    "egroupware",
-    "eventbrite",
-    "feng-office",
-    "front-accounting",
-    "group-office",
-    "hummingbirdshare",
-    "interleave",
-    "jenkins",
-    "joomla",
-    "limesurvey",
-    "mantisbt",
-    "magento",
-    "megaventory",
-    "moodle",
-    "myob",
-    "office-365",
-    "opendocman",
-    "openerp",
-    "openx",
-    "orangehrm",
-    "pentaho-bi",
-    "phreedom",
-    "plandora",
-    "prestashop",
-    "processmaker",
-    "projectpier",
-    "quickbooks",
-    "ranqx",
-    "receipt-bank",
-    "signmee",
-    "simpleinvoices",
-    "so-planning",
-    "spotlight-reporting",
-    "sugarcrm",
-    "timetrex",
-    "vtiger6",
-    "xero",
-    "wordpress"
-  ]
+  @@marketplace_listing = nil
 
   #====================================
   # Module Methods

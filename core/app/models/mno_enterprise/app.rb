@@ -39,10 +39,25 @@ module MnoEnterprise
       app_list.select { |a| a.categories.present? }.map(&:categories).flatten.uniq { |e| e.downcase }.sort
     end
 
+    def to_audit_event
+      {
+        app_id: id,
+        app_nid: nid,
+        app_name: name
+      }
+    end
+
     # Sanitize the app description
     # E.g.: replace any mention of Maestrano by the tenant name
     def sanitized_description
       @sanitized_description ||= (self.description || '').gsub(/maestrano/i,MnoEnterprise.app_name)
+    end
+
+    # Methods for appinfo flags
+    %w(coming_soon single_billing).each do |method|
+      define_method "#{method}?" do
+        appinfo.presence && appinfo[method]
+      end
     end
 
     def regenerate_api_key!

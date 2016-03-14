@@ -47,7 +47,7 @@ module MnoEnterprise
       :remember_created_at, :sign_in_count, :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, 
       :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email, 
       :failed_attempts, :unlock_token, :locked_at, :name, :surname, :company, :phone, :phone_country_code, 
-      :geo_country_code, :geo_state_code, :geo_city, :website, :orga_on_create, :sso_session, :current_password_required, :last_active_at
+      :geo_country_code, :geo_state_code, :geo_city, :website, :orga_on_create, :sso_session, :current_password_required
     
     define_model_callbacks :validation #required by Devise
     devise :remote_authenticatable, :registerable, :recoverable, :rememberable,
@@ -61,7 +61,6 @@ module MnoEnterprise
     if Devise.password_regex
       validates :password, format: { with: Devise.password_regex, message: Devise.password_regex_message }, if: :password_required?
     end
-
 
     #================================
     # Associations
@@ -134,13 +133,21 @@ module MnoEnterprise
     def errors
       @errors ||= ActiveModel::Errors.new(self)
     end
-    
+
     #================================
     # Instance Methods
     #================================
 
     def to_s
       "#{name} #{surname}"
+    end
+
+    # Format for audit log
+    def to_audit_event
+      {
+        user_name: to_s,
+        user_email: email
+      }
     end
 
     # Default value for failed attempts
@@ -161,13 +168,6 @@ module MnoEnterprise
       
       org = self.organizations.to_a.find { |o| o.id.to_s == organization.id.to_s }
       org ? org.role : nil
-    end
-
-    # Checks whether a password is needed or not. For validations only.
-    # Passwords are always required if it's a new record, or if the password
-    # or confirmation are being set somewhere.
-    def password_required?
-      !persisted? || !password.nil? || !password_confirmation.nil?
     end
 
     private

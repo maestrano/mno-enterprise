@@ -56,10 +56,7 @@ module MnoEnterprise
 
     # Stub user retrieval
     let!(:user) { build(:user, :with_deletion_request, :with_organizations) }
-    before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
-    end
+    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
 
     describe "GET #show" do
       subject { get :show }

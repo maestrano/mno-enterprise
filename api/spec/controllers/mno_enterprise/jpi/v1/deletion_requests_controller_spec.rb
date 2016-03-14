@@ -10,10 +10,7 @@ module MnoEnterprise
     # Stub model calls
     let(:deletion_request) { build(:deletion_request) }
     let(:user) { build(:user, deletion_request: deletion_request) }
-    before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
-    end
+    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     before { sign_in user }
 
     describe 'POST #create' do

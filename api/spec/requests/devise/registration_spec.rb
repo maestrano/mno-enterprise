@@ -9,11 +9,10 @@ module MnoEnterprise
     let(:signup_attrs) { {name: "John", surname: "Doe", email: 'john@doecorp.com', password: 'securepassword'} }
 
     # Stub user calls
-    before do
-      api_stub_for(post: '/users', response: from_api(user))
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
-    end
+    before { api_stub_for(post: '/users', response: from_api(user)) }
+    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
+
     # Stub user retrieval using confirmation token
     before { api_stub_for(
         get: '/users',

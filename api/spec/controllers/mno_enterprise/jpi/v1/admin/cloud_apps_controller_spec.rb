@@ -15,7 +15,6 @@ module MnoEnterprise
       api_stub_for(get: "/apps", response: from_api([app]))
       api_stub_for(get: "/apps/#{app.id}", response: from_api(app))
       api_stub_for(put: "/apps/#{app.id}", response: from_api(app))
-      api_stub_for(put: "/users/#{admin.id}", response: from_api(admin))
     end
 
     context "admin user" do
@@ -28,7 +27,35 @@ module MnoEnterprise
         
         it 'returns the cloud aplications' do
           subject
-          expect(JSON.parse(response.body)).to eq({"cloud_apps"=>[{"id"=>app.id, "uid"=>app.uid, "name"=>app.name, "api_key"=>app.api_key, "tiny_description"=>app.tiny_description, "description"=>app.description, "metadata_url"=>nil, "details"=>nil}]})
+          expect(JSON.parse(response.body)).to eq({"cloud_apps"=>[{"id"=>app.id, "uid"=>app.uid, "name"=>app.name, "api_key"=>app.api_key, "tiny_description"=>app.tiny_description, "description"=>app.description, "metadata_url"=>nil, "details"=>nil, "terms_url"=>app.terms_url}]})
+        end
+      end
+
+      describe '#update' do
+        let(:params) { {name: 'CloudApp', terms_url: 'terms.com'} }
+        subject { put :update, id: app.id, cloud_app: params }
+
+        before { allow(MnoEnterprise::App).to receive(:find) { app } }
+
+        it 'assigns the cloud app' do
+          subject
+          expect(assigns[:cloud_app]).to eq(app)
+        end
+
+        it 'updates the cloud app' do
+          expect(app).to receive(:save) { true }
+          subject
+          expect(app.terms_url).to eq(params[:terms_url])
+        end
+
+        it 'only updates authorized fields' do
+          subject
+          expect(app.name).to eq('My App')
+        end
+
+        it 'is successful' do
+          subject
+          expect(response).to be_success
         end
       end
 
