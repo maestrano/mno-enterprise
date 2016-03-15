@@ -118,6 +118,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
       MnoEnterprise::SystemNotificationMailer.organization_invite(@org_invite).deliver_now
     end
 
+    # Reload users
+    organization.users.reload
+
     render 'members'
   end
 
