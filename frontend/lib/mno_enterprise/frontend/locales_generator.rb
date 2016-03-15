@@ -31,7 +31,7 @@ module MnoEnterprise
         locale = {}
         flatten_translations('', translation_hash, locale)
 
-        output_file = File.join(@path, "#{locale_code}.json")
+        output_file = File.join(@path, "#{locale_code}.locale.json")
 
         File.open(output_file, 'w') {|f| f.write(JSON.pretty_generate(locale)) }
         puts "--> Generated #{output_file}"

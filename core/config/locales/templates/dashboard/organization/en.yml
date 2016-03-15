@@ -7,7 +7,7 @@ en:
             title: Sorry we couldn't process this payment
             explanation: Your account is currently in arrears as we were unable to charge your designated credit card.
             recommendation: "Please make sure your credit card details are up to date, then click the button below."
-            warning: "Unfortunately if we are unable to charge your credit card by %{date}, your applications will be automatically shut down."
+            warning: "Unfortunately if we are unable to charge your credit card by {{date}}, your applications will be automatically shut down."
             retry: Retry Payment
 
           billing:
@@ -60,7 +60,7 @@ en:
               title: Settings
 
           invoices:
-            disclaimer: All amounts are displayed in %{currency}
+            disclaimer: All amounts are displayed in {{currency}}
             period: Period
             amount: Amount
             paid: Paid

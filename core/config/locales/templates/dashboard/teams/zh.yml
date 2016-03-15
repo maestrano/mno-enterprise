@@ -20,7 +20,7 @@ zh:
             add: 添加
           member_removal_modal:
             title: 确认操作
-            confirmation: 您确定要从%{teamname}移除%{fullname}？
+            confirmation: 您确定要从{{teamname}}移除{{fullname}}？
             cancel: 取消
             remove: 移除
           team_add_modal:
@@ -30,11 +30,11 @@ zh:
             create: 创建
           team_delete_modal:
             title: 确认操作
-            confirmation: 您真的确定要移除%{teamname}？
+            confirmation: 您真的确定要移除{{teamname}}？
             cancel: 取消
             remove: 移除
           team_list:
-            no_team_member_warning: '%{teamname}尚无任何成员！'
+            no_team_member_warning: '{{teamname}}尚无任何成员！'
             add_team_members: 添加团队成员
             tbl_name: 名字
             tbl_surname: 姓氏
