@@ -7,7 +7,7 @@ zh:
             title: "对不起我们无法处理此付款"
             explanation: "您的帐户目前尚有欠款，因为我们无法用您指定的信用卡结帐。"
             recommendation: "请确定您的信用卡信息是最新的，然后点击以下按钮。"
-            warning: "很遗憾，如果我们无法在%{date}前使用您的信用卡结帐，您的应用程序将自动关闭。"
+            warning: "很遗憾，如果我们无法在{{date}}前使用您的信用卡结帐，您的应用程序将自动关闭。"
             retry: "重试付款"
 
           billing:
@@ -58,7 +58,7 @@ zh:
               title: 设置
 
           invoices:
-            disclaimer: 所有金额以%{currency}显示
+            disclaimer: 所有金额以{{currency}}显示
             period: 期限
             amount: 金额
             paid: 已支付

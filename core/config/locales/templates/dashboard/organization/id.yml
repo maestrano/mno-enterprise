@@ -7,7 +7,7 @@ id:
             title: "Maaf kami tidak dapat memproses pembayaran ini"
             explanation: "Akun Anda saat ini dalam tunggakan karena kami tidak mampu membebankan kartu kredit Anda."
             recommendation: "Pastikan detail kartu kredit Anda adalah yang terbaru, lalu klik tombol di bawah ini."
-            warning: "Sayang sekali jika kami tidak dapat membebankan kartu kredit Anda pada %{date}, aplikasi Anda akan secara otomatis nonaktif."
+            warning: "Sayang sekali jika kami tidak dapat membebankan kartu kredit Anda pada {{date}}, aplikasi Anda akan secara otomatis nonaktif."
             retry: "Coba Lagi Pembayaran"
 
           billing:
@@ -58,7 +58,7 @@ id:
               title: Penyetelan
 
           invoices:
-            disclaimer: Seluruh jumlah ditampilkan dalam %{currency}
+            disclaimer: Seluruh jumlah ditampilkan dalam {{currency}}
             period: Periode
             amount: Jumlah
             paid: Sudah Dibayar
