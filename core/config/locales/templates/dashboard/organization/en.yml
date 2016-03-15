@@ -93,6 +93,8 @@ en:
                 super_admin: A Super Admin has all power within the company including access to billing management
             removal_modal:
               title: Confirm action
+              body_name: Are you really sure you want to remove {{name}} {{surname}}?
+              body_email: Are you really sure you want to remove {{email}}?
               cancel: Cancel
               remove: Remove
 
