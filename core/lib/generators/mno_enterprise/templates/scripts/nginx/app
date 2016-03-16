@@ -17,8 +17,8 @@ server {
   listen       443;
 
   ssl on;
-  ssl_certificate /etc/nginx/certificates/maestrano.io.wildcard-2015/maestrano.io.wildcard.chained.crt;
-  ssl_certificate_key /etc/nginx/certificates/maestrano.io.wildcard-2015/maestrano.io.wildcard.key;
+  ssl_certificate /etc/nginx/certificates/maestrano.io.wildcard-current/maestrano.io.wildcard.chained.crt;
+  ssl_certificate_key /etc/nginx/certificates/maestrano.io.wildcard-current/maestrano.io.wildcard.key;
 
   root         /apps/<%= app_name %>/current/public;
   index        index.html index.htm;
