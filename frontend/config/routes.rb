@@ -5,11 +5,6 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   root to: redirect { MnoEnterprise.router.dashboard_path }
 
-  # MySpace routes
-  get '/myspace', to: 'pages#myspace'
-  get '/myspace#/apps/dashboard', to: 'pages#myspace', as: 'myspace_home'
-  get '/myspace#/billing', to: 'pages#myspace', as: 'myspace_billing'
-
   # Invoices
   resources :invoices, only: [:show], constraints: { id: /[\w\-]+/ }
 
