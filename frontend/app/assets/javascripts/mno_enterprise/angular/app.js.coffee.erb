@@ -28,10 +28,6 @@ mnoAppModules = [
 mnoAppModules.push('ngMaterial')
 <% end %>
 
-<% if Rails.env.development? %>
-mnoAppModules.push('blndspt.ngPerformance')
-<% end %>
-
 # Declare the application
 @maestranoApp = angular.module('maestrano',mnoAppModules)
 

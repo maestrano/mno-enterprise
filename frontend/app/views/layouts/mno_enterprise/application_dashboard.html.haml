@@ -10,10 +10,6 @@
   %body
     - if current_impersonator
       = render partial: 'layouts/mno_enterprise/impersonate_header'
-      
-    -# ngPerformance
-    - if Rails.env.development? && params[:perf]
-      %div{ 'ng-performance' => true }
 
     %div{ 'mno-notification-widget' => [notice_hash(notice),alert_hash(alert)].to_json, 'user-logged-in' => "#{user_signed_in?}" }
 
