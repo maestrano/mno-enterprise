@@ -5,21 +5,13 @@ mnoAppModules = [
   'ngRoute',
   'ngSanitize',
   'xeditable',
-  'ngReallyClick',
   'ui.bootstrap',
   
   # Internal libraries
   'maestrano.assets',
   'maestrano.utilities',
   'maestrano.components',
-  'maestrano.controllers',
   'maestrano.message-bus',
-  'maestrano.exchange-rates',
-  'maestrano.services',
-  'maestrano.filters',
-  
-  # Frontend modules
-  'maestrano.dashboard'
 ]
 
 # Add Angular Material if requested
@@ -56,39 +48,6 @@ mnoAppModules.push('ngMaterial')
   ]);
 
   return $httpProvider
-])
-
-# Configure routes
-@maestranoApp.config(['$routeProvider', ($routeProvider) ->
-  if window.location.pathname == '/mnoe/myspace'
-    $routeProvider.
-      when('/', {
-        template: "<div dashboard-apps-list></div>"
-      }).
-      when('/account', {
-        template: "<div dashboard-account></div>"
-      }).
-      when('/company', {
-        template: "<div dashboard-organization-index></div>"
-      }).
-      when('/support', {
-        template: "<div dashboard-support></div>"
-      }).
-      when('/billing', {
-        redirectTo: '/company'
-      }).
-      when('/marketplace', {
-        template: "<div dashboard-marketplace></div>"
-      }).
-      when('/marketplace/:appId', {
-        template: "<div dashboard-marketplace-app></div>"
-      }).
-      when('/impac', {
-        template: "<div impac-dashboard ></div>"
-      }).
-      otherwise({
-        redirectTo: '/'
-      })
 ])
 
 # Configure Angular Material Theme
