@@ -1,4 +1,10 @@
-- if MnoEnterprise.style.design.material
-  = render "mno_enterprise/auth/confirmations/material/show"
-- else
-  = render "mno_enterprise/auth/confirmations/default/show"
+.registration
+  .container
+    .row
+      //.col-md-6.col-md-offset-3
+      .login-box-wrapper
+        .login-box-title
+          %h2= t('mno_enterprise.auth.confirmations.show.title')
+        .login-box
+          .brand-logo
+          = render "mno_enterprise/auth/confirmations/form"

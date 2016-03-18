@@ -14,11 +14,6 @@ mnoAppModules = [
   'maestrano.message-bus',
 ]
 
-# Add Angular Material if requested
-<% if MnoEnterprise.style.design.material %>
-mnoAppModules.push('ngMaterial')
-<% end %>
-
 # Declare the application
 @maestranoApp = angular.module('maestrano',mnoAppModules)
 
@@ -49,18 +44,6 @@ mnoAppModules.push('ngMaterial')
 
   return $httpProvider
 ])
-
-# Configure Angular Material Theme
-<% if MnoEnterprise.style.design.material %>
-@maestranoApp.config(['$mdThemingProvider', ($mdThemingProvider) ->
-  $mdThemingProvider.theme('default')
-    .primaryPalette('<%= MnoEnterprise.style.palette.primary %>')
-    .accentPalette('<%= MnoEnterprise.style.palette.accent %>')
-    .warnPalette('<%= MnoEnterprise.style.palette.warn %>')
-    .backgroundPalette('<%= MnoEnterprise.style.palette.background %>')
-])
-<% end %>
-
 
 # Configure asset in rootScope
 @maestranoApp.run(['$rootScope', 'AssetPath', 'TemplatePath','editableOptions', ($rootScope, AssetPath, TemplatePath, editableOptions) ->
