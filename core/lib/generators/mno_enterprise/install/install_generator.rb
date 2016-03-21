@@ -9,6 +9,7 @@ module MnoEnterprise
       class_option :skip_rspec, type: :boolean, default: false, desc: 'Skip rspec-rails installation'
       class_option :skip_factory_girl, type: :boolean, default: false, desc: 'Skip factory_girl installation'
       class_option :skip_frontend, type: :boolean, default: false, desc: 'Skip frontend installation'
+      class_option :skip_admin, type: :boolean, default: false, desc: 'Skip admin installation'
 
       def copy_initializer
         template "Procfile"
@@ -76,6 +77,16 @@ module MnoEnterprise
         end
       end
 
+      def setup_admin
+        unless options[:skip_admin]
+          say("\n")
+          @install_admin = ask_with_default("Would you like to install Maestrano Enterprise Admin Dashboard (frontend)?")
+          if @install_admin
+            rake "mnoe:admin:install"
+          end
+        end
+      end
+
       # Inject engine routes
       def notify_about_routes
         if (routes_file = destination_path.join('config', 'routes.rb')).file? && (routes_file.read !~ %r{mount\ MnoEnterprise::Engine})
@@ -139,6 +150,12 @@ module MnoEnterprise
             say("- You can quickly customize the platform style in frontend/src/app/stylesheets")
             say("- You can customize the whole frontend by overriding mno-enterprise-angular in frontend/src/")
             say("- You can run 'rake mnoe:frontend:dist' to rebuild the frontend after changing frontend/src")
+          end
+
+          if @install_admin
+            say("\n\n")
+            say_status("==> Maestrano Enterprise Admin Dashboard has been installed", nil)
+            say("- You can access the platform with an admin user (admin_role = 'admin')")
           end
 
           say("\n\n")
