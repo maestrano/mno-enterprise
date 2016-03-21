@@ -55,29 +55,6 @@ namespace :mnoe do
       end
     end
 
-    desc "Rebuild the Live Previewer Style"
-    task :rebuild_previewer_style do
-      # Prepare the build folder
-      Rake::Task['mnoe:admin:prepare_build_folder'].execute
-
-      # Build the previewer stylesheet
-      Dir.chdir(frontend_tmp_folder) do
-        sh "npm install"
-        sh "gulp less-concat"
-      end
-
-      # Copy stylesheet to public
-      cp("#{frontend_tmp_folder}/dist/styles/theme-previewer.less","#{admin_dist_folder}/styles/")
-
-      # Copy bower_components to public (used by live previewer)
-      cp_r("#{frontend_tmp_folder}/bower_components","#{admin_dist_folder}/")
-
-      # Clear tmp cache in development
-      if Rails.env.development? || Rails.env.test?
-        Rake::Task['tmp:cache:clear'].execute
-      end
-    end
-
     desc "Reset the admin build folder"
     task :prepare_build_folder do
       # Reset tmp folder from mno-enterprise/frontend-admin source
