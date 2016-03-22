@@ -16,7 +16,10 @@ The goal of this engine is to provide a base that you can easily extend with cus
 4.  [Extending the Frontend](#extending-the-frontend)
 5.  [Replacing the Frontend](#replacing-the-frontend)
 6.  [Generating a database extension](#generating-a-database-extension)
-7.  [Deploy a Puma stack on EC2 via Webistrano/Capistrano](#deploy-a-puma-stack-on-ec2-via-webistranocapistrano)
+7.  [Deploying](#deploying)
+    1.  [Deploy a Puma stack on EC2 via Webistrano/Capistrano](#deploy-a-puma-stack-on-ec2-via-webistranocapistrano)
+    2.  [Sample nginx config for I18n](#sample-nginx-config-for-i18n)
+    3.  [Health Checks](#health-checks)
 8.  [Migrating from v2 to v3](#migrating-from-v2-to-v3)
 9.  [Contributing](#contributing)
 
@@ -117,8 +120,9 @@ eg:
 rails g mno_enterprise:database_extension Organization growth_type:string
 ```
 
+## Deploying
 
-## Deploy a Puma stack on EC2 via Webistrano/Capistrano
+### Deploy a Puma stack on EC2 via Webistrano/Capistrano
 
 **IMPORTANT NOTE:** These are legacy instructions. They will soon be replaced by Docker instructions.
 
@@ -144,7 +148,7 @@ This script will setup a bunch of symlinks for nginx, upstart and monit pointing
 
 That's it. You should be done!
 
-## Sample nginx config for I18n
+### Sample nginx config for I18n
 
 We need to accept URIs like `/en/dashboard` and serve `public/dashboard/index.html`.
 A simple combination of location regex and try_files does the trick.
@@ -163,6 +167,23 @@ server {
 
   try_files  $uri/index.html $uri.html $uri @backend;
 ```
+
+### Health Checks
+
+There are various endpoints to perform health checks:
+
+`/mnoe/ping`: A simple check to see that the app is up. Returns `{status: 'Ok'}`
+
+`/mnoe/version`: Version check. It will returns the version of the different components (app & mnoe gem):
+```json
+{
+  "app-version": "9061048-6811c4a",
+  "mno-enterprise-version": "0.0.1",
+  "env": "test"
+}
+```
+
+`/mnoe/health_check` & `/mnoe/health_check/full`: Complete health check (cache, smtp, database, ...). See [health_check](https://github.com/ianheggie/health_check)
 
 ## Migrating from v2 to v3
 
