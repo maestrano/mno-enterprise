@@ -13,5 +13,3 @@
 // require mno_enterprise/twitter/bootstrap
 //= require_tree ./angular
 //= require_tree ../../templates/mno_enterprise
-
-//= require impac-angular

@@ -175,7 +175,8 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
 
     def new_user_signed_in_session_path(resource, opts)
       if MnoEnterprise.style.workflow.signup_onboarding && opts[:new_user]
-        mno_enterprise.user_setup_index_path
+        warn '[DEPRECATION] Onboarding workflow is deprecated.'
+        after_sign_in_path_for(resource)
       elsif opts[:new_user]
         after_sign_in_path_for(resource)
       else
