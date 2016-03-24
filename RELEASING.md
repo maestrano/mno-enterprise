@@ -34,6 +34,6 @@ If you're doing a stable branch release, you should also ensure that the CHANGEL
 
 Run `rake gem:release`. This will update the gem version from MNOE_VERSION, commit the changes, tag it and push the gems to rubygems.org.
 
-### Send release annoucements
+### Send release announcements
 
 TODO
