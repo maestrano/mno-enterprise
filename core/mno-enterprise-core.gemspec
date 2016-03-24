@@ -33,4 +33,10 @@ Gem::Specification.new do |s|
   # Markdown parsing
   s.add_dependency 'redcarpet', '~> 3.3', '>= 3.3.3'
   s.add_dependency 'sanitize', '~> 4.0'
+
+  # Configuration & Settings
+  # Manage configuration via environment variables
+  s.add_dependency 'figaro'
+  # Config files per environment
+  s.add_dependency 'config', '~> 1.0.0'
 end

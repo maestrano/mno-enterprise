@@ -1,0 +1,9 @@
+zh:
+  activemodel:
+    models:
+      mno_enterprise/deletion_request: "删除要求"
+    attributes:
+      mno_enterprise/deletion_request:
+        created_at: "创建于"
+        id: Id
+        updated_at: "更新于"

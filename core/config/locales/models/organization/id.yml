@@ -1,0 +1,24 @@
+id:
+  activemodel:
+    models:
+      mno_enterprise/organization: Organisasi
+    attributes:
+      mno_enterprise/organization:
+        account_frozen: Akun beku?
+        created_at: Dibuat pada
+        free_trial_end_at: Uji coba gratis berakhir pada
+        geo_city: Kota
+        geo_country_code: Kode negara
+        geo_currency: Mata uang
+        geo_state_code: Kode negara bagian
+        geo_tz: Zona waktu
+        id: Id
+        latitude: Garis lintang
+        logo: Logo
+        longitude: Garis bujur
+        mails: Email kontak
+        meta_data: Metadata
+        name: Nama
+        soa_enabled: Connec!™ diaktifkan
+        uid: Uid
+        updated_at: Diperbarui pada

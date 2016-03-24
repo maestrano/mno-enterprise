@@ -1,0 +1,6 @@
+en:
+  mno_enterprise:
+    webhook:
+      o_auth:
+        authorize:
+          you_are_redirected: You are about to be connected via our integration partner

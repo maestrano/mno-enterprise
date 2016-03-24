@@ -3,17 +3,14 @@
     .row.text-center
       = image_tag("mno_enterprise/main-logo.png")
     .row
-      %h2 Billing Details Required
+      %h2= t('.title')
     %hr
     .row
       .col-md-6.col-md-offset-3
         .align-center
-          %h3
-            Oops! It looks like the free trial has ended for this application and no billing details have been entered.
-          %p Please ask your administrator to enter valid billing details for your company.
+          %h3= t('.explanation')
+          %p= t('.recommendation')
         .spacer4
         .align-center
-          %h5
-            If you think this is a mistake, please send us an email at
-            = mail_to support_email
+          %h5= t('.support_help_html', email: mail_to(support_email))
         .spacer4

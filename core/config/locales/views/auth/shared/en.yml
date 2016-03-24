@@ -1,0 +1,12 @@
+en:
+  mno_enterprise:
+    auth:
+      shared:
+        links:
+          login: Already have an account? Log in
+          signup: Don't have an account? Sign up
+          recover_password: Forgot your password?
+          resend_confirmation: Didn't receive confirmation instructions?
+          unlock: Didn't receive unlock instructions?
+          omni_login: "Sign in with %{provider}"
+          

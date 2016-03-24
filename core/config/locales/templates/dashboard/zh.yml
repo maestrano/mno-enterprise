@@ -1,0 +1,54 @@
+zh:
+  mno_enterprise:
+    templates:
+      dashboard:
+        account:
+          personal_information: 个人信息
+          user_form_name: 名字
+          user_form_surname: 姓氏
+          user_form_email: 电子邮件
+          user_form_phone: 电话
+          user_form_save: 保存
+          user_form_cancel: 取消
+          change_password: 更改密码
+          passwd_form_current: 当前密码
+          passwd_form_new: 新密码
+          passwd_form_confirm: 确认密码
+          passwd_form_save: 保存
+          passwd_form_cancel: 取消
+
+        app_deletion:
+          title: 确认删除应用程序
+          instructions: 为了删除您的应用程序，请在以下的框中输入下列语句。
+          cancel: 取消
+          delete: 删除
+
+        apps_list:
+          title: 仪表板
+          manual_data_sync: 手动数据同步
+          disconnect_link: 断开链接
+          restart: 重启
+          delete: 删除
+          linked_to: 连接至
+          connect: 连接
+          launch_app: 启动应用程序
+          deleted: 已删除
+
+        horizontal_menu:
+          toggle_navigation: 切换导航
+          dashboard: 仪表板
+          impac: Impac!
+          my_account: 我的帐户
+          company: 公司
+          marketplace: 市场
+          logout: 登出
+
+        menu:
+          toggle_navigation: 切换导航
+          dashboard: 仪表板
+          impac: Impac!
+          my_account: 我的帐户
+          company: 公司
+          marketplace: 市场
+          logout: 登出
+          new_company: 新公司

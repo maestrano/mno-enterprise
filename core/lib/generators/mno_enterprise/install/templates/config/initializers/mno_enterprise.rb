@@ -1,5 +1,3 @@
-# require 'mno-enterprise'
-
 MnoEnterprise.configure do |config|
   #===============================================
   # General Configuration
@@ -18,10 +16,10 @@ MnoEnterprise.configure do |config|
   # Maestrano Enterprise Tenant Authentication
   #===============================================
   # Configure your tenant ID
-  config.tenant_id = "my_tenant_id"
+  config.tenant_id = ENV['tenant_id']
 
   # Configure your tenant Key
-  config.tenant_key = "my_tenant_access_key"
+  config.tenant_key = ENV['tenant_key']
 
   #===============================================
   # Emailing
@@ -40,6 +38,9 @@ MnoEnterprise.configure do |config|
   #===============================================
   # External Routes
   #===============================================
+  # Dashboard path
+  # config.router.dashboard_path = '/dashboard/'
+
   # URL of the Terms and Conditions page.
   # Used on Devise Registration pages
   # config.router.terms_url = 'http://mywebsite.com/terms'
@@ -52,7 +53,12 @@ MnoEnterprise.configure do |config|
   #===============================================
   # Angular CSRF protection - Only needed if the AngularJS App
   # is not served through Rails asset pipeline
-  # config.include_angular_csrf = false
+  config.include_angular_csrf = true
+
+  # I18n - Controls:
+  #   - Routing in development
+  #   - Filter and locale management in controllers
+  config.i18n_enabled = true
 
   #===============================================
   # Third Party Plugins
@@ -66,19 +72,16 @@ MnoEnterprise.configure do |config|
   # ==> Maestrano Enterprise API Configuration
   # Configure the API host
   # config.mno_api_host = "https://api-enterprise.maestrano.com"
+  config.mno_api_host = "#{Settings.mno.protocol}://#{Settings.mno.host}"
+
+  # Configure private API host if defined
+  if Settings.mno.private_protocol && Settings.mno.private_host
+    config.mno_api_private_host = "#{Settings.mno.private_protocol}://#{Settings.mno.private_host}"
+  end
 
   # Configure the API root path
   # config.mno_api_root_path = "/v1"
-
-  #===============================================
-  # Impac! Reporting Configuration
-  #===============================================
-  # ==> Impac! API Configuration
-  # Configure the API host
-  # config.impac_api_host = "https://api-impac-uat.maestrano.io"
-
-  # Configure the API root path
-  # config.impac_api_root_path = "/api"
+  config.mno_api_root_path = Settings.mno.paths.root
 
   #===============================================
   # Marketplace Listing

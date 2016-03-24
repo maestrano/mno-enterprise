@@ -1,0 +1,23 @@
+id:
+  activemodel:
+    models:
+      mno_enterprise/credit_card: Kartu kredit
+    attributes:
+      mno_enterprise/credit_card:
+        billing_address: Alamat penagihan
+        billing_city: Kota
+        billing_country: Negara
+        billing_postcode: Kode pos
+        country: Negara
+        created_at: Dibuat pada
+        first_name: Nama depan
+        id: Id
+        last_name: Nama belakang
+        masked_number: Nomor bermasker
+        month: Bulan
+        number: Nomor
+        organization_id: Organisasi
+        title: Judul
+        updated_at: Diperbarui pada
+        verification_value: Verifikasi Kartu Nilai (CVV)
+        year: Tahun

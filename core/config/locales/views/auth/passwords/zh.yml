@@ -1,0 +1,10 @@
+zh:
+  mno_enterprise:
+    auth:
+      passwords:
+        new:
+          title: "找回密码"
+          recover: "找回我的密码"
+        edit:
+          title: "更改您的密码"
+          change: "更改我的密码"

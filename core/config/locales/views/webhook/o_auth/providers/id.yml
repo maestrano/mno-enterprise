@@ -1,0 +1,15 @@
+id:
+  mno_enterprise:
+    webhook:
+      o_auth:
+        providers:
+          myob:
+            which_version_used: Versi MYOB mana yang anda gunakan?
+            my_version_is: "Versi MYOB saya adalah:"
+            connect: Sambungkan
+
+          xero:
+            how_do_you_want_to_connect: How do you want us to connect your Xero account?
+            which_extra_modules: Do you want to connect any of the following extra modules?
+            which_country_for_the_account: What is the country associated with your Xero account?
+            connect: Connect

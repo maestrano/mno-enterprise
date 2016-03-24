@@ -1,0 +1,24 @@
+en:
+  activemodel:
+    models:
+      mno_enterprise/organization: Organization
+    attributes:
+      mno_enterprise/organization:
+        account_frozen: Account frozen?
+        created_at: Created at
+        free_trial_end_at: Free trial end at
+        geo_city: City
+        geo_country_code: Country code
+        geo_currency: Currency
+        geo_state_code: State code
+        geo_tz: Timezone
+        id: Id
+        latitude: Latitude
+        logo: Logo
+        longitude: Longitude
+        mails: Contact emails
+        meta_data: Metadata
+        name: Name
+        soa_enabled: Connec!™ enabled
+        uid: Uid
+        updated_at: Updated at

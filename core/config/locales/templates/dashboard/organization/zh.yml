@@ -1,0 +1,103 @@
+zh:
+  mno_enterprise:
+    templates:
+      dashboard:
+        organization:
+          arrears:
+            title: "对不起我们无法处理此付款"
+            explanation: "您的帐户目前尚有欠款，因为我们无法用您指定的信用卡结帐。"
+            recommendation: "请确定您的信用卡信息是最新的，然后点击以下按钮。"
+            warning: "很遗憾，如果我们无法在{{date}}前使用您的信用卡结帐，您的应用程序将自动关闭。"
+            retry: "重试付款"
+
+          billing:
+            current_billing_html: "您在目前开票期限内的帐单金额是： <b>{{amount}}</b>"
+            current_credit_html: "您的帐户余额有<b>{{amount}}</b>，可供下次付款使用。注意，此信用帐户也会连接至您创建的任何公司组织。"
+            disclaimer: "请注意，您在目前开票期限内的帐单金额仅供参考，不一定能反映您的目前帐单的最新变动。"
+            about_title: "关于我们的帐单周期"
+            about_body: "我们的开票期从上个月的25号至本月24号。任何到期款项（当前支出扣除余额）在下个月的2号结帐。"
+
+          credit_card:
+            title: "信用卡信息"
+            subtitle: "这是一张采用128位元SSL加密的安全信用卡"
+            cancel: "取消"
+            save: "保存"
+            cc_form:
+              title: "标题"
+              title_select: "-- 选择 --"
+              name: "信用卡持有人姓名"
+              number: "信用卡号码"
+              cvv: "安全码"
+              country: "国家"
+              country_select: "-- 选择 --"
+              expiry: "有效期限"
+              month_select: "-- 月 --"
+              year_select: "-- 年 --"
+            billing_form:
+              header: "帐单地址"
+              street: "住址"
+              city: "城市"
+              postcode: "邮编"
+              country: "国家"
+              country_select: "-- 选择 --"
+
+          index:
+            title: 公司
+            billing:
+              title: 计费
+              current_billing: 当前计费
+              billing_details: 计费详情
+              past_invoices: 过去的发票
+            members:
+              title: 成员
+            teams:
+              title: 团队
+              subtitle: 团队管理
+              control_access: 控制访问您的应用程序的权限
+            settings:
+              title: 设置
+
+          invoices:
+            disclaimer: 所有金额以{{currency}}显示
+            period: 期限
+            amount: 金额
+            paid: 已支付
+            download: 下载
+
+          members:
+            invite_users: 邀请用户
+            name: 名字
+            surname: 姓氏
+            email: 电子邮件
+            role: 角色
+            team: 团队
+            team_select: -- 选择团队 --
+            edit: 编辑
+            remove: 移除
+            invite_modal:
+              description: 输入您想要邀请的公司成员的电子邮件地址
+              example: 一行一个地址，例如：
+              disclaimer: 请注意，出于安全原因，未被接受的邀请将在3天后自动失效。
+              cancel: 取消
+              next: 下一步
+              invite: 邀请
+            edition_modal:
+              cancel: 取消
+              change: 更改
+              roles:
+                member: 成员可以看到其他成员及访问公司的应用程序
+                power_user: 高级用户看到其他成员及启动闲置的公司应用程序（按小时计划）
+                admin: 管理员可以管理其他成员（除超级管理员用户之外）及管理公司的应用程序
+                super_admin: 超级管理员拥有公司内所有权限，包括访问计费管理
+            removal_modal:
+              title: 确认操作
+              cancel: 取消
+              remove: 移除
+
+          settings:
+            company_name: 公司名称
+            connec_data_sharing: Connec!??数据分享
+            enable: "On"
+            disable: "Off"
+            cancel: 取消
+            save: 保存

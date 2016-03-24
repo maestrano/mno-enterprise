@@ -1,0 +1,6 @@
+zh:
+  mno_enterprise:
+    webhook:
+      o_auth:
+        authorize:
+          you_are_redirected: 您即将通过我们的集成合作伙伴连接

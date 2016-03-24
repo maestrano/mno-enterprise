@@ -1,0 +1,103 @@
+id:
+  mno_enterprise:
+    templates:
+      dashboard:
+        organization:
+          arrears:
+            title: "Maaf kami tidak dapat memproses pembayaran ini"
+            explanation: "Akun Anda saat ini dalam tunggakan karena kami tidak mampu membebankan kartu kredit Anda."
+            recommendation: "Pastikan detail kartu kredit Anda adalah yang terbaru, lalu klik tombol di bawah ini."
+            warning: "Sayang sekali jika kami tidak dapat membebankan kartu kredit Anda pada {{date}}, aplikasi Anda akan secara otomatis nonaktif."
+            retry: "Coba Lagi Pembayaran"
+
+          billing:
+            current_billing_html: "Tagihan Anda untuk periode tagihan saat ini adalah: <b>{{amount}}</b>"
+            current_credit_html: "Anda memiliki <b>{{amount}}</b> kredit di akun Anda untuk digunakan pada pembayaran berikutnya. Perhatikan bahwa akun kredit ini juga akan dihubungkan ke organisasi apa pun yang Anda buat."
+            disclaimer: "Perhatikan bahwa jumlah untuk periode tagihan Anda bersifat indikatif dan mungkin tidak menunjukkan perubahan terakhir dalam penagihan Anda saat ini."
+            about_title: "Tentang siklus penagihan kami"
+            about_body: "Periode tagihan kami berlangsung dari tanggal 25 pada bulan sebelumnya hingga tanggal 24 bulan ini. Jumlah utang (belanja saat ini dikurangi kredit) dibebankan tanggal 2 pada bulan berikutnya."
+
+          credit_card:
+            title: "Detail Kartu Kredit"
+            subtitle: "Ini merupakan bentuk kartu kredit terenkripsi SSL 128 bit yang aman"
+            cancel: "Batal"
+            save: "Simpan"
+            cc_form:
+              title: "Judul"
+              title_select: "-- PILIH --"
+              name: "Nama pada kartu"
+              number: "Nomor Kartu"
+              cvv: "Verifikasi Kartu Nilai (CVV)"
+              country: "Negara"
+              country_select: "-- PILIH --"
+              expiry: "Kedaluwarsa"
+              month_select: "-- BULAN --"
+              year_select: "-- TAHUN --"
+            billing_form:
+              header: "Alamat penagihan"
+              street: "Alamat Jalan"
+              city: "Kota"
+              postcode: "Kode pos"
+              country: "Negara"
+              country_select: "-- PILIH --"
+
+          index:
+            title: Perusahaan
+            billing:
+              title: Penagihan
+              current_billing: Penagihan Saat Ini
+              billing_details: Detail Penagihan
+              past_invoices: Tagihan Sebelumnya
+            members:
+              title: Anggota
+            teams:
+              title: Tim
+              subtitle: Manajemen Tim
+              control_access: Akses kontrol ke aplikasi Anda
+            settings:
+              title: Penyetelan
+
+          invoices:
+            disclaimer: Seluruh jumlah ditampilkan dalam {{currency}}
+            period: Periode
+            amount: Jumlah
+            paid: Sudah Dibayar
+            download: Unduh
+
+          members:
+            invite_users: Undang Pengguna
+            name: Nama
+            surname: Nama belakang
+            email: Email
+            role: Jabatan
+            team: Tim
+            team_select: -- Pilih Tim --
+            edit: Edit
+            remove: Hapus
+            invite_modal:
+              description: Masukkan alamat email orang-orang yang ingin diundang ke perusahaan Anda
+              example: 'Satu alamat per baris, mis.: '
+              disclaimer: Harap diingat bahwa untuk alasan keamanan, undangan yang tidak diterima akan kedaluwarsa secara otomatis dalam waktu 3 hari.
+              cancel: Batalkan
+              next: Berikutnya
+              invite: Undang
+            edition_modal:
+              cancel: Batalkan
+              change: Ubah
+              roles:
+                member: Anggota dapat melihat anggota lain dan mengakses aplikasi perusahaan
+                power_user: Power User dapat melihat anggota lain dan memulai aplikasi perusahaan yang siaga (berdasarkan perencanaan per jam)
+                admin: Admin dapat mengatur anggota lain (kecuali pengguna Super Admin) dan mengelola aplikasi perusahaan
+                super_admin: Super Admin memiliki seluruh kuasa di perusahaan termasuk akses ke manajemen tagihan
+            removal_modal:
+              title: Konfirmasi tindakan
+              cancel: Batalkan
+              remove: Hapus
+
+          settings:
+            company_name: Nama perusahaan
+            connec_data_sharing: Berbagi Data Connec!™
+            enable: "On"
+            disable: "Off"
+            cancel: Batalkan
+            save: Simpan

@@ -93,8 +93,4 @@ module MnoEnterprise::Concerns::Models::AppInstance
     self.status == 'running'
   end
 
-  def online?
-    running? && [self.created_at, self.started_at].compact.max < 70.seconds.ago
-  end
-
 end

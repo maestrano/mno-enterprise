@@ -1,0 +1,9 @@
+id:
+  activemodel:
+    models:
+      mno_enterprise/deletion_request: Permintaan penghapusan
+    attributes:
+      mno_enterprise/deletion_request:
+        created_at: Dibuat pada
+        id: Id
+        updated_at: Diperbarui pada

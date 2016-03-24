@@ -1,0 +1,9 @@
+en:
+  mno_enterprise:
+    auth:
+      registrations:
+        new:
+          title: Sign Up
+          create: Create my account!
+          user_accept: I accept
+          tos: the Terms of Use

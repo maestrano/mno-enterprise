@@ -1,6 +1,6 @@
 module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
   extend ActiveSupport::Concern
-  
+
   #==================================================================
   # Included methods
   #==================================================================
@@ -8,18 +8,18 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
   # context where it is included rather than being executed in the module's context
   included do
     before_filter :signed_in_and_unconfirmed, only: [:lounge,:update]
-    
+
     private
       # Redirects unless user is signed in and not confirmed yet
       def signed_in_and_unconfirmed
         resource = resource_class.to_adapter.get((send(:"current_#{resource_name}") || MnoEnterprise::User.new).to_key)
         return true if resource && !resource.confirmed?
-    
-        redirect_to mno_enterprise.myspace_path
+
+        redirect_to MnoEnterprise.router.dashboard_path
         return false
       end
   end
-  
+
   #==================================================================
   # Class methods
   #==================================================================
@@ -28,7 +28,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
     #   'some text'
     # end
   end
-  
+
   #==================================================================
   # Instance methods
   #==================================================================
@@ -47,14 +47,14 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
   def show
     @confirmation_token = params[:confirmation_token]
     self.resource = resource_class.find_for_confirmation(@confirmation_token)
-    
+
     # Exit if no resources
     unless resource.errors.empty?
       yield(:error, resource) if block_given?
       respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
       return
     end
-    
+
     # Case 1: user is confirmed but trying to confirm a new email address (change of email)
     # Case 2: user is a new user - in this case a form is displayed with final details to fill
     # Case 3: user is confirmed and clicking again on the link
@@ -71,26 +71,26 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
       end
       return
     end
-    
+
     # Check if phone number should be required
     # Bypassed for invited users
     @phone_required = resource.organizations.map(&:users).flatten.count == 1
     yield(:success, resource) if block_given?
   end
-  
+
   # POST /resource/confirmation/finalize
-  # Confirm a new user and update 
+  # Confirm a new user and update
   def finalize
     @confirmation_token = params[:user].delete(:confirmation_token)
     self.resource = resource_class.find_for_confirmation(@confirmation_token)
-    
+
     # Exit action and redirect if user is already confirmed
     if resource && resource.confirmed?
       yield(:already_confirmed, resource) if block_given?
       redirect_to after_confirmation_path_for(resource_name, resource)
       return
     end
-    
+
     if resource.errors.empty?
       resource.assign_attributes(params[:user]) unless resource.confirmed?
       resource.perform_confirmation(@confirmation_token)
@@ -119,17 +119,17 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
     self.resource = @resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
 
     # Redirect straight away if no changes
-    if @resource.email == params[:user][:email] 
+    if @resource.email == params[:user][:email]
       @resource.resend_confirmation_instructions
       redirect_to mno_enterprise.user_confirmation_lounge_path, notice: "The confirmation email has been resent."
       return
     end
-  
+
     # Update email
     previous_email = @resource.email
     @resource.email = params[:user][:email]
     @resource.skip_reconfirmation!
-  
+
     if @resource.save
       @resource.resend_confirmation_instructions
       yield(:success,resource) if block_given?
@@ -153,7 +153,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
     # TODO: invite acceptance logic should be moved to the 'show' action
     def after_confirmation_path_for(resource_name, resource, opts = {})
       return new_user_session_path unless resource
-    
+
       # 3 days is the duration of an invite.
       if resource.created_at > 3.days.ago
         # First auto confirm the orga invite if user has pending
@@ -175,9 +175,14 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
           org_invite.accept!(resource) unless org_invite.expired?
         end
       end
-      
+
+      new_user_signed_in_session_path(resource, opts)
+    end
+
+    def new_user_signed_in_session_path(resource, opts)
       if MnoEnterprise.style.workflow.signup_onboarding && opts[:new_user]
-        mno_enterprise.user_setup_index_path
+        warn '[DEPRECATION] Onboarding workflow is deprecated.'
+        after_sign_in_path_for(resource)
       elsif opts[:new_user]
         after_sign_in_path_for(resource)
       else

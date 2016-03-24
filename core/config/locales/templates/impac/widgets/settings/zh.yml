@@ -1,0 +1,19 @@
+zh:
+  mno_enterprise:
+    templates:
+      impac:
+        widgets:
+          settings:
+            account:
+              title: 应监控的帐户
+            chart_filters:
+              title: 图表筛选器
+              label_top: 最高
+            hist_mode:
+              label_current: 当前
+              label_history: 历史记录
+            organizations:
+              select_companies: 选择公司
+            time_range:
+              title: 时间范围
+              show_last: 显示上次

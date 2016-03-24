@@ -1,0 +1,11 @@
+zh:
+  mno_enterprise:
+    auth:
+      shared:
+        links:
+          login: "已经有帐户了？请登录"
+          signup: "还没有帐户？注册"
+          recover_password: "忘了您的密码？"
+          resend_confirmation: "没有收到确认指示吗？"
+          unlock: "没有收到解锁指示吗？"
+          omni_login: "向%{provider}登录"

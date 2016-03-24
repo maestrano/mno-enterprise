@@ -1,0 +1,9 @@
+id:
+  mno_enterprise:
+    auth:
+      registrations:
+        new:
+          title: "Daftar"
+          create: "Buat akun saya!"
+          user_accept: "Saya menerima"
+          tos: "Ketentuan Penggunaan"

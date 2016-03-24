@@ -1,0 +1,6 @@
+impac:
+  protocol: https
+  host: api-impac-uat.maestrano.io
+mno:
+  protocol: https
+  host: uat.maestrano.io

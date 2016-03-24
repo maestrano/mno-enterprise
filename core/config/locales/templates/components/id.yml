@@ -1,0 +1,21 @@
+id:
+  mno_enterprise:
+    templates:
+      components:
+        loading_lounge:
+          redirecting_to_app: Mengalihkan ke %{appname}
+          you_will_be_redirected_in: Anda akan dialihkan secara otomatis dalam waktu %{counter}s (atau klik tautan di bawah ini)
+          go_to_my_app: Buka aplikasi saya sekarang!
+          app_is_getting_configured: '%{appname} sedang dikonfigurasi'
+          app_should_be_available_soon: Jangan khawatir, aplikasi akan tersedia dalam beberapa detik lagi.
+          app_is_loading: '%{appname} sedang memuat'
+          app_has_been_idle_for_long: '%{appname} sudah siaga untuk waktu yang lama. Kami sedang memuatnya. Akan segera tersedia!'
+          app_is_getting_setup: '%{appname} sedang melakukan penyetelan'
+          app_is_preparing_for_first_use: '%{appname} sedang mempersiapkan penggunaan pertama. Akan segera tersedia!'
+          app_has_been_deleted: '%{appname} telah dihapus'
+          app_has_been_removed_by_admin: '%{appname} telah dihapus oleh administrator Anda dan tidak dapat diakses lagi.'
+          app_is_idle: '%{appname} sedang siaga'
+          cannot_start_app: Sayang sekali, aplikasi ini tidak dapat DIAKTIFKAN
+          app_not_found: Aplikasi tidak ditemukan
+          app_not_managed_by_us: Aplikasi yang Anda minta tampaknya tidak dikelola oleh kami.
+          did_you_type_the_right_url: Anda yakin sudah mengetik url yang benar?

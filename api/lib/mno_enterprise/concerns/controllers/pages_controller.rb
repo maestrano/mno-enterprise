@@ -69,7 +69,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
         stopped_at: app_instance.stopped_at,
         created_at: app_instance.created_at,
         server_time: Time.now.utc,
-        is_online: app_instance.online?,
+        is_online: app_instance.running?,
         errors: app_instance.errors ? app_instance.errors.full_messages : [],
         logo: app_instance.app.logo
       }

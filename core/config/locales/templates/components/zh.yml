@@ -1,0 +1,21 @@
+zh:
+  mno_enterprise:
+    templates:
+      components:
+        loading_lounge:
+          redirecting_to_app: 重定向至%{appname}
+          you_will_be_redirected_in: 您将在%{counter}之内自动重定向（或点击以下链接）
+          go_to_my_app: 立即转到我的应用程序！
+          app_is_getting_configured: '%{appname} 正在配置中'
+          app_should_be_available_soon: 别担心，应该在几秒钟后即可使用。
+          app_is_loading: '%{appname} 正在载入中'
+          app_has_been_idle_for_long: '%{appname} 已闲置很长的时间。我们目前正在载入它。应该很快就能使用了！'
+          app_is_getting_setup: '%{appname} 正在安装中'
+          app_is_preparing_for_first_use: '%{appname} 正在为首次使用做准备。应该很快就能使用了！'
+          app_has_been_deleted: '%{appname} 已被删除'
+          app_has_been_removed_by_admin: '%{appname} 已被您的管理员删除，因此无法再访问。'
+          app_is_idle: '%{appname} 闲置中'
+          cannot_start_app: 很遗憾，我们不能为您打开此应用程序
+          app_not_found: 找不到应用程序
+          app_not_managed_by_us: 您要求的应用程序似乎不是由我们管理。
+          did_you_type_the_right_url: 您确定您已输入正确的网址？

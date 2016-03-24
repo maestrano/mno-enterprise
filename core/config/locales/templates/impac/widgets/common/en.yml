@@ -1,0 +1,9 @@
+en:
+  mno_enterprise:
+    templates:
+      impac:
+        widgets:
+          common:
+            data_not_found:
+              data_not_found: Data not found
+              are_you_missing_an_app: Are you missing an app ?

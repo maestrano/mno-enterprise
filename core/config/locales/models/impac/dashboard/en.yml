@@ -1,0 +1,13 @@
+en:
+  activemodel:
+    models:
+      mno_enterprise/impac/dashboard: Dashboard
+    attributes:
+      mno_enterprise/impac/dashboard:
+        created_at: Created at
+        id: Id
+        name: Name
+        organization_ids: Organizations
+        updated_at: Updated at
+        widgets_order: Widgets order
+        widgets_templates: Widgets templates

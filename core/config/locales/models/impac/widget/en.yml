@@ -1,0 +1,13 @@
+en:
+  activemodel:
+    models:
+      mno_enterprise/impac/widget: Widget
+    attributes:
+      mno_enterprise/impac/widget:
+        created_at: Created at
+        id: Id
+        name: Name
+        settings: Settings
+        updated_at: Updated at
+        widget_category: Widget category
+        width: Width

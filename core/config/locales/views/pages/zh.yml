@@ -1,0 +1,18 @@
+zh:
+  mno_enterprise:
+    pages:
+      app_access_unauthorized:
+        title: "未授予应用程序访问权"
+        explanation: "对不起，此应用程序的持有者好像未授予您访问权。"
+        recommendation: "请要求此应用程序的管理员通过Maestrano与您分享此应用程序，或直接在应用程序中将您加入为一位用户。"
+        support_help_html: "如果您认为这是一个错误，请发送一封电子邮件至#{email}告诉我们"
+      app_logout:
+        title: "已成功登出应用程序"
+        explanation: "您已成功登出您的应用程序"
+        recommendation: "提示：如果您想要一次登出所有应用程序，只要从Maestrano登出即可！"
+        support_help_html: "如果您认为这是一个错误，请发送一封电子邮件至#{email}告诉我们"
+      billing_details_required:
+        title: "需要帐单信息"
+        explanation: "哎呀！看来此应用程序的免费试用已结束，而又没有输入任何帐单信息。"
+        recommendation: "请您的管理员输入贵公司的有效帐单信息。"
+        support_help_html: "如果您认为这是一个错误，请发送一封电子邮件至#{email}告诉我们"

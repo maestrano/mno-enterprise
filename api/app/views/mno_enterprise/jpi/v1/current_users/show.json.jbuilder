@@ -16,6 +16,9 @@ json.cache! ['v1', @user.cache_key] do
     # Embed association if user is persisted
     if @user.id
       json.admin_role @user.admin_role
+      if current_impersonator
+        json.current_impersonator true
+      end
 
       json.organizations do
         json.array! (@user.organizations || []) do |o|

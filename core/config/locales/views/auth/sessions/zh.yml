@@ -1,0 +1,7 @@
+zh:
+  mno_enterprise:
+    auth:
+      sessions:
+        new:
+          title: 成功登录。
+          sign_in: 成功登录。

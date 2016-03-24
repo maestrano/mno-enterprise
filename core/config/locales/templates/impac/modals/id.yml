@@ -1,0 +1,29 @@
+ id:
+   mno_enterprise:
+     templates:
+       impac:
+        modals:
+          create:
+            title: Buat Dasbor Baru
+            label_name: Nama
+            label_current_company: Perusahaan Saat Ini
+            label_multi_company: Perusahaan Aneka Usaha
+            unauthorized_to_access_company_reporting: Ups! Hanya Admin dan Super Admin yang dapat membuat dasbor untuk perusahaan %{companyname}.
+            please_select_multi_company: Pilih dasbor "Perusahaan Aneka Usaha" untuk memilih data dari perusahaan lain.
+            label_companies: Perusahaan
+            cancel: Batalkan
+            add: Tambahkan
+          delete:
+            title: Hapus Dasbor
+            are_you_sure: Yakin ingin menghapus dasbor analitis ini?
+            cancel: Batalkan
+            add: Hapus
+          formula_modal:
+            title: Kalkulasi Kustom
+            calculation_explanation: 'Buat persamaan kustom dengan akun Anda dan simpan sebagai widget. Untuk membuat persamaan, cukup pilih akun Anda pada daftar dan gunakan operator klasik (contoh:  ({1} + {2}) / {3})'
+            data_being_retrieved: Data Anda sedang diambil...
+            type_formula_below: Ketik rumus Anda di bawah ini
+            formula_result: Hasil
+            formula_legend: Legenda
+            cancel: Batalkan
+            save: Simpan

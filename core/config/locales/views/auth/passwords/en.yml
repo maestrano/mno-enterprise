@@ -1,0 +1,10 @@
+en:
+  mno_enterprise:
+    auth:
+      passwords:
+        new:
+          title: Password Recovery
+          recover: Recover my password
+        edit:
+          title: Change your password
+          change: Change my password

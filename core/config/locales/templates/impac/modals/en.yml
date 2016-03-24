@@ -1,0 +1,31 @@
+en:
+  mno_enterprise:
+    templates:
+      impac:
+        modals:
+          create:
+            title: Create New Dashboard
+            label_name: Name
+            label_current_company: Current Company
+            label_multi_company: Multi Company
+            unauthorized_to_access_company_reporting: "Oops! Only Admins and Super Admins can create dashboards for company %{companyname}."
+            please_select_multi_company: Please select a "Multi Company" dashboard to select data from other companies.
+            label_companies: Companies
+            cancel: Cancel
+            add: Add
+
+          delete:
+            title: Delete Dashboard
+            are_you_sure: Are you sure you want to delete this analytics dashboard?
+            cancel: Cancel
+            add: Delete
+
+          formula_modal:
+            title: Custom Calculation
+            calculation_explanation: "Make a custom equation with your accounts, and save it as a widget. To create an equation, simply select your accounts in the list, and use the classical operators (example: ({1} + {2}) / {3})"
+            data_being_retrieved: Your data is being retrieved...
+            type_formula_below: Type your formula just below
+            formula_result: Result
+            formula_legend: Legend
+            cancel: Cancel
+            save: Save
