@@ -57,12 +57,18 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
 
     # Case 1: user is confirmed but trying to confirm a new email address (change of email)
     # Case 2: user is a new user - in this case a form is displayed with final details to fill
+    # Case 3: user is confirmed and clicking again on the link
     if resource.confirmed?
       resource.perform_confirmation(@confirmation_token)
-      sign_in(resource)
-      set_flash_message(:notice, :confirmed) if is_flashing_format?
-      yield(:reconfirmation_success, resource) if block_given?
-      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+
+      if resource.errors.empty?
+        sign_in(resource)
+        set_flash_message(:notice, :confirmed) if is_flashing_format?
+        yield(:reconfirmation_success, resource) if block_given?
+        respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+      else
+        respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+      end
       return
     end
 
