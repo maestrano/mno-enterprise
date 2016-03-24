@@ -1,0 +1,58 @@
+zh:
+  mno_enterprise:
+    templates:
+      impac:
+        widgets:
+          accounts_accounting_values:
+            widget_settings: 小工具设置
+            cancel: 取消
+            save: 保存
+            data_being_retrieved: 您的数据正在检索中...
+          accounts_assets_summary:
+            widget_settings: 小工具设置
+            cancel: 取消
+            save: 保存
+            data_being_retrieved: 您的数据正在检索中...
+          accounts_balance:
+            widget_settings: 小工具设置
+            cancel: 取消
+            save: 保存
+            data_being_retrieved: 您的数据正在检索中...
+          accounts_comparison:
+            widget_settings: 小工具设置
+            select_accounts_to_compare: 选择您想要比较的帐户。
+            cancel: 取消
+            save: 保存
+            add_account: + 添加账户
+            data_being_retrieved: 您的数据正在检索中...
+          accounts_custom_calculation:
+            data_being_retrieved: 您的数据正在检索中...
+          accounts_expenses_revenue:
+            widget_settings: 小工具设置
+            cancel: 取消
+            save: 保存
+            label_expenses: 支出
+            label_revenue: 收入
+          accounts_payable_receivable:
+            widget_settings: 小工具设置
+            cancel: 取消
+            save: 保存
+            label_payable: 应付账款
+            label_receivable: 应收账款
+            label_accounts_receivable: 应收帐户
+            label_accounts_payable: 应付帐户
+            data_being_retrieved: 您的数据正在检索中...
+          invoices_list:
+            widget_settings: 小工具设置
+            cancel: 取消
+            save: 保存
+            data_being_retrieved: 您的数据正在检索中...
+            label_paid: 已支付
+            label_due: 已到期
+            label_invoiced: 已开发票
+            no_invoices_found_for: 找不到您的%{entitytype}的%{orderby}發票
+          invoices_summary:
+            widget_settings: 小工具设置
+            cancel: 取消
+            save: 保存
+            data_being_retrieved: 您的数据正在检索中...

@@ -1,0 +1,14 @@
+zh:
+  mno_enterprise:
+      templates:
+        dashboard:
+          marketplace:
+            index:
+              title: "市场"
+              select_all: "全部"
+            show:
+              back: "返回"
+              start_app: "立即开始！"
+              tag_responsive: "响应式"
+              tag_star: "Star!™ Tutorials"
+              tag_connec: "Connec!™ Ready"

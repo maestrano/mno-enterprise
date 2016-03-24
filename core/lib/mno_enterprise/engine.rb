@@ -6,6 +6,15 @@ module MnoEnterprise
     # lib
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
+    # Autoload all translations from config/locales/**/*.yml
+    initializer "mnoe.load_locales" do |app|
+      # Engine:
+      app.config.i18n.load_path += Dir[config.root.join('config', 'locales', '**/*.yml').to_s]
+
+      # Host app:
+      app.config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**/*.yml').to_s]
+    end
+
     # Remove testing support when not in test
     unless Rails.env.test?
       path_rejector = lambda { |s| s.include?('/testing_support/') }
@@ -28,6 +37,16 @@ module MnoEnterprise
     # Add responding to JSON to Devise
     config.to_prepare do
       DeviseController.respond_to :html, :json
+    end
+
+    # Use memory store
+    config.before_configuration do
+      ::Rails.configuration.cache_store = :memory_store, { size: 32.megabytes }
+    end
+
+    # Enable ActionController caching
+    config.before_initialize do
+      Rails.application.config.action_controller.perform_caching = true
     end
   end
 end

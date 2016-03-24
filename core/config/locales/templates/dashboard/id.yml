@@ -1,0 +1,50 @@
+id:
+  mno_enterprise:
+    templates:
+      dashboard:
+        account:
+          personal_information: Informasi Pribadi
+          user_form_name: Nama
+          user_form_surname: Nama belakang
+          user_form_email: Email
+          user_form_phone: Telepon
+          user_form_save: Simpan
+          user_form_cancel: Batalkan
+          change_password: Ubah kata sandi
+          passwd_form_current: Kata Sandi Saat Ini
+          passwd_form_new: Kata Sandi Baru
+          passwd_form_confirm: Konfirmasi Kata Sandi
+          passwd_form_save: Simpan
+          passwd_form_cancel: Batalkan
+        app_deletion:
+          title: Konfirmasi penghapusan aplikasi
+          instructions: Untuk menghapus aplikasi, masukkan pernyataan berikut ke dalam kotak di bawah ini.
+          cancel: Batalkan
+          delete: Hapus
+        apps_list:
+          title: Dasbor
+          manual_data_sync: Sinkronisasi Data Manual
+          disconnect_link: Putuskan Tautan
+          restart: Mulai Ulang
+          delete: Hapus
+          linked_to: Ditautkan ke
+          connect: Sambungkan
+          launch_app: Luncurkan Aplikasi
+          deleted: dihapus
+        horizontal_menu:
+          toggle_navigation: Navigasi toggle
+          dashboard: Dasbor
+          impac: Impac!
+          my_account: Akun Saya
+          company: Perusahaan
+          marketplace: Pasar
+          logout: Keluar
+        menu:
+          toggle_navigation: Navigasi toggle
+          dashboard: Dasbor
+          impac: Impac!
+          my_account: Akun Saya
+          company: Perusahaan
+          marketplace: Pasar
+          logout: Keluar
+          new_company: Perusahaan Baru

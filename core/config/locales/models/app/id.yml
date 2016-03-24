@@ -1,0 +1,25 @@
+id:
+  activemodel:
+    models:
+      mno_enterprise/app: Aplikasi
+    attributes:
+      mno_enterprise/app:
+        categories: Kategori
+        created_at: Dibuat pada
+        description: Deskripsi
+        id: Id
+        key_benefits: Manfaat utama
+        key_features: Fitur utama
+        logo: Logo
+        name: Nama
+        nid: Nid
+        pictures: Gambar
+        popup_description: Deskripsi popup
+        slug: Slug
+        stack: Susunan
+        terms_url: Tautan ke ketentuan penggunaan
+        testimonials: Testimoni
+        tiny_description: Deskripsi singkat
+        updated_at: Diperbarui pada
+        website: Situs web
+        worldwide_usage: Penggunaan di seluruh dunia

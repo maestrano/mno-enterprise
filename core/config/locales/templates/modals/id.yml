@@ -1,0 +1,9 @@
+id:
+  mno_enterprise:
+    templates:
+      modals:
+        new_organization:
+          title: Buat Perusahaan Baru
+          enter_new_company_name: Masukkan nama perusahaan baru Anda
+          cancel: Batalkan
+          create: Buat

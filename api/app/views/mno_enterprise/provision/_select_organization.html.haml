@@ -1,17 +1,17 @@
 .banners.promo.dark.darkblue
   .container
     .row
-      %h2 Choose an organization
+      %h2= t('mno_enterprise.provision.select_organization.title')
 .banners.promo
   .container
     .row
       .col-md-6.col-md-offset-3
         .align-center
-          %h3 You belong to multiple organizations
-          %p Please select the organization you are making this new order for
+          %h3= t('mno_enterprise.provision.select_organization.explanation')
+          %p= t('mno_enterprise.provision.select_organization.select')
           = form_tag(new_provision_path, method: :get) do
             - @apps.each do |app|
               = hidden_field_tag 'apps[]', app
             = select_tag :organization_id, options_for_select(@organizations.map { |o| [o.name, o.id]} )
-            = submit_tag 'Go', class: 'btn'
+            = submit_tag t('mno_enterprise.provision.select_organization.submit'), class: 'btn'
         .spacer4

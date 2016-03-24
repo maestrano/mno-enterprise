@@ -1,0 +1,60 @@
+en:
+  mno_enterprise:
+    templates:
+      dashboard:
+        account:
+          my_account: My Account
+          personal_information: Personal Information
+          user_form_name: Name
+          user_form_surname: Surname
+          user_form_email: Email
+          user_form_phone: Phone
+          user_form_save: Save
+          user_form_cancel: Cancel
+          change_password: Change password
+          passwd_form_current: Current Password
+          passwd_form_new: New Password
+          passwd_form_confirm: Confirm Password
+          passwd_form_save: Save
+          passwd_form_cancel: Cancel
+          settings: Settings
+
+        app_deletion:
+          title: Confirm app deletion
+          instructions: In order to delete your app, please enter the following statement in the box below.
+          cancel: Cancel
+          delete: Delete
+
+        apps_list:
+          title: Dashboard
+          manual_data_sync: Manual Data Sync
+          manual_data_sync_tooltip: Trigger a manual sync between {{appname}} and Maestrano.
+          disconnect_link: Disconnect Link
+          disconnect_link_tooltip: Are you sure you want to disconnect {{appname}} and Maestrano?
+          restart: Restart
+          delete: Delete
+          linked_to: Linked to
+          connect: Connect
+          launch_app: Launch App
+          deleted: deleted
+          tutorial: Tutorials
+
+        horizontal_menu:
+          toggle_navigation: Toggle navigation
+          dashboard: Dashboard
+          impac: Impac!
+          my_account: My Account
+          company: Company
+          marketplace: Marketplace
+          logout: Log off
+
+        menu:
+          toggle_navigation: Toggle navigation
+          dashboard: Dashboard
+          impac: Impac!
+          my_account: My Account
+          company: Company
+          marketplace: Marketplace
+          logout: Logout
+          new_company: New Company
+          access_admin_panel: Access Admin Panel

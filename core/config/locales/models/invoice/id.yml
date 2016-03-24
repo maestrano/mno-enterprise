@@ -1,0 +1,9 @@
+id:
+  activemodel:
+    models:
+      mno_enterprise/invoice: Tagihan
+    attributes:
+      mno_enterprise/invoice:
+        created_at: Dibuat pada
+        id: Id
+        updated_at: Diperbarui pada

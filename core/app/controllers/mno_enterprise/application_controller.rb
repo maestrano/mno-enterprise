@@ -8,6 +8,12 @@ module MnoEnterprise
     before_filter :store_location
     before_filter :perform_return_to
 
+
+    # I18n
+    if MnoEnterprise.i18n_enabled
+      include MnoEnterprise::Concerns::Controllers::I18n
+    end
+
     # Angular CSRF
     if MnoEnterprise.include_angular_csrf
       include MnoEnterprise::Concerns::Controllers::AngularCSRF
@@ -92,20 +98,20 @@ module MnoEnterprise
     # Redirect to previous url and reset it
     def after_sign_in_path_for(resource)
       previous_url = session.delete(:previous_url)
-      url = mno_enterprise.respond_to?(:myspace_url) ? mno_enterprise.myspace_url : main_app.root_url
+      url = MnoEnterprise.router.dashboard_path || main_app.root_url
       return (return_to_url(resource) || previous_url || url)
     end
 
     # Some controllers needs to redirect to 'MySpace' which breaks if you dont use mnoe-frontend
-    # Rather than relying on the MainApp to define myspace_path we check it here
+    # Rather than relying on the MainApp to define dashboard_path we check it here
     # The MainApp can redefine this two methods to fit its structure
     # Some of these are extracted to individuals methods like after_provision_path.
     def mnoe_home_path
-      mno_enterprise.respond_to?(:myspace_path) ? mno_enterprise.myspace_path : main_app.root_path
+      MnoEnterprise.router.dashboard_path || main_app.root_path
     end
 
     def mnoe_home_url
-      mno_enterprise.respond_to?(:myspace_url) ? mno_enterprise.myspace_url : main_app.root_url
+      MnoEnterprise.router.dashboard_path || main_app.root_url
     end
 
     # Overwriting the sign_out redirect path method

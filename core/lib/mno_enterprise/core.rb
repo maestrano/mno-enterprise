@@ -23,6 +23,10 @@ require "mno_enterprise/engine"
 
 require 'mno_enterprise/database_extendable'
 
+# Settings
+require 'config'
+require 'figaro'
+
 require 'mandrill'
 require "mandrill_client"
 
@@ -39,6 +43,12 @@ module MnoEnterprise
 
     # Customise after_sign_out url
     attr_accessor :after_sign_out_url
+
+    attr_accessor :dashboard_path
+
+    def dashboard_path
+      @dashboard_path || '/dashboard/'
+    end
 
     def terms_url
       @terms_url || '#'
@@ -60,7 +70,9 @@ module MnoEnterprise
       host_url("/oauth/#{id}/sync",opts)
     end
 
+    # @deprecated Impac is now configured through Settings
     def impac_root_url
+      warn '[DEPRECATION] `impac_root_url` is deprecated. Impac is now configured in the frontend through `Settings`.'
       URI.join(MnoEnterprise.impac_api_host,MnoEnterprise.impac_api_root_path)
     end
 
@@ -110,6 +122,8 @@ module MnoEnterprise
   #====================================
   # Impac
   #====================================
+  # @deprecated Impac is now configured through Settings
+
   mattr_accessor :impac_api_host
   @@impac_api_host = 'https://api-impac-uat.maestrano.io'
 
@@ -131,7 +145,7 @@ module MnoEnterprise
 
   # The Maestrano Enterprise API base path
   mattr_accessor :mno_api_root_path
-  @@mno_api_root_path = "/v1"
+  @@mno_api_root_path = "/api/mnoe/v1"
 
   # Hold the Her API configuration (see configure_api method)
   mattr_reader :mnoe_api_v1
@@ -168,6 +182,10 @@ module MnoEnterprise
   # Angular CSRF
   mattr_accessor :include_angular_csrf
   @@include_angular_csrf = false
+
+  # I18n
+  mattr_accessor :i18n_enabled
+  @@i18n_enabled = false
 
   #====================================
   # Third Party Plugins

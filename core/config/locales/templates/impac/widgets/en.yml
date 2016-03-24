@@ -1,0 +1,66 @@
+en:
+  mno_enterprise:
+    templates:
+      impac:
+        widgets:
+          accounts_accounting_values:
+            widget_settings: Widget settings
+            cancel: Cancel
+            save: Save
+            data_being_retrieved: Your data is being retrieved...
+
+          accounts_assets_summary:
+            widget_settings: Widget settings
+            cancel: Cancel
+            save: Save
+            data_being_retrieved: Your data is being retrieved...
+
+          accounts_balance:
+            widget_settings: Widget settings
+            cancel: Cancel
+            save: Save
+            data_being_retrieved: Your data is being retrieved...
+
+          accounts_comparison:
+            widget_settings: Widget settings
+            select_accounts_to_compare: Select which accounts you wish to compare.
+            cancel: Cancel
+            save: Save
+            add_account: + ADD ACCOUNT
+            data_being_retrieved: Your data is being retrieved...
+
+          accounts_custom_calculation:
+            data_being_retrieved: Your data is being retrieved...
+
+          accounts_expenses_revenue:
+            widget_settings: Widget settings
+            cancel: Cancel
+            save: Save
+            label_expenses: Expenses
+            label_revenue: Revenue
+
+          accounts_payable_receivable:
+            widget_settings: Widget settings
+            cancel: Cancel
+            save: Save
+            label_payable: Payable
+            label_receivable: Receivable
+            label_accounts_receivable: Accounts Receivable
+            label_accounts_payable: Accounts Payable
+            data_being_retrieved: Your data is being retrieved...
+
+          invoices_list:
+            widget_settings: Widget settings
+            cancel: Cancel
+            save: Save
+            data_being_retrieved: Your data is being retrieved...
+            label_paid: Paid
+            label_due: Due
+            label_invoiced: Invoiced
+            no_invoices_found_for: "No %{orderby}invoice found for your %{entitytype}"
+
+          invoices_summary:
+            widget_settings: Widget settings
+            cancel: Cancel
+            save: Save
+            data_being_retrieved: Your data is being retrieved...

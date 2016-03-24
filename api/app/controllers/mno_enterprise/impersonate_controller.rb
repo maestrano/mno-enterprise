@@ -2,8 +2,8 @@ module MnoEnterprise
   class ImpersonateController < ApplicationController
     include MnoEnterprise::ImpersonateHelper
 
-    before_filter :authenticate_user!, except: ["destroy"]
-    before_filter :current_user_must_be_admin!, except: ["destroy"]
+    before_filter :authenticate_user!, except: [:destroy]
+    before_filter :current_user_must_be_admin!, except: [:destroy]
 
     # Perform the user impersonate action
     # GET /impersonate/user/123
@@ -18,18 +18,11 @@ module MnoEnterprise
     end
 
     # Revert the user impersonation
-    # DELETE /impersonation/revert
+    # GET /impersonation/revert
     def destroy
       if current_impersonator
-        user = current_user
+        # user = current_user
         revert_impersonate
-        if user
-          flash[:notice] = "No longer impersonating #{user}"
-        else
-          flash[:notice] = "No longer impersonating a user"
-        end
-      else
-        flash[:notice] = "You weren't impersonating anyone"
       end
       redirect_to '/admin/'
     end

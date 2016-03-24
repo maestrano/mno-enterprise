@@ -1,0 +1,11 @@
+id:
+  mno_enterprise:
+    auth:
+      shared:
+        links:
+          login: "Sudah memiliki akun? Masuk"
+          signup: "Tidak memiliki akun? Daftar"
+          recover_password: "Lupa kata sandi?"
+          resend_confirmation: "Tidak menerima petunjuk konfirmasi?"
+          unlock: "Tidak menerima petunjuk membuka kunci?"
+          omni_login: "Masuk dengan %{provider}"

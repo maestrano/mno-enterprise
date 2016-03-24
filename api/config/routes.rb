@@ -27,7 +27,7 @@ MnoEnterprise::Engine.routes.draw do
 
 
   get "/impersonate/user/:user_id", to: "impersonate#create", as: :impersonate_user
-  delete "/impersonate/revert", to: "impersonate#destroy", as: :revert_impersonate_user
+  get "/impersonate/revert", to: "impersonate#destroy", as: :revert_impersonate_user
 
 
   #============================================================
@@ -146,6 +146,11 @@ MnoEnterprise::Engine.routes.draw do
             put :refresh_metadata
           end
         end
+
+        # Theme Previewer
+        post 'theme/save'
+        post 'theme/reset'
+        put 'theme/logo'
       end
     end
   end

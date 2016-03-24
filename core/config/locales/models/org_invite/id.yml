@@ -1,0 +1,9 @@
+id:
+  activemodel:
+    models:
+      mno_enterprise/org_invite: Undang organisasi
+    attributes:
+      mno_enterprise/org_invite:
+        created_at: Dibuat pada
+        id: Id
+        updated_at: Diperbarui pada

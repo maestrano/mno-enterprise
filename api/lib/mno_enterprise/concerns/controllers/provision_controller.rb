@@ -12,13 +12,7 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     protected
     # The path used after purchased apps have been provisionned
     def after_provision_path
-      # MySpace only defined in frontend
-      # This should be overriden by the main app when not loading frontend
-      if mno_enterprise.respond_to?(:myspace_path)
-        mno_enterprise.myspace_path(anchor: '/')
-      else
-        main_app.root_path
-      end
+      MnoEnterprise.router.dashboard_path || main_app.root_path
     end
 
     helper_method :after_provision_path # To use in the provision view

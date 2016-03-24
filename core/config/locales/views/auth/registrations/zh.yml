@@ -1,0 +1,8 @@
+zh:
+  mno_enterprise:
+    auth:
+      new:
+        title: "注册"
+        create: "创建我的帐户！"
+        user_accept: "我接受"
+        tos: "使用条款"

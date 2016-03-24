@@ -28,4 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'jquery-rails', '~> 4.0'
   # s.add_dependency 'sprockets-rails', '~> 2.2'
   s.add_dependency 'ngannotate-rails', '~> 1.0'
+
+  # Development: Rewrite routes for I18N
+  s.add_dependency 'rack-rewrite'
 end

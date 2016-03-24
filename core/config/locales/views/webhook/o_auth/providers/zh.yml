@@ -1,0 +1,15 @@
+zh:
+  mno_enterprise:
+    webhook:
+      o_auth:
+        providers:
+          myob:
+            which_version_used: 你用哪个MYOB的版本?
+            my_version_is: "我的MYOB的版本是:"
+            connect: 连接
+
+          xero:
+            how_do_you_want_to_connect: How do you want us to connect your Xero account?
+            which_extra_modules: Do you want to connect any of the following extra modules?
+            which_country_for_the_account: What is the country associated with your Xero account?
+            connect: Connect

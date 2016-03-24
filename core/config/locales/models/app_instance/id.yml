@@ -1,0 +1,24 @@
+id:
+  activemodel:
+    models:
+      mno_enterprise/app_instance: App instance
+    attributes:
+      mno_enterprise/app_instance:
+        app_id: Aplikasi
+        autostop_at: Autostop pada
+        autostop_interval: Interval autostop
+        billing_type: Jenis penagihan
+        created_at: Dibuat pada
+        id: Id
+        name: Nama
+        next_status: Status berikutnya
+        owner_id: Pemilik
+        owner_type: Jenis pemilik
+        soa_enabled: Soa diaktifkan
+        stack: Susunan
+        started_at: Dimulai pada
+        status: Status
+        stopped_at: Berhenti pada
+        terminated_at: Diakhiri pada
+        uid: Uid
+        updated_at: Diperbarui pada

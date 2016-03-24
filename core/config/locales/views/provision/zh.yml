@@ -1,0 +1,11 @@
+zh:
+  mno_enterprise:
+    provision:
+      provision_apps:
+        title: "您的订单正在处理中"
+        preparing: 正在处理订单
+      select_organization:
+        title: "选择一个公司"
+        explanation: "您属于多个公司"
+        select: "请选择建立此新订单的公司"
+        submit: "开始"

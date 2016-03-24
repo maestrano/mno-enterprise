@@ -1,0 +1,43 @@
+ id:
+  mno_enterprise:
+    templates:
+      dashboard:
+        teams:
+          index:
+            no_teams_warning: Anda tidak memiliki tim! Tim adalah cara yang bagus untuk mengontrol siapa saja yang memiliki akses ke aplikasi di perusahaan Anda.
+            add_team: Tambahkan Tim Sekarang!
+            add_team_light: tambahkan tim
+            admin_permission_warning: Admin dan Super Admin selalu memiliki akses ke semua aplikasi. Anggota yang tidak dialokasikan ke tim mana pun hanya akan memiliki akses ke semua aplikasi secara default.
+            all: Semua
+            no_apps_warning: Tampaknya Anda tidak memiliki aplikasi apa pun saat ini.
+            add_app: Tambahkan Aplikasi Sekarang!
+          member_add_modal:
+            title: Tambahkan Anggota Tim
+            all_belong_to_team_warning: Semua anggota perusahaan Anda sudah menjadi bagian tim ini
+            select_company_members: Pilih anggota perusahaan yang ingin Anda tambahkan ke tim ini
+            close: Tutup
+            cancel: Batalkan
+            add: Tambahkan
+          member_removal_modal:
+            title: Konfirmasi tindakan
+            confirmation: Yakin ingin menghapus {{fullname}} dari {{teamname}}?
+            cancel: Batalkan
+            remove: Hapus
+          team_add_modal:
+            title: Buat Tim Baru
+            enter_team_name: Masukkan nama tim baru Anda
+            cancel: Batalkan
+            create: Buat
+          team_delete_modal:
+            title: Konfirmasi tindakan
+            confirmation: Yakin ingin menghapus {{teamname}}?
+            cancel: Batalkan
+            remove: Hapus
+          team_list:
+            no_team_member_warning: '{{teamname}} belum memiliki satu pun anggota tim!'
+            add_team_members: Tambahkan Anggota Tim
+            tbl_name: Nama
+            tbl_surname: Nama belakang
+            tbl_email: Email
+            tbl_role: Jabatan
+            remove: Hapus

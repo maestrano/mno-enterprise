@@ -1,0 +1,25 @@
+zh:
+  activemodel:
+    models:
+      mno_enterprise/app: "应用程序"
+    attributes:
+      mno_enterprise/app:
+        categories: "类别"
+        created_at: "创建于"
+        description: "说明"
+        id: Id
+        key_benefits: "主要优点"
+        key_features: "主要特点"
+        logo: "图标"
+        name: "名称"
+        nid: "节点id"
+        pictures: "图片"
+        popup_description: "弹出窗口说明"
+        slug: "别名"
+        stack: "堆叠"
+        terms_url: "使用条款链接"
+        testimonials: "客户见证"
+        tiny_description: "简介"
+        updated_at: "更新于"
+        website: "网址"
+        worldwide_usage: "全球使用"

@@ -1,0 +1,23 @@
+en:
+  activemodel:
+    models:
+      mno_enterprise/credit_card: Credit card
+    attributes:
+      mno_enterprise/credit_card:
+        billing_address: Billing address
+        billing_city: City
+        billing_country: Country
+        billing_postcode: Postcode
+        country: Country
+        created_at: Created at
+        first_name: First name
+        id: Id
+        last_name: Last name
+        masked_number: Masked number
+        month: Month
+        number: Number
+        organization_id: Organization
+        title: Title
+        updated_at: Updated at
+        verification_value: CVV
+        year: Year

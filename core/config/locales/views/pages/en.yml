@@ -1,0 +1,19 @@
+en:
+  mno_enterprise:
+    pages:
+      app_access_unauthorized:
+        title: App Access Not Granted
+        explanation: It looks like the administrator of this application has not granted you access.
+        recommendation: You should ask your administrator to share this application with you.
+        support_help_html: "If you think this is a mistake, please send us an email at #{email}"
+
+      app_logout:
+        title: Successful logout
+        explanation: You have successfully logged out from your application
+        support_help_html: "If you think this is a mistake, please send us an email at #{email}"
+
+      billing_details_required:
+        title: Billing Details Required
+        explanation: Oops! It looks like the free trial has ended for this application and no billing details have been entered.
+        recommendation: Please ask your administrator to enter valid billing details for your company.
+        support_help_html: "If you think this is a mistake, please send us an email at #{email}"

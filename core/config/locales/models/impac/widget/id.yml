@@ -1,0 +1,13 @@
+id:
+  activemodel:
+    models:
+      mno_enterprise/impac/widget: Widget
+    attributes:
+      mno_enterprise/impac/widget:
+        created_at: Dibuat pada
+        id: Id
+        name: Nama
+        settings: Penyetelan
+        updated_at: Diperbarui pada
+        widget_category: Kategori widget
+        width: Lebar

@@ -46,6 +46,13 @@ module MnoEnterprise
       template "rails/test-env.rb", "#{dummy_path}/config/environments/test.rb", force: true
     end
 
+    # Overwrite mnoe less file required by asset pipeline
+    def test_dummy_frontend
+      if defined?(MnoEnterprise::Frontend)
+        create_file("#{dummy_path}/app/assets/stylesheets/main.less", force: true)
+      end
+    end
+
     def test_dummy_clean
       inside dummy_path do
         remove_file ".gitignore"

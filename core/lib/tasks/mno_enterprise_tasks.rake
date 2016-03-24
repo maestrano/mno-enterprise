@@ -1,8 +1,6 @@
-# desc "Explaining what the task does"
-# task :mno_enterprise do
-#   # Task goes here
-# end
-
+#=============================================
+# Rails task extension
+#=============================================
 # /*\ WARNING /*\
 # Make sure you never screw with that tasks. Ever.
 # Otherwise, deletion of all database data may occur.

@@ -1,0 +1,9 @@
+en:
+  activemodel:
+    models:
+      mno_enterprise/org_team: Org team
+    attributes:
+      mno_enterprise/org_team:
+        created_at: Created at
+        id: Id
+        updated_at: Updated at

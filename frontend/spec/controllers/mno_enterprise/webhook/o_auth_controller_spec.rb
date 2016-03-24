@@ -48,7 +48,7 @@ module MnoEnterprise
     describe 'GET #callback' do
       subject { get :callback, id: app_instance.uid }
 
-      it { subject; expect(response).to redirect_to(myspace_path) }
+      it { subject; expect(response).to redirect_to(MnoEnterprise.router.dashboard_path) }
     end
 
     describe 'GET #disconnect' do

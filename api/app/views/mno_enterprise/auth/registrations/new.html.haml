@@ -1,4 +1,11 @@
-- if MnoEnterprise.style.design.material
-  = render "mno_enterprise/auth/registrations/material/new"
-- else
-  = render "mno_enterprise/auth/registrations/default/new"
+.registration
+  .container
+    .row
+      .login-box-wrapper
+        .login-box-title
+          %h2= t('mno_enterprise.auth.registrations.new.title')
+        .login-box
+          .brand-logo
+          = render "mno_enterprise/auth/registrations/form"
+          %hr
+          = render "mno_enterprise/auth/shared/links"

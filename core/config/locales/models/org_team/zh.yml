@@ -1,0 +1,9 @@
+zh:
+  activemodel:
+    models:
+      mno_enterprise/org_team: "公司团队"
+    attributes:
+      mno_enterprise/org_team:
+        created_at: "创建于"
+        id: Id
+        updated_at: "更新于"

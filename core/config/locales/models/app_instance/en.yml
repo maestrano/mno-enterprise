@@ -1,0 +1,24 @@
+en:
+  activemodel:
+    models:
+      mno_enterprise/app_instance: App instance
+    attributes:
+      mno_enterprise/app_instance:
+        app_id: App
+        autostop_at: Autostop at
+        autostop_interval: Autostop interval
+        billing_type: Billing type
+        created_at: Created at
+        id: Id
+        name: Name
+        next_status: Next status
+        owner_id: Owner
+        owner_type: Owner type
+        soa_enabled: Soa enabled
+        stack: Stack
+        started_at: Started at
+        status: Status
+        stopped_at: Stopped at
+        terminated_at: Terminated at
+        uid: Uid
+        updated_at: Updated at

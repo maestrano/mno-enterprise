@@ -1,0 +1,17 @@
+en:
+  mno_enterprise:
+    auth:
+      confirmations:
+        new:
+          title: Confirmation
+          resend: Resend confirmation instructions
+        show:
+          title: Almost there
+          confirm: Confirm my account
+        lounge:
+          title: Congratulations! We've sent you a confirmation link, please check your email inbox.
+          subtitle: If you did not receive the email please click resend.
+          resend: Resend!
+          support_tip_html: "Or if you prefer you can send an email to our %{email} directly and we'll activate it for you."
+          support_team: customer care service
+          support_email_subject: Signup Verification

@@ -1,0 +1,23 @@
+en:
+  mno_enterprise:
+    templates:
+      impac:
+        widgets:
+          settings:
+            account:
+              title: Account to monitor
+
+            chart_filters:
+              title: Chart filters
+              label_top: Top
+
+            hist_mode:
+              label_current: Current
+              label_history: History
+
+            organizations:
+              select_companies: Select Companies
+
+            time_range:
+              title: Time range
+              show_last: Show last

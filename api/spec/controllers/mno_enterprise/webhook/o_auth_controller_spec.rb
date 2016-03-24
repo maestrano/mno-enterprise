@@ -62,10 +62,10 @@ module MnoEnterprise
 
         let(:fragment) { "#?#{URI.encode_www_form([['flash', {msg: 'We could not validate your credentials, please try again', type: :error}.to_json]])}" }
 
-        it { subject; expect(response).to redirect_to(main_app.root_path + fragment) }
+        it { subject; expect(response).to redirect_to(MnoEnterprise.router.dashboard_path + fragment) }
       end
 
-      it { subject; expect(response).to redirect_to(main_app.root_path) }
+      it { subject; expect(response).to redirect_to(MnoEnterprise.router.dashboard_path) }
     end
 
     describe 'GET #disconnect' do
