@@ -1,15 +1,14 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require File.expand_path('../../core/lib/mno_enterprise/version', __FILE__)
-version = MnoEnterprise::VERSION.to_s
+require_relative '../core/lib/mno_enterprise/version.rb'
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "mno-enterprise-frontend"
-  s.version     = version
-  s.authors     = ["Arnaud Lachaume"]
-  s.email       = ["arnaud.lachaume@maestrano.com"]
+  s.version     = MnoEnterprise::VERSION.to_s
+  s.authors     = ["Arnaud Lachaume", "Olivier Brisse"]
+  s.email       = ["developers@maestrano.com"]
   s.homepage    = "https://maestrano.com"
   s.summary     = "Maestrano Enterprise - Frontend"
   s.description = "Angular/Bootstrap frontend for MNOE"
@@ -19,20 +18,14 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   # TODO: add dependencies
-  s.add_dependency 'mno-enterprise-core', version
-  s.add_dependency 'mno-enterprise-api', version
+  s.add_dependency 'mno-enterprise-core', s.version
+  s.add_dependency 'mno-enterprise-api', s.version
 
-  s.add_dependency 'less-rails'
-  s.add_dependency 'therubyracer'
-  s.add_dependency 'haml-rails', '~> 0.9.0'
-  s.add_dependency 'coffee-rails', '~> 4.1.0'
-  s.add_dependency 'jquery-rails', '~> 4.0.3'
-  s.add_dependency 'sprockets-rails', '~> 2.2'
-  s.add_dependency 'ngannotate-rails'
-
-  #TODO: DRY to common dev dependencies
-  s.add_development_dependency 'sqlite3'
-  s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'factory_girl_rails'
-  s.add_development_dependency 'fakeweb', '~> 1.3'
+  s.add_dependency 'less-rails', '~> 2.7'
+  s.add_dependency 'therubyracer', '~> 0.12'
+  s.add_dependency 'haml-rails', '~> 0.9'
+  # s.add_dependency 'coffee-rails', '~> 4.1'
+  s.add_dependency 'jquery-rails', '~> 4.0'
+  # s.add_dependency 'sprockets-rails', '~> 2.2'
+  s.add_dependency 'ngannotate-rails', '~> 1.0'
 end

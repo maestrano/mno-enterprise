@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+eval(File.read(File.dirname(__FILE__) + '/common_mnoe_dependencies.rb'))
 
 # Declare your gem's dependencies in mno_enterprise.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and

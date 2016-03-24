@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+eval(File.read(File.dirname(__FILE__) + '/../common_mnoe_dependencies.rb'))
 
 gem 'mno-enterprise-core', path: '../core'
 gem 'mno-enterprise-api', path: '../api'
