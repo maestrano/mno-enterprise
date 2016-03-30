@@ -1,24 +1,24 @@
 <div id="customers">
   <div class="row">
     <div class="col-lg-3 col-md-6 col-xs-12">
-      <rd-kpi class="kpi-color-1" description="Users" icon="fa-users" loading="!vm.users.list">
-        <rd-kpi-body-number number="{{vm.users.list.length}}"><rd-kpi-body-number>
+      <rd-kpi class="kpi-color-1" description="Users" icon="fa-users" loading="!vm.users.totalCount">
+        <rd-kpi-body-number number="{{vm.users.totalCount}}"><rd-kpi-body-number>
       </rd-kpi>
     </div>
 
     <div class="col-lg-3 col-md-6 col-xs-12">
-      <rd-kpi class="kpi-color-2" description="Organizations" icon="fa-sitemap" loading="!vm.organizations.list">
-        <rd-kpi-body-number number="{{vm.organizations.list.length}}"><rd-kpi-body-number>
+      <rd-kpi class="kpi-color-2" description="Organizations" icon="fa-sitemap" loading="!vm.organizations.totalCount">
+        <rd-kpi-body-number number="{{vm.organizations.totalCount}}"><rd-kpi-body-number>
       </rd-kpi>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
-      <mnoe-users-list list="vm.users.list" view="all"></mnoe-users-list>
+      <mnoe-users-list view="all"></mnoe-users-list>
     </div>
     <div class="col-md-12">
-      <mnoe-organizations-list list="vm.organizations.list" view="all"></mnoe-users-list>
+      <mnoe-organizations-list view="all"></mnoe-users-list>
     </div>
   </div>
 </div>

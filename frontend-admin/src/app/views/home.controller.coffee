@@ -6,41 +6,25 @@
   vm.organizations = {}
   vm.invoices = {}
 
-  # TODO: endpoint in backend
-  countNewUsersLastMonth = () ->
-    _.countBy(vm.users.list, (u) ->
-      dateFrom = moment(_.now()).startOf('month')
-      dateTo = moment(_.now()).endOf('month')
-      moment(u.created_at).isBetween(dateFrom, dateTo)
-    )
-
-  # TODO: endpoint in backend
-  countOrgsWithACreditCard = () ->
-    _.countBy(vm.organizations.list, (o) ->
-      o.credit_card.presence
-    )
-
   # API calls
-  MnoeUsers.list().then(
+  MnoeUsers.count().then(
     (response) ->
-      vm.users.list = response
-      vm.users.countNewLastMonth = countNewUsersLastMonth().true || 0
+      vm.users.kpi = response.data
   )
 
-  MnoeOrganizations.list().then(
+  MnoeOrganizations.count().then(
     (response) ->
-      vm.organizations.list = response
-      vm.organizations.countWithCC = countOrgsWithACreditCard().true || 0
+      vm.organizations.kpi = response.data
   )
 
   MnoeInvoices.lastInvoicingAmount().then(
     (response) ->
-      vm.invoices.lastInvoicingAmount = response
+      vm.invoices.lastInvoicingAmount = response.data
   )
 
   MnoeInvoices.outstandingAmount().then(
     (response) ->
-      vm.invoices.outstandingAmount = response
+      vm.invoices.outstandingAmount = response.data
   )
 
   return

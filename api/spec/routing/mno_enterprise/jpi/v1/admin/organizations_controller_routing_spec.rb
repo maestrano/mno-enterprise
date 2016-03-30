@@ -15,6 +15,9 @@ module MnoEnterprise
     it 'routes to #in_arrears' do
       expect(get('/jpi/v1/admin/organizations/in_arrears')).to route_to("mno_enterprise/jpi/v1/admin/organizations#in_arrears", format: "json")
     end
+
+    it 'routes to #count' do
+      expect(get('/jpi/v1/admin/organizations/count')).to route_to("mno_enterprise/jpi/v1/admin/organizations#count", format: 'json')
+    end
   end
 end
-

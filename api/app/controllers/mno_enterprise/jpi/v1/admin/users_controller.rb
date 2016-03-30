@@ -3,14 +3,21 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/users
     def index
-      @users = MnoEnterprise::User
-      @users = @users.limit(params[:limit]) if params[:limit]
-      @users = @users.skip(params[:offset]) if params[:offset]
-      @users = @users.order_by(params[:order_by]) if params[:order_by]
-      @users = @users.where(params[:where]) if params[:where]
-      @users = @users.all
-
-      response.headers['X-Total-Count'] = @users.metadata[:pagination][:count]
+      if params[:terms]
+        # Search mode
+        @users = []
+        JSON.parse(params[:terms]).map { |t| @users = @users | MnoEnterprise::User.where(Hash[*t]) }
+        response.headers['X-Total-Count'] = @users.count
+      else
+        # Index mode
+        @users = MnoEnterprise::User
+        @users = @users.limit(params[:limit]) if params[:limit]
+        @users = @users.skip(params[:offset]) if params[:offset]
+        @users = @users.order_by(params[:order_by]) if params[:order_by]
+        @users = @users.where(params[:where]) if params[:where]
+        @users = @users.all
+        response.headers['X-Total-Count'] = @users.metadata[:pagination][:count]
+      end
     end
 
     # GET /mnoe/jpi/v1/admin/users/1
@@ -45,6 +52,12 @@ module MnoEnterprise
       user.destroy
 
       head :no_content
+    end
+
+    # GET /mnoe/jpi/v1/admin/users/count
+    def count
+      users_count = MnoEnterprise::Tenant.get('tenant').users_count
+      render json: {count: users_count }
     end
 
     private

@@ -45,7 +45,7 @@
           ng-click="vm.impersonateUser()"
           ng-disabled="!vm.user.confirmed_at">Impersonate</button>
         <div style="position:absolute; left:0; right:0; top:0; bottom:0;"
-          tooltip="User is not confirmed"
+          uib-tooltip="User is not confirmed"
           ng-show="!vm.user.confirmed_at"></div>
       </div>
       <div class="col-sm-12 top-buffer-2">

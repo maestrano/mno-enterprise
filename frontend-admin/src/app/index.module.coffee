@@ -1,7 +1,8 @@
 @App = angular.module 'frontendAdmin', [
   'ngAnimate',
-  'ngMessages',
   'ngAria',
+  'ngCookies',
+  'ngMessages',
   'restangular',
   'ui.router',
   'ui.bootstrap',

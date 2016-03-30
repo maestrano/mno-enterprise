@@ -14,6 +14,7 @@ gulp.task('scripts', function () {
     .pipe($.coffeelint())
     .pipe($.coffeelint.reporter())
     .pipe($.coffee()).on('error', conf.errorHandler('CoffeeScript'))
+    .pipe($.ngAnnotate())
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest(path.join(conf.paths.tmp, '/serve/app')))
     .pipe(browserSync.reload({ stream: true }))

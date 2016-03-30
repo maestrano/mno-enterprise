@@ -2,6 +2,7 @@
   return Restangular.withConfig((RestangularProvider) ->
     RestangularProvider.setBaseUrl('/mnoe/jpi/v1/admin')
     RestangularProvider.setDefaultHeaders({Accept: "application/json"})
+    RestangularProvider.setFullResponse(true)
 
     # Unwrap api response
     RestangularProvider.addResponseInterceptor(

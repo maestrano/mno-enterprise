@@ -6,15 +6,18 @@
   vm.organizations = {}
   vm.invoices = {}
 
-  # API calls
-  MnoeUsers.list().then(
-    (response) ->
-      vm.users.list = response
+  MnoeUsers.registerListChangeCb((promise) ->
+    promise.then(
+      (response) ->
+        vm.users.totalCount = response.headers('x-total-count')
+      )
   )
 
-  MnoeOrganizations.list().then(
-    (response) ->
-      vm.organizations.list = response
+  MnoeOrganizations.registerListChangeCb((promise) ->
+    promise.then(
+      (response) ->
+        vm.organizations.totalCount = response.headers('x-total-count')
+      )
   )
 
   return
