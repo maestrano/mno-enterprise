@@ -55,7 +55,7 @@ Building the frontend requires you to have nodejs and gulp install. While the ra
 
 Once node is installed, you can run the following commands to ensure that all dependencies are installed:
 ```bash
-npm install -g bower gulp gulp-util gulp-load-plugins del gulp-git
+npm install -g bower gulp gulp-util gulp-load-plugins del gulp-git phantomjs
 ```
 
 ## Building the frontend
