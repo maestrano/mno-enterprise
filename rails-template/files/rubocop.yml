@@ -1,0 +1,38 @@
+require: rubocop-rspec
+
+AllCops:
+  Exclude:
+    - 'db/schema.rb'
+    - 'db/migrate/*'
+    - 'bin/**/*'
+    - 'node_modules/**/*'
+    - 'Guardfile'
+  RunRailsCops: true
+
+# Disable for Rake tasks
+Lint/HandleExceptions:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+# Prevent "Use nested module/class definitions instead of compact style."
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+#Metrics/AbcSize:
+#  Max: 16
+#
+#Metrics/ClassLength:
+#  Max: 175
+#
+#Metrics/MethodLength:
+#  Max: 12
+
+# Enabled disabled Cops
+Style/CollectionMethods:
+  Enabled: true
+
+# Do not enforce Hash Style for now
+Style/SpaceInsideHashLiteralBraces:
+  Enabled: false

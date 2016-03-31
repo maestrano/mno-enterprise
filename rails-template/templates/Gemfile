@@ -1,0 +1,56 @@
+source 'https://rubygems.org'
+
+gem 'rails', '~> 4.2.6'
+
+# Maestrano Enterprise Engine
+# Bundle edge Mnoe instead: gem 'mno-enterprise', github: 'maestrano/mno-enterprise'
+gem 'mno-enterprise', '~> 3.0'
+
+# Use puma as the app server
+gem 'puma'
+
+<% gemfile_entries.each do |gem| -%>
+<% if gem.comment -%>
+
+# <%= gem.comment %>
+<% end -%>
+<%= gem.commented_out ? '# ' : '' %>gem '<%= gem.name %>'<%= %(, '#{gem.version}') if gem.version -%>
+<% if gem.options.any? -%>
+, <%= gem.options.map { |k,v|
+  "#{k}: #{v.inspect}" }.join(', ') %>
+<% end -%>
+<% end -%>
+
+
+# Ops gems
+group :uat, :production do
+  gem 'newrelic_rpm'
+end
+
+# CI gems
+group :development do
+  # Security audits
+  gem 'brakeman', require: false
+  gem 'bundler-audit', require: false
+
+  # Style check
+  gem 'rubocop', require: false
+  gem 'rubocop-rspec', require: false
+end
+
+group :development, :test do
+<%- if spring_install? %>
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+  gem 'spring-commands-rspec'
+<% end -%>
+end
+
+group :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'shoulda-matchers'
+
+  # Code coverage
+  gem 'simplecov'
+end
