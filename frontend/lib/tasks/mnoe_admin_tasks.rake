@@ -10,13 +10,18 @@ namespace :mnoe do
     frontend_tmp_folder = 'tmp/build/admin'
     frontend_orig_folder = 'frontend-admin'
 
-    desc "Setup the Enterprise Express Admin Dashboard"
-    task :install do
+    # Use bundled gulp
+    gulp = "./node_modules/.bin/gulp"
+
+    desc "Install dependencies"
+    task :install_dependencies do
       # Install required tools
       sh("which bower || npm install -g bower")
-      sh("which gulp || npm install -g gulp")
-      sh("npm install -g gulp-util gulp-load-plugins del gulp-git")
+    end
 
+
+    desc "Setup the Enterprise Express Admin Dashboard"
+    task install: :install_dependencies do
       # Build the admin
       Rake::Task['mnoe:admin:dist'].invoke
     end
@@ -30,7 +35,7 @@ namespace :mnoe do
       Dir.chdir(frontend_tmp_folder) do
         sh "npm install"
         sh "bower install"
-        sh "gulp"
+        sh gulp
       end
 
       # Ensure distribution folder exists

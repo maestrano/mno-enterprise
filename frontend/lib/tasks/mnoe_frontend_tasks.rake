@@ -11,13 +11,18 @@ namespace :mnoe do
     frontend_tmp_folder = 'tmp/build/frontend'
     frontend_bower_folder = 'bower_components/mno-enterprise-angular'
 
-    desc "Setup the Enterprise Express frontend"
-    task :install do
+    # Use bundled gulp
+    gulp = "./node_modules/.bin/gulp"
+
+    desc "Install dependencies"
+    task :install_dependencies do
       # Install required tools
       sh("which bower || npm install -g bower")
-      sh("which gulp || npm install -g gulp")
-      sh("npm install -g gulp-util gulp-load-plugins del gulp-git")
+    end
 
+    desc "Setup the Enterprise Express frontend"
+    task install: :install_dependencies do
+      # TODO: replace with a frontend download task without using bower
       # Setup bower and dependencies
       bower_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','bower.json')
       cp(bower_src, 'bower.json')
@@ -62,8 +67,8 @@ namespace :mnoe do
       # Build frontend using Gulp
       Dir.chdir(frontend_tmp_folder) do
         sh "npm install"
-        sh "gulp"
-        sh "gulp less-concat"
+        sh gulp
+        sh "#{gulp} less-concat"
       end
 
       # Ensure distribution folder exists
@@ -96,7 +101,7 @@ namespace :mnoe do
       # Build the previewer stylesheet
       Dir.chdir(frontend_tmp_folder) do
         sh "npm install"
-        sh "gulp less-concat"
+        sh "#{gulp} less-concat"
       end
 
       # Copy stylesheet to public
