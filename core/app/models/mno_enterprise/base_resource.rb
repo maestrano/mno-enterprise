@@ -109,6 +109,12 @@ module MnoEnterprise
           .max
     end
 
+    def clear_association_cache
+      self.class.associations[:has_many].each do |assoc|
+        instance_variable_set(:"@_her_association_#{assoc[:name]}", nil)
+      end
+    end
+
     # ActiveRecord Compatibility for Her
     def read_attribute(attr_name)
       get_attribute(attr_name)
