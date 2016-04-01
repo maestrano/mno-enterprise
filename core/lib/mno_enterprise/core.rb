@@ -276,6 +276,9 @@ module MnoEnterprise
         # c.use Faraday::Request::UrlEncoded
         c.request :json
 
+        # Instrumentation in development
+        c.use :instrumentation if Rails.env.development?
+
         # Response
         c.use Her::Middleware::MnoeApiV1ParseJson
 
@@ -283,5 +286,12 @@ module MnoEnterprise
         c.use Faraday::Adapter::NetHttpNoProxy
       end
     end
-
 end
+
+# Instrumentation in development
+ActiveSupport::Notifications.subscribe('request.faraday') do |name, starts, ends, _, env|
+  url = env[:url]
+  http_method = env[:method].to_s.upcase
+  duration = ends - starts
+  Rails.logger.debug '[%s] %s %s (%.3f s)' % [url.host, http_method, url.request_uri, duration]
+end if Rails.env.development?

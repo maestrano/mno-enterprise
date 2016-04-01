@@ -52,11 +52,11 @@ namespace :gem do
   version = File.read("#{root}/MNOE_VERSION").strip
   tag     = "v#{version}"
 
-  def for_each_gem
+  def for_each_gem(version)
     MNOE_GEMS.each do |gem_name|
       yield "pkg/mno-enterprise-#{gem_name}-#{version}.gem"
     end
-    yield "pkg/spree-#{version}.gem"
+    yield "pkg/mno-enterprise-#{version}.gem"
   end
 
   task :ensure_clean_state do
@@ -75,7 +75,7 @@ namespace :gem do
     file = File.join(root, 'core/lib/mno_enterprise/version.rb')
     ruby = File.read(file)
 
-    ruby.gsub!(/^(\s*)VERSION(\s*)= ".*?"$/, "\\1VERSION = '#{version}'")
+    ruby.gsub!(/^(\s*)VERSION(\s*)= '.*?'$/, "\\1VERSION = '#{version}'")
     raise "Could not insert VERSION in #{file}" unless $1
 
     File.open(file, 'w') { |f| f.write ruby }
@@ -97,6 +97,15 @@ namespace :gem do
     mv "mno-enterprise-#{version}.gem", pkgdir
   end
 
+  desc "Install all mnoe gems"
+  task install: :build do
+    for_each_gem(version) do |gem_path|
+      Bundler.with_clean_env do
+        sh "gem install #{gem_path}"
+      end
+    end
+  end
+
   task :bundle do
     sh 'bundle check'
   end
@@ -115,12 +124,12 @@ namespace :gem do
   # Tag commit
   task :tag do
     sh "git tag -m '#{tag} release' #{tag}"
-    # sh "git push --tags"
+    sh "git push --tags"
   end
 
   # Push to rubygems
   task push: :build do
-    for_each_gem do |gem_path|
+    for_each_gem(version) do |gem_path|
       sh "gem push '#{gem_path}'"
     end
   end

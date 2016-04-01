@@ -30,7 +30,7 @@ module Devise
         def serialize_from_session(key,salt)
           record = Rails.cache.fetch(['user', key], expires_in: 5.minutes) do
             to_adapter.get(key)
-          end
+          end.tap(&:clear_association_cache)
           record if record && record.authenticatable_salt == salt
         end
         
