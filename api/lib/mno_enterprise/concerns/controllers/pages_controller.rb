@@ -56,6 +56,15 @@ module MnoEnterprise::Concerns::Controllers::PagesController
     @meta[:description] = "Logged out from application"
   end
 
+  def terms
+    @meta[:title] = 'Terms of Use'
+    @meta[:description] = 'Terms of Use'
+    ts = MnoEnterprise::App.order_by("updated_at.desc").first.updated_at
+    @apps = Rails.cache.fetch(['pages/terms/app-list', ts]) do
+      MnoEnterprise::App.order_by("name.ac").reject{|i| i.terms_url.blank?}
+    end
+  end
+
   private
     def app_instance_hash(app_instance)
       return {} unless app_instance
