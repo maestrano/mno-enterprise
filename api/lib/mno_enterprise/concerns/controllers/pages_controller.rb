@@ -56,6 +56,11 @@ module MnoEnterprise::Concerns::Controllers::PagesController
     @meta[:description] = "Logged out from application"
   end
 
+  def terms
+    @meta[:title] = 'Terms of Use'
+    @meta[:description] = 'Terms of Use'
+  end
+
   private
     def app_instance_hash(app_instance)
       return {} unless app_instance

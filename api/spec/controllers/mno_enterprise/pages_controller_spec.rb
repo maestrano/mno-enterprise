@@ -45,5 +45,11 @@ module MnoEnterprise
       it { expect(response).to be_success }
     end
 
+    describe 'GET #terms' do
+      subject { get :term }
+      before { subject }
+      it { expect(response).to be_success }
+    end
+
   end
 end
