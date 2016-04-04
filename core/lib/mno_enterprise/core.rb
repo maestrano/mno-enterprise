@@ -162,7 +162,7 @@ module MnoEnterprise
   # Mandrill Key for sending emails
   # Points to the default maestrano enterprise account
   mattr_accessor :mandrill_key
-  @@mandrill_key = 'QcrLVdukhBi7iYrTeWHRPQ'
+  @@mandrill_key = nil
 
   # The support email address
   mattr_accessor :support_email
