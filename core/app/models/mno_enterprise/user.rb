@@ -170,10 +170,14 @@ module MnoEnterprise
       org ? org.role : nil
     end
 
-    private
     def expire_user_cache
       Rails.cache.delete(['user', self.to_key])
       true # Don't skip save if above return false (memory_store)
+    end
+
+    def refresh_user_cache
+      self.reload
+      Rails.cache.write(['user', self.to_key], self)
     end
   end
 end

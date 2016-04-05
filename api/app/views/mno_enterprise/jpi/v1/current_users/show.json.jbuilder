@@ -12,14 +12,13 @@ json.cache! ['v1', @user.cache_key] do
     json.country_code @user.geo_country_code || 'US'
     json.website @user.website
     json.sso_session @user.sso_session
-
+    json.admin_role @user.admin_role
+    if current_impersonator
+      json.current_impersonator true
+    end
+    
     # Embed association if user is persisted
     if @user.id
-      json.admin_role @user.admin_role
-      if current_impersonator
-        json.current_impersonator true
-      end
-
       json.organizations do
         json.array! (@user.organizations || []) do |o|
           json.id o.id
