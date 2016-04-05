@@ -55,6 +55,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     # Add the current user as Super Admin
     @organization.add_user(current_user,'Super Admin')
 
+    # Bust cache
+    current_user.refresh_user_cache
+
     render 'show'
   end
 
