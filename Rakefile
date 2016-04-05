@@ -128,7 +128,7 @@ namespace :gem do
   end
 
   # Push to rubygems
-  task push: :build do
+  task :push do
     for_each_gem(version) do |gem_path|
       sh "gem push '#{gem_path}'"
     end
