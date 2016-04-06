@@ -1,6 +1,27 @@
+require 'shellwords'
 
+#
+# Add this template directory to source_paths so that Thor actions like
+# copy_file and template resolve against our source files. If this file was
+# invoked remotely via HTTP, that means the files are not present locally.
+# In that case, use `git clone` to download them to a local temporary dir.
+# Thanks @mattbrictson!
+#
 def current_directory
-  File.expand_path(File.dirname(__FILE__))
+  @current_directory ||=
+      if __FILE__ =~ %r{\Ahttps?://}
+        tempdir = Dir.mktmpdir("mno-enterprise-")
+        at_exit { FileUtils.remove_entry(tempdir) }
+        git :clone => [
+                "--quiet",
+                "https://github.com/maestrano/mno-enterprise.git",
+                tempdir
+            ].map(&:shellescape).join(" ")
+
+        File.join(tempdir, 'rails-template')
+      else
+        File.expand_path(File.dirname(__FILE__))
+      end
 end
 
 # Add the current directory to the path Thor uses

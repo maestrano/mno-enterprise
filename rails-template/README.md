@@ -5,6 +5,12 @@ This template bootstrap a MNO Enterprise project.
 ## How to Use
 
 ```bash
+rails new [project_name] -TSOJ -m https://raw.githubusercontent.com/maestrano/mno-enterprise/master/rails-template/mnoe-app-template.rb
+```
+
+Or
+
+```bash
 rails new [project_name] -TSOJ -m <path-to>/mnoe-app-template.rb
 ```
 
