@@ -27,7 +27,8 @@ module MnoEnterprise
           'phone_country_code' => res.phone_country_code,
           'country_code' => res.geo_country_code || 'US',
           'website' => res.website,
-          'sso_session' => res.sso_session
+          'sso_session' => res.sso_session,
+          'admin_role' => res.admin_role
       }
 
       if res.id
