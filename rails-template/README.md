@@ -32,14 +32,14 @@ foreman start
 
 1. Adds the following gems:
   - CI:
-  -- [rubocop](https://github.com/bbatsov/rubocop): Ruby static code analyzer
-  -- [brakeman](https://github.com/presidentbeef/brakeman): A static analysis security vulnerability scanner
-  -- [bundler-audit](https://github.com/rubysec/bundler-audit): Patch level verification for bundler
+    - [rubocop](https://github.com/bbatsov/rubocop): Ruby static code analyzer
+    - [brakeman](https://github.com/presidentbeef/brakeman): A static analysis security vulnerability scanner
+    - [bundler-audit](https://github.com/rubysec/bundler-audit): Patch level verification for bundler
   - Testing:
-  -- [rspec-rails](https://github.com/rspec/rspec-rails): Rspec is a testing tool for test-driven and behavior-driven development..
-  -- [factory_girl_rails](https://github.com/thoughtbot/factory_girl): FactoryGirl is a fixtures replacement with a straightforward definition syntax.
-  -- [shoulda-matchers](https://github.com/thoughtbot/shoulda-matchers): Collection of testing matchers extracted from Shoulda
-  -- [simplecov](https://github.com/colszowka/simplecov): Code coverage
+    - [rspec-rails](https://github.com/rspec/rspec-rails): Rspec is a testing tool for test-driven and behavior-driven development..
+    - [factory_girl_rails](https://github.com/thoughtbot/factory_girl): FactoryGirl is a fixtures replacement with a straightforward definition syntax.
+    - [shoulda-matchers](https://github.com/thoughtbot/shoulda-matchers): Collection of testing matchers extracted from Shoulda
+    - [simplecov](https://github.com/colszowka/simplecov): Code coverage
 
 2. Add and install `mno-enterprise`
 
