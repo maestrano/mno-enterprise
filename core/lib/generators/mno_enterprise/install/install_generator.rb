@@ -90,8 +90,7 @@ module MnoEnterprise
       # Inject engine routes
       def notify_about_routes
         if (routes_file = destination_path.join('config', 'routes.rb')).file? && (routes_file.read !~ %r{mount\ MnoEnterprise::Engine})
-          mount = %Q{
-  # This line mount Maestrano Enterprise routes in your application under /mnoe.
+          mount = %Q{  # This line mount Maestrano Enterprise routes in your application under /mnoe.
   # If you would like to change where this engine is mounted, simply change the :at option to something different
   #
   # We ask that you don't use the :as option here, as Mnoe relies on it being the default of "mno_enterprise"
