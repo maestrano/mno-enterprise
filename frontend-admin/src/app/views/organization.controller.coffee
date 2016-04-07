@@ -2,10 +2,10 @@
   'ngInject'
   vm = this
 
-  # Get the user
+  # Get the organization
   MnoeOrganizations.get($stateParams.orgId).then(
     (response) ->
-      vm.organization = response
+      vm.organization = response.data
       vm.organization.invoices = $filter('orderBy')(vm.organization.invoices, '-started_at')
   )
 
