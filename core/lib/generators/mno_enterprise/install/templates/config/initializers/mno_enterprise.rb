@@ -135,4 +135,54 @@ MnoEnterprise.configure do |config|
   #   "xero",
   #   "wordpress"
   # ]
+
+  #====================================
+  # Impac! widgets templates listing
+  #====================================
+  # config.widgets_templates_listing = nil
+  # config.widgets_templates_listing = [
+  #   'accounts/balance',
+  #   'accounts/comparison',
+  #   'accounts/expenses_revenue',
+  #   'accounts/payable_receivable',
+  #   'accounts/assets_summary',
+  #   'accounts/custom_calculation',
+  #   'accounts/accounting_values/ebitda',
+  #   'accounts/accounting_values/turnover',
+  #   'accounts/accounting_values/workforce_costs',
+  #   'accounts/accounting_values/payroll_taxes_account',
+  #   'accounts/cash_summary',
+  #   'accounts/balance_sheet',
+  #   'accounts/profit_and_loss',
+  #   'invoices/list',
+  #   'invoices/summary',
+  #   'invoices/aged_payables_receivables',
+  #   'hr/workforce_summary',
+  #   'hr/salaries_summary',
+  #   'hr/employees_list',
+  #   'hr/employee_details',
+  #   'hr/payroll_taxes',
+  #   'hr/superannuation_accruals',
+  #   'hr/leaves_balance',
+  #   'hr/payroll_summary',
+  #   'hr/timesheets',
+  #   'sales/summary',
+  #   'sales/list',
+  #   'sales/growth',
+  #   'sales/segmented_turnover',
+  #   'sales/customer_details',
+  #   'sales/margin',
+  #   'sales/aged',
+  #   'sales/comparison',
+  #   'sales/leads_list',
+  #   'sales/number_of_leads',
+  #   'sales/cycle',
+  #   'sales/leads_funnel',
+  #   'sales/opportunities_funnel',
+  #   'sales/top_opportunities',
+  #   'sales/break_even',
+  #   'sales/forecast',
+  #   'sales/performance'
+  # ]
+
 end

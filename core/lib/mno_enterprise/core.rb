@@ -211,6 +211,14 @@ module MnoEnterprise
   @@marketplace_listing = nil
 
   #====================================
+  # Impac! widgets templates listing
+  #====================================
+  # List of widget templates that should be offered on Impac!
+  # if nil, all widget templates available will be offered
+  mattr_accessor :widgets_templates_listing
+  @@widgets_templates_listing = nil
+
+  #====================================
   # Module Methods
   #====================================
 
