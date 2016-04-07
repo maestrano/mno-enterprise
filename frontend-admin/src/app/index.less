@@ -36,6 +36,8 @@
 @kpi-color-3: @elemental-green;
 @kpi-color-4: @elemental-aqua;
 
+@mno-row-sublink-color: black;
+
 // Spacers
 @top-buffer-height: @grid-gutter-width/2;
 .top-buffer-1 { margin-top: @top-buffer-height; }
@@ -104,6 +106,24 @@ a {
 
 .table-layout-fixed {
   table-layout: fixed;
+}
+
+table {
+  tr {
+    td {
+      // whole row link
+      a {
+        display:block;
+        height:100%;
+        width:100%;
+      }
+
+      // row sublink
+      small {
+        color: @mno-row-sublink-color;
+      }
+    }
+  }
 }
 
 /**

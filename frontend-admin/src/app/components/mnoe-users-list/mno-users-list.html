@@ -14,13 +14,13 @@
       <tbody>
         <tr ng-repeat="user in users.list">
           <td class="ellipsis">
-            <div>
-              <a ng-show="user.name && user.surname" ui-sref="dashboard.home.user({userId: user.id})">{{user.name + ' ' + user.surname}}</a>
-              <span ng-show="!user.name && !user.surname">nc</span>
-            </div>
-            <small>{{user.email}}</small>
+            <a ui-sref="dashboard.home.user({userId: user.id})">
+              <div ng-show="user.name && user.surname">{{::user.name}}  {{::user.surname}}</div>
+              <div ng-show="!user.name && !user.surname">nc</div>
+              <small>{{::user.email}}</small>
+            </a>
           </td>
-          <td>{{user.created_at | date: 'dd/MM/yyyy'}}</td>
+          <td>{{::user.created_at | date: 'dd/MM/yyyy'}}</td>
         </tr>
       </tbody>
     </table>
