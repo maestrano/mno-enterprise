@@ -29,7 +29,7 @@ The goal of this engine is to provide a base that you can easily extend with cus
 
 ## Install
 
-### Generating a project with the Rails Application Template
+### One step install (recommended)
 
 You can generate a complete rails project using the application template:
 ```ruby
