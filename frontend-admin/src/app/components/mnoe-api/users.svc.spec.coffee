@@ -25,6 +25,14 @@ describe('Service: MnoeUsers', ->
           { "id": 10, "uid": "usr-4l04", "email": "charles.xavier@maestrano.com", "name": "Charles", "surname": "Xavier", "admin_role": null, "created_at": "2015-11-01T03:36:00.000Z" }
         ]
       })
+
+    $httpBackend.when('GET', '/mnoe/jpi/v1/admin/users/count').respond(200,
+      {
+        "count": {
+          "total_count": 14,
+          "count_new_month": 4
+        }
+      })
   ))
 
   afterEach( ->
@@ -44,6 +52,14 @@ describe('Service: MnoeUsers', ->
     it('GETs /mnoe/jpi/v1/admin/users/10', ->
       $httpBackend.expectGET('/mnoe/jpi/v1/admin/users/10')
       MnoeUsers.get(10)
+      $httpBackend.flush()
+    )
+  )
+
+  describe('@count', ->
+    it('GETs /mnoe/jpi/v1/admin/users/count', ->
+      $httpBackend.expectGET('/mnoe/jpi/v1/admin/users/count')
+      MnoeUsers.count()
       $httpBackend.flush()
     )
   )

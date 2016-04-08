@@ -1,14 +1,16 @@
 describe 'controllers', () ->
-  main = undefined
+  scope = undefined
 
   beforeEach module 'frontendAdmin'
 
   beforeEach inject ($controller) ->
-    main = $controller 'DashboardController'
+    scope = $controller('DashboardController')
 
   it 'make sure the sidebar is toggled on init', () ->
-    expect(main.toggle).toEqual true
+    expect(scope.main.toggle).toEqual true
+    console.log "### MAIN:", scope.main
 
   it 'toggle the sidebar', () ->
     main.toggleSidebar()
-    expect(main.toggle).toEqual false
+    expect(scope.main.toggle).toEqual false
+    console.log "### MAIN:", scope.main

@@ -19,11 +19,27 @@ describe('Service: MnoeOrganizations', ->
       })
 
     # Backend interceptors
+    $httpBackend.when('GET', '/mnoe/jpi/v1/admin/organizations/in_arrears').respond(200,
+      {
+        "organization": [
+          { "id": 9, "uid": "usr-fbbw", "name": "Marvel" }
+        ]
+      })
+
+    # Backend interceptors
     $httpBackend.when('GET', '/mnoe/jpi/v1/admin/organizations/9').respond(200,
       {
         "organization": [
           { "id": 9, "uid": "usr-fbbw", "name": "Marvel" }
         ]
+      })
+
+    $httpBackend.when('GET', '/mnoe/jpi/v1/admin/organizations/count').respond(200,
+      {
+        "count": {
+          "total_count": 7,
+          "total_with_cc": 3
+        }
       })
   ))
 
@@ -40,10 +56,18 @@ describe('Service: MnoeOrganizations', ->
     )
   )
 
-  describe('@get', ->
-    it('GETs /mnoe/jpi/v1/admin/organizations/9', ->
-      $httpBackend.expectGET('/mnoe/jpi/v1/admin/organizations/9')
-      MnoeOrganizations.get(9)
+  describe('@inArrears', ->
+    it('GETs /mnoe/jpi/v1/admin/in_arrears', ->
+      $httpBackend.expectGET('/mnoe/jpi/v1/admin/organizations/in_arrears')
+      MnoeOrganizations.inArrears()
+      $httpBackend.flush()
+    )
+  )
+
+  describe('@count', ->
+    it('GETs /mnoe/jpi/v1/admin/organizations/count', ->
+      $httpBackend.expectGET('/mnoe/jpi/v1/admin/organizations/count')
+      MnoeOrganizations.count()
       $httpBackend.flush()
     )
   )

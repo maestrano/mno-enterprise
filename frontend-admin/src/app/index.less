@@ -36,6 +36,8 @@
 @kpi-color-3: @elemental-green;
 @kpi-color-4: @elemental-aqua;
 
+@mno-row-sublink-color: black;
+
 // Spacers
 @top-buffer-height: @grid-gutter-width/2;
 .top-buffer-1 { margin-top: @top-buffer-height; }
@@ -49,16 +51,42 @@
 .top-buffer-9 { margin-top: 9*@top-buffer-height; }
 .top-buffer-10 { margin-top: 10*@top-buffer-height; }
 
+//--------------------------------------
+// RDash fixes
+//--------------------------------------
+
 // RDash overload bootstrap rows...
-// This is the real bootstrap class
+// This is the real bootstrap class behavior
 .bs-row {
   margin-left: -15px !important;
   margin-right: -15px !important;
 }
 
+.row > div {
+  margin-bottom: 0px;
+}
+
+.row.header {
+  margin-bottom: 0px;
+}
+
+.page-content {
+  padding-bottom: 15px;
+}
+
+//--------------------------------------
+// General less
+//--------------------------------------
 body {
   background: #f3f3f3;
   font-family: Montserrat;
+}
+
+a {
+  &.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }
 
 .breadcrumb {
@@ -71,23 +99,29 @@ body {
   border-bottom: 1px dashed @brand-primary;
 }
 
-// Fix RDash widgets header height
-.widget {
-  .widget-header {
-    .row > div {
-      margin-bottom: 0px;
-    }
+.ellipsis {
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
 
-    .search-bar {
-      width: inherit;
-      float: right;
-    }
-  }
-  .widget-body.medium {
-    min-height: 387px; // 10 lines
+.table-layout-fixed {
+  table-layout: fixed;
+}
 
-    .table {
-      margin-bottom: 0px;
+table {
+  tr {
+    td {
+      // whole row link
+      a {
+        display:block;
+        height:100%;
+        width:100%;
+      }
+
+      // row sublink
+      small {
+        color: @mno-row-sublink-color;
+      }
     }
   }
 }

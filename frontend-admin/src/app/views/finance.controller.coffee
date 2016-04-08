@@ -8,18 +8,18 @@
   # API calls
   MnoeInvoices.currentBillingAmount().then(
     (response) ->
-      vm.invoices.currentBillingAmount = response
+      vm.invoices.currentBillingAmount = response.data
   )
 
   MnoeTenantInvoices.list().then(
     (response) ->
-      vm.invoices.tenantInvoices = response
+      vm.invoices.tenantInvoices = response.data
       vm.invoices.tenantInvoices = $filter('orderBy')(vm.invoices.tenantInvoices, '-started_at')
   )
 
   MnoeOrganizations.inArrears().then(
     (response) ->
-      vm.organizations.inArrears = response
+      vm.organizations.inArrears = response.data
       # TODO: in backend
       # Humanize (payment_failed -> Payment failed)
       _.forEach(vm.organizations.inArrears, (org) ->

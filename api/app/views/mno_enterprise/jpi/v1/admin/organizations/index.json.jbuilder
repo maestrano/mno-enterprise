@@ -4,4 +4,4 @@ json.organizations do
     json.partial! 'credit_card', credit_card: organization.credit_card
   end
 end
-json.metadata @organizations.metadata
+json.metadata @organizations.metadata if @organizations.respond_to?(:metadata)

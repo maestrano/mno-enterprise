@@ -5,7 +5,7 @@
   # Get the user
   MnoeUsers.get($stateParams.userId).then(
     (response) ->
-      vm.user = response
+      vm.user = response.data
   )
 
   vm.impersonateUser = () ->

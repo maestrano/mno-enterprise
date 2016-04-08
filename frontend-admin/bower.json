@@ -2,25 +2,25 @@
   "name": "frontendAdmin",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "~1.4.7",
-    "angular-animate": "~1.4.7",
-    "angular-aria": "~1.4.7",
-    "angular-bootstrap": "~0.13.4",
-    "angular-messages": "~1.4.7",
-    "angular-ui-router": "~0.2.15",
-    "bootstrap": "~3.3.5",
-    "restangular": "~1.5.1",
-    "angular-toastr": "~1.5.0",
-    "moment": "~2.10.6",
-    "rdash-ui": "~1.0.1",
+    "angular": "~1.4.10",
+    "angular-animate": "~1.4.10",
+    "angular-aria": "~1.4.10",
+    "angular-bootstrap": "^1.2.5",
+    "angular-breadcrumb": "^0.4.1",
+    "angular-cookies": "~1.4.10",
+    "angular-inflector": "^0.2.3",
+    "angular-messages": "~1.4.10",
+    "angular-moment": "^0.10.3",
+    "angular-toastr": "~1.7.0",
+    "angular-ui-router": "^0.2.18",
+    "bootstrap": "^3.3.6",
     "font-awesome": "~4.4.0",
-    "angular-breadcrumb": "~0.4.1",
-    "angular-inflector": "~0.2.3",
-    "angular-moment": "~0.10.3",
-    "lodash": "~3.10.1"
+    "lodash": "~3.10.1",
+    "restangular": "~1.5.1",
+    "rdash-ui": "~1.0.1"
   },
   "devDependencies": {
-    "angular-mocks": "~1.4.7"
+    "angular-mocks": "~1.4.10"
   },
   "overrides": {
     "bootstrap": {
@@ -39,8 +39,5 @@
         "./fonts/*"
       ]
     }
-  },
-  "resolutions": {
-    "angular": "~1.4.7"
   }
 }

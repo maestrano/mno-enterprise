@@ -1,7 +1,7 @@
 #
 # Mnoe Users List
 #
-@App.directive('mnoeUsersList', ($filter, $log) ->
+@App.directive('mnoeUsersList', ($filter, $log, MnoeUsers) ->
   restrict: 'E'
   scope: {
     list: '='
@@ -9,63 +9,78 @@
   templateUrl: 'app/components/mnoe-users-list/mno-users-list.html',
   link: (scope, elem, attrs) ->
 
+    # Widget state
+    scope.state = attrs.view
+
     # Variables initialization
     scope.users =
-      displayList: []
-      widgetTitle: 'Loading users...'
       search: ''
+      nbItems: 10
+      page: 1
+      pageChangedCb: (nbItems, page) ->
+        scope.users.nbItems = nbItems
+        scope.users.page = page
+        offset = (page  - 1) * nbItems
+        fetchUsers(nbItems, offset)
+
+    # Fetch users
+    fetchUsers = (limit, offset, sort = 'surname') ->
+      scope.users.loading = true
+      return MnoeUsers.list(limit, offset, sort).then(
+        (response) ->
+          scope.users.totalItems = response.headers('x-total-count')
+          scope.users.list = response.data
+      ).finally(-> scope.users.loading = false)
+
+    scope.switchState = () ->
+      scope.state = attrs.view = if attrs.view == 'all' then 'last' else 'all'
+      displayCurrentState()
+
+    # if view="all" is set on the directive, all the users are displayed
+    # if view="last" is set on the directive, the last 10 users are displayed
+    displayCurrentState = () ->
+      if attrs.view == 'all'
+        setAllUsersList()
+        fetchUsers(scope.users.nbItems, 0)
+      else if attrs.view == 'last'
+        setLastUsersList()
+        fetchUsers(10, 0, 'created_at.desc')
+      else
+        $log.error('Value of attribute view can only be "all" or "last"')
 
     # Display all the users
     setAllUsersList = () ->
-      scope.users.widgetTitle = 'All users (' + scope.list.length + ')'
+      scope.users.widgetTitle = 'All users'
       scope.users.switchLinkTitle = '(last 10)'
-      scope.users.displayList = $filter('orderBy')(scope.list, 'email')
 
     # Display only the last 10 users
     setLastUsersList = () ->
       scope.users.widgetTitle = 'Last 10 users'
       scope.users.switchLinkTitle = '(view all)'
-      scope.users.displayList = $filter('orderBy')(scope.list, '-created_at')
-      scope.users.displayList = $filter('limitTo')(scope.users.displayList, 10)
-
-    # Display only the search results
-    setSearchUsersList = () ->
-      scope.users.widgetTitle = 'Search result'
-      delete scope.users.switchLinkTitle
-      searchToLowerCase = scope.users.search.toLowerCase()
-      scope.users.displayList = _.filter(scope.list, (user) ->
-        email = _.contains(user.email.toLowerCase(), searchToLowerCase) if user.email
-        name = _.contains(user.name.toLowerCase(), searchToLowerCase) if user.name
-        surname = _.contains(user.surname.toLowerCase(), searchToLowerCase) if user.surname
-        (email || name || surname)
-      )
-      scope.users.displayList = $filter('orderBy')(scope.users.displayList, 'email')
-
-    displayNormalState = () ->
-      # if view="all" is set on the directive, all the users are displayed
-      # if view="last" is set on the directive, the last 10 users are displayed
-      if attrs.view == 'all'
-        setAllUsersList()
-      else if attrs.view == 'last'
-        setLastUsersList()
-      else
-        $log.error('Value of attribute view can only be "all" or "last"')
-
-    scope.switchState = () ->
-      if attrs.view == 'all'
-        attrs.view = 'last'
-      else
-        attrs.view = 'all'
-      displayNormalState()
 
     scope.searchChange = () ->
-      if scope.users.search == ''
-        displayNormalState()
-      else
-        setSearchUsersList()
+      # Only search if the string is >= than 3 characters
+      if scope.users.search.length >= 3
+        scope.searchMode = true
+        setSearchUsersList(scope.users.search)
+      # No search string, so display current state
+      else if scope.searchMode
+        scope.searchMode = false
+        displayCurrentState()
 
-    scope.$watch('list', (newVal, oldVal) ->
-      if newVal
-        displayNormalState()
-    , true)
+    # Display only the search results
+    setSearchUsersList = (search) ->
+      scope.users.loading = true
+      scope.users.widgetTitle = 'Search result'
+      delete scope.users.switchLinkTitle
+      search = scope.users.search.toLowerCase()
+      terms = {'surname.like': "#{search}%", 'name.like': "#{search}%", 'email.like': "%#{search}%" }
+      MnoeUsers.search(terms).then(
+        (response) ->
+          scope.users.totalItems = response.headers('x-total-count')
+          scope.users.list = $filter('orderBy')(response.data, 'email')
+      ).finally(-> scope.users.loading = false)
+
+    # Initial call
+    displayCurrentState()
 )
