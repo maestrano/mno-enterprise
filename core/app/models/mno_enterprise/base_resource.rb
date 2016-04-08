@@ -6,6 +6,7 @@ module MnoEnterprise
   class BaseResource
     include Her::Model
     include HerExtension::Validations::RemoteUniquenessValidation
+    include GlobalID::Identification
 
     include_root_in_json :data
     use_api MnoEnterprise.mnoe_api_v1
