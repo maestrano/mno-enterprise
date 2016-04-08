@@ -6,8 +6,8 @@ module MnoEnterprise
       source_root File.expand_path("../templates", __FILE__)
       desc "Description:\n  Install Maestrano Enterprise Engine in your application\n\n"
 
-      class_option :skip_rspec, type: :boolean, default: false, desc: 'Skip rspec-rails installation'
-      class_option :skip_factory_girl, type: :boolean, default: false, desc: 'Skip factory_girl installation'
+      # class_option :skip_rspec, type: :boolean, default: false, desc: 'Skip rspec-rails installation'
+      # class_option :skip_factory_girl, type: :boolean, default: false, desc: 'Skip factory_girl installation'
       class_option :skip_frontend, type: :boolean, default: false, desc: 'Skip frontend installation'
       class_option :skip_admin, type: :boolean, default: false, desc: 'Skip admin installation'
 
@@ -90,8 +90,7 @@ module MnoEnterprise
       # Inject engine routes
       def notify_about_routes
         if (routes_file = destination_path.join('config', 'routes.rb')).file? && (routes_file.read !~ %r{mount\ MnoEnterprise::Engine})
-          mount = %Q{
-  # This line mount Maestrano Enterprise routes in your application under /mnoe.
+          mount = %Q{  # This line mount Maestrano Enterprise routes in your application under /mnoe.
   # If you would like to change where this engine is mounted, simply change the :at option to something different
   #
   # We ask that you don't use the :as option here, as Mnoe relies on it being the default of "mno_enterprise"
@@ -109,31 +108,6 @@ module MnoEnterprise
           say "We added the following line to your application's config/routes.rb file:"
           say "    mount MnoEnterprise::Engine, at: '/mnoe'"
           say "    root to: redirect(MnoEnterprise.router.dashboard_path)"
-        end
-      end
-
-      def install_rspec_rails
-        unless options[:skip_rspec]
-          say("\n")
-          @install_rspec = ask_with_default("Would you like to install rspec-rails?")
-          if @install_rspec
-            gem_group :test do
-              gem "rspec-rails"
-            end
-            generate "rspec:install"
-          end
-        end
-      end
-
-      def install_factory_girl
-        unless options[:skip_factory_girl]
-          say("\n")
-          @install_facto_girl = ask_with_default("Would you like to install factory_girl_rails?")
-          if @install_facto_girl
-            gem_group :test do
-              gem "factory_girl_rails"
-            end
-          end
         end
       end
 
