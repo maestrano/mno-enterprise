@@ -129,7 +129,7 @@ MnoEnterprise::Engine.routes.draw do
             get :count
           end
         end
-        resources :organizations, only: [:index, :show] do
+        resources :organizations, only: [:index, :show, :create] do
           collection do
             get :in_arrears
             get :count

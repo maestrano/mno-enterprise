@@ -5,10 +5,12 @@ if member.is_a?(MnoEnterprise::User)
   json.name member.name
   json.surname member.surname
   json.email member.email
+  json.created_at member.created_at
   json.role member.role(organization)
 elsif member.is_a?(MnoEnterprise::OrgInvite)
   json.id member.id
   json.entity 'OrgInvite'
   json.email member.user_email
+  json.created_at member.created_at
   json.role member.user_role
 end

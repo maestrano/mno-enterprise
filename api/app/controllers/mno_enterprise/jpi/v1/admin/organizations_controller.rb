@@ -36,5 +36,47 @@ module MnoEnterprise
       organizations_count = MnoEnterprise::Tenant.get('tenant').organizations_count
       render json: {count: organizations_count }
     end
+
+    # POST /mnoe/jpi/v1/admin/organizations
+    def create
+      # Create new organization
+      @organization = MnoEnterprise::Organization.create(organization_update_params)
+
+      # OPTIMIZE: move this into a delayed job?
+      update_app_list
+
+      @organization_active_apps = @organization.app_instances
+
+      render 'show'
+    end
+
+    protected
+      def organization_permitted_update_params
+        [:name, :app_nids]
+      end
+
+      def organization_update_params
+        params.fetch(:organization, {}).permit(*organization_permitted_update_params)
+      end
+
+      # Update App List to match the list passed in params
+      def update_app_list
+        # Differentiate between a null app_nids params and no app_nids params
+        if params[:organization].key?(:app_nids) && (desired_nids = Array(params[:organization][:app_nids]))
+
+          existing_apps = @organization.app_instances.active
+
+          existing_apps.each do |app_instance|
+            desired_nids.delete(app_instance.app.nid) || app_instance.terminate
+          end
+
+          desired_nids.each do |nid|
+            @organization.app_instances.create(product: nid)
+          end
+
+          # Force reload
+          existing_apps.reload
+        end
+      end
   end
 end

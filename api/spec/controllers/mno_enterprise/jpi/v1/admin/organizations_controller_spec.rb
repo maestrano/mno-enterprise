@@ -52,6 +52,7 @@ module MnoEnterprise
       api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
       api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api([credit_card]))
       api_stub_for(get: "/arrears_situations", response: from_api([arrears]))
+      api_stub_for(post: "/organizations", response: from_api([organization]))
     end
 
     let(:expected_hash_for_organizations) {

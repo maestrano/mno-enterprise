@@ -43,5 +43,21 @@
       controllerAs: 'vm'
       ncyBreadcrumb:
         label: 'Customers'
+    .state 'dashboard.customers.create-step-1',
+      url: '^/customers/create-customer'
+      views: '@dashboard':
+        templateUrl: 'app/views/customers/create-step-1/create-step-1.html'
+        controller: 'CreateStep1Controller'
+        controllerAs: 'vm'
+      ncyBreadcrumb:
+        label: 'Create a new customer'
+    .state 'dashboard.customers.create-step-2',
+      url: '^/customers/:orgId/connect-apps'
+      views: '@dashboard':
+        templateUrl: 'app/views/customers/create-step-2/create-step-2.html'
+        controller: 'CreateStep2Controller'
+        controllerAs: 'vm'
+      ncyBreadcrumb:
+        label: 'Connect cloud apps'
 
   $urlRouterProvider.otherwise '/home'

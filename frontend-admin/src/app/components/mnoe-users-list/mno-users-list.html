@@ -13,7 +13,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="user in users.list">
-          <td class="ellipsis">
+          <td>
             <a ui-sref="dashboard.home.user({userId: user.id})">
               <div ng-show="user.name && user.surname">{{::user.name}}  {{::user.surname}}</div>
               <div ng-show="!user.name && !user.surname">nc</div>

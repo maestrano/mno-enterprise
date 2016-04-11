@@ -1,6 +1,11 @@
-@App.controller 'DashboardController', ($scope, $cookies) ->
+@App.controller 'DashboardController', ($scope, $cookies, $sce, MnoeMarketplace, MnoErrorsHandler) ->
   'ngInject'
   main = this
+
+  main.errorHandler = MnoErrorsHandler
+
+  main.trustSrc = (src) ->
+    $sce.trustAsResourceUrl(src)
 
   mobileView = 992
 
@@ -22,5 +27,9 @@
 
   window.onresize = () ->
     $scope.$apply()
+
+  # Preload data to be reused in the app
+  # Marketplace is cached
+  # MnoeMarketplace.getApps()
 
   return
