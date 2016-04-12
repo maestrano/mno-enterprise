@@ -95,7 +95,7 @@ after_bundle do
   end
 
   # Setup test environment
-  generate 'spec:install'
+  generate 'rspec:install'
   run 'brakeman --rake'
   run 'rubocop --auto-gen-config'
 
