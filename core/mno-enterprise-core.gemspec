@@ -24,11 +24,14 @@ Gem::Specification.new do |s|
   s.add_dependency 'cancancan', '~> 1.10'
   s.add_dependency 'countries', '~> 0.11.3'
   s.add_dependency 'jwt', '~> 1.4'
-  s.add_dependency 'mandrill-api', '~> 1.0', '>= 1.0.53'
   s.add_dependency 'deepstruct', '~> 0.0.7'
   s.add_dependency 'prawn', '~> 2.0', '>= 2.0.1'
   s.add_dependency 'prawn-table', '~> 0.2.1'
   s.add_dependency 'money', '~> 6.5', '>= 6.5.1'
+
+  # Email
+  # TODO: remove in 3.2, left for backward compatibility
+  s.add_dependency 'mandrill-api', '~> 1.0', '>= 1.0.53'
 
   # Markdown parsing
   s.add_dependency 'redcarpet', '~> 3.3', '>= 3.3.3'

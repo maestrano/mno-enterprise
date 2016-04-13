@@ -34,7 +34,7 @@ module MnoEnterprise
     describe 'confirmation_instructions' do
       describe 'new user' do
         it 'sends the right email' do
-          expect(MandrillClient).to receive(:deliver).with('confirmation-instructions',
+          expect(MnoEnterprise::MailClient).to receive(:deliver).with('confirmation-instructions',
             SystemNotificationMailer::DEFAULT_SENDER,
             { name: "#{user.name} #{user.surname}".strip, email: user.email },
             user_vars(user).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: token))
@@ -49,7 +49,7 @@ module MnoEnterprise
         before { allow_any_instance_of(MnoEnterprise::User).to receive(:unconfirmed_email?).and_return(true) }
         
         it 'sends the right email' do
-          expect(MandrillClient).to receive(:deliver).with('reconfirmation-instructions',
+          expect(MnoEnterprise::MailClient).to receive(:deliver).with('reconfirmation-instructions',
             SystemNotificationMailer::DEFAULT_SENDER,
             { name: "#{user.name} #{user.surname}".strip, email: user.email },
             user_vars(user).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: token))
@@ -63,7 +63,7 @@ module MnoEnterprise
     
     describe 'reset_password_instructions' do
       it 'sends the right email' do
-        expect(MandrillClient).to receive(:deliver).with('reset-password-instructions',
+        expect(MnoEnterprise::MailClient).to receive(:deliver).with('reset-password-instructions',
           SystemNotificationMailer::DEFAULT_SENDER,
           { name: "#{user.name} #{user.surname}".strip, email: user.email },
           user_vars(user).merge(reset_password_link: routes.edit_user_password_url(reset_password_token: token))
@@ -75,7 +75,7 @@ module MnoEnterprise
     
     describe 'unlock_instructions' do
       it 'sends the right email' do
-        expect(MandrillClient).to receive(:deliver).with('unlock-instructions',
+        expect(MnoEnterprise::MailClient).to receive(:deliver).with('unlock-instructions',
           SystemNotificationMailer::DEFAULT_SENDER,
           { name: "#{user.name} #{user.surname}".strip, email: user.email },
           user_vars(user).merge(unlock_link: routes.user_unlock_url(unlock_token: token))
@@ -91,7 +91,7 @@ module MnoEnterprise
       
       context 'when invitee is a confirmed user' do
         it 'sends the right email' do
-          expect(MandrillClient).to receive(:deliver).with('organization-invite-existing-user',
+          expect(MnoEnterprise::MailClient).to receive(:deliver).with('organization-invite-existing-user',
             SystemNotificationMailer::DEFAULT_SENDER,
             { name: "#{invitee.name} #{invitee.surname}".strip, email: invitee.email },
             invite_vars(org_invite).merge(confirmation_link: routes.org_invite_url(id: org_invite.id, token: org_invite.token))
@@ -105,7 +105,7 @@ module MnoEnterprise
         let(:invitee) { build(:user, :unconfirmed) }
         
         it 'sends the right email' do
-          expect(MandrillClient).to receive(:deliver).with('organization-invite-new-user',
+          expect(MnoEnterprise::MailClient).to receive(:deliver).with('organization-invite-new-user',
             SystemNotificationMailer::DEFAULT_SENDER,
             { email: invitee.email },
             invite_vars(org_invite).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: invitee.confirmation_token))
@@ -119,7 +119,7 @@ module MnoEnterprise
 
     describe 'deletion_request_instructions' do
       it 'sends the correct email' do
-        expect(MandrillClient).to receive(:deliver).with('deletion-request-instructions',
+        expect(MnoEnterprise::MailClient).to receive(:deliver).with('deletion-request-instructions',
           SystemNotificationMailer::DEFAULT_SENDER,
           { name: "#{user.name} #{user.surname}".strip, email: user.email },
           user_vars(user).merge(terminate_account_link: routes.deletion_request_url(deletion_request))
