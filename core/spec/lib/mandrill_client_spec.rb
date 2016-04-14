@@ -6,6 +6,9 @@ describe MandrillClient do
   before { allow(subject).to receive(:warn) }
 
   describe '.deliver' do
+    before { MnoEnterprise::MailClient.adapter = :mandrill }
+    after { MnoEnterprise::MailClient.adapter = :test }
+
     let(:template) { :some_template }
     let(:from) {{ name: "John", email: 'j@e.com' }}
     let(:to) {{ name: "John", email: 'j@e.com' }}
