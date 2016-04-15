@@ -172,7 +172,7 @@ module MnoEnterprise
 
   # Adapter used to send emails
   # Default to :mandrill
-  mattr_reader(:mail_adapter) { :mandrill }
+  mattr_reader(:mail_adapter) { Rails.env.test? ? :test : :mandrill }
   def self.mail_adapter=(adapter)
     @@mail_adapter = adapter
     MnoEnterprise::MailClient.adapter = self.mail_adapter
@@ -248,6 +248,10 @@ module MnoEnterprise
     yield self
     self.configure_styleguide
     self.configure_api
+
+    # Mail config
+    # We can't use the setter before MailClient is loaded
+    self.mail_adapter = self.mail_adapter
   end
 
   # Create a JSON web token with the provided payload
