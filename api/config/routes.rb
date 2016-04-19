@@ -135,6 +135,9 @@ MnoEnterprise::Engine.routes.draw do
             get :in_arrears
             get :count
           end
+          member do
+            post :users, action: :invite_member
+          end
         end
         resources :tenant_invoices, only: [:index, :show]
         resources :invoices, only: [:index, :show] do
