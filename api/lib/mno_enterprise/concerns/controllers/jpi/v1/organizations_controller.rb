@@ -55,9 +55,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     # Add the current user as Super Admin
     @organization.add_user(current_user,'Super Admin')
 
-    # OPTIMIZE: move this into a delayed job?
-    update_app_list
-
     # Bust cache
     current_user.refresh_user_cache
 
@@ -179,25 +176,4 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     def organization_update_params
       params.fetch(:organization, {}).permit(*organization_permitted_update_params)
     end
-
-    # Update App List to match the list passed in params
-    def update_app_list
-      # Differentiate between a null app_nids params and no app_nids params
-      if params[:organization].key?(:app_nids) && (desired_nids = Array(params[:organization][:app_nids]))
-
-        existing_apps = organization.app_instances.active
-
-        existing_apps.each do |app_instance|
-          desired_nids.delete(app_instance.app.nid) || app_instance.terminate
-        end
-
-        desired_nids.each do |nid|
-          organization.app_instances.create(product: nid)
-        end
-
-        # Force reload
-        existing_apps.reload
-      end
-    end
-
 end
