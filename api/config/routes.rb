@@ -138,6 +138,9 @@ MnoEnterprise::Engine.routes.draw do
           member do
             post :users, action: :invite_member
           end
+          resources :users, only: [] do
+            resource :invites, only: [:create]
+          end
         end
         resources :tenant_invoices, only: [:index, :show]
         resources :invoices, only: [:index, :show] do
