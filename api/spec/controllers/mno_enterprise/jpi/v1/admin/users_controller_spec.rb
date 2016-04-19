@@ -131,7 +131,20 @@ module MnoEnterprise
 
       # Test that the user is deleted by testing the api endpoint was called
       it { expect(user_to_delete.name).to eq('deleted') }
+    end
 
+    describe 'POST #signup_email' do
+      let(:email) { 'test@test.com' }
+      subject { post :signup_email, user: {email: email}}
+
+      it { expect(response).to be_success }
+
+      it 'sends the signup instructions' do
+        message_delivery = instance_double(ActionMailer::MessageDelivery)
+        expect(SystemNotificationMailer).to receive(:registration_instructions).with(email) { message_delivery }
+        expect(message_delivery).to receive(:deliver_later).with(no_args)
+        subject
+      end
     end
   end
 end

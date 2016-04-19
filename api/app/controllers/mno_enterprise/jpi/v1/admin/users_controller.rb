@@ -60,6 +60,14 @@ module MnoEnterprise
       render json: {count: users_count }
     end
 
+    # POST /mnoe/jpi/v1/admin/users/signup_email
+    # Send an email to a user with the link to the registration page
+    def signup_email
+      MnoEnterprise::SystemNotificationMailer.registration_instructions(params.require(:user).require(:email)).deliver_later
+
+      head :no_content
+    end
+
     private
 
     def user_params

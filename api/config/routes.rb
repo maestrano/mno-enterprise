@@ -127,6 +127,7 @@ MnoEnterprise::Engine.routes.draw do
         resources :users, only: [:index, :show, :destroy, :update, :create] do
           collection do
             get :count
+            post :signup_email
           end
         end
         resources :organizations, only: [:index, :show, :create] do

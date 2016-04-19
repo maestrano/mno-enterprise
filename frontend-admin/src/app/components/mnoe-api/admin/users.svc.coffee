@@ -40,8 +40,8 @@
     MnoeAdminApiSvc.one('organizations', organization.id).one('users', user.id).doPOST({}, 'invite')
 
   # Send an email to a user with the link to the registration page
-  # POST /mnoe/jpi/v1/admin/users/send_signup_email
+  # POST /mnoe/jpi/v1/admin/users/signup_email
   @sendSignupEmail = (email) ->
-    MnoeAdminApiSvc.all('/users').doPOST({user: {email: email}}, 'send_signup_email')
+    MnoeAdminApiSvc.all('/users').doPOST({user: {email: email}}, 'signup_email')
 
   return @
