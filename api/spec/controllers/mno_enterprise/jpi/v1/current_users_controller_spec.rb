@@ -40,7 +40,8 @@ module MnoEnterprise
               'name' => o.name,
               'currency' => 'AUD',
               'current_user_role' => o.role,
-              'has_myob_essentials_only' => o.has_myob_essentials_only?
+              'has_myob_essentials_only' => o.has_myob_essentials_only?,
+              'financial_year_end_month' => o.financial_year_end_month
           }
         end
 
