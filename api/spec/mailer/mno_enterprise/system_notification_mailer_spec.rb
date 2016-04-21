@@ -58,7 +58,6 @@ module MnoEnterprise
           subject.confirmation_instructions(user,token).deliver_now
         end
       end
-      
     end
     
     describe 'reset_password_instructions' do
@@ -126,6 +125,19 @@ module MnoEnterprise
         )
 
         subject.deletion_request_instructions(user,deletion_request).deliver_now
+      end
+    end
+
+    describe 'registration_instructions' do
+      it 'sends the correct email' do
+        expect(MandrillClient).to receive(:deliver).with(
+            'registration-instructions',
+            SystemNotificationMailer::DEFAULT_SENDER,
+            { email: 'test@example.com' },
+            { registration_link: routes.new_user_registration_url }
+        )
+
+        subject.registration_instructions('test@example.com').deliver_now
       end
     end
   end

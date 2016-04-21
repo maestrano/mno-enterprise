@@ -73,7 +73,7 @@ module MnoEnterprise
 
     protected
       def organization_permitted_update_params
-        [:name, :app_nids]
+        [:name]
       end
 
       def organization_update_params

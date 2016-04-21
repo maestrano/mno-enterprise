@@ -28,33 +28,20 @@ module MnoEnterprise
           'admin_role' => user.admin_role,
           'created_at' => user.created_at,
           'last_sign_in_at' => user.last_sign_in_at,
-          'confirmed_at' => user.confirmed_at,
-          'organizations' => partial_hash_for_organization(user)
-      }
-    end
-
-    def partial_hash_for_users(user)
-      {
-          'id' => user.id,
-          'uid' => user.uid,
-          'email' => user.email,
-          'name' => user.name,
-          'surname' => user.surname,
-          'admin_role' => user.admin_role,
-          'created_at' => user.created_at
+          'confirmed_at' => user.confirmed_at
       }
     end
 
     def hash_for_users(users)
       {
-          'users' => users.map { |o| partial_hash_for_users(o) },
+          'users' => users.map { |o| partial_hash_for_user(o) },
           'metadata' => {'pagination' => {'count' => users.count}}
       }
     end
 
     def hash_for_user(user)
       hash = {
-          'user' => partial_hash_for_user(user)
+          'user' => partial_hash_for_user(user).merge('organizations' => partial_hash_for_organization(user))
       }
 
       return hash
