@@ -68,11 +68,7 @@ module MnoEnterprise
           status: 'staged' # Will be updated to 'accepted' for unconfirmed users
       )
 
-      # (user.confirmed? && invite) ? invite : user
-      # render :show, status: :ok
-      # TODO: return user
-
-      head :no_content
+      @user = user.confirmed? ? invite : user.reload
     end
 
     protected

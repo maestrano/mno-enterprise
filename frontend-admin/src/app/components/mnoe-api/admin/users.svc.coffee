@@ -37,7 +37,7 @@
   # Invite a user to join an organization
   # POST /mnoe/jpi/v1/admin/organizations/:orgId/users/:userId/invite
   @inviteUser = (organization, user) ->
-    MnoeAdminApiSvc.one('organizations', organization.id).one('users', user.id).doPOST({}, 'invites')
+    MnoeAdminApiSvc.one('organizations', organization.id).one('users', user.id).doPOST({}, '/invites')
 
   # Send an email to a user with the link to the registration page
   # POST /mnoe/jpi/v1/admin/users/signup_email

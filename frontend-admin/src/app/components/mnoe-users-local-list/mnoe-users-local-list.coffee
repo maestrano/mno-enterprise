@@ -72,7 +72,7 @@
         (response) ->
           toastr.success("#{user.name} #{user.surname}'s invitation has been sent.")
           # Update status
-          user.status = response.user.status
+          user.status = response.data.user.status
         (error) ->
           toastr.error("An error occurred: #{user.name} #{user.surname}'s invitation has not been sent.")
           MnoErrorsHandler.processServerError(error)

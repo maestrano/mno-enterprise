@@ -10,7 +10,7 @@
       (success) ->
         toastr.success("#{vm.user.name} #{vm.user.surname} has been successfully added.")
         # Close the modal returning the item to the parent window
-        $uibModalInstance.close(success.user)
+        $uibModalInstance.close(success.data.user)
       (error) ->
         toastr.error("An error occurred while adding #{vm.user.name} #{vm.user.surname}.")
         MnoErrorsHandler.processServerError(error)
