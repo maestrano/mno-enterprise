@@ -1,5 +1,5 @@
 {
-  "name": "frontendAdmin",
+  "name": "mnoe-frontend-admin",
   "version": "0.0.0",
   "dependencies": {
     "angular": "~1.5.3",

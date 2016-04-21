@@ -2,6 +2,8 @@
   "name": "frontendAdmin",
   "version": "0.0.0",
   "dependencies": {},
+  "license" : "Apache-2.0",
+  "repository": "maestrano/mno-enterprise",
   "scripts": {
     "test": "gulp test"
   },
