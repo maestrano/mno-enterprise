@@ -27,6 +27,7 @@ json.cache! ['v1', @user.cache_key] do
           json.currency o.billing_currency
           json.current_user_role o.role
           json.has_myob_essentials_only o.has_myob_essentials_only?
+          json.financial_year_end_month o.financial_year_end_month
         end
       end
 
