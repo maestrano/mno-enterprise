@@ -79,6 +79,8 @@ Maestrano Enterprise support either [Mandrill](https://www.mandrill.com/) or [Sp
 
 You can use either provider as long as your account has the [required templates](https://maestrano.atlassian.net/wiki/display/MNOE/Emailing).
 
+If you  want to copy the default templates to your own account you can use the tools in `tools/emails`
+
 #### Mandrill
 
 ```ruby
@@ -98,7 +100,7 @@ end
 
 ```ruby
 # Gemfile
-gem 'sparkpost', github: 'SparkPost/ruby-sparkpost'
+gem 'sparkpost', '~> 0.1.4'
 
 # config/application.yml
 SPARKPOST_API_KEY: api_key

@@ -12,7 +12,7 @@ gemspec
 group :test, :development do
   # Email
   gem 'mandrill-api', '~> 1.0.53'
-  gem 'sparkpost', github: 'SparkPost/ruby-sparkpost'
+  gem 'sparkpost', '~> 0.1.4'
 end
 
 
