@@ -170,11 +170,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     end
 
     def organization_permitted_update_params
-      [:name, :soa_enabled, :industry, :size]
+      [:name, :soa_enabled, :industry, :size, :app_nids]
     end
 
     def organization_update_params
       params.fetch(:organization, {}).permit(*organization_permitted_update_params)
     end
-
 end

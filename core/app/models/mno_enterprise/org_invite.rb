@@ -20,6 +20,7 @@
 module MnoEnterprise
   class OrgInvite < BaseResource
     scope :active, -> { where(status: 'pending') }
+    scope :active_or_staged, -> { where('status.in' => %w(staged pending)) }
     
     #==============================================================
     # Associations

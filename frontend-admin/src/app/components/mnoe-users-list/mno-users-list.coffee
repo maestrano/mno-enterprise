@@ -4,9 +4,8 @@
 @App.directive('mnoeUsersList', ($filter, $log, MnoeUsers) ->
   restrict: 'E'
   scope: {
-    list: '='
-  },
-  templateUrl: 'app/components/mnoe-users-list/mno-users-list.html',
+  }
+  templateUrl: 'app/components/mnoe-users-list/mno-users-list.html'
   link: (scope, elem, attrs) ->
 
     # Widget state

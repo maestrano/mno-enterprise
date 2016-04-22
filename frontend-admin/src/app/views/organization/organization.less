@@ -1,0 +1,35 @@
+
+#organization {
+  .app-wrapper {
+    margin-top: 10px;
+    margin-bottom: 0;
+
+    .small-app-card {
+      position: relative;
+      .thumbnail;
+      margin-bottom: 0;
+      text-align: center;
+
+      .app-state {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: white;
+        border-radius: 50%;
+        line-height: 0.9em;
+
+        &.state-success {
+          color: @brand-success;
+        }
+
+        &.state-warning {
+          color: @brand-warning;
+        }
+      }
+
+      span {
+        white-space: nowrap;
+      }
+    }
+  }
+}

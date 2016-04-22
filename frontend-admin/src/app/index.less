@@ -97,6 +97,17 @@ a {
 
 .label-cell {
   border-bottom: 1px dashed @brand-primary;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 0;
+
+  // ng-message errors
+  p.text-danger {
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
 }
 
 .ellipsis {
@@ -111,11 +122,20 @@ a {
 table {
   tr {
     td {
+      &.nowrap {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       // whole row link
       a {
         display:block;
         height:100%;
         width:100%;
+
+        // If text is too long add ... at the end
+        .ellipsis();
       }
 
       // row sublink

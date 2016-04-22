@@ -23,5 +23,9 @@ module MnoEnterprise
     it 'routes to #count' do
       expect(get('/jpi/v1/admin/users/count')).to route_to("mno_enterprise/jpi/v1/admin/users#count", format: 'json')
     end
+
+    it 'routes to #signup_email' do
+      expect(post('/jpi/v1/admin/users/signup_email')).to route_to("mno_enterprise/jpi/v1/admin/users#signup_email", format: 'json')
+    end
   end
 end

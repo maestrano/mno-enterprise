@@ -70,6 +70,11 @@ module MnoEnterprise::Concerns::Models::Ability
     #===================================================
     impac_abilities(user)
 
+    #===================================================
+    # Admin abilities
+    #===================================================
+    admin_abilities(user)
+
     # Define abilities for the passed in user here. For example:
     #
     #   user ||= User.new # guest user (not logged in)
@@ -103,6 +108,13 @@ module MnoEnterprise::Concerns::Models::Ability
       dhb.organizations.any? && dhb.organizations.all? do |org|
         !!user.role(org) && ['Super Admin', 'Admin'].include?(user.role(org))
       end
+    end
+  end
+
+  # Abilities for admin user
+  def admin_abilities(user)
+    if user.admin_role == 'admin'
+      can :manage_app_instances, MnoEnterprise::Organization
     end
   end
 end
