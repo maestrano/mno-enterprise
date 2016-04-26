@@ -33,6 +33,7 @@ end
 # Only use gems list for database (we manage the rest ourself)
 def gemfile_entries
   [database_gemfile_entry,
+   assets_gemfile_entry,
    @extra_entries].flatten.find_all(&@gem_filter)
 end
 
