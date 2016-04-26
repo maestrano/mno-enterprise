@@ -1,6 +1,13 @@
 # Change Log
 
-## [Unreleased]
+## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/master)
+
+**Implemented enhancements:**
+- Add SparkPost support for transactional emails. You can now choose either Mandrill or SparkPost.
+
+**Deprecated:**
+- `MnoEnteprise.config.mandrill_key` is replaced with `ENV['MANDRILL_API_KEY']`
+- `MandrillClient` is replaced with `MnoEnterprise::MailClient`
 
 ## [v3.0.1](https://github.com/maestrano/mno-enterprise/tree/v3.0.0) (2016-04-22)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.0...v3.0.1)

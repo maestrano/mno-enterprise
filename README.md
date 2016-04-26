@@ -13,17 +13,18 @@ The goal of this engine is to provide a base that you can easily extend with cus
 - - -
 
 1.  [Install](#install)
-2.  [Building the Frontend](#building-the-frontend)
-3.  [Modifying the style - Theme Previewer](#modifying-the-style---theme-previewer)
-4.  [Extending the Frontend](#extending-the-frontend)
-5.  [Replacing the Frontend](#replacing-the-frontend)
-6.  [Generating a database extension](#generating-a-database-extension)
-7.  [Deploying](#deploying)
+2.  [Configuration](#configuration)
+3.  [Building the Frontend](#building-the-frontend)
+4.  [Modifying the style - Theme Previewer](#modifying-the-style---theme-previewer)
+5.  [Extending the Frontend](#extending-the-frontend)
+6.  [Replacing the Frontend](#replacing-the-frontend)
+7.  [Generating a database extension](#generating-a-database-extension)
+8.  [Deploying](#deploying)
     1.  [Deploy a Puma stack on EC2 via Webistrano/Capistrano](#deploy-a-puma-stack-on-ec2-via-webistranocapistrano)
     2.  [Sample nginx config for I18n](#sample-nginx-config-for-i18n)
     3.  [Health Checks](#health-checks)
-8.  [Migrating from v2 to v3](#migrating-from-v2-to-v3)
-9.  [Contributing](#contributing)
+9.  [Migrating from v2 to v3](#migrating-from-v2-to-v3)
+10. [Contributing](#contributing)
 
 - - -
 
@@ -68,6 +69,46 @@ Building the frontend requires you to have nodejs and gulp install. While the ra
 Once node is installed, you can run the following commands to ensure that all dependencies are installed:
 ```bash
 bin/rake mnoe:frontend:install_dependencies
+```
+
+## Configuration
+
+### Emailing platform
+
+Maestrano Enterprise support either [Mandrill](https://www.mandrill.com/) or [SparkPost](https://www.sparkpost.com/).
+
+You can use either provider as long as your account has the [required templates](https://maestrano.atlassian.net/wiki/display/MNOE/Emailing).
+
+If you  want to copy the default templates to your own account you can use the tools in `tools/emails`
+
+#### Mandrill
+
+```ruby
+# Gemfile
+gem 'mandrill-api', '~> 1.0.53'
+
+# config/application.yml
+MANDRILL_API_KEY: api_key
+
+# config/initializers/mno_enterprise.rb
+MnoEnterprise.configure do |config|
+  config.mail_adapter = :mandrill
+end
+```
+
+#### SparkPost
+
+```ruby
+# Gemfile
+gem 'sparkpost', '~> 0.1.4'
+
+# config/application.yml
+SPARKPOST_API_KEY: api_key
+
+# config/initializers/mno_enterprise.rb
+MnoEnterprise.configure do |config|
+  config.mail_adapter = :sparkpost
+end
 ```
 
 ## Building the frontend

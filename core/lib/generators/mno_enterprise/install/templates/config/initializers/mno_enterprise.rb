@@ -28,6 +28,11 @@ MnoEnterprise.configure do |config|
   # Defaulted to Maestrano Enterprise demo account
   # config.mandrill_key = 'some-mandrill-api-key'
 
+  # Adapter used to send emails
+  # Default to :mandrill
+  # config.mail_adapter = :mandrill
+  # config.mail_adapter = :sparkpost
+
   # Support email address
   config.support_email = 'support@example.com'
 
