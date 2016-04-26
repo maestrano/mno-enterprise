@@ -134,6 +134,11 @@ module MnoEnterprise
       @errors ||= ActiveModel::Errors.new(self)
     end
 
+    # Don't require a password for unconfirmed users (user save password at confirmation step)
+    def password_required?
+      super if confirmed?
+    end
+
     #================================
     # Instance Methods
     #================================

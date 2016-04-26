@@ -28,33 +28,20 @@ module MnoEnterprise
           'admin_role' => user.admin_role,
           'created_at' => user.created_at,
           'last_sign_in_at' => user.last_sign_in_at,
-          'confirmed_at' => user.confirmed_at,
-          'organizations' => partial_hash_for_organization(user)
-      }
-    end
-
-    def partial_hash_for_users(user)
-      {
-          'id' => user.id,
-          'uid' => user.uid,
-          'email' => user.email,
-          'name' => user.name,
-          'surname' => user.surname,
-          'admin_role' => user.admin_role,
-          'created_at' => user.created_at
+          'confirmed_at' => user.confirmed_at
       }
     end
 
     def hash_for_users(users)
       {
-          'users' => users.map { |o| partial_hash_for_users(o) },
+          'users' => users.map { |o| partial_hash_for_user(o) },
           'metadata' => {'pagination' => {'count' => users.count}}
       }
     end
 
     def hash_for_user(user)
       hash = {
-          'user' => partial_hash_for_user(user)
+          'user' => partial_hash_for_user(user).merge('organizations' => partial_hash_for_organization(user))
       }
 
       return hash
@@ -131,7 +118,20 @@ module MnoEnterprise
 
       # Test that the user is deleted by testing the api endpoint was called
       it { expect(user_to_delete.name).to eq('deleted') }
+    end
 
+    describe 'POST #signup_email' do
+      let(:email) { 'test@test.com' }
+      subject { post :signup_email, user: {email: email}}
+
+      it { expect(response).to be_success }
+
+      it 'sends the signup instructions' do
+        message_delivery = instance_double(ActionMailer::MessageDelivery)
+        expect(SystemNotificationMailer).to receive(:registration_instructions).with(email) { message_delivery }
+        expect(message_delivery).to receive(:deliver_later).with(no_args)
+        subject
+      end
     end
   end
 end

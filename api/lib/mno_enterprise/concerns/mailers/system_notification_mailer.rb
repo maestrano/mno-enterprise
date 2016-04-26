@@ -125,6 +125,20 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     )
   end
 
+  # Description:
+  #   Email providing registration instructions
+  #
+  # Variables:
+  #   :registration_link
+  def registration_instructions(email)
+    MandrillClient.deliver(
+      'registration-instructions',
+      default_sender,
+      {email: email},
+      {registration_link: new_user_registration_url}
+    )
+  end
+
   protected
 
   def recipient(record, new_user = false)

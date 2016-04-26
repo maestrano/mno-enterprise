@@ -69,8 +69,11 @@ module MnoEnterprise::Concerns::Models::Organization
   #==================================================================
   # Return the list of users + active invites
   # TODO: specs
-  def members
-    [self.users,self.org_invites.active].flatten
+  #
+  # @params [Boolean] show_staged Also displayed staged invites (ie: not sent)
+  def members(show_staged=false)
+    invites = show_staged ? self.org_invites.active_or_staged : self.org_invites.active
+    [self.users, invites].flatten
   end
 
   # Add a user to the organization with the provided role

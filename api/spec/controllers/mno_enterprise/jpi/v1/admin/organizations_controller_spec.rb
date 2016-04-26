@@ -52,6 +52,7 @@ module MnoEnterprise
       api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
       api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api([credit_card]))
       api_stub_for(get: "/arrears_situations", response: from_api([arrears]))
+      api_stub_for(post: "/organizations", response: from_api([organization]))
     end
 
     let(:expected_hash_for_organizations) {
@@ -109,6 +110,70 @@ module MnoEnterprise
         it 'returns arrears with the organization name' do
           expect(response).to be_success
           expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_arrears([arrears]).to_json))
+        end
+      end
+    end
+
+    describe 'POST #create' do
+      let(:params) { FactoryGirl.attributes_for(:organization) }
+      before { allow(MnoEnterprise::Organization).to receive(:create) { organization } }
+
+      subject { post :create, organization: params }
+
+      it 'creates the organization' do
+        expect(MnoEnterprise::Organization).to receive(:create).with(params.slice(:name)) { organization }
+        subject
+      end
+
+      it 'provision the app instances' do
+        params.merge!(app_nids: ['xero', app_instance.app.nid])
+
+        # Track the API call
+        create = false
+        stub = -> { create = true; from_api(app_instance) }
+        api_stub_for(post: "/organizations/#{organization.id}/app_instances", response: stub)
+
+        subject
+
+        expect(create).to be true
+      end
+    end
+
+    describe 'POST #invite_member' do
+      before do
+        # Track the api call
+        @api_call = false
+        stub = -> { @api_call = true; from_api(org_invite) }
+        api_stub_for(post: "/organizations/#{organization.id}/org_invites", response: stub)
+      end
+
+      let(:params) { FactoryGirl.attributes_for(:user) }
+      subject { post :invite_member, id: organization.id, user: params }
+
+      context 'with existing user' do
+        before { allow(MnoEnterprise::User).to receive(:find_by) { user } }
+
+        it 'creates an invite' do
+          subject
+          expect(@api_call).to be true
+        end
+      end
+
+      context 'with new user' do
+        before { allow(MnoEnterprise::User).to receive(:find_by) { nil } }
+
+        # Directly stubbing the controller method as user creation is a PITA to stub
+        let(:new_user) { build(:user, params.slice(:email, :name, :surname, :phone)) }
+        before { allow(controller).to receive(:create_unconfirmed_user) { new_user } }
+
+        it 'creates a user' do
+          expect(controller).to receive(:create_unconfirmed_user) { new_user }
+          subject
+        end
+
+        it 'creates an invite' do
+          subject
+          expect(@api_call).to be true
         end
       end
     end

@@ -19,5 +19,13 @@ module MnoEnterprise
     it 'routes to #count' do
       expect(get('/jpi/v1/admin/organizations/count')).to route_to("mno_enterprise/jpi/v1/admin/organizations#count", format: 'json')
     end
+
+    it 'routes to #create' do
+      expect(post('/jpi/v1/admin/organizations')).to route_to("mno_enterprise/jpi/v1/admin/organizations#create", format: 'json')
+    end
+
+    it 'routes to #invite_member' do
+      expect(post('/jpi/v1/admin/organizations/1/users')).to route_to("mno_enterprise/jpi/v1/admin/organizations#invite_member", id: '1', format: 'json')
+    end
   end
 end

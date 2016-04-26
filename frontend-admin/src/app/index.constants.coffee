@@ -1,3 +1,2 @@
-# @App
-#   .constant 'malarkey', malarkey
-#   .constant 'moment', moment
+@App
+  .constant('USER_ROLES', ['Member', 'Power User', 'Admin', 'Super Admin'])

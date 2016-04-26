@@ -31,7 +31,7 @@ function browserSyncInit(baseDir, browser) {
   var adminRewriteMiddleware = function (req, res, next) {
     req.url = req.url.replace(/^\/admin\//, "/");
     next();
-  }
+  };
 
   /*
    * You can add a proxy to your backend by uncommenting the line below.

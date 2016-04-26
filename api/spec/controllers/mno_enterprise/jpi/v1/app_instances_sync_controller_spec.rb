@@ -8,7 +8,7 @@ module MnoEnterprise
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
-    
+
 
     #===============================================
     # Assignments
@@ -16,7 +16,7 @@ module MnoEnterprise
     # Stub controller ability
     let!(:ability) { stub_ability }
     before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
-    
+
     # Stub user and user call
     let(:user) { build(:user) }
     before do
@@ -24,12 +24,12 @@ module MnoEnterprise
       api_stub_for(put: "/users/#{user.id}", response: from_api(user))
     end
     before { sign_in user }
-    
+
     # Stub organization
     let(:organization) { build(:organization) }
     before { allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) }
 
-        
+
     #===============================================
     # Specs
     #===============================================
@@ -49,7 +49,7 @@ module MnoEnterprise
       before { api_stub_for(get: "/organizations/#{organization.id}/app_instances_sync/anything", response: from_api(progress_results)) }
 
       subject { get :index, organization_id: organization.uid }
-      
+
       it_behaves_like "jpi v1 protected action"
 
       it "verifies the user's rights" do
@@ -77,18 +77,18 @@ module MnoEnterprise
     end
 
     describe "POST #create" do
-      xit "to spec: cannot stub 'post /app_instances_syncs data%5Bmode%5D=a_mode'"
+      it "to spec: cannot stub 'post /app_instances_syncs data%5Bmode%5D=a_mode'"
 
-      # # Apps sync
-      # let(:sync_results) { [] }
-      # before { api_stub_for(post: "/app_instances_sync", response: from_api(sync_results)) }
+      # Apps sync
+      let(:sync_results) { {connectors: []} }
+      before { api_stub_for(post: "/app_instances_syncs", response: from_api(sync_results)) }
 
-      # subject { post :create, organization_id: organization.uid, mode: 'a_mode', return_url: 'a/random/url' }
+      subject { post :create, organization_id: organization.uid, mode: 'a_mode', return_url: 'a/random/url' }
 
-      # it "verifies the user's rights" do
-      #   expect(ability).to receive(:can?).with(:sync_apps, organization)
-      #   subject
-      # end
+      it "verifies the user's rights" do
+        expect(ability).to receive(:can?).with(:sync_apps, organization)
+        subject
+      end
     end
   end
 end

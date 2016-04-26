@@ -127,12 +127,19 @@ MnoEnterprise::Engine.routes.draw do
         resources :users, only: [:index, :show, :destroy, :update, :create] do
           collection do
             get :count
+            post :signup_email
           end
         end
-        resources :organizations, only: [:index, :show] do
+        resources :organizations, only: [:index, :show, :create] do
           collection do
             get :in_arrears
             get :count
+          end
+          member do
+            post :users, action: :invite_member
+          end
+          resources :users, only: [] do
+            resource :invites, only: [:create]
           end
         end
         resources :tenant_invoices, only: [:index, :show]
