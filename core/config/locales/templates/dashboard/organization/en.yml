@@ -77,8 +77,8 @@ en:
             edit: Edit
             remove: Remove
             invite_modal:
-              title_name: Edit Member: {{name}} {{surname}}
-              title_email: Edit Member: {{email}}
+              title_name: "Edit Member: {{name}} {{surname}}"
+              title_email: "Edit Member: {{email}}"
               description: Enter the email addresses of the people you want to invite in your company
               example: "One address per line, e.g.:"
               disclaimer: Please note that for security reasons unaccepted invites will automatically expire after 3 days.
