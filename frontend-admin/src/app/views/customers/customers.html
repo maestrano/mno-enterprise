@@ -2,21 +2,18 @@
   <div class="row">
     <div class="col-lg-3 col-md-6 col-xs-12">
       <rd-kpi class="kpi-color-1" description="Users" icon="fa-users" loading="!vm.users.totalCount">
-        <rd-kpi-body-number number="{{vm.users.totalCount}}"><rd-kpi-body-number>
+        <rd-kpi-body-number number="{{vm.users.totalCount}}"></rd-kpi-body-number>
       </rd-kpi>
     </div>
 
     <div class="col-lg-3 col-md-6 col-xs-12">
       <rd-kpi class="kpi-color-2" description="Organizations" icon="fa-sitemap" loading="!vm.organizations.totalCount">
-        <rd-kpi-body-number number="{{vm.organizations.totalCount}}"><rd-kpi-body-number>
+        <rd-kpi-body-number number="{{vm.organizations.totalCount}}"></rd-kpi-body-number>
       </rd-kpi>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-xs-12">
-      <mnoe-users-list view="all"></mnoe-users-list>
-    </div>
     <div class="col-xs-12">
       <div class="btn-group pull-right top-buffer-1" uib-dropdown keyboard-nav>
         <button id="simple-btn-keyboard-nav" type="button" class="btn btn-primary" uib-dropdown-toggle>
@@ -30,6 +27,9 @@
     </div>
     <div class="col-xs-12">
       <mnoe-organizations-list view="all"></mnoe-organizations-list>
+    </div>
+    <div class="col-xs-12">
+      <mnoe-users-list view="all"></mnoe-users-list>
     </div>
   </div>
 </div>

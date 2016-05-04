@@ -1,7 +1,7 @@
 #
 # Mnoe Users List
 #
-@App.directive('mnoeUsersLocalList', ($filter, $log, toastr, MnoeUsers, MnoErrorsHandler) ->
+@App.directive('mnoeUsersLocalList', ($window, $filter, $log, toastr, MnoeUsers, MnoErrorsHandler) ->
   restrict: 'E'
   scope: {
     list: '='
@@ -77,6 +77,12 @@
           toastr.error("An error occurred: #{user.name} #{user.surname}'s invitation has not been sent.")
           MnoErrorsHandler.processServerError(error)
       ).finally(-> user.isSendingInvite = false)
+
+    # Impersonate the user
+    scope.impersonateUser = (user) ->
+      if user
+        url = '/mnoe/impersonate/user/' + user.id
+        $window.location.href = url
 
     scope.$watch('list', (newVal) ->
       if newVal
