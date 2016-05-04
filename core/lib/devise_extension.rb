@@ -2,6 +2,9 @@ require 'devise'
 require 'devise/models/password_expirable'
 require 'devise/extension_routes'
 
+# Hook for impersonation
+require 'devise/hooks/impersonatable'
+
 module Devise
   # Should the password expire (e.g 3.months)
   mattr_accessor :expire_password_after
