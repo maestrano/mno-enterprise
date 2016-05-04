@@ -43,14 +43,10 @@
     <div class="bs-row">
       <div class="col-sm-4 col-sm-offset-4">
         <button class="btn btn-primary center-block"
-          ng-click="vm.impersonateUser()"
-          ng-disabled="!vm.user.confirmed_at">Impersonate</button>
-        <div style="position:absolute; left:0; right:0; top:0; bottom:0;"
-          uib-tooltip="User is not confirmed"
-          ng-show="!vm.user.confirmed_at"></div>
+          ng-click="vm.impersonateUser()">Log In as User</button>
       </div>
       <div class="col-sm-12 top-buffer-2">
-        <mnoe-organizations-list list="vm.user.organizations" view="all"></mnoe-organizations-list>
+        <mnoe-organizations-local-list list="vm.user.organizations" view="all"></mnoe-organizations-local-list>
       </div>
     </div>
   </div>
