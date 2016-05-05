@@ -34,7 +34,7 @@ The goal of this engine is to provide a base that you can easily extend with cus
 
 You can generate a complete rails project using the application template:
 ```ruby
-rails new [project_name] -TSOJ -m https://raw.githubusercontent.com/maestrano/mno-enterprise/master/rails-template/mnoe-app-template.rb
+rails new [project_name] -TOJ -m https://raw.githubusercontent.com/maestrano/mno-enterprise/master/rails-template/mnoe-app-template.rb
 ```
 
 For more details see the template [README](rails-template/README.md).
