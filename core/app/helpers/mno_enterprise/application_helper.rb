@@ -63,5 +63,19 @@ module MnoEnterprise
       return text unless text.present?
       HtmlProcessor.new(text, format: :markdown).html.html_safe
     end
+
+    # Return the user avatar url. The displayed picture use the gravatar of the user email
+    # TODO: add and use avatar_email from the OAUTH user
+    def avatar_url(user)
+      gravatar_url(user.email)
+    end
+
+    # Return the gravatar url for the given email
+    def gravatar_url(email)
+      if email
+        gravatar_id = Digest::MD5.hexdigest(email.downcase)
+        "https://gravatar.com/avatar/#{gravatar_id}.png?s=50&d=mm"
+      end
+    end
   end
 end
