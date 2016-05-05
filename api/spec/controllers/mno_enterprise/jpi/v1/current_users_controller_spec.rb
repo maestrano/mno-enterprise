@@ -6,6 +6,8 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
+    include MnoEnterprise::ApplicationHelper # For #avatar_url
+
     def json_for(res)
       json_hash_for(res).to_json
     end
@@ -28,7 +30,8 @@ module MnoEnterprise
           'country_code' => res.geo_country_code || 'US',
           'website' => res.website,
           'sso_session' => res.sso_session,
-          'admin_role' => res.admin_role
+          'admin_role' => res.admin_role,
+          'avatar_url' => avatar_url(res)
       }
 
       if res.id
