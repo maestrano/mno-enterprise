@@ -5,6 +5,9 @@
 </p>
 
 [![Gem Version](https://badge.fury.io/rb/mno-enterprise.svg)](https://rubygems.org/gems/mno-enterprise)
+[![Dependency Status](https://gemnasium.com/badges/github.com/maestrano/mno-enterprise.svg)](https://gemnasium.com/github.com/maestrano/mno-enterprise)
+[![Code Climate](https://codeclimate.com/github/maestrano/mno-enterprise/badges/gpa.svg)](https://codeclimate.com/github/maestrano/mno-enterprise)
+[![Test Coverage](https://codeclimate.com/github/maestrano/mno-enterprise/badges/coverage.svg)](https://codeclimate.com/github/maestrano/mno-enterprise/coverage)
 
 The Maestrano Enterprise Engine can be included in a Rails project to bootstrap an instance of Maestrano Enterprise Express.
 
