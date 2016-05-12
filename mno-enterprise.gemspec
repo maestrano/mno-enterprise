@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://maestrano.com"
   s.summary     = "Maestrano Enterprise"
   s.description = "Maestrano Enterprise is your application marketplace, out of the box."
-  s.license     = "Maestrano Enterprise License V1"
+  s.license     = "Apache-2.0"
 
   # s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.rdoc"]
   s.files = Dir['LICENSE', 'README.md', 'lib/**/*']
