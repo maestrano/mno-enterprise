@@ -30,7 +30,7 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
       # Return a hash of extra parameters that were passed along with
       # the request
       def extra_params
-        params.reject { |k,v|  [:controller,:action,:id, :perform].include?(k.to_sym) }
+        params.except(:controller,:action,:id, :perform)
       end
 
       # Current user web token
