@@ -2,7 +2,17 @@
 
 ## [Unreleased]
 
-## [v3.0.1](https://github.com/maestrano/mno-enterprise/tree/v3.0.0) (2016-04-22)
+## [v3.0.2](https://github.com/maestrano/mno-enterprise/tree/v3.0.2) (2016-05-12)
+
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.1...v3.0.2)
+
+**Fixed bugs:**
+
+- fix caching issue [\#20](https://github.com/maestrano/mno-enterprise/pull/20) ([ouranos](https://github.com/ouranos))
+- Fix assets precompile: add sprockets [\#16](https://github.com/maestrano/mno-enterprise/pull/16) ([ouranos](https://github.com/ouranos))
+- Merge [v2.0.2](#v2.0.2)
+
+## [v3.0.1](https://github.com/maestrano/mno-enterprise/tree/v3.0.1) (2016-04-22)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.0...v3.0.1)
 
 **Implemented enhancements:**
@@ -23,7 +33,7 @@
 - Theme builder/previewer
 - I18n implementation
 
-## [v2.0.2](https://github.com/maestrano/mno-enterprise/tree/v2.0.1) (2016-05-12)
+## [v2.0.2](https://github.com/maestrano/mno-enterprise/tree/v2.0.2) (2016-05-12)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.1...v2.0.2)
 
 **Implemented enhancements:**
