@@ -30,26 +30,12 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
       # Return a hash of extra parameters that were passed along with
       # the request
       def extra_params
-        params.reject { |k,v|  [:controller,:action,:id, :perform].include?(k.to_sym) }
+        params.except(:controller,:action,:id, :perform)
       end
 
       # Current user web token
       def wtk
         MnoEnterprise.jwt(user_id: current_user.uid)
-      end
-
-      # Append params to the fragment part of an existing url String
-      #   add_param("/#/platform/accounts", 'foo', 'bar')
-      #     => "/#/platform/accounts?foo=bar"
-      #   add_param("/#/platform/dashboard/he/43?en=690", 'foo', 'bar')
-      #     => "/#/platform/dashboard/he/43?en=690&foo=bar"
-      def add_param_to_fragment(url, param_name, param_value)
-        uri = URI(url)
-        fragment = URI(uri.fragment || "")
-        params = URI.decode_www_form(fragment.query || "") << [param_name, param_value]
-        fragment.query = URI.encode_www_form(params)
-        uri.fragment = fragment.to_s
-        uri.to_s
       end
 
       def error_message(error_key)

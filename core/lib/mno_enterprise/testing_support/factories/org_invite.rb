@@ -14,11 +14,15 @@ FactoryGirl.define do
       team { build(:team).attributes }
       user_role 'Member'
       
-      created_at 3.days.ago
+      created_at 1.days.ago
       updated_at 1.hour.ago
       
       # Properly build the resource with Her
       initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
+
+      trait :expired do
+        created_at 1.month.ago
+      end
     end
   end
 end

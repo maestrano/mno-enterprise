@@ -23,7 +23,6 @@ module MnoEnterprise::Concerns::Controllers::OrgInvitesController
   # Instance methods
   #==================================================================
   # GET /org_invites/1?token=HJuiofjpa45A73255a74F534FDfds
-  # TODO: improve integration with new frontends
   def show
     @current_user = current_user
     @org_invite = MnoEnterprise::OrgInvite.active.where(id: params[:id], token: params[:token]).first
@@ -38,6 +37,11 @@ module MnoEnterprise::Concerns::Controllers::OrgInvitesController
     else
       message = { alert: "Unfortunately, this invite does not seem to be valid." }
     end
+
+    # Add flash msg in url fragment for the new frontend
+    type, msg = message.first
+    type = (type == :alert ? :error : :success)
+    redirect_path = add_param_to_fragment(redirect_path.to_s, 'flash', [{msg: msg,  type: type}.to_json])
 
     redirect_to redirect_path, message
   end
