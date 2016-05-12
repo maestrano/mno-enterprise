@@ -154,6 +154,21 @@ foreman start -f Procfile.dev
 
 This will accelerate your development as the gulp serve task use BrowserSync to reload the browser any time a file is changed.
 
+### Adding a custom font
+
+It is possible to add custom fonts, shared all over the rails application screens and the AngularJS SPA.
+
+Simply copy the font files under the directory `/frontend/src/fonts/` of your host application and create a `font-faces.less` file containing your *font-face* definitions.
+
+An example of a project using a custom font can be seen on the [mno-enterprise-demo](https://github.com/maestrano/mno-enterprise-demo) project.
+
+NB: Your host project may have been generated or created before the implementation of this feature, in this case make sure the the file `/app/assets/stylesheets/main.less` contains:
+```less
+// Import custom fonts
+//--------------------------------------------
+@import "../../../frontend/src/fonts/font-faces";
+```
+
 ## Replacing the Frontend
 
 In some cases you may decide that the current [mno-enterprise-angular](https://github.com/maestrano/mno-enterprise-angular) frontend is not appropriate at all.
