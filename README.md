@@ -111,6 +111,31 @@ MnoEnterprise.configure do |config|
 end
 ```
 
+#### SMTP
+
+```ruby
+# config/environments/production.rb
+Rails.application.configure do
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default_url_options = { :host => host_domain, :port => port_number }
+  config.action_mailer.delivery_method = :smtp
+  ActionMailer::Base.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               'gmail.com',
+    user_name:            ENV['SMTP_USERNAME'],
+    password:             ENV['SMTP_PASSWORD'],
+    authentication:       'plain',
+    enable_starttls_auto: true  
+  }
+end
+
+# config/initializers/mno_enterprise.rb
+MnoEnterprise.configure do |config|
+  config.mail_adapter = :smtp
+end
+```
+
 ## Building the frontend
 The Maestrano Enterprise frontend is a Single Page Application (SPA) that is separate from the Rails project. The source code for this frontend can be found on the [mno-enterprise-angular Github repository](https://github.com/maestrano/mno-enterprise-angular)
 

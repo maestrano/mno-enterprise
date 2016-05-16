@@ -1,0 +1,11 @@
+<p>Hi there,</p>
+<p>You have been invited by <%= ref_full_name %> to join <%= organization %> on our platform!. You can automatically create your account on our platform and join <%= organization %> by clicking on the link below:</p>
+<a href="<%= confirmation_link %>">Create my account and join <%= organization %></a>
+ 
+<% if team? %>
+<p>By accepting this invite you will automatically join the <%= team %> team.</p>
+<% end %>
+<p>
+    Regards,<br/>
+    The Marketplace team
+</p>

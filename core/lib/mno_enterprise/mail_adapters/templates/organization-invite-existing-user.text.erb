@@ -1,0 +1,13 @@
+Hi there
+=================================================================
+
+You have been invited by <%= ref_full_name %> to join <%= organization %> on our platform!. You can automatically create your account on our platform and join <%= organization %> by clicking on the link below:
+<%= confirmation_link %>
+ 
+<% if team? %>
+By accepting this invite you will automatically join the <%= team %> team.
+<% end %>
+
+
+Regards,
+The Marketplace team
