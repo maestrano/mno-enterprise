@@ -112,7 +112,8 @@ end
 ```
 
 #### SMTP
-
+SMTP server settings are needed to send emails via SMTP. In case there's no SMTP server, a personal gmail account could be used as an alternative.
+To use gmail to send SMTP emails, the gmail account should be set to allow "less secure apps".
 ```ruby
 # config/environments/production.rb
 Rails.application.configure do
