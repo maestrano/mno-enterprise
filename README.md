@@ -143,7 +143,7 @@ MnoEnterprise.configure do |config|
 end
 ```
 
-# Customization of mail templates
+##### Customization of mail templates
 - You can override the default email templates by adding template files ( template-name.html.erb, template-name.text.erb ) to the mail view directory (/app/views/system_notifications).
 - Logo can also be overriden by adding your own logo image (main-logo.png) to the image assets directory (/app/assets/images/mno_enterprise).
 - Write your own stylesheet by adding mail.css file to the stylesheets directory (/app/assets/stylesheets/mno_enterprise). The css rules you write will be applied to all the mail templates including the default ones.
