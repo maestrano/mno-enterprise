@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <%= stylesheet_link_tag('mno_enterprise/mail.css') %>
+  </head>
+  <body>
+    <p class="header">
+      <%= image_tag('mno_enterprise/main-logo.png') %>
+    </p>
+
+    <p>Hi <%= @info[:first_name] %></p>
+     
+    <p>You have asked to change your email address in the platform. Please confirm this new email address by clicking on the following link</p>    
+     
+    <a href="<%= @info[:confirmation_link] %>">Confirm my new email address</a>
+     
+    <p>
+      Regards,<br/>
+      The Marketplace team
+    </p>
+    
+    <p class="footer">
+      <%= @info[:company] %>
+    </p>
+  </body>
+</html>
