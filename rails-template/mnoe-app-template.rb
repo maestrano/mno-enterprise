@@ -78,6 +78,9 @@ task default: :test
 EOF
 end
 
+# Create uat environment
+copy_file File.join(destination_root, 'config/environments/production.rb'), 'config/environments/uat.rb'
+
 after_bundle do
   #
   # Cleanup
