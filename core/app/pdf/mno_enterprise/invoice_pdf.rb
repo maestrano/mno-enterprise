@@ -55,11 +55,11 @@ module MnoEnterprise
       # Billing details
       @data[:billing_report] = @invoice.billing_summary.map do |item|
         item_label = item[:label]
-        price_label = item[:price_tag]
+        price_label = format_price item
 
         (item[:lines] || []).each do |item_line|
           item_label += "<font size='4'>\n\n</font><font size='8'><color rgb='999999'><i>#{Prawn::Text::NBSP * 3}#{item_line[:label]}</i></color></font>"
-          price_label += "<font size='4'>\n\n</font><font size='8'><color rgb='999999'>#{item_line[:price_tag]}</color></font>"
+          price_label += "<font size='4'>\n\n</font><font size='8'><color rgb='999999'>#{format_price(item_line)}</color></font>"
         end
 
         [item_label, item[:name], item[:usage], price_label]
@@ -78,6 +78,17 @@ module MnoEnterprise
     def render
       generate_content
       @pdf.render
+    end
+
+    def format_price(item)
+      # price_tag is deprecated
+      price = item[:price]
+      if price
+        # Money hash are automatically parsed to Money in core/lib/her_extension/middleware/mnoe_api_v1_parse_json.rb
+        price.format
+      else
+        item[:price_tag]
+      end
     end
 
     # Generate the document content
