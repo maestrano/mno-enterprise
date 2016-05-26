@@ -85,7 +85,7 @@ module MnoEnterprise
       price = item[:price]
       if price
         # Money hash are automatically parsed to Money in core/lib/her_extension/middleware/mnoe_api_v1_parse_json.rb
-        price.format
+        money(price)
       else
         item[:price_tag]
       end
@@ -126,6 +126,12 @@ module MnoEnterprise
 
       File.exists?(app_path) ? app_path : engine_path
     end
+
+    # Format a money object
+    def money(m)
+      "#{m.format(symbol: false)} #{m.currency_as_string}"
+    end
+
 
     # Add a repeated header to the document
     def add_page_header
@@ -217,7 +223,7 @@ module MnoEnterprise
 
       summary_data = []
       summary_data << ['Period', 'Total Payable' + (@data[:invoice_tax_pips] > 0 ? "\n<font size='8'><i>(incl. GST)</i></font>" : '')]
-      summary_data << ["#{@data[:period_started_at].strftime("%B, %e %Y")} to #{@data[:period_ended_at].strftime("%B, %e %Y")}",@data[:invoice_total_payable_with_tax].format]
+      summary_data << ["#{@data[:period_started_at].strftime("%B, %e %Y")} to #{@data[:period_ended_at].strftime("%B, %e %Y")}",money(@data[:invoice_total_payable_with_tax])]
 
       # Draw Table background
       bg_height = @data[:invoice_tax_pips] > 0 ? 58 : 50
@@ -280,13 +286,13 @@ module MnoEnterprise
           @pdf.text_box "Credit Remaining", at: [445,@pdf.cursor], width: 95, height: 23, align: :center, valign: :center,
             style: :bold, size: 10
 
-          @pdf.text_box @data[:customer_current_credit].format, at: [445,@pdf.cursor], width: 95, height: 37, align: :center, valign: :bottom
+          @pdf.text_box money(@data[:customer_current_credit]), at: [445,@pdf.cursor], width: 95, height: 37, align: :center, valign: :bottom
         end
 
         @pdf.move_down 40
       end
 
-      #===============================
+      #========================()=======
       # Account Situation
       #===============================
       @pdf.move_down 30
@@ -315,15 +321,15 @@ module MnoEnterprise
       situation_data << [
         '',
         '',
-        @data[:invoice_previous_total_due].format,
+        money(@data[:invoice_previous_total_due]),
         '-',
-        @data[:invoice_previous_total_paid].format,
+        money(@data[:invoice_previous_total_paid]),
         '+',
-        @data[:invoice_price].format,
+        money(@data[:invoice_price]),
         '-',
-        @data[:invoice_credit_paid].format,
+        money(@data[:invoice_credit_paid]),
         '=',
-        @data[:invoice_total_payable].format
+        money(@data[:invoice_total_payable])
       ]
 
       # Draw background
@@ -396,7 +402,7 @@ module MnoEnterprise
           '',
           'GST',
           '+',
-          @data[:invoice_tax_payable].format,
+          money(@data[:invoice_tax_payable]),
         ]
 
         # Draw table background
@@ -453,7 +459,7 @@ module MnoEnterprise
           '',
           'Total (incl. GST)',
           '=',
-          @data[:invoice_total_payable_with_tax].format,
+          money(@data[:invoice_total_payable_with_tax]),
         ]
 
         # Draw table background
