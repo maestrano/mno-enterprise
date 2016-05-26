@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <%= stylesheet_link_tag('mno_enterprise/mail.css') %>
+  </head>
+  <body>
+    <p class="header">
+      <%= image_tag('mno_enterprise/main-logo.png') %>
+    </p>
+
+    <p>Hi <%= @info[:first_name] %></p>
+     
+    <p>You can unlock your account by clicking on the following link</p>
+     
+    <a href="<%= @info[:unlock_link] %>">Unlock my account</a>
+     
+    <p>
+      Regards,<br/>
+      The Marketplace team
+    </p>
+    
+    <p class="footer">
+      <%= @info[:company] %>
+    </p>
+  </body>
+</html>

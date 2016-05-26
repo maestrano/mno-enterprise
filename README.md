@@ -111,6 +111,46 @@ MnoEnterprise.configure do |config|
 end
 ```
 
+#### SMTP
+SMTP server settings are needed to send emails via SMTP. In case there's no SMTP server, a personal gmail account could be used as an alternative.
+To use gmail to send SMTP emails, the gmail account should be set to allow "less secure apps".
+Typically for security reasons, system environment variables 'SMTP_USERNAME' and 'SMTP_PASSWORD' should be used to set the SMTP credentials.
+
+```ruby
+# Gemfile
+gem 'premailer-rails'
+
+# config/environments/production.rb
+Rails.application.configure do
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default_url_options = { :host => host_domain, :port => port_number }
+  config.action_mailer.asset_host = your_apps_root_url
+  config.action_mailer.delivery_method = :smtp
+  ActionMailer::Base.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               'gmail.com',
+    user_name:            ENV['SMTP_USERNAME'],
+    password:             ENV['SMTP_PASSWORD'],
+    authentication:       'plain',
+    enable_starttls_auto: true  
+  }
+end
+
+# config/initializers/mno_enterprise.rb
+MnoEnterprise.configure do |config|
+  config.mail_adapter = :smtp
+end
+
+# config/initializers/assets.rb
+Rails.application.config.assets.precompile += %w( mno_enterprise/mail.css )
+```
+
+##### Customization of mail templates
+- You can override the default mail templates by adding template files ( template-name.html.erb, template-name.text.erb ) to the mail view directory (/app/views/system_notifications).
+- Logo can also be overriden by adding your own logo image (main-logo.png) to the image assets directory (/app/assets/images/mno_enterprise).
+- Write your own stylesheet by adding mail.css file to the stylesheets directory (/app/assets/stylesheets/mno_enterprise). The css rules you write will be applied to all the mail templates including the default ones.
+
 ## Building the frontend
 The Maestrano Enterprise frontend is a Single Page Application (SPA) that is separate from the Rails project. The source code for this frontend can be found on the [mno-enterprise-angular Github repository](https://github.com/maestrano/mno-enterprise-angular)
 
