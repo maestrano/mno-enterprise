@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <%= stylesheet_link_tag('mno_enterprise/mail.css') %>
+  </head>
+  <body>
+    <p class="header">
+      <%= image_tag('mno_enterprise/main-logo.png') %>
+    </p>
+
+    <p>Hi there,</p>
+     
+    <p>You have been invited to create an account on our platform! You can do so by clicking on the link below:</p>
+     
+    <a href="<%= @info[:registration_link] %>">Create my account</a>
+     
+    <p>
+      Regards,<br/>
+      The Marketplace team
+    </p>
+
+    <p class="footer">
+      <%= @info[:company] %>
+    </p>    
+  </body>
+</html>

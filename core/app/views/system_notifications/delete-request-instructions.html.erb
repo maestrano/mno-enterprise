@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <%= stylesheet_link_tag('mno_enterprise/mail.css') %>
+  </head>
+  <body>
+    <p class="header">
+      <%= image_tag('mno_enterprise/main-logo.png') %>
+    </p>
+
+    <p>Hi <%= @info[:first_name] %></p>
+     
+    <p>We have received a request from you to terminate your account.</p>
+     
+    <p>If this is a mistake, you can simply disregard this email - however, we strongly recommend you change your password too.</p>
+     
+    <p>If you would like to proceed with the termination of your account you can do so by clicking the link below and following the prompts.</p>
+    <a href="<%= @info[:terminate_account_link] %>">Terminate Your Account</a>
+      
+    <p>Please be advised, this is an irreversible action.</p>
+     
+    <p>
+      Regards,<br/>
+      The Marketplace team
+    </p>
+    <p class="footer">
+      <%= @info[:company] %>
+    </p>
+  </body>
+</html>
