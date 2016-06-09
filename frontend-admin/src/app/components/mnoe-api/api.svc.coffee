@@ -21,7 +21,10 @@
         # Extract and restangularize the object
         else if (operation == 'get' || operation == 'put' || operation == 'post')
           what = inflector.singularize(what)
-          extractedData = data[what]
+          if (data[what])
+            extractedData = data[what]
+          else
+            extractedData = data
         else
           extractedData = data
         return extractedData

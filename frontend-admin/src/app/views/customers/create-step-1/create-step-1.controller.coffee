@@ -3,6 +3,7 @@
   vm = this
 
   vm.organization = {}
+  vm.appSearch = ""
 
   vm.toggleApp = (app) ->
     app.checked = !app.checked

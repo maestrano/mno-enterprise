@@ -1,4 +1,4 @@
-@App.controller 'CustomersController', ($uibModal, MnoeUsers, MnoeOrganizations) ->
+@App.controller 'CustomersController', ($uibModal, MnoeUsers, MnoeOrganizations, MnoeObservables) ->
   'ngInject'
   vm = this
 
@@ -14,7 +14,7 @@
       controllerAs: 'vm'
     )
 
-  MnoeUsers.registerListChangeCb((promise) ->
+  MnoeObservables.registerCb('listUserChange', (promise) ->
     promise.then(
       (response) ->
         vm.users.totalCount = response.headers('x-total-count')

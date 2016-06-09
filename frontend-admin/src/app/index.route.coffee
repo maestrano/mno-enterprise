@@ -36,6 +36,13 @@
       controllerAs: 'vm'
       ncyBreadcrumb:
         label: 'Finance'
+    .state 'dashboard.staff',
+      url: '/staff' #:staffId
+      templateUrl: 'app/views/staff/staff.html'
+      controller: 'StaffController'
+      controllerAs: 'vm'
+      ncyBreadcrumb:
+        label: 'Staff'
     .state 'dashboard.customers',
       url: '/customers'
       templateUrl: 'app/views/customers/customers.html'

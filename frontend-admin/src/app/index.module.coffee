@@ -9,6 +9,8 @@
   'toastr',
   'ncy-angular-breadcrumb',
   'platanus.inflector',
+  'smart-table',
   'angularMoment',
-  'duScroll'
+  'duScroll',
+  'angular.filter',
 ]
