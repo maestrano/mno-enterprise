@@ -6,14 +6,13 @@
   bindings: {
     view: '@',
   }
-  controller: ($filter, $log, MnoeUsers, MnoConfirm, MnoeObservables, ADMIN_ROLES, toastr) ->
+  controller: ($filter, $log, MnoeUsers, MnoConfirm, MnoeObservables, ADMIN_ROLES, OBS_KEYS, toastr) ->
     vm = this
 
     vm.listOfStaff = []
 
     # Manage sorting, search and pagination
     vm.callServer = (tableState) ->
-
       sort   = updateSort (tableState.sort)
       search = updateSearch (tableState.search)
 
@@ -99,29 +98,14 @@
           vm.listOfStaff = response.data
       ).finally(-> vm.staff.loading = false)
 
-    # If "all" is set on the directive, all the staffs are displayed
-    # if view="last" is set on the directive, the last 10 staffs are displayed
-    displayCurrentState = () ->
-      if vm.state == 'all'
-        setAllStaffsList()
-        return fetchStaffs(vm.staff.nbItems, 0)
-      else if vm.state == 'last'
-        setLastStaffsList()
-        return fetchStaffs(10, 0, 'created_at.desc')
-
-    # Display all the staffs
-    setAllStaffsList = () ->
-      vm.staff.widgetTitle = 'All staffs'
-      vm.staff.switchLinkTitle = '(last 10)'
-
     # Initial call and start the listeners
-    displayCurrentState().then( ->
+    fetchStaffs(vm.staff.nbItems, 0).then( ->
       # Notify me if a user is added
-      MnoeObservables.registerCb('addStaffChange', ->
+      MnoeObservables.registerCb(OBS_KEYS.staffAdded, ->
         displayCurrentState()
       )
       # Notify me if the list changes
-      MnoeObservables.registerCb('listStaffChange', ->
+      MnoeObservables.registerCb(OBS_KEYS.staffChanged, ->
         displayCurrentState()
       )
     )

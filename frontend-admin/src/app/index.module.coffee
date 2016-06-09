@@ -12,5 +12,4 @@
   'smart-table',
   'angularMoment',
   'duScroll',
-  'angular.filter',
 ]
