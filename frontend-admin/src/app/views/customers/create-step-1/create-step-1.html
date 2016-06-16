@@ -21,15 +21,17 @@
         </rd-widget>
 
         <rd-widget class="top-buffer-2">
-          <rd-widget-header icon="fa-rocket" title="Select your apps"></rd-widget-header>
+          <rd-widget-header icon="fa-rocket" title="Select your apps">
+            <input type="text" ng-model="vm.appSearch" placeholder="Search" class="form-control input-sm search-bar">
+          </rd-widget-header>
           <rd-widget-body loading="!vm.marketplace">
             <div class="row bs-row">
-              <div class="col-xs-6 col-sm-3 col-lg-2 app-icon" ng-repeat="app in vm.marketplace.apps">
+              <div class="col-xs-6 col-sm-3 col-lg-2 app-icon" ng-repeat="app in vm.marketplace.apps | filter:{name: vm.appSearch}">
                 <div class="app-icon-wrapper" ng-click="vm.toggleApp(app)">
                   <div class="checked" ng-show="app.checked">
                     <i class="fa fa-check fa-5x"></i>
                   </div>
-                  <img class="app-logo img-thumbnail" ng-src="{{::main.trustSrc(app.logo)}}" alt="{{::app.name}} logo">
+                  <img class="app-logo img-thumbnail" ng-src="{{::main.trustSrc(app.logo)}}" alt="{{::app.name}} logo" title="{{::app.tiny_description}}">
                 </div>
                 <div class="app-title">
                   {{::app.name}}
