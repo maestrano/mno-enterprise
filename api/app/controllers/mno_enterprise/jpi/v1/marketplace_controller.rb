@@ -9,7 +9,7 @@ module MnoEnterprise
       else
         MnoEnterprise::App.all.to_a
       end
-
+      @apps.sort_by! { |app| [app.rank ? 1 : (1.0 / 0) , app.rank] }
       @categories = MnoEnterprise::App.categories(@apps)
       @categories.delete('Most Popular')
     end
