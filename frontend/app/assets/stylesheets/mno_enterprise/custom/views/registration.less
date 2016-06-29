@@ -22,17 +22,22 @@
 }
 
 // Default style
+
+.registration when (isstring(@login-bg-img)) {
+  background-image: asset-url(@login-bg-img);
+}
+
 .registration {
   height: 100%;
   width: 100%;
   position: absolute;
   background-color: @login-bg-color;
-  
+
   .login-box-wrapper {
     text-align: center;
     @login-box-grid-position();
   }
-  
+
   .login-box-wrapper md-input-container {
     text-align: left;
   }
