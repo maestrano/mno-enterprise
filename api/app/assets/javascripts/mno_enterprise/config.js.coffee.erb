@@ -8,3 +8,4 @@ angular.module('mnoEnterprise.configuration', [])
     enabled: <%= MnoEnterprise.i18n_enabled %>,
     available_locales: <%= I18n.available_locales.to_json %>
   })
+  .constant('PRICING_CONFIG', <%= Settings.pricing.to_json %>)

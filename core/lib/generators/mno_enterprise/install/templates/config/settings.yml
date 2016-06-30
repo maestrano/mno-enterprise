@@ -5,3 +5,5 @@ mno:
   paths:
     root: /api/mnoe/v1
 frontend_host:
+pricing:
+  enabled: false
