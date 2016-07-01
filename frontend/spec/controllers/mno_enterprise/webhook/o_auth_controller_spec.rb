@@ -30,7 +30,7 @@ module MnoEnterprise
       it_behaves_like "a user protected resource"
 
       it { subject; expect(response).to be_success }
-      it { subject; expect(assigns(:redirect_to)).to eq(redirect_url) }
+      it { Timecop.freeze { subject; expect(assigns(:redirect_to)).to eq(redirect_url) } }
 
       Webhook::OAuthController::PROVIDERS_WITH_OPTIONS.each do |provider|
         describe "#{provider.capitalize} provider" do
@@ -39,7 +39,7 @@ module MnoEnterprise
 
           context 'with perform=true' do
             let(:extra_params) { {perform: true} }
-            it { subject; expect(assigns(:redirect_to)).to eq(redirect_url) }
+            it { Timecop.freeze { subject; expect(assigns(:redirect_to)).to eq(redirect_url) } }
           end
         end
       end
