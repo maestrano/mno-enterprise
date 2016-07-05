@@ -49,7 +49,7 @@
   # Update the admin-role of a staff to nothing
   # UPDATE /mnoe/jpi/v1/admin/users/:id
   @removeStaff = (id) ->
-    promise = MnoeAdminApiSvc.one('users', id).patch({admin_role: ""}).then(
+    promise = MnoeAdminApiSvc.one('users', id).remove().then(
       (response) ->
         MnoeObservables.notifyObservers(OBS_KEYS.staffChanged, promise)
       (error) ->
