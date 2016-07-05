@@ -86,7 +86,7 @@
           console.log 'Remove staff role:' + staff
           MnoeUsers.removeStaff(staff.id).then( ->
             toastr.success("#{staff.name} #{staff.surname} has been successfully removed.")
-            )
+          )
         )
 
     # Fetch staffs
@@ -102,11 +102,11 @@
     fetchStaffs(vm.staff.nbItems, 0).then( ->
       # Notify me if a user is added
       MnoeObservables.registerCb(OBS_KEYS.staffAdded, ->
-        displayCurrentState()
+        fetchStaffs(vm.staff.nbItems, vm.staff.offset)
       )
       # Notify me if the list changes
       MnoeObservables.registerCb(OBS_KEYS.staffChanged, ->
-        displayCurrentState()
+        fetchStaffs(vm.staff.nbItems, vm.staff.offset)
       )
     )
     return
