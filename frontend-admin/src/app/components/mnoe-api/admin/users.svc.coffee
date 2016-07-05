@@ -1,5 +1,5 @@
 # Service for managing the users.
-@App.service 'MnoeUsers', ($q, $log, MnoeAdminApiSvc, MnoeObservables, ADMIN_ROLES, OBS_KEYS) ->
+@App.service 'MnoeUsers', ($q, $log, MnoeAdminApiSvc, MnoeObservables, OBS_KEYS) ->
   _self = @
 
   @list = (limit, offset, sort) ->
@@ -10,9 +10,9 @@
     )
 
   @staffs = (limit, offset, sort, params = {}) ->
-    # Require only users with an admin role
+    # Require only users with an admin role (gets any role, not necessarly defined in the frontend)
     if ! params['where[admin_role.in][]']
-      params['where[admin_role.in][]'] = ADMIN_ROLES
+      params['where[admin_role.not]'] = ''
 
     return _getStaffs(limit, offset, sort, params)
 
