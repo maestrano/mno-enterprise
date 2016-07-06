@@ -70,7 +70,7 @@ namespace :test do
 end
 
 task :test do
-  Rake::Task['test:all'].invokecd
+  Rake::Task['test:all'].invoke
 end
 
 # Running `rake` runs all the tests.
@@ -83,7 +83,7 @@ copy_file File.join(destination_root, 'config/environments/production.rb'), 'con
 
 # Edit config/environments/*.rb
 Dir["config/environments/*.rb"].each do |file|
-  insert_into_file file, "\n  config.action_mailer.default_url_options = {host: 'localhost:7000'} \n", before: /^end$/
+  insert_into_file file, "\n  config.action_mailer.default_url_options = {host: 'localhost:7000'}\n", before: /^end$/
 end
 
 # secrets
