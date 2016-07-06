@@ -22,9 +22,7 @@
     return userPromise if userPromise?
     userPromise = MnoeApiSvc.one('current_user').get().then(
       (response) ->
-
         adminRole = {admin_role: response.data.admin_role}
-
         angular.copy(adminRole, _self.user)
         response
     )
