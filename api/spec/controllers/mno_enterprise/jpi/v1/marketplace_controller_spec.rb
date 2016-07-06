@@ -7,7 +7,7 @@ module MnoEnterprise
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
     let!(:app) { build(:app) }
-        
+    
     def markdown(text)
       return text unless text.present?
       HtmlProcessor.new(text, format: :markdown).html.html_safe
@@ -77,7 +77,7 @@ module MnoEnterprise
         it 'returns the right response' do
           subject
           expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app]).to_json))
-        end 
+        end
       end
 
       context 'when marketplace_listing is not set' do
