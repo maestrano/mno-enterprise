@@ -41,5 +41,4 @@ FactoryGirl.define do
     # Properly build the resource with Her
     initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
   end
-  
 end
