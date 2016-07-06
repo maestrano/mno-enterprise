@@ -70,7 +70,7 @@ namespace :test do
 end
 
 task :test do
-  Rake::Task['test:all'].invoke
+  Rake::Task['test:all'].invokecd
 end
 
 # Running `rake` runs all the tests.
@@ -80,6 +80,17 @@ end
 
 # Create uat environment
 copy_file File.join(destination_root, 'config/environments/production.rb'), 'config/environments/uat.rb'
+
+# Edit config/environments/*.rb
+Dir["config/environments/*.rb"].each do |file|
+  insert_into_file file, "\n  config.action_mailer.default_url_options = {host: 'localhost:7000'} \n", before: /^end$/
+end
+
+# secrets
+append_to_file 'config/secrets.yml' do
+  'uat: 
+  secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>'
+end
 
 after_bundle do
   #
