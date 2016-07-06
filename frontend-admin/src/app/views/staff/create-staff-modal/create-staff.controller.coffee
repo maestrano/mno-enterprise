@@ -8,9 +8,8 @@
     vm.isLoading = true
     MnoeUsers.addStaff(vm.user).then(
       (success) ->
-        toastr.success("#{vm.user.name} #{vm.user.surname} has been successfully added.")
-        # Close the modal returning the item to the parent window
-        $uibModalInstance.close(success.data)
+        # Send an email to the new staff
+        sendConfirmationEmail(vm.user)
       (error) ->
         toastr.error("An error occurred while adding #{vm.user.name} #{vm.user.surname}.")
         $log.error("An error occurred:", error)
@@ -18,5 +17,24 @@
 
   vm.onCancel = () ->
     $uibModalInstance.dismiss('cancel')
+
+  sendConfirmationEmail = (user) ->
+    MnoeUsers.sendSignupEmail(user.email).then(
+      (success) ->
+        toastr.success("#{user.name} #{user.surname} has been successfully added.")
+        # Close the modal returning the item to the parent window
+        $uibModalInstance.close(success.data)
+      (error) ->
+        toastr.error("An error occurred while sending an email to #{user.email}.")
+        $log.error("An error occurred:", error)
+
+        # Remove the staff that has been added
+        MnoeUsers.removeStaff(vm.user.id).then(
+          (success) ->
+          (error) ->
+            toastr.error("An error occurred while deleting the user.")
+            $log.error("An error occurred:", error)
+        )
+    )
 
   return
