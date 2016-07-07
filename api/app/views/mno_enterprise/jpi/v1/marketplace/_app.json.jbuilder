@@ -1,5 +1,5 @@
 json.extract! app, :id, :nid, :name, :stack, :key_benefits, :categories, :tags, :tiny_description,
-              :testimonials, :pictures, :pricing_plans
+              :testimonials, :pictures, :pricing_plans, :rank
 
 json.description markdown(app.sanitized_description)
 

@@ -22,7 +22,7 @@ FactoryGirl.define do
     stack 'cube'
     terms_url "http://opensource.org/licenses/MIT"
     appinfo { {} }
-
+    sequence(:rank) { |n| n }
     pricing_plans {{
       'default' =>[{name: 'Monthly Plan', price: '20.0', currency: 'AUD', factor: '/month'}]
     }}
@@ -41,5 +41,4 @@ FactoryGirl.define do
     # Properly build the resource with Her
     initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
   end
-  
 end

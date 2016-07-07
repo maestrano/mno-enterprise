@@ -9,7 +9,7 @@ module MnoEnterprise
       else
         MnoEnterprise::App.all.to_a
       end
-
+      @apps.sort_by! { |app| [app.rank ? 0 : 1 , app.rank] } # the nil ranks will appear at the end
       @categories = MnoEnterprise::App.categories(@apps)
       @categories.delete('Most Popular')
     end

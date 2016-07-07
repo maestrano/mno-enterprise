@@ -311,7 +311,7 @@ First switch to a new branch such as v2-to-v3.
 git co -b v2-to-v3
 ```
 
-Open your Gemfile and ensure that your project points to the v3.0-dev of Maestrano Enterprise. You gemfile should look like this:
+Open your Gemfile and ensure that your project points to the v3.0-dev branch of Maestrano Enterprise. You gemfile should look like this:
 ```ruby
 gem 'mno-enterprise', git: 'https://some-token:x-oauth-basic@github.com/alachaum/mno-enterprise.git', branch: 'v3.0-dev'
 ```
