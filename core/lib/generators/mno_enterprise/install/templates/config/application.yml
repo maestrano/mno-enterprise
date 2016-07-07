@@ -10,3 +10,6 @@ tenant_key: my_tenant_access_key
 
 # Rails secret key
 SECRET_KEY_BASE: <%= SecureRandom.hex(64) %>
+
+# Google Tag Manager
+google_tag_container: GTM-TH3MLB
