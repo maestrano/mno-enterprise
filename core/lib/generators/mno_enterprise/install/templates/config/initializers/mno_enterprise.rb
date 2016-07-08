@@ -69,7 +69,7 @@ MnoEnterprise.configure do |config|
   # Third Party Plugins
   #===============================================
   # Google Tag Manager
-  # config.google_tag_container = nil
+  config.google_tag_container = ENV['google_tag_container']
 
   #===============================================
   # API Configuration

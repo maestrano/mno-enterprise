@@ -9,3 +9,4 @@ angular.module('mnoEnterprise.configuration', [])
     available_locales: <%= I18n.available_locales.to_json %>
   })
   .constant('PRICING_CONFIG', <%= Settings.pricing.to_json %>)
+  .constant('GOOGLE_TAG_CONTAINER_ID', <%= MnoEnterprise.google_tag_container.to_json %>)
