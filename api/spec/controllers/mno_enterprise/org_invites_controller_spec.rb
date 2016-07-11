@@ -8,7 +8,7 @@ module MnoEnterprise
   describe OrgInvitesController, type: :controller do
     render_views
     routes { MnoEnterprise::Engine.routes }
-  
+
     let(:user) { build(:user) }
     let(:invite) { build(:org_invite, user: user) }
     let(:token) { invite.token }
@@ -25,7 +25,7 @@ module MnoEnterprise
     describe "GET #show" do
       subject { get :show, id: invite.id, token: token}
 
-      let(:success_fragment) { "#/?dhbRefId=#{invite.organization.id}&#{URI.encode_www_form([['flash', {msg: "You are now part of #{invite.organization.name}", type: :success}.to_json]])}" }
+      let(:success_fragment) { "#?dhbRefId=#{invite.organization.id}&#{URI.encode_www_form([['flash', {msg: "You are now part of #{invite.organization.name}", type: :success}.to_json]])}" }
       let(:expired_fragment) { "#?#{URI.encode_www_form([['flash', {msg: "It looks like this invite has expired. Please ask your company administrator to resend the invite.", type: :error}.to_json]])}" }
       let(:invalid_fragment) { "#?#{URI.encode_www_form([['flash', {msg: "Unfortunately, this invite does not seem to be valid.", type: :error}.to_json]])}" }
 
