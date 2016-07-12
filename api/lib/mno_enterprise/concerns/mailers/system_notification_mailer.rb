@@ -142,7 +142,8 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   protected
 
   def recipient(record, new_user = false)
-    hash = { email: record.email }
+    # Org Invite for unconfirmed users will have the email in #unconfirmed_email
+    hash = { email: record.email || record.unconfirmed_email }
     hash[:name] = "#{record.name} #{record.surname}".strip unless new_user
     hash
   end
