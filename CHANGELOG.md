@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+## [v3.0.3](https://github.com/maestrano/mno-enterprise/tree/v3.0.3) (2016-07-13)
+
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.2...v3.0.3)
+
+**Implemented enhancements:**
+
+- Add uat environment to the template [\#32](https://github.com/maestrano/mno-enterprise/pull/32) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- Correct root redirection in template routes
+- \[MNOE-70\] Anybody can access /admin/ [\#36](https://github.com/maestrano/mno-enterprise/pull/36) ([alexnoox](https://github.com/alexnoox))
+- Fix time-dependent specs [\#44](https://github.com/maestrano/mno-enterprise/pull/44) ([ouranos](https://github.com/ouranos))
+- Merge [v2.0.3](#v2.0.3)
+
 ## [v3.0.2](https://github.com/maestrano/mno-enterprise/tree/v3.0.2) (2016-05-12)
 
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.1...v3.0.2)
