@@ -33,6 +33,18 @@
 - Theme builder/previewer
 - I18n implementation
 
+## [v2.0.3](https://github.com/maestrano/mno-enterprise/tree/v2.0.3) (2016-07-12)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.2...v2.0.3)
+
+**Implemented enhancements:**
+
+- impac widgets\_controller to be overridable [\#39](https://github.com/maestrano/mno-enterprise/pull/39) ([cesar-tonnoir](https://github.com/cesar-tonnoir))
+
+**Fixed bugs:**
+
+- Fix invite when home\_path already has a fragment [\#49](https://github.com/maestrano/mno-enterprise/pull/49) ([ouranos](https://github.com/ouranos))
+- Fix error when sending invite to unconfirmed email [\#31](https://github.com/maestrano/mno-enterprise/pull/31) ([ouranos](https://github.com/ouranos))
+
 ## [v2.0.2](https://github.com/maestrano/mno-enterprise/tree/v2.0.2) (2016-05-12)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.1...v2.0.2)
 

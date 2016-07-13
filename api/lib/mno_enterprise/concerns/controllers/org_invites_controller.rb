@@ -29,7 +29,7 @@ module MnoEnterprise::Concerns::Controllers::OrgInvitesController
     redirect_path = mnoe_home_path
 
     if @org_invite && !@org_invite.expired? && @org_invite.accept!(current_user)
-      redirect_path += "#/?dhbRefId=#{ @org_invite.organization.id}"
+      redirect_path = add_param_to_fragment(redirect_path.to_s, 'dhbRefId', @org_invite.organization.id)
       message = { notice: "You are now part of #{@org_invite.organization.name}" }
       yield(:success, @org_invite) if block_given?
     elsif @org_invite && @org_invite.expired?
