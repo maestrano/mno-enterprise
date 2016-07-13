@@ -39,8 +39,4 @@ Gem::Specification.new do |s|
   s.add_dependency 'figaro'
   # Config files per environment
   s.add_dependency 'config', '~> 1.0.0'
-
-  # Emailing
-  # s.add_development_dependency 'mandrill-api', '~> 1.0.53'
-  s.add_development_dependency 'sparkpost', '~> 0.1.4'
 end
