@@ -19,7 +19,7 @@ module MnoEnterprise
       it { expect(controller.add_param_to_fragment('/#/platform/dashboard/he/43?en=690', 'foo', [{msg: 'yolo'}])).to eq('/#/platform/dashboard/he/43?en=690&foo=%7B%3Amsg%3D%3E%22yolo%22%7D') }
     end
 
-    describe '#after_sign_in_path_for' dos
+    describe '#after_sign_in_path_for' do
       before { @request.env["devise.mapping"] = Devise.mappings[:user] }
 
       it { expect(controller.after_sign_in_path_for(User.new())).to eq('/dashboard/') }
