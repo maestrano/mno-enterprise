@@ -43,6 +43,8 @@
       controllerAs: 'vm'
       ncyBreadcrumb:
         label: 'Staff'
+      resolve:
+        skip: (MnoeCurrentUser) -> MnoeCurrentUser.skipIfNotAdmin()
     .state 'dashboard.customers',
       url: '/customers'
       templateUrl: 'app/views/customers/customers.html'
