@@ -213,6 +213,11 @@ NB: Your host project may have been generated or created before the implementati
 @import "../../../frontend/src/fonts/font-faces";
 ```
 
+### Adding favicon
+
+Use  http://www.favicon-generator.org/ to generate all the favicon and put them in frontend/src/images/favicons
+
+
 ## Replacing the Frontend
 
 In some cases you may decide that the current [mno-enterprise-angular](https://github.com/maestrano/mno-enterprise-angular) frontend is not appropriate at all.
