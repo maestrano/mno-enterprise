@@ -36,7 +36,7 @@ module MnoEnterprise
 
     def set_default_meta
       @meta = {}
-      @meta[:title] = "Application"
+      @meta[:title] = MnoEnterprise.app_name
       @meta[:description] = "Enterprise Applications"
     end
 

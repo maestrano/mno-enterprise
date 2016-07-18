@@ -7,6 +7,8 @@
       controller: 'DashboardController'
       controllerAs: 'main'
     .state 'dashboard.home',
+      data:
+        pageTitle:'Home'
       url: '/home'
       templateUrl: 'app/views/home/home.html'
       controller: 'HomeController'
@@ -14,6 +16,8 @@
       ncyBreadcrumb:
         label: 'Home'
     .state 'dashboard.home.user',
+      data:
+        pageTitle:'User'
       url: '^/user/:userId'
       views: '@dashboard':
         templateUrl: 'app/views/user/user.html'
@@ -22,6 +26,8 @@
       ncyBreadcrumb:
         label: 'User'
     .state 'dashboard.home.organization',
+      data:
+        pageTitle:'Organization'
       url: '^/organization/:orgId'
       views: '@dashboard':
         templateUrl: 'app/views/organization/organization.html'
@@ -30,6 +36,8 @@
       ncyBreadcrumb:
         label: 'Organisation'
     .state 'dashboard.finance',
+      data:
+        pageTitle:'Finance'
       url: '/finance'
       templateUrl: 'app/views/finance/finance.html'
       controller: 'FinanceController'
@@ -37,6 +45,8 @@
       ncyBreadcrumb:
         label: 'Finance'
     .state 'dashboard.staff',
+      data:
+        pageTitle:'Staff'
       url: '/staff' #:staffId
       templateUrl: 'app/views/staff/staff.html'
       controller: 'StaffController'
@@ -44,6 +54,8 @@
       ncyBreadcrumb:
         label: 'Staff'
     .state 'dashboard.customers',
+      data:
+        pageTitle:'Customers'
       url: '/customers'
       templateUrl: 'app/views/customers/customers.html'
       controller: 'CustomersController'
