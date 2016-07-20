@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module MnoEnterprise
-  describe ApplicationController, type: :controller do
+  describe 'ApplicationController I18n', type: :controller do
     # Anonymous controller
     controller do
       include MnoEnterprise::Concerns::Controllers::I18n

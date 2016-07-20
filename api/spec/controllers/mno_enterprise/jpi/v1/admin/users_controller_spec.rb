@@ -92,16 +92,31 @@ module MnoEnterprise
 
     describe 'PUT #update' do
       subject { put :update, id: user.id, user: {admin_role: 'staff'} }
+      let(:current_user) { build(:user, :admin) }
 
       before do
-        api_stub_for(put: "/users/#{user.id}", response: ->{ user.admin_role = 'staff'; from_api(user) })
+        api_stub_for(get: "/users/#{current_user.id}", response: from_api(current_user))
+        sign_in current_user
+
+        user.admin_role = nil
+        api_stub_for(put: "/users/#{user.id}", response: -> { user.admin_role = 'staff'; from_api(user) })
         subject
       end
 
-      it { expect(response).to be_success }
+      context 'when admin' do
+        it { expect(response).to be_success }
 
-      # Test that the user is updated by testing the api endpoint was called
-      it { expect(user.admin_role).to eq('staff') }
+        # Test that the user is updated by testing the api endpoint was called
+        it { expect(user.admin_role).to eq('staff') }
+      end
+
+      context 'when staff' do
+        let(:current_user) { build(:user, :staff) }
+
+        it { expect(response).to have_http_status(:unauthorized) }
+
+        it { expect(user.admin_role).to be_nil }
+      end
     end
 
     describe 'DELETE #destroy' do

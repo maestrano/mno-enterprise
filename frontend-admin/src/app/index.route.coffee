@@ -53,6 +53,8 @@
       controllerAs: 'vm'
       ncyBreadcrumb:
         label: 'Staff'
+      resolve:
+        skip: (MnoeCurrentUser) -> MnoeCurrentUser.skipIfNotAdmin()
     .state 'dashboard.customers',
       data:
         pageTitle:'Customers'

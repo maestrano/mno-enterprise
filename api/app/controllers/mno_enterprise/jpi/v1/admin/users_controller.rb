@@ -40,10 +40,14 @@ module MnoEnterprise
 
     # PATCH /mnoe/jpi/v1/admin/users/:id
     def update
-      @user = MnoEnterprise::User.find(params[:id])
-      @user.update(user_params)
+      if current_user.admin_role == "admin"
+        @user = MnoEnterprise::User.find(params[:id])
+        @user.update(user_params)
 
-      render :show
+        render :show
+      else
+        render :index, status: :unauthorized
+      end
     end
 
     # DELETE /mnoe/jpi/v1/admin/users/1
