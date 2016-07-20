@@ -99,7 +99,7 @@ module MnoEnterprise
     def after_sign_in_path_for(resource)
       previous_url = session.delete(:previous_url)
       default_url = if resource.respond_to?(:admin_role) && resource.admin_role.present?
-        '/admin/'
+        MnoEnterprise.router.admin_path
       else
         MnoEnterprise.router.dashboard_path || main_app.root_url
       end
