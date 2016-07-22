@@ -7,7 +7,7 @@
 # fork of the upstream library
 
 
-@App.service 'MnoeCurrentUser', (MnoeApiSvc, $window, $state) ->
+@App.service 'MnoeCurrentUser', (MnoeApiSvc, $window, $state, $q) ->
   _self = @
 
   # Store the current_user promise
@@ -26,5 +26,15 @@
         angular.copy(adminRole, _self.user)
         response
     )
+
+  @skipIfNotAdmin = () ->
+    if _self.user.admin_role? && _self.user.admin_role == 'admin'
+      return $q.resolve()
+    else
+      $timeout(->
+        # Runs after the authentication promise has been rejected.
+        $state.go('dashboard.home')
+      )
+      $q.reject()
 
   return @
