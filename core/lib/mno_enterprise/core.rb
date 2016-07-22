@@ -53,6 +53,10 @@ module MnoEnterprise
       @terms_url || '#'
     end
 
+    def admin_path
+      @admin_path || '/admin/'
+    end
+
     def launch_url(id,opts = {})
       host_url("/launch/#{id}",opts)
     end
