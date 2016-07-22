@@ -186,12 +186,14 @@ This action will save the current style in /frontend/src/app/stylesheets/theme-p
 
 ## Extending the Frontend
 You can easily override or extend the Frontend by adding files to the /frontend directory. All files in this directory will be taken into account during the frontend build and will override the base files of the mno-enterprise-angular project.
+You can also override the login page background adding an image and gif loaders, which is managed by rails,  including the files into the path ../app/assets/images/mno_enterprise. You can generate really cool gifs for this task in pages like http://loading.io/ .
+
 
 Files in this folder MUST follow the [mno-enterprise-angular](https://github.com/maestrano/mno-enterprise-angular) directory structure. For example, you can override the application layout by creating /frontend/src/app/views/layout.html in your project - it will override the original src/app/views/layout.yml file of the mno-enterprise-angular project.
 
 You can also add new files to this directory such as adding new views. This allows you to easily extend the current frontend to suit your needs.
 
-While extending the frontend, you can run this command to start the frontend using gulp serve and automatically override the original files with the ones in the frontend folder:
+While extending the frontend, you can run this command to start the frontend using gulp serve and automatically override the original files with the ones in the frontend folder(be aware it does not take into account images or folders):
 ```bash
 foreman start -f Procfile.dev
 ```
