@@ -208,7 +208,7 @@ Simply copy the font files under the directory `/frontend/src/fonts/` of your ho
 
 An example of a project using a custom font can be seen on the [mno-enterprise-demo](https://github.com/maestrano/mno-enterprise-demo) project.
 
-NB: Your host project may have been generated or created before the implementation of this feature, in this case make sure the the file `/app/assets/stylesheets/main.less` contains:
+NB: Your host project may have been generated or created before the implementation of this feature, in this case make sure the file `/app/assets/stylesheets/main.less` contains:
 ```less
 // Import custom fonts
 //--------------------------------------------
