@@ -390,6 +390,17 @@ The v3 is currently being finalised. There are some minor configuration options 
 
 If deploying to UAT, the Impac! URLs need to be manually replaced. Search the "/public" directory for "http://localhost:4000" and replace by "https://api-impac-uat.maestrano.io". Save the files and deploy.
 
+## Update mnoe-angular to the version in the bower.json.
+```
+rake mnoe:frontend:update
+```
+
+## Update the version of the gem according to the gemfile.
+```
+bundle update mno-enterprise
+
+```
+
 ## Contributing
 
 # Contributing to MnoEnterprise
