@@ -76,7 +76,7 @@ module MnoEnterprise
       it_behaves_like 'a navigatable protected user action'
       it_behaves_like 'a user protected resource'
 
-      it { subject; expect(response).to redirect_to(redirect_url) }
+      it { subject; expect(response).to redirect_to redirect_url }
     end
 
     describe 'GET #sync' do
