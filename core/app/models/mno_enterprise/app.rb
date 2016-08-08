@@ -55,7 +55,7 @@ module MnoEnterprise
     end
 
     # Methods for appinfo flags
-    %w(coming_soon single_billing).each do |method|
+    %w(coming_soon single_billing add_on).each do |method|
       define_method "#{method}?" do
         appinfo.presence && appinfo[method]
       end
