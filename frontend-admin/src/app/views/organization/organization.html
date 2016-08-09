@@ -26,7 +26,8 @@
           <div class="bs-row row">
             <div class="col-sm-6"><div class="label-cell">Active apps</div></div>
             <div class="col-sm-6">
-              <div class="bs-row row">
+              <span ng-if="vm.organization.active_apps.length === 0">(none)</span>
+              <div ng-if="vm.organization.active_apps.length > 0" class="bs-row row">
                 <div class="app-wrapper col-xs-6 col-sm-4 col-md-3" ng-repeat="app in vm.organization.active_apps">
                   <div class="small-app-card ellipsis">
                     <i ng-show="vm.mnoAppInstances.isConnected(app)" class="fa fa-check-circle app-state state-success" uib-tooltip="{{::app.app_name}} is connected!" tooltip-append-to-body="true"></i>
