@@ -1,0 +1,28 @@
+en:
+  mno_enterprise:
+    templates:
+      impac:
+        dock:
+          launch: Launch
+          connect: Connect
+          settings: Settings
+          add_more_apps: Add more apps
+          cancel: Cancel
+          settings:
+            settings: Settings
+            status: Status
+            app_name: Name
+            access_add-on_settings: Acces add-on Settings
+            manual_data_sharing: Data sharing
+            manual_data_sync: Manual Data Sync
+            disconnect_link: Disconnect Link
+            delete: Delete
+            confirm_app_deletion: Confirm app deletion
+            please_note_this_app: Please note this app is on a monthly plan. Your billing for this app will be calculated pro rata.
+            delete_instructions: In order to delete your app, please enter the following statement in the box below.
+            cancel: Cancel
+            developer_details: developer details
+            linked_to: Linked to
+            organization_id: Organization id
+            group_id: Group id (uid) 
+
