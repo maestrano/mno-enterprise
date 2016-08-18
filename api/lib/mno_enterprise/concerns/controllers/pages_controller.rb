@@ -25,7 +25,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
   def launch
     app = MnoEnterprise::AppInstance.find_by(uid: params[:id])
     MnoEnterprise::EventLogger.info('app_launch', current_user.id, 'App launched', app.name, app)
-    redirect_to MnoEnterprise.router.launch_url(params[:id], {wtk: MnoEnterprise.jwt(user_id: current_user.uid)}.merge(request.query_parameters))
+    redirect_to MnoEnterprise.router.launch_url(params[:id], {wtk: MnoEnterprise.jwt(user_id: current_user.uid)}.reverse_merge(request.query_parameters))
   end
 
   # GET /loading/:id

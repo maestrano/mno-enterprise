@@ -34,7 +34,7 @@ module MnoEnterprise
 
       it_behaves_like "a navigatable protected user action"
 
-      it 'redirect to the mno enterprise launch page with a web token' do
+      it 'redirects to the mno enterprise launch page with a web token and extra params' do
         subject
         expect(response).to redirect_to(MnoEnterprise.router.launch_url(app_instance.uid, wtk: MnoEnterprise.jwt({user_id: user.uid}), specific_parameters: 'specific_parameters_value'))
       end
