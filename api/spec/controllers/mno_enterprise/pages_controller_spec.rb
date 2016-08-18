@@ -27,6 +27,19 @@ module MnoEnterprise
       end
     end
 
+    describe 'GET #launch with parameters' do
+      let(:app_instance) { build(:app_instance) }
+      before { sign_in user }
+      subject { get :launch, id: app_instance.uid, specific_parameters: 'specific_parameters_value' }
+
+      it_behaves_like "a navigatable protected user action"
+
+      it 'redirects to the mno enterprise launch page with a web token and extra params' do
+        subject
+        expect(response).to redirect_to(MnoEnterprise.router.launch_url(app_instance.uid, wtk: MnoEnterprise.jwt({user_id: user.uid}), specific_parameters: 'specific_parameters_value'))
+      end
+    end
+
     describe 'GET #app_access_unauthorized' do
       subject { get :app_access_unauthorized }
       before { subject }
