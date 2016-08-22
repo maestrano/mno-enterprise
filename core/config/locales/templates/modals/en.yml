@@ -7,3 +7,24 @@ en:
           enter_new_company_name: Enter a name for your new company
           cancel: Cancel
           create: Create
+
+        support: 
+          knowledge_center: Knowledge Center
+          Popular_topics: Popular topics
+          what_data: What data is shared between QuickBooks Online and Connec!™
+          how_to_create: How to create an event on Eventbrite
+          introduction_to_maestrano: Introduction to Maestrano dashboard
+          how_to_create_invoice: How to create Invoices and Quotes in MYOB Essentials
+          how_to_create_a_staff: How to create a staff schedule in Ento
+          go_to_knowledge_center: Go to Knowledge Centre
+          contact_us: Contact Us
+          need_help: Need help using Maestrano? Or having technical issues?
+          support_@_maestrano: support@maestrano.com
+          usa_toll_free: USA - Toll Free Number 1-800-274-4106
+          australia: Australia 02 9279 3236
+          rest_of_the_world: Rest of the world +61 2 9279 3236
+          how_can_we_help: How can we help you today? Join Maestrano Live Chat.
+          start_live_chat: Start Live Chat
+
+
+
