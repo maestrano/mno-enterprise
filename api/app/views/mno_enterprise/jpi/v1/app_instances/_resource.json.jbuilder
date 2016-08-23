@@ -20,5 +20,5 @@ app_instance.app.tap do |a|
   json.app_name a.name
   json.app_nid a.nid
   json.logo a.logo
-  json.addOn a.add_on?
+  json.add_on a.add_on?
 end
