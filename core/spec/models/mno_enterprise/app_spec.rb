@@ -26,7 +26,7 @@ module MnoEnterprise
     end
 
     describe 'appinfo methods' do
-      %i(single_billing? coming_soon?).each do |method|
+      %i(single_billing? coming_soon? add_on?).each do |method|
         it { expect(described_class.new).to respond_to(method) }
       end
     end
