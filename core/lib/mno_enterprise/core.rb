@@ -211,6 +211,9 @@ module MnoEnterprise
   mattr_accessor :google_tag_container
   @@google_tag_container = nil
 
+  mattr_accessor :intercom
+  @@intercom = nil
+
   #====================================
   # Layout & Styling
   #====================================
