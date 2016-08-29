@@ -49,9 +49,6 @@ namespace :mnoe do
       # Copy assets to public
       cp_r("#{frontend_tmp_folder}/dist/.", "#{admin_dist_folder}/")
 
-      # Copy bower_components to public (used by live previewer)
-      cp_r("#{frontend_tmp_folder}/bower_components","#{admin_dist_folder}/")
-
       # Clear tmp cache in development - recompile assets otherwise
       if Rails.env.development? || Rails.env.test?
         Rake::Task['tmp:cache:clear'].execute
@@ -63,8 +60,8 @@ namespace :mnoe do
     desc "Reset the admin build folder"
     task :prepare_build_folder do
       # Reset tmp folder from mno-enterprise/frontend-admin source
-      rm_rf "#{frontend_tmp_folder}/src"
-      rm_rf "#{frontend_tmp_folder}/e2e"
+      rm_rf "#{admin_dist_folder}"
+      rm_rf "#{frontend_tmp_folder}"
       mkdir_p frontend_tmp_folder
       cp_r(File.join(Gem.loaded_specs["mno-enterprise"].full_gem_path, "#{frontend_orig_folder}/."), "#{frontend_tmp_folder}/")
     end
