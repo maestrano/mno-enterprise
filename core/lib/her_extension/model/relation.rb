@@ -26,6 +26,9 @@ module Her
       # Use filter instead of raw parameters
       def where(params = {})
         return self if !params || params.empty?
+        # If a value is an empty array, it'll be excluded when calling params.to_query, so convert it to nil instead
+        params.each { |k, v| params[k] = v.presence if v.is_a?(Array) }
+
         self.params[:filter] ||= {}
         self.params[:filter].merge!(params)
         self

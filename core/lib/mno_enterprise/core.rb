@@ -18,6 +18,7 @@ require "her_extension/model/associations/association"
 require "her_extension/model/associations/association_proxy"
 require "her_extension/model/associations/has_many_association"
 require "her_extension/middleware/mnoe_api_v1_parse_json"
+require "her_extension/middleware/mnoe_raise_error"
 require "faraday_middleware"
 require "mno_enterprise/engine"
 
@@ -292,6 +293,9 @@ module MnoEnterprise
 
         # Adapter
         c.use Faraday::Adapter::NetHttpNoProxy
+
+        # Error Handling
+        c.use Her::Middleware::MnoeRaiseError
       end
     end
 end
