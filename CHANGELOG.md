@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.0.4](https://github.com/maestrano/mno-enterprise/tree/v2.0.4) (2016-08-30)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.3...v2.0.4)
+
+**Implemented enhancements:**
+
+- \[MNOE-137\] Add Her middleware to handle errors [\#70](https://github.com/maestrano/mno-enterprise/pull/70) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- \[MNOE-125\] Fix filtering on empty array [\#61](https://github.com/maestrano/mno-enterprise/pull/61) ([ouranos](https://github.com/ouranos))
+
 ## [v2.0.3](https://github.com/maestrano/mno-enterprise/tree/v2.0.3) (2016-07-12)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.2...v2.0.3)
 
