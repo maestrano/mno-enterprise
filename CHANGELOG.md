@@ -30,6 +30,11 @@
 - `MnoEnteprise.config.mandrill_key` is replaced with `ENV['MANDRILL_API_KEY']`
 - `MandrillClient` is replaced with `MnoEnterprise::MailClient`
 
+## [v3.0.4](https://github.com/maestrano/mno-enterprise/tree/v3.0.4) (2016-08-30)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.3...v3.0.4)
+
+- Merge [v2.0.4](#v2.0.4)
+
 ## [v3.0.3](https://github.com/maestrano/mno-enterprise/tree/v3.0.3) (2016-07-13)
 
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.2...v3.0.3)
@@ -75,6 +80,17 @@
 - Remove old Rails based frontend
 - Theme builder/previewer
 - I18n implementation
+
+## [v2.0.4](https://github.com/maestrano/mno-enterprise/tree/v2.0.4) (2016-08-30)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.3...v2.0.4)
+
+**Implemented enhancements:**
+
+- \[MNOE-137\] Add Her middleware to handle errors [\#70](https://github.com/maestrano/mno-enterprise/pull/70) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- \[MNOE-125\] Fix filtering on empty array [\#61](https://github.com/maestrano/mno-enterprise/pull/61) ([ouranos](https://github.com/ouranos))
 
 ## [v2.0.3](https://github.com/maestrano/mno-enterprise/tree/v2.0.3) (2016-07-12)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.2...v2.0.3)
