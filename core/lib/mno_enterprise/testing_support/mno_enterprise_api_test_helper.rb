@@ -124,7 +124,8 @@ module MnoEnterpriseApiTestHelper
 
         # Response
         c.use Her::Middleware::MnoeApiV1ParseJson
-      
+        c.use Her::Middleware::MnoeRaiseError
+
         # Add stubs on the test adapter
         c.use MnoeFaradayTestAdapter do |receiver|
           @_stub_list.each do |key,stub|

@@ -54,6 +54,15 @@ namespace :mnoe do
         FileUtils.touch(File.join(Rails.root,"frontend/src/app/stylesheets/#{filename}"))
       end
 
+      # Create custom fonts files so we can safely include them in main.less
+      frontend_font_folder = File.join(frontend_project_folder, 'src/fonts')
+      unless File.exists?(File.join(frontend_font_folder, 'font-faces.less'))
+        font_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','font-faces.less')
+
+        mkdir_p(frontend_font_folder)
+        cp(font_src, frontend_font_folder)
+      end
+
       # Build the frontend
       Rake::Task['mnoe:frontend:dist'].invoke
       #Rake::Task['assets:precompile'].invoke

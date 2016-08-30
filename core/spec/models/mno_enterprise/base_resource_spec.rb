@@ -2,6 +2,28 @@ require 'rails_helper'
 
 module MnoEnterprise
   RSpec.describe BaseResource, type: :model do
+    describe 'Error Handling' do
+      class Test < BaseResource; end
+
+      context 'Connection Errors' do
+        ((502..504).to_a<<407).each do |code|
+          it "handles #{code} error" do
+            api_stub_for(get: "/tests/1", code: code)
+            expect { Test.find(1) }.to raise_error(Faraday::ConnectionFailed)
+          end
+        end
+      end
+
+      context 'Server Errors' do
+        [401, 500].each do |code|
+          it "handles #{code} error" do
+            api_stub_for(get: "/tests/1", code: code)
+            expect { Test.find(1) }.to raise_error(Faraday::Error::ClientError)
+          end
+        end
+      end
+    end
+
     describe '#cache_key' do
       context 'for existing record' do
         let(:user) { build(:user) }
