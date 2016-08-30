@@ -2,7 +2,20 @@
 
 ## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/master)
 
-[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.3...HEAD)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.1...HEAD)
+
+## [v3.1.1](https://github.com/maestrano/mno-enterprise/tree/v3.1.1) (2016-08-29)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.0...v3.1.1)
+
+**Implemented enhancements:**
+
+- \[MNOE-106\] Admin Panel Improvements [\#54](https://github.com/maestrano/mno-enterprise/pull/54) ([claire00](https://github.com/claire00))
+- Improve doc regarding favicon [\#53](https://github.com/maestrano/mno-enterprise/pull/53) ([x4d3](https://github.com/x4d3))
+
+**Fixed bugs:**
+
+- Admin Panel bug fixes [\#68](https://github.com/maestrano/mno-enterprise/pull/68) ([alexnoox](https://github.com/alexnoox))
+- \[MNOE-117\] Generate stub font-faces.less [\#65](https://github.com/maestrano/mno-enterprise/pull/65) ([ouranos](https://github.com/ouranos))
 
 ## [v3.1.0](https://github.com/maestrano/mno-enterprise/tree/v3.1.0) (2016-07-13)
 
