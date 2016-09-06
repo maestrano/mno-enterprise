@@ -74,6 +74,14 @@ module MnoEnterprise
         before { subject }
         it { expect(JSON.parse(response.body)['is_syncing']).to be_falsey }
       end
+
+      context "when connector is pending" do
+        let(:progress_results) { { connectors: [
+          HashWithIndifferentAccess.new({name: 'a_name', status: 'PENDING', date: nil})
+        ] } }
+        before { subject }
+        it { expect(JSON.parse(response.body)['is_syncing']).to be_truthy }
+      end
     end
 
     describe "POST #create" do
