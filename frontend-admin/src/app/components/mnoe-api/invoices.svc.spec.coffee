@@ -53,4 +53,20 @@ describe('Service: MnoeInvoices', ->
     )
   )
 
+  describe('@lastPortfolioAmount', ->
+    it('GETs /mnoe/jpi/v1/admin/invoices/last_portfolio_amount', ->
+      $httpBackend.expectGET('/mnoe/jpi/v1/admin/invoices/last_portfolio_amount')
+      MnoeInvoices.lastPortfolioAmount()
+      $httpBackend.flush()
+    )
+  )
+
+  describe('@lastCommissionAmount', ->
+    it('GETs /mnoe/jpi/v1/admin/invoices/last_commission_amount', ->
+      $httpBackend.expectGET('/mnoe/jpi/v1/admin/invoices/last_commission_amount')
+      MnoeInvoices.lastCommissionAmount()
+      $httpBackend.flush()
+    )
+  )
+
 )
