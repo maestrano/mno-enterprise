@@ -29,6 +29,10 @@ module MnoEnterprise
       it 'returns the environment' do
         expect(data['env']).to eq('test')
       end
+
+      it 'returns the mno-api-host' do
+        expect(data['mno-api-host']).to eq('https://api-enterprise.maestrano.com')
+      end
     end
   end
 end
