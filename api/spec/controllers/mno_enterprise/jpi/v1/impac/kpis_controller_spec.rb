@@ -46,7 +46,7 @@ module MnoEnterprise
     end
 
     describe 'PUT #update' do
-      let(:kpi_hash) { from_api(kpi)[:data].except(:dashboard).merge(name: 'New Name') }
+      let(:kpi_hash) { from_api(kpi)[:data].except(:dashboard).merge(element_watched: 'New Watchable') }
 
       subject { put :update, id: kpi.id, kpi: kpi_hash }
 
@@ -59,7 +59,7 @@ module MnoEnterprise
 
       it "updates the kpi" do
         subject
-        expect(assigns(:kpi).name).to eq('New Name')
+        expect(assigns(:kpi).element_watched).to eq('New Watchable')
       end
 
       it { subject; expect(response.code).to eq('200') }
