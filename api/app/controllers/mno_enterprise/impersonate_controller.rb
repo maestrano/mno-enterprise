@@ -8,6 +8,7 @@ module MnoEnterprise
     # Perform the user impersonate action
     # GET /impersonate/user/123
     def create
+      session[:impersonator_redirect_path] = params[:redirect_path].presence
       @user = MnoEnterprise::User.find(params[:user_id])
       if @user.present?
         impersonate(@user)
@@ -31,7 +32,7 @@ module MnoEnterprise
       else
         flash[:notice] = "You weren't impersonating anyone"
       end
-      redirect_to '/admin/'
+      redirect_to session.delete(:impersonator_redirect_path).presence || '/admin/'
     end
 
     private

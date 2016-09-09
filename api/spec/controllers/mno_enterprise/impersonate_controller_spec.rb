@@ -22,8 +22,6 @@ module MnoEnterprise
       end
 
       describe "#create" do
-
-
         it do
           expect(controller.current_user.id).to eq(user.id)
           get :create, user_id: user2.id
@@ -32,17 +30,24 @@ module MnoEnterprise
       end
 
       describe "#destroy" do
-        before do
-          get :create, user_id: user2.id
-        end
-
-        it { expect(controller.current_user.id).to eq(user2.id) }
-
         subject { get :destroy }
 
-        it { subject; expect(controller.current_user.id).to eq(user.id) }
+        context 'without redirect_path' do
+          before { get :create, user_id: user2.id }
+
+          it { expect(controller.current_user.id).to eq(user2.id) }
+
+          it { subject; expect(controller.current_user.id).to eq(user.id) }
+
+          it { is_expected.to redirect_to('/admin/') }
+        end
+
+        context 'with a redirect_path' do
+          before { get :create, user_id: user2.id, redirect_path: '/admin/redirect#path' }
+
+          it { is_expected.to redirect_to('/admin/redirect#path') }
+        end
       end
     end
   end
-
 end
