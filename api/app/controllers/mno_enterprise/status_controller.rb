@@ -13,13 +13,15 @@ module MnoEnterprise
     #   {
     #     'app-version': '9061048-6811c4a',
     #     'mno-enterprise-version': '0.0.1',
-    #     'env': 'test'
+    #     'env': 'test',
+    #     'mno-api-host': 'https://uat.maestrano.io'
     #   }
     def version
       data = {
           'app-version' => MnoEnterprise::APP_VERSION,
           'mno-enteprise-version' => MnoEnterprise::VERSION,
-          'env' => Rails.env
+          'env' => Rails.env,
+          'mno-api-host' => MnoEnterprise.mno_api_host
       }
       render json: data
     end
