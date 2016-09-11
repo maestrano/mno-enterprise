@@ -10,7 +10,8 @@
 
   vm.impersonateUser = () ->
     if vm.user
-      url = '/mnoe/impersonate/user/' + vm.user.id
+      redirect = window.encodeURIComponent("#{location.pathname}#{location.hash}")
+      url = "/mnoe/impersonate/user/#{vm.user.id}?redirect_path=#{redirect}"
       $window.location.href = url
 
   return
