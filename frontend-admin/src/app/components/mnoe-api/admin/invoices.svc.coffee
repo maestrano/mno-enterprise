@@ -11,4 +11,10 @@
   @outstandingAmount = () ->
     MnoeAdminApiSvc.all('invoices').customGET('outstanding_amount')
 
+  @lastPortfolioAmount = ->
+    MnoeAdminApiSvc.all('invoices').customGET('last_portfolio_amount')
+
+  @lastCommissionAmount = ->
+    MnoeAdminApiSvc.all('invoices').customGET('last_commission_amount')
+
   return @

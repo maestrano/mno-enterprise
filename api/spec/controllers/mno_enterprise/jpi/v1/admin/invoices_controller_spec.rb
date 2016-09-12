@@ -39,16 +39,13 @@ module MnoEnterprise
     # Stub invoice and invoice call
     let(:invoice) { build(:invoice) }
     let(:user) { build(:user, :admin) }
-    let(:tenant) { build(:tenant) }
-    let(:org1) { build(:organization, current_billing: Money.new(10_000,'AUD')) }
-    let(:org2) { build(:organization, current_billing: Money.new(1000,'AUD')) }
+    let(:tenant) { build(:tenant, current_billing_amount: Money.new(11_000,'AUD')) }
 
     before do
       api_stub_for(get: "/invoices", response: from_api([invoice]))
       api_stub_for(get: "/invoices/#{invoice.id}", response: from_api(invoice))
       api_stub_for(get: "/users", response: from_api([user]))
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(get: "/organizations", response: from_api([org1, org2]))
       api_stub_for(get: "/tenant", response: from_api(tenant))
       sign_in user
     end
@@ -84,6 +81,19 @@ module MnoEnterprise
 
     describe 'GET #current_billing_amount' do
       subject { get :current_billing_amount }
+
+      context 'with an old MnoHub' do
+        let(:tenant) { build(:old_tenant) }
+
+        before { subject }
+
+        it { expect(response).to be_success }
+
+        it 'returns the sum of the current_billing' do
+          expected =  {'current_billing_amount' => {"amount"=>"N/A", "currency"=>""}}
+          expect(response.body).to eq(expected.to_json)
+        end
+      end
 
       context 'success' do
         before { subject }

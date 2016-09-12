@@ -30,13 +30,23 @@ module MnoEnterprise
 
       describe "#destroy" do
         subject { get :destroy }
-        before { get :create, user_id: user2.id }
 
-        it { expect(controller.current_user.id).to eq(user2.id) }
+        context 'without redirect_path' do
+          before { get :create, user_id: user2.id }
 
-        it { subject; expect(controller.current_user.id).to eq(user.id) }
+          it { expect(controller.current_user.id).to eq(user2.id) }
+
+          it { subject; expect(controller.current_user.id).to eq(user.id) }
+
+          it { is_expected.to redirect_to('/admin/') }
+        end
+
+        context 'with a redirect_path' do
+          before { get :create, user_id: user2.id, redirect_path: '/admin/redirect#path' }
+
+          it { is_expected.to redirect_to('/admin/redirect#path') }
+        end
       end
     end
   end
-
 end

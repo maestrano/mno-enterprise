@@ -94,6 +94,19 @@
 - Theme builder/previewer
 - I18n implementation
 
+## [v2.0.5](https://github.com/maestrano/mno-enterprise/tree/v2.0.5) (2016-09-09)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.4...v2.0.5)
+
+**Implemented enhancements:**
+
+- \[MNOE-149\] Allow impersonate\_redirect\_uri [\#78](https://github.com/maestrano/mno-enterprise/pull/78) ([ouranos](https://github.com/ouranos))
+- Expose mno-api-host in /version [\#74](https://github.com/maestrano/mno-enterprise/pull/74) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- \[MNOE-150\] Remove Kpi\#name [\#77](https://github.com/maestrano/mno-enterprise/pull/77) ([ouranos](https://github.com/ouranos))
+- Add support for pending connector sync [\#72](https://github.com/maestrano/mno-enterprise/pull/72) ([BrunoChauvet](https://github.com/BrunoChauvet))
+
 ## [v2.0.4](https://github.com/maestrano/mno-enterprise/tree/v2.0.4) (2016-08-30)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.3...v2.0.4)
 

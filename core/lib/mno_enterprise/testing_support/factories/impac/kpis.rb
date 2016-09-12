@@ -4,7 +4,6 @@ FactoryGirl.define do
     factory :impac_kpi, class: MnoEnterprise::Impac::Kpi do
       
       sequence(:id) { |n| n }
-      sequence(:name) { |n| "Random Kpi #{n}" }
       dashboard { build(:impac_dashboard).attributes }
       endpoint "an/endpoint"
       element_watched "a_watchable"
