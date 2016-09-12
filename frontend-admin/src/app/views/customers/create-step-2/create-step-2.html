@@ -15,7 +15,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="app in vm.organization.active_apps">
+              <tr ng-repeat="app in vm.organization.active_apps | filter : {stack: 'connector'}">
                 <td class="nowrap">
                   <img class="small-app-logo" ng-src="{{::main.trustSrc(app.app_logo)}}" alt="{{::app.name}} logo" />
                   <span class="app-name">{{::app.name}}</span>

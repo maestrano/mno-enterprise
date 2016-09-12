@@ -10,6 +10,18 @@
     (response) ->
       vm.invoices.currentBillingAmount = response.data
   )
+  MnoeInvoices.lastInvoicingAmount().then(
+    (response) ->
+      vm.invoices.lastInvoicingAmount = response.data
+  )
+  MnoeInvoices.lastPortfolioAmount().then(
+    (response) ->
+      vm.invoices.lastPortfolioAmount = response.data
+  )
+  MnoeInvoices.lastCommissionAmount().then(
+    (response) ->
+      vm.invoices.lastCommissionAmount = response.data
+  )
 
   MnoeTenantInvoices.list().then(
     (response) ->

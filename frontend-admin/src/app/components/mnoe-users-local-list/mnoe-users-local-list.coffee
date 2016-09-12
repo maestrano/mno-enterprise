@@ -81,7 +81,8 @@
     # Impersonate the user
     scope.impersonateUser = (user) ->
       if user
-        url = '/mnoe/impersonate/user/' + user.id
+        redirect = window.encodeURIComponent("#{location.pathname}#{location.hash}")
+        url = "/mnoe/impersonate/user/#{user.id}?redirect_path=#{redirect}"
         $window.location.href = url
 
     scope.$watch('list', (newVal) ->

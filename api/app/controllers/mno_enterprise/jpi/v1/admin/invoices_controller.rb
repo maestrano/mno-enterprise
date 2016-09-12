@@ -13,35 +13,49 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/invoices/current_billing_amount
     def current_billing_amount
-      data = Rails.cache.fetch('tenant_admin/current_billing_amount', expires_in: ADMIN_CACHE_DURATION) do
-        billing = MnoEnterprise::Organization.all.map(&:current_billing).sum(Money.new(0))
-        {current_billing_amount: {amount: billing.amount, currency: billing.currency_as_string}}
-      end
-      render json: data
+      # Backward compatibility with old MnoHub (<= v1.0.2)
+      # TODO: Remove once all mnohub are migrated to newer versions
+      tenant.respond_to?(:current_billing_amount) && current_billing = tenant.current_billing_amount
+
+      render json: {current_billing_amount: format_money(current_billing)}
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/last_invoicing_amount
     def last_invoicing_amount
-      tenant_billing = MnoEnterprise::Tenant.get('tenant').last_customers_invoicing_amount
-      render json: {last_invoicing_amount: {amount: tenant_billing.amount, currency: tenant_billing.currency_as_string}}
+      tenant_billing = tenant.last_customers_invoicing_amount
+      render json: {last_invoicing_amount: format_money(tenant_billing)}
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/outstanding_amount
     def outstanding_amount
-      tenant_billing = MnoEnterprise::Tenant.get('tenant').last_customers_outstanding_amount
-      render json: {outstanding_amount: {amount: tenant_billing.amount, currency: tenant_billing.currency_as_string}}
+      tenant_billing = tenant.last_customers_outstanding_amount
+      render json: {outstanding_amount: format_money(tenant_billing)}
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/last_portfolio_amount
     def last_portfolio_amount
-      tenant_billing = MnoEnterprise::Tenant.get('tenant').last_portfolio_amount
-      render json: {last_portfolio_amount: {amount: tenant_billing.amount, currency: tenant_billing.currency_as_string}}
+      tenant_billing = tenant.last_portfolio_amount
+      render json: {last_portfolio_amount: format_money(tenant_billing)}
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/last_commission_amount
     def last_commission_amount
-      tenant_billing = MnoEnterprise::Tenant.get('tenant').last_commission_amount
-      render json: {last_commission_amount: {amount: tenant_billing.amount, currency: tenant_billing.currency_as_string}}
+      tenant_billing = tenant.last_commission_amount
+      render json: {last_commission_amount: format_money(tenant_billing)}
+    end
+
+    private
+
+    def tenant
+      @tenant ||= MnoEnterprise::Tenant.show
+    end
+
+    def format_money(money)
+      if money
+        {amount: money.amount, currency: money.currency_as_string}
+      else
+        {amount: 'N/A', currency: ''}
+      end
     end
   end
 end
