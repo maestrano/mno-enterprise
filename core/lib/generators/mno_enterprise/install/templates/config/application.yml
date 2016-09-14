@@ -15,6 +15,6 @@ SECRET_KEY_BASE: <%= SecureRandom.hex(64) %>
 google_tag_container: GTM-TH3MLB
 
 # Intercom(Uncomment and Add a valid intercom_id to enable)
-# intercom_id: intercom_id
-# intercom_api_secret: intercom_api_secret
-# intercom_api_key: intercom_api_key
+# INTERCOM_ID: intercom_id
+# INTERCOM_API_SECRET: intercom_api_secret
+# INTERCOM_API_KEY: intercom_api_key
