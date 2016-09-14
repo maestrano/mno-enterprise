@@ -68,8 +68,17 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     @dashboards ||= current_user.dashboards
   end
 
+  def whitelisted_params
+    [:name, :currency, {widgets_order: []}, {organization_ids: []}]
+  end
+
+  # Allows all metadata attrs to be permitted, and maps it to :settings
+  # for the Her "meta_data" issue.
   def dashboard_params
-    params.require(:dashboard).permit(:name, :currency, {widgets_order: []}, {organization_ids: []})
+    params.require(:dashboard).permit(*whitelisted_params).tap do |whitelisted|
+      whitelisted[:settings] = params[:dashboard][:metadata]
+    end
+    .except(:metadata)
   end
   alias :dashboard_update_params  :dashboard_params
   alias :dashboard_create_params  :dashboard_params
