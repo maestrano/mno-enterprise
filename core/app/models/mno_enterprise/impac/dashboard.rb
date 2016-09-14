@@ -1,7 +1,7 @@
 module MnoEnterprise
   class Impac::Dashboard < BaseResource
 
-    attributes :name, :widgets_order, :organization_ids, :widgets_templates, :currency
+    attributes :name, :widgets_order, :kpis_order, :organization_ids, :widgets_templates, :currency
 
     has_many :widgets, class_name: 'MnoEnterprise::Impac::Widget', dependent: :destroy
     has_many :kpis, class_name: 'MnoEnterprise::Impac::Kpi', dependent: :destroy
