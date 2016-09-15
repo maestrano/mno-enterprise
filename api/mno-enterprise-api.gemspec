@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'coffee-rails', '~> 4.1'
   s.add_runtime_dependency 'health_check', '~> 1.5'
   s.add_runtime_dependency 'httparty', '~> 0.13.7'
-
+  s.add_runtime_dependency 'intercom', '~> 3.5.4'
   # Lock sprocket version
   s.add_dependency 'sprockets-rails', '~> 2.3'
 end
