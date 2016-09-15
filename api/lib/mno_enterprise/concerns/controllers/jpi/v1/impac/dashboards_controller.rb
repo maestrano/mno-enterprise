@@ -28,9 +28,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   # POST /mnoe/jpi/v1/impac/dashboards
   #   -> POST /api/mnoe/v1/users/1/dashboards
   def create
+    # TODO: dashboards.build breaks as dashboard.organization_ids returns nil, instead of an
+    #       empty array. (see MnoEnterprise::Impac::Dashboard #organizations)
+    # @dashboard = dashboards.build(dashboard_create_params)
+    # TODO: enable authorization
+    # authorize! :manage_impac, @dashboard
+    # if @dashboard.save
     if @dashboard = dashboards.create(dashboard_create_params)
-      # authorize! :create, @dashboard
       MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', nil, @dashboard)
+
       render 'show'
     else
       render_bad_request('create dashboard', @dashboard.errors)
@@ -38,11 +44,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   end
 
   # PUT /mnoe/jpi/v1/impac/dashboards/1
+  #   -> PUT /api/mnoe/v1/dashboards/1
   def update
     return render_not_found('dashboard') unless dashboard
 
+    # TODO: enable authorization
+    # authorize! :manage_impac, dashboard
+
     if dashboard.update(dashboard_update_params)
-      # authorize! :update, dashboard
       render 'show'
     else
       render_bad_request('update dashboard', dashboard.errors)
@@ -50,11 +59,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   end
 
   # DELETE /mnoe/jpi/v1/impac/dashboards/1
+  #   -> DELETE /api/mnoe/v1/dashboards/1
   def destroy
     return render_not_found('dashboard') unless dashboard
 
+    # TODO: enable authorization
+    # authorize! :manage_impac, dashboard
+
     if dashboard.destroy
-      # authorize! :destroy, @dashboard
       MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', nil, dashboard)
       head status: :ok
     else
