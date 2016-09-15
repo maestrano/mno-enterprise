@@ -22,10 +22,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
         @nocontent = true # no data fetch from Connec!
         render 'show'
       else
-        render json: @widget.errors, status: :bad_request
+        render_bad_request('create widget', @widget.errors)
       end
     else
-      render json: { errors: "Dashboard id #{params[:id]} doesn't exist" }, status: :not_found
+      render_not_found('widget')
     end
   end
 
@@ -37,6 +37,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
       render 'show'
     else
       render json: @widget.errors, status: :bad_request
+      render_bad_request('update widget', @widget.errors)
     end
   end
 
@@ -47,7 +48,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
       MnoEnterprise::EventLogger.info('widget_delete', current_user.id, 'Widget Deletion', nil, widget)
       head status: :ok
     else
-      render json: 'Unable to destroy widget', status: :bad_request
+      render_bad_request('destroy widget', 'Unable to destroy widget')
     end
   end
 
