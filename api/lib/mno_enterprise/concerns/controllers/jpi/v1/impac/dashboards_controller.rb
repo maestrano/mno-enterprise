@@ -38,6 +38,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   end
 
   # PUT /mnoe/jpi/v1/impac/dashboards/1
+  #   -> PUT /api/mnoe/v1/dashboards/1
   def update
     return render_not_found('dashboard') unless dashboard
 
@@ -50,6 +51,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   end
 
   # DELETE /mnoe/jpi/v1/impac/dashboards/1
+  #   -> DELETE /api/mnoe/v1/dashboards/1
   def destroy
     return render_not_found('dashboard') unless dashboard
 
