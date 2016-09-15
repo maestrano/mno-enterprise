@@ -109,6 +109,23 @@ module MnoEnterprise::Concerns::Models::Ability
         !!user.role(org) && ['Super Admin', 'Admin'].include?(user.role(org))
       end
     end
+
+    can [:create,:destroy], MnoEnterprise::Impac::Alert do |alert|
+      dashboard = alert.kpi.dashboard
+      
+      if dashboard.owner_type == "Organization"
+        # The current user is a member of the organization that owns the dashboard that has the kpi attached to
+        owner = MnoEnterprise::Organization.find(dashboard.owner_id)
+        owner && !!user.role(owner)
+      
+      elsif dashboard.owner_type == "User"
+        # The current user is the owner of the dashboard that has the kpi attached to
+        dashboard.owner_id == user.id
+      
+      else
+        false
+      end
+    end
   end
 
   # Abilities for admin user
