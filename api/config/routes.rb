@@ -113,16 +113,14 @@ MnoEnterprise::Engine.routes.draw do
 
       namespace :impac do
         resources :dashboards, only: [:index, :show, :create, :update, :destroy] do
-          resources :widgets, shallow: true, only: [:create, :destroy, :update]
-          resources :kpis, shallow: true, only: :create
+          resources :widgets, shallow: true, only: [:create, :update, :destroy]
+          resources :kpis, shallow: true, only: [:show, :create, :update, :destroy] do
+            resources :alerts, shallow: true, only: [:create, :update, :destroy]
+          end
         end
-
+        
         get 'kpis', to: 'kpis#discover'
-        resources :kpis, only: [:show, :update, :destroy] do
-          resources :alerts, only: [:create, :update, :destroy], shallow: true
-        end
-
-        resources :alerts, only: [:index]
+        resources :alerts, only: :index
       end
 
 
