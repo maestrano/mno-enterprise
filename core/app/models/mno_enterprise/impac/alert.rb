@@ -3,7 +3,7 @@ module MnoEnterprise
 
     attributes :title, :webhook, :service, :metadata, :sent
 
-    belongs_to :kpi, class_name: 'MnoEnterprise::Impac::Kpi'
+    belongs_to :kpi, class_name: 'MnoEnterprise::Impac::Kpi', foreign_key: 'impac_kpi_id'
     has_many :recipients, class_name: 'MnoEnterprise::User'
 
   end

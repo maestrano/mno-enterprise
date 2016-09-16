@@ -126,6 +126,11 @@ module MnoEnterprise::Concerns::Models::Ability
         false
       end
     end
+
+    can [:create,:destroy], MnoEnterprise::Impac::Alert do |alert|
+      kpi = alert.kpi
+      authorize! :manage_kpi, kpi
+    end
   end
 
   # Abilities for admin user
