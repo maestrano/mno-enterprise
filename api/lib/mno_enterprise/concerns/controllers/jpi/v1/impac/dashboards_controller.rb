@@ -32,7 +32,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     #       empty array. (see MnoEnterprise::Impac::Dashboard #organizations)
     # @dashboard = dashboards.build(dashboard_create_params)
     # TODO: enable authorization
-    # authorize! :manage_impac, @dashboard
+    # authorize! :manage_dashboard, @dashboard
     # if @dashboard.save
     if @dashboard = dashboards.create(dashboard_create_params)
       MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', nil, @dashboard)
@@ -49,7 +49,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     return render_not_found('dashboard') unless dashboard
 
     # TODO: enable authorization
-    # authorize! :manage_impac, dashboard
+    # authorize! :manage_dashboard, dashboard
 
     if dashboard.update(dashboard_update_params)
       render 'show'
@@ -64,7 +64,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     return render_not_found('dashboard') unless dashboard
 
     # TODO: enable authorization
-    # authorize! :manage_impac, dashboard
+    # authorize! :manage_dashboard, dashboard
 
     if dashboard.destroy
       MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', nil, dashboard)

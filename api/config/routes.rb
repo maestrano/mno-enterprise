@@ -118,8 +118,8 @@ MnoEnterprise::Engine.routes.draw do
             resources :alerts, shallow: true, only: [:create, :update, :destroy]
           end
         end
-        
-        get 'kpis', to: 'kpis#discover'
+
+        resources :kpis, only: :index
         resources :alerts, only: :index
       end
 

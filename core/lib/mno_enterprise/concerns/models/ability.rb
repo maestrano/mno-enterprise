@@ -110,24 +110,30 @@ module MnoEnterprise::Concerns::Models::Ability
       end
     end
 
-    can :manage_kpi, MnoEnterprise::Impac::Kpi do |kpi|
-      dashboard = kpi.dashboard
-
+    can :manage_dashboard, MnoEnterprise::Impac::Dashboard do |dashboard|
       if dashboard.owner_type == "Organization"
         # The current user is a member of the organization that owns the dashboard that has the kpi attached to
         owner = MnoEnterprise::Organization.find(dashboard.owner_id)
         owner && !!user.role(owner)
-
       elsif dashboard.owner_type == "User"
         # The current user is the owner of the dashboard that has the kpi attached to
         dashboard.owner_id == user.id
-
       else
         false
       end
     end
 
-    can [:create,:destroy], MnoEnterprise::Impac::Alert do |alert|
+    can :manage_widget, MnoEnterprise::Impac::Widget do |widget|
+      dashboard = widget.dashboard
+      authorize! :manage_dashboard, dashboard
+    end
+
+    can :manage_kpi, MnoEnterprise::Impac::Kpi do |kpi|
+      dashboard = kpi.dashboard
+      authorize! :manage_dashboard, dashboard
+    end
+
+    can :manage_alert, MnoEnterprise::Impac::Alert do |alert|
       kpi = alert.kpi
       authorize! :manage_kpi, kpi
     end

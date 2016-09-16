@@ -9,27 +9,63 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   included do
     respond_to :json
 
-    before_filter :require_valid_dashboard, only: [:create]
-    before_filter :find_valid_widget, only: [:create]
     before_filter :find_valid_kpi, only: [:update, :delete]
+    before_filter :require_feature_enabled
   end
 
   #==================================================================
   # Instance methods
   #==================================================================
   # GET /mnoe/jpi/v1/impac/kpis
-  def discover
-    render json: {}
+  def index
+    # Retrieve kpis templates from impac api.
+    attrs = params.permit(metadata: [:organization_ids])
+
+    auth = { username: MnoEnterprise.tenant_id, password: MnoEnterprise.tenant_key }
+
+    response = begin
+      MnoEnterprise::ImpacClient.send_get('/api/v2/kpis', attrs, basic_auth: auth)
+    rescue => e
+      return render json: { message: "Unable to retrieve kpis from Impac API | Error #{e}" }
+    end
+
+    # customise available kpis
+    kpis = (response['kpis'] || []).map do |kpi|
+      kpi = kpi.with_indifferent_access
+      kpi[:watchables].map do |watchable|
+        kpi.merge(
+          name: "#{kpi[:name]} #{watchable.capitalize unless kpi[:name].downcase.index(watchable)}".strip,
+          watchables: [watchable],
+          target_placeholders: {watchable => kpi[:target_placeholders][watchable]},
+        )
+      end
+    end
+    .flatten
+
+    render json: { kpis: kpis }
   end
 
   # POST /mnoe/jpi/v1/impac/dashboards/:dashboard_id/kpis
+  #   -> POST /api/mnoe/v1/dashboards/:id/kpis
+  #   -> POST /api/mnoe/v1/users/:id/alerts
   def create
-    authorize! :manage_kpi, dashboard
-    # TODO: Her will perform a request there which could be avoided
-    if @kpi = dashboard.kpis.create(kpi_create_params)
+    # TODO: ability for managing widget.
+    authorize! :manage_dashboard, dashboard
+    # TODO: attach widget onto KPI capability.
+    # authorize! :manage_widget, widget if widget
+
+    # TODO: nest alert in as a param, with the current user as a recipient.
+    if @kpi = kpi_parent.kpis.create(kpi_create_params)
+      # Creates a default alert for kpis created with targets defined.
+      if kpi.targets && kpi.targets.any?
+        current_user.alerts.create({service: 'inapp', impac_kpi_id: kpi.id})
+        # TODO: reload is adding the recipients to the kpi alerts (making another request).
+        kpi.reload
+      end
       render 'show'
     else
-      render_bad_request('create kpi', kpi.errors)
+      msg = kpi.errors.full_messages.join(', ') || 'unable to create KPI.'
+      render_bad_request("create kpi (id=#{kpi.id})", msg)
     end
   end
 
@@ -38,10 +74,29 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   def update
     authorize! :manage_kpi, kpi
 
+    params = kpi_update_params
+
+    # TODO: should this be done in a model?
+    # --
+    # Creates an in-app alert if target is set for the first time (in-app alerts should be activated by default)
+    if (!kpi.targets || kpi.targets.empty?) && params[:targets] && params[:targets].any?
+      current_user.alerts.create({service: 'inapp', impac_kpi_id: kpi.id})
+      # kpi.reload
+
+    # If targets have changed, reset all the alerts 'sent' status to false.
+    elsif kpi.targets && (params[:targets] && params[:targets].any?) && params[:targets] != kpi.targets
+      kpi.alerts.each { |alert| alert.update(sent: false) }
+
+    # Removes all the alerts if the targets are removed
+    elsif params[:targets] && (params[:targets].nil? || params[:targets].empty?)
+      kpi.alerts.each(&:destroy)
+    end
+
     if kpi.update(kpi_update_params)
       render 'show'
     else
-      render_bad_request('update kpi', kpi.errors)
+      msg = @kpi.errors.full_messages.join(', ') || 'unable to update KPI.'
+      render_bad_request("update kpi (id=#{kpi.id})", msg)
     end
   end
 
@@ -53,7 +108,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     if kpi.destroy
       head status: :ok
     else
-      render_bad_request('destroy kpi', 'Unable to delete this kpi')
+      render_bad_request('destroy kpi', "impossible to destroy kpi (id=#{kpi.id})")
     end
   end
 
@@ -63,12 +118,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   private
 
     def dashboard
-      @dashboard ||= MnoEnterprise::Impac::Dashboard.find(params[:dashboard_id])
+      @dashboard ||= MnoEnterprise::Impac::Dashboard.find(params.require(:dashboard_id))
       return render_not_found('dashboard') unless @dashboard
       @dashboard
     end
 
     def widget
+      return nil if (id = params.require(:kpi)[:widget_id]).blank?
       @widget ||= MnoEnterprise::Impac::Widget.find(id)
       return render_not_found('widget') unless @widget
       @widget
@@ -80,13 +136,19 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
       @kpi
     end
 
+    def kpi_parent
+      # TODO: attach kpi onto widget capability
+      # widget || dashboard
+      dashboard
+    end
+
     def kpi_create_params
       whitelist = [:dashboard_id, :endpoint, :source, :element_watched, {extra_watchables: []}]
       extract_params(whitelist)
     end
 
     def kpi_update_params
-      whitelist = [:name, :element_watched, :targets, {extra_watchables: []}]
+      whitelist = [:name, :element_watched, {extra_watchables: []}]
       extract_params(whitelist)
     end
 
@@ -100,12 +162,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
       .except(:metadata)
     end
 
-    def find_valid_widget
-      return true if (id = params[:kpi][:widget_id]).blank?
-      widget
+    def current_tenant
+      @tenant ||= MnoEnterprise::Tenant.get('tenant')
     end
 
-    alias :require_valid_dashboard  :dashboard
+    # TODO: move to MnoHub
+    def require_feature_enabled
+      return true if current_tenant && current_tenant.kpi_enabled?
+      render_forbidden_request(action_name)
+    end
+
     alias :find_valid_kpi  :kpi
 
 end

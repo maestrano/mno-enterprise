@@ -13,12 +13,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
   # GET /jpi/v1/impac/alerts
   def index
     # Tenant must have kpi_enabled set to true to discover alerts.
+    # TODO: move kpi_enabled? to MnoHub
     if current_tenant && current_tenant.kpi_enabled?
       @alerts = current_user.alerts
     else
-      # Remove all kpi alerts
-      current_user.alerts.each(&:destroy)
-      @alerts = []
+      # Return alerts not related to kpis
+      current_user.alerts.where(impac_kpi_id: nil)
     end
   end
 
@@ -27,7 +27,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
     return render_bad_request('attach alert to kpi', 'no alert specified') unless params.require(:alert)
     return render_not_found('kpi') unless kpi_alert.kpi
 
-    authorize! :create, kpi_alert
+    authorize! :manage_alert, kpi_alert
 
     if (@alert = current_user.alerts.create(kpi_alert.attributes))
       render 'show'
@@ -42,11 +42,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
     return render_not_found('alert') unless alert
 
     attributes = params.require(:alert).permit(:title, :webhook, :sent)
-    
+
     if alert.update(attributes)
       render 'show'
     else
-      render_bad_request('update alert', 'unable to save record: #{alert.inspect}')
+      render_bad_request('update alert', "unable to save record: #{alert.inspect}")
     end
   end
 
@@ -54,7 +54,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
   def destroy
     return render_not_found('alert') unless alert
 
-    authorize! :destroy, alert
+    authorize! :manage_alert, alert
 
     service = alert.service
     if alert.destroy
@@ -76,7 +76,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
       attributes = params.require(:alert).merge(impac_kpi_id: kpi_id)
       @alert ||= MnoEnterprise::Impac::Alert.new(attributes)
     end
-    
+
     def current_tenant
       @tenant ||= MnoEnterprise::Tenant.get('tenant')
     end
