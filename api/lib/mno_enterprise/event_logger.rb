@@ -2,14 +2,13 @@ require 'httparty'
 
 module MnoEnterprise
   class EventLogger
-    @@listeners = []
-    @@listeners << AuditEventsListener.new
-    @@listeners << IntercomEventsListener.new
+    @@listeners = [AuditEventsListener.new]
+    @@listeners << IntercomEventsListener.new if defined?(Intercom)
 
     def self.info(key, current_user_id, description, metadata, object)
-      formated_metadata = format_metadata(metadata, object)
+      formatted_metadata = format_metadata(metadata, object)
       @@listeners.each do |listener|
-        listener.info(key, current_user_id, description, formated_metadata, object)
+        listener.info(key, current_user_id, description, formatted_metadata, object)
       end
     end
 

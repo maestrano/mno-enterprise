@@ -7,8 +7,8 @@ module MnoEnterprise
     attr_accessor :intercom
 
     def initialize
-      if MnoEnterprise.intercom_api_key && MnoEnterprise.intercom_api_secret
-        self.intercom = ::Intercom::Client.new(app_id: MnoEnterprise.intercom_api_key, api_key: MnoEnterprise.intercom_api_secret)
+      if MnoEnterprise.intercom_app_id && MnoEnterprise.intercom_api_key
+        self.intercom = ::Intercom::Client.new(app_id: MnoEnterprise.intercom_app_id, api_key: MnoEnterprise.intercom_api_key)
       else
         self.intercom = nil
       end
@@ -18,29 +18,29 @@ module MnoEnterprise
     def info(key, current_user_id, description, metadata, object)
       return unless self.intercom
       u = User.find(current_user_id)
-      begin
-        begin
-          intercom.users.find(:user_id => current_user_id)
-        rescue Intercom::ResourceNotFound
-          self.update_intercom_user(u)
-        end
-        case key
-          when 'user_update'
-            self.update_intercom_user(u)
-            return
-          when 'app_destroy'
-            event_name = 'deleted-app-' + object.app.nid
-          when 'app_add'
-            event_name = 'added-app-' + object.app.nid
-          else
-            event_name = key.gsub!(/_/, '-')
-        end
-        self.intercom.events.create(event_name: event_name, created_at: Time.now.to_i, email: u.email)
 
+      begin
+        intercom.users.find(:user_id => current_user_id)
+      rescue Intercom::ResourceNotFound
+        self.update_intercom_user(u)
+      end
+
+      case key
+        when 'user_update'
+          self.update_intercom_user(u)
+          return
+        when 'app_destroy'
+          event_name = 'deleted-app-' + object.app.nid
+        when 'app_add'
+          event_name = 'added-app-' + object.app.nid
+        else
+          event_name = key.tr!('_', '-')
+      end
+
+      self.intercom.events.create(event_name: event_name, created_at: Time.now.to_i, email: u.email)
 
       rescue Intercom::IntercomError => e
         Rails.logger.debug '[INTERCOM] Could not call intercom: ' + e.message
-      end
     end
 
     def update_intercom_user(user)
