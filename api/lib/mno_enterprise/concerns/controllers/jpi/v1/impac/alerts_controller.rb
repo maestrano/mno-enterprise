@@ -43,6 +43,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
 
     attributes = params.require(:alert).permit(:title, :webhook, :sent)
 
+    authorize! :update, alert
+
     if alert.update(attributes)
       render 'show'
     else
