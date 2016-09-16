@@ -28,8 +28,7 @@ require 'mno_enterprise/database_extendable'
 require 'config'
 require 'figaro'
 
-require "mandrill_client"
-
+require 'mandrill_client'
 require 'accountingjs_serializer'
 
 module MnoEnterprise
@@ -221,6 +220,11 @@ module MnoEnterprise
   mattr_accessor :intercom_api_key
   @@intercom_api_key = nil
 
+  # Define if Intercom is enabled. Only if the gem intercom is present
+  def self.intercom_enabled?
+    defined?(::Intercom) && intercom_app_id && intercom_api_key
+  end
+
   #====================================
   # Layout & Styling
   #====================================
@@ -255,6 +259,8 @@ module MnoEnterprise
     self.configure_styleguide if Rails.env.development?
     @@style
   end
+
+
 
   # Default way to setup MnoEnterprise. Run rails generate mno-enterprise:install to create
   # a fresh initializer with all configuration values.

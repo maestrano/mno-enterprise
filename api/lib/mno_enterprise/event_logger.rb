@@ -3,7 +3,7 @@ require 'httparty'
 module MnoEnterprise
   class EventLogger
     @@listeners = [AuditEventsListener.new]
-    @@listeners << IntercomEventsListener.new if defined?(Intercom)
+    @@listeners << IntercomEventsListener.new if MnoEnterprise.intercom_enabled?
 
     def self.info(key, current_user_id, description, metadata, object)
       formatted_metadata = format_metadata(metadata, object)
