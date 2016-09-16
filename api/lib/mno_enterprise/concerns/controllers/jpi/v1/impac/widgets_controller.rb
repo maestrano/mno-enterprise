@@ -36,7 +36,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
       @nocontent = !params['metadata']
       render 'show'
     else
-      render json: @widget.errors, status: :bad_request
       render_bad_request('update widget', @widget.errors)
     end
   end

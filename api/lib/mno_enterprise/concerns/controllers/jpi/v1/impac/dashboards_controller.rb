@@ -74,28 +74,29 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     end
   end
 
-  protected
+  private
 
-  def dashboard
-    @dashboard ||= current_user.dashboards.to_a.find { |d| d.id.to_s == params[:id].to_s }
-  end
-
-  def dashboards
-    @dashboards ||= current_user.dashboards
-  end
-
-  def whitelisted_params
-    [:name, :currency, {widgets_order: []}, {organization_ids: []}]
-  end
-
-  # Allows all metadata attrs to be permitted, and maps it to :settings
-  # for the Her "meta_data" issue.
-  def dashboard_params
-    params.require(:dashboard).permit(*whitelisted_params).tap do |whitelisted|
-      whitelisted[:settings] = params[:dashboard][:metadata] || {}
+    def dashboard
+      @dashboard ||= current_user.dashboards.to_a.find { |d| d.id.to_s == params[:id].to_s }
     end
-    .except(:metadata)
-  end
-  alias :dashboard_update_params  :dashboard_params
-  alias :dashboard_create_params  :dashboard_params
+
+    def dashboards
+      @dashboards ||= current_user.dashboards
+    end
+
+    def whitelisted_params
+      [:name, :currency, {widgets_order: []}, {organization_ids: []}]
+    end
+
+    # Allows all metadata attrs to be permitted, and maps it to :settings
+    # for the Her "meta_data" issue.
+    def dashboard_params
+      params.require(:dashboard).permit(*whitelisted_params).tap do |whitelisted|
+        whitelisted[:settings] = params[:dashboard][:metadata] || {}
+      end
+      .except(:metadata)
+    end
+    alias :dashboard_update_params  :dashboard_params
+    alias :dashboard_create_params  :dashboard_params
+
 end
