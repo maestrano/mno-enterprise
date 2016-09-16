@@ -212,8 +212,8 @@ module MnoEnterprise
   mattr_accessor :google_tag_container
   @@google_tag_container = nil
 
-  mattr_accessor :intercom_id
-  @@intercom_id = nil
+  mattr_accessor :intercom_app_id
+  @@intercom_app_id = nil
 
   mattr_accessor :intercom_api_secret
   @@intercom_api_secret = nil
