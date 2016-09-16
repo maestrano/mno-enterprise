@@ -64,7 +64,7 @@ module MnoEnterprise
         {
           company_id: organization.id,
           name: organization.name,
-          created_at: organization.created_at,
+          created_at: organization.created_at.to_i,
           custom_attributes: {
             industry: organization.industry,
             size: organization.size,
