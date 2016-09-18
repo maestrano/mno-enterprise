@@ -2,23 +2,14 @@ require 'httparty'
 
 module MnoEnterprise
   class EventLogger
-    include HTTParty
-    base_uri "#{MnoEnterprise.mno_api_private_host || MnoEnterprise.mno_api_host}/api/mnoe/v1/audit_events"
-    read_timeout 0.1
-    basic_auth MnoEnterprise.tenant_id, MnoEnterprise.tenant_key
+    @@listeners = [AuditEventsListener.new]
+    @@listeners << IntercomEventsListener.new if MnoEnterprise.intercom_enabled?
 
     def self.info(key, current_user_id, description, metadata, object)
-      post('', body: {
-          data: {
-              key: key,
-              user_id: current_user_id,
-              description: description,
-              metadata: format_metadata(metadata, object),
-              subject_type: object.class.name,
-              subject_id: object.id
-          }})
-    rescue Net::ReadTimeout
-      # Meant to fail
+      formatted_metadata = format_metadata(metadata, object)
+      @@listeners.each do |listener|
+        listener.info(key, current_user_id, description, formatted_metadata, object)
+      end
     end
 
     def self.format_metadata(metadata, object)

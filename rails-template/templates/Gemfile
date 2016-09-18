@@ -6,6 +6,9 @@ gem 'rails', '~> 4.2.6'
 # Bundle edge Mnoe instead: gem 'mno-enterprise', github: 'maestrano/mno-enterprise'
 gem 'mno-enterprise', '~> 3.0'
 
+# Enable Intercom
+# gem 'intercom', '~> 3.5.4'
+
 # Use puma as the app server
 gem 'puma'
 

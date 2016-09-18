@@ -70,8 +70,9 @@ MnoEnterprise.configure do |config|
   #===============================================
   # Google Tag Manager
   config.google_tag_container = ENV['google_tag_container']
-  # intercom
-  config.intercom_id = ENV['INTERCOM_ID']
+
+  # Intercom
+  config.intercom_app_id = ENV['INTERCOM_APP_ID']
   config.intercom_api_secret = ENV['INTERCOM_API_SECRET']
   config.intercom_api_key = ENV['INTERCOM_API_KEY']
 

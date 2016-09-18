@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module MnoEnterprise
-  RSpec.describe EventLogger do
+  RSpec.describe AuditEventsListener do
 
     def info_data(user)
       {
@@ -18,8 +18,8 @@ module MnoEnterprise
 
     let(:user) { build(:user) }
 
-    describe "#info" do
-      subject { MnoEnterprise::EventLogger.info('user_update_password', user.id, "User password change", user.email, user) }
+    describe '#info' do
+      subject { MnoEnterprise::AuditEventsListener.new.info('user_update_password', user.id, 'User password change', user.email, user) }
 
       it { expect(subject.code).to eq(200) }
       it { expect(subject.request.options[:body]).to eq(info_data(user)) }
