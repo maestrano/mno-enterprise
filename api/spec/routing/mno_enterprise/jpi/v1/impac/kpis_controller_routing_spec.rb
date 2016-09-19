@@ -3,9 +3,9 @@ require 'rails_helper'
 module MnoEnterprise
   RSpec.describe Jpi::V1::Impac::KpisController, type: :routing do
     routes { MnoEnterprise::Engine.routes }
-   
-    it 'routes to #discover' do
-      expect(get('/jpi/v1/impac/kpis')).to route_to('mno_enterprise/jpi/v1/impac/kpis#discover')
+
+    it 'routes to #index' do
+      expect(get('/jpi/v1/impac/kpis')).to route_to('mno_enterprise/jpi/v1/impac/kpis#index')
     end
 
     it 'routes to #show' do

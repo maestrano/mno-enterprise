@@ -20,7 +20,6 @@ module MnoEnterprise
     let(:alert) { build(:impac_alert, kpi: kpi) }
     let(:alert_hash) { from_api(alert)[:data].except(:kpi) }
 
-    # TODO fix
     describe 'GET #index' do
       let(:kpi_enabled) { true }
       let(:tenant) { build(:tenant, kpi_enabled: kpi_enabled) }
@@ -60,7 +59,6 @@ module MnoEnterprise
       it { subject; expect(response.code).to eq('200') }
     end
 
-    # TODO fix
     describe 'PUT #update' do
       let(:update_alert_hash) { {title: 'test', webhook: 'test', sent: true, forbidden: 'test'} }
       let(:updated_alert) { build(:impac_alert, kpi: kpi, title: 'test', webhook: 'test', sent: true) }
@@ -80,7 +78,6 @@ module MnoEnterprise
       it { subject; expect(response.code).to eq('200') }
     end
 
-    # TODO fix
     describe 'DELETE #destroy' do
       before { api_stub_for(get: "/alerts/#{alert.id}", response: from_api(alert)) }
       before { api_stub_for(get: "/kpis/#{kpi.id}", response: from_api(kpi)) }
