@@ -17,10 +17,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   # Instance methods
   #==================================================================
   # GET /mnoe/jpi/v1/impac/kpis
+  # This action is used as a sort of 'proxy' for retrieving KPI templates which are
+  # usually retrieved from Impac! API, and customising the attributes.
   def index
     # Retrieve kpis templates from impac api.
-    attrs = params.permit(metadata: [:organization_ids])
-
+    # TODO: improve request params to work for strong parameters
+    attrs = params.slice(*['metadata'])
     auth = { username: MnoEnterprise.tenant_id, password: MnoEnterprise.tenant_key }
 
     response = begin
@@ -76,12 +78,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
 
     params = kpi_update_params
 
-    # TODO: should this be done in a model?
+    # TODO: refactor into models
     # --
     # Creates an in-app alert if target is set for the first time (in-app alerts should be activated by default)
     if (!kpi.targets || kpi.targets.empty?) && params[:targets] && params[:targets].any?
       current_user.alerts.create({service: 'inapp', impac_kpi_id: kpi.id})
-      # kpi.reload
 
     # If targets have changed, reset all the alerts 'sent' status to false.
     elsif kpi.targets && (params[:targets] && params[:targets].any?) && params[:targets] != kpi.targets
