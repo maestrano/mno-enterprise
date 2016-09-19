@@ -55,7 +55,8 @@ module MnoEnterprise
 
     define_model_callbacks :validation #required by Devise
     devise :remote_authenticatable, :registerable, :recoverable, :rememberable,
-      :trackable, :validatable, :lockable, :confirmable, :timeoutable, :password_expirable
+      :trackable, :validatable, :lockable, :confirmable, :timeoutable, :password_expirable,
+           :omniauthable, omniauth_providers: [:intuit, :linkedin, :google, :facebook]
 
     #================================
     # Validation
@@ -188,5 +189,70 @@ module MnoEnterprise
       self.reload
       Rails.cache.write(['user', self.to_key], self)
     end
+
+    # Used by omniauth providers to find or create users
+    # on maestrano
+    # See Auth::OmniauthCallbacksController
+    def self.find_for_oauth(auth, opts = {}, signed_in_resource = nil)
+      # Get the identity and user if they exist
+      identity = Identity.find_for_oauth(auth)
+
+      # If a signed_in_resource is provided it always overrides the existing user
+      # to prevent the identity being locked with accidentally created accounts.
+      # Note that this may leave zombie accounts (with no associated identity) which
+      # can be cleaned up at a later date.
+      user = signed_in_resource ? signed_in_resource : identity.user
+
+      # Create the user if needed
+      if user.nil?
+        # Get the existing user by email.
+        email = auth.info.email
+        user = User.where(email: email).first if email
+
+        # Create the user if it's a new registration
+        if user.nil?
+          user = create_from_omniauth(auth, opts.except(:authorized_link_to_email))
+        elsif auth.provider == 'intuit'
+          unless opts[:authorized_link_to_email] == user.email
+            # Intuit email is NOT a confirmed email. Therefore we need to ask the user to
+            # login the old fashion to make sure it is the right user!
+            fail(SecurityError, 'reconfirm credentials')
+          end
+        end
+      end
+
+      # Associate the identity with the user if needed
+      if identity.user != user
+        identity.user = user
+        identity.save!
+      end
+      user
+    end
+
+    # Create a new user from omniauth hash
+    def self.create_from_omniauth(auth, opts = {})
+      user = User.new(
+        name: auth.info.first_name.presence || auth.info.email[/(\S*)@/, 1],
+        surname: auth.info.last_name.presence || '',
+        email: auth.info.email,
+        password: Devise.friendly_token[0, 20],
+        avatar_url: auth.info.image.presence
+      )
+
+      # To force user to enter company and user details when accessing the dashboard
+      user.metadata ||= {}
+      user.metadata.merge!(need_details_update: {others: true})
+
+      # opts hash is expected to contain additional attributes
+      # to set on the model
+      user.assign_attributes(opts)
+
+      # Skip email confirmation if not from Intuit (Intuit email is NOT a confirmed email)
+      user.skip_confirmation! unless auth.provider == 'intuit'
+      user.save!
+
+      user
+    end
+
   end
 end

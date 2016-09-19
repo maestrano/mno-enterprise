@@ -41,7 +41,7 @@ MnoEnterprise::Engine.routes.draw do
       path_prefix: 'auth',
       controllers: {
           confirmations: "mno_enterprise/auth/confirmations",
-          #omniauth_callbacks: "auth/omniauth_callbacks",
+          omniauth_callbacks: "mno_enterprise/auth/omniauth_callbacks",
           passwords: "mno_enterprise/auth/passwords",
           registrations: "mno_enterprise/auth/registrations",
           sessions: "mno_enterprise/auth/sessions",
@@ -94,7 +94,7 @@ MnoEnterprise::Engine.routes.draw do
 
         # AppInstances
         resources :app_instances, only: [:index, :destroy], shallow: true
-
+p
         # Teams
         resources :teams, only: [:index, :show, :create, :update, :destroy], shallow: true do
           member do

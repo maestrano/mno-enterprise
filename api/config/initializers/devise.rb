@@ -6,6 +6,20 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # config.secret_key = '1e867fc01cfcda9e6dabdf99949082f5e4bf7cc90c358637a53505c73ab9b930b498c9573d388eed420afd7b0cfb71a8f09833d52490f2c10ce0385e9794a722'
 
+  # ==> Add Intuit as an OpenID provider
+  config.omniauth :open_id,
+                  # TODO make gem works with rails 4
+    # :store => ActiveRecordOpenidStore::ActiveRecordStore.new,
+    :name => 'intuit',
+    :identifier => 'https://openid.intuit.com/openid/xrds',
+    :require => 'omniauth-openid' if ENV['OAUTH_INTUIT_KEY']
+
+  # config.omniauth :twitter, ENV['oauth_twitter_key'], ENV['oauth_twitter_secret']
+  config.omniauth :linkedin, ENV['OAUTH_LINKEDIN_KEY'], ENV['OAUTH_LINKEDIN_SECRET'] if ENV['OAUTH_LINKEDIN_KEY'] && ENV['OAUTH_LINKEDIN_SECRET']
+  config.omniauth :google_oauth2, ENV['OAUTH_GOOGLE_KEY'], ENV['OAUTH_GOOGLE_SECRET'], name: :google if ENV['OAUTH_GOOGLE_KEY'] && ENV['OAUTH_GOOGLE_SECRET']
+  config.omniauth :facebook, ENV['OAUTH_FACEBOOK_KEY'], ENV['OAUTH_FACEBOOK_SECRET'], secure_image_url: true if ENV['OAUTH_FACEBOOK_KEY'] && ENV['OAUTH_FACEBOOK_SECRET']
+
+
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
@@ -258,7 +272,7 @@ Devise.setup do |config|
   # The router that invoked `devise_for`, in the example above, would be:
   # config.router_name = :my_engine
   config.router_name = :mno_enterprise
-  
+
   #
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
