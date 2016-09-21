@@ -233,7 +233,27 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
+  if ENV['OAUTH_INTUIT_KEY']
+    require 'omniauth-openid'
+    config.omniauth :open_id,
+                    # TODO make gem works with rails 4
+                    # :store => ActiveRecordOpenidStore::ActiveRecordStore.new,
+                    name: 'intuit',
+                    identifier: 'https://openid.intuit.com/openid/xrds',
+                    require: 'omniauth-openid'
+  end
+  if ENV['OAUTH_LINKEDIN_KEY'] && ENV['OAUTH_LINKEDIN_SECRET']
+    require 'omniauth-linkedin-oauth2'
+    config.omniauth :linkedin, ENV['OAUTH_LINKEDIN_KEY'], ENV['OAUTH_LINKEDIN_SECRET']
+  end
+  if ENV['OAUTH_GOOGLE_KEY'] && ENV['OAUTH_GOOGLE_SECRET']
+    require 'omniauth-google-oauth2'
+    config.omniauth :google_oauth2, ENV['OAUTH_GOOGLE_KEY'], ENV['OAUTH_GOOGLE_SECRET'], name: :google
+  end
+  if ENV['OAUTH_FACEBOOK_KEY'] && ENV['OAUTH_FACEBOOK_SECRET']
+    require 'omniauth-facebook'
+    config.omniauth :facebook, ENV['OAUTH_FACEBOOK_KEY'], ENV['OAUTH_FACEBOOK_SECRET'], secure_image_url: true
+  end
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
@@ -258,16 +278,16 @@ Devise.setup do |config|
   # The router that invoked `devise_for`, in the example above, would be:
   # config.router_name = :my_engine
   config.router_name = :mno_enterprise
-  
-  #
+
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
-  #
-  # When using omniauth, Devise cannot automatically set Omniauth path,
-  # so you need to do it manually. For the users scope, it would be:
-  # config.omniauth_path_prefix = '/my_engine/users/auth'
-  #
+
   # Inherit from engine ApplicationController
   config.parent_controller = 'MnoEnterprise::ApplicationController'
+
+  Rails.application.config.after_initialize do
+    config.omniauth_path_prefix = '/mnoe/users/auth'
+    ::OmniAuth::config.path_prefix = config.omniauth_path_prefix if defined?(OmniAuth)
+  end
 end
