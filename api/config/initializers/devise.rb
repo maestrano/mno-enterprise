@@ -279,15 +279,15 @@ Devise.setup do |config|
   # config.router_name = :my_engine
   config.router_name = :mno_enterprise
 
-  #
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
-  #
-  # When using omniauth, Devise cannot automatically set Omniauth path,
-  # so you need to do it manually. For the users scope, it would be:
-  # config.omniauth_path_prefix = '/my_engine/users/auth'
-  #
+
   # Inherit from engine ApplicationController
   config.parent_controller = 'MnoEnterprise::ApplicationController'
+
+  Rails.application.config.after_initialize do
+    config.omniauth_path_prefix = '/mnoe/users/auth'
+    ::OmniAuth::config.path_prefix = config.omniauth_path_prefix if defined?(OmniAuth)
+  end
 end
