@@ -33,10 +33,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'intercom', '~> 3.5.4'
 
   # Omniauth authentication strategies
-  s.add_runtime_dependency 'omniauth-openid', '~> 1.0'
-  s.add_runtime_dependency 'omniauth-linkedin-oauth2', '~> 0.1.5'
-  s.add_runtime_dependency 'omniauth-google-oauth2', '~> 0.2.6'
-  s.add_runtime_dependency 'omniauth-facebook', '~> 2.0.1'
+  s.add_development_dependency 'omniauth-openid', '~> 1.0'
+  s.add_development_dependency 'omniauth-linkedin-oauth2', '~> 0.1.5'
+  s.add_development_dependency 'omniauth-google-oauth2', '~> 0.2.6'
+  s.add_development_dependency 'omniauth-facebook', '~> 2.0.1'
   # TODO make gem works with rails 4
   # s.add_runtime_dependency 'active_record_openid_store', '~> 0.1.5'
 
