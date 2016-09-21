@@ -37,8 +37,23 @@ module MnoEnterprise
           load 'app/models/mno_enterprise/user.rb'
         end
       end
-
     end
 
+    describe :intercom_user_hash do
+      before { allow(MnoEnterprise).to receive(:intercom_enabled?).and_return(true) }
+      before { allow(MnoEnterprise).to receive(:intercom_api_secret).and_return('mysecret') }
+
+      # Reload User class to include IntercomUser concern
+      before do
+        MnoEnterprise.send(:remove_const, :User)
+        load "#{Rails.root}/../../app/models/mno_enterprise/user.rb"
+      end
+
+      let(:user) { MnoEnterprise::User.new(email: 'admin@example.com') }
+
+      it 'returns the user intercom hash' do
+        expect(user.intercom_user_hash).not_to be_nil
+      end
+    end
   end
 end
