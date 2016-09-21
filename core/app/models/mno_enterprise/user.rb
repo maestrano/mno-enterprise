@@ -39,6 +39,7 @@
 
 module MnoEnterprise
   class User < BaseResource
+    include MnoEnterprise::Concerns::Models::IntercomUser
     extend Devise::Models
     
     # Note: password and encrypted_password are write-only attributes and are never returned by

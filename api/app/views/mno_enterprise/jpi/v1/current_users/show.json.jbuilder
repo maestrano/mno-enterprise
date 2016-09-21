@@ -17,7 +17,11 @@ json.cache! ['v1', @user.cache_key] do
     if current_impersonator
       json.current_impersonator true
     end
-    
+
+    if @user.respond_to?(:intercom_user_hash)
+      json.user_hash @user.intercom_user_hash
+    end
+
     # Embed association if user is persisted
     if @user.id
       json.organizations do
