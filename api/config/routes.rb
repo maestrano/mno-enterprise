@@ -38,6 +38,7 @@ MnoEnterprise::Engine.routes.draw do
       class_name: "MnoEnterprise::User",
       module: :devise,
       path_prefix: 'auth',
+      skip: :omniauth_callbacks,
       controllers: {
           confirmations: "mno_enterprise/auth/confirmations",
           omniauth_callbacks: "mno_enterprise/auth/omniauth_callbacks",
@@ -54,6 +55,19 @@ MnoEnterprise::Engine.routes.draw do
     get "/auth/users/confirmation/lounge", to: "auth/confirmations#lounge", as: :user_confirmation_lounge
     patch "/auth/users/confirmation/finalize", to: "auth/confirmations#finalize", as: :user_confirmation_finalize
     patch "/auth/users/confirmation", to: "auth/confirmations#update"
+
+    # Patch omniauth routes as per plataformatec/devise#2692
+    providers = Regexp.union(Devise.omniauth_providers.map(&:to_s))
+    match "/users/auth/:provider",
+          constraints: { provider: providers },
+          to: "auth/omniauth_callbacks#passthru",
+          as: :user_omniauth_authorize,
+          via: [:get, :post]
+    match "/users/auth/:action/callback",
+          constraints: { action: providers },
+          controller: "auth/omniauth_callbacks",
+          as: :user_omniauth_callback,
+          via: [:get, :post]
   end
 
   #============================================================
