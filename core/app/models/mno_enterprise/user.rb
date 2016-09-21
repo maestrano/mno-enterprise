@@ -56,7 +56,7 @@ module MnoEnterprise
     define_model_callbacks :validation #required by Devise
     devise :remote_authenticatable, :registerable, :recoverable, :rememberable,
       :trackable, :validatable, :lockable, :confirmable, :timeoutable, :password_expirable,
-           :omniauthable, omniauth_providers: [:intuit, :linkedin, :google, :facebook]
+      :omniauthable, omniauth_providers: Devise.omniauth_providers
 
     #================================
     # Validation
