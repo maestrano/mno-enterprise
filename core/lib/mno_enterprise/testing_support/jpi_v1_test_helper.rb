@@ -34,6 +34,7 @@ module MnoEnterprise::TestingSupport::JpiV1TestHelper
         sign_in user
         allow(ability).to receive(:can?).with(any_args).and_return(false)
         expect(subject).to_not be_successful
+        expect(subject.code).to eq('403')
       end
     end
 
@@ -43,6 +44,38 @@ module MnoEnterprise::TestingSupport::JpiV1TestHelper
         allow(ability).to receive(:can?).with(any_args).and_return(true)
         expect(subject).to be_successful
       end
+    end
+  end
+
+  shared_examples_for "a not found response" do
+    it { expect(subject).to_not be_success }
+    it do
+      subject
+      expect(response.status).to eq(404)
+    end
+  end
+
+  shared_examples_for "a bad request response" do
+    it { expect(subject).to_not be_success }
+    it do
+      subject
+      expect(response.status).to eq(400)
+    end
+  end
+
+  shared_examples_for "a forbidden response" do
+    it { expect(subject).to_not be_success }
+    it do
+      subject
+      expect(response.status).to eq(403)
+    end
+  end
+
+  shared_examples_for "an internal server error response" do
+    it { expect(subject).to_not be_success }
+    it do
+      subject
+      expect(response.status).to eq(500)
     end
   end
 

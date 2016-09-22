@@ -1,4 +1,6 @@
-json.extract! dashboard, :id, :name, :full_name, :currency
+json.extract! dashboard, :id, :full_name, :currency
+
+json.metadata dashboard.settings
 
 json.data_sources dashboard.organizations.compact.map do |org|
   json.id org.id
