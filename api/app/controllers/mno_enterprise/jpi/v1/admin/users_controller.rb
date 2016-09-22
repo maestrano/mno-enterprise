@@ -72,6 +72,15 @@ module MnoEnterprise
       head :no_content
     end
 
+    # POST /mnoe/jpi/v1/admin/users/confirmation_email
+    # Send an email to a user with the link to the account confirmation page
+    def confirmation_email
+      @user = MnoEnterprise::User.find_by(email: params.require(:user).require(:email))
+      MnoEnterprise::SystemNotificationMailer.confirmation_instructions(@user, @user.confirmation_token).deliver_later
+
+      head :no_content
+    end
+
     private
 
     def user_params

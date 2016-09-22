@@ -1,5 +1,5 @@
 # Service for managing the users.
-@App.service 'MnoeUsers', ($q, $log, MnoeAdminApiSvc, MnoeObservables, OBS_KEYS) ->
+@App.service 'MnoeUsers', ($q, $log, MnoeAdminApiSvc, MnoeObservables, OBS_KEYS, toastr) ->
   _self = @
 
   @list = (limit, offset, sort) ->
@@ -67,6 +67,11 @@
   # POST /mnoe/jpi/v1/admin/users/signup_email
   @sendSignupEmail = (email) ->
     MnoeAdminApiSvc.all('/users').doPOST({user: {email: email}}, 'signup_email')
+
+  # Send an email to a user with the link to the confirmation page
+  # POST /mnoe/jpi/v1/admin/users/invites
+  @sendConfirmationEmail = (email) ->
+    MnoeAdminApiSvc.all('/users').doPOST({user: {email: email}}, 'confirmation_email')
 
   _getStaffs = (limit, offset, sort, params = {}) ->
     params["order_by"] = sort
