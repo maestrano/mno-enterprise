@@ -7,6 +7,9 @@ json.data_sources dashboard.organizations.compact.map do |org|
   json.uid org.uid
   json.label org.name
 end
-json.widgets dashboard.sorted_widgets, partial: 'mno_enterprise/jpi/v1/impac/widgets/widget', as: :widget
+
+json.kpis dashboard.kpis, partial: 'mno_enterprise/jpi/v1/impac/kpis/kpi', as: :kpi
+
+json.widgets dashboard.widgets, partial: 'mno_enterprise/jpi/v1/impac/widgets/widget', as: :widget
+
 json.widgets_templates dashboard.filtered_widgets_templates
-json.kpis dashboard.sorted_kpis, partial: 'mno_enterprise/jpi/v1/impac/kpis/kpi', as: :kpi
