@@ -29,6 +29,11 @@ module MnoEnterprise
       order.map { |id| self.widgets.to_a.find{ |w| w.id == id} }.compact
     end
 
+    def sorted_kpis
+      order = self.settings[:kpis_order].to_a.map(&:to_i) | self.kpis.map(&:id)
+      records = order.map { |id| self.kpis.to_a.find{ |k| k.id == id} }.compact
+    end
+
     # Filter widgets list based on config
     def filtered_widgets_templates
       if MnoEnterprise.widgets_templates_listing
