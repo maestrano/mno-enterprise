@@ -233,8 +233,7 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  if ENV['OAUTH_INTUIT_KEY']
-    require 'omniauth-openid'
+  if defined?('OmniAuth::OpenID') && !Rails.env.test?
     config.omniauth :open_id,
                     # TODO make gem works with rails 4
                     # :store => ActiveRecordOpenidStore::ActiveRecordStore.new,

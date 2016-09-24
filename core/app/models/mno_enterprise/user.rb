@@ -207,10 +207,10 @@ module MnoEnterprise
       user = signed_in_resource ? signed_in_resource : identity.user
 
       # Create the user if needed
-      if user.nil?
+      if user.blank? # WTF is wrong with user.nil?
         # Get the existing user by email.
         email = auth.info.email
-        user = User.where(email: email).first if email
+        user = self.where(email: email).first if email
 
         # Create the user if it's a new registration
         if user.nil?
@@ -226,7 +226,7 @@ module MnoEnterprise
 
       # Associate the identity with the user if needed
       if identity.user != user
-        identity.user = user
+        identity.user_id = user.id
         identity.save!
       end
       user
@@ -256,6 +256,5 @@ module MnoEnterprise
 
       user
     end
-
   end
 end
