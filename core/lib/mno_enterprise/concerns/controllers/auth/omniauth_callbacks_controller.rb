@@ -31,61 +31,53 @@
 #
 module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
   extend ActiveSupport::Concern
+
+  #==================================================================
+  # Included methods
+  #==================================================================
   included do
-    skip_filter :verify_authenticity_token, :only => [:intuit]
-  end
+    skip_filter :verify_authenticity_token, only: [:intuit]
 
+    providers = Devise.omniauth_providers & %i(linkedin google facebook)
 
-  def self.provides_callback_for(provider)
-    class_eval %Q{
-      def #{provider}
-        auth = env["omniauth.auth"]
-        opts = { orga_on_create: create_orga_on_user_creation(auth.info.email) }
-
-        @user = User.find_for_oauth(auth, opts, current_user)
-
-        if @user.persisted?
-
-          if app_id = env['omniauth.params']['bundle']
-            apps = App.where(id: app_id).pluck(:nid)
-            app_instances = setup_apps(@user, apps)
-          end
-
-          sign_in_and_redirect @user, event: :authentication
-          set_flash_message(:notice, :success, kind: "#{provider}".capitalize) if is_navigational_format?
-        else
-          session["devise.#{provider}_data"] = env["omniauth.auth"]
-          redirect_to new_user_registration_url
-        end
-      end
-    }
-  end
-
-  def facebook
-  auth = env['omniauth.auth']
-  opts = { orga_on_create: create_orga_on_user_creation(auth.info.email) }
-
-  @user = User.find_for_oauth(auth, opts, current_user)
-
-  if @user.persisted?
-
-    if app_id = env['omniauth.params']['bundle']
-      apps = App.where(id: app_id).pluck(:nid)
-      setup_apps(@user, apps)
+    providers.each do |provider|
+      provides_callback_for provider
     end
-
-    sign_in_and_redirect @user, event: :authentication
-    set_flash_message(:notice, :success, kind: "#{provider}".capitalize) if is_navigational_format?
-  else
-    session['devise.facebook_data'] = env['omniauth.auth']
-    redirect_to new_user_registration_url
-  end
   end
 
-  %i(linkedin google).each do |provider|
-    provides_callback_for provider
+  #==================================================================
+  # Class methods
+  #==================================================================
+  module ClassMethods
+    def provides_callback_for(provider)
+      class_eval %Q{
+        def #{provider}
+          auth = env["omniauth.auth"]
+          opts = { orga_on_create: create_orga_on_user_creation(auth.info.email) }
+
+          @user = MnoEnterprise::User.find_for_oauth(auth, opts, current_user)
+
+          if @user.persisted?
+            # # TODO: not working in Maestrano, reimplement
+            # if app_id = env['omniauth.params']['bundle']
+            #   apps = MnoEnterprise::App.where(id: app_id).pluck(:nid)
+            #   app_instances = setup_apps(@user, apps)
+            # end
+
+            sign_in_and_redirect @user, event: :authentication
+            set_flash_message(:notice, :success, kind: "#{provider}".capitalize) if is_navigational_format?
+          else
+            session["devise.#{provider}_data"] = env["omniauth.auth"]
+            redirect_to new_user_registration_url
+          end
+        end
+      }
+    end
   end
 
+  #==================================================================
+  # Instance methods
+  #==================================================================
   # GET|POST /users/auth/:action/callback
   def intuit
     auth = request.env['omniauth.auth']
@@ -96,7 +88,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
 
     # Try to find via intuit
     begin
-      @user = User.find_for_oauth(auth, opts, current_user)
+      @user = MnoEnterprise::User.find_for_oauth(auth, opts, current_user)
     rescue SecurityError
       # Intuit email is NOT a confirmed email. Therefore we need to ask the user to
       # login the old fashion to make sure it is the right user!
@@ -138,12 +130,12 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
 
       # Check whether we should redirect the user to a specific
       # url
-      redirect_url = (session.delete(:openid_previous_url) || myspace_path)
+      redirect_url = session.delete(:openid_previous_url) || MnoEnterprise.router.dashboard_path || main_app.root_path
 
       sign_in @user
       redirect_to redirect_url, event: :authentication
-      #sign_in_and_redirect @user, event: :authentication #this will throw if @user is not activated
-      set_flash_message(:notice, :success, :kind => "Intuit") if is_navigational_format?
+
+      set_flash_message(:notice, :success, kind: "Intuit") if is_navigational_format?
     else
       session["devise.intuit_data"] = request.env["omniauth.auth"]
       redirect_to home_url, "ng-controller" => "MnoSignupProcessCtrl", "ng-click" => "startProcess()"
@@ -163,7 +155,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
     # Whether to create an orga on user creation
     def create_orga_on_user_creation(user_email = nil)
       return false if user_email.blank?
-      return false if User.exists?(email: user_email)
+      return false if MnoEnterprise::User.exists?(email: user_email)
 
       # First check previous url to see if the user
       # was trying to accept an orga
@@ -173,7 +165,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
       end
 
       # Get remaining invites via email address
-      return OrgInvite.where(user_email: user_email).empty?
+      return MnoEnterprise::OrgInvite.where(user_email: user_email).empty?
     end
 
     # Create or find the apps provided in argument
@@ -187,43 +179,31 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
       return [] unless user
       return [] unless (user.organizations.reload.count == 1)
       return [] unless (org = user.organizations.first)
-      return [] unless Ability.new(user).can?(:edit,org)
+      return [] unless MnoEnterprise::Ability.new(user).can?(:edit,org)
 
       results = []
 
-      # For reach app nid (which is not nil), try to find an existing instance
-      # or create one
-      app_nids.compact.each do |app_nid|
-        if app = App.find_by_nid(app_nid)
+      apps = MnoEnterprise::App.where(nid: app_nids.compact)
+      existing = org.app_instances.active.index_by(&:app_id)
 
-          if (instance = org.app_instances.strictly_active.find_by_app_id(app.id))
-            results << instance
-          else
-            hash = { name: app.name, owner: org, app: app }
+      # For each app nid (which is not nil), try to find an existing instance or create one
+      apps.each do |app|
+        if (instance = existing[app.id])
+          results << instance
+        else
+          # Provision instance and add to results
+          instance = org.app_instances.create(product: app.nid)
+          results << instance
+          MnoEnterprise::EventLogger.info('app_add', user.id, "App added", instance.name, instance)
+        end
 
-            # Need additional params for cube stack
-            if app.cube_stack?
-              template = app.app_templates.active.order('price_cents ASC').first
-              next unless template
-              hash.merge!({ app_template: template, region: AppInstance.closest_region(org) })
-            end
-
-            # Provision instance
-            instance = AppInstance.provision(hash)
-
-            # Add instance to result
-            results << instance
-          end
-
-          # Add oauth keyset if defined and app_instance is
-          # oauth ready and does not have a valid set of oauth keys
-          if instance && opts[:oauth_keyset].present? && instance.oauth_agent && !instance.oauth_keys_valid?
-            instance.update_attribute(:oauth_keys, { keyset: opts[:oauth_keyset] })
-          end
-
+        # Add oauth keyset if defined and app_instance is
+        # oauth ready and does not have a valid set of oauth keys
+        if instance && opts[:oauth_keyset].present? && !instance.oauth_keys_valid?
+          instance.oauth_keys = { keyset: opts[:oauth_keyset] }
+          instance.save
         end
       end
-
       return results
     end
 end
