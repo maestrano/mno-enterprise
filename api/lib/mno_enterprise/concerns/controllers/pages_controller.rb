@@ -59,6 +59,11 @@ module MnoEnterprise::Concerns::Controllers::PagesController
   def terms
     @meta[:title] = 'Terms of Use'
     @meta[:description] = 'Terms of Use'
+    @apps = Rails.cache.fetch('terms/app-list') do
+      MnoEnterprise::App.where("name.not" => 'Openbravo')
+        .order_by("name.ac")
+        .reject{|i| i.terms_url.blank?}
+    end
   end
 
   private

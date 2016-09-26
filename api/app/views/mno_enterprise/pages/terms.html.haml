@@ -13,17 +13,17 @@
       %p
         By using the
         %b= link_to("maestrano.com", "http://maestrano.com")
-        web site ("Service"), or any services of #{MnoEnterprise.app_name} ("#{MnoEnterprise.app_name}"), you are agreeing to be bound by the following terms and conditions ("Terms of Service").
+        web site ("Service"), or any services of Maestrano ("Maestrano"), you are agreeing to be bound by the following terms and conditions ("Terms of Service").
 
       %p
         IF YOU ARE ENTERING INTO THIS AGREEMENT ON BEHALF OF A COMPANY OR OTHER LEGAL ENTITY, YOU REPRESENT THAT YOU HAVE THE AUTHORITY TO BIND SUCH ENTITY, ITS AFFILIATES AND ALL USERS WHO ACCESS OUR SERVICES THROUGH YOUR ACCOUNT TO THESE TERMS AND CONDITIONS, IN WHICH CASE THE TERMS "YOU" OR "YOUR" SHALL REFER TO SUCH ENTITY, ITS AFFILIATES AND USERS ASSOCIATED WITH IT. IF YOU DO NOT HAVE SUCH AUTHORITY, OR IF YOU DO NOT AGREE WITH THESE TERMS AND CONDITIONS, YOU MUST NOT ACCEPT THIS AGREEMENT AND MAY NOT USE THE SERVICES.
 
       %p
-        "#{MnoEnterprise.app_name}" is a service provided by #{MnoEnterprise.app_name} which is the legal entity representing #{MnoEnterprise.app_name}. Those Terms of Use are specific to the use of #{MnoEnterprise.app_name} and are not related to the use of any other service provided by #{MnoEnterprise.app_name}.
+        "Maestrano" is a service of Maestrano Pty Ltd, located at Suite 504, 46 Market Street, Sydney, NSW 2000 Australia. Maestrano is a service provided by Maestrano Pty Ltd which is the legal entity representing Maestrano. Those Terms of Use are specific to the use of Maestrano.com and are not related to the use of any other service provided by Maestrano Pty Ltd.
 
       %p
-        #{MnoEnterprise.app_name} reserves the right to update and change the Terms of Service at any time without notice. Any new features that augment or enhance the current Service, including the release of new tools and resources, shall be subject to the Terms of Service. Continued use of the Service after any such changes shall constitute your consent to such changes. You can review the most current version of the Terms of Service at any time at:
-        %b= link_to("http://maestrano.com/terms", "http://maestrano.com/terms")
+        Maestrano reserves the right to update and change the Terms of Service at any time without notice. Any new features that augment or enhance the current Service, including the release of new tools and resources, shall be subject to the Terms of Service. Continued use of the Service after any such changes shall constitute your consent to such changes. You can review the most current version of the Terms of Service at any time at:
+        %b= link_to(mno_enterprise.terms_url)
 
       %p
         Violation of any of the terms below will result in the termination of your Account. While Maestrano prohibits such conduct and Content on the Service, you understand and agree that Maestrano cannot be responsible for the Content posted on the Service. You agree to use the Service at your own risk.
@@ -37,21 +37,21 @@
           %li You must be a human. Accounts registered by "bots" or other automated methods are not permitted.
           %li You must provide your legal full name, a valid email address, and any other information requested in order to complete the signup process.
           %li Your login may only be used by one person - a single login shared by multiple people is not permitted. You may create separate logins for as many people as your plan allows.
-          %li You are responsible for maintaining the security of your account and password. #{MnoEnterprise.app_name} cannot and will not be liable for any loss or damage from your failure to comply with this security obligation.
+          %li You are responsible for maintaining the security of your account and password. Maestrano cannot and will not be liable for any loss or damage from your failure to comply with this security obligation.
           %li You are responsible for all Content posted and activity that occurs under your account (even when Content is posted by others who have accounts under your account).
           %li You may not use the Service for any illegal or unauthorized purpose. You must not, in the use of the Service, violate any laws in your jurisdiction (including but not limited to copyright or trademark laws).
 
       %div
         %h3 B. Use of Application Software Products
-        %p #{MnoEnterprise.app_name} provides the use of various application software products that are the property of their respective owners.
+        %p Maestrano provides the use of various application software products that are the property of their respective owners.
         %ol
-          %li By using an application software product on #{MnoEnterprise.app_name}, you agree to be bound by the terms of service and/or license of the relevant product owner and/or product. The terms of service and/or license of the owner(s) of the application software products provided on #{MnoEnterprise.app_name} can be read in Annexure A to these Terms of Use.
+          %li By using an application software product on Maestrano, you agree to be bound by the terms of service and/or license of the relevant product owner and/or product. The terms of service and/or license of the owner(s) of the application software products provided on Maestrano can be read in Annexure A to these Terms of Use.
 
       %div
         %h3 C. API Terms
-        %p Customers may access their #{MnoEnterprise.app_name} account data via an API (Application Program Interface). Any use of the API, including use of the API through a third-party product that accesses #{MnoEnterprise.app_name}, is bound by these Terms of Service plus the following specific terms:
+        %p Customers may access their Maestrano account data via an API (Application Program Interface). Any use of the API, including use of the API through a third-party product that accesses Maestrano, is bound by these Terms of Service plus the following specific terms:
         %ol
-          %li You expressly understand and agree that #{MnoEnterprise.app_name} shall not be liable for any direct, indirect, incidental, special, consequential or exemplary damages, including but not limited to, damages for loss of profits, goodwill, use, data or other intangible losses (even if Maestrano has been advised of the possibility of such damages), resulting from your use of the API or third-party products that access data via the API.
+          %li You expressly understand and agree that Maestrano shall not be liable for any direct, indirect, incidental, special, consequential or exemplary damages, including but not limited to, damages for loss of profits, goodwill, use, data or other intangible losses (even if Maestrano has been advised of the possibility of such damages), resulting from your use of the API or third-party products that access data via the API.
           %li Abuse or excessively frequent requests to Maestrano via the API may result in the temporary or permanent suspension of your account's access to the API. Maestrano, in its sole discretion, will determine abuse or excessive usage of the API. Maestrano will make a reasonable attempt via email to warn the account owner prior to suspension.
           %li Maestrano reserves the right at any time to modify or discontinue, temporarily or permanently, your access to the API (or any part thereof) with or without notice.
 
@@ -93,9 +93,7 @@
               %li gives You sole control of the defense and settlement of the claim, demand, suit or proceeding (provided that You may not settle any claim, demand, suit or proceeding unless the settlement unconditionally releases Maestrano of all liability) and
               %li provides to You all reasonable assistance, at Your expense.
           %li
-            The look and feel of the Service is copyright
-            = "©#{Time.now.year}"
-            Maestrano Pty Ltd. All rights reserved. You may not duplicate, copy, or reuse any portion of the HTML/CSS, Javascript, or visual design elements or concepts without express written permission from Maestrano and Maestrano Pty Ltd.
+            The look and feel of the Service is copyright ©2016 Maestrano Pty Ltd. All rights reserved. You may not duplicate, copy, or reuse any portion of the HTML/CSS, Javascript, or visual design elements or concepts without express written permission from Maestrano and Maestrano Pty Ltd.
 
       %div
         %h3 H. General Conditions
@@ -135,11 +133,60 @@
           We do not warrant the accuracy of any feedback or benchmarks provided on Maestrano. Use Maestrano as a starting point and then seek independent professional advice.
           %li
             Questions about the Terms of Service should be sent to
-            %b= mail_to(MnoEnterprise.support_email)
-
+            %b= mail_to("support@maestrano.com")
 
       %div
-        %h3 I. Intellectual Property
+        %h3 I. Special Offers, Promo Codes and Starter Packs
+        %ol
+          %li Maestrano may issue from time to time promotional offers and promotional codes. The issue of such codes and offers is at the sole discretion of Maestrano.
+          %li The offers and codes are valid from a limited period of time only and for specific locations, as specified in the offer's description and/or advertisement.
+          %li Maestrano reserves the right to modify the content of promotional offers at any time without notice.
+          %li All promotional offers come with applicable conditions. If not directly described in the offer, the conditions are as follows:
+          %ol{:style => "list-style-type: lower-alpha;"}
+            %li The offer is unique for each company.
+            %li Offers are not cumulative and cannot be applied simultaneously on a given company.
+            %li Offers related to services (Such as "data upload" for instance) are limited to services requiring less than 2 hours of involvement of a Maestrano's support staff member. Services exceeding this duration are considered out of the scope of any promotional offer.
+          %li Maestrano starter packs are for new customers only, only one starter pack can be applied per company.
+          %li Starter packs are only applicable to the following applications:
+          %ol{:style => "list-style-type: lower-alpha;"}
+            %li Allocpsa
+            %li Bugzilla
+            %li Collabtive
+            %li Dolibarr
+            %li Drupal
+            %li Egroupware
+            %li Feng Office
+            %li Front Accounting
+            %li Group Office
+            %li Interleave
+            %li Jenkins
+            %li Joomla
+            %li eEasySurvey
+            %li MantisBT
+            %li Moodle
+            %li Opendocman
+            %li OpenERP
+            %li Openx
+            %li OrangeHRM
+            %li Pentaho BI
+            %li Phreedom
+            %li Plandora
+            %li Prestashop
+            %li ProcessMaker
+            %li Projectpier
+            %li SimpleInvoices
+            %li SO Planning
+            %li SugarCRM
+            %li TikiWiki
+            %li TimeTrex
+            %li TWiki
+            %li vTiger
+            %li Wordpress
+          %li Any promotional offers are conditioned by the current Terms of Use of the Maestrano service. Maestrano reserves the right not to implement a commercial offer, should it be assessed as its sole discretion that implementing the offer will go against any point of the present Terms of Use.
+          %li When contacted by a customer wanting to benefit from a promotional offer, Maestrano will inform whether the service required fits within the promotional offer, in regards with points 4 and 5 above and may at its sole discretion elect not to provide the service proposed in the promotional offer.
+
+      %div
+        %h3 J. Intellectual Property
         %ul
           %li All Intellectual Property Rights in the Services, the Website and any documentation relating to the Services remain the property of Maestrano.
           %li All Intellectual Property Rights in, the Data remain Your property. However, Your access to the Data is contingent on full payment of Services rendered on Maestrano when due. You grant Maestrano a licence to use, copy, transmit, store, and back-up Your information and Data for the purposes of enabling You to access and use the Services and for any other purpose related to the provision of services to You.
@@ -149,10 +196,22 @@
           %li If You decide to terminate your Service with Maestrano you will be able to take Your Data with You. You can either export Your Data directly from the application(s) or ask our support team to assist you. Assistance provided by our support team may incur a cost depending on the amount of Data and hours required to complete the export of Your Data.
           %li When closing your account on Maestrano, You data and all copies of it will be deleted. This is an irreversible action.
 
+      %div
+        %h3 K. Partner Commission Agreement
+        %ol
+          %li After execution of this agreement, Maestrano will provide Partner with a unique partner code (a short alphanumeric string) that will be attached to their partner account
+          %li When advocating Maestrano’s service, Partner will provide this unique code to their client when they sign up for the Maestrano service. This link will automatically be attached to the partners account when sent via the Maestrano partner platform. For every customer registration received by Maestrano which includes the partner code of Partner, Maestrano will pay a commission fee to Partner on all revenue which Maestrano receives from that customer for the duration of that customer’s relationship with Maestrano, or for a period of three (3) years from the date of execution of this agreement, whichever is the lesser. Partner commissions will be due according to the following commission schedules
+          %li Maestrano will provide a monthly statement to Partner itemizing the clients who registered using Partner’s partner code, and the revenues received by Maestrano from them during the previous month. Maestrano will pay the commission fee to Partner on or before the fifteenth (15th) day of the following month. For the avoidance of doubt, Maestrano will not pay the commission fee on unpaid obligations of customers. Revenue received by Maestrano is the only basis for the calculation of commission fee.
+
+          %ul
+            %li Schedule 1: Rate of commission for standard applications (expressed as a percentage of revenue received by Maestrano from customers who initially registered on the Maestrano website using the partner code of Partner): Fifty percent (50%) in Year One; Fifteen percent (15%) thereafter
+            %li Schedule 2:Rate of commission for premium applications (expressed as a percentage of next revenue {gross revenue less payment to the application provider} received by Maestrano from customers who initially registered on the Maestrano website using the partner code of Partner. Fifty percent (50%) in Year One; Fifteen percent (15%) thereafter.
+        %p For the avoidance of doubt, Maestrano will not pay commission fee on revenue from customers who did not enter the partner code at the time of their registration with Maestrano. Partner will only receive commission based on Maestrano’s revenue from customers who correctly entered Partner’s partner code during their on-line registration or if they follow the link provided by their Partner, sent via the Maestrano partner portal.
 
       %div
-        %h3 Annexure A - Terms of service and licenses of the application software products provided by third parties to #{MnoEnterprise.app_name}
-        %p The terms of service and/or license of the owner(s) of the application software products provided on #{MnoEnterprise.app_name} can be read by accessing the links below:
+        %h3 Annexure A - Terms of service and licenses of the application software products provided by third parties to Maestrano
+        %p The terms of service and/or license of the owner(s) of the application software products provided on Maestrano can be read by accessing the links below:
         %ol
-          -#- App.select("name,terms_url").where("terms_url IS NOT NULL AND name != 'Openbravo'").order("name ASC").each do |app|
-          -#  %li= link_to app.name, app.terms_url, target: "_blank"
+          - cache ['v1/app-terms-list', @apps] do
+            - @apps.each do |app|
+              %li= link_to app.name, app.terms_url, target: "_blank"

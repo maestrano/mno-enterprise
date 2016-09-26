@@ -49,6 +49,7 @@ MnoEnterprise.configure do |config|
   # URL of the Terms and Conditions page.
   # Used on Devise Registration pages
   # config.router.terms_url = 'http://mywebsite.com/terms'
+  config.router.terms_url = '/terms'
 
   # After sign out URL. Default to the root_path
   # config.router.after_sign_out_url = 'http://mywebsite.com/'
