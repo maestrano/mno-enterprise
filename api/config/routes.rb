@@ -128,6 +128,7 @@ MnoEnterprise::Engine.routes.draw do
           collection do
             get :count
             post :signup_email
+            post :confirmation_email
           end
         end
         resources :organizations, only: [:index, :show, :create] do

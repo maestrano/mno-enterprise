@@ -19,7 +19,7 @@
     $uibModalInstance.dismiss('cancel')
 
   sendConfirmationEmail = (user) ->
-    MnoeUsers.sendSignupEmail(user.email).then(
+    MnoeUsers.sendConfirmationEmail(user.email).then(
       (success) ->
         toastr.success("#{user.name} #{user.surname} has been successfully added.")
         # Close the modal returning the item to the parent window

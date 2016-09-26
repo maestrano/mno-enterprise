@@ -39,14 +39,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     @user = current_user
 
     if @user.update(password_params.merge(current_password_required: true))
-      MnoEnterprise::EventLogger.info('user_update_password', current_user.id, "User password change", @user.email, @user)
+      MnoEnterprise::EventLogger.info('user_update_password', @user.id, "User password change", @user.email, @user)
       sign_in @user, bypass: true
       render :show
     else
       render json: @user.errors, status: :bad_request
     end
   end
-    
+
   private
     def user_params
       params.require(:user).permit(:name, :surname, :email, :company, :settings, :phone, :website, :phone_country_code, :current_password, :password, :password_confirmation)
