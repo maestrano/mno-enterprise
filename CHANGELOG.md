@@ -53,6 +53,20 @@
 - Theme builder/previewer
 - I18n implementation
 
+## [v2.0.6](https://github.com/maestrano/mno-enterprise/tree/v2.0.6) (2016-09-27)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.5...v2.0.6)
+
+**Implemented enhancements:**
+
+- \[\#73\] Improve perf for dashboard\#organizations [\#90](https://github.com/maestrano/mno-enterprise/pull/90) ([ouranos](https://github.com/ouranos))
+- \[MNOE-149\] Use redirect\_uri when impersonating uri [\#80](https://github.com/maestrano/mno-enterprise/pull/80) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- Fixed CVV field returned on empty credit card details [\#97](https://github.com/maestrano/mno-enterprise/pull/97) ([clemthenem](https://github.com/clemthenem))
+- \[MNOE-154\] Fix phone number autofill in signup page [\#96](https://github.com/maestrano/mno-enterprise/pull/96) ([clemthenem](https://github.com/clemthenem))
+- Fix Her monkey patch \#first\_or\_create/initialize [\#89](https://github.com/maestrano/mno-enterprise/pull/89) ([ouranos](https://github.com/ouranos))
+
 ## [v2.0.5](https://github.com/maestrano/mno-enterprise/tree/v2.0.5) (2016-09-09)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.4...v2.0.5)
 

@@ -35,6 +35,16 @@ module Her
       end
       alias all where
 
+      # Patch to unwrap filter when creating
+      def first_or_create(attributes = {})
+        fetch.first || create((@params.delete(:filter) || {}).merge(attributes))
+      end
+
+      # Patch to unwrap filter when creating
+      def first_or_initialize(attributes = {})
+        fetch.first || build((@params.delete(:filter) || {}).merge(attributes))
+      end
+
       # E.g:
       # Product.order_by('created_at.desc','name.asc')
       def order_by(*args)
