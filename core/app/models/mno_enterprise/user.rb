@@ -35,6 +35,8 @@
 #  geo_state_code                 :string(255)
 #  geo_city                       :string(255)
 #  website                        :string(255)
+#  api_key                        :string(255)
+#  api_secret                     :string(255)
 #
 
 module MnoEnterprise
@@ -48,7 +50,8 @@ module MnoEnterprise
       :remember_created_at, :sign_in_count, :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip,
       :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email,
       :failed_attempts, :unlock_token, :locked_at, :name, :surname, :company, :phone, :phone_country_code,
-      :geo_country_code, :geo_state_code, :geo_city, :website, :orga_on_create, :sso_session, :current_password_required, :admin_role
+      :geo_country_code, :geo_state_code, :geo_city, :website, :orga_on_create, :sso_session, :current_password_required, :admin_role,
+      :api_key, :api_secret
 
     define_model_callbacks :validation #required by Devise
     devise :remote_authenticatable, :registerable, :recoverable, :rememberable,
