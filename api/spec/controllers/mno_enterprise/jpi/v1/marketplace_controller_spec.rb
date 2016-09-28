@@ -34,7 +34,9 @@ module MnoEnterprise
         'pictures' => app.pictures,
         'pricing_plans' => app.pricing_plans,
         'rank' => app.rank,
-        'multi_instantiable' => app.multi_instantiable
+        'multi_instantiable' => app.multi_instantiable,
+        'subcategories' => app.subcategories,
+
       }
     end
 

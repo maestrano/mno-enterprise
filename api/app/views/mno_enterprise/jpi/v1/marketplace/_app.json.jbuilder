@@ -9,6 +9,7 @@ json.is_connec_ready app.connec_ready?
 json.is_coming_soon app.coming_soon?
 json.single_billing app.single_billing?
 json.multi_instantiable app.multi_instantiable
+json.subcategories app.subcategories
 
 if app.logo
   json.logo app.logo.to_s
