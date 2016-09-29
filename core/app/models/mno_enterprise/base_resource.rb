@@ -50,6 +50,11 @@ module MnoEnterprise
       end
 
       # ActiveRecord Compatibility for Her
+      def exists?(hash)
+        find_by(hash).present?
+      end
+
+      # ActiveRecord Compatibility for Her
       # Returns the class descending directly from MnoEnterprise::BaseResource, or
       # an abstract class, if any, in the inheritance hierarchy.
       #
