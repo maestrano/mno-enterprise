@@ -53,13 +53,24 @@
 - Theme builder/previewer
 - I18n implementation
 
+## [v2.0.7](https://github.com/maestrano/mno-enterprise/tree/v2.0.7) (2016-09-30)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.6...v2.0.7)
+
+**Fixed bugs:**
+
+- Fix BaseResource\#save! [\#100](https://github.com/maestrano/mno-enterprise/pull/100) ([ouranos](https://github.com/ouranos))
+- Fix belongs\_to when foreign key is nil [\#99](https://github.com/maestrano/mno-enterprise/pull/99) ([ouranos](https://github.com/ouranos))
+
 ## [v2.0.6](https://github.com/maestrano/mno-enterprise/tree/v2.0.6) (2016-09-27)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.5...v2.0.6)
 
 **Implemented enhancements:**
 
-- \[\#73\] Improve perf for dashboard\#organizations [\#90](https://github.com/maestrano/mno-enterprise/pull/90) ([ouranos](https://github.com/ouranos))
 - \[MNOE-149\] Use redirect\_uri when impersonating uri [\#80](https://github.com/maestrano/mno-enterprise/pull/80) ([ouranos](https://github.com/ouranos))
+
+**Closed issues:**
+
+- Improve performance for `dashboard.organizations` [\#73](https://github.com/maestrano/mno-enterprise/issues/73)
 
 **Fixed bugs:**
 
