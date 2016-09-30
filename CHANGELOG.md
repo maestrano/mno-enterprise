@@ -4,6 +4,19 @@
 
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.1...HEAD)
 
+## [v3.1.2](https://github.com/maestrano/mno-enterprise/tree/v3.1.2) (2016-09-30)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.1...v3.1.2)
+
+**Implemented enhancements:**
+
+- \[MNOE-149\] Use redirect\_uri when impersonating uri [\#81](https://github.com/maestrano/mno-enterprise/pull/81) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- \[MNOE-148\] Only display connectors in admin onboarding [\#76](https://github.com/maestrano/mno-enterprise/pull/76) ([ouranos](https://github.com/ouranos))
+
+- Merge [v3.0.5](#v3.0.5)
+
 ## [v3.1.1](https://github.com/maestrano/mno-enterprise/tree/v3.1.1) (2016-08-29)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.0...v3.1.1)
 
