@@ -1,6 +1,19 @@
 # Change Log
 
-## [Unreleased]
+## Unreleased
+
+## [v3.0.5](https://github.com/maestrano/mno-enterprise/tree/v3.0.5) (2016-09-30)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.4...v3.0.5)
+
+**Fixed bugs:**
+
+- Rephrased the link to terms of use [\#98](https://github.com/maestrano/mno-enterprise/pull/98) ([ouranos](https://github.com/ouranos))
+- Fix time-dependent specs [\#94](https://github.com/maestrano/mno-enterprise/pull/94) ([ouranos](https://github.com/ouranos))
+- \[MNOE-107\] Fix admin finance page [\#75](https://github.com/maestrano/mno-enterprise/pull/75) ([ouranos](https://github.com/ouranos))
+
+- Merge [v2.0.7](#v2.0.7)
+- Merge [v2.0.6](#v2.0.6)
+- Merge [v2.0.5](#v2.0.5)
 
 ## [v3.0.4](https://github.com/maestrano/mno-enterprise/tree/v3.0.4) (2016-08-30)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.3...v3.0.4)
