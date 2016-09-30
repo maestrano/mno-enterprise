@@ -25,7 +25,7 @@
       .checkbox-section.text-center
         = check_box_tag 'tos', 'accept', false, :required => true, :style => "margin-top: -3px;", 'ng-model' => 'acceptTos'
         %label{for: 'tos'}= t('mno_enterprise.auth.registrations.new.user_accept')
-        = link_to t('.tos'), MnoEnterprise.router.terms_url, target: '_blank'
+        = link_to t('mno_enterprise.auth.registrations.new.tos'), MnoEnterprise.router.terms_url, target: '_blank'
 
   %br
   .row
