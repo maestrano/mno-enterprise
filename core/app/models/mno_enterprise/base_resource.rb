@@ -143,7 +143,8 @@ module MnoEnterprise
       if perform_validations(options)
         ret = super()
         process_response_errors
-        raise_record_invalid
+        raise_record_invalid if self.errors.any?
+        ret
       else
         false
       end

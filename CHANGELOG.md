@@ -43,6 +43,19 @@
 - `MnoEnteprise.config.mandrill_key` is replaced with `ENV['MANDRILL_API_KEY']`
 - `MandrillClient` is replaced with `MnoEnterprise::MailClient`
 
+## [v3.0.5](https://github.com/maestrano/mno-enterprise/tree/v3.0.5) (2016-09-30)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.4...v3.0.5)
+
+**Fixed bugs:**
+
+- Rephrased the link to terms of use [\#98](https://github.com/maestrano/mno-enterprise/pull/98) ([ouranos](https://github.com/ouranos))
+- Fix time-dependent specs [\#94](https://github.com/maestrano/mno-enterprise/pull/94) ([ouranos](https://github.com/ouranos))
+- \[MNOE-107\] Fix admin finance page [\#75](https://github.com/maestrano/mno-enterprise/pull/75) ([ouranos](https://github.com/ouranos))
+
+- Merge [v2.0.7](#v2.0.7)
+- Merge [v2.0.6](#v2.0.6)
+- Merge [v2.0.5](#v2.0.5)
+
 ## [v3.0.4](https://github.com/maestrano/mno-enterprise/tree/v3.0.4) (2016-08-30)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.3...v3.0.4)
 
@@ -93,6 +106,31 @@
 - Remove old Rails based frontend
 - Theme builder/previewer
 - I18n implementation
+
+## [v2.0.7](https://github.com/maestrano/mno-enterprise/tree/v2.0.7) (2016-09-30)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.6...v2.0.7)
+
+**Fixed bugs:**
+
+- Fix BaseResource\#save! [\#100](https://github.com/maestrano/mno-enterprise/pull/100) ([ouranos](https://github.com/ouranos))
+- Fix belongs\_to when foreign key is nil [\#99](https://github.com/maestrano/mno-enterprise/pull/99) ([ouranos](https://github.com/ouranos))
+
+## [v2.0.6](https://github.com/maestrano/mno-enterprise/tree/v2.0.6) (2016-09-27)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.5...v2.0.6)
+
+**Implemented enhancements:**
+
+- \[MNOE-149\] Use redirect\_uri when impersonating uri [\#80](https://github.com/maestrano/mno-enterprise/pull/80) ([ouranos](https://github.com/ouranos))
+
+**Closed issues:**
+
+- Improve performance for `dashboard.organizations` [\#73](https://github.com/maestrano/mno-enterprise/issues/73)
+
+**Fixed bugs:**
+
+- Fixed CVV field returned on empty credit card details [\#97](https://github.com/maestrano/mno-enterprise/pull/97) ([clemthenem](https://github.com/clemthenem))
+- \[MNOE-154\] Fix phone number autofill in signup page [\#96](https://github.com/maestrano/mno-enterprise/pull/96) ([clemthenem](https://github.com/clemthenem))
+- Fix Her monkey patch \#first\_or\_create/initialize [\#89](https://github.com/maestrano/mno-enterprise/pull/89) ([ouranos](https://github.com/ouranos))
 
 ## [v2.0.5](https://github.com/maestrano/mno-enterprise/tree/v2.0.5) (2016-09-09)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.4...v2.0.5)
