@@ -9,6 +9,10 @@ module MnoEnterprise
     render_views
     routes { MnoEnterprise::Engine.routes }
 
+    # Freeze time (JWT are time dependent)
+    before { Timecop.freeze }
+    after { Timecop.return }
+
     # Stub controller ability
     let!(:ability) { stub_ability }
     let(:extra_params) { {some: 'param'} }
@@ -33,7 +37,7 @@ module MnoEnterprise
       it_behaves_like 'a user protected resource'
 
       it { subject; expect(response).to be_success }
-      it { Timecop.freeze { subject; expect(assigns(:redirect_to)).to eq(redirect_url) } }
+      it { subject; expect(assigns(:redirect_to)).to eq(redirect_url) }
 
       Webhook::OAuthController::PROVIDERS_WITH_OPTIONS.each do |provider|
         describe "#{provider.capitalize} provider" do

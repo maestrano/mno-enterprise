@@ -5,6 +5,10 @@ module MnoEnterprise
     render_views
     routes { MnoEnterprise::Engine.routes }
 
+    # Freeze time (JWT are time dependent)
+    before { Timecop.freeze }
+    after { Timecop.return }
+
     let(:user) { build(:user) }
     let(:app_instance) { build(:app_instance) }
 
