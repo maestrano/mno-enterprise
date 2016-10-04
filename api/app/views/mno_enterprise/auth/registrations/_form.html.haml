@@ -17,7 +17,7 @@
   .row
     .col-sm-12
       = f.text_field :company, placeholder: "Company", 'ng-model' => 'user.company', class: 'form-control'
-
+      = f.hidden_field :apps, :value =>params[:apps]
   %br
 
   .row
