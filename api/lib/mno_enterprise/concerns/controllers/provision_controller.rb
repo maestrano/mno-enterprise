@@ -14,7 +14,16 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     def after_provision_path
       MnoEnterprise.router.dashboard_path || main_app.root_path
     end
-
+    # Redirect to signup page if user not authenticated
+    def authenticate_user_or_signup!
+      unless current_user
+        # if the user does not exist, we start the sign_up process and we transmit the apps to the forms
+        # the apps are send as a string because transmitting array parameter to a form does not work
+        redirect_to new_user_registration_path(apps:params[:apps].join('+'))
+        false
+      end
+      true
+    end
     helper_method :after_provision_path # To use in the provision view
   end
 

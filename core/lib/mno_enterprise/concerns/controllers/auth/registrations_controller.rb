@@ -1,6 +1,6 @@
 module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
   extend ActiveSupport::Concern
-  
+
   #==================================================================
   # Included methods
   #==================================================================
@@ -9,22 +9,23 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
   included do
     before_filter :configure_sign_up_params, only: [:create]
     # before_filter :configure_account_update_params, only: [:update]
-    
+
     protected
       def configure_sign_up_params
         devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(
-          :email, 
-          :password, 
-          :password_confirmation, 
-          :name, 
+          :email,
+          :password,
+          :password_confirmation,
+          :name,
           :surname,
           :company,
           :phone,
-          :phone_country_code
-        )} 
+          :phone_country_code,
+          :apps
+        )}
       end
   end
-  
+
   #==================================================================
   # Class methods
   #==================================================================
@@ -33,7 +34,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
     #   'some text'
     # end
   end
-  
+
   #==================================================================
   # Instance methods
   #==================================================================
@@ -44,15 +45,24 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
 
   # POST /resource
   def create
-    build_resource(sign_up_params)
+    params = sign_up_params
+    build_resource(params)
     resource.password ||= Devise.friendly_token
-    
+
     resource_saved = resource.save
-    
+
     if resource_saved
       if resource.active_for_authentication?
         set_flash_message :notice, :signed_up if is_flashing_format?
         sign_up(resource_name, resource)
+        if params[:apps] && resource.organizations.first
+          # the apps parameters are being send a string because forms cannot send an hidden parameter as an array
+          # See MnoEnterprise::Concerns::Controllers::ProvisionController
+          params[:apps].split('+').each do |app|
+            app_instance = resource.organizations.first.app_instances.create(product: app)
+            MnoEnterprise::EventLogger.info('app_add', resource.id, "App added", app_instance.name, app_instance) if app_instance
+          end
+        end
         yield(:success,resource) if block_given?
         respond_with resource, location: after_sign_up_path_for(resource)
       else
@@ -97,7 +107,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
   # end
 
   protected
-  
+
     # You can put the params you want to permit in the empty array.
     # def configure_account_update_params
     #   devise_parameter_sanitizer.for(:account_update) << :attribute
@@ -112,19 +122,18 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
     # def after_inactive_sign_up_path_for(resource)
     #   super(resource)
     # end
-  
+
     def sign_up_params
       attrs = super
       attrs.merge(orga_on_create: create_orga_on_user_creation(attrs))
     end
-  
+
     # Check whether we should create an organization for the user
     def create_orga_on_user_creation(user_attrs)
       return false unless user_attrs['email']
 
       # First check previous url to see if the user
       # was trying to accept an orga
-      orga_invites = []
       if !session[:previous_url].blank? && (r = session[:previous_url].match(/\/orga_invites\/(\d+)\?token=(\w+)/))
         invite_params = { id: r.captures[0].to_i, token: r.captures[1] }
         return false if MnoEnterprise::OrgInvite.where(invite_params).any?
