@@ -1,7 +1,7 @@
 module MnoEnterprise
   class Impac::Dashboard < BaseResource
 
-    attributes :name, :widgets_order, :organization_ids, :widgets_templates, :currency
+    attributes :full_name, :widgets_order, :settings, :organization_ids, :widgets_templates, :currency
 
     has_many :widgets, class_name: 'MnoEnterprise::Impac::Widget', dependent: :destroy
     has_many :kpis, class_name: 'MnoEnterprise::Impac::Kpi', dependent: :destroy
@@ -20,11 +20,6 @@ module MnoEnterprise
     # the user has access
     def organizations
       MnoEnterprise::Organization.where('uid.in' => self.organization_ids).to_a
-    end
-
-    def sorted_widgets
-      order = self.widgets_order.map(&:to_i) | self.widgets.map{|w| w.id }
-      order.map { |id| self.widgets.to_a.find{ |w| w.id == id} }.compact
     end
 
     # Filter widgets list based on config
