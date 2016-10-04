@@ -5,6 +5,7 @@ MnoEnterprise::Engine.routes.draw do
   get '/app_access_unauthorized', to: 'pages#app_access_unauthorized'
   get '/billing_details_required', to: 'pages#billing_details_required'
   get '/app_logout', to: 'pages#app_logout'
+  get '/terms', to: 'pages#terms'
 
   # Health Status
   get '/ping', to: 'status#ping'

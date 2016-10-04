@@ -62,5 +62,13 @@ module MnoEnterprise
       it { expect(response).to be_success }
     end
 
+    describe 'GET #terms' do
+      before { api_stub_for(get: "/apps", response: from_api([build(:app)])) }
+
+      subject { get :terms }
+      before { subject }
+      it { expect(response).to be_success }
+    end
+
   end
 end

@@ -25,5 +25,9 @@ module MnoEnterprise
     it 'routes to #app_logout' do
       expect(get("/app_logout")).to route_to("mno_enterprise/pages#app_logout")
     end
+
+    it 'routes to #terms' do
+      expect(get("/terms")).to route_to("mno_enterprise/pages#terms")
+    end
   end
 end

@@ -18,9 +18,13 @@ The goal of this engine is to provide a base that you can easily extend with cus
 
 1.  [Install](#install)
 2.  [Configuration](#configuration)
+    1. [Emailing Platform](#emailing-platform)
+    2. [Active Job Backend](#active-job-backend)
 3.  [Building the Frontend](#building-the-frontend)
 4.  [Modifying the style - Theme Previewer](#modifying-the-style---theme-previewer)
 5.  [Extending the Frontend](#extending-the-frontend)
+    1. [Adding a custom font](#adding-a-custom-font)
+    2. [Adding a favicon](#adding-favicon)
 6.  [Replacing the Frontend](#replacing-the-frontend)
 7.  [Generating a database extension](#generating-a-database-extension)
 8.  [Deploying](#deploying)
@@ -154,6 +158,43 @@ Rails.application.config.assets.precompile += %w( mno_enterprise/mail.css )
 - You can override the default mail templates by adding template files ( template-name.html.erb, template-name.text.erb ) to the mail view directory (/app/views/system_notifications).
 - Logo can also be overriden by adding your own logo image (main-logo.png) to the image assets directory (/app/assets/images/mno_enterprise).
 - Write your own stylesheet by adding mail.css file to the stylesheets directory (/app/assets/stylesheets/mno_enterprise). The css rules you write will be applied to all the mail templates including the default ones.
+
+### Active Job Backend
+
+Maestrano Enterprise uses Active Job to process background jobs such as logging event or emails.
+
+By default if no adapter is set, the jobs are immediately executed.
+
+To see an up-to-date list of all queueing backend supported by Active Job see the documentation for [Active Job](http://edgeguides.rubyonrails.org/active_job_basics.html#backends)
+
+#### Sucker Punch
+
+This is the easiest as it runs within the application process, so you don't have to maintain a separate process to run background jobs.
+
+Add this line to your application's `Gemfile`:
+
+```ruby
+gem 'sucker_punch', '~> 2.0'
+```
+
+To enable backward compatibility with ActiveJob 4.2, create the following initializer:
+
+```ruby
+# config/initializers/sucker_punch.rb
+
+require 'sucker_punch/async_syntax'
+```
+
+Then in `config/application.rb`:
+
+```ruby
+# Use Sucker Punch for ActiveJob
+config.active_job.queue_adapter = :sucker_punch
+```
+
+#### Sidekiq
+
+See https://github.com/mperham/sidekiq/wiki/Active-Job
 
 ## Building the frontend
 The Maestrano Enterprise frontend is a Single Page Application (SPA) that is separate from the Rails project. The source code for this frontend can be found on the [mno-enterprise-angular Github repository](https://github.com/maestrano/mno-enterprise-angular)

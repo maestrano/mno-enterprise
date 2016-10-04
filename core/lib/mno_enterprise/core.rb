@@ -52,7 +52,7 @@ module MnoEnterprise
     end
 
     def terms_url
-      @terms_url || '#'
+      @terms_url || '/mnoe/terms'
     end
 
     def admin_path
