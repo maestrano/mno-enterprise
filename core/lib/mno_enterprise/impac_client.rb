@@ -7,7 +7,7 @@ module MnoEnterprise
     end
 
     def self.endpoint_url(endpoint, params)
-      "#{host}#{endpoint}?#{params.to_query}"
+      "#{File.join(host,endpoint)}?#{params.to_query}"
     end
 
     def self.send_get(endpoint, params, opts={})

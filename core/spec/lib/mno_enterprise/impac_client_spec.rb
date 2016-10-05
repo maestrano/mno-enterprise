@@ -3,10 +3,10 @@ require "rails_helper"
 describe MnoEnterprise::ImpacClient do
   subject { MnoEnterprise::ImpacClient }
 
-  let(:host_path) { "#{Settings.impac.protocol}://#{Settings.impac.host}" }
+  let(:host_path) { "http://localhost:4000" }
   let(:params) { { sso_session: '1234' } }
   let(:endpoint) { "/some/endpoint" }
-  let(:url) { "#{host_path}#{endpoint}?#{params.to_query}" }
+  let(:url) { "http://localhost:4000/some/endpoint?sso_session=1234" }
 
   describe ".host" do
     it { expect(subject.host).to eq(host_path) }
@@ -14,6 +14,10 @@ describe MnoEnterprise::ImpacClient do
 
   describe ".endpoint_url" do
     it { expect(subject.endpoint_url(endpoint, params)).to eq(url) }
+    context "when the endpoint misses the first '/'" do
+      let(:endpoint) { "some/endpoint" }
+      it { expect(subject.endpoint_url(endpoint, params)).to eq(url) }
+    end
   end
 
   describe ".send_get" do
