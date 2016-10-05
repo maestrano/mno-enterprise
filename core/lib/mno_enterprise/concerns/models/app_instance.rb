@@ -40,7 +40,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
   included do
     attributes :id, :uid, :name, :status, :app_id, :created_at, :updated_at, :started_at, :stack, :owner_id,
     :owner_type, :terminated_at, :stopped_at, :billing_type, :autostop_at, :autostop_interval,
-    :next_status, :soa_enabled, :oauth_keys_valid, :oauth_company
+    :next_status, :soa_enabled, :oauth_company, :oauth_keys, :oauth_keys_valid
 
     #==============================================================
     # Constants

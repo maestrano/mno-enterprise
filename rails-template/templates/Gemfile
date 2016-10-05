@@ -9,6 +9,13 @@ gem 'mno-enterprise', '~> 3.0'
 # Enable Intercom
 # gem 'intercom', '~> 3.5.4'
 
+# Omniauth authentication strategies
+# gem 'omniauth-openid', '~> 1.0'
+# gem 'openid-store-redis', '~> 1.0'
+# gem 'omniauth-linkedin-oauth2', '~> 0.1.5'
+# gem 'omniauth-google-oauth2', '~> 0.2.6'
+# gem 'omniauth-facebook', '~> 2.0.1'
+
 # Use puma as the app server
 gem 'puma'
 
