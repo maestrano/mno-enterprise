@@ -5,7 +5,7 @@ module MnoEnterprise
 
     belongs_to :dashboard, class_name: 'MnoEnterprise::Impac::Dashboard'
     belongs_to :widget, class_name: 'MnoEnterprise::Impac::Widget'
-    has_many :alerts, class_name: 'MnoEnterprise::Impac::Alert', dependent: :destroy
+    has_many :alerts, class_name: 'MnoEnterprise::Impac::Alert'
 
   end
 end

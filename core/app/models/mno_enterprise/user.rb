@@ -72,7 +72,7 @@ module MnoEnterprise
     has_many :teams, class_name: 'MnoEnterprise::Team'
 
     # Impac
-    has_many :dashboards, class_name: 'MnoEnterprise::Impac::Dashboard', dependent: :destroy
+    has_many :dashboards, class_name: 'MnoEnterprise::Impac::Dashboard'
     has_many :alerts, class_name: 'MnoEnterprise::Impac::Alert'
 
     #================================
