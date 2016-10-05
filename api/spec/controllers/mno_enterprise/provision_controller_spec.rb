@@ -87,6 +87,11 @@ module MnoEnterprise
         end
 
         it { expect(response).to be_success }
+
+        it 'deletes the previous url from session to avoid double provisioning' do
+          subject
+          expect(session[:previous_url]).to be_nil
+        end
       end
     end
 
