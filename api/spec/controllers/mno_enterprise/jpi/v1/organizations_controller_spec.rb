@@ -9,7 +9,7 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
     #before { allow_any_instance_of(CreditCard).to receive(:save_to_gateway).and_return(true) }
-    
+
 
     #===============================================
     # Assignments
@@ -17,17 +17,17 @@ module MnoEnterprise
     # Stub controller ability
     let!(:ability) { stub_ability }
     before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
-    
+
     # Stub user and user call
-    let(:user) { build(:user) }
+    let(:user) { build(:user, role: 'Admin') }
     before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     before { sign_in user }
-    
+
     # Advanced features - currently disabled
     let!(:credit_card) { build(:credit_card, organization_id: organization.id) }
     let!(:invoice) { build(:invoice, organization_id: organization.id) }
     let!(:org_invite) { build(:org_invite, organization: organization) }
-    
+
     # Stub organization + associations
     let(:organization) { build(:organization) }
     before { allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) }
@@ -35,22 +35,22 @@ module MnoEnterprise
     before { api_stub_for(post: "/organizations", response: from_api(organization)) }
     before { api_stub_for(put: "/organizations/#{organization.id}", response: from_api(organization)) }
     before { api_stub_for(delete: "/organizations/#{organization.id}", response: from_api(nil)) }
-    
+
     before { api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api(credit_card)) }
     before { api_stub_for(put: "/credit_cards/#{credit_card.id}", response: from_api(credit_card)) }
-    
-    
+
+
     before { api_stub_for(get: "/organizations/#{organization.id}/invoices", response: from_api([invoice])) }
     before { api_stub_for(get: "/organizations/#{organization.id}/org_invites", response: from_api([org_invite])) }
     before { api_stub_for(get: "/organizations/#{organization.id}/users", response: from_api([user])) }
     before { api_stub_for(post: "/organizations/#{organization.id}/users", response: from_api(user)) }
-    
+
     #===============================================
     # Specs
     #===============================================
     describe 'GET #index' do
       subject { get :index }
-      
+
       it_behaves_like "jpi v1 protected action"
 
       context 'success' do
@@ -62,10 +62,10 @@ module MnoEnterprise
         end
       end
     end
-    
+
     describe 'GET #show' do
       subject { get :show, id: organization.id }
-      
+
       it_behaves_like "jpi v1 protected action"
 
       context 'success' do
@@ -86,20 +86,20 @@ module MnoEnterprise
         # end
       end
     end
-    
+
     describe 'POST #create' do
       let(:params) { { 'name' => organization.name } }
       subject { post :create, organization: params }
-      
+
       it_behaves_like "jpi v1 protected action"
-      
+
       context 'success' do
         before { subject }
-        
+
         it 'creates the organization' do
           expect(assigns(:organization).name).to eq(organization.name)
         end
-        
+
         it 'adds the user as Super Admin' do
           expect(assigns(:organization).users).to eq([user])
         end
@@ -109,13 +109,13 @@ module MnoEnterprise
         end
       end
     end
-    
+
     describe 'PUT #update' do
       let(:params) { { 'name' => organization.name + 'a', 'soa_enabled' => !organization.soa_enabled } }
       subject { put :update, id: organization.id, organization: params }
-      
+
       it_behaves_like "jpi v1 authorizable action"
-      
+
       context 'success' do
         it 'updates the organization' do
           expect(organization).to receive(:save).and_return(true)

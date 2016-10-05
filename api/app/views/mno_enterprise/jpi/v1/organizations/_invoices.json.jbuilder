@@ -1,5 +1,5 @@
 json.invoices do
-  json.array! organization.invoices.order_by('ended_at.desc') do |invoice|
+  json.array! organization.invoices.order_by('ended_at.desc').limit(12) do |invoice|
     json.period invoice.period_label
     json.amount AccountingjsSerializer.serialize(invoice.total_due)
     json.paid invoice.paid?

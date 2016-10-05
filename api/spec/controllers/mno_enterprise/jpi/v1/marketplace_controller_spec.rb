@@ -5,9 +5,10 @@ module MnoEnterprise
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
+    before { Rails.cache.clear }
 
     let!(:app) { build(:app) }
-    
+
     def markdown(text)
       return text unless text.present?
       HtmlProcessor.new(text, format: :markdown).html.html_safe
@@ -112,15 +113,15 @@ module MnoEnterprise
         expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_app(app).to_json))
       end
     end
-     
+
     describe 'GET #index' do
       subject { get :index }
 
-      context 'when multiples apps' do 
+      context 'when multiples apps' do
         let(:app1) { build(:app, rank: 5 ) }
         let(:app2) { build(:app, rank: 0 ) }
 
-        before do  
+        before do
           MnoEnterprise.marketplace_listing = nil
           api_stub_for(get: '/apps', response: from_api([app1,app2]))
         end
@@ -133,15 +134,15 @@ module MnoEnterprise
         it 'returns the right response' do
           subject
           expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app2, app1]).to_json))
-        end 
+        end
       end
-      
-      context 'when multiples apps and attributes nil' do 
+
+      context 'when multiples apps and attributes nil' do
         let(:app1) { build(:app, rank: 5 ) }
         let(:app2) { build(:app, rank: 0 ) }
         let(:app3) { build(:app, rank: nil ) }
 
-        before do  
+        before do
           MnoEnterprise.marketplace_listing = nil
           api_stub_for(get: '/apps', response: from_api([app1,app3,app2]))
         end
@@ -149,7 +150,7 @@ module MnoEnterprise
         it 'returns the right response' do
           subject
           expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app2, app1, app3]).to_json))
-        end   
+        end
       end
     end
   end

@@ -179,7 +179,16 @@ module MnoEnterprise
       # Return cached version if available
       return self.read_attribute(:role) if !organization
 
-      org = self.organizations.to_a.find { |o| o.id.to_s == organization.id.to_s }
+      # Find in arrays if organizations have been fetched
+      # already. Perform remote query otherwise
+      org = begin
+        if self.organizations.is_a?(Array) && self.organizations.any?
+          self.organizations.to_a.find { |e| e.id == organization.id }
+        else
+          self.organizations.where(id: organization.id).first
+        end
+      end
+
       org ? org.role : nil
     end
 
