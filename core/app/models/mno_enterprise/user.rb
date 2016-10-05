@@ -72,8 +72,11 @@ module MnoEnterprise
     has_many :organizations, class_name: 'MnoEnterprise::Organization'
     has_many :org_invites, class_name: 'MnoEnterprise::OrgInvite'
     has_one :deletion_request, class_name: 'MnoEnterprise::DeletionRequest'
-    has_many :dashboards, class_name: 'MnoEnterprise::Impac::Dashboard'
     has_many :teams, class_name: 'MnoEnterprise::Team'
+
+    # Impac
+    has_many :dashboards, class_name: 'MnoEnterprise::Impac::Dashboard'
+    has_many :alerts, class_name: 'MnoEnterprise::Impac::Alert'
 
     #================================
     # Callbacks

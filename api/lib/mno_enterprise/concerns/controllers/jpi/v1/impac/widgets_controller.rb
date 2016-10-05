@@ -17,39 +17,41 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   #  -> POST /api/mnoe/v1/dashboards/:id/widgets
   def create
     if widgets
-      if @widget = widgets.create(format_attrs(['widget_category','metadata']))
+      if @widget = widgets.create(widget_create_params)
         MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Widget Creation', nil, @widget)
         @nocontent = true # no data fetch from Connec!
         render 'show'
       else
-        render json: @widget.errors, status: :bad_request
+        render_bad_request('create widget', @widget.errors)
       end
     else
-      render json: { errors: "Dashboard id #{params[:id]} doesn't exist" }, status: :not_found
+      render_not_found('widget')
     end
   end
 
   # PUT /mnoe/jpi/v1/impac/widgets/:id
+  #   -> PUT /api/mnoe/v1/widgets/:id
   def update
-    if widget.update(format_attrs(['name','metadata']))
+    if widget.update(widget_update_params)
       @nocontent = !params['metadata']
       render 'show'
     else
-      render json: @widget.errors, status: :bad_request
+      render_bad_request('update widget', @widget.errors)
     end
   end
-  
-  # DELETE /mnoe/jpi/v1/impac/dashboards/1
+
+  # DELETE /mnoe/jpi/v1/impac/widgets/:id
+  #   -> DELETE /api/mnoe/v1/widgets/:id
   def destroy
     if widget.destroy
       MnoEnterprise::EventLogger.info('widget_delete', current_user.id, 'Widget Deletion', nil, widget)
       head status: :ok
     else
-      render json: 'Unable to destroy widget', status: :bad_request
+      render_bad_request('destroy widget', 'Unable to destroy widget')
     end
   end
-  
-  
+
+
   #=================================================
   # Private methods
   #=================================================
@@ -63,10 +65,17 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
       @widgets ||= MnoEnterprise::Impac::Dashboard.find(params[:dashboard_id]).widgets
     end
 
-    def format_attrs(whitelist)
-      attrs = (params[:widget] || {}).select { |k,v| whitelist.include?(k.to_s) }
-      attrs['settings'] = widget ? widget.settings || {} : {}
-      attrs['settings'].merge!(attrs['metadata']) if attrs['metadata']
-      attrs.except!('metadata')
+    def widget_create_params
+      params.require(:widget).permit(:widget_category).tap do |whitelisted|
+        whitelisted[:settings] = params[:widget][:metadata] || {}
+      end
+      .except(:metadata)
+    end
+
+    def widget_update_params
+      params.require(:widget).permit(:name).tap do |whitelisted|
+        whitelisted[:settings] = params[:widget][:metadata] || {}
+      end
+      .except(:metadata)
     end
 end
