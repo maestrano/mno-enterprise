@@ -51,6 +51,9 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
   # POST /provision
   # TODO: check organization accessibility via ability
   def create
+    # Avoid double provisioning: previous url would be "/provision/new?apps[]=vtiger&organization_id=1"
+    session.delete('previous_url')
+
     @organization = current_user.organizations.to_a.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
     authorize! :manage_app_instances, @organization
 
