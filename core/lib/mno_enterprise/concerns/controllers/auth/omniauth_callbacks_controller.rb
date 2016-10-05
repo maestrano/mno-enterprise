@@ -58,12 +58,6 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
           @user = MnoEnterprise::User.find_for_oauth(auth, opts, current_user)
 
           if @user.persisted?
-            # # TODO: not working in Maestrano, reimplement
-            # if app_id = env['omniauth.params']['bundle']
-            #   apps = MnoEnterprise::App.where(id: app_id).pluck(:nid)
-            #   app_instances = setup_apps(@user, apps)
-            # end
-
             sign_in_and_redirect @user, event: :authentication
             set_flash_message(:notice, :success, kind: "#{provider}".capitalize) if is_navigational_format?
           else
