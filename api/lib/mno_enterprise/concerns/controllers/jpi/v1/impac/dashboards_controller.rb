@@ -77,7 +77,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   private
 
     def dashboard
-      @dashboard ||= current_user.dashboards.to_a.find { |d| d.id.to_s == params[:id].to_s }
+      @dashboard ||= current_user.dashboards.find(params[:id].to_i)
     end
 
     def dashboards

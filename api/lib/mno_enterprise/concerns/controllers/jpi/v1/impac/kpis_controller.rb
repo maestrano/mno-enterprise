@@ -22,7 +22,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   def index
     # Retrieve kpis templates from impac api.
     # TODO: improve request params to work for strong parameters
-    attrs = params.slice(*['metadata'])
+    attrs = params.slice('metadata')
     auth = { username: MnoEnterprise.tenant_id, password: MnoEnterprise.tenant_key }
 
     response = begin
@@ -59,7 +59,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     # TODO: nest alert in as a param, with the current user as a recipient.
     if @kpi = kpi_parent.kpis.create(kpi_create_params)
       # Creates a default alert for kpis created with targets defined.
-      if kpi.targets && kpi.targets.any?
+      if kpi.targets.present?
         current_user.alerts.create({service: 'inapp', impac_kpi_id: kpi.id})
         # TODO: reload is adding the recipients to the kpi alerts (making another request).
         kpi.reload
@@ -81,15 +81,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     # TODO: refactor into models
     # --
     # Creates an in-app alert if target is set for the first time (in-app alerts should be activated by default)
-    if (!kpi.targets || kpi.targets.empty?) && params[:targets] && params[:targets].any?
+    if kpi.targets.blank? && params[:targets].present?
       current_user.alerts.create({service: 'inapp', impac_kpi_id: kpi.id})
 
     # If targets have changed, reset all the alerts 'sent' status to false.
-    elsif kpi.targets && (params[:targets] && params[:targets].any?) && params[:targets] != kpi.targets
+    elsif kpi.targets && params[:targets].present? && params[:targets] != kpi.targets
       kpi.alerts.each { |alert| alert.update(sent: false) }
 
     # Removes all the alerts if the targets are removed
-    elsif params[:targets] && (params[:targets].nil? || params[:targets].empty?)
+    elsif params[:targets].blank?
       kpi.alerts.each(&:destroy)
     end
 
@@ -133,8 +133,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
 
     def kpi
       @kpi ||= MnoEnterprise::Impac::Kpi.find(params[:id])
-      return render_not_found('kpi') unless @kpi
-      @kpi
+      return @kpi || render_not_found('kpi')
     end
 
     def kpi_parent

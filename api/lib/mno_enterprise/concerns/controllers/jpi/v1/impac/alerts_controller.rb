@@ -74,9 +74,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
     end
 
     def kpi_alert
-      kpi_id = params.require(:kpi_id)
-      attributes = params.require(:alert).merge(impac_kpi_id: kpi_id)
-      @alert ||= MnoEnterprise::Impac::Alert.new(attributes)
+      @alert ||= (
+        kpi_id = params.require(:kpi_id)
+        attributes = params.require(:alert).merge(impac_kpi_id: kpi_id)
+        MnoEnterprise::Impac::Alert.new(attributes)
+      )
     end
 
     def current_tenant

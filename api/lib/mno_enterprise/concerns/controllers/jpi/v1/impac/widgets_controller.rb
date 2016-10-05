@@ -66,14 +66,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
     end
 
     def widget_create_params
-      params.require(:widget).permit(*[:widget_category]).tap do |whitelisted|
+      params.require(:widget).permit(:widget_category).tap do |whitelisted|
         whitelisted[:settings] = params[:widget][:metadata] || {}
       end
       .except(:metadata)
     end
 
     def widget_update_params
-      params.require(:widget).permit(*[:name]).tap do |whitelisted|
+      params.require(:widget).permit(:name).tap do |whitelisted|
         whitelisted[:settings] = params[:widget][:metadata] || {}
       end
       .except(:metadata)
