@@ -4,13 +4,15 @@ en:
       dashboard:
         marketplace:
           index:
-            title: Marketplace
-            select_all: All
-            search: Search
+            title: "Marketplace"
+            select_all: "All"
+            search: "Search"
 
           show:
-            back: Back
-            start_app: Start Now!
-            tag_responsive: Responsive
-            tag_star: Star!™ Tutorials
-            tag_connec: Connec!™ Ready
+            back: "Back"
+            start_app: "Start Now!"
+            launch_app: "Launch app"
+            tag_responsive: "Responsive"
+            tag_star: "Star!™ Tutorials"
+            tag_connec: "Connec!™ Ready"
+            conflicting_app: "You cannot install this app as it is incompatible with:"
