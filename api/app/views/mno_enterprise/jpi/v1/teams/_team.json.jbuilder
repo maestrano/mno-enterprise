@@ -7,7 +7,10 @@ json.name team.name
 json.users do
   json.array! team.users do |user|
     json.extract! user, :id, :name, :surname, :email
-    json.role org.users.to_a.find { |e| e.id == user.id }.role
+
+    # Retrieve role from cached version (org user list)
+    org_user = org.users.to_a.find { |e| e.id == user.id }
+    json.role org_user ? org_user.role : nil
   end
 end
 

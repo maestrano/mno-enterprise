@@ -49,12 +49,15 @@ module MnoEnterprise
     before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
 
     # Stub user and user call
+    let!(:app) { build(:app) }
     let(:user) { build(:user, :with_organizations) }
     let(:user2) { build(:user, :with_organizations, name: "Joe") }
     let(:organization) { build(:organization) }
     let(:team) { build(:team, organization: organization) }
-    let(:app_instance) { build(:app_instance) }
+    let(:app_instance) { build(:app_instance, app: app, app_id: app.id) }
     before do
+      api_stub_for(get: '/apps', response: from_api([app]))
+      api_stub_for(get: "/apps/#{app.id}", response: from_api(app))
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
       api_stub_for(get: "/users/#{user.id}/organizations", response: from_api(organization))
       api_stub_for(post: "/organizations", response: from_api(organization))
