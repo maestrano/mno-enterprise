@@ -21,6 +21,7 @@ require "her_extension/model/associations/belongs_to_association"
 require "her_extension/middleware/mnoe_api_v1_parse_json"
 require "her_extension/middleware/mnoe_raise_error"
 require "faraday_middleware"
+require "httparty"
 require "mno_enterprise/engine"
 
 require 'mno_enterprise/database_extendable'
