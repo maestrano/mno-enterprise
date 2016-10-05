@@ -233,7 +233,7 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  if defined?('OmniAuth::OpenID') && !Rails.env.test?
+  if defined?(OmniAuth::OpenID) && !Rails.env.test?
     require 'openid-store-redis'
     config.omniauth :open_id,
                     store: OpenID::Store::Redis.new,
