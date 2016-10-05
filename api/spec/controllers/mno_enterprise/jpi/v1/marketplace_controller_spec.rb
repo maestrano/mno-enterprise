@@ -5,6 +5,7 @@ module MnoEnterprise
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
+    before { Rails.cache.clear }
 
     let!(:app) { build(:app) }
 
