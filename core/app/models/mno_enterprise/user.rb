@@ -239,10 +239,6 @@ module MnoEnterprise
         avatar_url: auth.info.image.presence
       )
 
-      # To force user to enter company and user details when accessing the dashboard
-      user.metadata ||= {}
-      user.metadata.merge!(need_details_update: {others: true})
-
       # opts hash is expected to contain additional attributes
       # to set on the model
       user.assign_attributes(opts)
