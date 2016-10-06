@@ -37,6 +37,11 @@ module MnoEnterprise
           subject.info('app_add', user.id, 'App Added', user.email, app_instance)
         end
 
+        it 'add an event when an app is launched' do
+          expect(events).to receive(:create).with(hash_including(email: user.email, event_name: 'launched-app-' + app.nid))
+          subject.info('app_launch', user.id, 'App Launched', user.email, app_instance)
+        end
+
       end
       context 'when the user does not exist in intercom' do
         before do

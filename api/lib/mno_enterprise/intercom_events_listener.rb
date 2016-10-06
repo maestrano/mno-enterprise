@@ -33,6 +33,8 @@ module MnoEnterprise
         when 'widget_create'
           data[:event_name] = 'added-widget'
           data[:metadata] = {widget: object.name}
+        when 'app_launch'
+          data[:event_name] = 'launched-app-' + object.app.nid
         when 'app_destroy'
           data[:event_name] = 'deleted-app-' + object.app.nid
           data[:metadata] = {type: 'single', app_list: object.app.nid}
