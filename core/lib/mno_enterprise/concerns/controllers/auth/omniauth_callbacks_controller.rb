@@ -177,7 +177,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
 
       results = []
 
-      apps = MnoEnterprise::App.where(nid: app_nids.compact)
+      apps = MnoEnterprise::App.where('nid.in' => app_nids.compact)
       existing = org.app_instances.active.index_by(&:app_id)
 
       # For each app nid (which is not nil), try to find an existing instance or create one
