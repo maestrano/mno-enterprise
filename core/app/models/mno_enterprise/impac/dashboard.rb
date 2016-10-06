@@ -18,8 +18,12 @@ module MnoEnterprise
 
     # Return all the organizations linked to this dashboard and to which
     # the user has access
-    def organizations
-      MnoEnterprise::Organization.where('uid.in' => self.organization_ids).to_a
+    def organizations(org_list = nil)
+      if org_list
+        org_list.to_a.select { |e| self.organization_ids.include?(e.uid) }
+      else
+        MnoEnterprise::Organization.where('uid.in' => self.organization_ids).to_a
+      end
     end
 
     # Filter widgets list based on config

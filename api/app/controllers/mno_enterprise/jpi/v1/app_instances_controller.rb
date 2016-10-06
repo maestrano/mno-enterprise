@@ -4,6 +4,8 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/organization/1/apps.json?timestamp=151452452345
     def index
       @app_instances = parent_organization.app_instances.select do |i|
+        # force owner assignment to avoid a refetch in ability can?(:access,i)
+        i.owner = parent_organization
         i.active? && i.updated_at > Time.at(timestamp) && can?(:access,i)
       end
     end
