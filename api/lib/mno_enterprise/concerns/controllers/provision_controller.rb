@@ -40,7 +40,17 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     unless @organization
       @organization = @organizations.one? ? @organizations.first : nil
     end
-    authorize! :manage_app_instances, @organization
+
+    if @organization && cannot?(:manage_app_instances, @organization)
+      msg = 'Unfortunately you do not have permission to purchase products for this organization'
+      if @organizations.one?
+        redirect_path = add_param_to_fragment(after_provision_path.to_s, 'flash', [{msg: msg,  type: :error}.to_json])
+        redirect_to redirect_path
+      else
+        @organization = nil
+        flash.now.alert = msg
+      end
+    end
 
     # Redirect to dashboard if no applications
     unless @apps && @apps.any?
