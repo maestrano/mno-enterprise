@@ -21,14 +21,17 @@ Gem::Specification.new do |s|
   s.add_dependency "her", "~> 0.7.3"
   s.add_dependency "faraday_middleware", "~> 0.10.0"
   s.add_dependency "httparty", '~> 0.11'
-  s.add_dependency "devise", "~> 3.0"
-  s.add_dependency 'cancancan', '~> 1.10'
   s.add_dependency 'countries', '~> 0.11.3'
   s.add_dependency 'jwt', '~> 1.4'
   s.add_dependency 'deepstruct', '~> 0.0.7'
   s.add_dependency 'prawn', '~> 2.0', '>= 2.0.1'
   s.add_dependency 'prawn-table', '~> 0.2.1'
   s.add_dependency 'money', '~> 6.5', '>= 6.5.1'
+
+  # Authentication & Authorization
+  s.add_dependency 'devise', '~> 3.0'
+  s.add_dependency 'cancancan', '~> 1.10'
+  s.add_dependency 'omniauth', '~> 1.3.1'
 
   # Email
   # TODO: remove in 3.2, left for backward compatibility
