@@ -7,7 +7,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
-    before_filter :authenticate_user!, only: [:update, :update_password]
     respond_to :json
   end
 
@@ -46,7 +45,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
       render json: @user.errors, status: :bad_request
     end
   end
-    
+
   private
     def user_params
       params.require(:user).permit(:name, :surname, :email, :company, :settings, :phone, :website, :phone_country_code, :current_password, :password, :password_confirmation)

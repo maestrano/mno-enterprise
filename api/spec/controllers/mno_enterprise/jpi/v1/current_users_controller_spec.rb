@@ -66,18 +66,6 @@ module MnoEnterprise
     describe "GET #show" do
       subject { get :show }
 
-      describe 'guest' do
-        it 'is successful' do
-          subject
-          expect(response).to be_success
-        end
-
-        it 'returns the right response' do
-          subject
-          expect(response.body).to eq(json_for(MnoEnterprise::User.new))
-        end
-      end
-
       describe 'logged in' do
         before { sign_in user }
 
