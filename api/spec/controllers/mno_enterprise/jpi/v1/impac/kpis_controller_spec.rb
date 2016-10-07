@@ -174,13 +174,36 @@ module MnoEnterprise
         end
       end
 
-      context "when targets are removed from a kpi" do
+      context "when a kpi has no targets, nor is being updated with any" do
+        let(:kpi_targets) { nil }
         let(:params) { { targets: {} } }
 
         before { api_stub_for(delete: "/alerts/#{alert.id}", response: from_api({})) }
 
         it "destroys the kpi's alerts" do
           subject
+          expect(response.code).to eq('200')
+        end
+      end
+
+      context "when no targets are given / targets are nil" do
+        let(:kpi) { build(:impac_kpi, dashboard: dashboard, targets: kpi_targets, settings: { currency: 'GBP' }) }
+        let(:params) { { targets: nil } }
+
+        it "does not remove the kpi targets" do
+          subject
+          expect(assigns(:kpi).targets).to eq(kpi_targets.deep_stringify_keys)
+          expect(response.code).to eq('200')
+        end
+      end
+
+      context "when no extra_params are given / extra_params are nil" do
+        let(:kpi) { build(:impac_kpi, dashboard: dashboard, targets: kpi_targets, extra_params: ['some-param'], settings: { currency: 'GBP' }) }
+        let(:params) { { extra_params: nil } }
+
+        it "does not remove the kpi extra_params" do
+          subject
+          expect(assigns(:kpi).extra_params).to eq(['some-param'])
           expect(response.code).to eq('200')
         end
       end
