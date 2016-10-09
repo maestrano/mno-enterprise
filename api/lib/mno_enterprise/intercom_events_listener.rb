@@ -17,7 +17,7 @@ module MnoEnterprise
       rescue Intercom::ResourceNotFound
         self.update_intercom_user(u)
       end
-      data = {created_at: Time.now.to_i, email: u.email}
+      data = {created_at: Time.now.to_i, email: u.email, user_id: u.id}
       case key
         when 'user_update'
           self.update_intercom_user(u)
