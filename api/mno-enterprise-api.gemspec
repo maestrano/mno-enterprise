@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'jbuilder', '~> 2.2.16'
   s.add_runtime_dependency 'haml', '~> 4.0'
   s.add_runtime_dependency 'coffee-rails', '~> 4.1'
-  s.add_runtime_dependency 'health_check', '~> 1.5'
+  s.add_runtime_dependency 'health_check', '~> 2.4'
   s.add_runtime_dependency 'httparty', '~> 0.13.7'
 
   # Lock sprocket version

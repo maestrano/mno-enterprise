@@ -1,7 +1,6 @@
-HealthCheck::Engine.routes_manually_defined = true
+HealthCheck::Engine.routes_explicitly_defined = true
 
 HealthCheck.setup do |config|
-
   # Text output upon success
   config.success = 'success'
 
@@ -21,15 +20,14 @@ HealthCheck.setup do |config|
   config.http_status_for_error_object = 500
 
   # You can customize which checks happen on a standard health check
-  config.standard_checks = [ 'database', 'migrations', 'custom' ]
+  config.standard_checks = %w(site cache redis-if-present)
 
   # You can set what tests are run with the 'full' or 'all' parameter
-  config.full_checks = ['database', 'migrations', 'cache', 'custom']
+  config.full_checks = %w(site cache custom redis-if-present sidekiq-redis-if-present)
 
   # Add one or more custom checks that return a blank string if ok, or an error message if there is an error
   config.add_custom_check do
     # any code that returns blank on success and non blank string upon failure
     MnoEnterprise::HealthCheck.perform_mno_hub_check
   end
-
 end
