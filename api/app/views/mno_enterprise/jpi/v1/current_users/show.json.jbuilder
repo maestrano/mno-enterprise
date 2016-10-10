@@ -6,6 +6,7 @@ json.cache! ['v1', @user.cache_key] do
     json.email @user.email
     json.logged_in !!@user.id
     json.created_at @user.created_at ? @user.created_at.iso8601 : nil
+    json.confirmed_at @user.confirmed_at ? @user.confirmed_at.iso8601 : nil
     json.company @user.company
     json.phone @user.phone
     json.phone_country_code @user.phone_country_code
