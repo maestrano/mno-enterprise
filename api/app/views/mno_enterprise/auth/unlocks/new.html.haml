@@ -1,11 +1,11 @@
-%h2= t('.title')
-= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f|
-  = devise_error_messages!
-  .field
-    = f.label :email
-    %br/
-    = f.email_field :email, autofocus: true
-  .actions
-    = f.submit t('.unlock')
-
-= render "devise/shared/links"
+.registration
+  .container
+    .row
+      .login-box-wrapper
+        .login-box-title
+          %h2= t('.title')
+        .login-box
+          .brand-logo
+          = render "mno_enterprise/auth/unlocks/form"
+          %hr
+          = render "mno_enterprise/auth/shared/links"
