@@ -345,11 +345,27 @@ There are various endpoints to perform health checks:
 {
   "app-version": "9061048-6811c4a",
   "mno-enterprise-version": "0.0.1",
-  "env": "test"
+  "env": "test",
+  "mno-api-host": "https://api-hub.maestrano.com"
 }
 ```
 
-`/mnoe/health_check` & `/mnoe/health_check/full`: Complete health check (cache, smtp, database, ...). See [health_check](https://github.com/ianheggie/health_check)
+`/mnoe/health_check` & `/mnoe/health_check/full`: Complete health check (cache, smtp, database, ...).
+See [health_check](https://github.com/ianheggie/health_check) and the [initalizer](api/config/initializers/health_check.rb) for the default configuration.
+
+You can override it by creating an initalizer in the host app, eg:
+
+```ruby
+# my-mnoe-app/config/initializers/health_check.rb
+HealthCheck.setup do |config|
+  # You can customize which checks happen on a standard health check
+  config.standard_checks = %w(cache site)
+
+  # You can set what tests are run with the 'full' or 'all' parameter
+  config.full_checks = %w(cache site custom database migrations)
+end
+```
+
 
 ## Migrating from v2 to v3
 
