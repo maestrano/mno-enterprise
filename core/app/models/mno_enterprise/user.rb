@@ -56,7 +56,6 @@ module MnoEnterprise
     #================================
     # Validation
     #================================
-    validates_uniqueness_of :email, allow_blank: true, if: :email_changed?
 
     if Devise.password_regex
       validates :password, format: { with: Devise.password_regex, message: Devise.password_regex_message }, if: :password_required?
