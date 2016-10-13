@@ -17,6 +17,7 @@ end
 # end
 
 app_instance.app.tap do |a|
+  json.app_id a.id
   json.app_name a.name
   json.app_nid a.nid
   json.logo a.logo
