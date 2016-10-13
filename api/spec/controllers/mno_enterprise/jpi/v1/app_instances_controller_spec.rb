@@ -63,14 +63,14 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
+      let(:app) { build(:app, nid: 'my-app' ) }
+      let(:app_instance) { build(:app_instance, app: app, owner: organization ) }
       subject { post :create, organization_id: organization.id, nid: 'my-app' }
 
       before do
-        api_stub_for(post: "/organizations/#{organization.id}/app_instances")
-        api_stub_for(get: "/organizations/#{organization.id}/app_instances")
+        api_stub_for(post: "/organizations/#{organization.id}/app_instances", response: from_api(app_instance))
+        api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
       end
-
-
       it_behaves_like "jpi v1 protected action"
     end
 

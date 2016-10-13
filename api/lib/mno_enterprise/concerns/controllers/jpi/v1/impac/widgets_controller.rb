@@ -18,7 +18,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   def create
     if widgets
       if @widget = widgets.create(widget_create_params)
-        MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Widget Creation', nil, @widget)
+        MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Widget Creation', @widget)
         @nocontent = true # no data fetch from Connec!
         render 'show'
       else
@@ -44,7 +44,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   #   -> DELETE /api/mnoe/v1/widgets/:id
   def destroy
     if widget.destroy
-      MnoEnterprise::EventLogger.info('widget_delete', current_user.id, 'Widget Deletion', nil, widget)
+      MnoEnterprise::EventLogger.info('widget_delete', current_user.id, 'Widget Deletion', widget)
       head status: :ok
     else
       render_bad_request('destroy widget', 'Unable to destroy widget')

@@ -7,7 +7,7 @@ module MnoEnterprise
     has_many :kpis, class_name: 'MnoEnterprise::Impac::Kpi'
 
     def to_audit_event
-      name
+      {name: name}
     end
 
   end

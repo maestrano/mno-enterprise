@@ -71,7 +71,7 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     params[:apps].each do |product_name|
       app_instance = @organization.app_instances.create(product: product_name)
       app_instances << app_instance
-      MnoEnterprise::EventLogger.info('app_add', current_user.id, "App added", app_instance.name, app_instance)
+      MnoEnterprise::EventLogger.info('app_add', current_user.id, 'App added', app_instance)
     end
 
     render json: app_instances.map(&:attributes).to_json, status: :created

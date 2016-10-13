@@ -7,15 +7,15 @@ module MnoEnterprise
     read_timeout 0.1
     basic_auth MnoEnterprise.tenant_id, MnoEnterprise.tenant_key
 
-    def info(key, current_user_id, description, metadata, object)
+    def info(key, current_user_id, description, subject_type, subject_id, metadata)
       self.class.post('', body: {
         data: {
           key: key,
           user_id: current_user_id,
           description: description,
           metadata: metadata,
-          subject_type: object.class.name,
-          subject_id: object.id
+          subject_type: subject_type,
+          subject_id: subject_id
         }})
     rescue Net::ReadTimeout
       # Meant to fail

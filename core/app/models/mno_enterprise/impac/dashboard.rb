@@ -38,7 +38,7 @@ module MnoEnterprise
     end
 
     def to_audit_event
-      name
+      {name: name}
     end
   end
 end

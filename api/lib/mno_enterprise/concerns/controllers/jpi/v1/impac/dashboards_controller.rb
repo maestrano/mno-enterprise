@@ -35,7 +35,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     # authorize! :manage_dashboard, @dashboard
     # if @dashboard.save
     if @dashboard = dashboards.create(dashboard_create_params)
-      MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', nil, @dashboard)
+      MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', @dashboard)
 
       render 'show'
     else
@@ -67,7 +67,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     # authorize! :manage_dashboard, dashboard
 
     if dashboard.destroy
-      MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', nil, dashboard)
+      MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', dashboard)
       head status: :ok
     else
       render_bad_request('destroy dashboard', 'Unable to destroy dashboard')

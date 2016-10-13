@@ -182,20 +182,20 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
 
       # For each app nid (which is not nil), try to find an existing instance or create one
       apps.each do |app|
-        if (instance = existing[app.id])
-          results << instance
+        if (app_instance = existing[app.id])
+          results << app_instance
         else
           # Provision instance and add to results
-          instance = org.app_instances.create(product: app.nid)
-          results << instance
-          MnoEnterprise::EventLogger.info('app_add', user.id, "App added", instance.name, instance)
+          app_instance = org.app_instances.create(product: app.nid)
+          results << app_instance
+          MnoEnterprise::EventLogger.info('app_add', user.id, 'App added', app_instance)
         end
 
         # Add oauth keyset if defined and app_instance is
         # oauth ready and does not have a valid set of oauth keys
-        if instance && opts[:oauth_keyset].present? && !instance.oauth_keys_valid?
-          instance.oauth_keys = { keyset: opts[:oauth_keyset] }
-          instance.save
+        if app_instance && opts[:oauth_keyset].present? && !app_instance.oauth_keys_valid?
+          app_instance.oauth_keys = { keyset: opts[:oauth_keyset] }
+          app_instance.save
         end
       end
       return results

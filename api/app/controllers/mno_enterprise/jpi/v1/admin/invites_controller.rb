@@ -14,7 +14,7 @@ module MnoEnterprise::Jpi::V1::Admin
         send_org_invite(invite)
       end
 
-      MnoEnterprise::EventLogger.info('user_invite', current_user.id, 'User invited', {user_email: user.email, account_name: @organization.name}, user)
+      MnoEnterprise::EventLogger.info('user_invite', current_user.id, 'User invited', user, {user_email: user.email, account_name: @organization.name})
 
       @user = user.confirmed? ? invite : user.reload
 

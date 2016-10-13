@@ -10,7 +10,7 @@ module MnoEnterprise
       self.intercom = ::Intercom::Client.new(app_id: MnoEnterprise.intercom_app_id, api_key: MnoEnterprise.intercom_api_key)
     end
 
-    def info(key, current_user_id, description, metadata, object)
+    def info(key, current_user_id, description, subject_type, subject_id, metadata)
       u = User.find(current_user_id)
       begin
         intercom.users.find(:user_id => current_user_id)
@@ -32,15 +32,15 @@ module MnoEnterprise
           data[:event_name] = 'removed-widget'
         when 'widget_create'
           data[:event_name] = 'added-widget'
-          data[:metadata] = {widget: object.name}
+          data[:metadata] = {widget: metadata[:name]}
         when 'app_launch'
-          data[:event_name] = 'launched-app-' + object.app.nid
+          data[:event_name] = 'launched-app-' + metadata[:app_nid]
         when 'app_destroy'
-          data[:event_name] = 'deleted-app-' + object.app.nid
-          data[:metadata] = {type: 'single', app_list: object.app.nid}
+          data[:event_name] = 'deleted-app-'  + metadata[:app_nid]
+          data[:metadata] = {type: 'single', app_list: metadata[:app_nid]}
         when 'app_add'
-          data[:event_name] = 'added-app-' + object.app.nid
-          data[:metadata] = {type: 'single', app_list: object.app.nid}
+          data[:event_name] = 'added-app-' + metadata[:app_nid]
+          data[:metadata] = {type: 'single', app_list: metadata[:app_nid]}
         else
           data[:event_name] = key.tr!('_', '-')
       end
