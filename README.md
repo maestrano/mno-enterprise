@@ -194,7 +194,63 @@ config.active_job.queue_adapter = :sucker_punch
 
 #### Sidekiq
 
-See https://github.com/mperham/sidekiq/wiki/Active-Job
+This is more involved as you need to manage a separate process (the sidekiq worker) and add Redis to your stack.
+
+Here's a quick start guide, see https://github.com/mperham/sidekiq/wiki/Active-Job for more details.
+
+
+Add this line to your application's `Gemfile`:
+
+```ruby
+gem 'sidekiq'
+```
+
+Create a `config/sidekiq.yml`:
+
+```yaml
+---
+:queues:
+  - default
+  - mailers
+```
+
+In `config/application.rb`:
+
+```ruby
+# Use Sidekiq for ActiveJob
+config.active_job.queue_adapter = :sidekiq
+```
+
+Run the worker process, if you use a `Procfile` you can add the following line to it:
+
+```
+worker: bundle exec sidekiq
+```
+
+To enable the web interface only for admin, add to your `Gemfile`:
+
+```ruby
+gem 'sinatra', '~> 1.4.7', require: false
+```
+
+and to `config/routes.rb`:
+
+```ruby
+Rails.application.routes.draw do
+  ...
+
+  #================================================
+  # Sidekiq admin interface
+  #================================================
+  require 'sidekiq/web'
+  authenticate :user, -> (u) { u.admin_role == 'admin' } do
+    mount Sidekiq::Web, at: '/sidekiq'
+  end
+
+  ...
+end
+```
+
 
 ## Building the frontend
 The Maestrano Enterprise frontend is a Single Page Application (SPA) that is separate from the Rails project. The source code for this frontend can be found on the [mno-enterprise-angular Github repository](https://github.com/maestrano/mno-enterprise-angular)
