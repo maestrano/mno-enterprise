@@ -25,8 +25,8 @@
             <input type="text" ng-model="vm.appSearch" placeholder="Search" class="form-control input-sm search-bar">
           </rd-widget-header>
           <rd-widget-body loading="!vm.marketplace">
-            <div class="row bs-row">
-              <div class="col-xs-6 col-sm-3 col-lg-2 app-icon" ng-repeat="app in vm.marketplace.apps | filter:{name: vm.appSearch}">
+            <div class="apps-container">
+              <div class="app-icon" ng-repeat="app in vm.marketplace.apps | filter:{name: vm.appSearch}">
                 <div class="app-icon-wrapper" ng-click="vm.toggleApp(app)">
                   <div class="checked" ng-show="app.checked">
                     <i class="fa fa-check fa-5x"></i>
