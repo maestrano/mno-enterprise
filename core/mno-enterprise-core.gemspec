@@ -47,6 +47,8 @@ Gem::Specification.new do |s|
   # Config files per environment
   s.add_dependency 'config', '~> 1.0', '< 1.3'
 
+  s.add_dependency 'json_api_client', '~> 1.3'
+
   # Emailing
   # s.add_development_dependency 'mandrill-api', '~> 1.0.53'
   s.add_development_dependency 'sparkpost', '~> 0.1.4'
