@@ -12,7 +12,15 @@ en:
             back: "Back"
             start_app: "Start Now!"
             launch_app: "Launch app"
+            connect_app: "Connect App"
             tag_responsive: "Responsive"
             tag_star: "Star!™ Tutorials"
             tag_connec: "Connec!™ Ready"
             conflicting_app: "You cannot install this app as it is incompatible with:"
+
+          app_selection:
+            next: "Next"
+            cancel: "Cancel"
+            select_orga: "Select an organization"
+            no_orga_authorized: "Invalid purchase"
+            unauthorized_to_add_app: "Unfortunately you do not have permission to purchase products for this organization."
