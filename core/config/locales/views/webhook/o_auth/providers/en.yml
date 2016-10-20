@@ -3,13 +3,18 @@ en:
     webhook:
       o_auth:
         providers:
+          cancel: "Cancel"
+
           myob:
-            which_version_used: Which version of MYOB do you use?
+            which_version_used: "Which version of MYOB do you use?"
             my_version_is: "My version of MYOB is:"
-            connect: Connect
+            connect: "Connect"
+            connect_to: "Connect to {{appname}}"
 
           xero:
-            how_do_you_want_to_connect: How do you want us to connect your Xero account?
-            which_extra_modules: Do you want to connect any of the following extra modules?
-            which_country_for_the_account: What is the country associated with your Xero account?
-            connect: Connect
+            how_do_you_want_to_connect: "How do you want us to connect your Xero account?"
+            which_extra_modules: "Do you want to connect any of the following extra modules?"
+            payroll: "Payroll"
+            which_country_for_the_account: "What is the country associated with your Xero account?"
+            connect: "Connect"
+            connect_to: "Connect to {{appname}}"
