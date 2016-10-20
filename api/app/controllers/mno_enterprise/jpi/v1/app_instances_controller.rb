@@ -3,11 +3,18 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/organization/1/apps.json?timestamp=151452452345
     def index
-      @app_instances = parent_organization.app_instances.select do |i| 
+      @app_instances = parent_organization.app_instances.select do |i|
         i.active? && i.updated_at > Time.at(timestamp) && can?(:access,i)
       end
     end
-    
+
+    # POST /mnoe/jpi/v1/organization/1/app_instances
+    def create
+      authorize! :manage_app_instances, parent_organization
+      app_instance = parent_organization.app_instances.create(product: params[:nid])
+      head :created
+    end
+
     # DELETE /mnoe/jpi/v1/app_instances/1
     def destroy
       app_instance = MnoEnterprise::AppInstance.find(params[:id])
@@ -17,7 +24,7 @@ module MnoEnterprise
         MnoEnterprise::EventLogger.info('app_destroy', current_user.id, "App destroyed", app_instance.name,app_instance)
         app_instance.terminate
       end
-      
+
       head :accepted
     end
   end

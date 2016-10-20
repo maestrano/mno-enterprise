@@ -107,7 +107,7 @@ MnoEnterprise::Engine.routes.draw do
         end
 
         # AppInstances
-        resources :app_instances, only: [:index, :destroy], shallow: true
+        resources :app_instances, only: [:index, :create, :destroy], shallow: true
 
         # Teams
         resources :teams, only: [:index, :show, :create, :update, :destroy], shallow: true do
