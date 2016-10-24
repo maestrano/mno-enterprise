@@ -4,7 +4,7 @@ if member.is_a?(MnoEnterprise::User)
   json.name member.name
   json.surname member.surname
   json.email member.email
-  json.role member.role(organization)
+  json.role member.role
 elsif member.is_a?(MnoEnterprise::OrgInvite)
   json.id member.id
   json.entity 'OrgInvite'
