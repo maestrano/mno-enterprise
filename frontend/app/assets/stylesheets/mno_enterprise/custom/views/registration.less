@@ -80,11 +80,56 @@
     margin-left: auto;
     margin-right: auto;
   }
-  
+
+  .login-box .sign-in-using {
+    color: @text-inverse-link-color;
+    margin-top: 5px;
+  }
+  .login-box .oauth-sso {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+
+    .omniauth i {
+      display: inline-block;
+      border-radius: 3px;
+      color: #fff;
+      width: 25px;
+      height: 25px;
+      margin: 0 5px;
+      line-height: 25px;
+      text-align: center;
+
+      &.fa-facebook {
+        background: #3b5998;
+      }
+      &.fa-google {
+        background: #dd4b39;
+      }
+      &.fa-linkedin {
+        background: #0074C4;
+      }
+    }
+    .omniauth.intuit {
+      background: #fff;
+      height: 25px;
+      width: 50px;
+      display: inline-block;
+      margin: 0 5px;
+      border-radius: 3px;
+      background-position: 50%;
+      background-repeat: no-repeat;
+      background-size: 40px auto;
+      background-image: asset-url(@login-box-sso-intuit-logo);
+    }
+  }
+
   .checkbox-section label {
     font-weight: normal;
   }
-  
+
   .login-box-wrapper .login-box .phone select.form-control {
     height: 34px;
   }
