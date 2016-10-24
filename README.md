@@ -19,7 +19,8 @@ The goal of this engine is to provide a base that you can easily extend with cus
 1.  [Install](#install)
 2.  [Configuration](#configuration)
     1. [Emailing Platform](#emailing-platform)
-    2. [Active Job Backend](#active-job-backend)
+    2. [Intercom](#intercom)
+    3. [Active Job Backend](#active-job-backend)
 3.  [Building the Frontend](#building-the-frontend)
 4.  [Modifying the style - Theme Previewer](#modifying-the-style---theme-previewer)
 5.  [Extending the Frontend](#extending-the-frontend)
@@ -158,6 +159,33 @@ Rails.application.config.assets.precompile += %w( mno_enterprise/mail.css )
 - You can override the default mail templates by adding template files ( template-name.html.erb, template-name.text.erb ) to the mail view directory (/app/views/system_notifications).
 - Logo can also be overriden by adding your own logo image (main-logo.png) to the image assets directory (/app/assets/images/mno_enterprise).
 - Write your own stylesheet by adding mail.css file to the stylesheets directory (/app/assets/stylesheets/mno_enterprise). The css rules you write will be applied to all the mail templates including the default ones.
+
+### Intercom
+
+Intercom is already integrated in mno-enterprise, you just need to enable it!
+
+Add the gem to your `Gemfile`
+
+```ruby
+gem 'intercom', '~> 3.5.4'
+```
+
+Expose the following environments variables (via `application.yml` or your preferred method)
+
+```
+INTERCOM_APP_ID
+INTERCOM_API_KEY
+INTERCOM_API_SECRET
+```
+
+If you built your app with an older version of mno-enterprise, double-check that `config/initializer/mno-enteprise.rb` contains the following lines:
+
+```ruby
+# Intercom
+config.intercom_app_id = ENV['INTERCOM_APP_ID']
+config.intercom_api_secret = ENV['INTERCOM_API_SECRET']
+config.intercom_api_key = ENV['INTERCOM_API_KEY']
+```
 
 ### Active Job Backend
 
