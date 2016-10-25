@@ -23,4 +23,4 @@ en:
             cancel: "Cancel"
             select_orga: "Select an organization"
             no_orga_authorized: "Invalid purchase"
-            unauthorized_to_add_app: "Unfortunately you do not have permission to purchase products for this organization."
+            unauthorized_to_add_app: "Unfortunately you do not have permission to purchase products for this organization. Please select another organization:"
