@@ -8,5 +8,4 @@ en:
           recover_password: Forgot your password?
           resend_confirmation: Didn't receive confirmation instructions?
           unlock: Didn't receive unlock instructions?
-          omni_login: "Sign in with %{provider}"
-          
+          or_sign_in_using: Or sign in using
