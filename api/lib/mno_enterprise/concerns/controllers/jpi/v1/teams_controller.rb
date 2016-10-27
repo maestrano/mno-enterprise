@@ -52,32 +52,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
 
   # PUT /mnoe/jpi/v1/teams/:id/add_users
   def add_users
-    @team = MnoEnterprise::Team.find(params[:id])
-    authorize! :manage_teams, @team.organization
-
-    # Add users
-    if params[:team] && params[:team][:users]
-      id_list = params[:team][:users].map { |h| h[:id] }.compact
-      users = @team.organization.users.where('id.in' => id_list)
-      users.each { |u| @team.add_user(u) }
-    end
-
-    render 'show'
+    update_members(:add_user)
   end
 
   # PUT /mnoe/jpi/v1/teams/:id/remove_users
   def remove_users
-    @team = MnoEnterprise::Team.find(params[:id])
-    authorize! :manage_teams, @team.organization
-
-    # Add users
-    if params[:team] && params[:team][:users]
-      id_list = params[:team][:users].map { |h| h[:id] }.compact
-      users = @team.organization.users.where('id.in' => id_list)
-      users.each { |u| @team.remove_user(u) }
-    end
-
-    render 'show'
+    update_members(:remove_user)
   end
 
   # DELETE /mnoe/jpi/v1/teams/:id
@@ -90,6 +70,21 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   end
 
   private
+
+  # Update the members of a team
+  # Reduce duplication between add and remove
+  def update_members(action)
+    @team = MnoEnterprise::Team.find(params[:id])
+    authorize! :manage_teams, @team.organization
+
+    if params[:team] && params[:team][:users]
+      id_list = params[:team][:users].map { |h| h[:id] }.compact
+      users = @team.organization.users.where('id.in' => id_list)
+      users.each { |u| @team.send(action, u) }
+    end
+
+    render 'show'
+  end
 
   def team_params
     params.require(:team).permit(:name)
