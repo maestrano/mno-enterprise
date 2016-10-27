@@ -14,6 +14,10 @@ module MnoEnterprise
       { first_name: user.name, last_name: user.surname, full_name: "#{user.name} #{user.surname}".strip }
     end
 
+    def recipient(user)
+      { name: "#{user.name} #{user.surname}".strip, email: user.email }
+    end
+
     def invite_vars(org_invite)
       new_user = !org_invite.user.confirmed?
 
@@ -31,63 +35,80 @@ module MnoEnterprise
       }
     end
 
+    # Custom matcher to DRY the code
+    # TODO: extract to `testing_support`? Still dependent on local variables
+    RSpec::Matchers.define :send_the_correct_user_email do |template, extra_user_vars|
+      match do |block|
+        expect(MnoEnterprise::MailClient).to receive(:deliver).with(
+          template,
+          SystemNotificationMailer::DEFAULT_SENDER,
+          recipient(user),
+          user_vars(user).merge(extra_user_vars)
+        )
+        block.call
+        true
+      end
+
+      description do
+        "send the correct user email (\"#{template}\")"
+      end
+
+      supports_block_expectations
+    end
+
     describe 'confirmation_instructions' do
       describe 'new user' do
-        it 'sends the right email' do
-          expect(MnoEnterprise::MailClient).to receive(:deliver).with('confirmation-instructions',
-            SystemNotificationMailer::DEFAULT_SENDER,
-            { name: "#{user.name} #{user.surname}".strip, email: user.email },
-            user_vars(user).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: token))
+        it do
+          expect {
+            subject.confirmation_instructions(user,token).deliver_now
+          }.to send_the_correct_user_email(
+                 'confirmation-instructions',
+                 confirmation_link: routes.user_confirmation_url(confirmation_token: token)
           )
-        
-          subject.confirmation_instructions(user,token).deliver_now
         end
       end
-      
+
       describe 'existing user with new email address' do
         before { allow_any_instance_of(MnoEnterprise::User).to receive(:confirmed?).and_return(true) }
         before { allow_any_instance_of(MnoEnterprise::User).to receive(:unconfirmed_email?).and_return(true) }
-        
-        it 'sends the right email' do
-          expect(MnoEnterprise::MailClient).to receive(:deliver).with('reconfirmation-instructions',
-            SystemNotificationMailer::DEFAULT_SENDER,
-            { name: "#{user.name} #{user.surname}".strip, email: user.email },
-            user_vars(user).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: token))
+
+        it do
+          expect {
+            subject.confirmation_instructions(user,token).deliver_now
+          }.to send_the_correct_user_email(
+                 'reconfirmation-instructions',
+                 confirmation_link: routes.user_confirmation_url(confirmation_token: token)
           )
-        
-          subject.confirmation_instructions(user,token).deliver_now
         end
       end
     end
-    
+
     describe 'reset_password_instructions' do
-      it 'sends the right email' do
-        expect(MnoEnterprise::MailClient).to receive(:deliver).with('reset-password-instructions',
-          SystemNotificationMailer::DEFAULT_SENDER,
-          { name: "#{user.name} #{user.surname}".strip, email: user.email },
-          user_vars(user).merge(reset_password_link: routes.edit_user_password_url(reset_password_token: token))
+      it do
+        expect {
+          subject.reset_password_instructions(user,token).deliver_now
+        }.to send_the_correct_user_email(
+               'reset-password-instructions',
+               reset_password_link: routes.edit_user_password_url(reset_password_token: token)
         )
-        
-        subject.reset_password_instructions(user,token).deliver_now
       end
     end
-    
+
     describe 'unlock_instructions' do
-      it 'sends the right email' do
-        expect(MnoEnterprise::MailClient).to receive(:deliver).with('unlock-instructions',
-          SystemNotificationMailer::DEFAULT_SENDER,
-          { name: "#{user.name} #{user.surname}".strip, email: user.email },
-          user_vars(user).merge(unlock_link: routes.user_unlock_url(unlock_token: token))
+      it do
+        expect {
+          subject.unlock_instructions(user,token).deliver_now
+        }.to send_the_correct_user_email(
+               'unlock-instructions',
+               unlock_link: routes.user_unlock_url(unlock_token: token)
         )
-        
-        subject.unlock_instructions(user,token).deliver_now
       end
     end
-    
+
     describe 'organization_invite' do
       let(:invitee) { build(:user) }
       let(:org_invite) { build(:org_invite, user: invitee, referrer: user) }
-      
+
       context 'when invitee is a confirmed user' do
         it 'sends the right email' do
           expect(MnoEnterprise::MailClient).to receive(:deliver).with('organization-invite-existing-user',
@@ -95,21 +116,21 @@ module MnoEnterprise
             { name: "#{invitee.name} #{invitee.surname}".strip, email: invitee.email },
             invite_vars(org_invite).merge(confirmation_link: routes.org_invite_url(id: org_invite.id, token: org_invite.token))
           )
-        
+
           subject.organization_invite(org_invite).deliver_now
         end
       end
-      
+
       context 'when inviteee is an unconfirmed user' do
         let(:invitee) { build(:user, :unconfirmed) }
-        
+
         it 'sends the right email' do
           expect(MnoEnterprise::MailClient).to receive(:deliver).with('organization-invite-new-user',
             SystemNotificationMailer::DEFAULT_SENDER,
             { email: invitee.email },
             invite_vars(org_invite).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: invitee.confirmation_token))
           )
-        
+
           subject.organization_invite(org_invite).deliver_now
         end
       end
@@ -117,14 +138,13 @@ module MnoEnterprise
     end
 
     describe 'deletion_request_instructions' do
-      it 'sends the correct email' do
-        expect(MnoEnterprise::MailClient).to receive(:deliver).with('deletion-request-instructions',
-          SystemNotificationMailer::DEFAULT_SENDER,
-          { name: "#{user.name} #{user.surname}".strip, email: user.email },
-          user_vars(user).merge(terminate_account_link: routes.deletion_request_url(deletion_request))
-        )
-
-        subject.deletion_request_instructions(user,deletion_request).deliver_now
+      it do
+        expect {
+          subject.deletion_request_instructions(user,deletion_request).deliver_now
+        }.to send_the_correct_user_email(
+               'deletion-request-instructions',
+               terminate_account_link: routes.deletion_request_url(deletion_request)
+             )
       end
     end
 
