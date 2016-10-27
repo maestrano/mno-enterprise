@@ -1,0 +1,15 @@
+.error-page
+  .container
+    .error-code
+      = response.code
+    .error-title
+      = t("mno_enterprise.errors.#{response.code}-title")
+    %hr
+    .error-context
+      %p
+        = t("mno_enterprise.errors.#{response.code}-context")
+    .error-button
+      %button
+        = link_to(mno_enterprise.root_path) do
+          %i{class: "fa fa-home"}
+          = t("mno_enterprise.errors.redirection")
