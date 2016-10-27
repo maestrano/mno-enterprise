@@ -27,7 +27,9 @@ The goal of this engine is to provide a base that you can easily extend with cus
     1. [Adding a custom font](#adding-a-custom-font)
     2. [Adding a favicon](#adding-favicon)
 6.  [Replacing the Frontend](#replacing-the-frontend)
-7.  [Generating a database extension](#generating-a-database-extension)
+7.  [Extending the Backend](#extending-the-backend)
+    1. [Overriding Models and Controllers with the Decorator Pattern](#overriding-models-and-controllers-with-the-decorator-pattern)
+    2. [Generating a database extension](#generating-a-database-extension)
 8.  [Deploying](#deploying)
     1.  [Deploy a Puma stack on EC2 via Webistrano/Capistrano](#deploy-a-puma-stack-on-ec2-via-webistranocapistrano)
     2.  [Sample nginx config for I18n](#sample-nginx-config-for-i18n)
@@ -356,7 +358,67 @@ Once done you can replace the frontend source by specifying your frontend github
 bundle exec rake mnoe:frontend:dist
 ```
 
-## Generating a database extension
+## Extending the Backend
+
+### Overriding Models and Controllers with the Decorator Pattern
+
+`mno-enteprise` follows the decorator pattern recommended in the [Engine Rails guide](http://guides.rubyonrails.org/engines.html#improving-engine-functionality)
+
+#### Using `ActiveSupport::Concern`
+
+Most of `mno-enteprise` classes use `ActiveSupport::Concern` making it really easy to extend them.
+
+For example look at the following `MnoEnterprise::Organization` class:
+
+```ruby
+module MnoEnterprise
+  class Organization < BaseResource
+    include MnoEnterprise::Concerns::Models::Organization
+  end
+end
+```
+
+Let's say we want to add an extra method, a scope and not allow removal of users:
+
+```ruby
+# foobar-enterprise/app/models/mno_enterprise/organization.rb
+module MnoEnterprise
+  class Organization < BaseResource
+    include MnoEnterprise::Concerns::Models::Organization
+    
+    scope :big, -> { where('size.gt': 10) }
+    
+    def monkey_patched?
+     true
+    end
+    
+    # PATCH: do nothing
+    def remove_user(user)
+    end
+  end
+end
+```
+
+
+#### Using `Class#class_eval`
+
+Sometime the class you want to extend does not use a Concern. In this case, you can use `Class#class_eval`.
+
+For example, to override the `after_sign_in_path`:
+
+```ruby
+# foobar-enterprise/app/decorators/controllers/mno_enterprise/application_controller_decorator.rb
+MnoEnterprise::ApplicationController.class_eval do
+  # Patch: return to custom url
+  def after_sign_in_path_for(resource)
+    "my_custom_url"
+  end
+end
+```
+
+All decorators matching the glob `Dir.glob(Rails.root + "app/decorators/**/*_decorator*.rb")` are automatically loaded.
+
+### Generating a database extension
 
 If you want to add fields to existing models, you can create a database extension for it.
 
