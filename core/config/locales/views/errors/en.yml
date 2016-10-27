@@ -3,4 +3,6 @@ en:
     errors:
       503-title: "Looks like we're having some server issues."
       503-context: "Go back to the previous page and try again."
+      429-title: "Too many requests."
+      429-context: "The server received too many requests. Please try again in a moment."
       redirection: "Go to Homepage"
