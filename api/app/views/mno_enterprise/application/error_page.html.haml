@@ -1,13 +1,13 @@
 .error-page
   .container
     .error-code
-      = response.code
+      = @status
     .error-title
-      = t("mno_enterprise.errors.#{response.code}-title")
+      = t("mno_enterprise.errors.#{@status}-title")
     %hr
     .error-context
       %p
-        = t("mno_enterprise.errors.#{response.code}-context")
+        = t("mno_enterprise.errors.#{@status}-context")
     .error-button
       %button
         = link_to(mno_enterprise.root_path) do

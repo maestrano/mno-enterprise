@@ -29,5 +29,9 @@ module MnoEnterprise
     it 'routes to #terms' do
       expect(get("/terms")).to route_to("mno_enterprise/pages#terms")
     end
+
+    it 'routes to #error' do
+      expect(get("/errors/503")).to route_to("mno_enterprise/pages#error", error_code: '503')
+    end
   end
 end
