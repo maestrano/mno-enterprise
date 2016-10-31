@@ -23,6 +23,7 @@
   margin-top: 150px;
   width: 90%;
   max-width: 525px;
+  position: relative;
 
   @media (max-width: @screen-xs-max) {
     margin-top: 50px;
@@ -132,5 +133,15 @@
         }
       }
     }
+  }
+
+  #error-loader {
+    padding: 5px 0 5px 0;
+    color: @error-loader-text-color;
+    position: absolute;
+    left: 15px;
+    bottom: 10px;
+    right: 15px;
+    transition: 5s;
   }
 }
