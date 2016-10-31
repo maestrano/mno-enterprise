@@ -22,9 +22,9 @@ module MnoEnterprise
     rescue_from Faraday::ConnectionFailed, Faraday::TimeoutError do |e|
       case e
         when Faraday::ConnectionFailed
-          status = :service_unavailable
+          status = 503 # :service_unavailable
         when Faraday::TimeoutError
-          status = :too_many_requests
+          status = 529 # :too_many_requests
       end
 
       respond_to do |format|
