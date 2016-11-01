@@ -19,7 +19,8 @@ The goal of this engine is to provide a base that you can easily extend with cus
 1.  [Install](#install)
 2.  [Configuration](#configuration)
     1. [Emailing Platform](#emailing-platform)
-    2. [Active Job Backend](#active-job-backend)
+    2. [Intercom](#intercom)
+    3. [Active Job Backend](#active-job-backend)
 3.  [Building the Frontend](#building-the-frontend)
 4.  [Modifying the style - Theme Previewer](#modifying-the-style---theme-previewer)
 5.  [Extending the Frontend](#extending-the-frontend)
@@ -159,6 +160,33 @@ Rails.application.config.assets.precompile += %w( mno_enterprise/mail.css )
 - Logo can also be overriden by adding your own logo image (main-logo.png) to the image assets directory (/app/assets/images/mno_enterprise).
 - Write your own stylesheet by adding mail.css file to the stylesheets directory (/app/assets/stylesheets/mno_enterprise). The css rules you write will be applied to all the mail templates including the default ones.
 
+### Intercom
+
+Intercom is already integrated in mno-enterprise, you just need to enable it!
+
+Add the gem to your `Gemfile`
+
+```ruby
+gem 'intercom', '~> 3.5.4'
+```
+
+Expose the following environments variables (via `application.yml` or your preferred method)
+
+```
+INTERCOM_APP_ID
+INTERCOM_API_KEY
+INTERCOM_API_SECRET
+```
+
+If you built your app with an older version of mno-enterprise, double-check that `config/initializer/mno-enteprise.rb` contains the following lines:
+
+```ruby
+# Intercom
+config.intercom_app_id = ENV['INTERCOM_APP_ID']
+config.intercom_api_secret = ENV['INTERCOM_API_SECRET']
+config.intercom_api_key = ENV['INTERCOM_API_KEY']
+```
+
 ### Active Job Backend
 
 Maestrano Enterprise uses Active Job to process background jobs such as logging event or emails.
@@ -194,7 +222,63 @@ config.active_job.queue_adapter = :sucker_punch
 
 #### Sidekiq
 
-See https://github.com/mperham/sidekiq/wiki/Active-Job
+This is more involved as you need to manage a separate process (the sidekiq worker) and add Redis to your stack.
+
+Here's a quick start guide, see https://github.com/mperham/sidekiq/wiki/Active-Job for more details.
+
+
+Add this line to your application's `Gemfile`:
+
+```ruby
+gem 'sidekiq'
+```
+
+Create a `config/sidekiq.yml`:
+
+```yaml
+---
+:queues:
+  - default
+  - mailers
+```
+
+In `config/application.rb`:
+
+```ruby
+# Use Sidekiq for ActiveJob
+config.active_job.queue_adapter = :sidekiq
+```
+
+Run the worker process, if you use a `Procfile` you can add the following line to it:
+
+```
+worker: bundle exec sidekiq
+```
+
+To enable the web interface only for admin, add to your `Gemfile`:
+
+```ruby
+gem 'sinatra', '~> 1.4.7', require: false
+```
+
+and to `config/routes.rb`:
+
+```ruby
+Rails.application.routes.draw do
+  ...
+
+  #================================================
+  # Sidekiq admin interface
+  #================================================
+  require 'sidekiq/web'
+  authenticate :user, -> (u) { u.admin_role == 'admin' } do
+    mount Sidekiq::Web, at: '/sidekiq'
+  end
+
+  ...
+end
+```
+
 
 ## Building the frontend
 The Maestrano Enterprise frontend is a Single Page Application (SPA) that is separate from the Rails project. The source code for this frontend can be found on the [mno-enterprise-angular Github repository](https://github.com/maestrano/mno-enterprise-angular)
@@ -345,11 +429,27 @@ There are various endpoints to perform health checks:
 {
   "app-version": "9061048-6811c4a",
   "mno-enterprise-version": "0.0.1",
-  "env": "test"
+  "env": "test",
+  "mno-api-host": "https://api-hub.maestrano.com"
 }
 ```
 
-`/mnoe/health_check` & `/mnoe/health_check/full`: Complete health check (cache, smtp, database, ...). See [health_check](https://github.com/ianheggie/health_check)
+`/mnoe/health_check` & `/mnoe/health_check/full`: Complete health check (cache, smtp, database, ...).
+See [health_check](https://github.com/ianheggie/health_check) and the [initalizer](api/config/initializers/health_check.rb) for the default configuration.
+
+You can override it by creating an initalizer in the host app, eg:
+
+```ruby
+# my-mnoe-app/config/initializers/health_check.rb
+HealthCheck.setup do |config|
+  # You can customize which checks happen on a standard health check
+  config.standard_checks = %w(cache site)
+
+  # You can set what tests are run with the 'full' or 'all' parameter
+  config.full_checks = %w(cache site custom database migrations)
+end
+```
+
 
 ## Migrating from v2 to v3
 

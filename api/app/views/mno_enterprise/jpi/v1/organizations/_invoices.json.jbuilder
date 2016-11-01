@@ -1,4 +1,5 @@
 json.invoices do
+  # TODO: Introduce pagination
   json.array! organization.invoices.order_by('ended_at.desc').limit(12) do |invoice|
     json.period invoice.period_label
     json.amount AccountingjsSerializer.serialize(invoice.total_due)

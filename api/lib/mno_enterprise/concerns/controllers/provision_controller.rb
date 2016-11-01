@@ -40,7 +40,17 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     unless @organization
       @organization = @organizations.one? ? @organizations.first : nil
     end
-    authorize! :manage_app_instances, @organization
+
+    if @organization && cannot?(:manage_app_instances, @organization)
+      msg = 'Unfortunately you do not have permission to purchase products for this organization'
+      if @organizations.one?
+        redirect_path = add_param_to_fragment(after_provision_path.to_s, 'flash', [{msg: msg,  type: :error}.to_json])
+        redirect_to redirect_path
+      else
+        @organization = nil
+        flash.now.alert = msg
+      end
+    end
 
     # Redirect to dashboard if no applications
     unless @apps && @apps.any?
@@ -51,6 +61,9 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
   # POST /provision
   # TODO: check organization accessibility via ability
   def create
+    # Avoid double provisioning: previous url would be "/provision/new?apps[]=vtiger&organization_id=1"
+    session.delete('previous_url')
+
     @organization = current_user.organizations.to_a.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
     authorize! :manage_app_instances, @organization
 

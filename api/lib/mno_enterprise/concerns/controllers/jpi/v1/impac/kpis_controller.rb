@@ -88,8 +88,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     elsif kpi.targets && params[:targets].present? && params[:targets] != kpi.targets
       kpi.alerts.each { |alert| alert.update(sent: false) }
 
-    # Removes all the alerts if the targets are removed
-    elsif params[:targets].blank?
+    # Removes all the alerts if the targets are removed (kpi has no targets set,
+    # and params contains no targets to be set)
+    elsif params[:targets].blank? && kpi.targets.blank?
       kpi.alerts.each(&:destroy)
     end
 
@@ -153,11 +154,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     end
 
     def extract_params(whitelist)
-      params.require(:kpi).permit(*whitelist).tap do |whitelisted|
-        whitelisted[:settings] = params[:kpi][:metadata] || {}
+      (p = params).require(:kpi).permit(*whitelist).tap do |whitelisted|
+        whitelisted[:settings] = p[:kpi][:metadata] || {}
         # TODO: strong params for targets & extra_params attributes (keys will depend on the kpi).
-        whitelisted[:targets] = params[:kpi][:targets]
-        whitelisted[:extra_params] = params[:kpi][:extra_params]
+        whitelisted[:targets] = p[:kpi][:targets] unless p[:kpi][:targets].blank?
+        whitelisted[:extra_params] = p[:kpi][:extra_params] unless p[:kpi][:extra_params].blank?
       end
       .except(:metadata)
     end

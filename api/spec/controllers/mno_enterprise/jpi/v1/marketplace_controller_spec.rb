@@ -34,7 +34,10 @@ module MnoEnterprise
         'testimonials' => app.testimonials,
         'pictures' => app.pictures,
         'pricing_plans' => app.pricing_plans,
-        'rank' => app.rank
+        'rank' => app.rank,
+        'multi_instantiable' => app.multi_instantiable,
+        'subcategories' => app.subcategories,
+
       }
     end
 

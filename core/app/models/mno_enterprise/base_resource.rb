@@ -151,7 +151,7 @@ module MnoEnterprise
         raise_record_invalid if self.errors.any?
         ret
       else
-        false
+        raise_record_invalid
       end
     end
 

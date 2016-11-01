@@ -8,20 +8,20 @@
           %h2= t('.title')
         .login-box
           .brand-logo
-          = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, class: 'form-horizontal autofill-detect' }) do |f|
-            
+          = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, name: 'form', class: 'form-horizontal autofill-detect' }) do |f|
+
             - unless devise_error_messages!.empty?
               .row
                 .alert.alert-error
                   %button.close ×
                   = devise_error_messages!
-            
+
             .row
               .col-sm-12
                 = f.email_field :email, placeholder: "*Email", autofocus: true, required: true, 'ng-model' => 'user.email', :class => 'form-control'
-            
+
             %br
-            
+
             .row
               .col-sm-12
                 .text-center

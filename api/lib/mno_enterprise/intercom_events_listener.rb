@@ -17,7 +17,7 @@ module MnoEnterprise
       rescue Intercom::ResourceNotFound
         self.update_intercom_user(u)
       end
-      data = {created_at: Time.now.to_i, email: u.email}
+      data = {created_at: Time.now.to_i, email: u.email, user_id: u.id}
       case key
         when 'user_update'
           self.update_intercom_user(u)
@@ -33,6 +33,8 @@ module MnoEnterprise
         when 'widget_create'
           data[:event_name] = 'added-widget'
           data[:metadata] = {widget: object.name}
+        when 'app_launch'
+          data[:event_name] = 'launched-app-' + object.app.nid
         when 'app_destroy'
           data[:event_name] = 'deleted-app-' + object.app.nid
           data[:metadata] = {type: 'single', app_list: object.app.nid}
