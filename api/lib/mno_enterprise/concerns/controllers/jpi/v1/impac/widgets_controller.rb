@@ -13,6 +13,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   #==================================================================
   # Instance methods
   #==================================================================
+  # GET /mnoe/jpi/v1/impac/organizations/:organization_id/widgets
+  #  -> GET /api/mnoe/v1/organizations/:id/widgets
+  def index
+    render_not_found('organization') unless parent_organization
+    @widgets = parent_organization.widgets
+  end
+
   # POST /mnoe/jpi/v1/impac/dashboards/:id/widgets
   #  -> POST /api/mnoe/v1/dashboards/:id/widgets
   def create
