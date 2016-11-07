@@ -24,16 +24,22 @@
             </div>
           </div>
           <div class="bs-row row">
-            <div class="col-sm-6"><div class="label-cell">Active apps</div></div>
+            <div class="col-sm-6"><div class="label-cell">Active apps
+              <a ng-if="vm.organization.active_apps.length > 0 && vm.hasDisconnectedApps" ui-sref="dashboard.customers.create-step-2({orgId: vm.organization.id})">(connect the apps)</a></div></div>
             <div class="col-sm-6">
-              <span ng-if="vm.organization.active_apps.length === 0">(none)</span>
-              <div ng-if="vm.organization.active_apps.length > 0" class="bs-row row">
+              <div class="bs-row row apps-box">
                 <div class="app-wrapper col-xs-6 col-sm-4 col-md-3" ng-repeat="app in vm.organization.active_apps">
                   <div class="small-app-card ellipsis">
-                    <i ng-show="vm.mnoAppInstances.isConnected(app)" class="fa fa-check-circle app-state state-success" uib-tooltip="{{::app.app_name}} is connected!" tooltip-append-to-body="true"></i>
-                    <i ng-show="!vm.mnoAppInstances.isConnected(app)" class="fa fa-exclamation-circle app-state state-warning" uib-tooltip="{{::app.app_name}} is not connected." tooltip-append-to-body="true"></i>
+                    <i class="fa fa-trash app-remove" ng-click="vm.openRemoveAppModal(app, $index)" uib-tooltip="Remove {{::app.app_name}}" tooltip-append-to-body="true"></i>
+                    <i ng-show="vm.status[app.nid]" class="fa fa-check-circle app-state state-success" uib-tooltip="{{::app.app_name}} is connected!" tooltip-append-to-body="true"></i>
+                    <i ng-show="!vm.status[app.nid]" class="fa fa-exclamation-circle app-state state-warning" uib-tooltip="{{::app.app_name}} is not connected." tooltip-append-to-body="true"></i>
                     <img ng-src="{{::app.app_logo}}" width="60">
                     <span>{{::app.app_name}}</span>
+                  </div>
+                </div>
+                <div class="app-wrapper col-xs-6 col-sm-4 col-md-3">
+                  <div class="small-app-card ellipsis add-app" ng-click="vm.openAddAppModal()">
+                    <span>Add an app<i class="fa fa-plus"></i></span>
                   </div>
                 </div>
               </div>
