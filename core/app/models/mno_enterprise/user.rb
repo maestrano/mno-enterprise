@@ -181,7 +181,7 @@ module MnoEnterprise
       # Find in arrays if organizations have been fetched
       # already. Perform remote query otherwise
       org = begin
-        if self.organizations.is_a?(Array)
+        if self.organizations.loaded?
           self.organizations.to_a.find { |e| e.id == organization.id }
         else
           self.organizations.where(id: organization.id).first

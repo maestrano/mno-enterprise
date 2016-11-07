@@ -30,7 +30,12 @@ module MnoEnterprise
 
     # Stub organization + associations
     let(:organization) { build(:organization) }
-    before { allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) }
+
+    before do
+      organizations = [organization]
+      allow(organizations).to receive(:loaded?).and_return(true)
+      allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return(organizations)
+    end
 
     before { api_stub_for(post: "/organizations", response: from_api(organization)) }
     before { api_stub_for(put: "/organizations/#{organization.id}", response: from_api(organization)) }
