@@ -50,6 +50,18 @@ module MnoEnterprise
       render 'show'
     end
 
+    # PATCH /mnoe/jpi/v1/admin/organizations/1
+    def update
+      # get organization
+      @organization = MnoEnterprise::Organization.find(params[:id])
+
+      update_app_list
+
+      @organization_active_apps = @organization.app_instances.active
+
+      render 'show'
+    end
+
     # POST /mnoe/jpi/v1/admin/organizations/1/users
     # Invite a user to the organization (and create it if needed)
     # This does not send any emails (emails are manually triggered later)
@@ -62,60 +74,66 @@ module MnoEnterprise
 
       # Create the invitation
       invite = @organization.org_invites.create(
-          user_email: user.email,
-          user_role: params[:user][:role],
-          referrer_id: current_user.id,
-          status: 'staged' # Will be updated to 'accepted' for unconfirmed users
+        user_email: user.email,
+        user_role: params[:user][:role],
+        referrer_id: current_user.id,
+        status: 'staged' # Will be updated to 'accepted' for unconfirmed users
       )
 
       @user = user.confirmed? ? invite : user.reload
     end
 
     protected
-      def organization_permitted_update_params
-        [:name]
-      end
 
-      def organization_update_params
-        params.fetch(:organization, {}).permit(*organization_permitted_update_params)
-      end
+    def organization_permitted_update_params
+      [:name]
+    end
 
-      def user_params
-        params.require(:user).permit(:email, :name, :surname, :phone)
-      end
+    def organization_update_params
+      params.fetch(:organization, {}).permit(*organization_permitted_update_params)
+    end
 
-      # Create an unconfirmed user and skip the confirmation notification
-      # TODO: monkey patch User#confirmation_required? to simplify this? Use refinements?
-      def create_unconfirmed_user(user_params)
-        user = MnoEnterprise::User.new(user_params)
-        user.skip_confirmation_notification!
-        user.save
+    def user_params
+      params.require(:user).permit(:email, :name, :surname, :phone)
+    end
 
-        # Reset the confirmation field so we can track when the invite is send - #confirmation_sent_at is when the confirmation_token was generated (not sent)
-        # Not ideal as we do 2 saves, and the previous save trigger a call to the backend to validate the token uniqueness
-        user.assign_attributes(confirmation_sent_at: nil, confirmation_token: nil)
-        user.save
-        user
-      end
+    # Create an unconfirmed user and skip the confirmation notification
+    # TODO: monkey patch User#confirmation_required? to simplify this? Use refinements?
+    def create_unconfirmed_user(user_params)
+      user = MnoEnterprise::User.new(user_params)
+      user.skip_confirmation_notification!
+      user.save
 
-      # Update App List to match the list passed in params
-      def update_app_list
-        # Differentiate between a null app_nids params and no app_nids params
-        if params[:organization].key?(:app_nids) && (desired_nids = Array(params[:organization][:app_nids]))
+      # Reset the confirmation field so we can track when the invite is send - #confirmation_sent_at is when the confirmation_token was generated (not sent)
+      # Not ideal as we do 2 saves, and the previous save trigger a call to the backend to validate the token uniqueness
+      user.assign_attributes(confirmation_sent_at: nil, confirmation_token: nil)
+      user.save
+      user
+    end
 
-          existing_apps = @organization.app_instances.active
+    # Update App List to match the list passed in params
+    def update_app_list
+      # Differentiate between a null app_nids params and no app_nids params
+      if params[:organization].key?(:app_nids) && (desired_nids = Array(params[:organization][:app_nids]))
 
-          existing_apps.each do |app_instance|
-            desired_nids.delete(app_instance.app.nid) || app_instance.terminate
-          end
+        existing_apps = @organization.app_instances.active
 
-          desired_nids.each do |nid|
-            @organization.app_instances.create(product: nid)
-          end
-
-          # Force reload
-          existing_apps.reload
+        existing_apps.each do |app_instance|
+          desired_nids.delete(app_instance.app.nid) || app_instance.terminate
         end
+
+        desired_nids.each do |nid|
+          begin
+            @organization.app_instances.create(product: nid)
+          rescue => e
+            Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
+          end
+
+        end
+
+        # Force reload
+        existing_apps.reload
       end
+    end
   end
 end

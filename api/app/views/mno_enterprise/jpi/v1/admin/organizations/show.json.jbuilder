@@ -7,5 +7,6 @@ json.organization do
     json.extract! instance, :id, :name, :stack, :uid, :status, :oauth_keys_valid
     json.app_name instance.app.name
     json.app_logo instance.app.logo
+    json.nid instance.app.nid
   end
 end
