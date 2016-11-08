@@ -2,6 +2,7 @@ require 'rails_helper'
 
 module MnoEnterprise
   describe Jpi::V1::Admin::CloudAppsController, type: :controller do
+    include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
@@ -24,7 +25,9 @@ module MnoEnterprise
 
       describe "#index" do
         subject { get :index }
-        
+
+        it_behaves_like 'a jpi v1 admin action'
+
         it 'returns the cloud aplications' do
           subject
           expect(JSON.parse(response.body)).to eq({"cloud_apps"=>[{"id"=>app.id, "uid"=>app.uid, "name"=>app.name, "api_key"=>app.api_key, "tiny_description"=>app.tiny_description, "description"=>app.description, "metadata_url"=>nil, "details"=>nil, "terms_url"=>app.terms_url}]})
@@ -36,6 +39,8 @@ module MnoEnterprise
         subject { put :update, id: app.id, cloud_app: params }
 
         before { allow(MnoEnterprise::App).to receive(:find) { app } }
+
+        it_behaves_like 'a jpi v1 admin action'
 
         it 'assigns the cloud app' do
           subject
@@ -61,7 +66,9 @@ module MnoEnterprise
 
       describe "#regenerate_api_key" do
         subject { put :regenerate_api_key, id: app.id }
-        
+
+        it_behaves_like 'a jpi v1 admin action'
+
         it 'regenerates the API key' do
           expect_any_instance_of(MnoEnterprise::App).to receive(:regenerate_api_key!)
           subject
@@ -70,7 +77,9 @@ module MnoEnterprise
 
       describe "#refresh_metadata" do
         subject { put :refresh_metadata, id: app.id, metadata_url: 'http://test.com' }
-        
+
+        it_behaves_like 'a jpi v1 admin action'
+
         context 'with a valid response' do
           it 'refreshes the metadata' do
             expect(subject).to render_template(:show)

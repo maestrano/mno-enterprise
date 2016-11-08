@@ -2,6 +2,7 @@ require 'rails_helper'
 
 module MnoEnterprise
   describe Jpi::V1::Admin::UsersController, type: :controller do
+    include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
@@ -67,6 +68,8 @@ module MnoEnterprise
     describe '#index' do
       subject { get :index }
 
+      it_behaves_like "a jpi v1 admin action"
+
       context 'success' do
         before { subject }
 
@@ -79,6 +82,8 @@ module MnoEnterprise
 
     describe 'GET #show' do
       subject { get :show, id: user.id }
+
+      it_behaves_like "a jpi v1 admin action"
 
       context 'success' do
         before { subject }
@@ -100,22 +105,27 @@ module MnoEnterprise
 
         user.admin_role = nil
         api_stub_for(put: "/users/#{user.id}", response: -> { user.admin_role = 'staff'; from_api(user) })
-        subject
       end
 
-      context 'when admin' do
-        it { expect(response).to be_success }
+      it_behaves_like "a jpi v1 admin action"
 
-        # Test that the user is updated by testing the api endpoint was called
-        it { expect(user.admin_role).to eq('staff') }
-      end
+      context 'success' do
+        before { subject }
 
-      context 'when staff' do
-        let(:current_user) { build(:user, :staff) }
+        context 'when admin' do
+          it { expect(response).to be_success }
 
-        it { expect(response).to have_http_status(:unauthorized) }
+          # Test that the user is updated by testing the api endpoint was called
+          it { expect(user.admin_role).to eq('staff') }
+        end
 
-        it { expect(user.admin_role).to be_nil }
+        context 'when staff' do
+          let(:current_user) { build(:user, :staff) }
+
+          it { expect(response).to have_http_status(:unauthorized) }
+
+          it { expect(user.admin_role).to be_nil }
+        end
       end
     end
 
@@ -126,20 +136,23 @@ module MnoEnterprise
       before do
         api_stub_for(get: "/users/#{user_to_delete.id}", respond_with: user_to_delete)
         api_stub_for(delete: "/users/#{user_to_delete.id}", response: ->{ user_to_delete.name = 'deleted'; from_api(user_to_delete) })
-        subject
       end
 
-      it { expect(response).to be_success }
+      it_behaves_like "a jpi v1 admin action"
 
-      # Test that the user is deleted by testing the api endpoint was called
-      it { expect(user_to_delete.name).to eq('deleted') }
+      context 'success' do
+        before { subject }
+
+        # Test that the user is deleted by testing the api endpoint was called
+        it { expect(user_to_delete.name).to eq('deleted') }
+      end
     end
 
     describe 'POST #signup_email' do
       let(:email) { 'test@test.com' }
       subject { post :signup_email, user: {email: email}}
 
-      it { expect(response).to be_success }
+      it_behaves_like "a jpi v1 admin action"
 
       it 'sends the signup instructions' do
         message_delivery = instance_double(ActionMailer::MessageDelivery)
