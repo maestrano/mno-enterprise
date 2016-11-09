@@ -166,7 +166,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
   protected
     def organization
-      @organization ||= current_user.organizations.to_a.find{ |o| o.id.to_s == params[:id].to_s }
+      @organization ||= begin
+        # Find in arrays if organizations have been fetched
+        # already. Perform remote query otherwise
+        if current_user.organizations.loaded?
+          current_user.organizations.to_a.find { |o| o.id.to_s == params[:id].to_s }
+        else
+          current_user.organizations.where(id: params[:id]).first
+        end
+      end
     end
 
     def organization_permitted_update_params

@@ -43,7 +43,9 @@ module MnoEnterprise
     let(:credit_card) { build(:credit_card, organization: organization) }
 
     before do
-      allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) # ???
+      organizations = [organization]
+      allow(organizations).to receive(:loaded?).and_return(true)
+      allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return(organizations)
       api_stub_for(get: "/organizations/#{organization.id}/invoices", response: from_api([invoice]))
       api_stub_for(get: "/organizations", response: from_api([organization]))
       api_stub_for(get: "/organizations/#{organization.id}", response: from_api(organization))
