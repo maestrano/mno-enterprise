@@ -56,6 +56,19 @@
 - `MnoEnteprise.config.mandrill_key` is replaced with `ENV['MANDRILL_API_KEY']`
 - `MandrillClient` is replaced with `MnoEnterprise::MailClient`
 
+## [v3.0.6](https://github.com/maestrano/mno-enterprise/tree/v3.0.6) (2016-11-09)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.5...v3.0.6)
+
+**Implemented enhancements:**
+
+- \[MNOE-110\] Improve Health Check [\#121](https://github.com/maestrano/mno-enterprise/pull/121) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- \[MNOE-205\] Add style to unlock page [\#126](https://github.com/maestrano/mno-enterprise/pull/126) ([ouranos](https://github.com/ouranos))
+
+- Merge [v2.0.8](#v2.0.8)
+
 ## [v3.0.5](https://github.com/maestrano/mno-enterprise/tree/v3.0.5) (2016-09-30)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.4...v3.0.5)
 
@@ -119,6 +132,17 @@
 - Remove old Rails based frontend
 - Theme builder/previewer
 - I18n implementation
+
+## [v2.0.8](https://github.com/maestrano/mno-enterprise/tree/v2.0.8) (2016-11-09)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.7...v2.0.8)
+
+**Implemented enhancements:**
+
+- \[PERF\] Avoid duplicated requests on admin endpoints [\#148](https://github.com/maestrano/mno-enterprise/pull/148) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- \[MNOE-177\] UI: SignUp Page: Error message displayed when email is already registered [\#120](https://github.com/maestrano/mno-enterprise/pull/120) ([ouranos](https://github.com/ouranos))
 
 ## [v2.0.7](https://github.com/maestrano/mno-enterprise/tree/v2.0.7) (2016-09-30)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.6...v2.0.7)
