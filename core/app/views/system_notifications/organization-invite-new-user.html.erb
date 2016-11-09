@@ -13,8 +13,8 @@
 
     <p>You have been invited by <%= @info[:ref_full_name] %> to join <%= @info[:organization] %> on our platform!. You can automatically create your account on our platform and join <%= @info[:organization] %> by clicking on the link below:</p>
     <a href="<%= @info[:confirmation_link] %>">Create my account and join <%= @info[:organization] %></a>
-     
-    <% if @info[:team]? %>
+
+    <% if @info[:team] %>
     <p>By accepting this invite you will automatically join the <%= @info[:team] %> team.</p>
     <% end %>
 
@@ -22,7 +22,7 @@
       Regards,<br/>
       The Marketplace team
     </p>
-    
+
     <p class="footer">
       <%= @info[:company] %>
     </p>
