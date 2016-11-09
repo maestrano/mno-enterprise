@@ -1,4 +1,4 @@
-- if devise_mapping.omniauthable? && MnoEnterprise.style.devise.omniauth_link_shown
+- if devise_mapping.omniauthable? && MnoEnterprise.style.devise.omniauth_link_shown && resource_class.omniauth_providers.any?
   .sign-in-using
     = t('mno_enterprise.auth.shared.links.or_sign_in_using')
   .oauth-sso
