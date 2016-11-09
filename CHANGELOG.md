@@ -2,7 +2,12 @@
 
 ## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/master)
 
-[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.1...HEAD)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.3...HEAD)
+
+## [v3.1.3](https://github.com/maestrano/mno-enterprise/tree/v3.1.3) (2016-11-09)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.2...v3.1.3)
+
+- Merge [v3.0.6](#v3.0.6)
 
 ## [v3.1.2](https://github.com/maestrano/mno-enterprise/tree/v3.1.2) (2016-09-30)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.1...v3.1.2)
