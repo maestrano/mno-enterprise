@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## [v3.0.6](https://github.com/maestrano/mno-enterprise/tree/v3.0.6) (2016-11-09)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.5...v3.0.6)
+
+**Implemented enhancements:**
+
+- \[MNOE-110\] Improve Health Check [\#121](https://github.com/maestrano/mno-enterprise/pull/121) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- \[MNOE-205\] Add style to unlock page [\#126](https://github.com/maestrano/mno-enterprise/pull/126) ([ouranos](https://github.com/ouranos))
+
+- Merge [v2.0.8](#v2.0.8)
+
 ## [v3.0.5](https://github.com/maestrano/mno-enterprise/tree/v3.0.5) (2016-09-30)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.0.4...v3.0.5)
 
