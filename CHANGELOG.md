@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.0.8](https://github.com/maestrano/mno-enterprise/tree/v2.0.8) (2016-11-09)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.7...v2.0.8)
+
+**Implemented enhancements:**
+
+- \[PERF\] Avoid duplicated requests on admin endpoints [\#148](https://github.com/maestrano/mno-enterprise/pull/148) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- \[MNOE-177\] UI: SignUp Page: Error message displayed when email is already registered [\#120](https://github.com/maestrano/mno-enterprise/pull/120) ([ouranos](https://github.com/ouranos))
+
 ## [v2.0.7](https://github.com/maestrano/mno-enterprise/tree/v2.0.7) (2016-09-30)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.6...v2.0.7)
 
