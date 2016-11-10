@@ -36,7 +36,7 @@
           $state.go('dashboard.home.organization', {orgId: response.organization.id})
         else
           # Go to connect your apps screen
-          $state.go('dashboard.customers.create-step-2', {orgId: response.organization.id})
+          $state.go('dashboard.customers.connect-app', {orgId: response.organization.id})
       (error) ->
         $document.scrollTopAnimated(0)
         toastr.error("An error occurred while creating organisation #{vm.organization.name}.")

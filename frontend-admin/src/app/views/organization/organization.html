@@ -25,7 +25,7 @@
           </div>
           <div class="bs-row row">
             <div class="col-sm-6"><div class="label-cell">Active apps
-              <a ng-if="vm.organization.active_apps.length > 0 && vm.hasDisconnectedApps" ui-sref="dashboard.customers.create-step-2({orgId: vm.organization.id})">(connect the apps)</a></div></div>
+              <a ng-if="vm.organization.active_apps.length > 0 && vm.hasDisconnectedApps" ui-sref="dashboard.customers.connect-app({orgId: vm.organization.id})">(connect the apps)</a></div></div>
             <div class="col-sm-6">
               <div class="bs-row row apps-box">
                 <div class="app-wrapper col-xs-6 col-sm-4 col-md-3" ng-repeat="app in vm.organization.active_apps">

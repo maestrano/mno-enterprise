@@ -1,4 +1,4 @@
-@App.controller 'CreateStep2Controller', ($stateParams, $window, $uibModal, MnoeOrganizations, MnoAppsInstances) ->
+@App.controller 'ConnectAppController', ($stateParams, $window, $uibModal, MnoeOrganizations, MnoAppsInstances) ->
   'ngInject'
   vm = this
 

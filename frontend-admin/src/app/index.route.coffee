@@ -72,11 +72,11 @@
         controllerAs: 'vm'
       ncyBreadcrumb:
         label: 'Create a new customer'
-    .state 'dashboard.customers.create-step-2',
+    .state 'dashboard.customers.connect-app',
       url: '^/customers/:orgId/connect-apps'
       views: '@dashboard':
-        templateUrl: 'app/views/customers/create-step-2/create-step-2.html'
-        controller: 'CreateStep2Controller'
+        templateUrl: 'app/views/customers/connect-app/connect-app.html'
+        controller: 'ConnectAppController'
         controllerAs: 'vm'
       ncyBreadcrumb:
         label: 'Connect cloud apps'
