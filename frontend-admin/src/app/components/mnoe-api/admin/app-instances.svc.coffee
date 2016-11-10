@@ -1,15 +1,15 @@
 # Service for managing the app instances
-@App.service 'MnoeAppInstances', (MnoeAdminApiSvc) ->
+@App.service 'MnoeAppInstances', (MnoeAdminApiSvc, toastr) ->
   _self = @
 
-  # Store selected organization app instances
-  @appInstances = []
-
+  # Delete the instance of an app
   @terminate = (id) ->
     MnoeAdminApiSvc.one('app_instances', id).remove().then(
       (response) ->
-        # Remove the corresponding app from the list
-        _.remove(_self.appInstances, {id: id})
+        # Apps has been succesfuly removed
+      (error) ->
+        # Something went wrong
+        toastr.error("There was a problem and your app has not been deleted.")
     )
 
 

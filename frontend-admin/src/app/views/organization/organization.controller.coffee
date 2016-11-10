@@ -36,6 +36,7 @@
       (app) ->
         vm.status[app.nid] = MnoAppsInstances.isConnected(app)
     )
+    # Check the number of apps not connected (number of status equals to false)
     vm.hasDisconnectedApps = false of _.countBy(vm.status)
 
   # Add app modal
@@ -70,6 +71,7 @@
     )
     modalInstance.result.then(
       (result) ->
+        # If the user decide to remove the app
         if result
           vm.organization.active_apps.splice(index, 1)
           vm.updateStatus()

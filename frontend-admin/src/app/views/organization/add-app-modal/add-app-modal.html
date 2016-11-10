@@ -2,11 +2,11 @@
   <!-- Modal Header -->
   <div class="modal-header">
     <h3 class="modal-title">Add more apps</h3>
-    <div class="close" type="button" ng-click="vm.closeModal()" >×</div>
+    <div class="close" type="button" ng-click="vm.closeModal()">×</div>
   </div>
   <!-- Modal Body -->
   <div class="modal-body" style="max-height:{{vm.modal_height}};">
-    <div class="alert alert-danger modal-error" ng-show="vm.displayError">
+    <div class="alert alert-danger modal-error" ng-if="vm.displayError">
       <div class="close" type="button" ng-click="vm.closeError()" >×</div>
       <strong>Error:</strong> <b ng-repeat="app in vm.ListOfApps track by $index">{{app}}{{$last ? '' : ', '}}</b> could not be added. Please try again in a moment.
     </div>
@@ -35,7 +35,7 @@
     <div class="row">
       <div class="col-md-12">
         <button ng-click="vm.addApps()" ng-disabled="vm.loading.apps" class="btn btn-primary arrow">
-          <span ng-show="vm.loading.apps"><i class="fa fa-spin fa-spinner"></i></span>
+          <span ng-show="vm.loading.apps"><i class="fa fa-pulse fa-spinner"></i></span>
           Add
         </button>
         <button ng-click="vm.closeModal()" class="btn btn-default">

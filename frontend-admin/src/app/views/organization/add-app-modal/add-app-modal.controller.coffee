@@ -15,7 +15,7 @@
   MnoeMarketplace.getApps().then(
     (response) ->
       vm.marketplace = angular.copy(response.data.plain())
-      activeAppNids = _.pluck(organization.active_apps, 'nid')
+      activeAppNids = _.map(organization.active_apps, 'nid')
 
       # Filter the app list to remove the ones already activated
       vm.marketplace.filtered_apps = _.filter(vm.marketplace.apps, (app) ->
@@ -34,11 +34,11 @@
   # Add a list of apps to the current organization
   vm.addApps = ->
     vm.loading.apps = true
-    vm.appNidsToAdd = _.pluck(_.filter(vm.marketplace.apps, {checked: true}), 'nid')
+    vm.appNidsToAdd = _.map(_.filter(vm.marketplace.apps, {checked: true}), 'nid')
 
     # List of checked apps
     vm.organization.app_nids = _.union(
-      vm.appNidsToAdd, _.pluck(organization.active_apps, 'nid')
+      vm.appNidsToAdd, _.map(organization.active_apps, 'nid')
     )
 
     # Close the modal is no apps were selected
@@ -48,13 +48,19 @@
 
     MnoeOrganizations.update(vm.organization).then(
       (success) ->
-        # Get the list of active apps
-        active_apps = success.data.plain().organization.active_apps
+        # Get the number of active apps
+        nb_active_apps = success.data.plain().organization.active_apps.length
+        nb_apps_to_add = vm.organization.app_nids.length
 
-        # Some apps were not added
-        if active_apps.length < vm.organization.app_nids.length
+        # Update the active apps list
+        vm.organization = success.data.plain().organization
+
+        # Apps successfully added, close modal
+        if nb_active_apps == nb_apps_to_add
+          vm.closeModal()
+        else  # Some apps were not added
           vm.displayError = true
-          active_apps_nids = _.pluck(active_apps, 'nid')
+          active_apps_nids = _.map(active_apps, 'nid')
           # Remove all the apps successfully added from the filtered app list
           _.map(_.intersection(vm.appNidsToAdd, active_apps_nids),
             (app_nid) ->
@@ -63,18 +69,13 @@
               })
           )
 
-          vm.ListOfApps = _.pluck(_.map(_.difference(vm.appNidsToAdd, active_apps_nids),
+          vm.ListOfApps = _.map(_.difference(vm.appNidsToAdd, active_apps_nids),
             (app_nid) ->
               _.find(vm.marketplace.filtered_apps, {
                 nid: app_nid
-              })
-          ), 'name')
+              }).name
+          )
 
-          # Update the active apps list
-          vm.organization = success.data.plain().organization
-        else  # Apps successfully added, close modal
-          vm.organization = success.data.plain().organization
-          vm.closeModal()
       (error) ->
         toastr.error("We could not process your request, please try again.", {preventDuplicates: false})
 

@@ -2,7 +2,6 @@
   'ngInject'
   vm = this
   vm.app = app
-  vm.sentence = "Please proceed to the deletion of my app and all data it contains"
   vm.modal = {
     loading: false
   }
