@@ -16,5 +16,9 @@ module MnoEnterprise
     it 'routes to #destroy' do
       expect(delete('/jpi/v1/impac/widgets/2')).to route_to('mno_enterprise/jpi/v1/impac/widgets#destroy', id: '2')
     end
+
+    it 'routes to #index' do
+      expect(get('/jpi/v1/impac/organizations/1/widgets')).to route_to('mno_enterprise/jpi/v1/impac/widgets#index', organization_id: '1')
+    end
   end
 end

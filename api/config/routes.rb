@@ -136,6 +136,10 @@ MnoEnterprise::Engine.routes.draw do
 
         resources :kpis, only: :index
         resources :alerts, only: :index
+
+        resources :organizations, only: [] do
+          resources :widgets, only: :index
+        end
       end
 
 
