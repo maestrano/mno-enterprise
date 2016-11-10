@@ -136,8 +136,23 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
     # Authorize and update
     authorize! :invite_member, organization
+
     if @member.is_a?(MnoEnterprise::User)
-      organization.users.update(id: @member.id, role: attributes[:role])
+      if organization.role == "Super Admin"
+        if current_user.email != attributes[:email]
+          # A Super Admin may modify any member role
+          organization.users.update(id: @member.id, role: attributes[:role])
+        elsif attributes[:role] != "Super Admin" && organization.users.count {|u| u.role == 'Super Admin'} > 1
+          # A Super Admin may modify his role IF they are super admins remaining
+          organization.users.update(id: @member.id, role: attributes[:role])
+        end
+      elsif organization.role == "Admin"
+        # An admin cannot change a super admin, cannot assign super admin role
+        unless attributes[:role] == "Super Admin" || organization.users.where(email: attributes[:email]).first.role == "Super Admin"
+          organization.users.update(id: @member.id, role: attributes[:role])
+        end
+      end
+
     elsif @member.is_a?(MnoEnterprise::OrgInvite)
       @member.user_role = attributes[:role]
       @member.save
