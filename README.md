@@ -86,11 +86,11 @@ bin/rake mnoe:frontend:install_dependencies
 
 ### Emailing platform
 
-Maestrano Enterprise support either [Mandrill](https://www.mandrill.com/) or [SparkPost](https://www.sparkpost.com/).
+Maestrano Enterprise supports either [Mandrill](https://www.mandrill.com/) or [SparkPost](https://www.sparkpost.com/) as well as regular SMTP.
 
 You can use either provider as long as your account has the [required templates](https://maestrano.atlassian.net/wiki/display/MNOE/Emailing).
 
-If you  want to copy the default templates to your own account you can use the tools in `tools/emails`
+If you  want to copy the default templates to your own account you can use the tools in `tools/emails`.
 
 #### Mandrill
 
@@ -123,29 +123,34 @@ end
 ```
 
 #### SMTP
-SMTP server settings are needed to send emails via SMTP. In case there's no SMTP server, a personal gmail account could be used as an alternative.
-To use gmail to send SMTP emails, the gmail account should be set to allow "less secure apps".
-Typically for security reasons, system environment variables 'SMTP_USERNAME' and 'SMTP_PASSWORD' should be used to set the SMTP credentials.
+
+It's also possible to use a regular SMTP server. In this case, Maestrano Enterprise will use the templates bundled within the gem, see the next section to customise them.
 
 ```ruby
 # Gemfile
 gem 'premailer-rails'
 
-# config/environments/production.rb
+# config/application.rb
 Rails.application.configure do
-  config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = { :host => host_domain, :port => port_number }
-  config.action_mailer.asset_host = your_apps_root_url
+  # Email configuration
   config.action_mailer.delivery_method = :smtp
-  ActionMailer::Base.smtp_settings = {
-    address:              'smtp.gmail.com',
-    port:                 587,
-    domain:               'gmail.com',
+
+  config.action_mailer.smtp_settings = {
+    address:              ENV['SMTP_HOST'],
+    port:                 ENV['SMTP_PORT'],
+    domain:               ENV['SMTP_DOMAIN'],
     user_name:            ENV['SMTP_USERNAME'],
     password:             ENV['SMTP_PASSWORD'],
     authentication:       'plain',
     enable_starttls_auto: true  
   }
+end
+
+# config/environments/<production|uat>.rb
+Rails.application.configure do
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default_url_options = { host: host_domain, port: port_number }
+  config.action_mailer.asset_host = your_apps_root_url
 end
 
 # config/initializers/mno_enterprise.rb
@@ -157,10 +162,40 @@ end
 Rails.application.config.assets.precompile += %w( mno_enterprise/mail.css )
 ```
 
+
+In this example, the SMTP server settings are passed via environment variables. See sample configurations below.
+
+**Gmail**
+
+If you don't have access to a SMTP server, a personal Gmail account can be used as an alternative.
+The Gmail account should be set to allow "less secure apps".
+
+```ruby
+# config/application.yml
+SMTP_HOST: smtp.gmail.com
+SMTP_PORT: 587
+SMTP_DOMAIN: gmail.com
+SMTP_USERNAME: user@gmail.com
+SMTP_PASSWORD: password
+```
+
+**Mailgun**
+
+[Mailgun](https://www.mailgun.com/sending-email) provides an SMTP mode and allow you to manage multiple domain within the same account.
+
+```ruby
+# config/application.yml
+SMTP_HOST: smtp.mailgun.org
+SMTP_PORT: 587
+SMTP_DOMAIN: mg.acme-enterprise-mnoe-uat.maestrano.io
+SMTP_USERNAME:
+SMTP_PASSWORD:
+```
+
 ##### Customization of mail templates
-- You can override the default mail templates by adding template files ( template-name.html.erb, template-name.text.erb ) to the mail view directory (/app/views/system_notifications).
-- Logo can also be overriden by adding your own logo image (main-logo.png) to the image assets directory (/app/assets/images/mno_enterprise).
-- Write your own stylesheet by adding mail.css file to the stylesheets directory (/app/assets/stylesheets/mno_enterprise). The css rules you write will be applied to all the mail templates including the default ones.
+- You can override the default mail templates by adding template files (`template-name.html.erb`, `template-name.text.erb`) to the mail view directory (`/app/views/system_notifications`).
+- Logo can also be overridden by adding your own logo image (`main-logo.png`) to the image assets directory (`/app/assets/images/mno_enterprise`).
+- Write your own stylesheet by adding a `mail.css` file to the stylesheets directory (`/app/assets/stylesheets/mno_enterprise`). The css rules you write will be applied to all the mail templates including the default ones.
 
 ### Intercom
 
