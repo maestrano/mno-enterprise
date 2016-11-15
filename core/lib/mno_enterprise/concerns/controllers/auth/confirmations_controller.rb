@@ -98,7 +98,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
       sign_in resource, bypass: true
       set_flash_message(:notice, :confirmed) if is_flashing_format?
       yield(:success,resource) if block_given?
-      MnoEnterprise::EventLogger.info('user_confirm', resource.id, 'User confirmed', nil, resource)
+      MnoEnterprise::EventLogger.info('user_confirm', resource.id, 'User confirmed', resource)
       respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource, new_user: true) }
     else
       yield(:error,resource) if block_given?

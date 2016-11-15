@@ -29,17 +29,17 @@ module MnoEnterprise
 
         it 'add an event when an password is changed' do
           expect(events).to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'user-update-password', user_id: user.id))
-          subject.info('user_update_password', user.id, 'User password change', user.email, user)
+          subject.info('user_update_password', user.id, 'User password change', user.class.name, user.id, user.email)
         end
 
         it 'add an event when an app is added' do
           expect(events).to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'added-app-' + app.nid, metadata: {type: 'single', app_list: app.nid}))
-          subject.info('app_add', user.id, 'App Added', user.email, app_instance)
+          subject.info('app_add', user.id, 'App Added', app_instance.class.name, app_instance.id, {name: app_instance.name, app_nid: app_instance.app.nid} )
         end
 
         it 'add an event when an app is launched' do
           expect(events).to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'launched-app-' + app.nid))
-          subject.info('app_launch', user.id, 'App Launched', user.email, app_instance)
+          subject.info('app_launch', user.id, 'App Launched', app_instance.class.name, app_instance.id, {name: app_instance.name, app_nid: app_instance.app.nid} )
         end
 
       end
@@ -78,7 +78,7 @@ module MnoEnterprise
         end
         it 'add an event when an password is changed' do
           expect(events).to receive(:create).with(hash_including(email: user.email, event_name: 'user-update-password'))
-          subject.info('user_update_password', user.id, 'User password change', user.email, user)
+          subject.info('user_update_password', user.id, 'User password change', user.class.name, user.id, user.email)
         end
       end
 

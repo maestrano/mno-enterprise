@@ -39,14 +39,14 @@ module MnoEnterprise::Concerns::Models::AppInstance
   # context where it is included rather than being executed in the module's context
   included do
     attributes :id, :uid, :name, :status, :app_id, :created_at, :updated_at, :started_at, :stack, :owner_id,
-    :owner_type, :terminated_at, :stopped_at, :billing_type, :autostop_at, :autostop_interval,
-    :next_status, :soa_enabled, :oauth_company, :oauth_keys, :oauth_keys_valid
+               :owner_type, :terminated_at, :stopped_at, :billing_type, :autostop_at, :autostop_interval,
+               :next_status, :soa_enabled, :oauth_company, :oauth_keys, :oauth_keys_valid
 
     #==============================================================
     # Constants
     #==============================================================
-    ACTIVE_STATUSES = [:running,:stopped,:staged,:provisioning,:starting,:stopping,:updating]
-    TERMINATION_STATUSES = [:terminating,:terminated]
+    ACTIVE_STATUSES = [:running, :stopped, :staged, :provisioning, :starting, :stopping, :updating]
+    TERMINATION_STATUSES = [:terminating, :terminated]
 
     #==============================================================
     # Associations
@@ -55,7 +55,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
     belongs_to :app, class_name: 'MnoEnterprise::App'
 
     # Define connector_stack?, cloud_stack? etc. methods
-    [:cube,:cloud,:connector].each do |stackname|
+    [:cube, :cloud, :connector].each do |stackname|
       define_method("#{stackname}_stack?") do
         self.stack == stackname.to_s
       end
@@ -92,5 +92,15 @@ module MnoEnterprise::Concerns::Models::AppInstance
   def running?
     self.status == 'running'
   end
+
+  def to_audit_event
+    {
+      id: id,
+      uid: uid,
+      name: name,
+      app_nid: app ? app.nid : nil
+    }
+  end
+
 
 end

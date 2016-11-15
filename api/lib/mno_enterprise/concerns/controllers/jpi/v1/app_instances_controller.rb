@@ -26,6 +26,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
   def create
     authorize! :manage_app_instances, parent_organization
     app_instance = parent_organization.app_instances.create(product: params[:nid])
+    MnoEnterprise::EventLogger.info('app_add', current_user.id, 'App added', app_instance)
     head :created
   end
 
@@ -35,7 +36,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
 
     if app_instance
       authorize! :manage_app_instances, app_instance.owner
-      MnoEnterprise::EventLogger.info('app_destroy', current_user.id, "App destroyed", app_instance.name,app_instance)
+      MnoEnterprise::EventLogger.info('app_destroy', current_user.id, 'App destroyed', app_instance)
       app_instance.terminate
     end
 

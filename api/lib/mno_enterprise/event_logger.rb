@@ -15,13 +15,16 @@ module MnoEnterprise
     # @param [String] description humanised description
     # @param [Object] metadata
     # @param [Object] object
-    def self.info(key, current_user_id, description, metadata, object)
-      # Bypass Job queuing in specs or we'd have to stub lots of Her call for the deserialization
+    def self.info(key, current_user_id, description, object, metadata = {})
+      formatted_metadata = format_metadata(metadata, object)
+      subject_type = object.class.name
+      subject_id = object.id
       # TODO: improve
+      # Bypass Job queuing in specs or we'd have to stub lots of Her call for the deserialization
       if Rails.env.test?
-        self.send_info(key, current_user_id, description, metadata, object)
+        self.send_info(key, current_user_id, description, subject_type, subject_id, formatted_metadata)
       else
-        MnoEnterprise::EventLoggerJob.perform_later('info', key, current_user_id, description, metadata, object)
+        MnoEnterprise::EventLoggerJob.perform_later('info', key, current_user_id, description, subject_type, subject_id, formatted_metadata)
       end
     rescue ActiveJob::SerializationError
       Rails.logger.warn "[MnoEnterprise::EventLogger] Serialization error, skipping #{key} event"
@@ -29,10 +32,9 @@ module MnoEnterprise
 
     # Send the event to the listeners
     # @see .info for the params description
-    def self.send_info(key, current_user_id, description, metadata, object)
-      formatted_metadata = format_metadata(metadata, object)
+    def self.send_info(key, current_user_id, description, subject_type, subject_id, metadata)
       @@listeners.each do |listener|
-        listener.info(key, current_user_id, description, formatted_metadata, object)
+        listener.info(key, current_user_id, description, subject_type, subject_id, metadata)
       end
     end
 
