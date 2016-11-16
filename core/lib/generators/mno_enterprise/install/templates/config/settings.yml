@@ -9,3 +9,5 @@ pricing:
   enabled: false
 dock:
   enabled: true
+developer:
+  enabled: false
