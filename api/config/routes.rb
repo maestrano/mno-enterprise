@@ -94,6 +94,7 @@ MnoEnterprise::Engine.routes.draw do
       resources :marketplace, only: [:index, :show]
       resource :current_user, only: [:show, :update] do
         put :update_password
+        put :register_developer
         #post :deletion_request, action: :create_deletion_request
         #delete :deletion_request, action: :cancel_deletion_request
       end

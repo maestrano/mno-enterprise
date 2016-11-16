@@ -26,6 +26,8 @@ module MnoEnterprise
           'created_at' => res.created_at ? res.created_at.iso8601 : nil,
           'company' => res.company,
           'phone' => res.phone,
+          'api_secret' => res.api_secret,
+          'api_key' => res.api_key,
           'phone_country_code' => res.phone_country_code,
           'country_code' => res.geo_country_code || 'US',
           'website' => res.website,

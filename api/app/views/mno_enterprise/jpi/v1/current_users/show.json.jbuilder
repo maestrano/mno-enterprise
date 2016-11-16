@@ -8,6 +8,8 @@ json.cache! ['v1', @user.cache_key] do
     json.created_at @user.created_at ? @user.created_at.iso8601 : nil
     json.company @user.company
     json.phone @user.phone
+    json.api_secret @user.api_secret
+    json.api_key @user.api_key
     json.phone_country_code @user.phone_country_code
     json.country_code @user.geo_country_code || 'US'
     json.website @user.website
