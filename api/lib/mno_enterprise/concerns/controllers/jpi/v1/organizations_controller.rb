@@ -131,33 +131,36 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   # PUT /mnoe/jpi/v1/organizations/:id/update_member
   def update_member
     attributes = params[:member]
-    @member = organization.users.where(email: attributes[:email]).first
+
+    # Organizations are already loaded with all user
+    @member = organization.users.find {|u| u.email == attributes[:email]}
     @member ||= organization.org_invites.active.where(user_email: attributes[:email]).first
 
-    # Authorize and update
+    # Authorize and update => Admin or Super Admin
     authorize! :invite_member, organization
 
-    if @member.is_a?(MnoEnterprise::User)
-      if organization.role == "Super Admin"
-        if current_user.email != attributes[:email]
-          # A Super Admin may modify any member role
-          organization.users.update(id: @member.id, role: attributes[:role])
-        elsif attributes[:role] != "Super Admin" && organization.users.count {|u| u.role == 'Super Admin'} > 1
-          # A Super Admin may modify his role IF they are super admins remaining
-          organization.users.update(id: @member.id, role: attributes[:role])
-        end
-      elsif organization.role == "Admin"
-        # An admin cannot change a super admin, cannot assign super admin role
-        unless attributes[:role] == "Super Admin" || organization.users.where(email: attributes[:email]).first.role == "Super Admin"
-          organization.users.update(id: @member.id, role: attributes[:role])
-        end
-      end
+    # A super admin cannot modify his role if he's the last super admin
+    if attributes[:role] != 'Super Admin' && organization.users.count {|u| u.role == 'Super Admin'} <= 1
+      raise CanCan::AccessDenied
+    end
 
-    elsif @member.is_a?(MnoEnterprise::OrgInvite)
+    if organization.role == 'Admin'
+      # Admin cannot assign Super Admin role
+      raise CanCan::AccessDenied if attributes[:role] == 'Super Admin'
+
+      # Admin cannot edit Super Admin
+      raise CanCan::AccessDenied if (@member.is_a?(MnoEnterprise::User) && @member.role == 'Super Admin') ||
+        (@member.is_a?(MnoEnterprise::OrgInvite) && @member.user_role == 'Super Admin')
+    end
+
+    # Happy Path
+    case @member
+    when MnoEnterprise::User
+      organization.users.update(id: @member.id, role: attributes[:role])
+    when MnoEnterprise::OrgInvite
       @member.user_role = attributes[:role]
       @member.save
     end
-
     render 'members'
   end
 
