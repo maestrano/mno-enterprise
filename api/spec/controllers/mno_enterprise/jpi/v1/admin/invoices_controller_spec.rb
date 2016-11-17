@@ -2,6 +2,7 @@ require 'rails_helper'
 
 module MnoEnterprise
   describe Jpi::V1::Admin::InvoicesController, type: :controller do
+    include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
@@ -56,6 +57,8 @@ module MnoEnterprise
     describe '#index' do
       subject { get :index }
 
+      it_behaves_like 'a jpi v1 admin action'
+
       context 'success' do
         before { subject }
 
@@ -69,6 +72,8 @@ module MnoEnterprise
     describe 'GET #show' do
       subject { get :show, id: invoice.id }
 
+      it_behaves_like 'a jpi v1 admin action'
+
       context 'success' do
         before { subject }
 
@@ -81,6 +86,8 @@ module MnoEnterprise
 
     describe 'GET #current_billing_amount' do
       subject { get :current_billing_amount }
+
+      it_behaves_like 'a jpi v1 admin action'
 
       context 'with an old MnoHub' do
         let(:tenant) { build(:old_tenant) }
@@ -110,6 +117,8 @@ module MnoEnterprise
     describe 'GET #last_invoicing_amount' do
       subject { get :last_invoicing_amount }
 
+      it_behaves_like 'a jpi v1 admin action'
+
       context 'success' do
         before { subject }
 
@@ -125,6 +134,8 @@ module MnoEnterprise
     describe 'GET #outstanding_amount' do
       subject { get :outstanding_amount }
 
+      it_behaves_like 'a jpi v1 admin action'
+
       context 'success' do
         before { subject }
         let(:outstanding_amount) { {'outstanding_amount' => {"amount"=>"1789.86", "currency"=>"AUD"}} }
@@ -138,6 +149,8 @@ module MnoEnterprise
 
     describe 'GET #last_portfolio_amount' do
       subject { get :last_portfolio_amount }
+
+      it_behaves_like 'a jpi v1 admin action'
 
       context 'success' do
         before { subject }
@@ -154,6 +167,8 @@ module MnoEnterprise
 
     describe 'GET #last_commission_amount' do
       subject { get :last_commission_amount }
+
+      it_behaves_like 'a jpi v1 admin action'
 
       context 'success' do
         before { subject }

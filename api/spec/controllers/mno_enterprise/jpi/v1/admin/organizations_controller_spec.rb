@@ -3,6 +3,8 @@ require 'rails_helper'
 module MnoEnterprise
   describe Jpi::V1::Admin::OrganizationsController, type: :controller do
     include MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
+    include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
+
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
@@ -77,6 +79,8 @@ module MnoEnterprise
     describe '#index' do
       subject { get :index }
 
+      it_behaves_like 'a jpi v1 admin action'
+
       context 'success' do
         before { subject }
 
@@ -90,6 +94,8 @@ module MnoEnterprise
 
     describe 'GET #show' do
       subject { get :show, id: organization.id }
+
+      it_behaves_like 'a jpi v1 admin action'
 
       context 'success' do
         before { subject }
@@ -106,6 +112,8 @@ module MnoEnterprise
     describe 'GET #in_arrears' do
       subject { get :in_arrears }
 
+      it_behaves_like 'a jpi v1 admin action'
+
       context 'success' do
         before { subject }
 
@@ -121,6 +129,8 @@ module MnoEnterprise
       before { allow(MnoEnterprise::Organization).to receive(:create) { organization } }
 
       subject { post :create, organization: params }
+
+      it_behaves_like 'a jpi v1 admin action'
 
       it 'creates the organization' do
         expect(MnoEnterprise::Organization).to receive(:create).with(params.slice(:name)) { organization }
@@ -155,6 +165,8 @@ module MnoEnterprise
       context 'with existing user' do
         before { allow(MnoEnterprise::User).to receive(:find_by) { user } }
 
+        it_behaves_like 'a jpi v1 admin action'
+
         it 'creates an invite' do
           subject
           expect(@api_call).to be true
@@ -167,6 +179,8 @@ module MnoEnterprise
         # Directly stubbing the controller method as user creation is a PITA to stub
         let(:new_user) { build(:user, params.slice(:email, :name, :surname, :phone)) }
         before { allow(controller).to receive(:create_unconfirmed_user) { new_user } }
+
+        it_behaves_like 'a jpi v1 admin action'
 
         it 'creates a user' do
           expect(controller).to receive(:create_unconfirmed_user) { new_user }

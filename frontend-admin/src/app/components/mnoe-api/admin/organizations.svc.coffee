@@ -35,4 +35,7 @@
   @create = (organization) ->
     MnoeAdminApiSvc.all('/organizations').post(organization)
 
+  @update = (organization) ->
+    MnoeAdminApiSvc.one('/organizations', organization.id).patch(organization)
+
   return @

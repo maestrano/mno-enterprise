@@ -2,6 +2,7 @@ require 'rails_helper'
 
 module MnoEnterprise
   RSpec.describe Jpi::V1::Admin::InvitesController do
+    include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
@@ -41,6 +42,9 @@ module MnoEnterprise
     # unconfirmed
     describe 'POST #create' do
       subject { post :create, user_id: invitee.id, organization_id: organization.id }
+
+      before { allow(SystemNotificationMailer).to receive(:organization_invite).with(invite).and_return(message_delivery) }
+      it_behaves_like 'a jpi v1 admin action'
 
       context 'existing user' do
         it 'sends the invitation email' do

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 module MnoEnterprise
   describe Jpi::V1::Admin::TenantInvoicesController, type: :controller do
+    include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
@@ -66,6 +67,8 @@ module MnoEnterprise
     describe '#index' do
       subject { get :index }
 
+      it_behaves_like 'a jpi v1 admin action'
+
       context 'success' do
         before { subject }
 
@@ -78,6 +81,8 @@ module MnoEnterprise
 
     describe 'GET #show' do
       subject { get :show, id: tenant_invoice.id }
+
+      it_behaves_like 'a jpi v1 admin action'
 
       context 'success' do
         before { subject }

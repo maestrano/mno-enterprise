@@ -148,13 +148,14 @@ MnoEnterprise::Engine.routes.draw do
       #============================================================
       namespace :admin, defaults: {format: 'json'} do
         resources :audit_events, only: [:index]
+        resources :app_instances, only: [:destroy], shallow: true
         resources :users, only: [:index, :show, :destroy, :update, :create] do
           collection do
             get :count
             post :signup_email
           end
         end
-        resources :organizations, only: [:index, :show, :create] do
+        resources :organizations, only: [:index, :show, :update, :create] do
           collection do
             get :in_arrears
             get :count
