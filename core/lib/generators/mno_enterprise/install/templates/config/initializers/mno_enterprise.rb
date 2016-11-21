@@ -63,7 +63,7 @@ MnoEnterprise.configure do |config|
   # I18n - Controls:
   #   - Routing in development
   #   - Filter and locale management in controllers
-  config.i18n_enabled = true
+  config.i18n_enabled = false
 
   #===============================================
   # Third Party Plugins
