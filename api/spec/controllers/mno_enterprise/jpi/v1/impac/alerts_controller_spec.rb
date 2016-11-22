@@ -21,20 +21,8 @@ module MnoEnterprise
     let(:alert_hash) { from_api(alert)[:data].except(:kpi) }
 
     describe 'GET #index' do
-      let(:kpi_enabled) { true }
-      let(:tenant) { build(:tenant, kpi_enabled: kpi_enabled) }
-      before { api_stub_for(get: "/tenant", response: from_api(tenant)) }
-
       before { api_stub_for(get: "/users/#{user.id}/alerts", response: from_api([alert])) }
-
       subject { get :index }
-
-      context "when the tenant is not kpi_enabled" do
-        let(:kpi_enabled) { false }
-        before { api_stub_for(delete: "/alerts/#{alert.id}", response: from_api({})) }
-
-        it { subject; expect(JSON.parse(response.body)).to eq([]) }
-      end
     end
 
     describe 'POST #create' do
