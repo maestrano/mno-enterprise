@@ -113,6 +113,17 @@ module MnoEnterprise
       end
     end
 
+    describe 'PUT #register_developer' do
+      before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
+      before { sign_in user }
+      subject { put :register_developer}
+      
+      describe 'logged in' do
+        before { subject }        
+        it { expect(response).to be_success }
+      end
+    end
+
     describe 'PUT #update_password' do
       let(:attrs) { {current_password: 'password', password: 'blablabla', password_confirmation: 'blablabla'} }
       before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
