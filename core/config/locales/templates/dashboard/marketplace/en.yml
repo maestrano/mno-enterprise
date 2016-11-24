@@ -17,6 +17,9 @@ en:
             tag_star: "Star!™ Tutorials"
             tag_connec: "Connec!™ Ready"
             conflicting_app: "You cannot install this app as it is incompatible with:"
+            success_notification_title: "{{name}} has been added to your account"
+            success_launch_notification_body: "To start using {{name}}, click on the {{name}} icon then click on \"Launch\"."
+            success_connect_notification_body: "To start using {{name}}, click on the {{name}} icon then click on \"Connect\"."
 
           app_selection:
             next: "Next"
