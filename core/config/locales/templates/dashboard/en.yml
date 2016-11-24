@@ -19,6 +19,20 @@ en:
           passwd_form_cancel: Cancel
           settings: Settings
 
+          developer: Developer
+          are_you_developer: Are you a Developer looking to contribute to the Maestrano platform?
+          register: Register!
+          api_key: API Key
+          secret_key: Secret Key
+          show: Show
+          hide: Hide
+          name: Name
+          uid: UID
+          view_developer_docs: View our developer documentation
+          here: here
+          conceal: Conceal
+          organizations: Organizations
+
         app_deletion:
           title: Confirm app deletion
           instructions: In order to delete your app, please enter the following statement in the box below.
