@@ -2,6 +2,7 @@ require 'rails_helper'
 
 module MnoEnterprise
   RSpec.describe Jpi::V1::CurrentUsersController, type: :routing do
+    let!(:user) { build(:user, :with_deletion_request, :with_organizations) }
     routes { MnoEnterprise::Engine.routes }
     
     it 'routes to #show' do
@@ -12,6 +13,10 @@ module MnoEnterprise
       expect(put('/jpi/v1/current_user')).to route_to("mno_enterprise/jpi/v1/current_users#update")
     end
     
+    it 'routes to #register_developer' do
+      expect(put('/jpi/v1/current_user/register_developer')).to route_to("mno_enterprise/jpi/v1/current_users#register_developer")
+    end
+
     it 'routes to #update_password' do
       expect(put('/jpi/v1/current_user/update_password')).to route_to("mno_enterprise/jpi/v1/current_users#update_password")
     end

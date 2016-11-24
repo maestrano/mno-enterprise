@@ -23,11 +23,21 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # PUT /mnoe/jpi/v1/current_user
   def update
     @user = current_user
-
     @user.assign_attributes(user_params)
     changes = @user.changes
     if @user.update(user_params)
       MnoEnterprise::EventLogger.info('user_update', current_user.id, 'User update', @user, changes)
+      render :show
+    else
+      render json: @user.errors, status: :bad_request
+    end
+  end
+
+  # PUT /mnoe/jpi/v1/current_user/register_developer
+  def register_developer
+    @user = current_user
+    if @user.update(developer: true)
+      MnoEnterprise::EventLogger.info('register_developer', current_user.id, "User developer register", @user)
       render :show
     else
       render json: @user.errors, status: :bad_request

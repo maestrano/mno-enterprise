@@ -26,6 +26,8 @@ module MnoEnterprise
           'created_at' => res.created_at ? res.created_at.iso8601 : nil,
           'company' => res.company,
           'phone' => res.phone,
+          'api_secret' => res.api_secret,
+          'api_key' => res.api_key,
           'phone_country_code' => res.phone_country_code,
           'country_code' => res.geo_country_code || 'US',
           'website' => res.website,
@@ -108,6 +110,17 @@ module MnoEnterprise
         before { sign_in user }
         before { subject }
         it { expect(user.name).to eq(attrs[:name]) }
+      end
+    end
+
+    describe 'PUT #register_developer' do
+      before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
+      before { sign_in user }
+      subject { put :register_developer}
+      
+      describe 'logged in' do
+        before { subject }        
+        it { expect(response).to be_success }
       end
     end
 
