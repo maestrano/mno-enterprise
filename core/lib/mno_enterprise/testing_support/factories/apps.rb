@@ -5,7 +5,7 @@ FactoryGirl.define do
     sequence(:id) { |n| n }
     sequence(:name) { |n| "TestApp#{n}" }
     nid { name.parameterize }
-    
+
     description "This is a description"
     created_at 1.day.ago
     updated_at 2.hours.ago
@@ -14,30 +14,32 @@ FactoryGirl.define do
     slug { "#{id}-myapp" }
     categories ["CRM"]
     tags ['Foo', 'Bar']
-    key_benefits ['Super','Hyper','Good']
-    key_features ['Super','Hyper','Good']
-    testimonials [{text:'Bla', company:'Doe Pty Ltd', author: 'John'}]
+    key_benefits ['Super', 'Hyper', 'Good']
+    key_features ['Super', 'Hyper', 'Good']
+    testimonials [{text: 'Bla', company: 'Doe Pty Ltd', author: 'John'}]
     worldwide_usage 120000
     tiny_description "A great app"
     stack 'cube'
     terms_url "http://opensource.org/licenses/MIT"
     appinfo { {} }
+    ratings { [{id: 'id', rating: 1, description: 'description', status: 'validated', user_id: 15, user_name: 'toto', app_id: 12, app_name: 'app name', organization_id: 'org-id', organization_name: 'org-name', created_at: nil, updated_at: nil}] }
+    average_rating 1
     sequence(:rank) { |n| n }
-    pricing_plans {{
-      'default' =>[{name: 'Monthly Plan', price: '20.0', currency: 'AUD', factor: '/month'}]
-    }}
+    pricing_plans { {
+      'default' => [{name: 'Monthly Plan', price: '20.0', currency: 'AUD', factor: '/month'}]
+    } }
 
     trait :cloud do
       stack 'cloud'
     end
-  
+
     trait :connector do
       stack 'connector'
     end
-  
+
     factory :cloud_app, traits: [:cloud]
     factory :connector_app, traits: [:connector]
-    
+
     # Properly build the resource with Her
     initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
   end
