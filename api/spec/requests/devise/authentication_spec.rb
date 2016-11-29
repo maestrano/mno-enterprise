@@ -3,7 +3,7 @@ require 'rails_helper'
 module MnoEnterprise
   RSpec.describe "Remote Authentication", type: :request do
 
-    let(:user) { build(:user) }
+    let(:user) { build(:user, password_valid: true) }
     before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
 

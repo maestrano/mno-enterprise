@@ -51,7 +51,7 @@ module MnoEnterprise
       :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email,
       :failed_attempts, :unlock_token, :locked_at, :name, :surname, :company, :phone, :phone_country_code,
       :geo_country_code, :geo_state_code, :geo_city, :website, :orga_on_create, :sso_session, :current_password_required, :admin_role,
-      :api_key, :api_secret, :developer, :kpi_enabled, :external_id, :meta_data
+      :api_key, :api_secret, :developer, :kpi_enabled, :external_id, :meta_data, :password_valid
 
     define_model_callbacks :validation #required by Devise
 
@@ -94,14 +94,14 @@ module MnoEnterprise
     # The auth_hash includes an email and password
     # Return nil in case of failure
     def self.authenticate(auth_hash)
-      u = self.post("user_sessions", auth_hash)
-
+      # retro compatibilty issue: previous version were returning nil if the user was not found or if the password was invalid
+      # see https://maestrano.atlassian.net/browse/MNOE-209
+      # we now validate that the password is valid in /core/lib/devise/strategies/remote_authenticatable.rb
+      u = self.post("user_sessions", auth_hash.merge(validate_password: true))
       if u && u.id
         u.clear_attribute_changes!
-        return u
       end
-
-      nil
+      return u
     end
 
 
