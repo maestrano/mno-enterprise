@@ -1,0 +1,60 @@
+<rd-widget>
+  <rd-widget-header icon="fa-comment">
+    &nbsp;All comments
+  </rd-widget-header>
+  <rd-widget-body classes="large no-padding">
+    <div>
+      <table class="table">
+      <table class="table table-striped" >
+      <thead>
+        <tr>
+        <th>Author</th>
+        <th>Company</th>
+        <th>App</th>
+        <th>Comment</th>
+        <th>Rating</th>
+        <th>Date</th>
+        <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="rating in listOfRatings">
+          <td>
+            {{rating.user_name}}
+          </td>
+          <td>
+            {{rating.organization_name}}
+          </td>
+          <td>
+            {{rating.app_name}}
+          </td>
+          <td>
+            {{rating.description}}
+          </td>
+          <td>
+            {{rating.rating}}
+          </td>
+          <td>
+            {{rating.created_at | date: 'dd/MM/yyyy' }}
+          </td>
+          <td><span ng-show="!editmode[rating.id]">{{rating.status}}</span>
+            <select ng-model="rating.status" ng-show="editmode[rating.id]" >
+              <option ng-repeat="status in statuses" value="{{status}}">{{status}}</option>
+            </select>
+          </td>
+          <td>
+            <a href="" ng-hide="editmode[rating.id]" ng-click="editmode[rating.id] = true"><i class="fa fa-pencil"></i></a>
+          </td>
+          <td>
+          <!-- future implementation, waiting for back end to be ready -->
+            <!-- <a href="" ng-hide="editmode[rating.id]" ng-click="remove(rating)"><i class="fa fa-times"></i></a> -->
+            <a href="" ng-show="editmode[rating.id]" ng-click="update(rating)"><i class="fa fa-check"></i></a>
+          </td>
+        </tr>
+      </tbody>
+      </table>
+      </table>
+    </div>  
+  </rd-widget-body>
+</rd-widget>
+
