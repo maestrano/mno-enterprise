@@ -98,14 +98,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     end
   end
 
-  # TODO: specs
   # PUT /mnoe/jpi/v1/organizations/:id/invite_members
   def invite_members
     # Filter
     whitelist = ['email','role','team_id']
     attributes = []
     params[:invites].each do |invite|
-      attributes << invite.select { |k,v| whitelist.include?(k.to_s) }
+      attributes << invite.slice(*whitelist)
     end
 
     # Authorize and create
@@ -127,44 +126,58 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     render 'members'
   end
 
-  # TODO: specs
   # PUT /mnoe/jpi/v1/organizations/:id/update_member
   def update_member
     attributes = params[:member]
-    @member = organization.users.where(email: attributes[:email]).first
-    @member ||= organization.org_invites.active.where(user_email: attributes[:email]).first
 
-    # Authorize and update
+    # Authorize and update => Admin or Super Admin
     authorize! :invite_member, organization
-    if @member.is_a?(MnoEnterprise::User)
-      organization.users.update(id: @member.id, role: attributes[:role])
-    elsif @member.is_a?(MnoEnterprise::OrgInvite)
-      @member.user_role = attributes[:role]
-      @member.save
+
+    if organization.role == 'Admin'
+      # Admin cannot assign Super Admin role
+      raise CanCan::AccessDenied if attributes[:role] == 'Super Admin'
+
+      # Admin cannot edit Super Admin
+      raise CanCan::AccessDenied if (member.is_a?(MnoEnterprise::User) && member.role == 'Super Admin') ||
+        (member.is_a?(MnoEnterprise::OrgInvite) && member.user_role == 'Super Admin')
+    elsif member.id == current_user.id && attributes[:role] != 'Super Admin' && organization.users.count {|u| u.role == 'Super Admin'} <= 1
+      # A super admin cannot modify his role if he's the last super admin
+      raise CanCan::AccessDenied
     end
 
+    # Happy Path
+    case member
+    when MnoEnterprise::User
+      organization.users.update(id: member.id, role: attributes[:role])
+    when MnoEnterprise::OrgInvite
+      member.update(user_role: attributes[:role])
+    end
     render 'members'
   end
 
-  # TODO: specs
   # PUT /mnoe/jpi/v1/organizations/:id/remove_member
   def remove_member
-    attributes = params[:member]
-    @member = organization.users.where(email: attributes[:email]).first
-    @member ||= organization.org_invites.active.where(user_email: attributes[:email]).first
-
-    # Authorize and update
     authorize! :invite_member, organization
-    if @member.is_a?(MnoEnterprise::User)
-      organization.remove_user(@member)
-    elsif @member.is_a?(MnoEnterprise::OrgInvite)
-      @member.cancel!
+
+    if member.is_a?(MnoEnterprise::User)
+      organization.remove_user(member)
+    elsif member.is_a?(MnoEnterprise::OrgInvite)
+      member.cancel!
     end
 
     render 'members'
   end
 
   protected
+    def member
+      @member ||= begin
+        email = params.require(:member).require(:email)
+        # Organizations are already loaded with all users
+        organization.users.to_a.find { |u| u.email == email } ||
+          organization.org_invites.active.where(user_email: email).first
+      end
+    end
+
     def organization
       @organization ||= begin
         # Find in arrays if organizations have been fetched

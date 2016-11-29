@@ -228,294 +228,198 @@ module MnoEnterprise
       end
     end
 
-    # describe 'PUT #invite_members' do
-    #   let(:team) { build(:team, organization: organization) }
-    #   let(:params) { [{email: 'newmember@maestrano.com', role: 'Power User', team_id: team.id}] }
-    #   subject { put :invite_members, id: organization.id, invites: params }
-    #
-    #   it_behaves_like "jpi v1 authorizable action"
-    #
-    #   context 'success' do
-    #     before { subject }
-    #
-    #     it 'creates a new invite' do
-    #       invite = organization.org_invites.first
-    #       expect(invite.user_email).to eq(params.first[:email])
-    #       expect(invite.user_role).to eq(params.first[:role])
-    #       expect(invite.organization).to eq(organization)
-    #       expect(invite.team).to eq(team)
-    #       expect(invite.referrer).to eq(user)
-    #     end
-    #
-    #     it 'returns a partial representation of the entity' do
-    #       organization.reload
-    #       expect(JSON.parse(response.body)).to eq(partial_hash_for_members(organization))
-    #     end
-    #   end
-    # end
+    describe 'PUT #invite_members' do
+      before { api_stub_for(post: "/organizations/#{organization.id}/org_invites", response: from_api(org_invite)) }
 
-    # describe 'PUT #update_member' do
+      let(:team) { build(:team, organization: organization) }
+      let(:params) { [{email: 'newmember@maestrano.com', role: 'Power User', team_id: team.id}] }
+      subject { put :invite_members, id: organization.id, invites: params }
+
+      it_behaves_like "jpi v1 authorizable action"
+
+      context 'succcess' do
+        let(:relation) { instance_double('Her::Model::Relation') }
+        before do
+          allow(relation).to receive(:active).and_return(relation)
+        end
+
+        it 'creates an invitation' do
+          # For the view
+          allow(organization).to receive(:members).and_return([org_invite])
+
+          expect(organization).to receive(:org_invites).and_return(relation)
+          expect(relation).to receive(:create).with(
+            user_email: 'newmember@maestrano.com',
+            user_role: 'Power User',
+            team_id: team.id.to_s,
+            referrer_id: user.id
+          ).and_return(org_invite)
+          subject
+        end
+
+        it 'sends a notification email' do
+          expect(MnoEnterprise::SystemNotificationMailer).to receive(:organization_invite).with(org_invite).and_call_original
+          subject
+        end
+
+        it 'returns a partial representation of the entity' do
+          subject
+          expect(JSON.parse(response.body)).to eq({'members' => partial_hash_for_members(organization)})
+        end
+      end
+    end
+
+    describe 'PUT #update_member' do
     #   let(:user) { build(:user) }
     #   let(:organization) { build(:organization) }
-    #   let(:params) { { email: 'somemember@maestrano.com', role: 'Admin'} }
-    #   subject { put :update_member, id: organization.id, member: params }
-    #
-    #   context 'guest' do
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'unauthorized as guest' do
-    #     before { sign_in user }
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'unauthorized as member' do
-    #     let(:role) { 'Power User' }
-    #     before { sign_in user }
-    #     before { organization.add_user(user,role) }
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'authorized with member' do
-    #     let(:role) { 'Admin' }
-    #     let(:member) { build(:user, email: params[:email]) }
-    #     before { organization.add_user(user,role) }
-    #     before { organization.add_user(member) }
-    #     before { sign_in user }
-    #     before { subject }
-    #
-    #     it 'updates the member role' do
-    #       member.reload
-    #       expect(member.role(organization)).to eq(params[:role])
-    #     end
-    #
-    #     it 'returns a partial representation of the entity' do
-    #       organization.reload
-    #       expect(JSON.parse(response.body)).to eq(partial_hash_for_members(organization))
-    #     end
-    #   end
-    #
-    #   context 'authorized with invite' do
-    #     let(:role) { 'Admin' }
-    #     let!(:member) { build(:org_invite, user_email: params[:email], organization: organization) }
-    #     before { organization.add_user(user,role) }
-    #     before { sign_in user }
-    #     before { subject }
-    #
-    #     it 'updates the member role' do
-    #       member.reload
-    #       expect(member.user_role).to eq(params[:role])
-    #     end
-    #
-    #     it 'returns a partial representation of the entity' do
-    #       organization.reload
-    #       expect(JSON.parse(response.body)).to eq(partial_hash_for_members(organization))
-    #     end
-    #   end
-    # end
-    #
-    # describe 'PUT #remove_member' do
-    #   let(:user) { build(:user) }
-    #   let(:organization) { build(:organization) }
-    #   let(:params) { { email: 'somemember@maestrano.com', role: 'Admin'} }
-    #   subject { put :remove_member, id: organization.id, member: params }
-    #
-    #   context 'guest' do
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'unauthorized as guest' do
-    #     before { sign_in user }
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'unauthorized as member' do
-    #     let(:role) { 'Power User' }
-    #     let!(:member) { build(:user, email: params[:email]) }
-    #     before { sign_in user }
-    #     before { organization.add_user(user,role) }
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'authorized - with member' do
-    #     let(:role) { 'Admin' }
-    #     let(:member) { build(:user, email: params[:email]) }
-    #     before { organization.add_user(user,role) }
-    #     before { organization.add_user(member) }
-    #     before { sign_in user }
-    #     before { subject }
-    #
-    #     it 'remove the member' do
-    #       member.reload
-    #       expect(member.role(organization)).to be_nil
-    #     end
-    #
-    #     it 'returns a partial representation of the entity' do
-    #       organization.reload
-    #       expect(JSON.parse(response.body)).to eq(partial_hash_for_members(organization))
-    #     end
-    #   end
-    #
-    #   context 'authorized - with invite' do
-    #     let(:role) { 'Admin' }
-    #     let!(:invite) { build(:org_invite, organization: organization, user_email: params[:email]) }
-    #     before { organization.add_user(user,role) }
-    #     before { sign_in user }
-    #     before { subject }
-    #
-    #     it 'remove the member' do
-    #       invite.reload
-    #       expect(invite).to be_expired
-    #     end
-    #
-    #     it 'returns a partial representation of the entity' do
-    #       organization.reload
-    #       expect(JSON.parse(response.body)).to eq(partial_hash_for_members(organization))
-    #     end
-    #   end
-    # end
 
-    # describe "PUT update_support_plan" do
-    #   let(:user) { build(:user) }
-    #   let(:organization) { build(:organization) }
-    #
-    #   before { allow_any_instance_of(CreditCard).to receive(:save_to_gateway).and_return(true) }
-    #   subject { put :update_support_plan, id: organization.id, support_plan:'concierge' }
-    #
-    #   context 'guest' do
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'unauthorized as guest' do
-    #     before { sign_in user }
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'unauthorized as member' do
-    #     let(:role) { 'Admin' }
-    #     before { sign_in user }
-    #     before { organization.add_user(user,role) }
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'authorized' do
-    #     let(:role) { 'Super Admin' }
-    #     before { sign_in user }
-    #     before { organization.add_user(user,role) }
-    #     before { subject }
-    #
-    #     it 'updates the entity support plan' do
-    #       organization.reload
-    #       expect(organization.current_support_plan).to eq('concierge')
-    #     end
-    #
-    #     it 'returns a partial representation of the entity' do
-    #       organization.reload
-    #       expect(JSON.parse(response.body)).to eq(partial_hash_for_organization(organization))
-    #     end
-    #   end
-    # end
+      before { api_stub_for(put: "/org_invites/#{org_invite.id}")}
 
-    # describe "POST training_session_req" do
-    #   let(:user) { build(:user) }
-    #   let(:organization) { build(:organization) }
-    #
-    #   before { allow_any_instance_of(CreditCard).to receive(:save_to_gateway).and_return(true) }
-    #   subject { post :training_session_req, id: organization.id, message: 'I would like to be trained on blabla' }
-    #
-    #   context 'guest' do
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context 'unauthorized as guest' do
-    #     before { sign_in user }
-    #     before { subject }
-    #     it { expect(response.code).to eq("401") }
-    #   end
-    #
-    #   context '#NO concierge support' do
-    #     before { sign_in user }
-    #     before { organization.add_user(user) }
-    #     before { subject }
-    #
-    #     it { expect(response.code).to eq("400") }
-    #   end
-    #
-    #   context 'authorized' do
-    #     let(:now) { Time.new("2014-01-01") }
-    #     before {
-    #       Timecop.freeze(now) do
-    #         organization.update_support_plan('concierge')
-    #       end
-    #     }
-    #     before { sign_in user }
-    #     before { organization.add_user(user) }
-    #     let(:delay) { double(:delay) }
-    #     before { PartnerMailer.stub(:delay).and_return(delay) }
-    #
-    #     it "sends an email to the account manager with the customer's enquiry" do
-    #       Timecop.freeze(now + 6.months) do
-    #         expect(delay).to receive(:contact_partner).with({"message"=>"I would like to be trained on blabla", "first_name"=>user.name, "last_name"=>user.surname, "email"=>user.email})
-    #         subject
-    #       end
-    #     end
-    #
-    #     it "consume a custom training session credit" do
-    #       delay.stub(:contact_partner).and_return(true)
-    #       Timecop.freeze(now + 8.months) do
-    #         subject
-    #         expect(organization.support_plan.custom_training_credits).to eq(0)
-    #       end
-    #     end
-    #
-    #     it 'returns a partial representation of the entity' do
-    #       delay.stub(:contact_partner).and_return(true)
-    #       Timecop.freeze(now + 6.months) do
-    #         subject
-    #         organization.reload
-    #         expect(JSON.parse(response.body)).to eq(partial_hash_for_organization(organization))
-    #       end
-    #     end
-    #   end
-    # end
+      let(:email) { 'somemember@maestrano.com' }
+      let(:role) { 'Admin' }
+      let(:params) { { email: email, role: role} }
+      subject { put :update_member, id: organization.id, member: params }
 
-    # describe "PUT update_meta_data" do
-    #   let(:user) { build(:user) }
-    #   let(:organization) { build(:organization) }
-    #   subject { put :update_meta_data, name:'field_example', value:'test', id: organization.id }
-    #
-    #   context "when organization has update rights" do
-    #     let(:role) { 'Super Admin' }
-    #     before { sign_in user }
-    #     before { organization.add_user(user,role) }
-    #
-    #     it { expect(subject).to be_success }
-    #
-    #     it "calls put_meta_data with the rights args" do
-    #       Organization.any_instance.should_receive(:put_meta_data).with('field_example','test')
-    #       subject
-    #     end
-    #   end
-    #
-    #   context "when user is not logged in" do
-    #     before { sign_in user }
-    #     before { organization.add_user(user) }
-    #
-    #     it "is not successful" do
-    #       expect(subject).to_not be_success
-    #     end
-    #   end
-    # end
+      it_behaves_like "jpi v1 authorizable action"
 
+      context 'with user' do
+        let(:member) { build(:user) }
+        let(:email) { member.email }
+        # No verifying double as this rely on method_missing and proxying
+        let(:collection) { double('Her::Collection') }
+
+        before do
+          allow(collection).to receive(:to_a).and_return([member])
+          allow(organization).to receive(:users).and_return(collection)
+        end
+
+        # Happy path
+        it 'updates the member role' do
+          expect(collection).to receive(:update).with(id: member.id, role: params[:role])
+          subject
+        end
+
+        # Exceptions
+        context 'when admin' do
+          context 'assign super admin role' do
+            let(:role) { 'Super Admin' }
+            it 'denies access' do
+              expect(subject).to_not be_successful
+              expect(subject.code).to eq('403')
+            end
+          end
+
+          context 'edit super admin' do
+            let(:member) { build(:user, role: 'Super Admin') }
+            let(:role) { 'Member' }
+
+            it 'denies access' do
+              expect(subject).to_not be_successful
+              expect(subject.code).to eq('403')
+            end
+          end
+        end
+
+        context 'last super admin changing his role' do
+          let(:user) { build(:user, role: 'Super Admin') }
+          let(:member) { user }
+          let(:role) { 'Member' }
+
+          it 'denies access' do
+            expect(subject).to_not be_successful
+            expect(subject.code).to eq('403')
+          end
+        end
+      end
+
+      context 'with invite' do
+        let(:relation) { instance_double('Her::Model::Relation') }
+
+        before do
+          allow(relation).to receive(:active).and_return(relation)
+          allow(relation).to receive(:where).and_return([org_invite])
+
+          allow(organization).to receive(:org_invites).and_return(relation)
+          # For the view
+          allow(organization).to receive(:members).and_return([org_invite])
+        end
+
+
+        # Happy Path
+        it 'updates the member role' do
+          expect(org_invite).to receive(:update).with(user_role: params[:role])
+          subject
+        end
+
+        # Exceptions
+        context 'when admin' do
+          context 'assign super admin role' do
+            let(:role) { 'Super Admin' }
+            it 'denies access' do
+              expect(subject).to_not be_successful
+              expect(subject.code).to eq('403')
+            end
+          end
+
+          context 'edit super admin' do
+            let!(:org_invite) { build(:org_invite, organization: organization, user_role: 'Super Admin') }
+            let(:role) { 'Member' }
+
+            it 'denies access' do
+              expect(subject).to_not be_successful
+              expect(subject.code).to eq('403')
+            end
+          end
+        end
+      end
+
+      it 'renders a the user list' do
+        subject
+        expect(JSON.parse(response.body)).to eq({'members' => partial_hash_for_members(organization)})
+      end
+    end
+
+    describe 'PUT #remove_member' do
+      before do
+        api_stub_for(delete: "/organizations/#{organization.id}/users/#{user.id}", response: from_api(nil))
+        api_stub_for(put: "/org_invites/#{org_invite.id}", response: from_api(nil))
+      end
+
+      let(:params) { { email: 'somemember@maestrano.com' } }
+      subject { put :remove_member, id: organization.id, member: params }
+
+      it_behaves_like "jpi v1 authorizable action"
+
+
+      context 'with user' do
+        let(:params) { { email: user.email } }
+        it 'removes the member' do
+          expect(organization).to receive(:remove_user).with(user).and_call_original
+          subject
+        end
+      end
+
+      context 'with invite' do
+        let(:relation) { instance_double('Her::Model::Relation') }
+        before do
+          allow(relation).to receive(:active).and_return(relation)
+          allow(relation).to receive(:where).and_return([org_invite])
+
+          allow(organization).to receive(:org_invites).and_return(relation)
+          # For the view
+          allow(organization).to receive(:members).and_return([org_invite])
+        end
+
+        it 'removes the member' do
+          expect(org_invite).to receive(:cancel!)
+          subject
+        end
+      end
+
+      it 'renders a the user list' do
+        subject
+        expect(JSON.parse(response.body)).to eq({'members' => partial_hash_for_members(organization)})
+      end
+    end
   end
 end
