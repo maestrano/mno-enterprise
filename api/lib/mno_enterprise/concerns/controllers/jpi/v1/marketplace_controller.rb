@@ -30,20 +30,21 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     @app = MnoEnterprise::App.find(params[:id])
   end
 
-  # POST /mnoe/jpi/v1/marketplace/:id/add_rating
-  def add_rating
+  # POST /mnoe/jpi/v1/marketplace/:id/app_review
+  def app_review
     @app = MnoEnterprise::App.find(params[:id])
     return render json: "could not find App #{params[:id]}", status: :not_found unless @app
-    rating = MnoEnterprise::AppUserRating.new(rating_params(@app.id))
-    if rating.save
-      head :created
+    @app_review = MnoEnterprise::AppReview.new(review_params(@app.id))
+    if @app_review.save
+      @app_review.reload
+      render 'app_review'
     else
-      render json: rating.errors, status: :bad_request
+      render json: @app_review.errors, status: :bad_request
     end
   end
 
-  def rating_params(app_id)
-    params.require(:app_user_rating).permit(:rating, :description, :organization_id)
+  def review_params(app_id)
+    params.require(:app_review).permit(:rating, :description, :organization_id)
       .merge(app_id: app_id, user_id: current_user.id)
   end
 

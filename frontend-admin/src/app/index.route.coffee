@@ -55,14 +55,14 @@
         label: 'Staff'
       resolve:
         skip: (MnoeCurrentUser) -> MnoeCurrentUser.skipIfNotAdmin()
-    .state 'dashboard.ratings',
+    .state 'dashboard.reviews',
       data:
-        pageTitle:'Ratings'
-      url: '/ratings'
-      templateUrl: 'app/views/ratings/ratings.html'
+        pageTitle:'Reviews'
+      url: '/reviews'
+      templateUrl: 'app/views/reviews/reviews.html'
       controllerAs: 'vm'
       ncyBreadcrumb:
-        label: 'Ratings'
+        label: 'Reviews'
       resolve:
         skip: (MnoeCurrentUser) -> MnoeCurrentUser.skipIfNotAdmin()
     .state 'dashboard.customers',

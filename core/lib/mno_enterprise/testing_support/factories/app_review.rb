@@ -1,9 +1,9 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :mno_enterprise_user_app_rating, :class => 'AppUserRating' do
+  factory :mno_enterprise_app_review, :class => 'AppReview' do
 
-    factory :app_user_rating, class: MnoEnterprise::AppUserRating do
+    factory :app_review, class: MnoEnterprise::AppReview do
       sequence(:id)
       description 'Some Description'
       status 'approved'

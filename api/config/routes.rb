@@ -93,7 +93,7 @@ MnoEnterprise::Engine.routes.draw do
     namespace :v1 do
       resources :marketplace, only: [:index, :show] do
         member do
-          put :add_rating
+          post :app_review
         end
       end
       resource :current_user, only: [:show, :update] do
@@ -154,7 +154,7 @@ MnoEnterprise::Engine.routes.draw do
       namespace :admin, defaults: {format: 'json'} do
         resources :audit_events, only: [:index]
         resources :app_instances, only: [:destroy], shallow: true
-        resources :app_user_ratings, only: [:index, :show,  :update]
+        resources :app_reviews, only: [:index, :show,  :update]
         resources :users, only: [:index, :show, :destroy, :update, :create] do
           collection do
             get :count
