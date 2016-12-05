@@ -20,12 +20,6 @@ module MnoEnterprise
 
     # TODO KPI DISABLED TEST CASES
 
-
-    # Tenant kpi_enabled feature authentication
-    let(:kpi_enabled) { true }
-    let(:tenant) { build(:tenant, kpi_enabled: kpi_enabled) }
-    before { api_stub_for(get: '/tenant', response: from_api(tenant)) }
-
     # Stub the dashboard owner
     before { allow_any_instance_of(MnoEnterprise::Impac::Dashboard).to receive(:owner).and_return(user) }
 
