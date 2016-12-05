@@ -22,7 +22,7 @@ FactoryGirl.define do
     stack 'cube'
     terms_url "http://opensource.org/licenses/MIT"
     appinfo { {} }
-    ratings { [{id: 'id', rating: 1, description: 'description', status: 'validated', user_id: 15, user_name: 'toto', app_id: 12, app_name: 'app name', organization_id: 'org-id', organization_name: 'org-name', created_at: nil, updated_at: nil}] }
+    reviews { [{id: 'id', rating: 1, description: 'description', status: 'validated', user_id: 15, user_name: 'toto', app_id: 12, app_name: 'app name', organization_id: 'org-id', organization_name: 'org-name', created_at: nil, updated_at: nil}] }
     average_rating 1
     sequence(:rank) { |n| n }
     pricing_plans { {
