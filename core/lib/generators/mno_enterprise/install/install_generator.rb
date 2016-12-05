@@ -24,6 +24,8 @@ module MnoEnterprise
 
         template "config/application.yml", "config/application.yml"
         template "config/application.yml", "config/application.sample.yml"
+
+        template "config/newrelic.yml", "config/newrelic.yml"
       end
 
       def setup_assets
