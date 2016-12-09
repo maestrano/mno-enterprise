@@ -36,8 +36,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # PUT /mnoe/jpi/v1/current_user/register_developer
   def register_developer
     @user = current_user
+    metadata = {developer: true}
     if @user.update(developer: true)
-      MnoEnterprise::EventLogger.info('register_developer', current_user.id, "User developer register", @user)
+      MnoEnterprise::EventLogger.info('register_developer', current_user.id, "User developer register", metadata, @user)
       render :show
     else
       render json: @user.errors, status: :bad_request

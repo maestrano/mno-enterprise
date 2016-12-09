@@ -8,6 +8,16 @@ module MnoEnterprise
     basic_auth MnoEnterprise.tenant_id, MnoEnterprise.tenant_key
 
     def info(key, current_user_id, description, metadata, object)
+      p 'key'
+      p key
+      p 'current_user_id'
+      p current_user_id
+      p 'description'
+      p description
+      p 'metadata'
+      p metadata
+      p 'object'
+      p object
       self.class.post('', body: {
         data: {
           key: key,

@@ -18,6 +18,7 @@ module MnoEnterprise
     def self.info(key, current_user_id, description, metadata, object)
       # Bypass Job queuing in specs or we'd have to stub lots of Her call for the deserialization
       # TODO: improve
+      p Rails.env.test?
       if Rails.env.test?
         self.send_info(key, current_user_id, description, metadata, object)
       else
