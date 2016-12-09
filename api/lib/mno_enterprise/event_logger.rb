@@ -21,6 +21,7 @@ module MnoEnterprise
       subject_id = object.id
       # TODO: improve
       # Bypass Job queuing in specs or we'd have to stub lots of Her call for the deserialization
+      p Rails.env.test?
       if Rails.env.test?
         self.send_info(key, current_user_id, description, subject_type, subject_id, formatted_metadata)
       else
