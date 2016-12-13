@@ -23,6 +23,6 @@ module MnoEnterprise::Concerns::Models::IntercomUser
   # Return intercom user hash
   # This is used in secure mode
   def intercom_user_hash
-    OpenSSL::HMAC.hexdigest('sha256', MnoEnterprise.intercom_api_secret, (self.id || self.email).to_s)
+    OpenSSL::HMAC.hexdigest('sha256', MnoEnterprise.intercom_api_secret, (self.id || self.email).to_s) if MnoEnterprise.intercom_api_secret
   end
 end
