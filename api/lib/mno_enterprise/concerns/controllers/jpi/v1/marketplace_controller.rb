@@ -36,8 +36,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     return render json: "could not find App #{params[:id]}", status: :not_found unless @app
     @app_review = MnoEnterprise::AppReview.new(review_params(@app.id))
     if @app_review.save
-      @app_review.reload
-      render 'app_review'
+      @app.reload
+      render :show
     else
       render json: @app_review.errors, status: :bad_request
     end
