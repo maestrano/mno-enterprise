@@ -211,6 +211,26 @@ Expose the following environments variables (via `application.yml` or your prefe
 
 ```
 INTERCOM_APP_ID
+INTERCOM_TOKEN
+```
+
+If you want to enable secure mode (recommended), expose `INTERCOM_API_SECRET`.
+
+If you built your app with an older version of mno-enterprise, double-check that `config/initializer/mno-enteprise.rb` contains the following lines:
+
+```ruby
+# Intercom
+config.intercom_app_id = ENV['INTERCOM_APP_ID']
+config.intercom_api_secret = ENV['INTERCOM_API_SECRET']
+config.intercom_token = ENV['INTERCOM_TOKEN']
+```
+
+#### (Deprecated) Using API Keys
+
+Expose the following environments variables (via `application.yml` or your preferred method)
+
+```
+INTERCOM_APP_ID
 INTERCOM_API_KEY
 INTERCOM_API_SECRET
 ```
