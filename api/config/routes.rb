@@ -94,6 +94,7 @@ MnoEnterprise::Engine.routes.draw do
       resources :marketplace, only: [:index, :show] do
         member do
           post :app_review
+          get :app_reviews
         end
       end
       resource :current_user, only: [:show, :update] do

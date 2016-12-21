@@ -15,7 +15,3 @@ json.average_rating app.average_rating
 if app.logo
   json.logo app.logo.to_s
 end
-
-json.reviews app.reviews do |app_review|
-  json.partial! 'app_review', app_review: app_review
-end

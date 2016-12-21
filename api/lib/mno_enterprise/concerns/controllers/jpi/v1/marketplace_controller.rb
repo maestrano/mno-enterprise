@@ -30,6 +30,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     @app = MnoEnterprise::App.find(params[:id])
   end
 
+  # GET /mnoe/jpi/v1/marketplace/:id/app_comments
+  def app_reviews
+    @app_reviews = MnoEnterprise::App.find(params[:id]).reviews
+    return render json: "could not find Reviews for app #{params[:id]}", status: :not_found unless @app_reviews
+    render 'app_reviews'
+  end
+
   # POST /mnoe/jpi/v1/marketplace/:id/app_review
   def app_review
     @app = MnoEnterprise::App.find(params[:id])
