@@ -32,7 +32,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
 
   # GET /mnoe/jpi/v1/marketplace/:id/app_comments
   def app_reviews
-    @app_reviews = MnoEnterprise::App.find(params[:id]).reviews
+    res = MnoEnterprise::AppReview.where(reviewable_id: params[:id])
+    res.limit(params[:limit]) if params[:limit]
+    res.skip(params[:offset]) if params[:offset]
+    res.order_by(params[:order_by]) if params[:order_by]
+    res.where(params[:where]) if params[:where]
+    @app_reviews = res.all.fetch
+    response.headers['X-Total-Count'] = @app_reviews.metadata[:pagination][:count]
     return render json: "could not find Reviews for app #{params[:id]}", status: :not_found unless @app_reviews
     render 'app_reviews'
   end
