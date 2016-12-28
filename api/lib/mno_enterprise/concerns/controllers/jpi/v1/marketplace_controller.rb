@@ -39,8 +39,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     res.where(params[:where]) if params[:where]
     @app_reviews = res.all.fetch
     response.headers['X-Total-Count'] = @app_reviews.metadata[:pagination][:count]
-    return render json: "could not find Reviews for app #{params[:id]}", status: :not_found unless @app_reviews
-    render 'app_reviews'
   end
 
   # POST /mnoe/jpi/v1/marketplace/:id/app_review

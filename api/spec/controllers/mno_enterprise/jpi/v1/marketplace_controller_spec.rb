@@ -37,7 +37,6 @@ module MnoEnterprise
         'rank' => app.rank,
         'multi_instantiable' => app.multi_instantiable,
         'subcategories' => app.subcategories,
-        'reviews' => app.reviews,
         'average_rating' => app.average_rating,
       }
     end
