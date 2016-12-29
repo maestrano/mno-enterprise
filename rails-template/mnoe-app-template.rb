@@ -1,3 +1,105 @@
+# Match the mno-enterprise rails dependency
+RAILS_REQUIREMENT = ["~> 4.2", ">= 4.2.0"]
+
+def apply_template!
+  assert_compatible_rails_version
+  assert_valid_options
+
+  # Rebuild the Gemfile from scratch
+  template 'templates/Gemfile', 'Gemfile', force: true
+
+  copy_file 'files/gitignore', '.gitignore', force: true
+  template 'templates/ruby-version.tt', '.ruby-version'
+
+  # Add test tasks
+  rakefile("test.rake") do <<-EOF
+  # Don't crash in production
+  begin
+    require 'bundler/audit/task'
+    require 'rubocop/rake_task'
+    require 'rspec/core/rake_task'
+
+    Bundler::Audit::Task.new
+    RuboCop::RakeTask.new
+    RSpec::Core::RakeTask.new(:spec)
+  rescue LoadError
+  end
+
+  namespace :test do
+    desc 'Run all tests'
+    task all: :environment do
+      Rake::Task['bundle:audit'].invoke
+      Rake::Task['brakeman:run'].invoke
+      Rake::Task['rubocop'].invoke
+      Rake::Task['spec'].invoke
+    end
+  end
+
+  task :test do
+    Rake::Task['test:all'].invoke
+  end
+
+  # Running `rake` runs all the tests.
+  task default: :test
+  EOF
+  end
+
+  # Create uat environment
+  copy_file File.join(destination_root, 'config/environments/production.rb'), 'config/environments/uat.rb'
+
+  # Edit config/environments/*.rb
+  Dir["config/environments/*.rb"].each do |file|
+    insert_into_file file, "\n  config.action_mailer.default_url_options = {host: 'localhost:7000'}\n", before: /^end$/
+  end
+
+  # secrets
+  append_to_file 'config/secrets.yml' do
+    'uat:
+    secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>'
+  end
+
+  after_bundle do
+    #
+    # Cleanup
+    #
+    remove_dir 'app/views'
+    remove_dir 'app/mailers'
+    remove_dir 'test'
+
+    application do <<-RUBY
+      config.generators do |g|
+        g.test_framework :rspec, fixture: false
+        g.view_specs false
+        g.helper_specs false
+      end
+    RUBY
+    end
+
+    # Setup test environment
+    generate 'rspec:install'
+    run 'brakeman --rake'
+    run 'rubocop --auto-gen-config'
+
+    remove_file '.rubocop.yml'
+    copy_file 'files/rubocop.yml', '.rubocop.yml'
+
+    # Install mnoe
+    generate 'mno_enterprise:install'
+
+    # Git: Initialize
+    # ==================================================
+    if yes?("Do you want to initalize a git repository for this new app?")
+      git :init
+      git add: "."
+      git commit: "-a -m 'Initial commit'"
+    end
+  end
+end
+
+# ==================================================
+# Here be dragons. Thou art forewarned
+# ==================================================
+
 require 'shellwords'
 
 #
@@ -30,6 +132,7 @@ def source_paths
   Array(super) + [current_directory]
 end
 
+# Monkey patched from Rails::Generators::AppBase
 # Only use gems list for database (we manage the rest ourself)
 def gemfile_entries
   [database_gemfile_entry,
@@ -37,94 +140,31 @@ def gemfile_entries
    @extra_entries].flatten.find_all(&@gem_filter)
 end
 
-#
-# Rebuild the Gemfile from scratch
-remove_file 'Gemfile'
-template 'templates/Gemfile', 'Gemfile'
+# Ensure we're using a compatible Rails version
+def assert_compatible_rails_version
+  requirement = Gem::Requirement.new(RAILS_REQUIREMENT)
+  rails_version = Gem::Version.new(Rails::VERSION::STRING)
+  return if requirement.satisfied_by?(rails_version)
 
-remove_file '.gitignore'
-copy_file 'files/gitignore', '.gitignore'
-
-# Add test tasks
-rakefile("test.rake") do <<-EOF
-# Don't crash in production
-begin
-  require 'bundler/audit/task'
-  require 'rubocop/rake_task'
-  require 'rspec/core/rake_task'
-
-  Bundler::Audit::Task.new
-  RuboCop::RakeTask.new
-  RSpec::Core::RakeTask.new(:spec)
-rescue LoadError
+  prompt = "This template requires Rails #{RAILS_REQUIREMENT}. "\
+           "You are using #{rails_version}. Continue anyway?"
+  exit 1 if no?(prompt)
 end
 
-namespace :test do
-  desc 'Run all tests'
-  task all: :environment do
-    Rake::Task['bundle:audit'].invoke
-    Rake::Task['brakeman:run'].invoke
-    Rake::Task['rubocop'].invoke
-    Rake::Task['spec'].invoke
-  end
-end
-
-task :test do
-  Rake::Task['test:all'].invoke
-end
-
-# Running `rake` runs all the tests.
-task default: :test
-EOF
-end
-
-# Create uat environment
-copy_file File.join(destination_root, 'config/environments/production.rb'), 'config/environments/uat.rb'
-
-# Edit config/environments/*.rb
-Dir["config/environments/*.rb"].each do |file|
-  insert_into_file file, "\n  config.action_mailer.default_url_options = {host: 'localhost:7000'}\n", before: /^end$/
-end
-
-# secrets
-append_to_file 'config/secrets.yml' do
-  'uat: 
-  secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>'
-end
-
-after_bundle do
-  #
-  # Cleanup
-  #
-  remove_dir 'app/views'
-  remove_dir 'app/mailers'
-  remove_dir 'test'
-
-  application do <<-RUBY
-    config.generators do |g|
-      g.test_framework :rspec, fixture: false
-      g.view_specs false
-      g.helper_specs false
+# Exit if the user has used invalid generator options.
+def assert_valid_options
+  valid_options = {
+    skip_gemfile: false,
+    skip_bundle: false,
+    skip_git: false
+  }
+  valid_options.each do |key, expected|
+    next unless options.key?(key)
+    actual = options[key]
+    unless actual == expected
+      fail Rails::Generators::Error, "Unsupported option: #{key}=#{actual}"
     end
-  RUBY
-  end
-
-  # Setup test environment
-  generate 'rspec:install'
-  run 'brakeman --rake'
-  run 'rubocop --auto-gen-config'
-
-  remove_file '.rubocop.yml'
-  copy_file 'files/rubocop.yml', '.rubocop.yml'
-
-  # Install mnoe
-  generate 'mno_enterprise:install'
-
-  # Git: Initialize
-  # ==================================================
-  if yes?("Do you want to initalize a git repository for this new app?")
-    git :init
-    git add: "."
-    git commit: "-a -m 'Initial commit'"
   end
 end
+
+apply_template!
