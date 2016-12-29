@@ -1,6 +1,8 @@
 impac:
   paths:
     mnohub_api: /mnoe/jpi/v1
+  pusher:
+    key: <%= ENV['impac_pusher_key'] %>
 mno:
   paths:
     root: /api/mnoe/v1
