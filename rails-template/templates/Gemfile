@@ -44,8 +44,8 @@ group :development do
   gem 'bundler-audit', require: false
 
   # Style check
-  gem 'rubocop', '~> 0.39', require: false
-  gem 'rubocop-rspec', require: false
+  gem 'rubocop', '~> 0.46', require: false
+  gem 'rubocop-rspec', '~> 1.8.0', require: false
 end
 
 group :development, :test do
