@@ -79,4 +79,10 @@ module MnoEnterprise::TestingSupport::JpiV1TestHelper
     end
   end
 
+  shared_examples_for "a paginated action" do
+    it 'adds the pagination metadata' do
+      subject
+      expect(response.headers['X-Total-Count']).to be_a(Fixnum)
+    end
+  end
 end
