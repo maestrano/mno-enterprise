@@ -93,7 +93,7 @@ MnoEnterprise::Engine.routes.draw do
     namespace :v1 do
       resources :marketplace, only: [:index, :show] do
         member do
-          post :app_review
+          resources :app_reviews, only: [:index, :create]
         end
       end
       resource :current_user, only: [:show, :update] do

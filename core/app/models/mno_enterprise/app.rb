@@ -35,6 +35,11 @@ module MnoEnterprise
                :popup_description, :stack, :terms_url, :pictures, :tags, :api_key, :metadata_url, :metadata, :details, :rank, :multi_instantiable, :subcategories, :reviews, :average_rating
 
 
+    #================================
+    # Associations
+    #================================
+    has_many :reviews, class_name: 'AppReview'
+
     # Return the list of available categories
     def self.categories(list = nil)
       app_list = list || self.all.to_a
