@@ -1,4 +1,6 @@
 require 'fileutils'
+require 'erb'
+require 'rake/clean'
 
 #=============================================
 # Enterprise Express Tasks
@@ -6,85 +8,109 @@ require 'fileutils'
 # Enterprise Express related tasks
 namespace :mnoe do
   namespace :frontend do
+    # Default version
+    MNOE_ANGULAR_VERSION = "1.0.x"
+    IMPAC_ANGULAR_VERSION = "1.4.x"
+
+    # Final build
     frontend_dist_folder = "public/dashboard"
+    # Local overrides
     frontend_project_folder = 'frontend'
+    # Tmp build
     frontend_tmp_folder = 'tmp/build/frontend'
-    frontend_bower_folder = 'bower_components/mno-enterprise-angular'
-
+    # Frontend package
+    FRONTEND_PKG_FOLDER = 'node_modules/mno-enterprise-angular'
+    PKG_FILE = 'package.json'
     # Use bundled gulp
-    gulp = "./node_modules/.bin/gulp"
+    gulp_cmd = "./node_modules/.bin/gulp"
 
-    desc "Install dependencies"
-    task :install_dependencies do
-      # Install required tools
-      sh("which bower || npm install -g bower")
+    ## Helper methods
+
+    def render_template(template_file, output_file, binding = nil)
+      File.open(output_file, "w+") do |f|
+        f.write(ERB.new(File.read(template_file)).result(binding))
+      end
+    end
+
+    # Get yarn resolution for impac-angular
+    # This will need to be extended for multiple components later
+    def resolve_dependencies
+      yarn_lockfile = 'yarn.lock'
+      regexp = /^\s+resolved (.*impac-angular.*)$/
+
+      File.exist?(yarn_lockfile) || raise("No lockfile found. Run install first")
+      File.open(yarn_lockfile) { |file| file.find { |line| line =~ regexp } }
+      Regexp.last_match(1)
+    end
+
+    # Override the frontend bower.json with the locked versions
+    def override_frontend_dependencies
+      resolved_version = resolve_dependencies
+      unless resolved_version
+        puts "No impac-angular override. Skipping"
+        return
+      end
+
+      frontend_bower_file = File.join(FRONTEND_PKG_FOLDER, 'bower.json')
+      File.exist?(frontend_bower_file) || raise("Frontend bower file not found.")
+
+      # Override the bowerfile
+      bower_regexp = /"impac-angular": (".*")/
+
+      # TODO: refactor
+      IO.write(frontend_bower_file, File.open(frontend_bower_file) do |f|
+        f.read.gsub(bower_regexp) do |match|
+          match.gsub!(Regexp.last_match(1), resolved_version)
+        end
+      end
+      )
+    end
+
+    ## Tasks
+    # TODO: replace with yarn install commands to get latest version
+    desc "Yarn package file"
+    file PKG_FILE do
+      # Binding values for the templates
+      app_name = Rails.root.basename
+      mnoe_angular_pkg = "git+https://git@github.com/maestrano/mno-enterprise-angular.git##{MNOE_ANGULAR_VERSION}"
+      impac_angular_pkg = "git+https://git@github.com/maestrano/impac-angular.git##{IMPAC_ANGULAR_VERSION}"
+
+      render_template(
+        File.join(File.expand_path(File.dirname(__FILE__)),'templates','package.json'),
+        PKG_FILE,
+        binding
+      )
     end
 
     desc "Setup the Enterprise Express frontend"
-    task install: :install_dependencies do
-      # TODO: replace with a frontend download task without using bower
-      # Setup bower and dependencies
-      bower_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','bower.json')
-      cp(bower_src, 'bower.json')
-      sh("bower install --quiet")
+    task :install do
+      Rake::Task['mnoe:frontend:install_frontend'].invoke
 
-      # Create frontend override folder
-      mkdir_p(frontend_project_folder)
-      touch "#{frontend_project_folder}/.keep"
-
-      # Bootstrap override folder
-      # Replace relative image path by absolute path in the LESS files
-      mkdir_p("#{frontend_project_folder}/src/app/stylesheets")
-      ['src/app/stylesheets/theme.less','src/app/stylesheets/variables.less'].each do |path|
-        next if File.exists?("#{frontend_project_folder}/#{path}")
-
-        # Generate file from template
-        cp("#{frontend_bower_folder}/#{path}","#{frontend_project_folder}/#{path}")
-
-        # Replace image relative path
-        content = File.read("#{frontend_project_folder}/#{path}")
-        File.open("#{frontend_project_folder}/#{path}", 'w') do |f|
-          f << content.gsub("../images", File.join(frontend_dist_folder.gsub("public",""),"images"))
-        end
-      end
-
-      # Setup theme previewer working files so we can safely include
-      # them in main.less
-      ['theme-previewer-tmp.less','theme-previewer-published.less'].each do |filename|
-        FileUtils.touch(File.join(Rails.root,"frontend/src/app/stylesheets/#{filename}"))
-      end
-
-      # Create custom fonts files so we can safely include them in main.less
-      frontend_font_folder = File.join(frontend_project_folder, 'src/fonts')
-      unless File.exists?(File.join(frontend_font_folder, 'font-faces.less'))
-        font_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','font-faces.less')
-
-        mkdir_p(frontend_font_folder)
-        cp(font_src, frontend_font_folder)
-      end
+      # Bootstrap frontend folder
+      Rake::Task['mnoe:frontend:bootstrap_override_folder'].invoke
 
       # Build the frontend
-      Rake::Task['mnoe:frontend:dist'].invoke
+      Rake::Task['mnoe:frontend:build'].invoke
       #Rake::Task['assets:precompile'].invoke
     end
 
-    desc "Rebuild the Enterprise Express frontend"
-    task :dist do
+    desc "Build/Rebuild the Enterprise Express frontend"
+    task :build do
       # Prepare the build folder
       Rake::Task['mnoe:frontend:prepare_build_folder'].execute
 
       # Build frontend using Gulp
       Dir.chdir(frontend_tmp_folder) do
-        sh "npm install"
-        sh gulp
-        sh "#{gulp} less-concat"
+        sh "yarn install"
+        sh gulp_cmd
+        sh "#{gulp_cmd} less-concat"
       end
 
       # Ensure distribution folder exists
       mkdir_p frontend_dist_folder
 
       # Cleanup previously compiled files
-      Dir.glob("#{frontend_dist_folder}/{styles,scripts}/app-*.{css,js}").each do |f|
+      Dir.glob("#{frontend_dist_folder}/{styles,scripts}/*.{css,js}").each do |f|
         rm_f f
       end
 
@@ -102,7 +128,85 @@ namespace :mnoe do
       end
     end
 
-    desc "Rebuild the Live Previewer Style"
+    # Alias to dist for backward compatibility
+    task dist: :build
+
+    desc "Update the frontend and rebuild it"
+    task update: :install_dependencies do
+      # Fetch new version of the packages
+      sh "yarn upgrade --ignore-scripts --ignore-engines"
+
+      # Override frontend dependencies
+      puts "Locking frontend dependencies"
+      override_frontend_dependencies
+
+      # Cleanup
+      rm_rf "#{frontend_tmp_folder}/bower_components"
+
+      # Rebuild the frontend
+      Rake::Task['mnoe:frontend:build'].execute
+    end
+
+    # Install dependencies
+    task :install_dependencies do
+      unless system("which yarn")
+        puts 'Yarn executable was not detected in the system.'
+        puts 'Download Yarn at https://yarnpkg.com/en/docs/install'
+        raise
+      end
+
+      # Install required tools
+      sh("which bower || npm install -g bower")
+    end
+
+    # Create & populate the frontend override folder
+    task :bootstrap_override_folder do
+      # Create frontend override folder
+      mkdir_p(frontend_project_folder)
+      touch "#{frontend_project_folder}/.keep"
+
+      # Bootstrap override folder
+      # Replace relative image path by absolute path in the LESS files
+      mkdir_p("#{frontend_project_folder}/src/app/stylesheets")
+      ['src/app/stylesheets/theme.less','src/app/stylesheets/variables.less'].each do |path|
+        next if File.exist?("#{frontend_project_folder}/#{path}")
+
+        # Generate file from template
+        cp("#{FRONTEND_PKG_FOLDER}/#{path}","#{frontend_project_folder}/#{path}")
+
+        # Replace image relative path
+        content = File.read("#{frontend_project_folder}/#{path}")
+        File.open("#{frontend_project_folder}/#{path}", 'w') do |f|
+          f << content.gsub("../images", File.join(frontend_dist_folder.gsub("public",""),"images"))
+        end
+      end
+
+      # Setup theme previewer working files so we can safely include
+      # them in main.less
+      ['theme-previewer-tmp.less','theme-previewer-published.less'].each do |filename|
+        FileUtils.touch(File.join(Rails.root,"frontend/src/app/stylesheets/#{filename}"))
+      end
+
+      # Create custom fonts files so we can safely include them in main.less
+      frontend_font_folder = File.join(frontend_project_folder, 'src/fonts')
+      unless File.exist?(File.join(frontend_font_folder, 'font-faces.less'))
+        font_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','font-faces.less')
+
+        mkdir_p(frontend_font_folder)
+        cp(font_src, frontend_font_folder)
+      end
+    end
+
+    task install_frontend: [:install_dependencies, PKG_FILE] do
+      # Fetch the packages
+      sh("yarn install --ignore-scripts --ignore-engines")
+
+      # Override frontend dependencies
+      puts "Locking frontend dependencies"
+      override_frontend_dependencies
+    end
+
+    # Rebuild the Live Previewer Style
     task :rebuild_previewer_style do
       # Prepare the build folder
       Rake::Task['mnoe:frontend:prepare_build_folder'].execute
@@ -125,28 +229,25 @@ namespace :mnoe do
       end
     end
 
-    desc "Reset the frontend build folder and apply local customisations"
+    # Reset the frontend build folder and apply local customisations
     task :prepare_build_folder do
       # Ensure frontend is downloaded
-      sh("[ -d #{frontend_bower_folder} ] || bower install")
+      Rake::Task['mnoe:frontend:install_frontend'].invoke unless File.directory?(FRONTEND_PKG_FOLDER)
 
       # Reset tmp folder from mno-enterprise-angular source
       rm_rf "#{frontend_tmp_folder}/src"
       rm_rf "#{frontend_tmp_folder}/e2e"
       mkdir_p frontend_tmp_folder
-      cp_r("#{frontend_bower_folder}/.","#{frontend_tmp_folder}/")
+      cp_r("#{FRONTEND_PKG_FOLDER}/.", "#{frontend_tmp_folder}/")
 
       # Apply frontend customisations
-      cp_r("#{frontend_project_folder}/.","#{frontend_tmp_folder}/")
+      cp_r("#{frontend_project_folder}/.", "#{frontend_tmp_folder}/")
     end
 
-    desc "Update the frontend and rebuild it"
-    task :update do
-      # Run bower to get a new version of the frontend
-      sh "bower update"
-
-      # Rebuild the frontend
-      Rake::Task['mnoe:frontend:dist'].execute
+    desc "Remove all generated files"
+    task :clean do
+      clean = FileList[frontend_tmp_folder, frontend_dist_folder, FRONTEND_PKG_FOLDER, 'node_modules/.yarn-integrity']
+      Rake::Cleaner.cleanup_files(clean)
     end
   end
 end
