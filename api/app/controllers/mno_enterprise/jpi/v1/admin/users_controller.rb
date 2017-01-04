@@ -31,7 +31,6 @@ module MnoEnterprise
       @user = MnoEnterprise::User.build(user_create_params)
 
       if @user.save
-        @user.resend_confirmation_instructions
         render :show
       else
         render json: @user.errors, status: :bad_request

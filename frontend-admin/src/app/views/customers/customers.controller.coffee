@@ -27,7 +27,7 @@
       )
   )
 
-  $scope.$on('$destroy', () =>
+  $scope.$on('$destroy', () ->
     MnoeObservables.unsubscribe(OBS_KEYS.userChanged, processListOfUsers)
   )
 
