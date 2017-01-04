@@ -6,7 +6,7 @@
   bindings: {
     view: '@',
   }
-  controller: ($filter, $log, MnoeUsers, MnoConfirm, MnoeObservables, ADMIN_ROLES, OBS_KEYS, toastr) ->
+  controller: ($filter, $log, MnoeUsers, MnoeCurrentUser, MnoConfirm, MnoeObservables, ADMIN_ROLES, OBS_KEYS, toastr) ->
     vm = this
 
     vm.listOfStaff = []
@@ -69,6 +69,7 @@
             updateSearch()
             # Remove the edit mode for this user
             delete vm.staff.editmode[staff.id]
+            MnoeCurrentUser.updateAdminRole()
           (error) ->
             # Display an error
             $log.error('Error while saving user', error)
@@ -99,16 +100,23 @@
       ).finally(-> vm.staff.loading = false)
 
     # Initial call and start the listeners
-    fetchStaffs(vm.staff.nbItems, 0).then( ->
+    fetchStaffs(vm.staff.nbItems, 0).then(->
       # Notify me if a user is added
-      MnoeObservables.registerCb(OBS_KEYS.staffAdded, ->
-        fetchStaffs(vm.staff.nbItems, vm.staff.offset)
-      )
+      MnoeObservables.registerCb(OBS_KEYS.staffAdded, onStaffAdded)
       # Notify me if the list changes
-      MnoeObservables.registerCb(OBS_KEYS.staffChanged, ->
-        fetchStaffs(vm.staff.nbItems, vm.staff.offset)
-      )
+      MnoeObservables.registerCb(OBS_KEYS.staffChanged, onStaffChanged)
     )
+
+    onStaffAdded = ->
+      fetchStaffs(vm.staff.nbItems, vm.staff.offset)
+
+    onStaffChanged = ->
+      fetchStaffs(vm.staff.nbItems, vm.staff.offset)
+
+    this.$onDestroy = ->
+      MnoeObservables.unsubscribe(OBS_KEYS.staffAdded, onStaffAdded)
+      MnoeObservables.unsubscribe(OBS_KEYS.staffChanged, onStaffChanged)
+
     return
 
 })

@@ -7,7 +7,7 @@
 # fork of the upstream library
 
 
-@App.service 'MnoeCurrentUser', (MnoeApiSvc, $window, $state, $q) ->
+@App.service 'MnoeCurrentUser', ($window, $state, $q, $timeout, MnoeApiSvc) ->
   _self = @
 
   # Store the current_user promise

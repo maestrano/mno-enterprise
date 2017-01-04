@@ -5,7 +5,7 @@
   @list = (limit, offset, sort) ->
     promise = MnoeAdminApiSvc.all('users').getList({order_by: sort, limit: limit, offset: offset}).then(
       (response) ->
-        MnoeObservables.notifyObservers(OBS_KEYS.userChanged, promise)
+        MnoeObservables.notifyObservers(OBS_KEYS.userChanged, response)
         response
     )
 
@@ -49,7 +49,7 @@
   # Update the admin-role of a staff to nothing
   # UPDATE /mnoe/jpi/v1/admin/users/:id
   @removeStaff = (id) ->
-    promise = MnoeAdminApiSvc.one('users', id).patch({admin_role: ""}).then(
+    promise = MnoeAdminApiSvc.one('users', id).patch({admin_role: null}).then(
       (response) ->
         MnoeObservables.notifyObservers(OBS_KEYS.staffChanged, promise)
       (error) ->
@@ -67,6 +67,11 @@
   # POST /mnoe/jpi/v1/admin/users/signup_email
   @sendSignupEmail = (email) ->
     MnoeAdminApiSvc.all('/users').doPOST({user: {email: email}}, 'signup_email')
+
+  # Send an email to a user with the link to the confirmation page
+  # POST /mnoe/jpi/v1/admin/users/invites
+  @sendConfirmationEmail = (email) ->
+    MnoeAdminApiSvc.all('/users').doPOST({user: {email: email}}, 'confirmation_email')
 
   _getStaffs = (limit, offset, sort, params = {}) ->
     params["order_by"] = sort
