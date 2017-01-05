@@ -107,14 +107,10 @@
     onStaffChanged = ->
       fetchStaffs(vm.staff.nbItems, vm.staff.offset)
 
-    # Initial call and start the listeners
-    fetchStaffs(vm.staff.nbItems, 0).then(->
-      # Notify me if a user is added
-      MnoeObservables.registerCb(OBS_KEYS.staffAdded, onStaffAdded)
-      # Notify me if the list changes
-      MnoeObservables.registerCb(OBS_KEYS.staffChanged, onStaffChanged)
-    )
-
+    # Notify me if a user is added
+    MnoeObservables.registerCb(OBS_KEYS.staffAdded, onStaffAdded)
+    # Notify me if the list changes
+    MnoeObservables.registerCb(OBS_KEYS.staffChanged, onStaffChanged)
 
     this.$onDestroy = ->
       MnoeObservables.unsubscribe(OBS_KEYS.staffAdded, onStaffAdded)
