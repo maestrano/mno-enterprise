@@ -97,7 +97,15 @@
         (response) ->
           vm.staff.totalItems = response.headers('x-total-count')
           vm.listOfStaff = response.data
+          vm.staff.oneAdminLeft = _.filter(response.data, {'admin_role': 'admin'}).length == 1
+
       ).finally(-> vm.staff.loading = false)
+
+    onStaffAdded = ->
+      fetchStaffs(vm.staff.nbItems, vm.staff.offset)
+
+    onStaffChanged = ->
+      fetchStaffs(vm.staff.nbItems, vm.staff.offset)
 
     # Initial call and start the listeners
     fetchStaffs(vm.staff.nbItems, 0).then(->
@@ -107,11 +115,6 @@
       MnoeObservables.registerCb(OBS_KEYS.staffChanged, onStaffChanged)
     )
 
-    onStaffAdded = ->
-      fetchStaffs(vm.staff.nbItems, vm.staff.offset)
-
-    onStaffChanged = ->
-      fetchStaffs(vm.staff.nbItems, vm.staff.offset)
 
     this.$onDestroy = ->
       MnoeObservables.unsubscribe(OBS_KEYS.staffAdded, onStaffAdded)
