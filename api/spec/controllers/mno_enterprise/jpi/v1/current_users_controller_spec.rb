@@ -56,13 +56,15 @@ module MnoEnterprise
               'token' => res.deletion_request.token
           }
         end
+
+        hash['kpi_enabled'] = !!res.kpi_enabled
       end
 
       hash
     end
 
     # Stub user retrieval
-    let!(:user) { build(:user, :with_deletion_request, :with_organizations) }
+    let!(:user) { build(:user, :with_deletion_request, :with_organizations, :kpi_enabled) }
     before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
 
     describe "GET #show" do
@@ -117,9 +119,9 @@ module MnoEnterprise
       before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
       before { sign_in user }
       subject { put :register_developer}
-      
+
       describe 'logged in' do
-        before { subject }        
+        before { subject }
         it { expect(response).to be_success }
       end
     end

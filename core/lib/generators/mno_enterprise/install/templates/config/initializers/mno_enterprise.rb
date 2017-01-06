@@ -3,7 +3,7 @@ MnoEnterprise.configure do |config|
   # General Configuration
   #===============================================
   # Name of your company/application
-  config.app_name = "My Company"
+  config.app_name = 'My Company'
 
   # Fallback default country.
   # Used as default in geolocalised fields (e.g.: country, phone number)
@@ -71,10 +71,11 @@ MnoEnterprise.configure do |config|
   # Google Tag Manager
   config.google_tag_container = ENV['google_tag_container']
 
-  # Intercom
+  # Intercom (both API Keys and Personal token are supported)
+  config.intercom_token = ENV['INTERCOM_TOKEN']
   config.intercom_app_id = ENV['INTERCOM_APP_ID']
-  config.intercom_api_secret = ENV['INTERCOM_API_SECRET']
   config.intercom_api_key = ENV['INTERCOM_API_KEY']
+  config.intercom_api_secret = ENV['INTERCOM_API_SECRET']
 
   #===============================================
   # API Configuration
@@ -194,5 +195,4 @@ MnoEnterprise.configure do |config|
   #   'sales/forecast',
   #   'sales/performance'
   # ]
-
 end

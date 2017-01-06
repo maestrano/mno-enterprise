@@ -1,0 +1,8 @@
+{
+  "name": "<%= app_name %>",
+  "private": true,
+  "dependencies": {
+    "mno-enterprise-angular": "<%= mnoe_angular_pkg %>",
+    "impac-angular": "<%= impac_angular_pkg %>"
+  }
+}

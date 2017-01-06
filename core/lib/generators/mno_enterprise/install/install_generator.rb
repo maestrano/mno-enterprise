@@ -12,8 +12,12 @@ module MnoEnterprise
       class_option :skip_admin, type: :boolean, default: false, desc: 'Skip admin installation'
 
       def copy_initializer
+        # Foreman config
         template "Procfile"
         template "Procfile.dev"
+        template ".foreman"
+        template ".healthcheck"
+
         template "config/initializers/mno_enterprise.rb"
         template "config/mno_enterprise_styleguide.yml"
 
@@ -24,6 +28,8 @@ module MnoEnterprise
 
         template "config/application.yml", "config/application.yml"
         template "config/application.yml", "config/application.sample.yml"
+
+        template "config/newrelic.yml", "config/newrelic.yml"
       end
 
       def setup_assets

@@ -12,14 +12,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
 
   # GET /jpi/v1/impac/alerts
   def index
-    # Tenant must have kpi_enabled set to true to discover alerts.
-    # TODO: move kpi_enabled? to MnoHub
-    if current_tenant && current_tenant.kpi_enabled?
-      @alerts = current_user.alerts
-    else
-      # Return alerts not related to kpis
-      current_user.alerts.where(impac_kpi_id: nil)
-    end
+    @alerts = current_user.alerts
   end
 
   # POST /jpi/v1/impac/kpis/:kpi_id/alerts
@@ -79,9 +72,5 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
         attributes = params.require(:alert).merge(impac_kpi_id: kpi_id)
         MnoEnterprise::Impac::Alert.new(attributes)
       )
-    end
-
-    def current_tenant
-      @tenant ||= MnoEnterprise::Tenant.get('tenant')
     end
 end

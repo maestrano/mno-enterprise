@@ -1,2 +1,2 @@
-web: bundle exec puma -p 7000
+web: bundle exec puma
 gulp: cd ./tmp/build/frontend && node_modules/.bin/gulp serve

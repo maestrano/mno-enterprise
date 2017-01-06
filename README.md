@@ -17,24 +17,24 @@ The goal of this engine is to provide a base that you can easily extend with cus
 - - -
 
 1.  [Install](#install)
-2.  [Configuration](#configuration)
+2.  [Upgrade](#upgrade)
+3.  [Configuration](#configuration)
     1. [Emailing Platform](#emailing-platform)
     2. [Intercom](#intercom)
     3. [Active Job Backend](#active-job-backend)
-3.  [Building the Frontend](#building-the-frontend)
-4.  [Modifying the style - Theme Previewer](#modifying-the-style---theme-previewer)
-5.  [Extending the Frontend](#extending-the-frontend)
+4.  [Building the Frontend](#building-the-frontend)
+5.  [Modifying the style - Theme Previewer](#modifying-the-style---theme-previewer)
+6.  [Extending the Frontend](#extending-the-frontend)
     1. [Adding a custom font](#adding-a-custom-font)
     2. [Adding a favicon](#adding-favicon)
-6.  [Replacing the Frontend](#replacing-the-frontend)
-7.  [Extending the Backend](#extending-the-backend)
+7.  [Replacing the Frontend](#replacing-the-frontend)
+8.  [Extending the Backend](#extending-the-backend)
     1. [Overriding Models and Controllers with the Decorator Pattern](#overriding-models-and-controllers-with-the-decorator-pattern)
     2. [Generating a database extension](#generating-a-database-extension)
-8.  [Deploying](#deploying)
+9.  [Deploying](#deploying)
     1.  [Deploy a Puma stack on EC2 via Webistrano/Capistrano](#deploy-a-puma-stack-on-ec2-via-webistranocapistrano)
     2.  [Sample nginx config for I18n](#sample-nginx-config-for-i18n)
     3.  [Health Checks](#health-checks)
-9.  [Migrating from v2 to v3](#migrating-from-v2-to-v3)
 10. [Contributing](#contributing)
 
 - - -
@@ -75,12 +75,19 @@ The install script will perform three things:
 - Create a /frontend directory in your application for all frontend customisations/overrides
 
 **Manual Node setup (optional):**
-Building the frontend requires you to have nodejs and gulp install. While the rake task will attempt to install these dependencies, you may want to install these manually prior to running the install task. See the [nodejs website](https://nodejs.org/en/) for intructions on how to install node on your machine.
+Building the frontend requires you to have nodejs and yarn installed. While the rake task will attempt to install these dependencies, you may want to install these manually prior to running the install task.
+See the [nodejs](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/en/docs/install) websites for instructions on how install them on your machine.
 
 Once node is installed, you can run the following commands to ensure that all dependencies are installed:
 ```bash
 bin/rake mnoe:frontend:install_dependencies
 ```
+
+## Upgrade
+
+We follow [Semantic Versioning](https://semver.org/) so upgrading to a compatible version should be straightforward.
+
+For major upgrade between versions see [UPGRADING](UPGRADING.md).
 
 ## Configuration
 
@@ -211,6 +218,26 @@ Expose the following environments variables (via `application.yml` or your prefe
 
 ```
 INTERCOM_APP_ID
+INTERCOM_TOKEN
+```
+
+If you want to enable secure mode (recommended), expose `INTERCOM_API_SECRET`.
+
+If you built your app with an older version of mno-enterprise, double-check that `config/initializer/mno-enteprise.rb` contains the following lines:
+
+```ruby
+# Intercom
+config.intercom_app_id = ENV['INTERCOM_APP_ID']
+config.intercom_api_secret = ENV['INTERCOM_API_SECRET']
+config.intercom_token = ENV['INTERCOM_TOKEN']
+```
+
+#### (Deprecated) Using API Keys
+
+Expose the following environments variables (via `application.yml` or your preferred method)
+
+```
+INTERCOM_APP_ID
 INTERCOM_API_KEY
 INTERCOM_API_SECRET
 ```
@@ -322,11 +349,21 @@ The Maestrano Enterprise frontend is a Single Page Application (SPA) that is sep
 
 Build the frontend by running the following command:
 ```bash
-bundle exec rake mnoe:frontend:dist
+bin/rake mnoe:frontend:build
 ```
 This will create a "dashboard" directory under the /public folder with the compiled frontend.
 
 Building the frontend is only required if you modify the CSS and/or JavaScripts files under /frontend.
+
+### Upgrading the frontend
+
+To upgrade the frontend version, edit the `package.json` file if needed, then run:
+
+```
+bin/rake mnoe:frontend:update
+```
+
+This will upgrade the frontend version, respecting the constraint in `package.json`, and rebuild it.
 
 ## Modifying the style - Theme Previewer
 The Maestrano Enterprise Express frontend is bundled with a Theme Previewer allowing you to easily modify and save the style of an Express instance without reloading the page.
@@ -388,9 +425,9 @@ In some cases you may decide that the current [mno-enterprise-angular](https://g
 
 In this case we recommend cloning or copying the [mno-enterprise-angular](https://github.com/maestrano/mno-enterprise-angular) repository in a new repository so as to keep the directory structure and build (Gulp) process. From there you can completely change the frontend appearance to fit your needs.
 
-Once done you can replace the frontend source by specifying your frontend github repository in the /bower.json file. You can then build it by running the usual:
+Once done you can replace the frontend source by specifying your frontend github repository in the /package.json file. You can then build it by running the usual:
 ```bash
-bundle exec rake mnoe:frontend:dist
+bin/rake mnoe:frontend:build
 ```
 
 ## Extending the Backend
@@ -545,98 +582,6 @@ HealthCheck.setup do |config|
   # You can set what tests are run with the 'full' or 'all' parameter
   config.full_checks = %w(cache site custom database migrations)
 end
-```
-
-
-## Migrating from v2 to v3
-
-### a) Upgrade the gem
-First switch to a new branch such as v2-to-v3.
-```bash
-git co -b v2-to-v3
-```
-
-Open your Gemfile and ensure that your project points to the v3.0-dev branch of Maestrano Enterprise. You gemfile should look like this:
-```ruby
-gem 'mno-enterprise', git: 'https://some-token:x-oauth-basic@github.com/alachaum/mno-enterprise.git', branch: 'v3.0-dev'
-```
-
-Then update the gem by running
-```bash
-bundle update mno-enterprise
-```
-
-Ensure you've got node installed on your system. Some googling will surely provide you with the steps required to install Node on your machine.
-
-Rerun the Maestrano Enterprise task in your project. This task will download and compile the enterprise angular frontend.
-```bash
-bundle exec rake mno_enterprise:install
-```
-
-After running this task a new "/frontend" directory will have appeared in the root of your project. This folder will contain any customization you want to make the frontend. It should already contain a few LESS files with a default theme.
-
-### b) Reapply your style
-
-The way styling and frontend customisations are handled by the platform has changed. Everything is now located under the "/frontend" directory.
-
-In order to migrate your style, follow these instructions:
-
-- Copy the content of your /app/assets/stylesheets/theme.less.erb into /frontend/src/app/stylesheets/theme.less. Replace any ERB variable by the actual LESS value
-- Delete /app/assets/stylesheets/theme.less.erb
-- Copy the content of your /app/assets/stylesheets/variables.less into /frontend/src/app/stylesheets/variables.less.
-- Delete /app/assets/stylesheets/variables.less
-- Create the file: /app/assets/stylesheets/main.less and copy the following content to it:
-```less
-/*-----------------------------------------------------------------------*/
-/*                    Import Core LESS Framework                         */
-/*-----------------------------------------------------------------------*/
-// Import Core LESS Framework
-@import "mno_enterprise/main";
-
-/*-----------------------------------------------------------------------*/
-/*                           Customization                               */
-/*-----------------------------------------------------------------------*/
-
-// Import theme colors
-//--------------------------------------------
-@import "../../../frontend/src/app/stylesheets/theme";
-
-// Import custom variables
-//--------------------------------------------
-@import "../../../frontend/src/app/stylesheets/variables";
-
-// Import theme published by Theme Previewer
-//--------------------------------------------
-// @import "../../../frontend/src/app/stylesheets/theme-previewer-published.less";
-
-// Import any custom less file below
-//--------------------------------------------
-// @import 'homepage'
-```
-- Copy any CSS customization you have made in main.less.erb to main.less
-- Rebuild the frontend with your style
-```bash
-rake mnoe:frontend:dist
-```
-- Copy your logo in /app/assets/images/mno_enterprise/main-logo.png to /public/dashboard/images/main-logo.png
-
-Launch your application, your style should now be reapplied.
-
-### c) Caveat: Impac! endpoint
-
-The v3 is currently being finalised. There are some minor configuration options that still need to be implemented such as the "impact endpoint urls".
-
-If deploying to UAT, the Impac! URLs need to be manually replaced. Search the "/public" directory for "http://localhost:4000" and replace by "https://api-impac-uat.maestrano.io". Save the files and deploy.
-
-## Update mnoe-angular to the version in the bower.json.
-```
-rake mnoe:frontend:update
-```
-
-## Update the version of the gem according to the gemfile.
-```
-bundle update mno-enterprise
-
 ```
 
 ## Contributing

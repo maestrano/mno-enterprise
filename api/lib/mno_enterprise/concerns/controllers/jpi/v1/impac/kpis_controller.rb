@@ -10,7 +10,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     respond_to :json
 
     before_filter :find_valid_kpi, only: [:update, :delete]
-    before_filter :require_feature_enabled
   end
 
   #==================================================================
@@ -161,16 +160,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
         whitelisted[:extra_params] = p[:kpi][:extra_params] unless p[:kpi][:extra_params].blank?
       end
       .except(:metadata)
-    end
-
-    def current_tenant
-      @tenant ||= MnoEnterprise::Tenant.get('tenant')
-    end
-
-    # TODO: move to MnoHub
-    def require_feature_enabled
-      return true if current_tenant && current_tenant.kpi_enabled?
-      render_forbidden_request(action_name)
     end
 
     alias :find_valid_kpi  :kpi

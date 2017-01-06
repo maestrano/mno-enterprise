@@ -16,7 +16,10 @@ module MnoEnterprise
           # Prepare message from args
           message = { from_name: from[:name], from_email: from[:email]}
           message[:to] = [to].flatten.map { |t| {name: t[:name], email: t[:email], type: (t[:type] || :to) } }
-          message[:global_merge_vars] = vars.map { |k,v| {name: k.to_s, content: v} }
+
+          # Sanitize merge vars
+          full_sanitizer = Rails::Html::FullSanitizer.new
+          message[:global_merge_vars] = vars.map { |k,v| {name: k.to_s, content: full_sanitizer.sanitize(v)} }
 
           # Merge additional mandrill options
           message.merge!(opts)

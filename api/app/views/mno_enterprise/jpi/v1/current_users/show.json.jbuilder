@@ -43,6 +43,8 @@ json.cache! ['v1', @user.cache_key] do
           json.extract! @user.deletion_request, :id, :token
         end
       end
+
+      json.kpi_enabled !!@user.kpi_enabled
     end
   end
 end

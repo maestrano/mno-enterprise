@@ -51,7 +51,7 @@ module MnoEnterprise
       :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email,
       :failed_attempts, :unlock_token, :locked_at, :name, :surname, :company, :phone, :phone_country_code,
       :geo_country_code, :geo_state_code, :geo_city, :website, :orga_on_create, :sso_session, :current_password_required, :admin_role,
-      :api_key, :api_secret, :developer
+      :api_key, :api_secret, :developer, :kpi_enabled
 
     define_model_callbacks :validation #required by Devise
     devise :remote_authenticatable, :registerable, :recoverable, :rememberable,
