@@ -8,9 +8,9 @@ angular.module('mnoEnterprise.configuration', [])
     enabled: <%= MnoEnterprise.i18n_enabled %>,
     available_locales: <%= I18n.available_locales.to_json %>
   })
-  .constant('PRICING_CONFIG', <%= Settings.pricing.to_json %>)
-  .constant('DOCK_CONFIG', <%= Settings.dock.to_json %>)
-  .constant('DEVELOPER_SECTION_CONFIG', <%= Settings.developer.to_json %>)
+  .constant('PRICING_CONFIG', <%= (Settings.pricing || {}).to_json %>)
+  .constant('DOCK_CONFIG', <%= (Settings.dock || {}).to_json %>)
+  .constant('DEVELOPER_SECTION_CONFIG', <%= (Settings.developer || {}).to_json %>)
   .constant('GOOGLE_TAG_CONTAINER_ID', <%= MnoEnterprise.google_tag_container.to_json %>)
   .constant('INTERCOM_ID', <%= MnoEnterprise.intercom_app_id.to_json %>)
   .constant('APP_NAME', <%= MnoEnterprise.app_name.to_json %>)
