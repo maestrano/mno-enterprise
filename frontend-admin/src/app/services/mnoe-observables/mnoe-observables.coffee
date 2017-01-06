@@ -17,7 +17,4 @@
     _.pull(observersCallbacks[name], cb)
     delete observersCallbacks[name] if _.isEmpty(observersCallbacks[name])
 
-  @print =  ->
-    observersCallbacks
-
   return

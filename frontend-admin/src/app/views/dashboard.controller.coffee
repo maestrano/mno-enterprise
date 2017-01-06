@@ -29,7 +29,7 @@
     $cookies.put('admin_platform_toggle', main.toggle)
 
   main.exit = ->
-    MnoeCurrentUser.logoutIfNoOrganisation()
+    MnoeCurrentUser.logout()
 
   window.onresize = () ->
     $scope.$apply()

@@ -69,7 +69,7 @@
             updateSearch()
             # Remove the edit mode for this user
             delete vm.staff.editmode[staff.id]
-            MnoeCurrentUser.updateAdminRole()
+            MnoeCurrentUser.refreshUser()
           (error) ->
             # Display an error
             $log.error('Error while saving user', error)

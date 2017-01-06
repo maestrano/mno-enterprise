@@ -68,11 +68,6 @@
   @sendSignupEmail = (email) ->
     MnoeAdminApiSvc.all('/users').doPOST({user: {email: email}}, 'signup_email')
 
-  # Send an email to a user with the link to the confirmation page
-  # POST /mnoe/jpi/v1/admin/users/invites
-  @sendConfirmationEmail = (email) ->
-    MnoeAdminApiSvc.all('/users').doPOST({user: {email: email}}, 'confirmation_email')
-
   _getStaffs = (limit, offset, sort, params = {}) ->
     params["order_by"] = sort
     params["limit"] = limit
