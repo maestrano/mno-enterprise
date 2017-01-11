@@ -58,6 +58,7 @@ module MnoEnterprise
 
     describe 'confirmation_instructions' do
       describe 'new user' do
+        let(:user) { build(:user, :unconfirmed) }
         it do
           expect {
             subject.confirmation_instructions(user,token).deliver_now
@@ -69,15 +70,21 @@ module MnoEnterprise
       end
 
       describe 'existing user with new email address' do
-        before { allow_any_instance_of(MnoEnterprise::User).to receive(:confirmed?).and_return(true) }
-        before { allow_any_instance_of(MnoEnterprise::User).to receive(:unconfirmed_email?).and_return(true) }
+        before { user.unconfirmed_email = 'unconfirmed@test.com' }
 
-        it do
+        it 'sends confirmation to new and old email address' do
+          expect(MnoEnterprise::MailClient).to receive(:deliver).with(
+            'reconfirmation-instructions',
+            SystemNotificationMailer::DEFAULT_SENDER,
+            recipient(user).merge(email: 'unconfirmed@test.com'),
+            user_vars(user).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: token))
+          )
+
           expect {
             subject.confirmation_instructions(user,token).deliver_now
           }.to send_the_correct_user_email(
-                 'reconfirmation-instructions',
-                 confirmation_link: routes.user_confirmation_url(confirmation_token: token)
+                 'email-change',
+                 unconfirmed_email: 'unconfirmed@test.com'
           )
         end
       end
@@ -102,6 +109,14 @@ module MnoEnterprise
                'unlock-instructions',
                unlock_link: routes.user_unlock_url(unlock_token: token)
         )
+      end
+    end
+
+    describe 'password_change' do
+      it 'sends an email to notify the user' do
+        expect {
+          subject.password_change(user).deliver_now
+        }.to send_the_correct_user_email('password-change', {})
       end
     end
 

@@ -14,12 +14,23 @@ module Devise
       def remote_authentication(authentication_hash)
         self.class.authenticate(authentication_hash) # call MnoEnterprise::User.authenticate
       end
-      
+
+      included do
+        before_update :track_password_changed
+        after_update :send_password_change_notification, if: :send_password_change_notification?
+      end
+
+      def send_password_change_notification
+        send_devise_notification(:password_change)
+      end
+
       ####################################
       # Overriden methods from Devise::Models::Authenticatable
       ####################################
       module ClassMethods
-        
+        # Flag to enable password change notification
+        Devise::Models.config(self, :send_password_change_notification)
+
         # This method is called from:
         # Warden::SessionSerializer in devise
         #
@@ -41,8 +52,22 @@ module Devise
         def serialize_into_session(record)
           [record.to_key, record.authenticatable_salt]
         end
- 
+
       end
+
+      protected
+
+        # We want to send the notification once the password has changed but
+        # we won't have access to dirty attributes.
+        # Flag change before the model is saved.
+        def track_password_changed
+          @password_changed = password_changed?
+          true # before callback needs to return true to continue
+        end
+
+        def send_password_change_notification?
+          self.class.send_password_change_notification && @password_changed
+        end
     end
   end
 end
