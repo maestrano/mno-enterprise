@@ -65,6 +65,18 @@ module MnoEnterprise::Concerns::Controllers::PagesController
     end
   end
 
+  # Error page
+  def error
+    status = params[:error_code]
+    respond_to do |format|
+      format.html do
+        @meta = {title: 'Backend unavailable'}
+        render 'error_page', layout: 'mno_enterprise/public', status: status
+      end
+      format.json { render json: {error: 'API hub unavailable'}, status: status }
+    end
+  end
+
   private
     def app_instance_hash(app_instance)
       return {} unless app_instance

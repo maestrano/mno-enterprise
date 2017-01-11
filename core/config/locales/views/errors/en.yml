@@ -1,0 +1,8 @@
+en:
+  mno_enterprise:
+    errors:
+      503-title: "Looks like we're having some server issues."
+      503-context: "We will redirect you as soon as it's online. Otherwise try again in a moment."
+      429-title: "Too many requests."
+      429-context: "The server received too many requests. Please try again in a moment."
+      redirection: "Go to Homepage"
