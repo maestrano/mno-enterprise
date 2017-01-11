@@ -1,0 +1,6 @@
+en:
+  mno_enterprise:
+    errors:
+      503-title: "Looks like we're having some server issues."
+      503-context: "Go back to the previous page and try again."
+      redirection: "Go to Homepage"
