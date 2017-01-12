@@ -22,7 +22,7 @@ en:
             success_connect_notification_body: "To start using {{name}}, click on the {{name}} icon then click on \"Connect\"."
             no_reviews: "No reviews on"
             write_review: "Write a review"
-            number_of_reviews: "# of reviews per page"
+            number_of_reviews: "Reviews per page:"
             success_toastr: "Your review has been taken into account!"
             error_toastr: "An error occurred while saving your review."
             from: "from"
