@@ -120,6 +120,9 @@ namespace :mnoe do
       # Copy bower_components to public (used by live previewer)
       cp_r("#{frontend_tmp_folder}/bower_components","#{frontend_dist_folder}/")
 
+      # generates locales
+      Rake::Task['mnoe:locales:generate'].invoke
+
       # Clear tmp cache in development - recompile assets otherwise
       if Rails.env.development? || Rails.env.test?
         Rake::Task['tmp:cache:clear'].execute
