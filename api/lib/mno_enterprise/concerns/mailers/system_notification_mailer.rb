@@ -23,7 +23,11 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
 
   # ==> Devise Email
   # Description:
-  #   Email asking users to confirm their email
+  #   New user: Email asking users to confirm their email
+  #     OR
+  #   Existing user: 
+  #    - Email asking users (on their new email) to confirm their email change
+  #    - Email notifying users (on their old email) of an email change
   #
   # Mandrill vars:
   #   :first_name
@@ -32,12 +36,21 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   #   :confirmation_link
   #
   def confirmation_instructions(record, token, opts={})
-    template = record.confirmed? && record.unconfirmed_email? ? 'reconfirmation-instructions' : 'confirmation-instructions'
+    update_email = record.confirmed? && record.unconfirmed_email?
+    template = update_email ? 'reconfirmation-instructions' : 'confirmation-instructions'
+    email = update_email ? record.unconfirmed_email : record.email
     MnoEnterprise::MailClient.deliver(template,
       default_sender,
-      recipient(record),
+      recipient(record).merge(email: email),
       user_vars(record).merge(confirmation_link: user_confirmation_url(confirmation_token: token))
     )
+    if update_email
+      MnoEnterprise::MailClient.deliver('email-change',
+         default_sender,
+         recipient(record),
+         user_vars(record).merge(unconfirmed_email: record.unconfirmed_email)
+      )
+    end
   end
 
   # ==> Devise Email
@@ -73,6 +86,17 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
       default_sender,
       recipient(record),
       user_vars(record).merge(unlock_link: user_unlock_url(unlock_token: token))
+    )
+  end
+
+  # Description:
+  #   Email notifying a change of password
+  #
+  def password_change(record, opts={})
+    MnoEnterprise::MailClient.deliver('password-change',
+      default_sender,
+      recipient(record),
+      user_vars(record)
     )
   end
 

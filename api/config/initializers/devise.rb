@@ -99,6 +99,9 @@ Devise.setup do |config|
   # Setup a pepper to generate the encrypted password.
   # config.pepper = '11ab398be280e434b1dc50197d359577c1bc52efd28a07d081e397c7c11dcf8d1ad80f40188d58421830c20351f5af8c1217b39397ca95ee33809c74b028972f'
 
+  # Send a notification email when the user's password is changed
+  config.send_password_change_notification = true
+
   # ==> Configuration for :confirmable
   # A period that the user is allowed to access the website even without
   # confirming their account. For instance, if set to 2.days, the user will be
