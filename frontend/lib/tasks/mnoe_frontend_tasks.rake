@@ -117,6 +117,9 @@ namespace :mnoe do
       # Copy assets to public
       cp_r("#{frontend_tmp_folder}/dist/.","#{frontend_dist_folder}/")
 
+      # Generate locales
+      Rake::Task['mnoe:locales:generate'].invoke
+
       # Copy bower_components to public (used by live previewer)
       cp_r("#{frontend_tmp_folder}/bower_components","#{frontend_dist_folder}/")
 
