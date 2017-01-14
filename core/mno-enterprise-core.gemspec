@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
   # Manage configuration via environment variables
   s.add_dependency 'figaro'
   # Config files per environment
-  s.add_dependency 'config', '~> 1.0.0'
+  s.add_dependency 'config', '~> 1.0', '< 1.3'
 
   # Emailing
   # s.add_development_dependency 'mandrill-api', '~> 1.0.53'
