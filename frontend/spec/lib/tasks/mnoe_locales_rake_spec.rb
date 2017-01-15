@@ -25,7 +25,7 @@ describe 'mnoe:locales:generate' do
   end
 
   it 'copies the locales to the public folder' do
-    expect_any_instance_of(Rake::FileUtilsExt).to receive(:cp_r).with('tmp/build/frontend/src/locales/', 'public/dashboard/locales/')
+    expect_any_instance_of(Rake::FileUtilsExt).to receive(:cp_r).with('tmp/build/frontend/src/locales/.', 'public/dashboard/locales/')
     subject.invoke
   end
 end

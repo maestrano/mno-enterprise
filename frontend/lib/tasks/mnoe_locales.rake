@@ -12,7 +12,7 @@ namespace :mnoe do
       MnoEnterprise::Frontend::LocalesGenerator.new(locales_tmp_folder).generate_json
 
       # Copy locales to public
-      cp_r("#{locales_tmp_folder}/","#{locales_dist_folder}/")
+      cp_r("#{locales_tmp_folder}/.","#{locales_dist_folder}/")
     end
   end
 end
