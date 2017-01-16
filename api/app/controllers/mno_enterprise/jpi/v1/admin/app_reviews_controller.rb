@@ -16,7 +16,6 @@ module MnoEnterprise
       @app_review = MnoEnterprise::AppReview.find(params[:id])
     end
 
-
     # PATCH /mnoe/jpi/v1/admin/app_reviews/1
     def update
       @app_review = MnoEnterprise::AppReview.find(params[:id])
@@ -27,6 +26,5 @@ module MnoEnterprise
     def app_review_params
       params.require(:app_review).permit(:status)
     end
-
   end
 end
