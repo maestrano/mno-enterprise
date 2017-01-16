@@ -1,4 +1,7 @@
 @App = angular.module 'frontendAdmin', [
+  # Default configuration
+  'mnoEnterprise.defaultConfiguration',
+  # Runtime configuration
   'mnoEnterprise.configuration',
 
   'ngAnimate',
