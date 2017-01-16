@@ -95,7 +95,7 @@ For major upgrade between versions see [UPGRADING](UPGRADING.md).
 
 Maestrano Enterprise supports either [Mandrill](https://www.mandrill.com/) or [SparkPost](https://www.sparkpost.com/) as well as regular SMTP.
 
-You can use either provider as long as your account has the [required templates](https://maestrano.atlassian.net/wiki/display/MNOE/Emailing).
+You can use either provider as long as your account has the [required templates](https://maestrano.atlassian.net/wiki/display/DEV/Emailing).
 
 If you  want to copy the default templates to your own account you can use the tools in `tools/emails`.
 
