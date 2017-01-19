@@ -35,7 +35,7 @@
   # Marketplace is cached
   # MnoeMarketplace.getApps()
 
-  MnoeCurrentUser.getAdminRole().then(
+  MnoeCurrentUser.getCurrentUser().then(
     # Display the layout
     main.user = MnoeCurrentUser.user
   )
