@@ -11,9 +11,9 @@
     instance.stack == 'connector' && instance.oauth_keys_valid
 
   # Path to connect this app instance and redirect to the current page
-  @oAuthConnectPath = (instance) ->
+  @oAuthConnectPath = (instance, extra_params = '') ->
     redirect = window.encodeURIComponent("#{location.pathname}#{location.hash}")
-    "/mnoe/webhook/oauth/#{instance.uid}/authorize?redirect_path=#{redirect}"
+    "/mnoe/webhook/oauth/#{instance.uid}/authorize?redirect_path=#{redirect}&#{extra_params}"
 
   # Can the app instance be data synced
   @canBeDataSynced = (instance) ->
