@@ -91,7 +91,11 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   namespace :jpi do
     namespace :v1 do
-      resources :marketplace, only: [:index, :show]
+      resources :marketplace, only: [:index, :show] do
+        member do
+          resources :app_reviews, only: [:index, :create]
+        end
+      end
       resource :current_user, only: [:show, :update] do
         put :update_password
         put :register_developer
@@ -150,6 +154,7 @@ MnoEnterprise::Engine.routes.draw do
       namespace :admin, defaults: {format: 'json'} do
         resources :audit_events, only: [:index]
         resources :app_instances, only: [:destroy], shallow: true
+        resources :app_reviews, only: [:index, :show,  :update]
         resources :users, only: [:index, :show, :destroy, :update, :create] do
           collection do
             get :count

@@ -60,7 +60,7 @@
           vm.closeModal()
         else  # Some apps were not added
           vm.displayError = true
-          active_apps_nids = _.map(active_apps, 'nid')
+          active_apps_nids = if active_apps? then _.map(active_apps, 'nid') else []
           # Remove all the apps successfully added from the filtered app list
           _.map(_.intersection(vm.appNidsToAdd, active_apps_nids),
             (app_nid) ->

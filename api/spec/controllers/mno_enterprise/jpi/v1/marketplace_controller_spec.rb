@@ -37,7 +37,7 @@ module MnoEnterprise
         'rank' => app.rank,
         'multi_instantiable' => app.multi_instantiable,
         'subcategories' => app.subcategories,
-
+        'average_rating' => app.average_rating,
       }
     end
 
@@ -73,10 +73,7 @@ module MnoEnterprise
           )
         end
 
-        it 'is successful' do
-          subject
-          expect(response).to be_success
-        end
+        it { is_expected.to be_success }
 
         it 'returns the right response' do
           subject
@@ -90,10 +87,7 @@ module MnoEnterprise
           api_stub_for(get: '/apps', response: from_api([app]))
         end
 
-        it 'is successful' do
-          subject
-          expect(response).to be_success
-        end
+        it { is_expected.to be_success }
 
         it 'returns the right response' do
           subject
@@ -106,10 +100,7 @@ module MnoEnterprise
       before { api_stub_for(get: "/apps/#{app.id}", response: from_api(app)) }
       subject { get :show, id: app.id }
 
-      it 'is successful' do
-        subject
-        expect(response).to be_success
-      end
+      it { is_expected.to be_success }
 
       it 'returns the right response' do
         subject
@@ -129,10 +120,7 @@ module MnoEnterprise
           api_stub_for(get: '/apps', response: from_api([app1,app2]))
         end
 
-        it 'is successful' do
-          subject
-          expect(response).to be_success
-        end
+        it { is_expected.to be_success }
 
         it 'returns the right response' do
           subject

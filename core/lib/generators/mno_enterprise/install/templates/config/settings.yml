@@ -7,9 +7,20 @@ mno:
   paths:
     root: /api/mnoe/v1
 frontend_host:
+
+#===============================================
+# Feature Flags
+#===============================================
+
+# Display App Pricing on Marketplace
 pricing:
   enabled: false
+# Enable the App Dock
 dock:
   enabled: true
+# Display the Developer section on "My Account"
 developer:
+  enabled: false
+# Enable Reviews in the marketplace
+reviews:
   enabled: false

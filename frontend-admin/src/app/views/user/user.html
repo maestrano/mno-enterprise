@@ -37,6 +37,10 @@
             <div class="col-sm-3"><div class="label-cell">Last sign in</div></div>
             <div class="col-sm-3">{{(vm.user.last_sign_in_at | amCalendar) || '(Never signed in yet)'}}</div>
           </div>
+          <div class="bs-row row">
+            <div class="col-sm-3"><div class="label-cell">Number of sign in</div></div>
+            <div class="col-sm-3">{{vm.user.sign_in_count}}</div>
+          </div>
         </div>
       </div>
     </div>

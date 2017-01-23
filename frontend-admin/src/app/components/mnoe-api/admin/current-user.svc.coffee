@@ -17,13 +17,18 @@
   # Save the current user in variable to be able to reference it directly
   @user = {}
 
-  # Get the current user admmin role
-  @getAdminRole = ->
+  # Get the current user profile
+  @getCurrentUser = ->
     return userPromise if userPromise?
     userPromise = MnoeApiSvc.one('current_user').get().then(
       (response) ->
-        adminRole = {admin_role: response.data.admin_role}
-        angular.copy(adminRole, _self.user)
+        user = {
+          name: response.data.name
+          surname: response.data.surname
+          adminRole: response.data.admin_role
+          email: response.data.email
+        }
+        angular.copy(user, _self.user)
         response
     )
 

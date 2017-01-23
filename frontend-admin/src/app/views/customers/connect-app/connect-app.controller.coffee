@@ -12,9 +12,6 @@
       vm.organization = response.data
   ).finally(-> vm.isLoading = false)
 
-  vm.launchAppInstance = (app) ->
-    $window.open("/mnoe/launch/#{app.uid}", '_blank')
-
   #====================================
   # App Connect modal
   #====================================
@@ -29,7 +26,7 @@
         controller: 'ConnectMyobModalCtrl'
       }
       else
-        vm.launchAppInstance(app)
+        $window.location.href = MnoAppsInstances.oAuthConnectPath(app)
         return
 
     $uibModal.open(

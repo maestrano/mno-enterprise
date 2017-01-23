@@ -31,8 +31,14 @@ module MnoEnterprise
     scope :cloud, -> { where(stack: 'cloud') }
 
     attributes :id, :uid, :nid, :name, :description, :tiny_description, :created_at, :updated_at, :logo, :website, :slug,
-    :categories, :key_benefits, :key_features, :testimonials, :worldwide_usage, :tiny_description,
-    :popup_description, :stack, :terms_url, :pictures, :tags, :api_key, :metadata_url, :metadata, :details, :rank, :multi_instantiable, :subcategories
+               :categories, :key_benefits, :key_features, :testimonials, :worldwide_usage, :tiny_description,
+               :popup_description, :stack, :terms_url, :pictures, :tags, :api_key, :metadata_url, :metadata, :details, :rank, :multi_instantiable, :subcategories, :reviews, :average_rating
+
+
+    #================================
+    # Associations
+    #================================
+    has_many :reviews, class_name: 'AppReview'
 
     # Return the list of available categories
     def self.categories(list = nil)

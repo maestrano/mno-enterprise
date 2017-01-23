@@ -1,9 +1,8 @@
-@App.controller 'ConnectXeroModalCtrl', ($window, $httpParamSerializer, $uibModalInstance, app) ->
+@App.controller 'ConnectXeroModalCtrl', ($window, $httpParamSerializer, $uibModalInstance, MnoAppsInstances, app) ->
   'ngInject'
   vm = this
 
   vm.app = app
-  vm.path = "/mnoe/webhook/oauth/" + vm.app.uid + "/authorize?"
   vm.form = {
     perform: true
     "xero_country": "AU"
@@ -15,7 +14,7 @@
 
   vm.connect = (form) ->
     form['extra_params[]'] = "payroll" if vm.payroll
-    $window.location.href = vm.path + $httpParamSerializer(form)
+    $window.location.href = MnoAppsInstances.oAuthConnectPath(app, $httpParamSerializer(form))
 
   vm.close = ->
     $uibModalInstance.close()

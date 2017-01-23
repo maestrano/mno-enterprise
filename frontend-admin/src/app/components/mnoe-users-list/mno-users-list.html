@@ -8,7 +8,8 @@
       <thead>
         <tr>
           <th>Username</th>
-          <th style="width: 100px;">Creation</th>
+          <th width="110">Last login</th>
+          <th width="100">Creation</th>
         </tr>
       </thead>
       <tbody>
@@ -19,6 +20,11 @@
               <div ng-show="!user.name && !user.surname">nc</div>
               <small>{{::user.email}}</small>
             </a>
+          </td>
+          <td>
+            <span data-toggle="tooltip" title="{{::user.last_sign_in_at | date: 'H:m - dd/MM/yyyy'}}">
+              {{(user.last_sign_in_at | amTimeAgo) || 'never'}}
+            </span>
           </td>
           <td>{{::user.created_at | date: 'dd/MM/yyyy'}}</td>
         </tr>
