@@ -24,7 +24,7 @@
     MnoErrorsHandler.resetErrors(vm.form)
 
     # List of checked apps
-    vm.organization.app_nids = _.pluck(_.filter(vm.marketplace.apps, {checked: true}), 'nid')
+    vm.organization.app_nids = _.map(_.filter(vm.marketplace.apps, {checked: true}), 'nid')
 
     MnoeOrganizations.create(vm.organization).then(
       (response) ->
