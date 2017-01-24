@@ -24,3 +24,7 @@ developer:
 # Enable Reviews in the marketplace
 reviews:
   enabled: false
+
+marketplace:
+  comparison:
+    enabled: true

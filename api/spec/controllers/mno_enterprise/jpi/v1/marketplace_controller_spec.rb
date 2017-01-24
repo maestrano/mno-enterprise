@@ -38,6 +38,7 @@ module MnoEnterprise
         'multi_instantiable' => app.multi_instantiable,
         'subcategories' => app.subcategories,
         'average_rating' => app.average_rating,
+        'running_instances_count' => app.running_instances_count
       }
     end
 
