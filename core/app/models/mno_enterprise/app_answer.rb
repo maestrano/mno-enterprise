@@ -7,5 +7,9 @@ module MnoEnterprise
   # An AppAnswer belong to an AppQuestion
   class AppAnswer < AppReview
     attributes :question_id
+
+    belongs_to :question, class_name: 'AppQuestion', foreign_key: :question_id
+
+    scope :approved, -> { where(status: 'approved') }
   end
 end

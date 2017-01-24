@@ -18,6 +18,24 @@ FactoryGirl.define do
       updated_at 1.hour.ago
       # Properly build the resource with Her
       initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
+
+      factory :app_feedback, class: MnoEnterprise::AppFeedback do
+        sequence(:description) { |n| "Feedback ##{n}" }
+      end
+
+      factory :app_question, class: MnoEnterprise::AppQuestion do
+        sequence(:description) { |n| "Question ##{n}" }
+      end
+
+      factory :app_comment, class: MnoEnterprise::AppComment do
+        sequence(:description) { |n| "Comment ##{n}" }
+        feedback_id 'feedback-id'
+      end
+
+      factory :app_answer, class: MnoEnterprise::AppAnswer do
+        sequence(:description) { |n| "Answer ##{n}" }
+        question_id 'question-id'
+      end
     end
   end
 end

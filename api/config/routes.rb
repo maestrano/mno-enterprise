@@ -94,6 +94,10 @@ MnoEnterprise::Engine.routes.draw do
       resources :marketplace, only: [:index, :show] do
         member do
           resources :app_reviews, only: [:index, :create]
+          resources :app_feedbacks, only: [:index, :create]
+          resources :app_comments, only: [:index, :create]
+          resources :app_questions, only: [:index, :create]
+          resources :app_answers, only: [:index, :create]
         end
       end
       resource :current_user, only: [:show, :update] do
