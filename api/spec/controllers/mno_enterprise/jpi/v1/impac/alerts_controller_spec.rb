@@ -44,17 +44,26 @@ module MnoEnterprise
         expect(assigns(:alert).kpi).to eq(kpi)
       end
 
+      context "when params contains recipient_ids" do
+        let(:alert_hash) { from_api(alert)[:data].except(:kpi).merge(recipient_ids: [user.id, 10]) }
+
+        it "excludes the recipient_ids from params" do
+          subject
+          expect(assigns(:alert)).to eq(alert)
+        end
+      end
+
       it { subject; expect(response.code).to eq('200') }
     end
 
     describe 'PUT #update' do
-      let(:update_alert_hash) { {title: 'test', webhook: 'test', sent: true, forbidden: 'test'} }
+      let(:params) { {title: 'test', webhook: 'test', sent: true, forbidden: 'test'} }
       let(:updated_alert) { build(:impac_alert, kpi: kpi, title: 'test', webhook: 'test', sent: true) }
 
       before { api_stub_for(get: "/alerts/#{alert.id}", response: from_api(alert)) }
       before { api_stub_for(put: "/alerts/#{alert.id}", response: from_api(updated_alert)) }
 
-      subject { put :update, id: alert.id, alert: update_alert_hash }
+      subject { put :update, id: alert.id, alert: params }
 
       it_behaves_like "jpi v1 authorizable action"
 
@@ -64,6 +73,17 @@ module MnoEnterprise
       end
 
       it { subject; expect(response.code).to eq('200') }
+
+      context "when updating email alert recipients" do
+        let(:another_recipient) { build(:user) }
+        let(:params) { { recipient_ids: [alert.recipients.first.id, another_recipient.id] } }
+        let(:updated_alert) { build(:impac_alert, kpi: kpi, service: 'email', recipients: [alert.recipients.first, another_recipient]) }
+
+        it "assigns the alert with the correct recipients" do
+          subject
+          expect(assigns(:alert)).to eq(updated_alert)
+        end
+      end
     end
 
     describe 'DELETE #destroy' do

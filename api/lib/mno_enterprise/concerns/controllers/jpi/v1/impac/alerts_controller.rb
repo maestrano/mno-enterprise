@@ -34,7 +34,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
     return render_bad_request('update alert attributes', 'no alert hash specified') unless params.require(:alert)
     return render_not_found('alert') unless alert
 
-    attributes = params.require(:alert).permit(:title, :webhook, :sent)
+    attributes = params.require(:alert).permit(:title, :webhook, :sent, recipient_ids: [])
 
     authorize! :manage_alert, alert
 
@@ -69,7 +69,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
     def kpi_alert
       @alert ||= (
         kpi_id = params.require(:kpi_id)
-        attributes = params.require(:alert).merge(impac_kpi_id: kpi_id)
+        attributes = params.require(:alert).except(:recipient_ids).merge(impac_kpi_id: kpi_id)
         MnoEnterprise::Impac::Alert.new(attributes)
       )
     end
