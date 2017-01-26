@@ -20,22 +20,22 @@ module MnoEnterprise
     let(:feedback_comment_2) { build(:app_comment) }
     let(:app_feedback) { build(:app_feedback, comments: [feedback_comment_1, feedback_comment_2]) }
     let(:expected_hash_for_comment_1) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name)
+      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role)
       feedback_comment_1.attributes.slice(*attrs).merge({'created_at' => feedback_comment_1.created_at.as_json, 'updated_at' => feedback_comment_1.updated_at.as_json})
     end
     let(:expected_hash_for_comment_2) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name)
+      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role)
       feedback_comment_2.attributes.slice(*attrs).merge({'created_at' => feedback_comment_2.created_at.as_json, 'updated_at' => feedback_comment_2.updated_at.as_json})
     end
     let(:expected_array_for_comments) { [expected_hash_for_comment_1, expected_hash_for_comment_2] }
     let(:expected_hash_for_feedback) do
-      attrs = %w(id rating description status user_id user_name organization_id organization_name app_id app_name comments)
+      attrs = %w(id rating description status user_id user_name organization_id organization_name app_id app_name user_admin_role comments)
       app_feedback.attributes.slice(*attrs).merge({'created_at' => app_feedback.created_at.as_json, 'updated_at' => app_feedback.updated_at.as_json, 'comments' => expected_array_for_comments})
     end
     let(:expected_hash_for_feedbacks) do
       {
         'app_feedbacks' => [expected_hash_for_feedback],
-        # 'metadata' => {'pagination' => {'count' => 1}}
+        'metadata' => {'pagination' => {'count' => 1}}
       }
     end
 

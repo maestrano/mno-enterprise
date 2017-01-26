@@ -1,6 +1,7 @@
 module MnoEnterprise
   class Jpi::V1::AppReviewsController < Jpi::V1::BaseResourceController
     before_action :ensure_app_exists
+    before_action :find_review, only: [:update, :destroy]
 
     # GET /mnoe/jpi/v1/marketplace/:id/app_reviews
     def index
@@ -13,7 +14,8 @@ module MnoEnterprise
       @app_reviews = scope_app_reviews
 
       @app_reviews = @app_reviews.all.fetch
-      response.headers['X-Total-Count'] = @app_reviews.metadata.try(:[], :pagination).try(:[], :count) || 0
+      @total_count = @app_reviews.metadata[:pagination][:count]
+      response.headers['X-Total-Count'] = @total_count
     end
 
     # POST /mnoe/jpi/v1/marketplace/:id/app_reviews
@@ -21,11 +23,27 @@ module MnoEnterprise
       # TODO: use the has_many associations -> @app.reviews.build
       @app_review = review_klass.new(review_params)
       if @app_review.save
-        after_create
+        after_save
         render :show
       else
         render json: @app_review.errors, status: :bad_request
       end
+    end
+
+    def update
+      if @app_review.update(permitted_params)
+        after_save
+        render :show
+      else
+        render json: @app_review.errors, status: :bad_request
+      end
+    end
+
+    def destroy
+      @app_review.destroy
+      after_save
+
+      render :show
     end
 
     private
@@ -38,7 +56,7 @@ module MnoEnterprise
 
     # perform some additional actions if new review was created
     # may be overriden
-    def after_create
+    def after_save
       @average_rating = current_app.reload.average_rating
     end
 
@@ -49,6 +67,13 @@ module MnoEnterprise
     def ensure_app_exists
       unless current_app.present?
         return render json: "could not find App #{params[:id]}", status: :not_found
+      end
+    end
+
+    def find_review
+      @app_review = review_klass.find(params[:review_id])
+      unless @app_review.user_id == current_user.id
+        return render json: "could not find Review #{params[:review_id]}", status: :not_found
       end
     end
 

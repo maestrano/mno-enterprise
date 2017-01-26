@@ -3,7 +3,6 @@ module MnoEnterprise
   # MnoEnterprise::AppFeedback.create(description: "description", organization_id: 3, user_id: 9, app_id: 43, rating: 5)
   class AppFeedback < AppReview
     belongs_to :app
-    has_many   :comments, class_name: 'AppComment', foreign_key: :feedback_id
 
     scope :approved, -> { where(status: 'approved') }
   end
