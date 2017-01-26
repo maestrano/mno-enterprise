@@ -99,6 +99,10 @@ module MnoEnterprise
       nil
     end
 
+    def admin_role
+      true
+    end
+
     #================================
     # Devise Confirmation
     # TODO: should go in a module
