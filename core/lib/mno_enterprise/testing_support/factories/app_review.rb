@@ -16,6 +16,7 @@ FactoryGirl.define do
       organization_name 'Organization 11'
       created_at 3.days.ago
       updated_at 1.hour.ago
+      user_admin_role 'admin'
       # Properly build the resource with Her
       initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
 

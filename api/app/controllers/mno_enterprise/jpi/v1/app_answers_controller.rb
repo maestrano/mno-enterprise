@@ -7,7 +7,7 @@ module MnoEnterprise
       @app_reviews.where(question_id: params[:question_id])
     end
 
-    def after_create
+    def after_save
       #do nothing because answers doesn't affect on app rating
     end
 

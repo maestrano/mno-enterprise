@@ -7,7 +7,7 @@ module MnoEnterprise
       @app_reviews.where(feedback_id: params[:feedback_id])
     end
 
-    def after_create
+    def after_save
       #do nothing because comments doesn't affect on app rating
     end
 

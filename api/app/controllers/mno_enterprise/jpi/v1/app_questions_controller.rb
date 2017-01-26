@@ -10,7 +10,7 @@ module MnoEnterprise
       collection
     end
 
-    def after_create
+    def after_save
       #do nothing because questions doesn't affect on app rating
     end
 

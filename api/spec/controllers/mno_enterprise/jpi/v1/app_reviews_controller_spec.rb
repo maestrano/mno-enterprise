@@ -18,7 +18,7 @@ module MnoEnterprise
     let(:app) { build(:app) }
     let(:app_review) { build(:app_review) }
     let(:expected_hash_for_review) do
-      attrs = %w(id rating description status user_id user_name organization_id organization_name app_id app_name)
+      attrs = %w(id rating description status user_id user_name organization_id organization_name app_id app_name json.user_admin_role user_admin_role)
       app_review.attributes.slice(*attrs).merge({'created_at' => app_review.created_at.as_json, 'updated_at' => app_review.updated_at.as_json})
     end
     let(:expected_hash_for_reviews) do
@@ -68,6 +68,39 @@ module MnoEnterprise
       end
 
       it 'renders the new average rating' do
+        expect(JSON.parse(subject.body)).to include('average_rating' => app.average_rating)
+      end
+    end
+
+    describe 'PATCH #update', focus: true do
+      let(:params) { {description: 'A Review 2', rating: 1} }
+      let(:app_review) { build(:app_review, user_id: user.id) }
+
+      before do
+        api_stub_for(put: "/app_reviews/#{app_review.id}", response: from_api(app_review))
+        api_stub_for(get: "/app_reviews/#{app_review.id}", response: from_api(app_review))
+      end
+
+      subject { put :update, id: app.id, review_id: app_review.id, app_review: params }
+
+      it 'renders the new review' do
+        expect(JSON.parse(subject.body)).to include('app_review' => expected_hash_for_review)
+        expect(JSON.parse(subject.body)).to include('average_rating' => app.average_rating)
+      end
+    end
+
+    describe 'DELETE #destroy', focus: true do
+      let(:app_review) { build(:app_review, user_id: user.id) }
+
+      before do
+        api_stub_for(delete: "/app_reviews/#{app_review.id}", response: from_api(app_review))
+        api_stub_for(get: "/app_reviews/#{app_review.id}", response: from_api(app_review))
+      end
+
+      subject { delete :destroy, id: app.id, review_id: app_review.id }
+
+      it 'renders the new review' do
+        expect(JSON.parse(subject.body)).to include('app_review' => expected_hash_for_review)
         expect(JSON.parse(subject.body)).to include('average_rating' => app.average_rating)
       end
     end

@@ -8,6 +8,7 @@ json.organization_id app_feedback[:organization_id]
 json.organization_name app_feedback[:organization_name]
 json.app_id app_feedback[:app_id]
 json.app_name app_feedback[:app_name]
+json.user_admin_role app_feedback[:user_admin_role]
 json.created_at app_feedback[:created_at]
 json.updated_at app_feedback[:updated_at]
 json.comments do
