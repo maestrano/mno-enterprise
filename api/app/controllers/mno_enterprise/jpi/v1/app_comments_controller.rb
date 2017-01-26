@@ -16,7 +16,7 @@ module MnoEnterprise
     end
 
     def permitted_params
-      params.require(:app_comment).permit(:rating, :description, :organization_id, :feedback_id)
+      params.require(:app_comment).permit(:description, :organization_id, :feedback_id)
     end
   end
 end
