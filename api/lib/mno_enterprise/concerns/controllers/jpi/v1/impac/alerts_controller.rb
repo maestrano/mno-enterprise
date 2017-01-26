@@ -22,10 +22,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
 
     authorize! :manage_alert, kpi_alert
 
-    if (@alert = current_user.alerts.create(kpi_alert.attributes))
+    if (@alert = kpi_alert.save(kpi_alert.attributes))
       render 'show'
     else
-      render_bad_request('attach alert to kpi', "impossible to save record: #{@kpi_alert.inspect}")
+      render_bad_request('attach alert to kpi', "impossible to save record: #{kpi_alert.inspect}")
     end
   end
 
@@ -34,11 +34,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
     return render_bad_request('update alert attributes', 'no alert hash specified') unless params.require(:alert)
     return render_not_found('alert') unless alert
 
-    attributes = params.require(:alert).permit(:title, :webhook, :sent, recipient_ids: [])
-
     authorize! :manage_alert, alert
 
-    if alert.update(attributes)
+    if alert.update(kpi_update_params)
       render 'show'
     else
       render_bad_request('update alert', "unable to save record: #{alert.inspect}")
@@ -62,15 +60,22 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
 
   private
 
+    def kpi_create_params
+      kpi_id = params.require(:kpi_id)
+      attributes = params.require(:alert).permit(:title, :webhook, :service, recipient_ids: [])
+      attributes[:recipient_ids] = [current_user.id] unless attributes.has_key?(:recipient_ids)
+      attributes.merge(impac_kpi_id: kpi_id)
+    end
+
+    def kpi_update_params
+      params.require(:alert).permit(:title, :webhook, :sent, recipient_ids: [])
+    end
+
     def alert
       @alert ||= MnoEnterprise::Impac::Alert.find(params.require(:id))
     end
 
     def kpi_alert
-      @alert ||= (
-        kpi_id = params.require(:kpi_id)
-        attributes = params.require(:alert).except(:recipient_ids).merge(impac_kpi_id: kpi_id)
-        MnoEnterprise::Impac::Alert.new(attributes)
-      )
+      @alert ||= MnoEnterprise::Impac::Alert.new(kpi_create_params)
     end
 end
