@@ -29,7 +29,8 @@
             {{review.app_name}}
           </td>
           <td>
-            {{review.description}}
+            <p>{{review.description}}</p>
+            <button type="" name="button" ng-click="openCommentModal()">Comment</button>
           </td>
           <td>
             {{review.rating}}
@@ -57,4 +58,3 @@
     </div>
   </rd-widget-body>
 </rd-widget>
-

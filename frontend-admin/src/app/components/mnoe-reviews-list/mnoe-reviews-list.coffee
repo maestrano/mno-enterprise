@@ -1,4 +1,4 @@
-@App.directive('mnoeReviewsList', ($filter, $log, MnoeReviews) ->
+@App.directive('mnoeReviewsList', ($filter, $log, $uibModal, MnoeReviews) ->
   restric:'E'
   scope: {
   }
@@ -8,6 +8,15 @@
     scope.editmode = []
     scope.listOfReviews = []
     scope.statuses = ['approved', 'rejected']
+
+    #====================================
+    # Comment modal
+    #====================================
+    scope.openCommentModal = () ->
+      $uibModal.open(
+        templateUrl: 'app/components/mnoe-reviews-list/comment-modal.html'
+        controller: 'CommentModal'
+      )
 
     fetchReviews = () ->
       return MnoeReviews.list().then(
