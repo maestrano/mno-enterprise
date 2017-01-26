@@ -61,7 +61,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
   private
 
     def kpi_create_params
-      params.require(:alert).permit(:title, :webhook, :service, recipient_ids: [])
+      kpi_id = params.require(:kpi_id)
+      attributes = params.require(:alert).permit(:title, :webhook, :service, recipient_ids: [])
+      attributes[:recipient_ids] = [current_user.id] unless attributes.has_key?(:recipient_ids)
+      attributes.merge(impac_kpi_id: kpi_id)
     end
 
     def kpi_update_params
@@ -72,14 +75,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
       @alert ||= MnoEnterprise::Impac::Alert.find(params.require(:id))
     end
 
-    def valid_kpi_alert_attrs
-      kpi_id = params.require(:kpi_id)
-      attributes = kpi_create_params.merge(impac_kpi_id: kpi_id)
-      attributes[:recipient_ids] = [current_user.id] unless attributes.has_key?(:recipient_ids)
-      attributes
-    end
-
     def kpi_alert
-      @alert ||= MnoEnterprise::Impac::Alert.new(valid_kpi_alert_attrs)
+      @alert ||= MnoEnterprise::Impac::Alert.new(kpi_create_params)
     end
 end
