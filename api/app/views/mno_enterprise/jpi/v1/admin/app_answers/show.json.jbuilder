@@ -6,6 +6,7 @@ json.app_answer do
   json.user_name @app_review[:user_name]
   json.organization_id @app_review[:organization_id]
   json.organization_name @app_review[:organization_name]
+  json.type @app_review[:type]
   json.app_id @app_review[:app_id]
   json.question_id @app_review[:question_id]
   json.app_name @app_review[:app_name]

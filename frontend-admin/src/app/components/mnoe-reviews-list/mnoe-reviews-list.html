@@ -2,7 +2,7 @@
   <rd-widget-header icon="fa-comment">
     &nbsp;All comments
   </rd-widget-header>
-  <rd-widget-body classes="large no-padding">
+  <rd-widget-body classes="large no-padding widget-comments">
     <div>
       <table class="table">
       <table class="table table-striped" >
@@ -11,7 +11,8 @@
         <th>Author</th>
         <th>Company</th>
         <th>App</th>
-        <th>Comment</th>
+        <th>Type</th>
+        <th>Message</th>
         <th>Rating</th>
         <th>Date</th>
         <th>Status</th>
@@ -29,8 +30,13 @@
             {{review.app_name}}
           </td>
           <td>
+            {{review.type}}
+          </td>
+          <td>
             <p>{{review.description}}</p>
-            <button type="" name="button" ng-click="openCommentModal()">Comment</button>
+            <button type"" name="button" ng-click="openQuestionReplyModal(review)"  ng-show="review.type == 'Question'">Reply</button>
+            <button type="" name="button" ng-click="openFeedbackReplyModal(review)" ng-show="review.type == 'Feedback'" >Comment</button>
+            <button type="" name="button" ng-click="openEditModal(review)">Edit</button>
           </td>
           <td>
             {{review.rating}}
@@ -58,3 +64,12 @@
     </div>
   </rd-widget-body>
 </rd-widget>
+<div class="row">
+  <div class="col-md-12 pagination">
+    <div class="pagination-container">
+      <span><i class="fa fa-arrow-left"></i> Back</span>
+      <span class="pagination-pages">Pages 2/{{ parseInt(vm.app.questionCount/2) }}</span>
+      <span>Next<i class="fa fa-arrow-right"></i></span>
+    </div>
+  </div>
+</div>

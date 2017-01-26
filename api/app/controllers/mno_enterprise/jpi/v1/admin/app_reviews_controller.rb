@@ -24,7 +24,7 @@ module MnoEnterprise
     end
 
     def app_review_params
-      params.require(:app_review).permit(:status).merge(user_id: current_user.id)
+      params.require(:app_review).permit(:status, :description).merge(user_id: current_user.id)
     end
   end
 end
