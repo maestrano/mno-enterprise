@@ -29,7 +29,7 @@ module MnoEnterprise
     let(:expected_hash_for_comments) do
       {
         'app_comments' => [expected_hash_for_comment_1, expected_hash_for_comment_2],
-        # 'metadata' => {'pagination' => {'count' => 1}}
+        'metadata' => {'pagination' => {'count' => 2}}
       }
     end
 

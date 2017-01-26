@@ -3,3 +3,8 @@ json.app_feedbacks do
     json.partial! 'resource', app_feedback: app_feedback
   end
 end
+json.metadata do
+  json.pagination do
+    json.count @total_count
+  end
+end

@@ -35,7 +35,7 @@ module MnoEnterprise
     let(:expected_hash_for_feedbacks) do
       {
         'app_feedbacks' => [expected_hash_for_feedback],
-        # 'metadata' => {'pagination' => {'count' => 1}}
+        'metadata' => {'pagination' => {'count' => 1}}
       }
     end
 

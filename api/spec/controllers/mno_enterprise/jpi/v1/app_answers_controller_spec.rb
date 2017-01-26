@@ -29,7 +29,7 @@ module MnoEnterprise
     let(:expected_hash_for_answers) do
       {
         'app_answers' => [expected_hash_for_answer_1, expected_hash_for_answer_2],
-        # 'metadata' => {'pagination' => {'count' => 1}}
+        'metadata' => {'pagination' => {'count' => 2}}
       }
     end
 
