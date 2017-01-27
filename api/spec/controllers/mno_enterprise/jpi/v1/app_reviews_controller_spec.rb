@@ -24,7 +24,6 @@ module MnoEnterprise
     let(:expected_hash_for_reviews) do
       {
         'app_reviews' => [expected_hash_for_review],
-        'metadata' => {'pagination' => {'count' => 1}}
       }
     end
 

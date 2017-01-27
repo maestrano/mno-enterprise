@@ -3,8 +3,3 @@ json.app_comments do
     json.partial! 'resource', app_comment: app_comment
   end
 end
-json.metadata do
-  json.pagination do
-    json.count @total_count
-  end
-end

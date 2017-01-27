@@ -14,8 +14,7 @@ module MnoEnterprise
       @app_reviews = scope_app_reviews
 
       @app_reviews = @app_reviews.all.fetch
-      @total_count = @app_reviews.metadata[:pagination][:count]
-      response.headers['X-Total-Count'] = @total_count
+      response.headers['X-Total-Count'] = @app_reviews.metadata[:pagination][:count]
     end
 
     # POST /mnoe/jpi/v1/marketplace/:id/app_reviews
