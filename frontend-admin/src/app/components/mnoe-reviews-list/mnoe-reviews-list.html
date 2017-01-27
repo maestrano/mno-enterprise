@@ -16,6 +16,7 @@
         <th>Rating</th>
         <th>Date</th>
         <th>Status</th>
+        <th>Edit</th>
         </tr>
       </thead>
       <tbody>
@@ -34,9 +35,11 @@
           </td>
           <td>
             <p>{{review.description}}</p>
-            <button type"" name="button" ng-click="openQuestionReplyModal(review)"  ng-show="review.type == 'Question'">Reply</button>
-            <button type="" name="button" ng-click="openFeedbackReplyModal(review)" ng-show="review.type == 'Feedback'" >Comment</button>
-            <button type="" name="button" ng-click="openEditModal(review)">Edit</button>
+            <div class="text-right">
+              <button type"" name="button" ng-click="openQuestionReplyModal(review)"  ng-show="review.type == 'Question'">Reply</button>
+              <button type="" name="button" ng-click="openFeedbackReplyModal(review)" ng-show="review.type == 'Feedback'" >Comment</button>
+              <button type="" name="button" ng-click="openEditModal(review)">Edit</button>
+            </div>
           </td>
           <td>
             {{review.rating}}
@@ -51,12 +54,9 @@
           </td>
           <td>
             <a href="" ng-hide="editmode[review.id]" ng-click="editmode[review.id] = true"><i class="fa fa-pencil"></i></a>
-          </td>
-          <td>
-          <!-- future implementation, waiting for back end to be ready -->
-            <!-- <a href="" ng-hide="editmode[review.id]" ng-click="remove(review)"><i class="fa fa-times"></i></a> -->
             <a href="" ng-show="editmode[review.id]" ng-click="update(review)"><i class="fa fa-check"></i></a>
           </td>
+
         </tr>
       </tbody>
       </table>
@@ -64,12 +64,3 @@
     </div>
   </rd-widget-body>
 </rd-widget>
-<div class="row">
-  <div class="col-md-12 pagination">
-    <div class="pagination-container">
-      <span><i class="fa fa-arrow-left"></i> Back</span>
-      <span class="pagination-pages">Pages 2/{{ parseInt(vm.app.questionCount/2) }}</span>
-      <span>Next<i class="fa fa-arrow-right"></i></span>
-    </div>
-  </div>
-</div>
