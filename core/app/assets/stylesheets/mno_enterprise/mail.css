@@ -8,11 +8,8 @@
 }
 .header img{
   display: block;
-  width: 40%;
-  min-width: 200px;
-  max-width: 400px;
-  
   margin: 0 auto;
+  max-height: 120px;
 }
 
 .footer {
