@@ -61,14 +61,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
   private
 
     def kpi_create_params
-      kpi_id = params.require(:kpi_id)
-      attributes = params.require(:alert).permit(:title, :webhook, :service, recipient_ids: [])
-      attributes[:recipient_ids] = [current_user.id] unless attributes.has_key?(:recipient_ids)
-      attributes.merge(impac_kpi_id: kpi_id)
+      attributes = params.require(:alert).permit(:title, :webhook, :service, recipients: [:id, :email])
+      attributes[:recipients] = [{id: current_user.id}] unless attributes.has_key?(:recipients)
+      attributes.merge(impac_kpi_id: params.require(:kpi_id))
     end
 
     def kpi_update_params
-      params.require(:alert).permit(:title, :webhook, :sent, recipient_ids: [])
+      params.require(:alert).permit(:title, :webhook, :sent, recipients: [:id, :email])
     end
 
     def alert
