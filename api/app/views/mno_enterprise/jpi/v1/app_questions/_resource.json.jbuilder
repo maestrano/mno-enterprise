@@ -15,3 +15,11 @@ json.answers do
     json.partial! 'answer', app_answer: app_answer
   end
 end
+if app_question[:versions]
+  json.versions do
+    json.array! app_question[:versions] do |version|
+      json.extract! version, :id, :event, :description
+    end
+  end
+end
+

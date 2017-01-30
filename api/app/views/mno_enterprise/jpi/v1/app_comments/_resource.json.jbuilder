@@ -11,3 +11,11 @@ json.app_name app_comment[:app_name]
 json.user_admin_role app_comment[:user_admin_role]
 json.created_at app_comment[:created_at]
 json.updated_at app_comment[:updated_at]
+if app_comment[:versions]
+  json.versions do
+    json.array! app_comment[:versions] do |version|
+      json.extract! version, :id, :event, :description
+    end
+  end
+end
+
