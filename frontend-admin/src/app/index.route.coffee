@@ -63,9 +63,9 @@
       controllerAs: 'vm'
       ncyBreadcrumb:
         label: 'Reviews'
-      # resolve:
-      #   skip: (MnoeCurrentUser) -> MnoeCurrentUser.skipIfNotAdmin()
-      #   skipCondition: (RoutingHelper, REVIEWS_CONFIG) -> RoutingHelper.skipUnlessCondition(REVIEWS_CONFIG && REVIEWS_CONFIG.enabled)
+      resolve:
+        skip: (MnoeCurrentUser) -> MnoeCurrentUser.skipIfNotAdmin()
+        skipCondition: (RoutingHelper, REVIEWS_CONFIG) -> RoutingHelper.skipUnlessCondition(REVIEWS_CONFIG && REVIEWS_CONFIG.enabled)
     .state 'dashboard.customers',
       data:
         pageTitle:'Customers'
