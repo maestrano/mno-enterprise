@@ -11,3 +11,11 @@ json.app_name app_answer[:app_name]
 json.user_admin_role app_answer[:user_admin_role]
 json.created_at app_answer[:created_at]
 json.updated_at app_answer[:updated_at]
+if app_answer[:versions]
+  json.versions do
+    json.array! app_answer[:versions] do |version|
+      json.extract! version, :id, :event, :description
+    end
+  end
+end
+
