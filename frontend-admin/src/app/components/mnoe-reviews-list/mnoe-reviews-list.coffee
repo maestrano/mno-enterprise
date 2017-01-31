@@ -28,7 +28,6 @@
         (review) ->
           MnoeReviews.updateDescription(review).then(
             (response) ->
-              console.log(response);
               # Remove the edit mode for this review
               #delete scope.editmode[review.id]
           )
