@@ -17,6 +17,11 @@ module MnoEnterprise
       response.headers['X-Total-Count'] = @app_reviews.metadata[:pagination][:count]
     end
 
+    # POST /mnoe/jpi/v1/marketplace/:id/app_reviews/:id
+    def show
+      @app_review = review_klass.find(params[:review_id])
+    end
+
     # POST /mnoe/jpi/v1/marketplace/:id/app_reviews
     def create
       # TODO: use the has_many associations -> @app.reviews.build
@@ -64,15 +69,13 @@ module MnoEnterprise
     end
 
     def ensure_app_exists
-      unless current_app.present?
-        return render json: "could not find App #{params[:id]}", status: :not_found
-      end
+      render_not_found('App') unless current_app.present?
     end
 
     def find_review
       @app_review = review_klass.find(params[:review_id])
       unless @app_review.user_id == current_user.id
-        return render json: "could not find Review #{params[:review_id]}", status: :not_found
+        return render json:{ errors: {message: "Review not found (id=#{params[:review_id]})", code: 404} }, status: :not_found
       end
     end
 
