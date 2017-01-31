@@ -44,14 +44,16 @@ module MnoEnterprise
         expect(assigns(:alert).kpi).to eq(kpi)
       end
 
-      context "when params contains recipient_ids" do
+      context "when params contains recipients" do
         let(:another_recipient) { build(:user) }
-        let(:alert_hash) { from_api(alert)[:data].except(:kpi).merge(recipient_ids: [user.id, another_recipient.id]) }
-        let(:alert) { build(:impac_alert, kpi: kpi, recipients: [user,another_recipient]) }
+        let(:alert_hash) { from_api(alert)[:data].except(:kpi).merge(recipients: [{id: user.id}, {email: another_recipient.email}]) }
+        let(:recipients) { [user.attributes.extract!(:id, :email), another_recipient.attributes.extract!(:id, :email)] }
+        let(:alert) { build(:impac_alert, kpi: kpi, recipients: recipients) }
 
-        it "excludes the recipient_ids from params" do
+        it "attaches the recipients to the alert" do
           subject
           expect(assigns(:alert)).to eq(alert)
+          expect(assigns(:alert).recipients).to eq(recipients)
         end
       end
 
@@ -78,7 +80,7 @@ module MnoEnterprise
 
       context "when updating email alert recipients" do
         let(:another_recipient) { build(:user) }
-        let(:params) { { recipient_ids: [alert.recipients.first.id, another_recipient.id] } }
+        let(:params) { { recipients: [{id: alert.recipients.first[:id]}, {email: another_recipient[:email]}] } }
         let(:updated_alert) { build(:impac_alert, kpi: kpi, service: 'email', recipients: [alert.recipients.first, another_recipient]) }
 
         it "assigns the alert with the correct recipients" do
