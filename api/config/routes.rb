@@ -93,7 +93,9 @@ MnoEnterprise::Engine.routes.draw do
     namespace :v1 do
       resources :marketplace, only: [:index, :show] do
         member do
-          resources :app_reviews, only: [:index, :create]
+          %i(app_reviews app_feedbacks app_comments app_questions app_answers).each do |name|
+            resources name, except: [:new, :edit], param: :review_id
+          end  
         end
       end
       resource :current_user, only: [:show, :update] do
@@ -155,6 +157,8 @@ MnoEnterprise::Engine.routes.draw do
         resources :audit_events, only: [:index]
         resources :app_instances, only: [:destroy], shallow: true
         resources :app_reviews, only: [:index, :show,  :update]
+        resources :app_comments, only: [:create]
+        resources :app_answers, only: [:create]
         resources :users, only: [:index, :show, :destroy, :update, :create] do
           collection do
             get :count
