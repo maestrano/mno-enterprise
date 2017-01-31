@@ -27,4 +27,4 @@ reviews:
 
 marketplace:
   comparison:
-    enabled: true
+    enabled: false

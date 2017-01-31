@@ -7,6 +7,12 @@ en:
             title: "Marketplace"
             select_all: "All"
             search: "Search"
+            compare: "Compare application"
+            select_apps: "Compare up to 4 applications"
+            toastr:
+              error: "You can only compare up to 4 applications."
+            cancel: "Cancel"
+            compare_apps: "Compare"
 
           show:
             back: "Back"
@@ -33,6 +39,28 @@ en:
             tell_others: "Tell others what you think about this application (optional)"
             cancel: "Cancel"
             submit: "Submit"
+            comment: "Comment this feedback:"
+            question: "Question"
+            question_ask: "Ask a question"
+            answer: "Publish an answer to this question"
+            answer_q: "Answer to this Question"
+            answers: "Answers"
+            delete: "Delete"
+            delete_q: "Delete this Question"
+            edit: "Edit"
+            edit_q: "Edit this Question"
+            filter: "Filter by:"
+            filter_rating_desc: "rating high to low"
+            filter_rating_ask: "rating low to high"
+            filter_date_desc: "date high to low"
+            filter_date_ask: "date low to high"
+            success_toastr_2: "Success."
+            edited: "Edited"
+            edited_tooltip: "Show edit history"
+            modals:
+              history:
+                title: "Edit History"
+                close: "Close"
 
           app_selection:
             next: "Next"
@@ -40,3 +68,14 @@ en:
             select_orga: "Select an organization"
             no_orga_authorized: "Invalid purchase"
             unauthorized_to_add_app: "Unfortunately you do not have permission to purchase products for this organization. Please select another organization:"
+
+          compare:
+            title: "Comparison"
+            application_provider: "Application Provider"
+            category: "Category"
+            key_benefits: "Key benefits"
+            short_description: "Short description"
+            rating: "Rating"
+            companies_number: "Number of companies using the application"
+            pricing: "Pricing"
+            pricing_not_available: "pricing information not available"
