@@ -6,7 +6,5 @@ module MnoEnterprise
     attributes :feeback_id
 
     belongs_to :feedback, class_name: 'AppFeedback', foreign_key: :feedback_id
-
-    scope :approved, -> { where(status: 'approved') }
   end
 end

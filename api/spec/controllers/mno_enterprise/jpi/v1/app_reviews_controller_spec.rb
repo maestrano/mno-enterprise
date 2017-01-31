@@ -18,7 +18,7 @@ module MnoEnterprise
     let(:app) { build(:app) }
     let(:app_review) { build(:app_review) }
     let(:expected_hash_for_review) do
-      attrs = %w(id rating description status user_id user_name organization_id organization_name app_id app_name json.user_admin_role user_admin_role)
+      attrs = %w(id rating description status user_id user_name organization_id organization_name app_id app_name json.user_admin_role user_admin_role edited)
       app_review.attributes.slice(*attrs).merge({'created_at' => app_review.created_at.as_json, 'updated_at' => app_review.updated_at.as_json})
     end
     let(:expected_hash_for_reviews) do

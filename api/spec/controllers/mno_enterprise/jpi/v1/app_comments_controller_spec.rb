@@ -19,11 +19,11 @@ module MnoEnterprise
     let(:comment_1) { build(:app_comment, feedback_id: 'fid') }
     let(:comment_2) { build(:app_comment, feedback_id: 'fid') }
     let(:expected_hash_for_comment_1) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role)
+      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role edited)
       comment_1.attributes.slice(*attrs).merge({'created_at' => comment_1.created_at.as_json, 'updated_at' => comment_1.updated_at.as_json})
     end
     let(:expected_hash_for_comment_2) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role)
+      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role edited)
       comment_2.attributes.slice(*attrs).merge({'created_at' => comment_2.created_at.as_json, 'updated_at' => comment_2.updated_at.as_json})
     end
     let(:expected_hash_for_comments) do

@@ -4,7 +4,6 @@ module MnoEnterprise
   class AppQuestion < AppReview
     belongs_to :app
 
-    scope :approved, -> { where(status: 'approved') }
-    scope :search,   ->(search) { where("description.like" => "%#{search}%") }
+    scope :search, ->(search) { where("description.like" => "%#{search}%") }
   end
 end

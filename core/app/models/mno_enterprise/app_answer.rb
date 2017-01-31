@@ -9,7 +9,5 @@ module MnoEnterprise
     attributes :question_id
 
     belongs_to :question, class_name: 'AppQuestion', foreign_key: :question_id
-
-    scope :approved, -> { where(status: 'approved') }
   end
 end

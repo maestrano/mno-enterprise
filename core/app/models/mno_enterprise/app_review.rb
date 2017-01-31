@@ -1,6 +1,6 @@
 module MnoEnterprise
   class AppReview < BaseResource
-    attributes :id, :rating, :description, :created_at, :updated_at, :app_id, :user_id, :organization_id, :status, :parent_id, :type
+    attributes :id, :rating, :description, :created_at, :updated_at, :app_id, :user_id, :organization_id, :status, :parent_id, :type, :edited
 
     scope :approved, -> { where(status: 'approved') }
   end
