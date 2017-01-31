@@ -55,6 +55,12 @@ en:
             filter_date_desc: "date high to low"
             filter_date_ask: "date low to high"
             success_toastr_2: "Success."
+            edited: "Edited"
+            edited_tooltip: "Show edit history"
+            modals:
+              history:
+                title: "Edit History"
+                close: "Close"
 
           app_selection:
             next: "Next"
