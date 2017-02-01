@@ -1,6 +1,7 @@
 json.extract! app_review, :id, :description, :status,
               :user_id, :user_name, :organization_id, :organization_name,
-              :app_id, :app_name, :user_admin_role, :created_at, :updated_at, :edited
+              :app_id, :app_name, :user_admin_role, :created_at, :updated_at,
+              :edited, :edited_by_name, :edited_by_admin_role, :edited_by_id
 
 show_rating = local_assigns.fetch(:show_rating, true)
 if app_review.respond_to?(:rating) && show_rating
