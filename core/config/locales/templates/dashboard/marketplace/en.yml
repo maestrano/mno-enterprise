@@ -60,6 +60,26 @@ en:
             success_toastr_question: "Your question has been successfully posted!"
             error_toastr_answer: "An error occurred while saving your answer"
             error_toastr_question: "An error occurred while saving your question"
+            review:
+              delete_modal_header: "Delete a review"
+              delete_modal_body: "Do you really want to delete your review?"
+              delete_modal_cancel: "Cancel"
+              delete_modal_delete: "Delete"
+            question:
+              delete_modal_header: "Delete a question"
+              delete_modal_body: "Do you really want to delete your question?"
+              delete_modal_cancel: "Cancel"
+              delete_modal_delete: "Delete"
+            comment:
+              delete_modal_header: "Delete a comment"
+              delete_modal_body: "Do you really want to delete your comment?"
+              delete_modal_cancel: "Cancel"
+              delete_modal_delete: "Delete"
+            answer:
+              delete_modal_header: "Delete an answer"
+              delete_modal_body: "Do you really want to delete your answer?"
+              delete_modal_cancel: "Cancel"
+              delete_modal_delete: "Delete"
             edited: "Edited"
             edited_tooltip: "Show edit history"
             modals:
