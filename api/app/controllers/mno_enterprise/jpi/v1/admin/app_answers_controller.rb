@@ -13,8 +13,10 @@ module MnoEnterprise
     end
 
     def app_answer_params
+      # for an admin, the organization does not matter
+      organization_id = current_user.organizations.first.id
       params.require(:app_answer).permit(:description)
-        .merge(user_id: current_user.id, question_id: parent.id, organization_id: parent.organization_id, app_id: parent.app_id)
+        .merge(user_id: current_user.id, question_id: parent.id, organization_id: organization_id, app_id: parent.app_id)
     end
 
     def parent
