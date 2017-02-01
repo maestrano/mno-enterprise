@@ -28,6 +28,7 @@ module MnoEnterprise
         'user_name' => app_review.user_name,
         'organization_id' => app_review.organization_id,
         'organization_name' => app_review.organization_name,
+        'type'       => app_review.type,
         'created_at' => app_review.created_at,
         'updated_at' => app_review.updated_at,
       }

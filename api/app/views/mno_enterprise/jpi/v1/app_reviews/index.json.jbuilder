@@ -3,4 +3,3 @@ json.app_reviews do
     json.partial! 'resource', app_review: app_review
   end
 end
-
