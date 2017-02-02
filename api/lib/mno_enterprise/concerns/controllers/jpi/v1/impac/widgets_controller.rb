@@ -78,7 +78,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
         # TODO: remove when mnohub migrated to new model
         whitelisted[:widget_category] = params[:widget][:endpoint]
       end
-      .except(:metadata, :endpoint)
+      .except(:metadata)
     end
 
     def widget_update_params
