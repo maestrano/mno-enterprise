@@ -19,11 +19,11 @@ module MnoEnterprise
     let(:answer_1) { build(:app_answer, question_id: 'qid') }
     let(:answer_2) { build(:app_answer, question_id: 'qid') }
     let(:expected_hash_for_answer_1) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id question_id app_name user_admin_role edited)
+      attrs = %w(id description status user_id user_name organization_id organization_name app_id question_id app_name user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
       answer_1.attributes.slice(*attrs).merge({'created_at' => answer_1.created_at.as_json, 'updated_at' => answer_1.updated_at.as_json})
     end
     let(:expected_hash_for_answer_2) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id question_id app_name user_admin_role edited)
+      attrs = %w(id description status user_id user_name organization_id organization_name app_id question_id app_name user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
       answer_2.attributes.slice(*attrs).merge({'created_at' => answer_2.created_at.as_json, 'updated_at' => answer_2.updated_at.as_json})
     end
     let(:expected_hash_for_answers) do

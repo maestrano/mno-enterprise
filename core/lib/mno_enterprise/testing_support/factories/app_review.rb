@@ -17,6 +17,10 @@ FactoryGirl.define do
       created_at 3.days.ago
       updated_at 1.hour.ago
       edited true
+      edited_by_name 'Jane Dale'
+      edited_by_admin_role 'admin'
+      edited_by_id 1
+
       user_admin_role 'admin'
       # Properly build the resource with Her
       initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
