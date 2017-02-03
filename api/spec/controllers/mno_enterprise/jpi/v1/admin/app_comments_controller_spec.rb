@@ -11,8 +11,12 @@ module MnoEnterprise
     #===============================================
     # Assignments
     #===============================================
-    let(:user) { build(:user, :admin) }
+    let(:user) { build(:user, :admin, :with_organizations) }
+    let(:organization) { user.organizations.first }
     let(:feedback) { build(:app_feedback) }
+
+    before { api_stub_for(get: "/organization/#{organization.id}", response: from_api(organization)) }
+    before { api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization])) }
     before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     before { api_stub_for(get: "/app_feedbacks/#{feedback.id}", response: from_api(feedback)) }
     before { sign_in user }
