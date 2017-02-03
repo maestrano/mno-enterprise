@@ -2,7 +2,7 @@
   <rd-widget-header icon="fa-comment">
     &nbsp;All comments
   </rd-widget-header>
-  <rd-widget-body classes="large no-padding">
+  <rd-widget-body classes="large no-padding widget-comments">
     <div>
       <table class="table">
       <table class="table table-striped" >
@@ -11,10 +11,12 @@
         <th>Author</th>
         <th>Company</th>
         <th>App</th>
-        <th>Comment</th>
+        <th>Type</th>
+        <th>Message</th>
         <th>Rating</th>
         <th>Date</th>
         <th>Status</th>
+        <th>Edit</th>
         </tr>
       </thead>
       <tbody>
@@ -29,7 +31,15 @@
             {{review.app_name}}
           </td>
           <td>
-            {{review.description}}
+            {{review.type}}
+          </td>
+          <td>
+            <p>{{review.description}}</p>
+            <div class="text-right">
+              <button type"" name="button" ng-click="openQuestionReplyModal(review)"  ng-show="review.type == 'Question'">Reply</button>
+              <button type="" name="button" ng-click="openFeedbackReplyModal(review)" ng-show="review.type == 'Feedback'" >Comment</button>
+              <button type="" name="button" ng-click="openEditModal(review)">Edit</button>
+            </div>
           </td>
           <td>
             {{review.rating}}
@@ -44,12 +54,9 @@
           </td>
           <td>
             <a href="" ng-hide="editmode[review.id]" ng-click="editmode[review.id] = true"><i class="fa fa-pencil"></i></a>
-          </td>
-          <td>
-          <!-- future implementation, waiting for back end to be ready -->
-            <!-- <a href="" ng-hide="editmode[review.id]" ng-click="remove(review)"><i class="fa fa-times"></i></a> -->
             <a href="" ng-show="editmode[review.id]" ng-click="update(review)"><i class="fa fa-check"></i></a>
           </td>
+
         </tr>
       </tbody>
       </table>
@@ -57,4 +64,3 @@
     </div>
   </rd-widget-body>
 </rd-widget>
-
