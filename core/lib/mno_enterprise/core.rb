@@ -22,6 +22,8 @@ require "her_extension/middleware/mnoe_api_v1_parse_json"
 require "her_extension/middleware/mnoe_raise_error"
 require "faraday_middleware"
 require "httparty"
+require "json_api_client"
+require "json_api_client_extension/json_api_client_orm_adapter"
 require "mno_enterprise/engine"
 
 require 'mno_enterprise/database_extendable'

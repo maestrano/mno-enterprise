@@ -36,7 +36,7 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   # Main devise configuration
   devise_for :users, {
-      class_name: "MnoEnterprise::User",
+      class_name: "Mno::User",
       module: :devise,
       path_prefix: 'auth',
       skip: :omniauth_callbacks,

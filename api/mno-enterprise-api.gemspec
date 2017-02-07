@@ -30,6 +30,8 @@ Gem::Specification.new do |s|
   # Lock sprocket version
   s.add_dependency 'sprockets-rails', '~> 2.3'
 
+  s.add_dependency 'json_api_client', '~> 1.3'
+
   s.add_development_dependency 'intercom', '~> 3.5.4'
 
   # Omniauth authentication strategies
