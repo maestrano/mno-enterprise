@@ -18,15 +18,16 @@ module MnoEnterprise
     def info(key, current_user_id, description, subject_type, subject_id, metadata)
       u = User.find(current_user_id)
       begin
-        intercom.users.find(:user_id => current_user_id)
+        intercom.users.find(user_id: current_user_id)
       rescue Intercom::ResourceNotFound
         self.update_intercom_user(u)
       end
-      data = {created_at: Time.now.to_i, email: u.email, user_id: u.id}
+      data = {created_at: Time.now.to_i, email: u.email, user_id: u.id, event_name: key.tr('_', '-')}
       case key
-        when 'user_update'
+        when 'user_update', 'organization_update'
           self.update_intercom_user(u)
-          return
+          # convert values to string
+          data[:metadata] = Hash[ metadata.collect {|k,v| [k, v.to_s] } ]
         when 'user_confirm'
           data[:event_name] = 'finished-sign-up'
         when 'dashboard_create'
@@ -46,24 +47,22 @@ module MnoEnterprise
         when 'app_add'
           data[:event_name] = 'added-app-' + metadata[:app_nid]
           data[:metadata] = {type: 'single', app_list: metadata[:app_nid]}
-        else
-          data[:event_name] = key.tr!('_', '-')
       end
-
       self.intercom.events.create(data)
 
     rescue Intercom::IntercomError => e
-      Rails.logger.debug '[INTERCOM] Could not call intercom: ' + e.message
+      Rails.logger.tagged('Intercom') { Rails.logger.warn 'Error while calling intercom ' + e.message}
     end
 
-    def update_intercom_user(user)
+    def update_intercom_user(user, update_last_request_at = true)
       data = {
         user_id: user.id,
         name: [user.name, user.surname].join(' '),
         email: user.email,
         created_at: user.created_at.to_i,
         last_seen_ip: user.last_sign_in_ip,
-        custom_attributes: {}
+        custom_attributes: {},
+        update_last_request_at: update_last_request_at
       }
       data[:custom_attributes][:phone]= user.phone if user.phone
 
@@ -81,11 +80,8 @@ module MnoEnterprise
           }
         }
       end
-
       intercom.users.create(data)
     end
-
   end
-
 end
 
