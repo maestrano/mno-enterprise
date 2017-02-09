@@ -31,8 +31,8 @@ module MnoEnterprise
     let(:alerts_hashes) { [from_api(alert)[:data]] }
 
     describe 'GET index' do
-      let(:params) { { 'metadata' => {'organization_ids' => ['some_id']} } }
-      subject { get :index, metadata: params['metadata'] }
+      let(:params) { { 'metadata' => {'organization_ids' => ['some_id']}, 'opts' => {'some' => 'opts'} } }
+      subject { get :index, metadata: params['metadata'], opts: params['opts'] }
 
       let(:impac_available_kpis) do
         [
