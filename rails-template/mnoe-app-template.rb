@@ -5,6 +5,8 @@ def apply_template!
   assert_compatible_rails_version
   assert_valid_options
 
+  @mnoe_version = ask("Choose mno-enterprise version:", :limited_to => %w[stable edge])
+
   # Rebuild the Gemfile from scratch
   template 'templates/Gemfile', 'Gemfile', force: true
 
@@ -132,13 +134,42 @@ def source_paths
   Array(super) + [current_directory]
 end
 
+# ==================================================
 # Monkey patched from Rails::Generators::AppBase
+# ==================================================
+
 # Only use gems list for database (we manage the rest ourself)
 def gemfile_entries
-  [database_gemfile_entry,
+  [mnoe_gemfile_entry,
+   database_gemfile_entry,
    assets_gemfile_entry,
    @extra_entries].flatten.find_all(&@gem_filter)
 end
+
+def mnoe_gemfile_entry
+  gems = []
+
+  case @mnoe_version
+  when 'stable'
+    gems << GemfileEntry.version('mno-enterprise',
+                                 '~> 3.0',
+                                 "Bundle edge Mnoe instead: gem 'mno-enterprise', github: 'maestrano/mno-enterprise'")
+  when 'edge'
+    gems << GemfileEntry.github('mno-enterprise', 'maestrano/mno-enterprise')
+  end
+
+  gems << GemfileEntry.new('intercom', '~> 3.5.4', 'Enable Intercom', {}, true)
+
+  gems << GemfileEntry.new('omniauth-openid', '~> 1.0', 'Omniauth authentication strategies', {}, true)
+  gems << GemfileEntry.new('openid-store-redis', '~> 1.0', nil, {}, true)
+  gems << GemfileEntry.new('omniauth-linkedin-oauth2', '~> 0.1.5', nil, {}, true)
+  gems << GemfileEntry.new('omniauth-google-oauth2', '~> 0.2.6', nil, {}, true)
+  gems << GemfileEntry.new('omniauth-facebook', '~> 2.0.1', nil, {}, true)
+
+  gems
+end
+
+# ==================================================
 
 # Ensure we're using a compatible Rails version
 def assert_compatible_rails_version

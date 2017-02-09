@@ -18,17 +18,11 @@
   @user = {}
 
   # Get the current user profile
-  @getCurrentUser = ->
+  @getUser = ->
     return userPromise if userPromise?
     userPromise = MnoeApiSvc.one('current_user').get().then(
       (response) ->
-        user = {
-          name: response.data.name
-          surname: response.data.surname
-          adminRole: response.data.admin_role
-          email: response.data.email
-        }
-        angular.copy(user, _self.user)
+        angular.copy(response.data, _self.user)
         response
     )
 

@@ -28,7 +28,7 @@ module MnoEnterprise
         subject { MnoEnterprise::IntercomEventsListener.new }
 
         it 'add an event when an password is changed' do
-          expect(events).to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'user-update-password', user_id: user.id))
+          expect(events).to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'user-update-password'))
           subject.info('user_update_password', user.id, 'User password change', user.class.name, user.id, user.email)
         end
 
@@ -58,6 +58,7 @@ module MnoEnterprise
             created_at: user.created_at.to_i,
             last_seen_ip: user.last_sign_in_ip,
             custom_attributes: {phone: user.phone},
+            update_last_request_at: true,
             companies:[
               {
                 company_id: organization.id,
