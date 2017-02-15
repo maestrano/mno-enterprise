@@ -8,5 +8,6 @@ json.user_id app_review.user_id
 json.user_name app_review.user_name
 json.organization_id app_review.organization_id
 json.organization_name app_review.organization_name
+json.type app_review.type
 json.created_at app_review.created_at
 json.updated_at app_review.updated_at

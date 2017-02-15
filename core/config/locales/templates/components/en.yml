@@ -19,3 +19,12 @@ en:
           app_not_found: Application not found
           app_not_managed_by_us: The app you requested does not seem to be managed by us.
           did_you_type_the_right_url: Are you sure you typed the right url?
+
+        app_install_btn:
+          conflicting_app: "You cannot install this App as it is incompatible with:"
+          start_app: "Start Now!"
+          launch_app: "Launch App"
+          connect_app: "Connect App"
+          success_notification_title: "{{name}} has been added to your account"
+          success_launch_notification_body: "To start using {{name}}, click on the {{name}} icon then click on \"Launch\"."
+          success_connect_notification_body: "To start using {{name}}, click on the {{name}} icon then click on \"Connect\"."

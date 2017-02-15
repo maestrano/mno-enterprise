@@ -103,4 +103,13 @@ module MnoEnterprise::Concerns::Models::Organization
   def update_user(user, role = 'Member')
     self.users.update(id: user.id, role: role)
   end
+
+  def to_audit_event
+    {
+      id: id,
+      uid: uid,
+      name: name
+    }
+  end
+
 end
