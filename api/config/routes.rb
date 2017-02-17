@@ -84,6 +84,8 @@ MnoEnterprise::Engine.routes.draw do
         get :sync
       end
     end
+    # Maestrano-hub events
+    resources :events, only: [:create] 
   end
 
   #============================================================
