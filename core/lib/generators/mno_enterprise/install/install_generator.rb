@@ -20,6 +20,7 @@ module MnoEnterprise
 
         template "config/initializers/mno_enterprise.rb"
         template "config/mno_enterprise_styleguide.yml"
+        template "config/puma.rb", skip: true # Copied from Rails 5 - skip if already existing
 
         # Settings
         template "config/settings.yml", "config/settings.yml"

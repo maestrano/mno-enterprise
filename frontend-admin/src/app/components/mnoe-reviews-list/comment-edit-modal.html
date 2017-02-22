@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <div class="close" type="button" ng-click="closeModal()" >×</div>
+  <h3>Edit this feedback: </h3>
+</div>
+
+<div class="modal-body">
+  <div class="main-area comment-input">
+    <textarea ng-model="review.description" rows="8" cols="40"></textarea>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="row">
+    <div class="col-md-12">
+      <button class="btn btn-default" ng-click="closeModal()">
+        Cancel
+      </button>
+      <button class="btn btn-default" ng-click="submitIteraction()">
+        Submit
+      </button>
+    </div>
+  </div>
+</div>
