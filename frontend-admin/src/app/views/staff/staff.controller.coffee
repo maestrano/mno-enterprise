@@ -17,4 +17,4 @@
     console.log (tableState)
     vm.isLoading = false
 
-  return vm
+  return

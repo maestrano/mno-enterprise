@@ -1,4 +1,4 @@
-@App.controller 'CustomersController', ($uibModal, MnoeUsers, MnoeOrganizations, MnoeObservables, OBS_KEYS) ->
+@App.controller 'CustomersController', ($scope, $uibModal, MnoeUsers, MnoeOrganizations, MnoeObservables, OBS_KEYS) ->
   'ngInject'
   vm = this
 
@@ -14,18 +14,21 @@
       controllerAs: 'vm'
     )
 
-  MnoeObservables.registerCb(OBS_KEYS.userChanged, (promise) ->
-    promise.then(
-      (response) ->
-        vm.users.totalCount = response.headers('x-total-count')
-      )
-  )
+  updateUsersCounter = (response) ->
+    vm.users.totalCount = response.headers('x-total-count')
+    return
+
+  MnoeObservables.registerCb(OBS_KEYS.userChanged, updateUsersCounter)
 
   MnoeOrganizations.registerListChangeCb((promise) ->
     promise.then(
       (response) ->
         vm.organizations.totalCount = response.headers('x-total-count')
       )
+  )
+
+  $scope.$on('$destroy', () ->
+    MnoeObservables.unsubscribe(OBS_KEYS.userChanged, updateUsersCounter)
   )
 
   return
