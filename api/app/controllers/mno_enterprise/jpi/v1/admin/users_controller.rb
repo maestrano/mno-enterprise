@@ -29,7 +29,6 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/admin/users
     def create
       @user = MnoEnterprise::User.build(user_create_params)
-      @user.admin_role = params[:user][:admin_role].presence
 
       if @user.save
         render :show
@@ -40,6 +39,7 @@ module MnoEnterprise
 
     # PATCH /mnoe/jpi/v1/admin/users/:id
     def update
+      # TODO: replace with authorize/ability
       if current_user.admin_role == "admin"
         @user = MnoEnterprise::User.find(params[:id])
         @user.update(user_params)
@@ -79,9 +79,15 @@ module MnoEnterprise
     end
 
     def user_create_params
-      params.require(:user).permit(:name, :surname, :email, :phone).merge(
-        password: 'Password1',
-        confirmed_at: Time.zone.now
+      attrs = [:name, :surname, :email, :phone]
+
+      # TODO: replace with authorize/ability
+      if current_user.admin_role == "admin"
+        attrs << :admin_role
+      end
+
+      params.require(:user).permit(attrs).merge(
+        password: Devise.friendly_token.first(12)
       )
     end
   end

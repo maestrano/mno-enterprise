@@ -7,7 +7,7 @@
 # fork of the upstream library
 
 
-@App.service 'MnoeCurrentUser', (MnoeApiSvc, $window, $state, $q) ->
+@App.service 'MnoeCurrentUser', ($window, $state, $q, $timeout, MnoeApiSvc) ->
   _self = @
 
   # Store the current_user promise
@@ -18,28 +18,44 @@
   @user = {}
 
   # Get the current user profile
-  @getCurrentUser = ->
+  @getUser = ->
     return userPromise if userPromise?
     userPromise = MnoeApiSvc.one('current_user').get().then(
       (response) ->
-        user = {
-          name: response.data.name
-          surname: response.data.surname
-          adminRole: response.data.admin_role
-          email: response.data.email
-        }
-        angular.copy(user, _self.user)
-        response
+        angular.copy(response.data, _self.user)
+        response.data
     )
 
   @skipIfNotAdmin = () ->
-    if _self.user.admin_role? && _self.user.admin_role == 'admin'
-      return $q.resolve()
-    else
-      $timeout(->
-        # Runs after the authentication promise has been rejected.
-        $state.go('dashboard.home')
-      )
-      $q.reject()
+    deferred = $q.defer()
+    _self.getUser().then(->
+      if _self.user.admin_role? && _self.user.admin_role == 'admin'
+        return deferred.resolve()
+      else
+        $timeout(->
+          # Runs after the authentication promise has been rejected.
+          $state.go('dashboard.home')
+        )
+        deferred.reject()
+    )
+    return deferred
+
+  @logout = ->
+    _self.getUser().then(
+      (response) ->
+        # Redirect to dashboard if the user has at least one organization
+        if response.data.organizations? && response.data.organizations.length > 0
+          $window.location.assign("/dashboard/")
+        # Logout if the user has no organization
+        else
+          $window.location.assign("/dashboard/#/logout")
+    )
+
+  @refreshUser = ->
+    userPromise = null
+    _self.getUser().then(
+      () ->
+        _self.skipIfNotAdmin()
+    )
 
   return @

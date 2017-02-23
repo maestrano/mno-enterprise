@@ -28,6 +28,9 @@
     main.toggle = !main.toggle
     $cookies.put('admin_platform_toggle', main.toggle)
 
+  main.exit = ->
+    MnoeCurrentUser.logout()
+
   window.onresize = () ->
     $scope.$apply()
 
@@ -35,7 +38,7 @@
   # Marketplace is cached
   # MnoeMarketplace.getApps()
 
-  MnoeCurrentUser.getCurrentUser().then(
+  MnoeCurrentUser.getUser().then(
     # Display the layout
     main.user = MnoeCurrentUser.user
   )

@@ -28,9 +28,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     # Update and Authorize
     organization.assign_attributes(organization_update_params)
     authorize! :update, organization
-
+    changes = organization.changes
     # Save
     if organization.save
+      MnoEnterprise::EventLogger.info('organization_update', current_user.id, 'Organization update', organization, changes)
       render 'show_reduced'
     else
       render json: organization.errors, status: :bad_request
@@ -41,6 +42,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   def destroy
     if organization
       authorize! :destroy, organization
+      MnoEnterprise::EventLogger.info('organization_destroy', current_user.id, 'Organization deleted', organization)
       organization.destroy
     end
 
@@ -57,7 +59,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
     # Bust cache
     current_user.refresh_user_cache
-
+    MnoEnterprise::EventLogger.info('organization_create', current_user.id, 'Organization created', organization)
     render 'show'
   end
 

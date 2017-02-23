@@ -99,6 +99,7 @@ module MnoEnterprise
       nil
     end
 
+
     #================================
     # Devise Confirmation
     # TODO: should go in a module
