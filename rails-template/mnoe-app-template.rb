@@ -1,11 +1,14 @@
 # Match the mno-enterprise rails dependency
 RAILS_REQUIREMENT = ["~> 4.2", ">= 4.2.0"]
 
+# Local path to the gem if using a local template
+MNOE_DEV_PATH = File.expand_path("..", File.dirname(__FILE__)) unless __FILE__ =~ %r{\Ahttps?://}
+
 def apply_template!
   assert_compatible_rails_version
   assert_valid_options
 
-  @mnoe_version = ask("Choose mno-enterprise version:", :limited_to => %w[stable edge])
+  @mnoe_version = ask("Choose mno-enterprise version:", limited_to: available_mnoe_versions).to_sym
 
   # Rebuild the Gemfile from scratch
   template 'templates/Gemfile', 'Gemfile', force: true
@@ -150,12 +153,14 @@ def mnoe_gemfile_entry
   gems = []
 
   case @mnoe_version
-  when 'stable'
+  when :stable
     gems << GemfileEntry.version('mno-enterprise',
                                  '~> 3.0',
                                  "Bundle edge Mnoe instead: gem 'mno-enterprise', github: 'maestrano/mno-enterprise'")
-  when 'edge'
+  when :edge
     gems << GemfileEntry.github('mno-enterprise', 'maestrano/mno-enterprise')
+  when :dev
+    gems << GemfileEntry.path('mno-enterprise', MNOE_DEV_PATH)
   end
 
   gems << GemfileEntry.new('intercom', '~> 3.5.4', 'Enable Intercom', {}, true)
@@ -170,6 +175,15 @@ def mnoe_gemfile_entry
 end
 
 # ==================================================
+
+# stable: latest version available on rubygems
+# edge:   master branch of the mno-enterprise repository
+# dev:    local mnoe-enteprise checkout
+def available_mnoe_versions
+  versions = %w[stable edge]
+  versions << 'dev' if defined?(MNOE_DEV_PATH)
+  versions
+end
 
 # Ensure we're using a compatible Rails version
 def assert_compatible_rails_version

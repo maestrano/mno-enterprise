@@ -1,18 +1,18 @@
 module MnoEnterprise
   module ApplicationHelper
-    
+
     def support_email
       MnoEnterprise.support_email
     end
-    
+
     # Re-implement Devise filter
     # For some reasons the original Devise filter seems to ignore the
     # mnoe prefix when using custom devise controllers
-    def authenticate_user!
+    def authenticate_user!(_favourite=nil, opts={})
       redirect_to(new_user_session_path) unless current_user
       true
     end
-    
+
     # Redirect a signed in user to the confirmation
     # lounge if unconfirmed
     def redirect_to_lounge_if_unconfirmed
@@ -21,17 +21,17 @@ module MnoEnterprise
       end
       return true
     end
-    
+
     # Redirect to signup page if user not authenticated
     def authenticate_user_or_signup!
       unless current_user
         redirect_to new_user_registration_path
         false
       end
-    
+
       true
     end
-    
+
     def notice_hash(notice)
       return {} unless notice
       # TODO: refactor

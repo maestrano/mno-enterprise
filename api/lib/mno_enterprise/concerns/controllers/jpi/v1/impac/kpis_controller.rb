@@ -21,7 +21,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   def index
     # Retrieve kpis templates from impac api.
     # TODO: improve request params to work for strong parameters
-    attrs = params.slice('metadata')
+    attrs = params.slice('metadata', 'opts')
     auth = { username: MnoEnterprise.tenant_id, password: MnoEnterprise.tenant_key }
 
     response = begin
