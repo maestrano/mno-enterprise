@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="bs-row">
-      <div class="col-sm-4 col-sm-offset-4">
+      <div class="col-sm-4 col-sm-offset-4" ng-if="!vm.disable_impersonation">
         <button class="btn btn-primary center-block"
           ng-click="vm.impersonateUser()">Log In as User</button>
       </div>
