@@ -79,7 +79,7 @@ module MnoEnterprise
       let (:kpi_targets) { {} }
 
       before do
-        api_stub_for(get: "/dashboards/#{dashboard.id}", response: from_api(dashboard))
+        api_stub_for(get: "/users/#{user.id}/dashboards/#{dashboard.id}", response: from_api(dashboard))
         api_stub_for(post: "/dashboards/#{dashboard.id}/kpis", response: from_api(kpi))
         api_stub_for(get: "/dashboards/#{dashboard.id}/kpis", response: from_api([]))
         api_stub_for(get: "/kpis/#{kpi.id}", response: from_api(kpi)) # kpi.reload
