@@ -141,7 +141,7 @@ module MnoEnterprise
             @pdf.image image_path('mno_enterprise/main-logo.png'), scale: 0.5
           end
           @pdf.move_down 52
-          @pdf.font_size(20) { @pdf.text title + "#{@data[:period_month]}", style: :bold, align: :right }
+          @pdf.font_size(20) { @pdf.text "#{title} #{@data[:period_month]}", style: :bold, align: :right }
         end
       end
     end
