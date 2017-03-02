@@ -31,7 +31,12 @@ payment:
 marketplace:
   comparison:
     enabled: false
+
 # Disable Impersonation
 admin_panel:
   impersonation:
+    disabled: false
+# Disable user registration
+devise:
+  registration:
     disabled: false

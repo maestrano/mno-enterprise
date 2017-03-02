@@ -2,6 +2,14 @@ require 'rails_helper'
 
 module MnoEnterprise
   RSpec.describe User, type: :model do
+    def reload_user
+      # Reload User class to redefine the validation
+      # Removes MnoEnterprise::User from object-space:
+      MnoEnterprise.send(:remove_const, :User)
+      # Reloads the module (require might also work):
+      load 'app/models/mno_enterprise/user.rb'
+    end
+
     describe 'password strength' do
       let(:user) do
         # Initialize this way so the class reload is taken into account (the factory doesnt reload the User class)
@@ -17,12 +25,7 @@ module MnoEnterprise
       context 'with password regex' do
         before do
           Devise.password_regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/
-
-          # Reload User class to redefine the validation
-          # Removes MnoEnterprise::User from object-space:
-          MnoEnterprise.send(:remove_const, :User)
-          # Reloads the module (require might also work):
-          load 'app/models/mno_enterprise/user.rb'
+          reload_user
         end
 
         it 'validates the password strength' do
@@ -274,6 +277,38 @@ module MnoEnterprise
                 email: auth.info.email
               )).and_return(user)
             subject
+          end
+        end
+      end
+    end
+
+    describe 'Devise' do
+      subject { MnoEnterprise::User.new }
+      describe 'registerable?' do
+        context 'default' do
+          before { reload_user }
+          it 'is registerable' do
+            expect(MnoEnterprise::User.ancestors).to include(Devise::Models::Registerable)
+          end
+        end
+
+        context 'enabled' do
+          before do
+            Settings.merge!(devise: { registration: { disabled: false } })
+            reload_user
+          end
+          it 'is registerable' do
+            expect(MnoEnterprise::User.ancestors).to include(Devise::Models::Registerable)
+          end
+        end
+
+        context 'disabled' do
+          before do
+            Settings.merge!(devise: { registration: { disabled: true } })
+            reload_user
+          end
+          it 'is not registerable' do
+            expect(MnoEnterprise::User.ancestors).not_to include(Devise::Models::Registerable)
           end
         end
       end

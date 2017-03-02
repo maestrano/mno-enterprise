@@ -54,9 +54,14 @@ module MnoEnterprise
       :api_key, :api_secret, :developer, :kpi_enabled
 
     define_model_callbacks :validation #required by Devise
-    devise :remote_authenticatable, :registerable, :recoverable, :rememberable,
+
+    devise_modules = [
+      :remote_authenticatable, :registerable, :recoverable, :rememberable,
       :trackable, :validatable, :lockable, :confirmable, :timeoutable, :password_expirable,
-      :omniauthable, omniauth_providers: Devise.omniauth_providers
+      :omniauthable
+    ]
+    devise_modules.delete(:registerable) if Settings.try(:devise).try(:registration).try(:disabled)
+    devise(*devise_modules, omniauth_providers: Devise.omniauth_providers)
 
     #================================
     # Validation
