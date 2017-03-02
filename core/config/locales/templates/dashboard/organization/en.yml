@@ -50,6 +50,7 @@ en:
               current_billing: Current Billing
               billing_details: Billing Details
               past_invoices: Past Invoices
+              account_statement: Account Statements
             members:
               title: Members
             teams:
