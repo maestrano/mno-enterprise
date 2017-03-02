@@ -15,7 +15,7 @@
       displayList: []
       widgetTitle: 'Loading users...'
       search: ''
-    scope.disable_impersonation = ADMIN_PANEL_CONFIG.impersonation.disabled if ADMIN_PANEL_CONFIG.impersonation
+    scope.impersonation_enabled = if ADMIN_PANEL_CONFIG.impersonation then not ADMIN_PANEL_CONFIG.impersonation.disabled else true
 
     # Display all the users
     setAllUsersList = () ->

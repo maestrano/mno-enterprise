@@ -2,7 +2,7 @@
   'ngInject'
   vm = this
 
-  vm.disable_impersonation = ADMIN_PANEL_CONFIG.impersonation.disabled if ADMIN_PANEL_CONFIG.impersonation
+  vm.impersonation_enabled = if ADMIN_PANEL_CONFIG.impersonation then not ADMIN_PANEL_CONFIG.impersonation.disabled else true
 
   # Get the user
   MnoeUsers.get($stateParams.userId).then(

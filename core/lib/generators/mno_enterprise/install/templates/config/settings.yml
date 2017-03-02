@@ -24,7 +24,11 @@ developer:
 # Enable Reviews in the marketplace
 reviews:
   enabled: false
-
+# Enable comparison of apps
 marketplace:
   comparison:
     enabled: false
+# Disable Impersonation
+admin_panel:
+  impersonation:
+    disabled: false

@@ -26,10 +26,10 @@ MnoEnterprise::Engine.routes.draw do
     end
   end
 
-
-  get "/impersonate/user/:user_id", to: "impersonate#create", as: :impersonate_user
-  get "/impersonate/revert", to: "impersonate#destroy", as: :revert_impersonate_user
-
+  unless Settings.try(:admin_panel).try(:impersonation).try(:disabled)
+    get "/impersonate/user/:user_id", to: "impersonate#create", as: :impersonate_user
+    get "/impersonate/revert", to: "impersonate#destroy", as: :revert_impersonate_user
+  end
 
   #============================================================
   # Devise/User Configuration
@@ -95,7 +95,7 @@ MnoEnterprise::Engine.routes.draw do
         member do
           %i(app_reviews app_feedbacks app_comments app_questions app_answers).each do |name|
             resources name, except: [:new, :edit], param: :review_id
-          end  
+          end
         end
       end
       resource :current_user, only: [:show, :update] do

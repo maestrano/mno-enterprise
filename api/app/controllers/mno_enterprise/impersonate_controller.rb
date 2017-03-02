@@ -10,7 +10,7 @@ module MnoEnterprise
     def create
       session[:impersonator_redirect_path] = params[:redirect_path].presence
       @user = MnoEnterprise::User.find(params[:user_id])
-      if @user.present? && (!Settings.admin_panel || !Settings.admin_panel.impersonation.disabled)
+      if @user.present?
         impersonate(@user)
       else
         flash[:notice] = "User doesn't exist"

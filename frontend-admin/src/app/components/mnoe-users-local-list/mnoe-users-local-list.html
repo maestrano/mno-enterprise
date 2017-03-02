@@ -10,7 +10,7 @@
           <th>Username</th>
           <th style="width: 100px;">Creation</th>
           <th style="width: 140px;">Status</th>
-          <th style="width: 100px;" ng-if="!disable_impersonation"></th>
+          <th style="width: 100px;" ng-if="impersonation_enabled"></th>
         </tr>
       </thead>
       <tbody>
@@ -34,7 +34,7 @@
             </button>
             <span ng-show="user.status === 'active'">Active</span>
           </td>
-          <td ng-if="!disable_impersonation"><a href="" ng-click="impersonateUser(user)">Log In as...</a></td>
+          <td ng-if="impersonation_enabled"><a href="" ng-click="impersonateUser(user)">Log In as...</a></td>
         </tr>
       </tbody>
     </table>
