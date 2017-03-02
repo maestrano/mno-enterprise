@@ -41,7 +41,6 @@ module MnoEnterprise
       @data[:invoice_currency] = @invoice.price.currency_as_string
       @data[:invoice_currency_name] = @invoice.price.currency.name
       @data[:invoice_credit_paid] = @invoice.credit_paid
-      @data[:invoice_total_due] = @invoice.total_due
       @data[:invoice_total_payable] = @invoice.total_payable
       @data[:invoice_tax_payable] = @invoice.tax_payable
       @data[:invoice_tax_pips] = (@invoice.tax_pips_applied || 0)
@@ -135,13 +134,14 @@ module MnoEnterprise
 
     # Add a repeated header to the document
     def add_page_header
+      title = Settings.payment.disabled ? 'Account Statement - ' : 'Monthly Invoice - '
       @pdf.repeat :all do
         @pdf.bounding_box([0, @pdf.bounds.top+@format[:header_size]], width: 540, height: @format[:footer_size]) do
           @pdf.float do
             @pdf.image image_path('mno_enterprise/main-logo.png'), scale: 0.5
           end
           @pdf.move_down 52
-          @pdf.font_size(20) { @pdf.text "Monthly Invoice - #{@data[:period_month]}", style: :bold, align: :right }
+          @pdf.font_size(20) { @pdf.text title + "#{@data[:period_month]}", style: :bold, align: :right }
         end
       end
     end
@@ -156,7 +156,7 @@ module MnoEnterprise
           @pdf.move_down 10
           @pdf.font_size(8) do
             @pdf.text "<color rgb='999999'>Maestrano is a service of Maestrano Pty Ltd (ABN: 80 152 564 424),</color>", inline_format: true
-            @pdf.text "<color rgb='999999'>Suite 102, 410 Elizabeth Street, Surry Hills 2010, Sydney, Australia.</color>", inline_format: true
+            @pdf.text "<color rgb='999999'>Suite 504, 46 Market Street, Sydney, NSW 2000, Australia.</color>", inline_format: true
             @pdf.text "<color rgb='999999'>All charges are in #{@data[:invoice_currency_name]} (#{@data[:invoice_currency]}).</color>", inline_format: true
           end
         end
@@ -179,6 +179,8 @@ module MnoEnterprise
     # This method is responsible for
     # generating the actual pdf content
     def add_page_body
+      payment_enabled = !Settings.payment.disabled
+
       @pdf.stroke_color '999999'
 
       #===============================
@@ -191,10 +193,10 @@ module MnoEnterprise
         @pdf.fill_color = original_color
 
         @pdf.text_box "Your Reference", at: [310,@pdf.cursor], width: 65, height: 13, align: :center, valign: :center,
-          style: :bold_italic, size: 7
+                      style: :bold_italic, size: 7
 
         @pdf.text_box @data[:invoice_reference], at: [310,@pdf.cursor], width: 230, height: 50, align: :center, valign: :center,
-          style: :bold
+                      style: :bold
       end
 
       #===============================
@@ -211,8 +213,6 @@ module MnoEnterprise
         @pdf.text "<color rgb='999999'>#{@data[:customer_billing_address]}</color>", align: :left, inline_format: true, style: :italic, size: 9
       end
 
-
-
       #===============================
       # Summary
       #===============================
@@ -221,9 +221,12 @@ module MnoEnterprise
       @pdf.stroke_horizontal_rule
       @pdf.move_down 10
 
+      summary_data_amount = @data[:invoice_price]
+      summary_data_amount = @data[:invoice_total_payable_with_tax] if payment_enabled
+
       summary_data = []
       summary_data << ['Period', 'Total Payable' + (@data[:invoice_tax_pips] > 0 ? "\n<font size='8'><i>(incl. GST)</i></font>" : '')]
-      summary_data << ["#{@data[:period_started_at].strftime("%B, %e %Y")} to #{@data[:period_ended_at].strftime("%B, %e %Y")}",money(@data[:invoice_total_payable_with_tax])]
+      summary_data << ["#{@data[:period_started_at].strftime("%B, %e %Y")} to #{@data[:period_ended_at].strftime("%B, %e %Y")}",money(summary_data_amount)]
 
       # Draw Table background
       bg_height = @data[:invoice_tax_pips] > 0 ? 58 : 50
@@ -284,7 +287,7 @@ module MnoEnterprise
           @pdf.fill_color = original_color
 
           @pdf.text_box "Credit Remaining", at: [445,@pdf.cursor], width: 95, height: 23, align: :center, valign: :center,
-            style: :bold, size: 10
+                        style: :bold, size: 10
 
           @pdf.text_box money(@data[:customer_current_credit]), at: [445,@pdf.cursor], width: 95, height: 37, align: :center, valign: :bottom
         end
@@ -292,198 +295,79 @@ module MnoEnterprise
         @pdf.move_down 40
       end
 
-      #========================()=======
-      # Account Situation
-      #===============================
-      @pdf.move_down 30
-      @pdf.font_size(20) { @pdf.text 'Account Situation', style: :bold }
-      @pdf.stroke_horizontal_rule
-      @pdf.move_down 10
+      if payment_enabled
+        #===============================
+        # Account Situation
+        #===============================
+        @pdf.move_down 30
+        @pdf.font_size(20) { @pdf.text 'Account Situation', style: :bold }
+        @pdf.stroke_horizontal_rule
+        @pdf.move_down 10
 
-      # Situation Data
-      situation_data = []
-      # Header
-      situation_data << [
-        '',
-        '',
-        'Due Last Month',
-        '',
-        'Paid (Thank You)',
-        '',
-        'This Month',
-        '',
-        'Credit',
-        '',
-        'Total'
-      ]
-
-      #Content
-      situation_data << [
-        '',
-        '',
-        money(@data[:invoice_previous_total_due]),
-        '-',
-        money(@data[:invoice_previous_total_paid]),
-        '+',
-        money(@data[:invoice_price]),
-        '-',
-        money(@data[:invoice_credit_paid]),
-        '=',
-        money(@data[:invoice_total_payable])
-      ]
-
-      # Draw background
-      @pdf.float do
-        original_color = @pdf.fill_color
-        @pdf.fill_color "F0F0F0"
-        @pdf.fill_rounded_rectangle [0,@pdf.cursor], 540, 50, 5
-        @pdf.fill_color = original_color
-      end
-
-
-      # Draw left background
-      @pdf.float do
-        original_color = @pdf.fill_color
-        @pdf.fill_color "E0E0E0"
-        @pdf.fill_rounded_rectangle [0,@pdf.cursor], 80, 50, 5
-        @pdf.fill_color = original_color
-        @pdf.move_down 21
-        if @data[:invoice_tax_pips] > 0
-          @pdf.text_box 'Excl. GST', at: [12,@pdf.cursor]
-        else
-          @pdf.text_box 'Details', at: [20,@pdf.cursor]
-        end
-      end
-
-      # Draw table
-      @pdf.table(situation_data) do |t|
-        t.header = true
-        t.width = 540
-        t.column_widths = [75,18,75,18,75,18,75,18,75,18,75]
-        t.row(0).font_style = :bold
-        t.row(0).size = 8
-        t.row(0).height = 22
-        t.row(1).height = 25
-
-        t.cell_style = {
-          borders: [],
-          overflow: :shrink_to_fit,
-          align: :center
-        }
-
-        # Color the '+','-' and '=' characters
-        t.cells.style do |c|
-          if c.row == 1 && c.column.odd?
-            c.text_color = "a8a8a8"
-          end
-        end
-      end
-
-
-      #=================================
-      # Account Situation - Tax Section
-      #=================================
-      if @data[:invoice_tax_pips] > 0
-
-        #-----------------
-        # GST row
-        #-----------------
-        @pdf.move_down 8
-
-        table_data = []
-        table_data << [
+        # Situation Data
+        situation_data = []
+        # Header
+        situation_data << [
           '',
           '',
+          'Due Last Month',
+          '',
+          'Paid (Thank You)',
+          '',
+          'This Month',
+          '',
+          'Credit',
+          '',
+          'Total'
+        ]
+
+        #Content
+        situation_data << [
           '',
           '',
-          '',
-          '',
-          '',
-          '',
-          'GST',
+          money(@data[:invoice_previous_total_due]),
+          '-',
+          money(@data[:invoice_previous_total_paid]),
           '+',
-          money(@data[:invoice_tax_payable]),
-        ]
-
-        # Draw table background
-        @pdf.float do
-          original_color = @pdf.fill_color
-          @pdf.fill_color "F0F0F0"
-          @pdf.fill_rounded_rectangle [368,@pdf.cursor], 172, 24, 5
-          @pdf.fill_color = original_color
-        end
-
-        # Draw left background
-        @pdf.float do
-          original_color = @pdf.fill_color
-          @pdf.fill_color "FAB451"
-          @pdf.fill_rounded_rectangle [368,@pdf.cursor], 80, 24, 5
-          @pdf.fill_color = original_color
-        end
-
-        @pdf.table(table_data) do |t|
-          t.header = true
-          t.width = 540
-          t.column_widths = [75,18,75,18,75,18,75,18,75,18,75]
-          t.row(0).height = 25
-
-          t.cell_style = {
-            borders: [],
-            overflow: :shrink_to_fit,
-            align: :center
-          }
-
-          # Color the '+','-' and '=' characters
-          t.cells.style do |c|
-            if c.row == 0 && c.column.odd?
-              c.text_color = "a8a8a8"
-            end
-          end
-        end
-
-
-        #-----------------
-        # Total (incl. GST)
-        #-----------------
-        @pdf.move_down 5
-
-        table_data = []
-        table_data << [
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          '',
-          'Total (incl. GST)',
+          money(@data[:invoice_price]),
+          '-',
+          money(@data[:invoice_credit_paid]),
           '=',
-          money(@data[:invoice_total_payable_with_tax]),
+          money(@data[:invoice_total_payable])
         ]
 
-        # Draw table background
+        # Draw background
         @pdf.float do
           original_color = @pdf.fill_color
           @pdf.fill_color "F0F0F0"
-          @pdf.fill_rounded_rectangle [368,@pdf.cursor], 172, 24, 5
+          @pdf.fill_rounded_rectangle [0,@pdf.cursor], 540, 50, 5
           @pdf.fill_color = original_color
         end
+
 
         # Draw left background
         @pdf.float do
           original_color = @pdf.fill_color
-          @pdf.fill_color "DAE173"
-          @pdf.fill_rounded_rectangle [368,@pdf.cursor], 80, 24, 5
+          @pdf.fill_color "E0E0E0"
+          @pdf.fill_rounded_rectangle [0,@pdf.cursor], 80, 50, 5
           @pdf.fill_color = original_color
+          @pdf.move_down 21
+          if @data[:invoice_tax_pips] > 0
+            @pdf.text_box 'Excl. GST', at: [12,@pdf.cursor]
+          else
+            @pdf.text_box 'Details', at: [20,@pdf.cursor]
+          end
         end
 
-        @pdf.table(table_data) do |t|
+        # Draw table
+        @pdf.table(situation_data) do |t|
           t.header = true
           t.width = 540
-          t.row(0).font_style = :bold
           t.column_widths = [75,18,75,18,75,18,75,18,75,18,75]
-          t.row(0).height = 25
+          t.row(0).font_style = :bold
+          t.row(0).size = 8
+          t.row(0).height = 22
+          t.row(1).height = 25
 
           t.cell_style = {
             borders: [],
@@ -493,14 +377,133 @@ module MnoEnterprise
 
           # Color the '+','-' and '=' characters
           t.cells.style do |c|
-            if c.row == 0 && c.column.odd?
+            if c.row == 1 && c.column.odd?
               c.text_color = "a8a8a8"
             end
           end
         end
 
-      end
 
+        #=================================
+        # Account Situation - Tax Section
+        #=================================
+        if @data[:invoice_tax_pips] > 0
+
+          #-----------------
+          # GST row
+          #-----------------
+          @pdf.move_down 8
+
+          table_data = []
+          table_data << [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            'GST',
+            '+',
+            money(@data[:invoice_tax_payable]),
+          ]
+
+          # Draw table background
+          @pdf.float do
+            original_color = @pdf.fill_color
+            @pdf.fill_color "F0F0F0"
+            @pdf.fill_rounded_rectangle [368,@pdf.cursor], 172, 24, 5
+            @pdf.fill_color = original_color
+          end
+
+          # Draw left background
+          @pdf.float do
+            original_color = @pdf.fill_color
+            @pdf.fill_color "FAB451"
+            @pdf.fill_rounded_rectangle [368,@pdf.cursor], 80, 24, 5
+            @pdf.fill_color = original_color
+          end
+
+          @pdf.table(table_data) do |t|
+            t.header = true
+            t.width = 540
+            t.column_widths = [75,18,75,18,75,18,75,18,75,18,75]
+            t.row(0).height = 25
+
+            t.cell_style = {
+              borders: [],
+              overflow: :shrink_to_fit,
+              align: :center
+            }
+
+            # Color the '+','-' and '=' characters
+            t.cells.style do |c|
+              if c.row == 0 && c.column.odd?
+                c.text_color = "a8a8a8"
+              end
+            end
+          end
+
+
+          #-----------------
+          # Total (incl. GST)
+          #-----------------
+          @pdf.move_down 5
+
+          table_data = []
+          table_data << [
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            'Total (incl. GST)',
+            '=',
+            money(@data[:invoice_total_payable_with_tax]),
+          ]
+
+          # Draw table background
+          @pdf.float do
+            original_color = @pdf.fill_color
+            @pdf.fill_color "F0F0F0"
+            @pdf.fill_rounded_rectangle [368,@pdf.cursor], 172, 24, 5
+            @pdf.fill_color = original_color
+          end
+
+          # Draw left background
+          @pdf.float do
+            original_color = @pdf.fill_color
+            @pdf.fill_color "DAE173"
+            @pdf.fill_rounded_rectangle [368,@pdf.cursor], 80, 24, 5
+            @pdf.fill_color = original_color
+          end
+
+          @pdf.table(table_data) do |t|
+            t.header = true
+            t.width = 540
+            t.row(0).font_style = :bold
+            t.column_widths = [75,18,75,18,75,18,75,18,75,18,75]
+            t.row(0).height = 25
+
+            t.cell_style = {
+              borders: [],
+              overflow: :shrink_to_fit,
+              align: :center
+            }
+
+            # Color the '+','-' and '=' characters
+            t.cells.style do |c|
+              if c.row == 0 && c.column.odd?
+                c.text_color = "a8a8a8"
+              end
+            end
+          end
+        end
+      end
 
       #===============================
       # Details
@@ -520,10 +523,10 @@ module MnoEnterprise
         t.row_colors = ["FFFFFF", "F0F0F0"]
         t.column_widths = [240,100,100,100]
         t.cell_style = { borders: [:bottom],
-                        border_width: 1,
-                        border_color: "999999",
-                        inline_format: true
-                        }
+                         border_width: 1,
+                         border_color: "999999",
+                         inline_format: true
+        }
         t.row(0).borders = [:bottom]
         t.row(0).border_width = 2
         t.row(0).font_style = :bold

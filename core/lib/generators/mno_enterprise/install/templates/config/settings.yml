@@ -24,6 +24,9 @@ developer:
 # Enable Reviews in the marketplace
 reviews:
   enabled: false
+# Disable payment
+payment:
+  disabled: false
 # Enable comparison of apps
 marketplace:
   comparison:
