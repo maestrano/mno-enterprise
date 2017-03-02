@@ -48,7 +48,7 @@
           $window.location.assign("/dashboard/")
         # Logout if the user has no organization
         else
-          $window.location.assign("/dashboard/#/logout")
+          $window.location.assign("/dashboard/#!/logout")
     )
 
   @refreshUser = ->
