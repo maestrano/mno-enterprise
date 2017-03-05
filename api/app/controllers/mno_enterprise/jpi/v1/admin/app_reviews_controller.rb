@@ -20,7 +20,12 @@ module MnoEnterprise
     def update
       @app_review = MnoEnterprise::AppReview.find(params[:id])
       @app_review.update(app_review_params)
+      @app_review.save!
       render :show
+    end
+
+    def app_review_update_params
+      params.require(:app_review).permit(:status, :description)
     end
 
     def app_review_params

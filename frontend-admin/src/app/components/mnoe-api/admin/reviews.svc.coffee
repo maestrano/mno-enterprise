@@ -1,5 +1,5 @@
 # Service for managing the comments and reviews.
-@App.service 'MnoeReviews', (MnoeAdminApiSvc, $log, toastr) ->
+@App.service 'MnoeReviews', (MnoeAdminApiSvc, MnoeApiSvc, $log, toastr) ->
   _self = @
 
   # GET List /mnoe/jpi/v1/admin/app_reviews
@@ -24,8 +24,29 @@
         toastr.error('An error occured while updating the review.')
     )
 
-  @updateDescription = (review) ->
-    promise = MnoeAdminApiSvc.one('app_reviews', review.id).patch({description: review.description}).then(
+  @updateFeedback = (review_id, feedback) ->
+    promise = MnoeAdminApiSvc.one('app_reviews', review_id).patch({app_review: {description: feedback}}).then(
+      (response) ->
+        response
+      (error) ->
+        # Display an error
+        $log.error('Error while updating review', error)
+        toastr.error('An error occured while updating the review.')
+    )
+
+  @updateAnswer = (answer) ->
+    promise = MnoeAdminApiSvc.one('app_answers', answer.id).patch({description: answer.description}).then(
+      (response) ->
+        response
+      (error) ->
+        # Display an error
+        $log.error('Error while updating review', error)
+        toastr.error('An error occured while updating the review.')
+    )
+
+
+  @updateComment = (comment) ->
+    promise = MnoeAdminApiSvc.one("app_comments/#{comment.id}").patch({app_comment: {description: comment.description}}).then(
       (response) ->
         response
       (error) ->
