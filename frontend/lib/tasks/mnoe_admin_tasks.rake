@@ -9,13 +9,13 @@ require 'rake/clean'
 namespace :mnoe do
   namespace :admin do
     # Default version
-    MNOE_ADMIN_PANEL_VERSION = '1.0.0-rc.1'
+    MNOE_ADMIN_PANEL_VERSION = '1.0.0-rc.2'
     MNOE_ADMIN_PANEL_PKG = "git+https://git@github.com/maestrano/mnoe-admin-panel.git##{MNOE_ADMIN_PANEL_VERSION}"
 
     # Final build
     admin_panel_dist_folder = 'public/admin'
     # Local overrides
-    admin_panel_project_folder = 'admin_panel'
+    admin_panel_project_folder = 'frontend-admin-panel'
     # Tmp build
     admin_panel_tmp_folder = 'tmp/build/admin_panel'
     # Frontend package
