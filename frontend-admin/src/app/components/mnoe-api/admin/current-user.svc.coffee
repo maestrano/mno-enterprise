@@ -44,7 +44,7 @@
     _self.getUser().then(
       (response) ->
         # Redirect to dashboard if the user has at least one organization
-        if response.data.organizations? && response.data.organizations.length > 0
+        if response.organizations? && response.organizations.length > 0
           $window.location.assign("/dashboard/")
         # Logout if the user has no organization
         else
