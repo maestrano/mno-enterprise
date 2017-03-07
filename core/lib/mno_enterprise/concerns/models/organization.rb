@@ -112,4 +112,7 @@ module MnoEnterprise::Concerns::Models::Organization
     }
   end
 
+  def payment_restriction
+    meta_data && meta_data['payment_restriction']
+  end
 end

@@ -52,7 +52,8 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     ret = {
         'id' => organization.id,
         'name' => organization.name,
-        'soa_enabled' => organization.soa_enabled
+        'soa_enabled' => organization.soa_enabled,
+        'payment_restriction' => organization.payment_restriction
     }
 
     if admin
