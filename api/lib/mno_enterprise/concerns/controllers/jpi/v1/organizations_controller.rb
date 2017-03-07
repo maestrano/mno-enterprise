@@ -83,13 +83,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
   # PUT /mnoe/jpi/v1/organizations/:id/update_billing
   def update_billing
-    whitelist = ['title','first_name','last_name','number','month','year','country','verification_value','billing_address','billing_city','billing_postcode', 'billing_country']
-    attributes = params[:credit_card].select { |k,v| whitelist.include?(k.to_s) }
     authorize! :manage_billing, organization
 
     # Upsert
-    if @credit_card = organization.credit_card
-      @credit_card.assign_attributes(attributes.merge(organization_id: @credit_card.organization_id))
+    if (@credit_card = organization.credit_card)
+      @credit_card.assign_attributes(organization_billing_params.merge(organization_id: @credit_card.organization_id))
       @credit_card.save
     end
 
@@ -198,5 +196,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
     def organization_update_params
       params.fetch(:organization, {}).permit(*organization_permitted_update_params)
+    end
+
+    def organization_billing_params
+      params.require(:credit_card).permit(
+        'title', 'first_name', 'last_name', 'number', 'month', 'year', 'country', 'verification_value',
+        'billing_address', 'billing_city', 'billing_postcode', 'billing_country'
+      )
     end
 end
