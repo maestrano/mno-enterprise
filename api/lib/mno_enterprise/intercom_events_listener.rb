@@ -65,6 +65,7 @@ module MnoEnterprise
         update_last_request_at: update_last_request_at
       }
       data[:custom_attributes][:phone]= user.phone if user.phone
+      data[:custom_attributes][:external_id]= user.external_id if user.external_id
 
       data[:companies] = user.organizations.map do |organization|
         {
@@ -81,6 +82,14 @@ module MnoEnterprise
         }
       end
       intercom.users.create(data)
+      tag_user(user)
+    end
+
+    # If a source is set, tag the user with it
+    def tag_user(user)
+      if user.meta_data && user.meta_data[:source].present?
+        intercom.tags.tag(name: user.meta_data[:source], users: [{user_id: user.id}])
+      end
     end
   end
 end
