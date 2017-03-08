@@ -2,10 +2,10 @@
 
 - - -
 
-1. [Upgrading the frontend](upgrading-the-frontend)
-1. [Upgrading the gem](upgrading-the-gem)
-    1. [Migrating from v3.0/v3.1 to v3.2](migrating-from-v30v31-to-v32)
-    1. [Migrating from v2 to v3](migrating-from-v2-to-v3)
+1. [Upgrading the frontend](#upgrading-the-frontend)
+1. [Upgrading the gem](#upgrading-the-gem)
+    1. [Migrating from v3.0/v3.1 to v3.2](#migrating-from-v30v31-to-v32)
+    1. [Migrating from v2 to v3](#migrating-from-v2-to-v3)
 
 - - -
 
