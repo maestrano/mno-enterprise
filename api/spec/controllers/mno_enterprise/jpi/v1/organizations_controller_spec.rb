@@ -225,6 +225,42 @@ module MnoEnterprise
           subject
           expect(JSON.parse(response.body)).to eq(partial_hash_for_credit_card(organization.credit_card))
         end
+
+        describe 'when payment restrictions are set' do
+          before { organization.meta_data = {payment_restriction: [:visa]} }
+          let(:visa) { '4111111111111111' }
+          let(:mastercard) { '5105105105105100' }
+
+          context 'with a valid type' do
+            before { params.merge!(number: visa) }
+            it 'updates the entity credit card' do
+              expect_any_instance_of(MnoEnterprise::CreditCard).to receive(:save).and_return(true)
+              subject
+              expect(organization.credit_card).to_not be_nil
+              expect(organization.credit_card).to be_valid
+            end
+
+            it 'returns a partial representation of the entity' do
+              subject
+              expect(JSON.parse(response.body)).to eq(partial_hash_for_credit_card(organization.credit_card))
+            end
+          end
+
+          context 'with an invalid type' do
+            before { params.merge!(number: mastercard) }
+            it 'does not the entity credit card' do
+              expect_any_instance_of(MnoEnterprise::CreditCard).not_to receive(:save)
+              subject
+              expect(organization.credit_card.errors).to_not be_empty
+            end
+
+            it 'returns an error' do
+              subject
+              expect(response).to have_http_status(:bad_request)
+              expect(JSON.parse(response.body)).to eq({"number" => ["Payment is limited to Visa Card Holders"]})
+            end
+          end
+        end
       end
     end
 

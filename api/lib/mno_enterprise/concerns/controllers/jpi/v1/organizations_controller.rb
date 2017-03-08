@@ -86,7 +86,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     authorize! :manage_billing, organization
 
     # Upsert
-    if (@credit_card = organization.credit_card)
+    if (@credit_card = organization.credit_card) && check_valid_payment_method
       @credit_card.assign_attributes(organization_billing_params.merge(organization_id: @credit_card.organization_id))
       @credit_card.save
     end
@@ -203,5 +203,17 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
         'title', 'first_name', 'last_name', 'number', 'month', 'year', 'country', 'verification_value',
         'billing_address', 'billing_city', 'billing_postcode', 'billing_country'
       )
+    end
+
+    def check_valid_payment_method
+      return true unless organization.payment_restriction.present?
+
+      if CreditCardValidations::Detector.new(organization_billing_params[:number]).valid?(*organization.payment_restriction)
+        true
+      else
+        cards = organization.payment_restriction.map(&:capitalize).to_sentence
+        @credit_card.errors.add(:number, "Payment is limited to #{cards} Card Holders")
+        false
+      end
     end
 end
