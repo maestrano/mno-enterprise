@@ -53,6 +53,15 @@ module MnoEnterprise
     #===============================================
     # Specs
     #===============================================
+    shared_examples "an organization management action" do
+      context 'when Organization management is disabled' do
+        before { Settings.merge!(organization_management: {enabled: false}) }
+        after { Settings.reload! }
+
+        it { is_expected.to have_http_status(:forbidden) }
+      end
+    end
+
     describe 'GET #index' do
       subject { get :index }
 
@@ -97,6 +106,7 @@ module MnoEnterprise
       subject { post :create, organization: params }
 
       it_behaves_like "jpi v1 protected action"
+      it_behaves_like "an organization management action"
 
       context 'success' do
         before { subject }
@@ -120,6 +130,7 @@ module MnoEnterprise
       subject { put :update, id: organization.id, organization: params }
 
       it_behaves_like "jpi v1 authorizable action"
+      it_behaves_like "an organization management action"
 
       context 'success' do
         it 'updates the organization' do
@@ -140,6 +151,7 @@ module MnoEnterprise
       subject { delete :destroy, id: organization.id }
 
       it_behaves_like 'jpi v1 authorizable action'
+      it_behaves_like 'an organization management action'
 
       context 'success' do
         it 'deletes the organization' do
@@ -213,6 +225,7 @@ module MnoEnterprise
       subject { put :update_billing, id: organization.id, credit_card: params }
 
       it_behaves_like "jpi v1 protected action"
+      it_behaves_like "an organization management action"
 
       context 'authorized' do
         it 'updates the entity credit card' do
@@ -236,6 +249,7 @@ module MnoEnterprise
       subject { put :invite_members, id: organization.id, invites: params }
 
       it_behaves_like "jpi v1 authorizable action"
+      it_behaves_like "an organization management action"
 
       context 'succcess' do
         let(:relation) { instance_double('Her::Model::Relation') }
@@ -281,6 +295,7 @@ module MnoEnterprise
       subject { put :update_member, id: organization.id, member: params }
 
       it_behaves_like "jpi v1 authorizable action"
+      it_behaves_like "an organization management action"
 
       context 'with user' do
         let(:member) { build(:user) }
@@ -389,7 +404,7 @@ module MnoEnterprise
       subject { put :remove_member, id: organization.id, member: params }
 
       it_behaves_like "jpi v1 authorizable action"
-
+      it_behaves_like "an organization management action"
 
       context 'with user' do
         let(:params) { { email: user.email } }

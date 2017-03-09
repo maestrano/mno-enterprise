@@ -8,6 +8,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # context where it is included rather than being executed in the module's context
   included do
     before_filter :authenticate_user!, only: [:update, :update_password]
+    before_filter :user_management_enabled?, only: [:update, :update_password]
     respond_to :json
   end
 
@@ -64,5 +65,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
 
     def password_params
       params.require(:user).permit(:current_password, :password, :password_confirmation)
+    end
+
+    def user_management_enabled?
+      return head :forbidden unless Settings.user_management.enabled
     end
 end

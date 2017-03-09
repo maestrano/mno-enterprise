@@ -63,6 +63,16 @@ module MnoEnterprise
       hash
     end
 
+    shared_examples "a user management action" do
+      context 'when Organization management is disabled' do
+        before { Settings.merge!(user_management: {enabled: false}) }
+        before { sign_in user }
+        after { Settings.reload! }
+
+        it { is_expected.to have_http_status(:forbidden) }
+      end
+    end
+
     # Stub user retrieval
     let!(:user) { build(:user, :with_deletion_request, :with_organizations, :kpi_enabled) }
     before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
@@ -103,6 +113,8 @@ module MnoEnterprise
 
       subject { put :update, user: attrs }
 
+      it_behaves_like 'a user management action'
+
       describe 'guest' do
         before { subject }
         it { expect(response).to_not be_success }
@@ -131,6 +143,8 @@ module MnoEnterprise
       before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
 
       subject { put :update_password, user: attrs }
+
+      it_behaves_like 'a user management action'
 
       describe 'guest' do
         before { subject }
