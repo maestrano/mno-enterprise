@@ -8,6 +8,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   # context where it is included rather than being executed in the module's context
   included do
     respond_to :json
+    before_filter :organization_management_enabled?, only: [:create, :update, :destroy, :update_billing,
+                                                           :invite_members, :update_member, :remove_member]
   end
 
   #==================================================================
@@ -198,5 +200,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
     def organization_update_params
       params.fetch(:organization, {}).permit(*organization_permitted_update_params)
+    end
+
+    def organization_management_enabled?
+      return head :forbidden unless Settings.organization_management.enabled
     end
 end

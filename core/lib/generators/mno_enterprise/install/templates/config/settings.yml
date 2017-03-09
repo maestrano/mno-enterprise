@@ -31,7 +31,9 @@ payment:
 marketplace:
   comparison:
     enabled: false
-
+# Allow user to create and manage Organizations
+organization_management:
+  enabled: true
 # Disable Impersonation
 admin_panel:
   impersonation:
