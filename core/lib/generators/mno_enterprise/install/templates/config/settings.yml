@@ -34,6 +34,9 @@ marketplace:
 # Allow user to create and manage Organizations
 organization_management:
   enabled: true
+# Allow user to edit their information and password
+user_management:
+  enabled: true
 # Disable Impersonation
 admin_panel:
   impersonation:
