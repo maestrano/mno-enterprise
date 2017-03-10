@@ -1,2 +1,3 @@
 web: bundle exec puma
 gulp: cd ./tmp/build/frontend && node_modules/.bin/gulp serve
+gulp-admin: cd ./tmp/build/admin_panel && npm run serve

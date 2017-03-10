@@ -9,7 +9,7 @@ require 'rake/clean'
 namespace :mnoe do
   namespace :admin do
     # Default version
-    MNOE_ADMIN_PANEL_VERSION = '1.0.0-rc.2'
+    MNOE_ADMIN_PANEL_VERSION = 'master'
     MNOE_ADMIN_PANEL_PKG = "git+https://git@github.com/maestrano/mnoe-admin-panel.git##{MNOE_ADMIN_PANEL_VERSION}"
 
     # Final build
@@ -62,7 +62,7 @@ namespace :mnoe do
       end
 
       # Copy assets to public
-      cp_r("#{admin_panel_tmp_folder}/dist/.","#{admin_panel_dist_folder}/")
+      cp_r("#{admin_panel_tmp_folder}/dist/.", "#{admin_panel_dist_folder}/")
 
       # Clear tmp cache in development - recompile assets otherwise
       if Rails.env.development? || Rails.env.test?
