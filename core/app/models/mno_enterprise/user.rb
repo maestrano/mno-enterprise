@@ -200,6 +200,9 @@ module MnoEnterprise
     def refresh_user_cache
       self.reload
       Rails.cache.write(['user', self.to_key], self)
+    # singleton can't be dumped / undefined method `marshal_dump' for nil
+    rescue TypeError, NoMethodError
+      expire_user_cache
     end
 
     # Used by omniauth providers to find or create users
