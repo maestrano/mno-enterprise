@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'coffee-rails', '~> 4.1'
   s.add_runtime_dependency 'health_check', '~> 2.4'
   s.add_runtime_dependency 'httparty', '~> 0.13.7'
+  s.add_runtime_dependency 'credit_card_validations', '~> 3.4.0'
   # Lock sprocket version
   s.add_dependency 'sprockets-rails', '~> 2.3'
 
@@ -39,5 +40,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'omniauth-facebook', '~> 2.0.1'
   # TODO make gem works with rails 4
   # s.add_runtime_dependency 'active_record_openid_store', '~> 0.1.5'
-
 end

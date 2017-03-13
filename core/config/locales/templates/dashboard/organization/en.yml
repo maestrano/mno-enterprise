@@ -29,6 +29,7 @@ en:
               placeholder_name: Name
               placeholder_surname: Surname
               number: Card Number
+              unaccepted_type: This card type is not accepted
               cvv: CVV
               country: Country
               country_select: "-- SELECT --"

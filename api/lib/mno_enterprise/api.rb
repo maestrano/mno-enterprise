@@ -1,6 +1,7 @@
 require 'action_view' # To fix "uninitialized constant Haml::ActionView"
 require 'jbuilder'
 require 'haml'
+require 'credit_card_validations'
 
 require 'mno_enterprise/core'
 
