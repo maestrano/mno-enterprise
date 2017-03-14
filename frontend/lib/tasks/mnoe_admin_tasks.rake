@@ -1,4 +1,6 @@
 require 'fileutils'
+require 'erb'
+require 'rake/clean'
 
 #=============================================
 # Enterprise Express Tasks
@@ -6,48 +8,61 @@ require 'fileutils'
 # Enterprise Express related tasks
 namespace :mnoe do
   namespace :admin do
-    admin_dist_folder = "public/admin"
-    frontend_tmp_folder = 'tmp/build/admin'
-    frontend_orig_folder = 'frontend-admin'
+    # Default version
+    MNOE_ADMIN_PANEL_VERSION = 'master'
+    MNOE_ADMIN_PANEL_PKG = "git+https://git@github.com/maestrano/mnoe-admin-panel.git##{MNOE_ADMIN_PANEL_VERSION}"
 
-    # Use bundled gulp
-    gulp = "./node_modules/.bin/gulp"
+    # Final build
+    admin_panel_dist_folder = 'public/admin'
+    # Local overrides
+    admin_panel_project_folder = 'frontend-admin-panel'
+    # Tmp build
+    admin_panel_tmp_folder = 'tmp/build/admin_panel'
+    # Frontend package
+    ADMIN_PANEL_PKG_FOLDER = 'node_modules/mnoe-admin-panel'
 
-    desc "Install dependencies"
-    task :install_dependencies do
-      # Install required tools
-      sh("which bower || npm install -g bower")
+    ## Helper methods
+    def render_template(template_file, output_file, binding = nil)
+      File.open(output_file, "w+") do |f|
+        f.write(ERB.new(File.read(template_file)).result(binding))
+      end
     end
 
+    desc 'Setup the Enterprise Express Admin Panel'
+    task :install do
+      Rake::Task['mnoe:admin:add_package'].invoke
 
-    desc "Setup the Enterprise Express Admin Dashboard"
-    task install: :install_dependencies do
-      # Build the admin
-      Rake::Task['mnoe:admin:dist'].invoke
+      Rake::Task['mnoe:admin:install_frontend'].invoke
+
+      # Bootstrap frontend folder
+      Rake::Task['mnoe:admin:bootstrap_override_folder'].invoke
+
+      # Build the frontend
+      Rake::Task['mnoe:admin:build'].invoke
     end
 
-    desc "Rebuild the Enterprise Express Admin Dashboard"
-    task :dist do
+    desc 'Build/Rebuild the Enterprise Express Admin Panel'
+    task :build do
       # Prepare the build folder
       Rake::Task['mnoe:admin:prepare_build_folder'].execute
 
       # Build frontend using Gulp
-      Dir.chdir(frontend_tmp_folder) do
-        sh "npm install"
-        sh "bower install"
-        sh gulp
+      Dir.chdir(admin_panel_tmp_folder) do
+        sh 'yarn install'
+        sh 'bower install'
+        sh 'npm run build'
       end
 
       # Ensure distribution folder exists
-      mkdir_p admin_dist_folder
+      mkdir_p admin_panel_dist_folder
 
       # Cleanup previously compiled files
-      Dir.glob("#{admin_dist_folder}/{styles,scripts}/app-*.{css,js}").each do |f|
+      Dir.glob("#{admin_panel_dist_folder}/{styles,scripts}/*.{css,js}").each do |f|
         rm_f f
       end
 
       # Copy assets to public
-      cp_r("#{frontend_tmp_folder}/dist/.", "#{admin_dist_folder}/")
+      cp_r("#{admin_panel_tmp_folder}/dist/.", "#{admin_panel_dist_folder}/")
 
       # Clear tmp cache in development - recompile assets otherwise
       if Rails.env.development? || Rails.env.test?
@@ -57,13 +72,94 @@ namespace :mnoe do
       end
     end
 
-    desc "Reset the admin build folder"
+    # Alias to dist for backward compatibility
+    task dist: :build
+
+    desc 'Update the admin panel and rebuild it'
+    task update: :install_dependencies do
+      # Fetch new version of the packages
+      sh 'yarn upgrade --ignore-scripts --ignore-engines'
+
+      # Cleanup
+      rm_rf "#{admin_panel_tmp_folder}/bower_components"
+
+      # Rebuild the admin panel
+      Rake::Task['mnoe:admin:build'].execute
+    end
+
+    # Install dependencies
+    task :install_dependencies do
+      unless system('which yarn')
+        puts 'Yarn executable was not detected in the system.'
+        puts 'Download Yarn at https://yarnpkg.com/en/docs/install'
+        raise
+      end
+
+      # Install required tools
+      sh('which bower || npm install -g bower')
+    end
+
+    # Add 'mnoe-admin-panel' to package.json
+    task :add_package do
+      sh "yarn add  --ignore-scripts --ignore-engines #{MNOE_ADMIN_PANEL_PKG}"
+    end
+
+    task install_frontend: [:install_dependencies] do
+      # Fetch the packages
+      sh('yarn install --ignore-scripts --ignore-engines')
+    end
+
+    # Create & populate the admin panel override folder
+    task :bootstrap_override_folder do
+      # Create admin panel override folder
+      mkdir_p(admin_panel_project_folder)
+      touch "#{admin_panel_project_folder}/.keep"
+
+      # Bootstrap override folder
+      # Replace relative image path by absolute path in the LESS files
+      mkdir_p("#{admin_panel_project_folder}/src/app/stylesheets")
+      %w(src/app/stylesheets/theme.less src/app/stylesheets/variables.less).each do |path|
+        next if File.exist?("#{admin_panel_project_folder}/#{path}")
+
+        # Generate file from template
+        cp("#{ADMIN_PANEL_PKG_FOLDER}/#{path}","#{admin_panel_project_folder}/#{path}")
+
+        # Replace image relative path
+        content = File.read("#{admin_panel_project_folder}/#{path}")
+        File.open("#{admin_panel_project_folder}/#{path}", 'w') do |f|
+          f << content.gsub('../images', File.join(admin_panel_dist_folder.gsub('public', ''), 'images'))
+        end
+      end
+
+      # Create custom fonts files so we can safely include them in main.less
+      admin_panel_font_folder = File.join(admin_panel_project_folder, 'src/fonts')
+      unless File.exist?(File.join(admin_panel_font_folder, 'font-faces.less'))
+        font_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','font-faces.less')
+
+        mkdir_p(admin_panel_font_folder)
+        cp(font_src, admin_panel_font_folder)
+      end
+    end
+
+    # Reset the frontend build folder and apply local customisations
     task :prepare_build_folder do
-      # Reset tmp folder from mno-enterprise/frontend-admin source
-      rm_rf "#{admin_dist_folder}"
-      rm_rf "#{frontend_tmp_folder}"
-      mkdir_p frontend_tmp_folder
-      cp_r(File.join(Gem.loaded_specs["mno-enterprise"].full_gem_path, "#{frontend_orig_folder}/."), "#{frontend_tmp_folder}/")
+      # Ensure frontend is downloaded
+      Rake::Task['mnoe:admin:install_frontend'].invoke unless File.directory?(ADMIN_PANEL_PKG_FOLDER)
+
+      # Reset tmp folder from mnoe-admin-panel source
+      rm_rf "#{admin_panel_tmp_folder}/src"
+      rm_rf "#{admin_panel_tmp_folder}/e2e"
+      mkdir_p admin_panel_tmp_folder
+      cp_r("#{ADMIN_PANEL_PKG_FOLDER}/.", "#{admin_panel_tmp_folder}/")
+
+      # Apply frontend customisations
+      cp_r("#{admin_panel_project_folder}/.", "#{admin_panel_tmp_folder}/")
+    end
+
+    desc 'Remove all generated files'
+    task :clean do
+      clean = FileList[admin_panel_tmp_folder, admin_panel_dist_folder, ADMIN_PANEL_PKG_FOLDER, 'node_modules/.yarn-integrity']
+      Rake::Cleaner.cleanup_files(clean)
     end
   end
 end
