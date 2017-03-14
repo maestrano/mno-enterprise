@@ -10,7 +10,7 @@ namespace :mnoe do
   namespace :frontend do
     # Default version
     MNOE_ANGULAR_VERSION = "master"
-    IMPAC_ANGULAR_VERSION = "1.5.0-rc3"
+    IMPAC_ANGULAR_VERSION = "1.5.0-rc4"
 
     # Final build
     frontend_dist_folder = "public/dashboard"
