@@ -27,8 +27,11 @@ reviews:
 # Disable payment
 payment:
   disabled: false
-# Enable comparison of apps
+# Marketplace config
 marketplace:
+  # Enable the marketplace
+  enabled: true
+  # Enable comparison of apps
   comparison:
     enabled: false
 # Allow user to create and manage Organizations
