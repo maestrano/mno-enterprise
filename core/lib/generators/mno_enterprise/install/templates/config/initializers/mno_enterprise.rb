@@ -3,7 +3,7 @@ MnoEnterprise.configure do |config|
   # General Configuration
   #===============================================
   # Name of your company/application
-  config.app_name = 'My Company'
+  config.app_name = '<%= @company_name || "My Company" %>'
 
   # Fallback default country.
   # Used as default in geolocalised fields (e.g.: country, phone number)
@@ -32,13 +32,14 @@ MnoEnterprise.configure do |config|
   # Default to :mandrill
   # config.mail_adapter = :mandrill
   # config.mail_adapter = :sparkpost
+  # config.mail_adapter = :smtp
 
   # Support email address
-  config.support_email = 'support@example.com'
+  config.support_email = '<%= @support_email || "support@example.com" %>'
 
   # Default sender for system generated emails
-  config.default_sender_name = 'My Company'
-  config.default_sender_email = 'no-reply@example.com'
+  config.default_sender_name = '<%= @company_name || "My Company" %>'
+  config.default_sender_email = '<%= @system_email || "no-reply@example.com" %>'
 
   #===============================================
   # External Routes
@@ -97,55 +98,11 @@ MnoEnterprise.configure do |config|
   #===============================================
   # Marketplace Listing
   #===============================================
+  # [DEPRECATED] Please get in touch with our enterprise team
   # List of applications that should be offered on the marketplace
   # Set to nil to offer everything
   # config.marketplace_listing = nil
-  # config.marketplace_listing = [
-  #   "allocpsa",
-  #   "boxsuite",
-  #   "bugzilla",
-  #   "collabtive",
-  #   "dolibarr",
-  #   "drupal",
-  #   "egroupware",
-  #   "eventbrite",
-  #   "feng-office",
-  #   "front-accounting",
-  #   "group-office",
-  #   "hummingbirdshare",
-  #   "interleave",
-  #   "jenkins",
-  #   "joomla",
-  #   "limesurvey",
-  #   "mantisbt",
-  #   "magento",
-  #   "megaventory",
-  #   "moodle",
-  #   "myob",
-  #   "office-365",
-  #   "opendocman",
-  #   "openerp",
-  #   "openx",
-  #   "orangehrm",
-  #   "pentaho-bi",
-  #   "phreedom",
-  #   "plandora",
-  #   "prestashop",
-  #   "processmaker",
-  #   "projectpier",
-  #   "quickbooks",
-  #   "ranqx",
-  #   "receipt-bank",
-  #   "signmee",
-  #   "simpleinvoices",
-  #   "so-planning",
-  #   "spotlight-reporting",
-  #   "sugarcrm",
-  #   "timetrex",
-  #   "vtiger6",
-  #   "xero",
-  #   "wordpress"
-  # ]
+  # config.marketplace_listing = ["xero"]
 
   #====================================
   # Impac! widgets templates listing

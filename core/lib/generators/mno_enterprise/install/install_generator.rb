@@ -8,8 +8,18 @@ module MnoEnterprise
 
       # class_option :skip_rspec, type: :boolean, default: false, desc: 'Skip rspec-rails installation'
       # class_option :skip_factory_girl, type: :boolean, default: false, desc: 'Skip factory_girl installation'
+      class_option :skip_application_config, type: :boolean, default: false, desc: 'Skip Application config'
       class_option :skip_frontend, type: :boolean, default: false, desc: 'Skip frontend installation'
       class_option :skip_admin, type: :boolean, default: false, desc: 'Skip admin installation'
+
+      def application_config
+        return if options[:skip_application_config]
+
+        say("\n")
+        @company_name  = ask("Company Name [My Company]: ").presence || "My Company"
+        @support_email = ask("Support email [support@example.com]: ").presence || "support@example.com"
+        @system_email  = ask("System email [no-reply@example.com]: ").presence || "no-reply@example.com"
+      end
 
       def copy_initializer
         # Foreman config
