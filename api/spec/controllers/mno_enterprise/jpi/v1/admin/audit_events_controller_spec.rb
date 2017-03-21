@@ -35,6 +35,15 @@ module MnoEnterprise
           expect(response).to render_template :index
         end
       end
+
+      context 'csv' do
+        before { request.env["HTTP_ACCEPT"] = 'text/csv' }
+
+        it 'renders the :index view' do
+          subject
+          expect(response).to render_template :index
+        end
+      end
     end
   end
 end
