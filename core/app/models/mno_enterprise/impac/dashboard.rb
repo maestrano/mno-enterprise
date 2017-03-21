@@ -38,7 +38,10 @@ module MnoEnterprise
     end
 
     def to_audit_event
-      {name: name}
+      {
+        name: name,
+        organization_id: (owner_type == 'MnoEnterprise::Organization') ? owner_id : nil
+      }
     end
   end
 end

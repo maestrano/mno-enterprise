@@ -6,6 +6,8 @@ FactoryGirl.define do
       user_id 1
       description 'Blabla'
       details 'Details'
+      organization_id 1
+      organization { {name: 'Org'} }
       user { {name: 'John', surname: 'Doe'} }
 
       # Properly build the resource with Her
