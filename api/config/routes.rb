@@ -26,6 +26,11 @@ MnoEnterprise::Engine.routes.draw do
     end
   end
 
+  # Invoices
+  namespace :admin do
+    resources :invoices, only: [:show], constraints: { id: /[\w\-]+/ }
+  end
+
   unless Settings.try(:admin_panel).try(:impersonation).try(:disabled)
     get "/impersonate/user/:user_id", to: "impersonate#create", as: :impersonate_user
     get "/impersonate/revert", to: "impersonate#destroy", as: :revert_impersonate_user
