@@ -3,4 +3,4 @@ impac:
   host: api-impac.maestrano.com
 mno:
   protocol: https
-  host: maestrano.com
+  host: api-hub.maestrano.com
