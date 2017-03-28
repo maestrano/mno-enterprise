@@ -120,6 +120,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
       )
 
       MnoEnterprise::SystemNotificationMailer.organization_invite(@org_invite).deliver_now
+      MnoEnterprise::EventLogger.info('user_invite', current_user.id, 'User invited', @org_invite)
     end
 
     # Reload users

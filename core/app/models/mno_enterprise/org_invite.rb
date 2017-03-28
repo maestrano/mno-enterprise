@@ -29,23 +29,27 @@ module MnoEnterprise
     belongs_to :referrer, class_name: 'MnoEnterprise::User'
     belongs_to :organization, class_name: 'MnoEnterprise::Organization'
     belongs_to :team, class_name: 'MnoEnterprise::Team'
-    
+
     # TODO: specs
     # Add the user to the organization and update the status of the invite
     # Add team
     def accept!(user = self.user)
       self.put(operation: 'accept', data: { user_id: user.id})
     end
-    
+
     # TODO: specs
     def cancel!
       self.put(operation: 'cancel')
     end
-    
+
     # TODO: specs
     # Check whether the invite is expired or not
     def expired?
       self.status != 'pending' || self.created_at < 3.days.ago
+    end
+
+    def to_audit_event
+      self.attributes.slice(:team_id, :user_role, :user_email, :user_id, :referrer_id, :organization_id)
     end
   end
 end
