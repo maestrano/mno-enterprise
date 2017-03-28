@@ -14,7 +14,7 @@ if app_instance.per_user_licence?
 end
 
 if app_instance.under_free_trial?
-  json.free_trial_end_at time_ago_in_words(app_instance.free_trial_end_at)
+  json.free_trial_end_at app_instance.free_trial_end_at
 end
 
 if app_instance.oauth_company
