@@ -139,10 +139,6 @@ namespace :mnoe do
       # Fetch new version of the packages
       sh "yarn upgrade --ignore-scripts --ignore-engines"
 
-      # Override frontend dependencies
-      puts "Locking frontend dependencies"
-      override_frontend_dependencies
-
       # Cleanup
       rm_rf "#{frontend_tmp_folder}/bower_components"
 
@@ -203,10 +199,6 @@ namespace :mnoe do
     task install_frontend: [:install_dependencies, PKG_FILE] do
       # Fetch the packages
       sh("yarn install --ignore-scripts --ignore-engines")
-
-      # Override frontend dependencies
-      puts "Locking frontend dependencies"
-      override_frontend_dependencies
     end
 
     # Rebuild the Live Previewer Style
@@ -239,6 +231,10 @@ namespace :mnoe do
     task :prepare_build_folder do
       # Ensure frontend is downloaded
       Rake::Task['mnoe:frontend:install_frontend'].invoke unless File.directory?(FRONTEND_PKG_FOLDER)
+
+      # Override frontend dependencies
+      puts "Locking frontend dependencies"
+      override_frontend_dependencies
 
       # Reset tmp folder from mno-enterprise-angular source
       rm_rf "#{frontend_tmp_folder}/src"

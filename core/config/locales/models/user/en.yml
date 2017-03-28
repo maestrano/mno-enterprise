@@ -41,5 +41,10 @@ en:
         updated_at: Updated at
         website: Website
     errors:
+      models:
+        mno_enterprise/user:
+          attributes:
+            email:
+              taken: "has already been taken"
       mno_enterprise/user:
         password_weak: "Password is not strong enough. Try mixing letters, numbers and cases"
