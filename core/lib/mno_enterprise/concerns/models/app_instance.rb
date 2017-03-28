@@ -99,7 +99,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
       uid: uid,
       name: name,
       app_nid: app ? app.nid : nil,
-      organization_id: owner_id
+      organization_id: owner_id || owner.id
     }
   end
 end
