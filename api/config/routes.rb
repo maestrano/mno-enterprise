@@ -134,6 +134,8 @@ MnoEnterprise::Engine.routes.draw do
         end
 
         resources :app_instances_sync, only: [:create, :index]
+
+        resources :audit_events, only: [:index]
       end
 
       resources :deletion_requests, only: [:show, :create, :destroy] do

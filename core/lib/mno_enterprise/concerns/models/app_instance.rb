@@ -98,9 +98,8 @@ module MnoEnterprise::Concerns::Models::AppInstance
       id: id,
       uid: uid,
       name: name,
-      app_nid: app ? app.nid : nil
+      app_nid: app ? app.nid : nil,
+      organization_id: owner_id || owner.id
     }
   end
-
-
 end
