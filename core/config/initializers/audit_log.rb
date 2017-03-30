@@ -4,7 +4,7 @@ unless defined? AUDIT_LOG_CONFIG
   begin
     AUDIT_LOG_CONFIG = Rails.application.config_for('audit_log')
   rescue
-    {
+    AUDIT_LOG_CONFIG = {
       "events" => {
         "app_add" => "%{name} added",
         "app_destroy" => "%{name} removed",
