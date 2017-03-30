@@ -10,6 +10,9 @@ en:
             warning: "Unfortunately if we are unable to charge your credit card by {{date}}, your applications will be automatically shut down."
             retry: Retry Payment
 
+          audit_log:
+            export: Export
+
           billing:
             current_billing_html: "Your billing for the current invoicing period is: <b>{{amount}}</b>"
             current_credit_html: "You have <b>{{amount}}</b> credit on your account to be used for the next payment. Note that this credit account will also be linked to any organization you create."
@@ -46,6 +49,8 @@ en:
 
           index:
             title: Company
+            audit_log:
+              title: Audit Log
             billing:
               title: Billing
               current_billing: Current Billing
