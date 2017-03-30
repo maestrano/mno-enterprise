@@ -29,3 +29,14 @@ en:
           success_notification_title: "{{name}} has been added to your account"
           success_launch_notification_body: "To start using {{name}}, click on the {{name}} icon then click on \"Launch\"."
           success_connect_notification_body: "To start using {{name}}, click on the {{name}} icon then click on \"Connect\"."
+
+        audit_events_list:
+          table:
+            date: Date
+            user: User
+            action: Action
+            description: Description
+            loading_events: Loading Events
+
+        mno_pagination:
+          items_per_page: "Items per page: "
