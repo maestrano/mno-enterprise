@@ -1,4 +1,4 @@
-<%- headers = ['Date', 'User', 'User email', 'Organization', 'Organization Name', 'Action', 'Description'] -%>
+<%- headers = ['Date', 'User', 'User email', 'Organization', 'Organization Name', 'Action', 'Description', 'Details'] -%>
 <%= CSV.generate_line headers -%>
 <%- @audit_events.each do |event| -%>
 <%= CSV.generate_line([
@@ -8,6 +8,7 @@
   event.organization_id,
   event.organization[:name],
   event.key,
-  event.description
-]) -%>
+  event.description,
+  event.formatted_details.present? ? %{#{event.formatted_details}} : event.metadata
+]).html_safe -%>
 <%- end -%>
