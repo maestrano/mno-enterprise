@@ -13,6 +13,14 @@ module MnoEnterprise
       @audit_events = @audit_events.all.fetch
 
       response.headers['X-Total-Count'] = @audit_events.metadata[:pagination][:count]
+
+      respond_to do |format|
+        format.json
+        format.csv do
+          headers['Content-Disposition'] = 'attachment; filename="audit-log.csv"'
+          headers['Content-Type'] ||= 'text/csv'
+        end
+      end
     end
   end
 end

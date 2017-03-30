@@ -1,0 +1,12 @@
+<%- headers = ['Date', 'User', 'User email', 'Action', 'Description', 'Details'] -%>
+<%= CSV.generate_line headers -%>
+<%- @audit_events.each do |event| -%>
+<%= CSV.generate_line([
+  event.created_at,
+  event.user[:name],
+  event.user[:email],
+  event.key,
+  event.description,
+  event.formatted_details.present? ? %{#{event.formatted_details}} : event.metadata
+]).html_safe -%>
+<%- end -%>
