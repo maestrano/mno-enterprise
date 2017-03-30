@@ -10,7 +10,7 @@ unless defined? AUDIT_LOG_CONFIG
         "app_destroy" => "%{name} removed",
         "app_launch" => "%{name} launched",
         "dashboard_create" => "Dashboard '%{name}' created",
-        "dashboard_dashboard_delete" => "Dashboard '%{name}' deleted",
+        "dashboard_delete" => "Dashboard '%{name}' deleted",
         "widget_create" => "Widget '%{name}' added",
         "user_invite" => "%{user_email} invited"
       }
