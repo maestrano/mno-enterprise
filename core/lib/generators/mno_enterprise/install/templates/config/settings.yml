@@ -11,7 +11,9 @@ frontend_host:
 #===============================================
 # Feature Flags
 #===============================================
-
+# Do not display Audit Log in Organization Panel
+audit_log:
+  enabled: false
 # Display App Pricing on Marketplace
 pricing:
   enabled: false
@@ -47,17 +49,18 @@ devise:
 
 # Admin Panel Config
 admin_panel:
-  # Disable Impersonation
-  impersonation:
-    disabled: false
-  staff:
-    enabled: true
-  finance:
-    enabled: true
   apps_management:
+    enabled: true
+  audit_log:
     enabled: true
   customer_management:
     organization:
       enabled: true
     user:
       enabled: true
+  finance:
+    enabled: true
+  impersonation:
+    disabled: false
+  staff:
+    enabled: true
