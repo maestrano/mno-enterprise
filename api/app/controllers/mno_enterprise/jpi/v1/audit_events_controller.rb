@@ -5,7 +5,7 @@ module MnoEnterprise
     def index
       @organization = MnoEnterprise::Organization.find(params.require(:organization_id))
 
-      authorize! :manage, @organization
+      authorize! :administrate, @organization
 
       @audit_events = MnoEnterprise::AuditEvent.where(organization_id: @organization.id)
       @audit_events = @audit_events.limit(params[:limit]) if params[:limit]
