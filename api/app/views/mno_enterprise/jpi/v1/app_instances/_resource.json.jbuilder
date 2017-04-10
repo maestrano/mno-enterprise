@@ -8,10 +8,8 @@ json.oauth_keys_valid app_instance.oauth_keys_valid
 #json.microsoft_trial_url app_instance.microsoft_trial_url
 json.created_at app_instance.created_at
 
-if app_instance.per_user_licence?
-	json.per_user_licence app_instance.per_user_licence
-	json.licences_count app_instance.active_licences_count
-end
+json.per_user_licence app_instance.per_user_licence
+json.licences_count app_instance.active_licences_count if app_instance.per_user_licence?
 
 if app_instance.under_free_trial?
   json.free_trial_end_at app_instance.free_trial_end_at
