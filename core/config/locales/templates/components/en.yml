@@ -31,12 +31,12 @@ en:
           success_connect_notification_body: "To start using {{name}}, click on the {{name}} icon then click on \"Connect\"."
 
         audit_events_list:
+          loading_events: Loading Events
           table:
             date: Date
             user: User
             action: Action
             description: Description
-            loading_events: Loading Events
 
         mno_pagination:
           items_per_page: "Items per page: "
