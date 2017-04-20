@@ -7,6 +7,7 @@ MnoEnterprise::Engine.routes.draw do
   get '/app_logout', to: 'pages#app_logout'
   get '/terms', to: 'pages#terms'
 
+  get '/home', to: 'home#index'
   # Health Status
   get '/ping', to: 'status#ping'
   get '/version', to: 'status#version'

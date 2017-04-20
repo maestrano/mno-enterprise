@@ -80,7 +80,6 @@ module MnoEnterprise
     # Handle return_to parameter in URL if present
     def capture_return_to_redirection
       return false unless request.format == 'text/html' && params[:return_to].present?
-
       # Capture return url
       session[:return_to] = params[:return_to]
     end
@@ -91,20 +90,24 @@ module MnoEnterprise
 
       # Add Web Token to URL
       separator = (url =~ /\?/ ? '&' : '?')
-
       url + "#{separator}wtk=#{MnoEnterprise.jwt({user_id: resource.uid})}"
     end
 
     # Redirect to previous url and reset it
     def after_sign_in_path_for(resource)
       previous_url = session.delete(:previous_url)
-      default_url = if resource.respond_to?(:admin_role) && resource.admin_role.present?
+      default_url = user_default_url(resource)
+      return (return_to_url(resource) || previous_url || default_url)
+    end
+
+    def user_default_url(resource)
+      if resource.respond_to?(:admin_role) && resource.admin_role.present?
         MnoEnterprise.router.admin_path
       else
         MnoEnterprise.router.dashboard_path || main_app.root_url
       end
-      return (return_to_url(resource) || previous_url || default_url)
     end
+
 
     # Some controllers needs to redirect to 'MySpace' which breaks if you dont use mnoe-frontend
     # Rather than relying on the MainApp to define dashboard_path we check it here
