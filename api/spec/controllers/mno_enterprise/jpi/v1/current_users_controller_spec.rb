@@ -24,6 +24,7 @@ module MnoEnterprise
           'email' => res.email,
           'logged_in' => !!res.id,
           'created_at' => res.created_at ? res.created_at.iso8601 : nil,
+          'confirmed_at' => res.confirmed_at ? res.confirmed_at.iso8601 : nil,
           'company' => res.company,
           'phone' => res.phone,
           'api_secret' => res.api_secret,
