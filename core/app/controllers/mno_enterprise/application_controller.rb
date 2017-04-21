@@ -1,6 +1,6 @@
 module MnoEnterprise
   class ApplicationController < ActionController::Base
-    protect_from_forgery
+    protect_from_forgery if: -> { MnoEnterprise.include_angular_csrf }
     include ApplicationHelper
     prepend_before_filter :skip_devise_trackable_on_xhr
 
