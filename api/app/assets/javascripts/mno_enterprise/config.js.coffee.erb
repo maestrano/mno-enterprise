@@ -1,9 +1,15 @@
 # Configuration module
 #
-# Recompile if the settings change
+# Dist: Recompile front-end if the settings change
+# Dev: Delete express project public/assets to ensure nothing is cached, bundle and restart.
 # = depend_on_config
 angular.module('mnoEnterprise.configuration', [])
-  .constant('IMPAC_CONFIG', <%= Settings.impac.to_json %>)
+  .constant('IMPAC_CONFIG', {
+    settings: <%= Settings.impac.to_json %>,
+    keys: {
+      pusher_client: <%= ((k = ENV['pusher_key']) && k.to_json) || ''  %>
+    }
+  })
   .constant('I18N_CONFIG', {
     enabled: <%= MnoEnterprise.i18n_enabled %>,
     available_locales: <%= I18n.available_locales.to_json %>
