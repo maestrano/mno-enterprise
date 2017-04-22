@@ -73,14 +73,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
     end
 
     def widget_create_params
-      params.require(:widget).permit(:widget_category).tap do |whitelisted|
+      params.require(:widget).permit(:endpoint, :name, :width).tap do |whitelisted|
         whitelisted[:settings] = params[:widget][:metadata] || {}
+        # TODO: remove when mnohub migrated to new model
+        whitelisted[:widget_category] = params[:widget][:endpoint]
       end
       .except(:metadata)
     end
 
     def widget_update_params
-      params.require(:widget).permit(:name).tap do |whitelisted|
+      params.require(:widget).permit(:name, :width).tap do |whitelisted|
         whitelisted[:settings] = params[:widget][:metadata] || {}
       end
       .except(:metadata)
