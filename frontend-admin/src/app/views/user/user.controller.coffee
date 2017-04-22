@@ -1,6 +1,8 @@
-@App.controller 'UserController', ($stateParams, $window, MnoeUsers) ->
+@App.controller 'UserController', ($stateParams, $window, MnoeUsers, ADMIN_PANEL_CONFIG) ->
   'ngInject'
   vm = this
+
+  vm.disable_impersonation = ADMIN_PANEL_CONFIG.impersonation.disabled if ADMIN_PANEL_CONFIG.impersonation
 
   # Get the user
   MnoeUsers.get($stateParams.userId).then(
