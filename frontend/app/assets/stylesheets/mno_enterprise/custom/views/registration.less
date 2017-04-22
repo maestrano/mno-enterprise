@@ -7,15 +7,15 @@
   position: absolute;
   background-color: @login-bg-color;
   text-align: center;
-  
+
   .action-box {
     height: 90%;
   }
-  
+
   .action-box md-input-container {
     text-align: left;
   }
-  
+
   .action-box md-checkbox {
     text-align: left;
   }
@@ -42,19 +42,19 @@
   .login-box-wrapper md-input-container {
     text-align: left;
   }
-  
+
   .login-box-wrapper .login-box-title {
     color: @login-box-title-color;
     margin-bottom: 15px;
     @login-box-title();
   }
-  
+
   .login-box-wrapper .login-box {
     padding: @login-box-padding;
     background-color: @login-box-bg-color;
     border-radius: @login-box-corners;
   }
-  
+
   .login-box-wrapper .login-box .brand-logo when (isstring(@login-box-brand-logo-img)){
     min-height: 80px;
     background-repeat: no-repeat;
@@ -62,12 +62,12 @@
     background-size: 100%;
     @login-box-brand-logo();
   }
-  
+
   .login-box-wrapper .login-box .btn-login {
     @login-box-btn-login();
   }
-  
-  
+
+
   .login-box-wrapper .login-box:before when (@login-box-title-display-box-arrow = true){
     .fa;
     color: @login-box-bg-color;
@@ -82,7 +82,7 @@
   }
 
   .login-box .sign-in-using {
-    color: @text-inverse-link-color;
+    color: @decorator-main-color;
     margin-top: 5px;
   }
   .login-box .oauth-sso {
