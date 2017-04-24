@@ -25,7 +25,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   # Description:
   #   New user: Email asking users to confirm their email
   #     OR
-  #   Existing user: 
+  #   Existing user:
   #    - Email asking users (on their new email) to confirm their email change
   #    - Email notifying users (on their old email) of an email change
   #
@@ -36,7 +36,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   #   :confirmation_link
   #
   def confirmation_instructions(record, token, opts={})
-    update_email = record.confirmed? && record.unconfirmed_email?
+    update_email = record.confirmed? && record.unconfirmed_email.present?
     template = update_email ? 'reconfirmation-instructions' : 'confirmation-instructions'
     email = update_email ? record.unconfirmed_email : record.email
     MnoEnterprise::MailClient.deliver(template,
@@ -122,7 +122,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   #
   def organization_invite(org_invite)
     new_user = !org_invite.user.confirmed?
-    confirmation_link = new_user ? user_confirmation_url(confirmation_token: org_invite.user.confirmation_token) : org_invite_url(org_invite, token: org_invite.token)
+    confirmation_link = new_user ? user_confirmation_url(confirmation_token: org_invite.user.confirmation_token) : org_invite_url(id: org_invite.id, token: org_invite.token)
     email_template = new_user ? 'organization-invite-new-user' : 'organization-invite-existing-user'
 
     MnoEnterprise::MailClient.deliver(email_template,
@@ -145,7 +145,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     MnoEnterprise::MailClient.deliver('deletion-request-instructions',
       default_sender,
       recipient(record),
-      user_vars(record).merge(terminate_account_link: deletion_request_url(deletion_request))
+      user_vars(record).merge(terminate_account_link: deletion_request_url(deletion_request.id))
     )
   end
 

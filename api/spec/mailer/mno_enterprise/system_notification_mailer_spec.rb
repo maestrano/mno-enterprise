@@ -18,20 +18,20 @@ module MnoEnterprise
       { name: "#{user.name} #{user.surname}".strip, email: user.email }
     end
 
-    def invite_vars(org_invite)
-      new_user = !org_invite.user.confirmed?
+    def invite_vars(orga_invite)
+      new_user = !orga_invite.user.confirmed?
 
       {
-        organization: org_invite.organization.name,
-        team: org_invite.team ? org_invite.team.name : nil,
-        ref_first_name: org_invite.referrer.name,
-        ref_last_name: org_invite.referrer.surname,
-        ref_full_name: "#{org_invite.referrer.name} #{org_invite.referrer.surname}".strip,
-        ref_email: org_invite.referrer.email,
-        invitee_first_name: new_user ? nil : org_invite.user.name,
-        invitee_last_name: new_user ? nil : org_invite.user.surname,
-        invitee_full_name: new_user ? nil : "#{org_invite.user.name} #{org_invite.user.surname}".strip,
-        invitee_email: org_invite.user.email,
+        organization: orga_invite.organization.name,
+        team: orga_invite.team ? orga_invite.team.name : nil,
+        ref_first_name: orga_invite.referrer.name,
+        ref_last_name: orga_invite.referrer.surname,
+        ref_full_name: "#{orga_invite.referrer.name} #{orga_invite.referrer.surname}".strip,
+        ref_email: orga_invite.referrer.email,
+        invitee_first_name: new_user ? nil : orga_invite.user.name,
+        invitee_last_name: new_user ? nil : orga_invite.user.surname,
+        invitee_full_name: new_user ? nil : "#{orga_invite.user.name} #{orga_invite.user.surname}".strip,
+        invitee_email: orga_invite.user.email,
       }
     end
 
@@ -122,17 +122,17 @@ module MnoEnterprise
 
     describe 'organization_invite' do
       let(:invitee) { build(:user) }
-      let(:org_invite) { build(:org_invite, user: invitee, referrer: user) }
+      let(:orga_invite) { build(:orga_invite, user: invitee, referrer: user) }
 
       context 'when invitee is a confirmed user' do
         it 'sends the right email' do
           expect(MnoEnterprise::MailClient).to receive(:deliver).with('organization-invite-existing-user',
             SystemNotificationMailer::DEFAULT_SENDER,
             { name: "#{invitee.name} #{invitee.surname}".strip, email: invitee.email },
-            invite_vars(org_invite).merge(confirmation_link: routes.org_invite_url(id: org_invite.id, token: org_invite.token))
+            invite_vars(orga_invite).merge(confirmation_link: routes.org_invite_url(id: orga_invite.id, token: orga_invite.token))
           )
 
-          subject.organization_invite(org_invite).deliver_now
+          subject.organization_invite(orga_invite).deliver_now
         end
       end
 
@@ -143,10 +143,10 @@ module MnoEnterprise
           expect(MnoEnterprise::MailClient).to receive(:deliver).with('organization-invite-new-user',
             SystemNotificationMailer::DEFAULT_SENDER,
             { email: invitee.email },
-            invite_vars(org_invite).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: invitee.confirmation_token))
+            invite_vars(orga_invite).merge(confirmation_link: routes.user_confirmation_url(confirmation_token: invitee.confirmation_token))
           )
 
-          subject.organization_invite(org_invite).deliver_now
+          subject.organization_invite(orga_invite).deliver_now
         end
       end
 
@@ -158,7 +158,7 @@ module MnoEnterprise
           subject.deletion_request_instructions(user,deletion_request).deliver_now
         }.to send_the_correct_user_email(
                'deletion-request-instructions',
-               terminate_account_link: routes.deletion_request_url(deletion_request)
+               terminate_account_link: routes.deletion_request_url(deletion_request.id)
              )
       end
     end

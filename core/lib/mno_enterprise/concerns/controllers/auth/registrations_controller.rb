@@ -127,13 +127,12 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
 
       # First check previous url to see if the user
       # was trying to accept an orga
-      orga_invites = []
       if !session[:previous_url].blank? && (r = session[:previous_url].match(/\/orga_invites\/(\d+)\?token=(\w+)/))
         invite_params = { id: r.captures[0].to_i, token: r.captures[1] }
-        return false if MnoEnterprise::OrgInvite.where(invite_params).any?
+        return false if MnoEnterprise::OrgaInvite.where(invite_params).any?
       end
 
       # Get remaining invites via email address
-      return MnoEnterprise::OrgInvite.where(user_email: user_attrs['email']).empty?
+      return MnoEnterprise::OrgaInvite.where(user_email: user_attrs['email']).empty?
     end
 end

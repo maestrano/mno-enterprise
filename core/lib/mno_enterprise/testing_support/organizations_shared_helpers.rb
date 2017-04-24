@@ -29,14 +29,14 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
           'name' => user.name,
           'surname' => user.surname,
           'email' => user.email,
-          'role' => user.role(organization)
+          'role' => organization.role(user)
       }
       u['uid'] = user.uid if admin
       list.push(u)
     end
 
 
-    organization.org_invites.each do |invite|
+    organization.orga_invites.each do |invite|
       list.push({
                     'id' => invite.id,
                     'entity' => 'OrgInvite',

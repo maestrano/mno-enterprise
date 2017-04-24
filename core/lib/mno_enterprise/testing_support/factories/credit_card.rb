@@ -2,14 +2,11 @@
 
 FactoryGirl.define do
   factory :mno_enterprise_credit_card, :class => 'CreditCard' do
-    
-    
     factory :credit_card, class: MnoEnterprise::CreditCard do
-      sequence(:id)
+      sequence(:id, &:to_s)
       organization_id 265
-      created_at 3.days.ago 
-      updated_at 1.hour.ago 
-      
+      created_at 3.days.ago
+      updated_at 1.hour.ago
       title 'Mr.'
       first_name 'John'
       last_name 'Doe'
@@ -23,11 +20,9 @@ FactoryGirl.define do
       billing_postcode '2010'
       billing_country 'AU'
       verification_value 'CVV'
-      
-      # Properly build the resource with Her
-      initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
+
     end
-    
-    
+
+
   end
 end

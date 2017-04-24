@@ -16,23 +16,23 @@ module Her
           :metadata => json[:metadata] || {}
         })
       end
-      
+
       def parse_types(res)
         case
-        when res.kind_of?(Array)
-          return res.map { |e| parse_types(e) }
-        when res.kind_of?(Hash) && res[:cents] && res[:currency]
-          Money.new(res[:cents],res[:currency])
-        when res.kind_of?(Hash)
-          hash = res.dup
-          hash.each do |k,v|
-            hash[k] = parse_types(v)
-          end
-          return hash
-        when res.is_a?(String) && res =~ /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/i
-          return Time.iso8601(res)
-        else
-          return res
+          when res.kind_of?(Array)
+            return res.map { |e| parse_types(e) }
+          when res.kind_of?(Hash) && res[:cents] && res[:currency]
+            Money.new(res[:cents], res[:currency])
+          when res.kind_of?(Hash)
+            hash = res.dup
+            hash.each do |k, v|
+              hash[k] = parse_types(v)
+            end
+            return hash
+          when res.is_a?(String) && res =~ /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/i
+            return Time.iso8601(res)
+          else
+            return res
         end
       end
 

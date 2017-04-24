@@ -3,19 +3,15 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/audit_events
     def index
-      @organization = MnoEnterprise::Organization.find(params.require(:organization_id))
+      @organization = MnoEnterprise::Organization.find_one(params.require(:organization_id))
 
       authorize! :administrate, @organization
 
-      @audit_events = MnoEnterprise::AuditEvent.where(organization_id: @organization.id)
-      @audit_events = @audit_events.limit(params[:limit]) if params[:limit]
-      @audit_events = @audit_events.skip(params[:offset]) if params[:offset]
-      @audit_events = @audit_events.order_by(params[:order_by]) if params[:order_by]
-      @audit_events = @audit_events.where(params[:where]) if params[:where]
-      @audit_events = @audit_events.all.fetch
+      query = MnoEnterprise::AuditEvent.where(organization_id: @organization.id)
+      query = MnoEnterprise::AuditEvent.apply_query_params(query, params)
 
-      response.headers['X-Total-Count'] = @audit_events.metadata[:pagination][:count]
-
+      response.headers['X-Total-Count'] = query.meta.record_count
+      @audit_events = query.to_a
       respond_to do |format|
         format.json
         format.csv do

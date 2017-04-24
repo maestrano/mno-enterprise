@@ -4,7 +4,7 @@ module MnoEnterprise
   describe MnoEnterprise::Jpi::V1::MarketplaceController, type: :controller do
     render_views
     routes { MnoEnterprise::Engine.routes }
-    before { request.env["HTTP_ACCEPT"] = 'application/json' }
+    before { request.env['HTTP_ACCEPT'] = 'application/json' }
     before { Rails.cache.clear }
 
     let!(:app) { build(:app) }
@@ -88,10 +88,9 @@ module MnoEnterprise
         let(:app2) { build(:app, rank: 0 ) }
 
         before do
-          api_stub_for(get: '/apps', response: from_api([app1, app2]))
-          # TODO: Shouldn't need to stub this
-          api_stub_for(get: "/apps/#{app1.id}/shared_entities", response: from_api([]))
-          api_stub_for(get: "/apps/#{app2.id}/shared_entities", response: from_api([]))
+          MnoEnterprise.marketplace_listing = [app.nid]
+          stub_api_v2(:get, '/apps', [app], [], { filter: { nid: MnoEnterprise.marketplace_listing }})
+          stub_api_v2(:get, '/apps', [app], [], { filter: { nid: MnoEnterprise.marketplace_listing }, fields: { apps: 'updated_at' }, page:{number: 1, size: 1}, sort: '-updated_at'})
         end
 
         it 'returns the apps in the correct order' do
@@ -106,11 +105,9 @@ module MnoEnterprise
         let(:app3) { build(:app, rank: nil ) }
 
         before do
-          api_stub_for(get: '/apps', response: from_api([app1, app3, app2]))
-          # TODO: Shouldn't need to stub this
-          api_stub_for(get: "/apps/#{app1.id}/shared_entities", response: from_api([]))
-          api_stub_for(get: "/apps/#{app2.id}/shared_entities", response: from_api([]))
-          api_stub_for(get: "/apps/#{app3.id}/shared_entities", response: from_api([]))
+          MnoEnterprise.marketplace_listing = nil
+          stub_api_v2(:get, '/apps', [app1, app3, app2])
+          stub_api_v2(:get, '/apps', [app1], [], { fields: { apps: 'updated_at' }, page:{number: 1, size: 1}, sort: '-updated_at'})
         end
 
         it 'returns the apps in the correct order' do
@@ -122,6 +119,13 @@ module MnoEnterprise
       describe 'caching' do
         context 'on the first request' do
           it { is_expected.to have_http_status(:ok) }
+        end
+
+        context 'with multiple apps' do
+          let(:app1) { build(:app, rank: 5 ) }
+          let(:app2) { build(:app, rank: 0 ) }
+
+          before { stub_api_v2(:get, '/apps', [app1, app2]) }
 
           it 'sets the correct cache headers' do
             subject
@@ -131,6 +135,7 @@ module MnoEnterprise
 
             # Parse and serialise to get correct format and avoid ms difference
             expect(Time.rfc822(header).in_time_zone.to_s).to eq(app.updated_at.to_s)
+            expect(assigns(:apps).map(&:id)).to eq([app2.id, app1.id])
           end
         end
 
@@ -138,12 +143,18 @@ module MnoEnterprise
 
           before do
             request.env['HTTP_IF_MODIFIED_SINCE'] = last_modified.rfc2822
+            stub_api_v2(:get, '/apps', [app1, app3, app2])
           end
 
           context 'if it is not stale' do
             # Can't be based on the previous request due to parsing and rounding issues with ms
             let(:last_modified) { app.updated_at + 10.minutes }
             it { is_expected.to have_http_status(:not_modified) }
+          end
+
+          it 'returns the apps in the correct order' do
+            subject
+            expect(assigns(:apps).map(&:id)).to eq([app2.id, app1.id, app3.id])
           end
 
           context 'if it is stale' do
@@ -156,14 +167,11 @@ module MnoEnterprise
 
     describe 'GET #show' do
       before do
-        api_stub_for(get: "/apps/#{app.id}", response: from_api(app))
-        # TODO: Shouldn't need to stub this
-        api_stub_for(get: "/apps/#{app.id}/shared_entities", response: from_api([]))
+        stub_api_v2(:get, "/apps/#{app.id}", app)
       end
       subject { get :show, id: app.id }
 
       it { is_expected.to be_success }
-
       it 'returns the right response' do
         subject
         expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_app(app).to_json))

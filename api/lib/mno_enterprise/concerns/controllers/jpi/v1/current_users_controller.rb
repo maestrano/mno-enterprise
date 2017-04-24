@@ -18,27 +18,30 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   #==================================================================
   # GET /mnoe/jpi/v1/current_user
   def show
-    @user = current_user || MnoEnterprise::User.new
+    @user = current_user || MnoEnterprise::User.new(id: nil)
   end
 
   # PUT /mnoe/jpi/v1/current_user
   def update
     @user = current_user
-    @user.assign_attributes(user_params)
-    changes = @user.changes
-    if @user.update(user_params)
-      MnoEnterprise::EventLogger.info('user_update', current_user.id, 'User update', @user, changes)
+    @user.update_attributes(user_params)
+    if @user.errors.empty?
+      MnoEnterprise::EventLogger.info('user_update', current_user.id, 'User update', @user, @user.changed)
+      @user = @user.load_required(:organizations, :deletion_requests)
       render :show
     else
       render json: @user.errors, status: :bad_request
     end
+    current_user.refresh_user_cache
   end
 
   # PUT /mnoe/jpi/v1/current_user/register_developer
   def register_developer
     @user = current_user
-    if @user.update(developer: true)
-      MnoEnterprise::EventLogger.info('register_developer', current_user.id, "Developer registration", @user)
+    @user = @user.create_api_credentials.first
+    if @user.errors.empty?
+      MnoEnterprise::EventLogger.info('register_developer', current_user.id, 'Developer registration', @user)
+      @user = @user.load_required(:organizations, :deletion_requests)
       render :show
     else
       render json: @user.errors, status: :bad_request
@@ -48,9 +51,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # PUT /mnoe/jpi/v1/current_user/update_password
   def update_password
     @user = current_user
-
-    if @user.update(password_params.merge(current_password_required: true))
+    @user.update(password_params.merge(current_password_required: true))
+    if @user.errors.empty?
       MnoEnterprise::EventLogger.info('user_update_password', current_user.id, 'User password change', @user)
+      @user = @user.load_required(:organizations, :deletion_requests)
       sign_in @user, bypass: true
       render :show
     else

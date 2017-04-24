@@ -15,6 +15,8 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require "fakeweb"
+# Library for stubbing and setting expectations on HTTP requests in Ruby.
+require 'webmock/rspec'
 
 RSpec.configure do |config|
   config.before(:suite) do
@@ -86,3 +88,7 @@ RSpec.configure do |config|
   end
 =end
 end
+
+# http://stackoverflow.com/questions/30910214/rubymine-doesnt-recognize-it-behaves-like-method
+# tricking" RubyMine into recognising the method exists
+def it_behaves_like(*args) ; end

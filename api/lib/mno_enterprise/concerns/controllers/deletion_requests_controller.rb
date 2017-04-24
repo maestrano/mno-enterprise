@@ -13,8 +13,8 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
     before_filter :set_meta
 
     def set_meta
-      @meta[:title] = "Account Termination"
-      @meta[:description] = "Account Termination"
+      @meta[:title] = 'Account Termination'
+      @meta[:description] = 'Account Termination'
     end
   end
 
@@ -33,7 +33,7 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
   # GET /deletion_requests/1
   def show
     # authorize! :manage_billing, current_user.organizations.find(@invoice.organization_id)
-    @deletion_request = current_user.deletion_request
+    @deletion_request = current_user.current_deletion_request
 
     respond_to do |format|
       # Check that the user has a deletion_request in progress
@@ -58,7 +58,7 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
 
   # PATCH /deletion_requests/1/freeze_account
   def freeze_account
-    @deletion_request = current_user.deletion_request
+    @deletion_request = current_user.current_deletion_request
 
     respond_to do |format|
       # Check that the user has a deletion_request in progress
@@ -68,9 +68,9 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
         # Check that the deletion_request has the right status
         if @deletion_request.status == 'pending'
           @deletion_request.freeze_account!
-          format.html { redirect_to @deletion_request, notice: 'Your account has been frozen' }
+          format.html { redirect_to({action: :show, id: @deletion_request.id}, notice: 'Your account has been frozen') }
         else
-          format.html { redirect_to @deletion_request, alert: 'Invalid action' }
+          format.html { redirect_to({action: :show, id: @deletion_request.id}, alert: 'Invalid action')}
         end
       else
         format.html { redirect_to main_app.root_path, alert: 'This deletion request is invalid or expired' }
@@ -81,7 +81,7 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
 
   # PATCH /deletion_requests/1/checkout
   def checkout
-    @deletion_request = current_user.deletion_request
+    @deletion_request = current_user.current_deletion_request
 
     respond_to do |format|
       # Check that the user has a deletion_request in progress
@@ -95,9 +95,9 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
           #   Finally Perform the checkout
           @deletion_request.status = 'account_checked_out'
           @deletion_request.save
-          format.html { redirect_to @deletion_request, notice: 'Checkout has been performed successfully' }
+          format.html { redirect_to({action: :show, id: @deletion_request.id}, notice: 'Checkout has been performed successfully')}
         else
-          format.html { redirect_to @deletion_request, alert: 'Invalid action' }
+          format.html { redirect_to({action: :show, id: @deletion_request.id}, alert: 'Invalid action') }
         end
       else
         format.html { redirect_to main_app.root_path, alert: 'This deletion request is invalid or expired' }

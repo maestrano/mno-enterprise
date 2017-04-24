@@ -25,7 +25,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
   # TODO: Access + existence checks could be added in the future. This is not
   # mandatory as Mno Enterprise will do it anyway
   def launch
-    app_instance = MnoEnterprise::AppInstance.find_by(uid: params[:id])
+    app_instance = MnoEnterprise::AppInstance.where(uid: params[:id]).first
     MnoEnterprise::EventLogger.info('app_launch', current_user.id, 'App launched', app_instance)
     redirect_to MnoEnterprise.router.launch_url(params[:id], {wtk: MnoEnterprise.jwt(user_id: current_user.uid)}.reverse_merge(request.query_parameters))
   end
@@ -33,7 +33,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
   # GET /loading/:id
   # Loading lounge - wait for an app to be online
   def loading
-    @app_instance = MnoEnterprise::AppInstance.where(uid: params[:id]).reload.first
+    @app_instance = MnoEnterprise::AppInstance.where(uid: params[:id]).first
 
     respond_to do |format|
       format.html { @app_instance_hash = app_instance_hash(@app_instance) }
@@ -43,33 +43,32 @@ module MnoEnterprise::Concerns::Controllers::PagesController
 
   # GET /app_access_unauthorized
   def app_access_unauthorized
-    @meta[:title] = "Unauthorized"
-    @meta[:description] = "Application access not granted"
+    @meta[:title] = 'Unauthorized'
+    @meta[:description] = 'Application access not granted'
   end
 
   def billing_details_required
-    @meta[:title] = "Billing Details Required"
-    @meta[:description] = "Billing details have not been provided"
+    @meta[:title] = 'Billing Details Required'
+    @meta[:description] = 'Billing details have not been provided'
   end
 
   # GET /app_logout
   def app_logout
-    @meta[:title] = "Logged out"
-    @meta[:description] = "Logged out from application"
+    @meta[:title] = 'Logged out'
+    @meta[:description] = 'Logged out from application'
   end
 
   def terms
     @meta[:title] = 'Terms of Use'
     @meta[:description] = 'Terms of Use'
-
-    ts = MnoEnterprise::App.order_by("updated_at.desc").first.try(:updated_at)
+    ts = MnoEnterprise::App.order(updated_at: :desc).select(:updated_at).first.updated_at
     @apps = if ts
-      Rails.cache.fetch(['pages/terms/app-list', ts]) do
-        MnoEnterprise::App.order_by("name.ac").reject{|i| i.terms_url.blank?}
-      end
-    else
-      []
-    end
+              Rails.cache.fetch(['pages/terms/app-list', ts]) do
+                MnoEnterprise::App.order(name: :asc).reject { |i| i.terms_url.blank? }
+              end
+            else
+              []
+            end
   end
 
   private

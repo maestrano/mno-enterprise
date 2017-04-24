@@ -11,6 +11,7 @@ group :test do
   gem 'shoulda-matchers'
   gem 'fakeweb', '~> 1.3'
   gem 'timecop'
+  gem 'webmock', '~> 3.0.1'
   # gem 'simplecov'
 end
 

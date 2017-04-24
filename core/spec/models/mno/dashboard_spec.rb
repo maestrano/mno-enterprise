@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module MnoEnterprise
-  RSpec.describe Impac::Dashboard, type: :model do
+  RSpec.describe Dashboard, type: :model do
     subject(:dashboard) { build(:impac_dashboard) }
 
     describe '#full_name' do

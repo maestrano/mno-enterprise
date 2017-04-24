@@ -9,13 +9,14 @@ module MnoEnterprise
     before { Timecop.freeze }
     after { Timecop.return }
 
+    before { stub_audit_events }
+
     let(:user) { build(:user) }
     let(:app_instance) { build(:app_instance) }
 
     before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(get: "/app_instances", response: from_api([app_instance]))
+      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
+      stub_api_v2(:get, '/app_instances', [app_instance], [], {filter:{uid: app_instance.uid}, page:{number: 1, size: 1}})
     end
 
     describe 'GET #launch' do
@@ -63,7 +64,11 @@ module MnoEnterprise
     end
 
     describe 'GET #terms' do
-      before { api_stub_for(get: "/apps", response: from_api([build(:app)])) }
+      let(:app) { build(:app) }
+      before {
+        stub_api_v2(:get, '/apps', [app], [], {fields: {apps: 'updated_at'}, page: {number: 1, size: 1}, sort: '-updated_at'})
+        stub_api_v2(:get, '/apps', [app], [], {sort: 'name'})
+      }
 
       subject { get :terms }
       before { subject }

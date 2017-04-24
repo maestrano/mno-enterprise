@@ -3,10 +3,7 @@ require 'rails_helper'
 module MnoEnterprise
   describe Auth::OmniauthCallbacksController, type: :controller do
     routes { MnoEnterprise::Engine.routes }
-
-
     supported_providers = %i(linkedin google facebook)
-
 
     describe 'provides callbacks for the providers' do
       before do
@@ -14,21 +11,11 @@ module MnoEnterprise
         MnoEnterprise::Auth.send(:remove_const, :OmniauthCallbacksController)
         load 'app/controllers/mno_enterprise/auth/omniauth_callbacks_controller.rb'
       end
-
-
       # No described_class as it doesn't take into account the reloading above
       let(:controller) { MnoEnterprise::Auth::OmniauthCallbacksController.new }
 
       it { expect(controller).to respond_to(:intuit) }
       it { expect(controller).to respond_to(:facebook) }
-
     end
-
-    # it creates an org?
-    # no if no email
-    # no if user already exists
-    # no if accepting an org invite
-
-
   end
 end

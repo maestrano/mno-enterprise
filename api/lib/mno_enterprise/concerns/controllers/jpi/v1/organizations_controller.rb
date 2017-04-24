@@ -28,16 +28,17 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   # PUT /mnoe/jpi/v1/organizations/:id
   def update
     # Update and Authorize
-    organization.assign_attributes(organization_update_params)
     authorize! :update, organization
-    changes = organization.changes
     # Save
+    organization.attributes = organization_update_params
+    changed = organization.changed
     if organization.save
-      MnoEnterprise::EventLogger.info('organization_update', current_user.id, 'Organization update', organization, changes)
+      MnoEnterprise::EventLogger.info('organization_update', current_user.id, 'Organization update', organization, changed)
       render 'show_reduced'
     else
       render json: organization.errors, status: :bad_request
     end
+    current_user.refresh_user_cache
   end
 
   # DELETE /mnoe/jpi/v1/organizations/1
@@ -55,33 +56,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   def create
     # Create new organization
     @organization = MnoEnterprise::Organization.create(organization_update_params)
-
     # Add the current user as Super Admin
     @organization.add_user(current_user,'Super Admin')
-
     # Bust cache
     current_user.refresh_user_cache
+
     MnoEnterprise::EventLogger.info('organization_create', current_user.id, 'Organization created', organization)
     render 'show'
   end
-
-  # PUT /mnoe/jpi/v1/organizations/:id/charge
-  # def charge
-  #   authorize! :manage_billing, organization
-  #   payment = organization.charge
-  #   s = ''
-  #   if payment
-  #     if payment.success?
-  #       s = 'success'
-  #     else
-  #       s = 'fail'
-  #     end
-  #   else
-  #     s = 'error'
-  #   end
-  #
-  #   render json: { status: s, data: payment }
-  # end
 
   # PUT /mnoe/jpi/v1/organizations/:id/update_billing
   def update_billing
@@ -89,8 +71,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
     # Upsert
     if (@credit_card = organization.credit_card) && check_valid_payment_method
-      @credit_card.assign_attributes(organization_billing_params.merge(organization_id: @credit_card.organization_id))
-      @credit_card.save
+      @credit_card.update_attributes(organization_billing_params)
     end
 
     if @credit_card.errors.empty?
@@ -112,20 +93,21 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     # Authorize and create
     authorize! :invite_member, organization
     attributes.each do |invite|
-      @org_invite = organization.org_invites.create(
+
+      @org_invite = MnoEnterprise::OrgaInvite.create(
+        organization_id: organization.id,
         user_email: invite['email'],
         user_role: invite['role'],
         team_id: invite['team_id'],
         referrer_id: current_user.id
       )
-
+      @org_invite = @org_invite.load_required(:user, :organization, :team, :referrer)
       MnoEnterprise::SystemNotificationMailer.organization_invite(@org_invite).deliver_now
       MnoEnterprise::EventLogger.info('user_invite', current_user.id, 'User invited', @org_invite)
     end
 
-    # Reload users
-    organization.users.reload
-
+    # Reload organization
+    @organization = organization.load_required(:users, :orga_invites, :orga_relations)
     render 'members'
   end
 
@@ -135,15 +117,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
     # Authorize and update => Admin or Super Admin
     authorize! :invite_member, organization
-
-    if organization.role == 'Admin'
+    if current_user.role(organization) == 'Admin'
       # Admin cannot assign Super Admin role
       raise CanCan::AccessDenied if attributes[:role] == 'Super Admin'
 
       # Admin cannot edit Super Admin
-      raise CanCan::AccessDenied if (member.is_a?(MnoEnterprise::User) && member.role == 'Super Admin') ||
-        (member.is_a?(MnoEnterprise::OrgInvite) && member.user_role == 'Super Admin')
-    elsif member.id == current_user.id && attributes[:role] != 'Super Admin' && organization.users.count {|u| u.role == 'Super Admin'} <= 1
+      raise CanCan::AccessDenied if (member.is_a?(MnoEnterprise::User) && organization.role(member) == 'Super Admin') || (member.is_a?(MnoEnterprise::OrgaInvite) && member.user_role == 'Super Admin')
+    elsif member.id == current_user.id && attributes[:role] != 'Super Admin' && organization.orga_relations.count {|u| u.role == 'Super Admin'} <= 1
       # A super admin cannot modify his role if he's the last super admin
       raise CanCan::AccessDenied
     end
@@ -151,12 +131,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     # Happy Path
     case member
     when MnoEnterprise::User
-      organization.users.update(id: member.id, role: attributes[:role])
+      orga_relation = MnoEnterprise::OrgaRelation.where(user_id: member.id, organization_id: organization.id).first
+      orga_relation.update_attributes(role: attributes[:role])
       MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in org', organization, {email: attributes[:email], role: attributes[:role]})
     when MnoEnterprise::OrgInvite
-      member.update(user_role: attributes[:role])
+      member.update_attributes(user_role: attributes[:role])
       MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in invitation', organization, {email: attributes[:email], role: attributes[:role]})
     end
+    # Reload organization
+    @organization = organization.load_required(:users, :orga_invites, :orga_relations)
 
     render 'members'
   end
@@ -168,11 +151,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     if member.is_a?(MnoEnterprise::User)
       organization.remove_user(member)
       MnoEnterprise::EventLogger.info('user_role_delete', current_user.id, 'User removed from org', organization, {email: member.email})
-    elsif member.is_a?(MnoEnterprise::OrgInvite)
-      member.cancel!
+    elsif member.is_a?(MnoEnterprise::OrgaInvite)
+      member.decline
       MnoEnterprise::EventLogger.info('user_role_delete', current_user.id, 'User removed from invitation', organization, {email: member.user_email})
     end
-
+    # Reload organization
+    @organization = organization.load_required(:users, :orga_invites, :orga_relations)
     render 'members'
   end
 
@@ -181,21 +165,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
       @member ||= begin
         email = params.require(:member).require(:email)
         # Organizations are already loaded with all users
-        organization.users.to_a.find { |u| u.email == email } ||
-          organization.org_invites.active.where(user_email: email).first
+        organization.users.find { |u| u.email == email } ||
+        organization.orga_invites.find { |u| u.status == 'pending' && u.user_email == email}
       end
     end
 
     def organization
-      @organization ||= begin
-        # Find in arrays if organizations have been fetched
-        # already. Perform remote query otherwise
-        if current_user.organizations.loaded?
-          current_user.organizations.to_a.find { |o| o.id.to_s == params[:id].to_s }
-        else
-          current_user.organizations.where(id: params[:id]).first
-        end
-      end
+      @organization ||= MnoEnterprise::Organization.find_one(params[:id], :users, :orga_invites, :orga_relations, :credit_card)
     end
 
     def organization_permitted_update_params

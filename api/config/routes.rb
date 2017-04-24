@@ -92,7 +92,7 @@ MnoEnterprise::Engine.routes.draw do
       end
     end
     # Maestrano-hub events
-    resources :events, only: [:create] 
+    resources :events, only: [:create]
   end
 
   #============================================================

@@ -1,13 +1,22 @@
 require "rails_helper"
 
-RSpec.describe Devise::Models::RemoteAuthenticatable < ActiveSupport::TestCase do
+RSpec.describe Devise::Models::RemoteAuthenticatable do
   let(:user) { build(:user, email: 'test@maestrano.com', password: 'oldpass') }
 
-  before do
-    api_stub_for(put: "/users/#{user.id}", response: from_api(user))
-  end
+    before do
+      stub_api_v2(:get, '/users', [], [], {filter: {email: 'test@maestrano.com'}, page: {number: 1, size: 1}})
+      stub_api_v2(:post, '/users', user)
+    end
 
-  describe 'Sends an email on password update' do
+    describe 'Sends an email on password update' do
+    let(:confirmation_token){'1e243fa1180e32f3ec66a648835d1fbca7912223a487eac36be22b095a01b5a5'}
+    before{
+      Devise.token_generator
+      stub_api_v2(:get, '/users', user, [], {filter: {confirmation_token: confirmation_token}})
+      allow_any_instance_of(Devise::TokenGenerator).to receive(:digest).and_return(confirmation_token)
+      allow_any_instance_of(Devise::TokenGenerator).to receive(:generate).and_return(confirmation_token)
+    }
+
     subject { user.update(updates) }
 
     context 'when password change notifications are enabled' do

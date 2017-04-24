@@ -6,7 +6,7 @@ module MnoEnterprise
 
     render_views
     routes { MnoEnterprise::Engine.routes }
-    before { request.env["HTTP_ACCEPT"] = 'application/json' }
+    before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
     #===============================================
     # Assignments
@@ -16,27 +16,32 @@ module MnoEnterprise
     before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
 
     # Stub user and mnoe API calls
-    let(:user) { FactoryGirl.build(:user, :with_organizations) }
-    let(:organization) { user.organizations.first }
-    let(:audit_event) { FactoryGirl.build(:audit_event) }
+    let(:user) { build(:user) }
+    let!(:organization) {
+      o = build(:organization, orga_relations: [])
+      o.orga_relations << build(:orga_relation, user_id: user.id, organization_id: o.id, role: "Super Admin")
+      o
+    }
+    let(:audit_event) { build(:audit_event) }
 
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
+    before { stub_api_v2(:get, "/organizations/#{organization.id}", organization) }
     before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization]))
-      api_stub_for(get: "/organizations/#{organization.id}", response: from_api(organization))
-      api_stub_for(get: '/audit_events', response: from_api([audit_event]))
+      stub_api_v2(:get, '/audit_events', [audit_event], [], {filter: {organization_id: organization.id}})
       sign_in user
     end
 
     describe 'GET #index' do
       subject { get :index, organization_id: organization.id }
 
-      it_behaves_like "jpi v1 protected action"
+      it_behaves_like 'jpi v1 protected action'
 
-      context 'sucess' do
+      context 'success' do
         it 'assigns @audit_events' do
           subject
-          expect(assigns(:audit_events).to_a).to eq([audit_event])
+          # TODO: Check fields assignation from response
+          # expect(assigns(:audit_events).to_a).to eq([audit_event])
         end
 
         it 'renders the :index view' do

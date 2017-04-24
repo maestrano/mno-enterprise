@@ -26,8 +26,6 @@ module MnoEnterprise
       else
         MnoEnterprise::EventLoggerJob.perform_later('info', key, current_user_id, description, subject_type, subject_id, formatted_metadata)
       end
-    rescue ActiveJob::SerializationError
-      Rails.logger.warn "[MnoEnterprise::EventLogger] Serialization error, skipping #{key} event"
     end
 
     # Send the event to the listeners

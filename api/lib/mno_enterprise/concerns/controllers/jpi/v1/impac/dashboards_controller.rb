@@ -34,9 +34,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     # TODO: enable authorization
     # authorize! :manage_dashboard, @dashboard
     # if @dashboard.save
-    if @dashboard = dashboards.create(dashboard_create_params)
+    @dashboard = MnoEnterprise::Dashboard.create(dashboard_create_params)
+    if @dashboard.errors.empty?
       MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', @dashboard)
-
+      @dashboard = dashboard.load_required(:owner, :widgets, :kpis)
       render 'show'
     else
       render_bad_request('create dashboard', @dashboard.errors)
@@ -50,8 +51,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
 
     # TODO: enable authorization
     # authorize! :manage_dashboard, dashboard
-
-    if dashboard.update(dashboard_update_params)
+    dashboard.update_attributes(dashboard_update_params)
+    if dashboard.errors.empty?
+      # Reload Dashboard
+      @dashboard = dashboard.load_required(:owner, :widgets, :kpis)
       render 'show'
     else
       render_bad_request('update dashboard', dashboard.errors)
@@ -62,26 +65,21 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   #   -> DELETE /api/mnoe/v1/dashboards/1
   def destroy
     return render_not_found('dashboard') unless dashboard
-
+    MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', dashboard)
     # TODO: enable authorization
     # authorize! :manage_dashboard, dashboard
-
-    if dashboard.destroy
-      MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', dashboard)
-      head status: :ok
-    else
-      render_bad_request('destroy dashboard', 'Unable to destroy dashboard')
-    end
+    dashboard.destroy
+    head status: :ok
   end
 
   private
 
     def dashboard
-      @dashboard ||= current_user.dashboards.find(params[:id].to_i)
+      @dashboard ||= MnoEnterprise::Dashboard.find_one(params[:id].to_i, :widgets, :kpis, {kpis: :alerts})
     end
 
     def dashboards
-      @dashboards ||= current_user.dashboards
+      @dashboards ||= MnoEnterprise::Dashboard.includes(:widgets, :kpis, {kpis: :alerts}).find(owner_id: current_user.id)
     end
 
     def whitelisted_params
@@ -95,6 +93,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
         whitelisted[:settings] = params[:dashboard][:metadata] || {}
       end
       .except(:metadata)
+      .merge(owner_type: "User", owner_id: current_user.id)
     end
     alias :dashboard_update_params  :dashboard_params
     alias :dashboard_create_params  :dashboard_params

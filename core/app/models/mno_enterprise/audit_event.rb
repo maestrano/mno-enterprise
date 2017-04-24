@@ -1,5 +1,8 @@
 module MnoEnterprise
   class AuditEvent < BaseResource
+    property :created_at, type: :time
+    property :updated_at, type: :time
+
     def formatted_details
       case details
         when String
@@ -17,5 +20,7 @@ module MnoEnterprise
       e.message
       # details.inspect
     end
+
   end
 end
+
