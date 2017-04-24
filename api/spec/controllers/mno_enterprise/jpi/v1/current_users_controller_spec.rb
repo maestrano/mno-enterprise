@@ -76,6 +76,8 @@ module MnoEnterprise
     # Stub user retrieval
     let!(:user) { build(:user, :with_deletion_request, :with_organizations, :kpi_enabled) }
     before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    before { api_stub_for(get: "/users/#{user.id}/organizations?filter%5Baccount_frozen%5D=false", response: from_api(user.organizations)) }
+
 
     describe "GET #show" do
       subject { get :show }

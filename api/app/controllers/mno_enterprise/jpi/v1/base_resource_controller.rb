@@ -1,7 +1,7 @@
 module MnoEnterprise
   class Jpi::V1::BaseResourceController < ApplicationController
     before_filter :check_authorization
-    
+
     protected
 
       def timestamp
