@@ -22,6 +22,8 @@ require "her_extension/middleware/mnoe_api_v1_parse_json"
 require "her_extension/middleware/mnoe_raise_error"
 require "faraday_middleware"
 require "httparty"
+require "json_api_client"
+require "json_api_client_extension/json_api_client_orm_adapter"
 require "mno_enterprise/engine"
 
 require 'mno_enterprise/database_extendable'
@@ -156,6 +158,13 @@ module MnoEnterprise
   mattr_reader :mnoe_api_v1
   @@mnoe_api_v1 = nil
 
+
+  mattr_accessor :mno_api_v2_root_path
+  @@mno_api_v2_root_path = "/api/mnoe/v2"
+
+  mattr_reader :mnoe_api_v2
+  @@mnoe_api_v2 = nil
+
   # Hold the Maestrano enterprise router (redirection to central enterprise platform)
   mattr_reader :router
   @@router = Router.new
@@ -265,7 +274,9 @@ module MnoEnterprise
     @@style
   end
 
-
+  def self.api_host
+   @@mno_api_private_host || @@mno_api_host
+  end
 
   # Default way to setup MnoEnterprise. Run rails generate mno-enterprise:install to create
   # a fresh initializer with all configuration values.
@@ -295,7 +306,6 @@ module MnoEnterprise
   private
     # Return the options to use in the setup of the API
     def self.api_options
-      api_host = @@mno_api_private_host || @@mno_api_host
       {
           url: "#{URI.join(api_host,@@mno_api_root_path).to_s}",
           send_only_modified_attributes: true

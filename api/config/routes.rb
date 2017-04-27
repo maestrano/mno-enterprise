@@ -43,7 +43,7 @@ MnoEnterprise::Engine.routes.draw do
   skipped_devise_modules = [:omniauth_callbacks]
   skipped_devise_modules << :registrations if Settings.try(:devise).try(:registration).try(:disabled)
   devise_for :users, {
-      class_name: "MnoEnterprise::User",
+      class_name: "Mno::User",
       module: :devise,
       path_prefix: 'auth',
       skip: skipped_devise_modules,

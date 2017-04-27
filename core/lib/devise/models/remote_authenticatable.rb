@@ -2,7 +2,7 @@ module Devise
   module Models
     module RemoteAuthenticatable
       extend ActiveSupport::Concern
- 
+
       #
       # Here you do the request to the external webservice
       #
@@ -12,7 +12,7 @@ module Devise
       # If the authentication fails you should return false
       #
       def remote_authentication(authentication_hash)
-        self.class.authenticate(authentication_hash) # call MnoEnterprise::User.authenticate
+        self.class.authenticate_user(authentication_hash) # call MnoEnterprise::User.authenticate
       end
 
       included do
@@ -28,8 +28,10 @@ module Devise
       # Overriden methods from Devise::Models::Authenticatable
       ####################################
       module ClassMethods
+
         # Flag to enable password change notification
         Devise::Models.config(self, :send_password_change_notification)
+
 
         # This method is called from:
         # Warden::SessionSerializer in devise
@@ -41,10 +43,10 @@ module Devise
         def serialize_from_session(key,salt)
           record = Rails.cache.fetch(['user', key], expires_in: 1.minutes) do
             to_adapter.get(key)
-          end.tap {|r| r && r.clear_association_cache}
+          end
           record if record && record.authenticatable_salt == salt
         end
-        
+
         # Here you have to return and array with the data of your resource
         # that you want to serialize into the session
         #
