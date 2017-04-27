@@ -41,6 +41,10 @@ module MnoEnterprise::Concerns::Models::Organization
 
     scope :in_arrears, -> { where(in_arrears?: true) }
 
+    scope :active, -> { where(account_frozen: false) }
+
+    default_scope lambda { where(account_frozen: false) }
+
     #================================
     # Associations
     #================================
