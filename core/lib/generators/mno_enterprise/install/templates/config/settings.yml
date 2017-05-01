@@ -39,6 +39,9 @@ marketplace:
 # Allow user to create and manage Organizations
 organization_management:
   enabled: true
+  # Display the billing tab
+  billing:
+    enabled: true
 # Allow user to edit their information and password
 user_management:
   enabled: true
