@@ -119,4 +119,8 @@ module MnoEnterprise::Concerns::Models::Organization
   def payment_restriction
     meta_data && meta_data['payment_restriction']
   end
+
+  def has_credit_card_details?
+    credit_card.persisted?
+  end
 end
