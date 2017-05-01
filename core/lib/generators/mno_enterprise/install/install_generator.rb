@@ -140,7 +140,7 @@ module MnoEnterprise
             say_status("==> Maestrano Enterprise Angular has been installed", nil)
             say("- You can quickly customize the platform style in frontend/src/app/stylesheets")
             say("- You can customize the whole frontend by overriding mno-enterprise-angular in frontend/src/")
-            say("- You can run 'rake mnoe:frontend:dist' to rebuild the frontend after changing frontend/src")
+            say("- You can run 'rake mnoe:frontend:build' to rebuild the frontend after changing frontend/src")
           end
 
           if @install_admin
