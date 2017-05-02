@@ -126,13 +126,13 @@ module MnoEnterprise
     private
 
     # Append params to the fragment part of an existing url String
-    #   add_param("/#/platform/accounts", 'foo', 'bar')
-    #     => "/#/platform/accounts?foo=bar"
-    #   add_param("/#/platform/dashboard/he/43?en=690", 'foo', 'bar')
-    #     => "/#/platform/dashboard/he/43?en=690&foo=bar"
+    #   add_param_to_fragment("/#!/platform/accounts", 'foo', 'bar')
+    #     => "/#!/platform/accounts?foo=bar"
+    #   add_param_to_fragment("/#!/platform/dashboard/he/43?en=690", 'foo', 'bar')
+    #     => "/#!/platform/dashboard/he/43?en=690&foo=bar"
     def add_param_to_fragment(url, param_name, param_value)
       uri = URI(url)
-      fragment = URI(uri.fragment || "")
+      fragment = URI(uri.fragment || "!")
       params = URI.decode_www_form(fragment.query || "") << [param_name, param_value]
       fragment.query = URI.encode_www_form(params)
       uri.fragment = fragment.to_s

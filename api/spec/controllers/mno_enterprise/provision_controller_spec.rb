@@ -57,7 +57,7 @@ module MnoEnterprise
             describe "unauthorized" do
               let(:authorized) { false }
 
-              let(:error_fragment) { "#?#{URI.encode_www_form([['flash', {msg: "Unfortunately you do not have permission to purchase products for this organization", type: :error}.to_json]])}" }
+              let(:error_fragment) { "#!?#{URI.encode_www_form([['flash', {msg: "Unfortunately you do not have permission to purchase products for this organization", type: :error}.to_json]])}" }
 
               it 'redirect to the dashboard with an error message' do
                 expect(response).to redirect_to(mnoe_home_path + error_fragment)
@@ -89,7 +89,7 @@ module MnoEnterprise
 
             context 'with one organization available' do
               let(:organizations) { [organization] }
-              let(:error_fragment) { "#?#{URI.encode_www_form([['flash', {msg: "Unfortunately you do not have permission to purchase products for this organization", type: :error}.to_json]])}" }
+              let(:error_fragment) { "#!?#{URI.encode_www_form([['flash', {msg: "Unfortunately you do not have permission to purchase products for this organization", type: :error}.to_json]])}" }
 
               it 'redirect to the dashboard with an error message' do
                 expect(response).to redirect_to(mnoe_home_path + error_fragment)
