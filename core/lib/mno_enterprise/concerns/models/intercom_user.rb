@@ -38,6 +38,7 @@ module MnoEnterprise::Concerns::Models::IntercomUser
         first_name: self.name,
         surname: self.surname,
         confirmed_at: self.confirmed_at,
+        admin_role: self.admin_role
       },
       update_last_request_at: update_last_request_at
     }

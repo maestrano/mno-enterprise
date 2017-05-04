@@ -71,7 +71,7 @@ module MnoEnterprise
           load 'app/models/mno_enterprise/user.rb'
         end
 
-        let(:user) { MnoEnterprise::User.new(attributes_for(:user)) }
+        let(:user) { MnoEnterprise::User.new(attributes_for(:user, admin_role: 'admin')) }
 
         describe :intercom_user_hash do
           it 'returns the user intercom secure hash' do
@@ -91,7 +91,8 @@ module MnoEnterprise
                 first_name: user.name,
                 surname: user.surname,
                 confirmed_at: user.confirmed_at,
-                phone: user.phone
+                phone: user.phone,
+                admin_role: user.admin_role
               },
               update_last_request_at: true
             }
