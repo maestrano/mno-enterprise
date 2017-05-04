@@ -26,7 +26,6 @@ def apply_template!
 
     Bundler::Audit::Task.new
     RuboCop::RakeTask.new
-    RSpec::Core::RakeTask.new(:spec)
   rescue LoadError
   end
 
@@ -36,7 +35,6 @@ def apply_template!
       Rake::Task['bundle:audit'].invoke
       Rake::Task['brakeman:run'].invoke
       Rake::Task['rubocop'].invoke
-      Rake::Task['spec'].invoke
     end
   end
 

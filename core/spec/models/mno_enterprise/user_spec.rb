@@ -42,12 +42,18 @@ module MnoEnterprise
       end
     end
 
-    describe :intercom_user_hash do
-      let(:user) { MnoEnterprise::User.new(email: 'admin@example.com') }
-
+    describe 'IntercomUser' do
       context 'without Intercom' do
         # default
-        it { expect(user).not_to respond_to(:intercom_user_hash) }
+        let(:user) { MnoEnterprise::User.new(email: 'admin@example.com') }
+
+        describe :intercom_data do
+          it { expect(user).not_to respond_to(:intercom_data) }
+        end
+
+        describe :intercom_user_hash do
+          it { expect(user).not_to respond_to(:intercom_user_hash) }
+        end
       end
 
       context 'with Intercom' do
@@ -59,15 +65,42 @@ module MnoEnterprise
           MnoEnterprise.send(:remove_const, :User)
           load 'app/models/mno_enterprise/user.rb'
         end
-
-        it 'returns the user intercom hash' do
-          expect(user.intercom_user_hash).not_to be_nil
-        end
-
         after do
           # Reset to default
           MnoEnterprise.send(:remove_const, :User)
           load 'app/models/mno_enterprise/user.rb'
+        end
+
+        let(:user) { MnoEnterprise::User.new(attributes_for(:user, admin_role: 'admin')) }
+
+        describe :intercom_user_hash do
+          it 'returns the user intercom secure hash' do
+            expect(user.intercom_user_hash).not_to be_nil
+          end
+        end
+
+        describe :intercom_data do
+          let(:expected) {
+            {
+              user_id: user.id,
+              name: [user.name, user.surname].join(' '),
+              email: user.email,
+              created_at: user.created_at.to_i,
+              last_seen_ip: user.last_sign_in_ip,
+              custom_attributes: {
+                first_name: user.name,
+                surname: user.surname,
+                confirmed_at: user.confirmed_at,
+                phone: user.phone,
+                admin_role: user.admin_role
+              },
+              update_last_request_at: true
+            }
+          }
+
+          it {
+            expect(user.intercom_data).to eq(expected)
+          }
         end
       end
     end

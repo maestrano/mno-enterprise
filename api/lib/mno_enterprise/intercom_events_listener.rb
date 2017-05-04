@@ -17,15 +17,9 @@ module MnoEnterprise
 
     def info(key, current_user_id, description, subject_type, subject_id, metadata)
       u = User.find(current_user_id)
-      begin
-        intercom.users.find(user_id: current_user_id)
-      rescue Intercom::ResourceNotFound
-        self.update_intercom_user(u)
-      end
       data = {created_at: Time.now.to_i, email: u.email, user_id: u.id, event_name: key.tr('_', '-')}
       case key
         when 'user_update', 'organization_update'
-          self.update_intercom_user(u)
           # convert values to string
           data[:metadata] = Hash[ metadata.collect {|k,v| [k, v.to_s] } ]
         when 'user_confirm'
@@ -48,6 +42,10 @@ module MnoEnterprise
           data[:event_name] = 'added-app-' + metadata[:app_nid]
           data[:metadata] = {type: 'single', app_list: metadata[:app_nid]}
       end
+      # Update user data in intercom
+      # OPTIMIZE: we could fetch the user for intercom and only update fields that have changed
+      self.update_intercom_user(u)
+      # Push the event to intercom
       self.intercom.events.create(data)
 
     rescue Intercom::IntercomError => e
@@ -55,31 +53,9 @@ module MnoEnterprise
     end
 
     def update_intercom_user(user, update_last_request_at = true)
-      data = {
-        user_id: user.id,
-        name: [user.name, user.surname].join(' '),
-        email: user.email,
-        created_at: user.created_at.to_i,
-        last_seen_ip: user.last_sign_in_ip,
-        custom_attributes: {},
-        update_last_request_at: update_last_request_at
-      }
-      data[:custom_attributes][:phone]= user.phone if user.phone
-      data[:custom_attributes][:external_id]= user.external_id if user.external_id
-
+      data = user.intercom_data(update_last_request_at)
       data[:companies] = user.organizations.map do |organization|
-        {
-          company_id: organization.id,
-          name: organization.name,
-          created_at: organization.created_at.to_i,
-          custom_attributes: {
-            industry: organization.industry,
-            size: organization.size,
-            credit_card_details: organization.credit_card?,
-            app_count: organization.app_instances.count,
-            app_list: organization.app_instances.map { |app| app.name }.to_sentence
-          }
-        }
+        format_company(organization)
       end
       intercom.users.create(data)
       tag_user(user)
@@ -90,6 +66,25 @@ module MnoEnterprise
       if user.meta_data && user.meta_data[:source].present?
         intercom.tags.tag(name: user.meta_data[:source], users: [{user_id: user.id}])
       end
+    end
+
+    # Formatting
+    # TODO: extract to a CRM service
+    def format_company(organization)
+      {
+        company_id: organization.id,
+        name: organization.name,
+        created_at: organization.created_at.to_i,
+        custom_attributes: {
+          industry: organization.industry,
+          size: organization.size,
+          credit_card_details: organization.has_credit_card_details?,
+          credit_card_expiry: organization.credit_card.expiry_date,
+          app_count: organization.app_instances.count,
+          app_list: organization.app_instances.map(&:name).sort.to_sentence,
+          user_count: organization.users.count
+        }
+      }
     end
   end
 end
