@@ -12,7 +12,7 @@ common: &default_settings
 
   # Your application name. Renaming here affects where data displays in New
   # Relic.  For more details, see https://docs.newrelic.com/docs/apm/new-relic-apm/maintenance/renaming-applications
-  app_name: <%= Rails.application.class.parent_name %>
+  app_name: <%= "#{@new_relic_app_name}-prd" %>
 
   # Logging level for log/newrelic_agent.log
   log_level: info
@@ -26,7 +26,7 @@ common: &default_settings
 # If your application has other named environments, configure them here.
 development:
   <<: *default_settings
-  app_name: <%= Rails.application.class.parent_name %> (Development)
+  app_name: <%= "#{@new_relic_app_name}-dev" %>
 
   # NOTE: There is substantial overhead when running in developer mode.
   # Do not use for production or load testing.
@@ -40,7 +40,7 @@ test:
 
 uat:
   <<: *default_settings
-  app_name: <%= Rails.application.class.parent_name %> (UAT)
+  app_name: <%= "#{@new_relic_app_name}-uat" %>
 
 production:
   <<: *default_settings
