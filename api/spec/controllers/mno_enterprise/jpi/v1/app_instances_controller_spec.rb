@@ -21,6 +21,7 @@ module MnoEnterprise
 
     describe 'GET #index' do
       let(:app_instance) { build(:app_instance, status: "running") }
+      let(:app_instance) { build(:app_instance, under_free_trial: false) }
       let(:app_instances) { instance_double('Her::Model::Relation') }
 
       before do

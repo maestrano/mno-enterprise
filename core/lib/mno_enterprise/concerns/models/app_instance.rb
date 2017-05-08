@@ -39,8 +39,8 @@ module MnoEnterprise::Concerns::Models::AppInstance
   # context where it is included rather than being executed in the module's context
   included do
     attributes :id, :uid, :name, :status, :app_id, :created_at, :updated_at, :started_at, :stack, :owner_id,
-               :owner_type, :terminated_at, :stopped_at, :billing_type, :autostop_at, :autostop_interval,
-               :next_status, :soa_enabled, :oauth_company, :oauth_keys, :oauth_keys_valid
+    :owner_type, :terminated_at, :stopped_at, :billing_type, :autostop_at, :autostop_interval,
+    :next_status, :soa_enabled, :oauth_company, :oauth_keys, :oauth_keys_valid, :free_trial_end_at, :per_user_licence, :active_licences_count
 
     #==============================================================
     # Constants
@@ -87,6 +87,14 @@ module MnoEnterprise::Concerns::Models::AppInstance
   # Route53 DNS propagation may take up to a minute, so we force a minimum of 60 seconds before considering the application online
   def active?
     ACTIVE_STATUSES.include?(self.status.to_sym)
+  end
+
+  def per_user_licence?
+    self.per_user_licence
+  end
+
+  def under_free_trial?
+    self.under_free_trial
   end
 
   def running?
