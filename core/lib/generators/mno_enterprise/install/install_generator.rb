@@ -40,6 +40,7 @@ module MnoEnterprise
         template "config/application.yml", "config/application.yml"
         template "config/application.yml", "config/application.sample.yml"
 
+        @new_relic_app_name = new_relic_app_name
         template "config/newrelic.yml", "config/newrelic.yml"
       end
 
@@ -171,6 +172,12 @@ module MnoEnterprise
             valid = (answer  =~ /\Ay(?:es)?|no?\Z/i)
           end
           answer.downcase[0] == ?y
+        end
+
+        def new_relic_app_name
+          app_name = Rails.application.class.parent_name.to_s
+          name = app_name.parameterize.gsub('enterprise', '')
+          "frontend-#{name}"
         end
     end
   end
