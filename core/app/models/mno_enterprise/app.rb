@@ -64,10 +64,18 @@ module MnoEnterprise
     end
 
     # Methods for appinfo flags
-    %w(coming_soon single_billing add_on).each do |method|
+    %w(responsive coming_soon single_billing add_on).each do |method|
       define_method "#{method}?" do
-        appinfo.presence && appinfo[method]
+        !!(appinfo.presence && appinfo[method])
       end
+    end
+
+    def star_ready?
+      !!(appinfo.presence && appinfo['starReady'])
+    end
+
+    def connec_ready?
+      !!(appinfo.presence && !!appinfo['connecReady'])
     end
 
     def regenerate_api_key!
