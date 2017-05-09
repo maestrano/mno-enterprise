@@ -20,6 +20,16 @@ en:
           app_not_managed_by_us: The app you requested does not seem to be managed by us.
           did_you_type_the_right_url: Are you sure you typed the right url?
 
+        layout:
+          your_dashboard_is_loading": "Your dashboard is loading..."
+
+        without_organisation:
+          hello: "Hi, {{name}}!"
+          text: "Unfortunately, your account is not attached to an organisation. Please contact your administrator."
+          text_if_can_create: "Unfortunately, your account is not attached to an organisation. Please contact your administrator or create a new one using the button below."
+          button: "Create an organisation"
+          logout: "Logout"
+
         app_install_btn:
           conflicting_app: "You cannot install this App as it is incompatible with:"
           start_app: "Start Now!"
