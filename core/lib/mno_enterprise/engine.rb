@@ -1,7 +1,7 @@
 module MnoEnterprise
   class Engine < ::Rails::Engine
     isolate_namespace MnoEnterprise
-    
+
     # Autoload all files and sub-directories in
     # lib
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
@@ -25,7 +25,7 @@ module MnoEnterprise
       g.test_framework :rspec, fixture: true
       g.fixture_replacement :factory_girl, :dir => 'spec/factories'
     end
-    
+
     # Allow class overriding using decorator pattern
     # See: http://edgeguides.rubyonrails.org/engines.html#overriding-models-and-controllers
     config.to_prepare do
@@ -47,6 +47,11 @@ module MnoEnterprise
     # Enable ActionController caching
     config.before_initialize do
       Rails.application.config.action_controller.perform_caching = true
+    end
+
+    # Make sure the MailAdapter is correctly configured
+    config.to_prepare do
+      MnoEnterprise::MailClient.adapter ||= MnoEnterprise.mail_adapter
     end
   end
 end
