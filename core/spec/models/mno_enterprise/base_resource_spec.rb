@@ -46,5 +46,42 @@ module MnoEnterprise
         it { expect(User.new.cache_key).to eq('mno_enterprise/users/new') }
       end
     end
+
+    # Not the best spec as this still pass without the attributes deletion
+    describe '#clear_association_cache' do
+      let(:user) { build(:user, :with_organizations) }
+      let(:dashboard) { build(:impac_dashboard) }
+
+      # Prime the cache and clear the stubs
+      before do
+        api_stub_for(get: "/users/#{user.id}/dashboards", response: from_api([dashboard]))
+        user.dashboards.count
+        user.organizations.count
+        clear_api_stubs
+      end
+
+      context 'without clearing the cache' do
+        # We can get the widget count without hitting the API
+        it 'is cached' do
+          # ivar
+          expect(user.dashboards.count).to eq(1)
+          # attribute
+          expect(user.organizations.count).to eq(1)
+        end
+      end
+
+      context 'when the cache is cleared' do
+        before { user.clear_association_cache }
+
+        # It tries to hit the API
+        it 'clears the resource cache (ivar)' do
+          expect{user.dashboards.count}.to raise_error(MnoeFaradayTestAdapter::Stubs::NotFound)
+        end
+
+        it 'clears the resource cache (attributes)' do
+          expect{user.organizations.count}.to raise_error(MnoeFaradayTestAdapter::Stubs::NotFound)
+        end
+      end
+    end
   end
 end

@@ -22,6 +22,7 @@ module MnoEnterprise
 
     before do
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization]))
       api_stub_for(get: "/organizations/#{organization.id}", response: from_api(organization))
       api_stub_for(get: '/audit_events', response: from_api([audit_event]))
       sign_in user
