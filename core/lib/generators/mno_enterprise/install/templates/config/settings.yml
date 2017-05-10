@@ -25,6 +25,9 @@ dock:
 # Display the Developer section on "My Account"
 developer:
   enabled: false
+# Display the onboarding wizard
+onboarding_wizard:
+  enabled: false
 # Enable Reviews in the marketplace
 reviews:
   enabled: false
