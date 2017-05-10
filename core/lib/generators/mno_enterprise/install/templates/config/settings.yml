@@ -6,6 +6,8 @@ impac:
 mno:
   paths:
     root: /api/mnoe/v1
+url_config:
+  after_sign_out_url: <%= ENV['AFTER_SIGN_OUT_URL']%>
 frontend_host:
 
 #===============================================
