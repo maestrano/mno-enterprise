@@ -13,6 +13,16 @@ RSpec.describe Devise::Models::RemoteAuthenticatable < ActiveSupport::TestCase d
     context 'when password change notifications are enabled' do
       before { user.class.send_password_change_notification = true }
 
+      context 'when the user is confirmed' do
+        let(:user) { build(:user, email: 'test@maestrano.com', password: 'oldpass', confirmed_at: nil) }
+        let(:updates) { {password: 'newpass', password_confirmation: 'newpass', confirmed_at: Time.current} }
+
+        it 'does not send an email' do
+          expect(user).not_to receive(:send_devise_notification)
+          subject
+        end
+      end
+
       context 'when the password is changed' do
         let(:updates) { {password: 'newpass', password_confirmation: 'newpass'} }
 
