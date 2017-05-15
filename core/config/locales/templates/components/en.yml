@@ -21,7 +21,7 @@ en:
           did_you_type_the_right_url: Are you sure you typed the right url?
 
         layout:
-          your_dashboard_is_loading": "Your dashboard is loading..."
+          your_dashboard_is_loading: "Your dashboard is loading..."
 
         without_organisation:
           hello: "Hi, {{name}}!"
