@@ -27,6 +27,7 @@ module MnoEnterprise
         template "Procfile.dev"
         template ".foreman"
         template ".healthcheck"
+        template "nginx.conf"
 
         template "config/initializers/mno_enterprise.rb"
         template "config/mno_enterprise_styleguide.yml"
