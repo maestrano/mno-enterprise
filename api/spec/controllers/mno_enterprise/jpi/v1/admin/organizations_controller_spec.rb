@@ -67,7 +67,8 @@ module MnoEnterprise
           'name' => organization.name,
           'soa_enabled' => organization.soa_enabled,
           'created_at' => organization.created_at,
-          'credit_card' => {'presence' => organization.credit_card?}
+          'credit_card' => {'presence' => organization.credit_card?},
+          'account_frozen' => organization.account_frozen
         }],
         'metadata' => {'pagination' => {'count' => 1}}
       }

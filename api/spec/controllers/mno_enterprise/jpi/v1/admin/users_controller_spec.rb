@@ -13,7 +13,8 @@ module MnoEnterprise
             'id' => org.id,
             'uid' => org.uid,
             'name' => org.name,
-            'created_at' => org.created_at
+            'created_at' => org.created_at,
+            'account_frozen' => org.account_frozen
         }
       end
     end

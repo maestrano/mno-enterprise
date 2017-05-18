@@ -53,6 +53,7 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
         'id' => organization.id,
         'name' => organization.name,
         'soa_enabled' => organization.soa_enabled,
+        'account_frozen' => organization.account_frozen,
         'payment_restriction' => organization.payment_restriction
     }
 
