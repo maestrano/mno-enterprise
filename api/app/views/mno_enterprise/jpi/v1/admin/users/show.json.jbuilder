@@ -5,6 +5,7 @@ json.user do
     json.id org.id
     json.uid org.uid
     json.name org.name
+    json.account_frozen org.account_frozen
     json.created_at org.created_at
   end
 end
