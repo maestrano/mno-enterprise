@@ -1,12 +1,12 @@
 module MnoEnterpriseApiTestHelper
-  
+
   # Take a resource and transform it into a Hash describing
   # the resource as if it had been returned by the MnoEnterprise
   # API server
   def from_api(res)
     { data: serialize_type(res), metadata: {pagination: {count: entity_count(res)}} }
   end
-  
+
   def serialize_type(res)
     case
     when res.kind_of?(Array)
@@ -42,7 +42,7 @@ module MnoEnterpriseApiTestHelper
       return 1
     end
   end
-  
+
   # Reset all API stubs.
   # Called before each test (see spec_helper)
   def api_stub_reset
@@ -74,12 +74,27 @@ module MnoEnterpriseApiTestHelper
       warn("DEPRECATION WARNING: api_stub_for(MyClass,{ some: 'opts'}) is deprecated. Please use api_stub_for({ some: 'opts' }) from now on")
       real_opts = opts
     end
-    
+
     set_api_stub
     api_stub_add(real_opts)
     api_stub_configure(@_api_stub)
   end
-  
+
+  # Remove an API stub added with `api_stub_for`
+  # This needs to be called with the same options
+  def remove_api_stub(opts = {})
+    set_api_stub
+    api_stub_remove(opts)
+    api_stub_configure(@_api_stub)
+  end
+
+  # Remove all api stubs
+  def clear_api_stubs
+    set_api_stub
+    @_stub_list = {}
+    api_stub_configure(@_api_stub)
+  end
+
   private
     # Set a stub api on the provider class
     def set_api_stub
@@ -99,21 +114,37 @@ module MnoEnterpriseApiTestHelper
     def api_stub_add(orig_opts)
       @_stub_list ||= {}
       opts = orig_opts.dup
-      
-      # Expand options so that: { put: '/path' } becomes { path: '/path', method: :put }
+
+      expand_options(opts)
+
+      key = opts.to_param
+      @_stub_list[key] = opts
+    end
+
+    # Remove an API
+    # This need to be called with the exact same options as `api_stub_add` was called with
+    def api_stub_remove(orig_opts)
+      @_stub_list ||= {}
+      opts = orig_opts.dup
+
+      expand_options(opts)
+
+      key = opts.to_param
+      @_stub_list.delete(key)
+    end
+
+    # Expand options so that: { put: '/path' } becomes { path: '/path', method: :put }
+    def expand_options(opts)
       unless opts[:method] && opts[:path]
-        [:get,:put,:post,:delete].each do |verb|
+        [:get, :put, :post, :delete].each do |verb|
           if path = opts.delete(verb)
             opts[:path] = path
             opts[:method] = verb
           end
         end
       end
-      
-      key = opts.to_param
-      @_stub_list[key] = opts
     end
-  
+
     # Configure the api and apply a list of stubs
     def api_stub_configure(api)
       # This block should match the her.rb initializer
@@ -157,9 +188,9 @@ module MnoEnterpriseApiTestHelper
               else
                 resp_code = stub[:code] || 200
               end
-                 
-              
-              [resp_code, {}, resp.to_json] 
+
+
+              [resp_code, {}, resp.to_json]
             }
           end
         end

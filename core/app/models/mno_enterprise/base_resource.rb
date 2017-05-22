@@ -115,9 +115,11 @@ module MnoEnterprise
           .max
     end
 
+    # Clear the record association cache
     def clear_association_cache
       self.class.associations[:has_many].each do |assoc|
         instance_variable_set(:"@_her_association_#{assoc[:name]}", nil)
+        attributes.delete(assoc[:name].to_s)
       end
     end
 
