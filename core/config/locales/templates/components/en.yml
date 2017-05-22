@@ -24,7 +24,7 @@ en:
           your_dashboard_is_loading: "Your dashboard is loading..."
 
         without_organisation:
-          hello: "Hi, {{name}}!"
+          hello: "Hi, {name}!"
           text: "Unfortunately, your account is not attached to an organisation. Please contact your administrator."
           text_if_can_create: "Unfortunately, your account is not attached to an organisation. Please contact your administrator or create a new one using the button below."
           button: "Create an organisation"
