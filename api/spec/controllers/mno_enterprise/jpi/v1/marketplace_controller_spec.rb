@@ -31,14 +31,20 @@ module MnoEnterprise
         'single_billing' => app.single_billing?,
         'tiny_description' => app.tiny_description,
         'description' => markdown(app.sanitized_description),
+        'known_limitations' => markdown(app.known_limitations),
+        'getting_started' => markdown(app.getting_started),
         'testimonials' => app.testimonials,
         'pictures' => app.pictures,
         'pricing_plans' => app.pricing_plans,
         'rank' => app.rank,
+        'support_url' => app.support_url,
+        'key_workflows'  => app.key_workflows,
+        'key_features' => app.key_features,
         'multi_instantiable' => app.multi_instantiable,
         'subcategories' => app.subcategories,
         'average_rating' => app.average_rating,
-        'running_instances_count' => app.running_instances_count
+        'running_instances_count' => app.running_instances_count,
+        'shared_entities' => []
       }
     end
 
