@@ -14,7 +14,7 @@ en:
             export: Export
 
           billing:
-            current_billing_html: "Your billing for the current invoicing period is: <b>{{amount}}</b>"
+            current_billing_html: "Your billing for the current invoicing period is:"
             current_credit_html: "You have <b>{{amount}}</b> credit on your account to be used for the next payment. Note that this credit account will also be linked to any organization you create."
             disclaimer: Note that the amount for your current invoicing period is indicative and might not reflect the latest changes in your current billing.
             about_title: About our billing cycle
@@ -102,8 +102,9 @@ en:
                 super_admin: A Super Admin has all power within the company including access to billing management
             removal_modal:
               title: Confirm action
-              body_name: Are you really sure you want to remove {{name}} {{surname}}?
-              body_email: Are you really sure you want to remove {{email}}?
+              body_name: Are you really sure you want to remove
+              question_mark: "?"
+              body_email: Are you really sure you want to remove
               cancel: Cancel
               remove: Remove
 

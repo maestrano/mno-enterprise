@@ -22,7 +22,9 @@ en:
 
           member_removal_modal:
             title: Confirm action
-            confirmation: "Are you sure you want to remove {{fullname}} from {{teamname}}?"
+            confirmation: "Are you sure you want to remove"
+            confirmation_from: from
+            confirmation_question_mark: "?"
             cancel: Cancel
             remove: Remove
 
@@ -34,7 +36,8 @@ en:
 
           team_delete_modal:
             title: Confirm action
-            confirmation: "Are you really sure you want to remove {{teamname}}?"
+            confirmation: "Are you really sure you want to remove"
+            question_mark: "?"
             cancel: Cancel
             remove: Remove
 
