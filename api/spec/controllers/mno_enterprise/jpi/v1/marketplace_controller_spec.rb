@@ -100,6 +100,65 @@ module MnoEnterprise
           subject
           expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app]).to_json))
         end
+
+        context 'with multiple apps' do
+          let(:app1) { build(:app, rank: 5 ) }
+          let(:app2) { build(:app, rank: 0 ) }
+
+          before { api_stub_for(get: '/apps', response: from_api([app1, app2])) }
+
+          it 'returns the apps in the correct order' do
+            subject
+            expect(assigns(:apps)).to eq([app2, app1])
+          end
+        end
+
+        context 'when multiples apps and a nil rank' do
+          let(:app1) { build(:app, rank: 5 ) }
+          let(:app2) { build(:app, rank: 0 ) }
+          let(:app3) { build(:app, rank: nil ) }
+
+          before { api_stub_for(get: '/apps', response: from_api([app1, app3, app2])) }
+
+          it 'returns the apps in the correct order' do
+            subject
+            expect(assigns(:apps)).to eq([app2, app1, app3])
+          end
+        end
+
+        describe 'caching' do
+          context 'on the first request' do
+            it { is_expected.to have_http_status(:ok) }
+
+            it 'sets the correct cache headers' do
+              subject
+              header = response.headers['Last-Modified']
+
+              expect(header).to be_present
+
+              # Parse and serialise to get correct format and avoid ms difference
+              expect(Time.rfc822(header).in_time_zone.to_s).to eq(app.updated_at.to_s)
+            end
+          end
+
+          context 'on a subsequent request'  do
+
+            before do
+              request.env['HTTP_IF_MODIFIED_SINCE'] = last_modified.rfc2822
+            end
+
+            context 'if it is not stale' do
+              # Can't be based on the previous request due to parsing and rounding issues with ms
+              let(:last_modified) { app.updated_at + 10.minutes }
+              it { is_expected.to have_http_status(:not_modified) }
+            end
+
+            context 'if it is stale' do
+              let(:last_modified) { app.updated_at - 10.minutes }
+              it { is_expected.to have_http_status(:ok) }
+            end
+          end
+        end
       end
     end
 
@@ -112,43 +171,6 @@ module MnoEnterprise
       it 'returns the right response' do
         subject
         expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_app(app).to_json))
-      end
-    end
-
-    describe 'GET #index' do
-      subject { get :index }
-
-      context 'when multiples apps' do
-        let(:app1) { build(:app, rank: 5 ) }
-        let(:app2) { build(:app, rank: 0 ) }
-
-        before do
-          MnoEnterprise.marketplace_listing = nil
-          api_stub_for(get: '/apps', response: from_api([app1,app2]))
-        end
-
-        it { is_expected.to be_success }
-
-        it 'returns the right response' do
-          subject
-          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app2, app1]).to_json))
-        end
-      end
-
-      context 'when multiples apps and attributes nil' do
-        let(:app1) { build(:app, rank: 5 ) }
-        let(:app2) { build(:app, rank: 0 ) }
-        let(:app3) { build(:app, rank: nil ) }
-
-        before do
-          MnoEnterprise.marketplace_listing = nil
-          api_stub_for(get: '/apps', response: from_api([app1,app3,app2]))
-        end
-
-        it 'returns the right response' do
-          subject
-          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app2, app1, app3]).to_json))
-        end
       end
     end
   end
