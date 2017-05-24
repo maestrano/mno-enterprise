@@ -20,7 +20,7 @@
             add: Tambahkan
           member_removal_modal:
             title: Konfirmasi tindakan
-            confirmation: Yakin ingin menghapus {{fullname}} dari {{teamname}}?
+            confirmation: Yakin ingin menghapus {fullname} dari {teamname}?
             cancel: Batalkan
             remove: Hapus
           team_add_modal:
@@ -30,11 +30,11 @@
             create: Buat
           team_delete_modal:
             title: Konfirmasi tindakan
-            confirmation: Yakin ingin menghapus {{teamname}}?
+            confirmation: Yakin ingin menghapus {teamname}?
             cancel: Batalkan
             remove: Hapus
           team_list:
-            no_team_member_warning: '{{teamname}} belum memiliki satu pun anggota tim!'
+            no_team_member_warning: '{teamname} belum memiliki satu pun anggota tim!'
             add_team_members: Tambahkan Anggota Tim
             tbl_name: Nama
             tbl_surname: Nama belakang

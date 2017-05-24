@@ -7,15 +7,15 @@ en:
             title: Sorry we couldn't process this payment
             explanation: Your account is currently in arrears as we were unable to charge your designated credit card.
             recommendation: "Please make sure your credit card details are up to date, then click the button below."
-            warning: "Unfortunately if we are unable to charge your credit card by {{date}}, your applications will be automatically shut down."
+            warning: "Unfortunately if we are unable to charge your credit card by {date}, your applications will be automatically shut down."
             retry: Retry Payment
 
           audit_log:
             export: Export
 
           billing:
-            current_billing_html: "Your billing for the current invoicing period is: <b>{{amount}}</b>"
-            current_credit_html: "You have <b>{{amount}}</b> credit on your account to be used for the next payment. Note that this credit account will also be linked to any organization you create."
+            current_billing_html: "Your billing for the current invoicing period is: <b>{amount}</b>"
+            current_credit_html: "You have <b>{amount}</b> credit on your account to be used for the next payment. Note that this credit account will also be linked to any organization you create."
             disclaimer: Note that the amount for your current invoicing period is indicative and might not reflect the latest changes in your current billing.
             about_title: About our billing cycle
             about_body: Our invoicing period runs from the 25th of the previous month to the 24th of the current month. Any amount due (current spending minus credit) is charged on the 2nd of the following month.
@@ -67,7 +67,7 @@ en:
               title: Settings
 
           invoices:
-            disclaimer: All amounts are displayed in {{currency}}
+            disclaimer: All amounts are displayed in {currency}
             period: Period
             amount: Amount
             paid: Paid
@@ -84,8 +84,8 @@ en:
             edit: Edit
             remove: Remove
             invite_modal:
-              title_name: "Edit Member: {{name}} {{surname}}"
-              title_email: "Edit Member: {{email}}"
+              title_name: "Edit Member: {name} {surname}"
+              title_email: "Edit Member: {email}"
               description: Enter the email addresses of the people you want to invite in your company
               example: "One address per line, e.g.:"
               disclaimer: Please note that for security reasons unaccepted invites will automatically expire after 3 days.
@@ -102,8 +102,8 @@ en:
                 super_admin: A Super Admin has all power within the company including access to billing management
             removal_modal:
               title: Confirm action
-              body_name: Are you really sure you want to remove {{name}} {{surname}}?
-              body_email: Are you really sure you want to remove {{email}}?
+              body_name: Are you really sure you want to remove {name} {surname}?
+              body_email: Are you really sure you want to remove {email}?
               cancel: Cancel
               remove: Remove
 
