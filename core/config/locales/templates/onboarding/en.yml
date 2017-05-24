@@ -1,0 +1,48 @@
+en:
+  mno_enterprise:
+    templates:
+      app_feature:
+        single_sign_on: "Single Sign-on"
+        single_billing: "Single billing"
+        data_sharing: "Data-sharing"
+      onboarding:
+        breadcrumb:
+          step1: "Welcome"
+          step2: "Select your application(s)"
+          step3: "Connect your application(s)"
+          step4: "Discover your account"
+        welcome:
+          title: "Welcome, {name}!"
+          intro: "Setting up the Maestrano platform for the first time takes just a few minutes."
+          setup: "Our easy setup guide will take you through the process of connecting your first business applications and offer some insights on how to get the most out of your new cloud platform."
+          choose_my_apps: "Choose my apps!"
+          connect_my_apps: "Connect my apps!"
+          almost_there: "Almost there!"
+          discover_your_account: "Discover your account now!"
+        select_your_app:
+          title: "Select the applications you want to connect"
+          search: "Search"
+          categories: "Categories"
+        data_sync:
+          what_data: "What data will be synchronised"
+          start: "Start to visualise the data synchronised by your applications by clicking on its icon."
+          learn_more: "Learn how Maestrano synchronises data between your applications."
+        app_infos_modal:
+          what_is: "What is {name}?"
+          how_is_app_integrated:
+            title: "How is {name} integrated to Maestrano?"
+            connector: "{name} is an add-on on Maestrano. You either need an existing account or to create an account.<br>The only thing you need to do is to authorise Maestrano to synchronise data with your account by clicking on \"connect my account\""
+            cloud: "{name} is a cloud app."
+            cube: "{name} is a cube app."
+          what_is_shared: "What data is shared with {name}?"
+          free_trial: "{duration} days free trial"
+        connect_apps:
+          connect_applications: "Connect your applications"
+        almost_there:
+          title: "You’re almost there"
+          text1: "Before we forward you to your new dashboard, here are a few helpful hints to help you get started."
+          line1: "You can access each of your newly added applications by clicking on them in the Application Dock, located in the top center of your dashboard."
+          line2: "You can connect additional application from our marketplace by clicking on the “Marketplace” tab on the left-hand side menu of the page."
+          line3: "Our <a href=\"https://maestrano.atlassian.net/wiki/display/UKB/Maestrano+Apps+Marketplace\">User Knowledge Base</a> contains a range of tutorials and guides to getting the most out of your applications."
+          line4: "Your new dashboard has more than 50 widgets that can be used to view your entire business performance at a glance."
+          text2: "And remember, should you need any help along the way, our Customer Experience and Support team are more than happy to answer any of your questions. You can get in touch with them by clicking on the intercom chat (pink and white speech bubble icon)  in the bottom right-hand corner of Maestrano"
