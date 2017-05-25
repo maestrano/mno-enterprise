@@ -50,7 +50,7 @@ en:
             question_search: "Search..."
             question_ask: "Ask a question"
             question_ask_placeholder: "Enter your question here..."
-            no_review: "There are no reviews of {{name}}."
+            no_review: "There are no reviews on"
             answers: "Answers"
             answer_q: "Answer this Question"
             answer_placeholder: "Enter your answer to this question here..."
@@ -82,7 +82,7 @@ en:
               delete_modal_body: "Do you really want to delete your question?"
               delete_modal_cancel: "Cancel"
               delete_modal_delete: "Delete"
-              no_question: "There are no questions on {{name}}."
+              no_question: "There are no questions on"
             comment:
               delete_modal_header: "Delete a comment"
               delete_modal_body: "Do you really want to delete your comment?"
