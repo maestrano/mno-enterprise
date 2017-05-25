@@ -4,5 +4,8 @@
   "dependencies": {
     "mno-enterprise-angular": "<%= mnoe_angular_pkg %>",
     "impac-angular": "<%= impac_angular_pkg %>"
+  },
+  "engines": {
+    "node": ">= 6.9.0"
   }
 }
