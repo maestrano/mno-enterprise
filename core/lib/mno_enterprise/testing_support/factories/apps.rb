@@ -16,11 +16,15 @@ FactoryGirl.define do
     tags ['Foo', 'Bar']
     key_benefits ['Super', 'Hyper', 'Good']
     key_features ['Super', 'Hyper', 'Good']
+    key_workflows ['1st workflow', '2nd workflow']
+    known_limitations "No limitations"
     testimonials [{text: 'Bla', company: 'Doe Pty Ltd', author: 'John'}]
     worldwide_usage 120000
     tiny_description "A great app"
     stack 'cube'
     terms_url "http://opensource.org/licenses/MIT"
+    support_url "http://example.com/su  pport"
+    getting_started "Let's get started"
     appinfo { {} }
     average_rating { rand(1..5) }
     sequence(:rank) { |n| n }
@@ -28,6 +32,8 @@ FactoryGirl.define do
     pricing_plans { {
       'default' => [{name: 'Monthly Plan', price: '20.0', currency: 'AUD', factor: '/month'}]
     } }
+
+    shared_entities []
 
     trait :cloud do
       stack 'cloud'

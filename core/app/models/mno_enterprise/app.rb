@@ -42,6 +42,7 @@ module MnoEnterprise
     has_many :reviews,   class_name: 'AppReview'
     has_many :feedbacks, class_name: 'AppFeedback'
     has_many :questions, class_name: 'AppQuestion'
+    has_many :shared_entities
 
     # Return the list of available categories
     def self.categories(list = nil)
