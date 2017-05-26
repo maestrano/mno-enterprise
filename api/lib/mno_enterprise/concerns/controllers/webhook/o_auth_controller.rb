@@ -1,5 +1,6 @@
 module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
   extend ActiveSupport::Concern
+  include MnoEnterprise::ImageHelper
 
   #==================================================================
   # Included methods
@@ -12,7 +13,7 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
     before_filter :check_permissions, only: [:authorize, :disconnect, :sync]
 
     PROVIDERS_WITH_OPTIONS = ['xero','myob']
-
+    helper_method :main_logo_white_bg # To use in the provision view
     private
       def app_instance
         @app_instance ||= MnoEnterprise::AppInstance.where(uid: params[:id]).first
