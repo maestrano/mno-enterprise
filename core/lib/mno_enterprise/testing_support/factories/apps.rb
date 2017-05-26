@@ -33,7 +33,7 @@ FactoryGirl.define do
       'default' => [{name: 'Monthly Plan', price: '20.0', currency: 'AUD', factor: '/month'}]
     } }
 
-    shared_entities []
+    shared_entities { [] }
 
     trait :cloud do
       stack 'cloud'
