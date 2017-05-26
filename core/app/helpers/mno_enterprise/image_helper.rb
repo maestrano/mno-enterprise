@@ -1,8 +1,9 @@
 module MnoEnterprise
   module ImageHelper
-    # Helper method to easily access and select the images
+    
     IMAGES_LOCATION = "/app/assets/images/mno_enterprise/"
     
+    # Helper method to easily access and select the images
     # If is_for_invoice is true returns logo appended to the path
     # If is_for_invoice is false returns logo detached to the path
     def main_logo_white_bg(is_for_invoice=false)
