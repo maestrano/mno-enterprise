@@ -43,8 +43,7 @@ module MnoEnterprise
         'multi_instantiable' => app.multi_instantiable,
         'subcategories' => app.subcategories,
         'average_rating' => app.average_rating,
-        'running_instances_count' => app.running_instances_count,
-        'shared_entities' => []
+        'running_instances_count' => app.running_instances_count
       }
     end
 
@@ -78,6 +77,8 @@ module MnoEnterprise
             params: { filter: { 'nid.in' => MnoEnterprise.marketplace_listing } },
             response: from_api([app])
           )
+          # TODO: Shouldn't need to stub this
+          api_stub_for(get: "/apps/#{app.id}/shared_entities", response: from_api([]))
         end
 
         it { is_expected.to be_success }
@@ -92,6 +93,8 @@ module MnoEnterprise
         before do
           MnoEnterprise.marketplace_listing = nil
           api_stub_for(get: '/apps', response: from_api([app]))
+          # TODO: Shouldn't need to stub this
+          api_stub_for(get: "/apps/#{app.id}/shared_entities", response: from_api([]))
         end
 
         it { is_expected.to be_success }
@@ -105,7 +108,12 @@ module MnoEnterprise
           let(:app1) { build(:app, rank: 5 ) }
           let(:app2) { build(:app, rank: 0 ) }
 
-          before { api_stub_for(get: '/apps', response: from_api([app1, app2])) }
+          before do
+            api_stub_for(get: '/apps', response: from_api([app1, app2]))
+            # TODO: Shouldn't need to stub this
+            api_stub_for(get: "/apps/#{app1.id}/shared_entities", response: from_api([]))
+            api_stub_for(get: "/apps/#{app2.id}/shared_entities", response: from_api([]))
+          end
 
           it 'returns the apps in the correct order' do
             subject
@@ -118,7 +126,13 @@ module MnoEnterprise
           let(:app2) { build(:app, rank: 0 ) }
           let(:app3) { build(:app, rank: nil ) }
 
-          before { api_stub_for(get: '/apps', response: from_api([app1, app3, app2])) }
+          before do
+            api_stub_for(get: '/apps', response: from_api([app1, app3, app2]))
+            # TODO: Shouldn't need to stub this
+            api_stub_for(get: "/apps/#{app1.id}/shared_entities", response: from_api([]))
+            api_stub_for(get: "/apps/#{app2.id}/shared_entities", response: from_api([]))
+            api_stub_for(get: "/apps/#{app3.id}/shared_entities", response: from_api([]))
+          end
 
           it 'returns the apps in the correct order' do
             subject
@@ -163,7 +177,11 @@ module MnoEnterprise
     end
 
     describe 'GET #show' do
-      before { api_stub_for(get: "/apps/#{app.id}", response: from_api(app)) }
+      before do
+        api_stub_for(get: "/apps/#{app.id}", response: from_api(app))
+        # TODO: Shouldn't need to stub this
+        api_stub_for(get: "/apps/#{app.id}/shared_entities", response: from_api([]))
+      end
       subject { get :show, id: app.id }
 
       it { is_expected.to be_success }

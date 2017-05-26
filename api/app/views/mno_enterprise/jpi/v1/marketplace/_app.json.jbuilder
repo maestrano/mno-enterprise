@@ -19,7 +19,7 @@ json.shared_entities do
   json.array! app.shared_entities do |shared_entity|
     json.extract! shared_entity, :shared_entity_nid, :shared_entity_name, :write, :read
   end
-end
+end if app.shared_entities.any?
 
 if app.logo
   json.logo app.logo.to_s
