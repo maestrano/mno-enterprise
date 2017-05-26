@@ -36,9 +36,9 @@ en:
           launch_app: "Launch App"
           connect_app: "Connect App"
           insufficient_privilege: "You do not have the sufficient privileges. Contact your administrator."
-          success_notification_title: "{{name}} has been added to your account"
-          success_launch_notification_body: "To start using {{name}}, click on the {{name}} icon then click on \"Launch\"."
-          success_connect_notification_body: "To start using {{name}}, click on the {{name}} icon then click on \"Connect\"."
+          success_notification_title: "{name} has been added to your account"
+          success_launch_notification_body: "To start using {name}, click on the {name} icon then click on \"Launch\"."
+          success_connect_notification_body: "To start using {name}, click on the {name} icon then click on \"Connect\"."
 
         audit_events_list:
           loading_events: Loading Events

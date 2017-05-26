@@ -9,7 +9,7 @@ en:
             which_version_used: "Which version of MYOB do you use?"
             my_version_is: "My version of MYOB is:"
             connect: "Connect"
-            connect_to: "Connect to {{appname}}"
+            connect_to: "Connect to {appname}"
 
           xero:
             how_do_you_want_to_connect: "How do you want us to connect your Xero account?"
@@ -17,4 +17,4 @@ en:
             payroll: "Payroll"
             which_country_for_the_account: "What is the country associated with your Xero account?"
             connect: "Connect"
-            connect_to: "Connect to {{appname}}"
+            connect_to: "Connect to {appname}"

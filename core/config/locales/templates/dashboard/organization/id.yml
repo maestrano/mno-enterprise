@@ -7,12 +7,12 @@ id:
             title: "Maaf kami tidak dapat memproses pembayaran ini"
             explanation: "Akun Anda saat ini dalam tunggakan karena kami tidak mampu membebankan kartu kredit Anda."
             recommendation: "Pastikan detail kartu kredit Anda adalah yang terbaru, lalu klik tombol di bawah ini."
-            warning: "Sayang sekali jika kami tidak dapat membebankan kartu kredit Anda pada {{date}}, aplikasi Anda akan secara otomatis nonaktif."
+            warning: "Sayang sekali jika kami tidak dapat membebankan kartu kredit Anda pada {date}, aplikasi Anda akan secara otomatis nonaktif."
             retry: "Coba Lagi Pembayaran"
 
           billing:
-            current_billing_html: "Tagihan Anda untuk periode tagihan saat ini adalah: <b>{{amount}}</b>"
-            current_credit_html: "Anda memiliki <b>{{amount}}</b> kredit di akun Anda untuk digunakan pada pembayaran berikutnya. Perhatikan bahwa akun kredit ini juga akan dihubungkan ke organisasi apa pun yang Anda buat."
+            current_billing_html: "Tagihan Anda untuk periode tagihan saat ini adalah: <b>{amount}</b>"
+            current_credit_html: "Anda memiliki <b>{amount}</b> kredit di akun Anda untuk digunakan pada pembayaran berikutnya. Perhatikan bahwa akun kredit ini juga akan dihubungkan ke organisasi apa pun yang Anda buat."
             disclaimer: "Perhatikan bahwa jumlah untuk periode tagihan Anda bersifat indikatif dan mungkin tidak menunjukkan perubahan terakhir dalam penagihan Anda saat ini."
             about_title: "Tentang siklus penagihan kami"
             about_body: "Periode tagihan kami berlangsung dari tanggal 25 pada bulan sebelumnya hingga tanggal 24 bulan ini. Jumlah utang (belanja saat ini dikurangi kredit) dibebankan tanggal 2 pada bulan berikutnya."
@@ -58,7 +58,7 @@ id:
               title: Penyetelan
 
           invoices:
-            disclaimer: Seluruh jumlah ditampilkan dalam {{currency}}
+            disclaimer: Seluruh jumlah ditampilkan dalam {currency}
             period: Periode
             amount: Jumlah
             paid: Sudah Dibayar

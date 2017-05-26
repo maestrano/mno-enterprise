@@ -22,7 +22,7 @@ en:
 
           member_removal_modal:
             title: Confirm action
-            confirmation: "Are you sure you want to remove {{fullname}} from {{teamname}}?"
+            confirmation: "Are you sure you want to remove {fullname} from {teamname}?"
             cancel: Cancel
             remove: Remove
 
@@ -34,12 +34,12 @@ en:
 
           team_delete_modal:
             title: Confirm action
-            confirmation: "Are you really sure you want to remove {{teamname}}?"
+            confirmation: "Are you really sure you want to remove {teamname}?"
             cancel: Cancel
             remove: Remove
 
           team_list:
-            no_team_member_warning: "{{teamname}} does not have any team member yet!"
+            no_team_member_warning: "{teamname} does not have any team member yet!"
             add_team_members: Add Team Members
             tbl_name: Name
             tbl_surname: Surname

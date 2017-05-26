@@ -42,9 +42,9 @@ en:
         apps_list:
           title: Dashboard
           manual_data_sync: Manual Data Sync
-          manual_data_sync_tooltip: Trigger a manual sync between {{appname}} and Maestrano.
+          manual_data_sync_tooltip: Trigger a manual sync between {appname} and Maestrano.
           disconnect_link: Disconnect Link
-          disconnect_link_tooltip: Are you sure you want to disconnect {{appname}} and Maestrano?
+          disconnect_link_tooltip: Are you sure you want to disconnect {appname} and Maestrano?
           restart: Restart
           delete: Delete
           linked_to: Linked to

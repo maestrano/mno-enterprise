@@ -7,12 +7,12 @@ zh:
             title: "对不起我们无法处理此付款"
             explanation: "您的帐户目前尚有欠款，因为我们无法用您指定的信用卡结帐。"
             recommendation: "请确定您的信用卡信息是最新的，然后点击以下按钮。"
-            warning: "很遗憾，如果我们无法在{{date}}前使用您的信用卡结帐，您的应用程序将自动关闭。"
+            warning: "很遗憾，如果我们无法在{date}前使用您的信用卡结帐，您的应用程序将自动关闭。"
             retry: "重试付款"
 
           billing:
-            current_billing_html: "您在目前开票期限内的帐单金额是： <b>{{amount}}</b>"
-            current_credit_html: "您的帐户余额有<b>{{amount}}</b>，可供下次付款使用。注意，此信用帐户也会连接至您创建的任何公司组织。"
+            current_billing_html: "您在目前开票期限内的帐单金额是： <b>{amount}</b>"
+            current_credit_html: "您的帐户余额有<b>{amount}</b>，可供下次付款使用。注意，此信用帐户也会连接至您创建的任何公司组织。"
             disclaimer: "请注意，您在目前开票期限内的帐单金额仅供参考，不一定能反映您的目前帐单的最新变动。"
             about_title: "关于我们的帐单周期"
             about_body: "我们的开票期从上个月的25号至本月24号。任何到期款项（当前支出扣除余额）在下个月的2号结帐。"
@@ -58,7 +58,7 @@ zh:
               title: 设置
 
           invoices:
-            disclaimer: 所有金额以{{currency}}显示
+            disclaimer: 所有金额以{currency}显示
             period: 期限
             amount: 金额
             paid: 已支付
