@@ -64,5 +64,33 @@ module MnoEnterprise
         end
       end
     end
+
+    describe 'PATCH #finalize' do
+      let(:user_params) { {confirmation_token: user.confirmation_token, password: 'test', name: 'test'} }
+      subject { post :finalize, user: user_params }
+
+      before do
+        allow(MnoEnterprise::User).to receive(:find_for_confirmation) { user }
+        api_stub_for(get: "/org_invites?filter[user_email]=#{user.email}", response: from_api(nil))
+        api_stub_for(put: "/users/#{user.id}", response: from_api(user))
+      end
+
+      context 'unconfirmed user' do
+        let(:user) { unconfirmed_user }
+
+        it 'redirects the user to the dashboard' do
+          expect(subject).to redirect_to('/dashboard/')
+        end
+
+        context 'when password change notifications are enabled' do
+          before { user.class.send_password_change_notification = true }
+
+          it 'does not send an email' do
+            expect(user).not_to receive(:send_devise_notification)
+            subject
+          end
+        end
+      end
+    end
   end
 end

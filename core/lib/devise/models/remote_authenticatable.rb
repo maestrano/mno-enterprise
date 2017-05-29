@@ -2,7 +2,7 @@ module Devise
   module Models
     module RemoteAuthenticatable
       extend ActiveSupport::Concern
- 
+
       #
       # Here you do the request to the external webservice
       #
@@ -44,7 +44,7 @@ module Devise
           end.tap {|r| r && r.clear_association_cache}
           record if record && record.authenticatable_salt == salt
         end
-        
+
         # Here you have to return and array with the data of your resource
         # that you want to serialize into the session
         #
@@ -60,8 +60,9 @@ module Devise
         # We want to send the notification once the password has changed but
         # we won't have access to dirty attributes.
         # Flag change before the model is saved.
+        # Do not send a notification at confirmation
         def track_password_changed
-          @password_changed = password_changed?
+          @password_changed = password_changed? && confirmed_at_was.present?
           true # before callback needs to return true to continue
         end
 
