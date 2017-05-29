@@ -119,17 +119,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   private
 
     def dashboard
-      @dashboard ||= MnoEnterprise::Impac::Dashboard.find(params.require(:dashboard_id))
+      @dashboard ||= current_user.dashboards.find(params.require(:dashboard_id))
       return render_not_found('dashboard') unless @dashboard
       @dashboard
     end
 
-    def widget
-      return nil if (id = params.require(:kpi)[:widget_id]).blank?
-      @widget ||= MnoEnterprise::Impac::Widget.find(id)
-      return render_not_found('widget') unless @widget
-      @widget
-    end
+    # TODO: attach KPI onto widget capability
+    # def widget
+    #   return nil if (id = params.require(:kpi)[:widget_id]).blank?
+    #   @widget ||= MnoEnterprise::Impac::Widget.find(id)
+    #   return render_not_found('widget') unless @widget
+    #   @widget
+    # end
 
     def kpi
       @kpi ||= MnoEnterprise::Impac::Kpi.find(params[:id])

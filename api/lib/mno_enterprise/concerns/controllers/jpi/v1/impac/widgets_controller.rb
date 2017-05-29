@@ -69,7 +69,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
     end
 
     def widgets
-      @widgets ||= MnoEnterprise::Impac::Dashboard.find(params[:dashboard_id]).widgets
+      @widgets ||= current_user.dashboards.find(params[:dashboard_id]).widgets
     end
 
     def widget_create_params
