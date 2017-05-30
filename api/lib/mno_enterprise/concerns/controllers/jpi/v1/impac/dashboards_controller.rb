@@ -81,6 +81,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     end
 
     def dashboards
+      current_user.dashboards.reload
       @dashboards ||= current_user.dashboards
     end
 
