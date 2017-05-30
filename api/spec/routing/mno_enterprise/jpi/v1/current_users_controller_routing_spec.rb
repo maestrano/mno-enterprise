@@ -14,6 +14,7 @@ module MnoEnterprise
     end
     
     it 'routes to #register_developer' do
+      p 'routes to #register_developer'
       expect(put('/jpi/v1/current_user/register_developer')).to route_to("mno_enterprise/jpi/v1/current_users#register_developer")
     end
 
