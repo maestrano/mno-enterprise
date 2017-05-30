@@ -128,7 +128,7 @@ module MnoEnterprise
       @pdf.repeat :all do
         @pdf.bounding_box([0, @pdf.bounds.top+@format[:header_size]], width: 540, height: @format[:footer_size]) do
           @pdf.float do
-            @pdf.image main_logo_white_bg(is_for_invoice=true), scale: 0.5
+            @pdf.image main_logo_white_bg_path(true), scale: 0.5
           end
           @pdf.move_down 52
           @pdf.font_size(20) { @pdf.text "#{title} #{@data[:period_month]}", style: :bold, align: :right }
