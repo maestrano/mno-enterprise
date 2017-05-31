@@ -1,6 +1,6 @@
 impac:
-  protocol: http
-  host: localhost:4000
+  protocol: https
+  host: api-impac.maestrano.test
 mno:
   protocol: https
-  host: api-enterprise.maestrano.com
+  host: api-enterprise.maestrano.test

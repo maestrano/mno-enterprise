@@ -31,7 +31,7 @@ module MnoEnterprise
       end
 
       it 'returns the mno-api-host' do
-        expect(data['mno-api-host']).to eq('https://api-enterprise.maestrano.com')
+        expect(data['mno-api-host']).to eq('https://api-enterprise.maestrano.test')
       end
     end
   end
