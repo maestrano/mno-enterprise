@@ -31,6 +31,7 @@ Dir[Rails.root.join("../..","spec/support/**/*.rb")].each { |f| require f }
 
 # Require all factories
 require 'mno_enterprise/testing_support/factories'
+require 'mno_enterprise/testing_support/climate_control'
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
