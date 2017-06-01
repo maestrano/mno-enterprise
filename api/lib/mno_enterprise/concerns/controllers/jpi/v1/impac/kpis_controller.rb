@@ -50,13 +50,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   #   -> POST /api/mnoe/v1/dashboards/:id/kpis
   #   -> POST /api/mnoe/v1/users/:id/alerts
   def create
-    # TODO: ability for managing widget.
-    authorize! :manage_dashboard, dashboard
-    # TODO: attach widget onto KPI capability.
-    # authorize! :manage_widget, widget if widget
-
+    if widget.present?
+      authorize! :manage_widget, widget
+    else
+      authorize! :manage_dashboard, dashboard
+    end
     # TODO: nest alert in as a param, with the current user as a recipient.
-    if @kpi = kpi_parent.kpis.create(kpi_create_params)
+    @kpi = kpi_parent.kpis.create(kpi_create_params)
+    unless kpi.errors?
       # Creates a default alert for kpis created with targets defined.
       if kpi.targets.present?
         current_user.alerts.create({service: 'inapp', impac_kpi_id: kpi.id})
@@ -137,13 +138,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     end
 
     def kpi_parent
-      # TODO: attach kpi onto widget capability
-      # widget || dashboard
-      dashboard
+      widget || dashboard
     end
 
     def kpi_create_params
-      whitelist = [:dashboard_id, :endpoint, :source, :element_watched, {extra_watchables: []}]
+      whitelist = [:dashboard_id, :widget_id, :endpoint, :source, :element_watched, {extra_watchables: []}]
       extract_params(whitelist)
     end
 

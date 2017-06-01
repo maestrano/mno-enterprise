@@ -56,7 +56,7 @@ module MnoEnterprise
       before { allow(MnoEnterprise).to receive(:tenant_id).and_return(auth[:username]) }
       before { allow(MnoEnterprise).to receive(:tenant_key).and_return(auth[:password]) }
 
-      it { subject; expect(response.code).to eq('200') }
+      it { subject; expect(response).to have_http_status(:ok) }
 
       it "successfully discovers and customises available kpis" do
         expect(MnoEnterprise::ImpacClient).to receive(:send_get)
@@ -75,46 +75,77 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
-      subject { post :create, dashboard_id: dashboard.id, kpi: kpi_hash }
+      shared_examples "create kpi action" do
+
+        it "creates the kpi" do
+          subject
+          expect(assigns(:kpi)).to eq(kpi)
+        end
+
+        context "when there are kpi targets" do
+          let(:kpi_targets) { { evolution: [{max: "20"}] } }
+
+          before do
+            api_stub_for(post: "/users/#{user.id}/alerts", response: from_api(alert))
+            api_stub_for(get: "/users/#{user.id}/alerts", response: from_api({}))
+          end
+
+          it "creates kpi alerts" do
+            subject
+            expect(assigns(:kpi).alerts).to eq([alert])
+            expect(response).to have_http_status(:ok)
+          end
+        end
+
+        it { subject; expect(response).to have_http_status(:ok) }
+      end
+
       let (:kpi_targets) { {} }
 
-      before do
-        api_stub_for(get: "/dashboards/#{dashboard.id}", response: from_api(dashboard))
-        api_stub_for(post: "/dashboards/#{dashboard.id}/kpis", response: from_api(kpi))
-        api_stub_for(get: "/dashboards/#{dashboard.id}/kpis", response: from_api([]))
-        api_stub_for(get: "/kpis/#{kpi.id}", response: from_api(kpi)) # kpi.reload
-        # TODO: this call should not happen as alerts should be wrapped into the kpi object
-        api_stub_for(get: "/kpis/#{kpi.id}/alerts", response: from_api(alerts_hashes))
-      end
-
-      it_behaves_like "jpi v1 authorizable action"
-
-      it ".dashboard retrieves the correct dashboard" do
-        subject
-        expect(assigns(:dashboard)).to eq(dashboard)
-      end
-
-      it "creates the kpi" do
-        subject
-        expect(assigns(:kpi)).to eq(kpi)
-      end
-
-      context "when there are kpi targets" do
-        let(:kpi_targets) { { evolution: [{max: "20"}] } }
+      context "a dashboard KPI" do
+        subject { post :create, dashboard_id: dashboard.id, kpi: kpi_hash }
 
         before do
-          api_stub_for(post: "/users/#{user.id}/alerts", response: from_api(alert))
-          api_stub_for(get: "/users/#{user.id}/alerts", response: from_api({}))
+          api_stub_for(get: "/dashboards/#{dashboard.id}", response: from_api(dashboard))
+          api_stub_for(post: "/dashboards/#{dashboard.id}/kpis", response: from_api(kpi))
+          api_stub_for(get: "/dashboards/#{dashboard.id}/kpis", response: from_api([]))
+          api_stub_for(get: "/kpis/#{kpi.id}", response: from_api(kpi)) # kpi.reload
+          # TODO: this call should not happen as alerts should be wrapped into the kpi object
+          api_stub_for(get: "/kpis/#{kpi.id}/alerts", response: from_api(alerts_hashes))
         end
 
-        it "creates kpi alerts" do
+        it_behaves_like "jpi v1 authorizable action"
+
+        it_behaves_like "create kpi action"
+
+        it ".dashboard retrieves the correct dashboard" do
           subject
-          expect(assigns(:kpi).alerts).to eq([alert])
-          expect(response.code).to eq('200')
+          expect(assigns(:dashboard)).to eq(dashboard)
         end
       end
 
-      it { subject; expect(response.code).to eq('200') }
+      context "a widget KPI" do
+        let(:widget) { build(:impac_widget) }
+        subject { post :create, dashboard_id: dashboard.id, kpi: kpi_hash.merge(widget_id: widget.id) }
+
+        before do
+          api_stub_for(get: "/widgets/#{widget.id}", response: from_api(widget))
+          api_stub_for(post: "/widgets/#{widget.id}/kpis", response: from_api(kpi))
+          api_stub_for(get: "/widgets/#{widget.id}/kpis", response: from_api([]))
+          api_stub_for(get: "/kpis/#{kpi.id}", response: from_api(kpi)) # kpi.reload
+          # TODO: this call should not happen as alerts should be wrapped into the kpi object
+          api_stub_for(get: "/kpis/#{kpi.id}/alerts", response: from_api(alerts_hashes))
+        end
+
+        it_behaves_like "jpi v1 authorizable action"
+
+        it_behaves_like "create kpi action"
+
+        it ".widget retrieves the correct widget" do
+          subject
+          expect(assigns(:widget)).to eq(widget)
+        end
+      end
     end
 
     describe 'PUT #update' do
@@ -136,7 +167,7 @@ module MnoEnterprise
       it "updates the kpi" do
         subject
         expect(assigns(:kpi).element_watched).to eq('New Watchable')
-        expect(response.code).to eq('200')
+        expect(response).to have_http_status(:ok)
       end
 
       context "target set for the first time" do
@@ -151,7 +182,7 @@ module MnoEnterprise
         it "creates an alert" do
           subject
           expect(assigns(:kpi).alerts).to eq([alert])
-          expect(response.code).to eq('200')
+          expect(response).to have_http_status(:ok)
         end
       end
 
@@ -164,7 +195,7 @@ module MnoEnterprise
         it "updates the sent status of all the kpi's alerts" do
           subject
           expect(assigns(:kpi).alerts).to eq([alert])
-          expect(response.code).to eq('200')
+          expect(response).to have_http_status(:ok)
         end
       end
 
@@ -176,7 +207,7 @@ module MnoEnterprise
 
         it "destroys the kpi's alerts" do
           subject
-          expect(response.code).to eq('200')
+          expect(response).to have_http_status(:ok)
         end
       end
 
@@ -187,7 +218,7 @@ module MnoEnterprise
         it "does not remove the kpi targets" do
           subject
           expect(assigns(:kpi).targets).to eq(kpi_targets.deep_stringify_keys)
-          expect(response.code).to eq('200')
+          expect(response).to have_http_status(:ok)
         end
       end
 
@@ -198,7 +229,7 @@ module MnoEnterprise
         it "does not remove the kpi extra_params" do
           subject
           expect(assigns(:kpi).extra_params).to eq(['some-param'])
-          expect(response.code).to eq('200')
+          expect(response).to have_http_status(:ok)
         end
       end
     end
@@ -211,7 +242,7 @@ module MnoEnterprise
 
       it_behaves_like "jpi v1 authorizable action"
 
-      it { expect(response.code).to eq('200') }
+      it { expect(response).to have_http_status(:ok) }
     end
   end
 end
