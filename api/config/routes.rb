@@ -12,6 +12,8 @@ MnoEnterprise::Engine.routes.draw do
   get '/version', to: 'status#version'
   get 'health_check(/:checks)(.:format)', to: '/health_check/health_check#index'
 
+  get 'config', to: 'config#show'
+
   # App Provisioning
   resources :provision, only: [:new, :create]
 
