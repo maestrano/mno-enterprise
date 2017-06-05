@@ -2,11 +2,22 @@
 
 ## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/master)
 
-[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.3...HEAD)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.4...HEAD)
+
+## [v3.1.4](https://github.com/maestrano/mno-enterprise/tree/v3.1.4) (2017-06-05)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.3...v3.1.4)
+
+**Fixed bugs:**
+
+- \[MNOE-358\] Fix dev mailer [\#276](https://github.com/maestrano/mno-enterprise/pull/276) ([ouranos](https://github.com/ouranos))
+- Merge [v3.0.7](#v3.0.7)
 
 ## [v3.1.3](https://github.com/maestrano/mno-enterprise/tree/v3.1.3) (2016-11-09)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.2...v3.1.3)
 
+**Fixed bugs:**
+
+- Fix built in email templates [\#149](https://github.com/maestrano/mno-enterprise/pull/149) ([ouranos](https://github.com/ouranos))
 - Merge [v3.0.6](#v3.0.6)
 
 ## [v3.1.2](https://github.com/maestrano/mno-enterprise/tree/v3.1.2) (2016-09-30)
