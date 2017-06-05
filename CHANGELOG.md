@@ -79,6 +79,13 @@
 - Theme builder/previewer
 - I18n implementation
 
+## [v2.0.9](https://github.com/maestrano/mno-enterprise/tree/v2.0.8) (2017-06-05)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.8...v2.0.9)
+
+**Fixed bugs:**
+
+- \[MNOE-27\] Fix double loading [\#307](https://github.com/maestrano/mno-enterprise/pull/307) ([ouranos](https://github.com/ouranos))
+
 ## [v2.0.8](https://github.com/maestrano/mno-enterprise/tree/v2.0.8) (2016-11-09)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v2.0.7...v2.0.8)
 
