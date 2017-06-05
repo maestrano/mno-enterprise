@@ -17,19 +17,19 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   #  -> GET /api/mnoe/v1/organizations/:id/widgets
   def index
     render_not_found('organization') unless parent_organization
-    @widgets = parent_organization.widgets
+    widgets = parent_organization.widgets
   end
 
   # POST /mnoe/jpi/v1/impac/dashboards/:id/widgets
   #  -> POST /api/mnoe/v1/dashboards/:id/widgets
   def create
     if widgets
-      if @widget = widgets.create(widget_create_params)
-        MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Widget Creation', @widget)
+      if widget = widgets.create(widget_create_params)
+        MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Widget Creation', widget)
         @nocontent = true # no data fetch from Connec!
         render 'show'
       else
-        render_bad_request('create widget', @widget.errors)
+        render_bad_request('create widget', widget.errors)
       end
     else
       render_not_found('widget')
@@ -40,6 +40,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   #   -> PUT /api/mnoe/v1/widgets/:id
   def update
     if widget.update(widget_update_params)
+      MnoEnterprise::EventLogger.info('widget_update', current_user.id, 'Widget Update', widget, {widget_action: params[:widget]})
       @nocontent = !params['metadata']
       render 'show'
     else

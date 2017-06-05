@@ -1,6 +1,6 @@
 module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
   extend ActiveSupport::Concern
-  
+
   #==================================================================
   # Included methods
   #==================================================================
@@ -9,22 +9,22 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
   included do
     before_filter :configure_sign_up_params, only: [:create]
     # before_filter :configure_account_update_params, only: [:update]
-    
+
     protected
       def configure_sign_up_params
         devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(
-          :email, 
-          :password, 
-          :password_confirmation, 
-          :name, 
+          :email,
+          :password,
+          :password_confirmation,
+          :name,
           :surname,
           :company,
           :phone,
           :phone_country_code
-        )} 
+        )}
       end
   end
-  
+
   #==================================================================
   # Class methods
   #==================================================================
@@ -33,7 +33,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
     #   'some text'
     # end
   end
-  
+
   #==================================================================
   # Instance methods
   #==================================================================
@@ -46,10 +46,13 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
   def create
     build_resource(sign_up_params)
     resource.password ||= Devise.friendly_token
-    
+
     resource_saved = resource.save
-    
+
     if resource_saved
+
+      MnoEnterprise::EventLogger.info('user_add', resource_saved.id, 'User Signup', resource_saved)
+
       if resource.active_for_authentication?
         set_flash_message :notice, :signed_up if is_flashing_format?
         sign_up(resource_name, resource)
@@ -97,7 +100,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
   # end
 
   protected
-  
+
     # You can put the params you want to permit in the empty array.
     # def configure_account_update_params
     #   devise_parameter_sanitizer.for(:account_update) << :attribute
@@ -112,12 +115,12 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
     # def after_inactive_sign_up_path_for(resource)
     #   super(resource)
     # end
-  
+
     def sign_up_params
       attrs = super
       attrs.merge(orga_on_create: create_orga_on_user_creation(attrs))
     end
-  
+
     # Check whether we should create an organization for the user
     def create_orga_on_user_creation(user_attrs)
       return false unless user_attrs['email']

@@ -152,9 +152,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     case member
     when MnoEnterprise::User
       organization.users.update(id: member.id, role: attributes[:role])
+      MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in org', organization, {email: attributes[:email], role: attributes[:role]})
     when MnoEnterprise::OrgInvite
       member.update(user_role: attributes[:role])
+      MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in invitation', organization, {email: attributes[:email], role: attributes[:role]})
     end
+
     render 'members'
   end
 
@@ -164,8 +167,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
     if member.is_a?(MnoEnterprise::User)
       organization.remove_user(member)
+      MnoEnterprise::EventLogger.info('user_role_delete', current_user.id, 'User removed from org', organization, {email: member.email})
     elsif member.is_a?(MnoEnterprise::OrgInvite)
       member.cancel!
+      MnoEnterprise::EventLogger.info('user_role_delete', current_user.id, 'User removed from invitation', organization, {email: member.user_email})
     end
 
     render 'members'
