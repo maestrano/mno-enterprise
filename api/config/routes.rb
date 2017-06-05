@@ -206,6 +206,7 @@ MnoEnterprise::Engine.routes.draw do
             put :refresh_metadata
           end
         end
+        resource 'tenant'
 
         # Theme Previewer
         post 'theme/save'
