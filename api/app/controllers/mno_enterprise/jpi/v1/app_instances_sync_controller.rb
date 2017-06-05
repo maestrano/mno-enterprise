@@ -2,6 +2,8 @@ module MnoEnterprise
   class Jpi::V1::AppInstancesSyncController < Jpi::V1::BaseResourceController
     CONNECTOR_STATUS_RUNNING = ['PENDING', 'RUNNING']
 
+    prepend_before_action :do_not_extend_session
+
     # GET /mnoe/jpi/v1/organization/org-fbba/app_instances_sync
     def index
       authorize! :check_apps_sync, @parent_organization

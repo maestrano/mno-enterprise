@@ -2,7 +2,6 @@ module MnoEnterprise
   class ApplicationController < ActionController::Base
     protect_from_forgery
     include ApplicationHelper
-    prepend_before_filter :skip_devise_trackable_on_xhr
 
     before_filter :set_default_meta
     before_filter :store_location
@@ -39,14 +38,8 @@ module MnoEnterprise
     #============================================
     protected
 
-    # Do not updated devise last access timestamps on ajax call so that
-    # timeout feature works properly
-    # Only GET request get ignored - POST/PUT/DELETE requests reflect a
-    # user action and should therefore be taken into account
-    def skip_devise_trackable_on_xhr
-      if request.format == 'application/json' && request.get?
-        request.env["devise.skip_trackable"] = true
-      end
+    def do_not_extend_session
+      request.env["devise.skip_trackable"] = true
     end
 
     # Return the user to the 'return_to' url if one was specified
