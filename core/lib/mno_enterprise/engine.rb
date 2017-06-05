@@ -53,5 +53,22 @@ module MnoEnterprise
     config.to_prepare do
       MnoEnterprise::MailClient.adapter ||= MnoEnterprise.mail_adapter
     end
+
+    config.after_initialize do
+      #  TODO: wrap this in a module and include retry/caching/...
+      puts "Settings loaded -> Fetching Tenant"
+
+      begin
+        frontend_config = MnoEnterprise::Tenant.show.frontend_config
+      rescue JsonApiClient::Errors::ConnectionError
+        puts "Couldn't get configuration from MnoHub"
+        Rails.logger.warn "Couldn't get configuration from MnoHub"
+      end
+
+      if frontend_config
+        Settings.add_source!(frontend_config)
+        Settings.reload!
+      end
+    end
   end
 end
