@@ -10,12 +10,16 @@ module MnoEnterprise
         response.headers['X-Total-Count'] = @users.count
       else
         # Index mode
-        @users = MnoEnterprise::User
-        @users = @users.limit(params[:limit]) if params[:limit]
-        @users = @users.skip(params[:offset]) if params[:offset]
-        @users = @users.order_by(params[:order_by]) if params[:order_by]
-        @users = @users.where(params[:where]) if params[:where]
-        @users = @users.all.fetch
+        users = MnoEnterprise::User
+        users.limit(params[:limit]) if params[:limit]
+        users.skip(params[:offset]) if params[:offset]
+        users.order_by(params[:order_by]) if params[:order_by]
+        users.where(params[:where]) if params[:where]
+
+        @users = users.all
+        @users.params[:sub_tenant_id] = current_user.mnoe_sub_tenant_id
+        @users.params[:account_manager_id] = current_user.id
+
         response.headers['X-Total-Count'] = @users.metadata[:pagination][:count]
       end
     end
@@ -24,6 +28,7 @@ module MnoEnterprise
     def show
       @user = MnoEnterprise::User.find(params[:id])
       @user_organizations = @user.organizations
+      @user_clients = @user.clients
     end
 
     # POST /mnoe/jpi/v1/admin/users
@@ -43,7 +48,7 @@ module MnoEnterprise
       if current_user.admin_role == "admin"
         @user = MnoEnterprise::User.find(params[:id])
         @user.update(user_params)
-
+        @user_clients = @user.clients
         render :show
       else
         render :index, status: :unauthorized
@@ -75,17 +80,15 @@ module MnoEnterprise
     private
 
     def user_params
-      params.require(:user).permit(:admin_role)
+      params.require(:user).permit(:admin_role, :mnoe_sub_tenant_id, :client_ids => [])
     end
 
     def user_create_params
-      attrs = [:name, :surname, :email, :phone]
-
+      attrs = [:name, :surname, :email, :phone, :mnoe_sub_tenant_id, client_ids: []]
       # TODO: replace with authorize/ability
-      if current_user.admin_role == "admin"
+      if current_user.admin_role == 'admin'
         attrs << :admin_role
       end
-
       params.require(:user).permit(attrs).merge(
         password: Devise.friendly_token.first(12)
       )
