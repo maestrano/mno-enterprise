@@ -92,7 +92,7 @@ MnoEnterprise::Engine.routes.draw do
       end
     end
     # Maestrano-hub events
-    resources :events, only: [:create] 
+    resources :events, only: [:create]
   end
 
   #============================================================
@@ -190,6 +190,7 @@ MnoEnterprise::Engine.routes.draw do
             resource :invites, only: [:create]
           end
         end
+        resources :sub_tenants, only: [:index, :show, :destroy, :update, :create]
         resources :tenant_invoices, only: [:index, :show]
         resources :invoices, only: [:index, :show] do
           collection do
