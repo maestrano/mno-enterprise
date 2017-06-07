@@ -6,6 +6,7 @@ module MnoEnterprise
     has_many :widgets, class_name: 'MnoEnterprise::Impac::Widget'
     has_many :kpis, class_name: 'MnoEnterprise::Impac::Kpi'
     belongs_to :owner, polymorphic: true
+    scope :templates, -> { where(dashboard_type: 'template') }
 
     #============================================
     # Instance methods
