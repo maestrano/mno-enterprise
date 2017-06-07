@@ -13,6 +13,7 @@ json.single_billing app.single_billing?
 json.multi_instantiable app.multi_instantiable
 json.subcategories app.subcategories
 json.average_rating app.average_rating
+json.add_on app.add_on?
 json.running_instances_count app.running_instances_count
 
 json.shared_entities do
