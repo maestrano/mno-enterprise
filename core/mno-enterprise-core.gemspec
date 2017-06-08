@@ -17,6 +17,8 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"]
 
+  s.required_ruby_version = '>= 2.3.1'
+
   s.add_dependency 'rails', '~> 4.2', '>= 4.2.0'
   s.add_dependency "her", "~> 0.7.3"
   s.add_dependency "faraday_middleware", "~> 0.10.0"
