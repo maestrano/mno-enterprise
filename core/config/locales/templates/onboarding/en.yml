@@ -22,6 +22,7 @@ en:
           title: "Select the applications you want to connect"
           search: "Search"
           categories: "Categories"
+          max_apps_selected: "You cannot start with more than 4 apps, you will be able to add more at a later stage."
         data_sync:
           what_data: "What data will be synchronised"
           start: "Start to visualise the data synchronised by your applications by clicking on its icon."
@@ -40,13 +41,5 @@ en:
           connect_applications: "Connect your applications"
           apps_to_connect: "Click on <b>Connect App</b> button on each app to connect them now, you can skip this step if you want to connect your {nb, plural, one{application} other{applications}} later."
           all_apps_connected: "{nb, plural, one{Your application is connected} other{Your applications are all connected}}! Click on the button below to go to the last step."
-          almost_there: "Almost there!"
-          skip: "Skip"
-        almost_there:
-          title: "You’re almost there"
-          text1: "Before we forward you to your new dashboard, here are a few helpful hints to help you get started."
-          line1: "You can access each of your newly added applications by clicking on them in the Application Dock, located in the top center of your dashboard."
-          line2: "You can connect additional application from our marketplace by clicking on the “Marketplace” tab on the left-hand side menu of the page."
-          line3: "Our <a href=\"https://maestrano.atlassian.net/wiki/display/UKB/Maestrano+Apps+Marketplace\">User Knowledge Base</a> contains a range of tutorials and guides to getting the most out of your applications."
-          line4: "Your new dashboard has more than 50 widgets that can be used to view your entire business performance at a glance."
-          text2: "And remember, should you need any help along the way, our Customer Experience and Support team are more than happy to answer any of your questions. You can get in touch with them by clicking on the intercom chat (pink and white speech bubble icon)  in the bottom right-hand corner of Maestrano"
+          go_to_dashboard: "Go to my dashboard!"
+          skip: "Skip & Go to my dashboard!"
