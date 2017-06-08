@@ -41,9 +41,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'sanitize', '~> 4.0'
 
   # Configuration & Settings
-  # Manage configuration via environment variables
-  # TODO: only needed for development?
-  s.add_dependency 'figaro'
   # Config files per environment
   s.add_dependency 'config', '~> 1.4.0'
 

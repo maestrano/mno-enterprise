@@ -91,6 +91,11 @@ For major upgrade between versions see [UPGRADING](UPGRADING.md).
 
 ## Configuration
 
+### Environement variable
+
+TODO: figaro or anything else
+just need tenant credentials and rake secret
+
 ### Emailing platform
 
 Maestrano Enterprise supports either [Mandrill](https://www.mandrill.com/) or [SparkPost](https://www.sparkpost.com/) as well as regular SMTP.

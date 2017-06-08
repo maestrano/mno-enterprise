@@ -31,7 +31,6 @@ require 'mno_enterprise/database_extendable'
 
 # Settings
 require 'config'
-require 'figaro'
 require 'json-schema'
 
 require 'accountingjs_serializer'
