@@ -26,6 +26,12 @@ module MnoEnterprise
           get :create, user_id: user2.id
           expect(controller.current_user.id).to eq(user2.id)
         end
+
+        context 'with an organisation id in parameters' do
+          before { get :create, user_id: user.id, dhbRefId: 10 }
+
+          it { is_expected.to redirect_to('/dashboard/#!?dhbRefId=10') }
+        end
       end
 
       describe "#destroy" do

@@ -17,7 +17,7 @@ module MnoEnterprise
       end
 
       path = mnoe_home_path
-      path = add_param_to_fragment(path + "#!/" , 'dhbRefId', params[:dhbRefId]) if params[:dhbRefId].present?
+      path = add_param_to_fragment(path, 'dhbRefId', params[:dhbRefId]) if params[:dhbRefId].present?
 
       redirect_to path
     end
