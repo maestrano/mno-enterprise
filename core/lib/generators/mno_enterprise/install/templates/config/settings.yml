@@ -28,11 +28,12 @@ developer:
 # Display the onboarding wizard
 onboarding_wizard:
   enabled: false
-# Enable Reviews/Questions in the marketplace
+# Enable Reviews in the marketplace
 reviews:
   enabled: false
-  questions:
-    enabled: false
+# Enable Questions in the marketplace
+questions:
+  enabled: false
 # Disable payment
 payment:
   disabled: false
