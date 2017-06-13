@@ -52,6 +52,7 @@ module MnoEnterprise
     # Make sure the MailAdapter is correctly configured
     config.to_prepare do
       MnoEnterprise::MailClient.adapter ||= MnoEnterprise.mail_adapter
+      MnoEnterprise::AppManager.adapter ||= MnoEnterprise.platform_adapter
     end
 
     config.after_initialize do

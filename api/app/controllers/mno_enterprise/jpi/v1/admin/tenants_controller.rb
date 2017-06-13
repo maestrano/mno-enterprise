@@ -12,8 +12,7 @@ module MnoEnterprise
       @tenant = MnoEnterprise::Tenant.show
       @tenant.update(tenant_params)
 
-      # TODO: move this somewhere else
-      FileUtils.touch('tmp/restart.txt')
+      MnoEnterprise::AppManager.restart
 
       render :show
     end
