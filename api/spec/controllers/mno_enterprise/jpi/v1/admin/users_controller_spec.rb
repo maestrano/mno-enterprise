@@ -18,6 +18,7 @@ module MnoEnterprise
         'id' => org.id,
         'uid' => org.uid,
         'name' => org.name,
+        'account_frozen' => org.account_frozen,
         'created_at' => org.created_at
       }
     end
@@ -67,11 +68,14 @@ module MnoEnterprise
     #===============================================
     # Stub user and user call
     let(:user) { build(:user, :admin, :with_organizations, :with_clients) }
+
+    let(:organization) { build(:organization) }
+
     before do
       api_stub_for(get: "/users", response: from_api([user]))
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(get: "/users/#{user.id}/organizations", response: from_api(user))
-      api_stub_for(get: "/users/#{user.id}/clients", response: from_api(user))
+      api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization]))
+      api_stub_for(get: "/users/#{user.id}/clients", response: from_api([organization]))
       sign_in user
     end
 
