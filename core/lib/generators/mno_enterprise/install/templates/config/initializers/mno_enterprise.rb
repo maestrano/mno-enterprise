@@ -95,15 +95,6 @@ MnoEnterprise.configure do |config|
   # config.mno_api_root_path = "/v1"
   config.mno_api_root_path = Settings.mno.paths.root
 
-  #===============================================
-  # Marketplace Listing
-  #===============================================
-  # [DEPRECATED] Please get in touch with our enterprise team
-  # List of applications that should be offered on the marketplace
-  # Set to nil to offer everything
-  # config.marketplace_listing = nil
-  # config.marketplace_listing = ["xero"]
-
   #====================================
   # Impac! widgets templates listing
   #====================================

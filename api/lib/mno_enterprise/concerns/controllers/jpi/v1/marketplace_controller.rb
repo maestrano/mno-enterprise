@@ -35,10 +35,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   end
 
   def app_relation
-    if MnoEnterprise.marketplace_listing
-      MnoEnterprise::App.where('nid.in' => MnoEnterprise.marketplace_listing)
-    else
-      MnoEnterprise::App.all
-    end
+    MnoEnterprise::App.all
   end
 end

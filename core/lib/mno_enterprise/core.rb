@@ -240,14 +240,6 @@ module MnoEnterprise
   @@style = nil
 
   #====================================
-  # Marketplace
-  #====================================
-  # List of applications that should be offered on
-  # the marketplace
-  mattr_accessor :marketplace_listing
-  @@marketplace_listing = nil
-
-  #====================================
   # Impac! widgets templates listing
   #====================================
   # List of widget templates that should be offered on Impac!
