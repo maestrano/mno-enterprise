@@ -74,12 +74,6 @@ module MnoEnterprise
       host_url("/oauth/#{id}/sync",opts)
     end
 
-    # @deprecated Impac is now configured through Settings
-    def impac_root_url
-      warn '[DEPRECATION] `impac_root_url` is deprecated. Impac is now configured in the frontend through `Settings`.'
-      URI.join(MnoEnterprise.impac_api_host,MnoEnterprise.impac_api_root_path)
-    end
-
     private
       def base_path
         MnoEnterprise.mno_api_root_path
@@ -122,17 +116,6 @@ module MnoEnterprise
   # Maestrano Enterprise Tenant Key
   mattr_accessor :tenant_key
   @@tenant_key = nil
-
-  #====================================
-  # Impac
-  #====================================
-  # @deprecated Impac is now configured through Settings
-
-  mattr_accessor :impac_api_host
-  @@impac_api_host = 'https://api-impac-uat.maestrano.io'
-
-  mattr_accessor :impac_api_root_path
-  @@impac_api_root_path = "/api/v1"
 
   #====================================
   # Enterprise API
