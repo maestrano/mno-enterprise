@@ -146,6 +146,7 @@ module MnoEnterprise::Concerns::Models::Ability
   def admin_abilities(user)
     if user.admin_role.to_s.casecmp('admin').zero?
       can :manage_app_instances, MnoEnterprise::Organization
+      can :manage_sub_tenant, MnoEnterprise::SubTenant
     end
   end
 end

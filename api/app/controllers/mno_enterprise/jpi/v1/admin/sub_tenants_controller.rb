@@ -1,6 +1,8 @@
 module MnoEnterprise
   class Jpi::V1::Admin::SubTenantsController < Jpi::V1::Admin::BaseResourceController
 
+    before_filter :check_sub_tenant_authorization
+
     # GET /mnoe/jpi/v1/admin/sub_tenants
     def index
       # Index mode
@@ -23,7 +25,6 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/admin/sub_tenants
     def create
       @sub_tenant = MnoEnterprise::SubTenant.build(sub_tenant_params)
-
       if @sub_tenant.save
         render :show
       else
@@ -33,31 +34,31 @@ module MnoEnterprise
 
     # PATCH /mnoe/jpi/v1/admin/sub_tenant/:id
     def update
-      # TODO: Use Ability
-      if current_user.admin_role == 'admin'
-        @sub_tenant = MnoEnterprise::SubTenant.find(params[:id])
-        @sub_tenant.update(sub_tenant_params)
+      @sub_tenant = MnoEnterprise::SubTenant.find(params[:id])
+
+      if @sub_tenant.update(sub_tenant_params)
         @sub_tenant_clients = @sub_tenant.clients
         @sub_tenant_account_managers = @sub_tenant.account_managers
         render :show
       else
-        render :index, status: :unauthorized
+        render json: @sub_tenant.errors, status: :bad_request
       end
     end
 
     # DELETE /mnoe/jpi/v1/admin/sub_tenant/1
     def destroy
-      sub_tenant = MnoEnterprise::SubTenant.find(params[:id])
-      sub_tenant.destroy
-
+      @sub_tenant = MnoEnterprise::SubTenant.find(params[:id])
+      @sub_tenant.destroy
       head :no_content
     end
 
+    def check_sub_tenant_authorization
+      authorize! :manage_sub_tenant, MnoEnterprise::SubTenant
+    end
+
     private
-
-
     def sub_tenant_params
-      params.require(:sub_tenant).permit(:name, client_ids:[], account_manager_ids: [])
+      params.require(:sub_tenant).permit(:name, client_ids: [], account_manager_ids: [])
     end
   end
 end

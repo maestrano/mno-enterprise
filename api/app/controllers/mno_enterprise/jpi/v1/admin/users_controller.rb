@@ -10,15 +10,16 @@ module MnoEnterprise
         response.headers['X-Total-Count'] = @users.count
       else
         # Index mode
-        users = MnoEnterprise::User
-        users.limit(params[:limit]) if params[:limit]
-        users.skip(params[:offset]) if params[:offset]
-        users.order_by(params[:order_by]) if params[:order_by]
-        users.where(params[:where]) if params[:where]
+        query = MnoEnterprise::User
+        query = query.limit(params[:limit]) if params[:limit]
+        query = query.skip(params[:offset]) if params[:offset]
+        query = query.order_by(params[:order_by]) if params[:order_by]
+        query = query.where(params[:where]) if params[:where]
 
-        @users = users.all
-        @users.params[:sub_tenant_id] = current_user.mnoe_sub_tenant_id
-        @users.params[:account_manager_id] = current_user.id
+        all = query.all
+        all.params[:sub_tenant_id] = current_user.mnoe_sub_tenant_id
+        all.params[:account_manager_id] = current_user.id
+        @users = all.fetch
 
         response.headers['X-Total-Count'] = @users.metadata[:pagination][:count]
       end
