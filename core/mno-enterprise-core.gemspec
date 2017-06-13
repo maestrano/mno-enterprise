@@ -35,10 +35,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'cancancan', '~> 1.10'
   s.add_dependency 'omniauth', '~> 1.3.1'
 
-  # Email
-  # TODO: remove in 3.2, left for backward compatibility
-  s.add_dependency 'mandrill-api', '~> 1.0', '>= 1.0.53'
-
   # Markdown parsing
   s.add_dependency 'redcarpet', '~> 3.3', '>= 3.3.3'
   s.add_dependency 'sanitize', '~> 4.0'
@@ -51,6 +47,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'config', '~> 1.4.0'
 
   # Emailing
-  # s.add_development_dependency 'mandrill-api', '~> 1.0.53'
+  s.add_development_dependency 'mandrill-api', '~> 1.0', '>= 1.0.53'
   s.add_development_dependency 'sparkpost', '~> 0.1.4'
 end

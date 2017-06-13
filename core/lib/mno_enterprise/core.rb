@@ -30,7 +30,6 @@ require 'mno_enterprise/database_extendable'
 require 'config'
 require 'figaro'
 
-require 'mandrill_client'
 require 'accountingjs_serializer'
 
 module MnoEnterprise
@@ -164,21 +163,9 @@ module MnoEnterprise
   #====================================
   # Emailing
   #====================================
-  # @deprecated: Use ENV['MANDRILL_API_KEY']
-  # Mandrill Key for sending emails
-  def self.mandrill_key
-    warn "[DEPRECATION] `mandrill_key` is deprecated. Use `ENV['MANDRILL_API_KEY']`."
-    @@mandrill_key
-  end
-  def self.mandrill_key=(mandrill_key)
-    warn "[DEPRECATION] `mandrill_key` is deprecated. Use `ENV['MANDRILL_API_KEY']`."
-    @@mandrill_key = mandrill_key
-  end
-  @@mandrill_key = nil
-
   # Adapter used to send emails
   # Default to :mandrill
-  mattr_reader(:mail_adapter) { Rails.env.test? ? :test : :mandrill }
+  mattr_reader(:mail_adapter) { Rails.env.test? ? :test : :smtp }
   def self.mail_adapter=(adapter)
     @@mail_adapter = adapter
     MnoEnterprise::MailClient.adapter = self.mail_adapter
