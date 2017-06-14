@@ -31,7 +31,7 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
           'email' => user.email,
           'role' => user.role(organization)
       }
-      u.merge!('uid' => user.uid) if admin
+      u['uid'] = user.uid if admin
       list.push(u)
     end
 
@@ -58,9 +58,7 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     }
 
     if admin
-      ret.merge!({
-                     'uid' => organization.uid
-                 })
+      ret['uid'] = organization.uid
     end
 
     ret
@@ -116,9 +114,7 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
         'organization' => partial_hash_for_organization(organization),
         'current_user' => partial_hash_for_current_user(organization, user)
     }
-    hash['organization'].merge!(
-        'members' => partial_hash_for_members(organization)
-    )
+    hash['organization']['members'] = partial_hash_for_members(organization)
 
     if user.role(organization) == 'Super Admin'
       hash.merge!(partial_hash_for_billing(organization))
@@ -139,8 +135,8 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
   def admin_hash_for_organization(organization)
     hash = {}
     hash['organization'] = partial_hash_for_organization(organization, true)
-    hash['organization'].merge!('members' => partial_hash_for_members(organization, true))
-    hash['organization'].merge!('credit_card' => {'presence' => false})
+    hash['organization']['members'] = partial_hash_for_members(organization, true)
+    hash['organization']['credit_card'] = {'presence' => false}
     hash['organization'].merge!(admin_partial_hash_for_invoices(organization))
     hash['organization'].merge!(admin_partial_hash_for_active_apps(organization))
     hash
