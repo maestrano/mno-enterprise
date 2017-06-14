@@ -52,7 +52,7 @@ def apply_template!
 
   # Edit config/environments/*.rb
   Dir["config/environments/*.rb"].each do |file|
-    insert_into_file file, "\n  config.action_mailer.default_url_options = {host: 'localhost:7000'}\n", before: /^end$/
+    insert_into_file file, "\n  config.action_mailer.default_url_options = {host: 'localhost:7000', protocol: 'http'}\n", before: /^end$/
   end
 
   # secrets
