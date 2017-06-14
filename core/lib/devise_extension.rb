@@ -30,10 +30,6 @@ end
 # modules
 Devise.add_module :password_expirable, controller: :password_expirable, model: 'devise/models/password_expirable', route: :password_expired
 
-module DeviseExtension
-  class Engine < ::Rails::Engine
-    ActiveSupport.on_load(:action_controller) do
-      include DeviseExtension::Controllers::Helpers
-    end
-  end
+ActiveSupport.on_load(:action_controller) do
+  include DeviseExtension::Controllers::Helpers
 end
