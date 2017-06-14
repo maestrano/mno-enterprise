@@ -6,7 +6,7 @@ Compare `mno-enteprise-angular/src/app/stylesheets/variables.less` with your `fr
 
 ## Migrating from v3.0/v3.1 to v3.2
 
-See the [CHANGELOG](CHANGELOG.md)
+See the [CHANGELOG](CHANGELOG.md#v3.2.0)
 
 ### New frontend build process
 
@@ -17,6 +17,13 @@ The frontend build process has been refactored, `package.json` is now replacing 
 - Run `bin/rake mnoe:frontend:update` if you've edited `package.json`
 - Delete the obsolete `bower.json` file
 
+### Event Logger
+
+If you're doing custom event login in your app, the `EventLogger.info` signature has changed:
+```diff
+-self.info(key, current_user_id, description, metadata, object)
++self.info(key, current_user_id, description, object, metadata = {})
+```
 
 ## Migrating from v2 to v3
 
