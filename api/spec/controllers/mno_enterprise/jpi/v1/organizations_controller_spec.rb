@@ -245,7 +245,7 @@ module MnoEnterprise
           let(:mastercard) { '5105105105105100' }
 
           context 'with a valid type' do
-            before { params.merge!(number: visa) }
+            before { params[:number] = visa }
             it 'updates the entity credit card' do
               expect_any_instance_of(MnoEnterprise::CreditCard).to receive(:save).and_return(true)
               subject
@@ -260,7 +260,7 @@ module MnoEnterprise
           end
 
           context 'with an invalid type' do
-            before { params.merge!(number: mastercard) }
+            before { params[:number] = mastercard }
             it 'does not the entity credit card' do
               expect_any_instance_of(MnoEnterprise::CreditCard).not_to receive(:save)
               subject

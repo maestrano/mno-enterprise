@@ -139,7 +139,7 @@ module MnoEnterprise
       end
 
       it 'provision the app instances' do
-        params.merge!(app_nids: ['xero', app_instance.app.nid])
+        params[:app_nids] = ['xero', app_instance.app.nid]
 
         # Track the API call
         create = false
