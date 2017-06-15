@@ -25,7 +25,7 @@ en:
           max_apps_selected: "You cannot start with more than 4 apps, you will be able to add more at a later stage."
         data_sync:
           what_data: "What data will be synchronised"
-          start: "Start to visualise the data synchronised by your applications by clicking on its icon."
+          start: "Visualise what data will be synchronised from your applications by clicking on their icons."
           learn_more: "Learn how Maestrano synchronises data between your applications."
           no_entity_shared: "No entities are shared"
         app_infos_modal:
@@ -39,7 +39,7 @@ en:
           free_trial: "{duration} days free trial"
         connect_apps:
           connect_applications: "Connect your applications"
-          apps_to_connect: "Click on <b>Connect App</b> button on each app to connect them now, you can skip this step if you want to connect your {nb, plural, one{application} other{applications}} later."
+          apps_to_connect: "Click on <b>Connect an existing account</b> button on each application to connect them now, you can skip this step if you want to connect your {nb, plural, one{application} other{applications}} later."
           all_apps_connected: "{nb, plural, one{Your application is connected} other{Your applications are all connected}}! Click on the button below to go to the last step."
           go_to_dashboard: "Go to my dashboard!"
           skip: "Skip & Go to my dashboard!"
