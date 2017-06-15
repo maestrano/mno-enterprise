@@ -5,7 +5,6 @@ FactoryGirl.define do
     factory :invoice, class: MnoEnterprise::Invoice do
       sequence(:id)
       sequence(:slug) { |n| "201504-NU#{n}" }
-      organization_id 265
 
       started_at 28.days.ago
       ended_at 3.days.ago

@@ -2,12 +2,12 @@ module MnoEnterprise
   class InvoicesController < ApplicationController
     before_filter :authenticate_user!
     before_filter :redirect_to_lounge_if_unconfirmed
-    
+
     # GET /mnoe/invoices/201504-NU4
     def show
-      @invoice = MnoEnterprise::Invoice.where(slug: params[:id].upcase).reload.first
+      @invoice = MnoEnterprise::Invoice.where(slug: params[:id].upcase).includes(:organization).first
       authorize! :manage_billing, current_user.organizations.find(@invoice.organization_id)
-    
+
       respond_to do |format|
         if @invoice
           filename = "Invoice - #{@invoice.slug}.pdf"

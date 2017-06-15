@@ -1,5 +1,10 @@
 module MnoEnterprise
   class Invoice < BaseResource
+    property :created_at, type: :time
+    property :updated_at, type: :time
+    property :organization_id
+
+
     # this invoice covers
     def period_label
       return '' unless self.started_at && self.ended_at

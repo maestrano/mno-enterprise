@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'her'
 require 'factory_girl_rails'
 require 'fakeweb'
-
+require 'webmock/rspec'
 require 'mno_enterprise/testing_support/user_action_shared'
 
 # Load the Dummy application

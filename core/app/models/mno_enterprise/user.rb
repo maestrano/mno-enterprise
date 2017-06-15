@@ -12,6 +12,7 @@ module MnoEnterprise
     property :updated_at, type: :time
     property :confirmed_at, type: :time
     property :email, type: :string
+    property :unconfirmed_email
     property :name, type: :string
     property :surname, type: :string
     property :company, type: :string
