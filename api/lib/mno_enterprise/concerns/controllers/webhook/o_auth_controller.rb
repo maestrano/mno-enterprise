@@ -41,7 +41,7 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
       def error_message(error_key)
         case error_key.to_sym
           when :bad_relinking
-            %{A different account "#{app_instance.oauth_company}" was previously linked to this application, please re-link the same account.}
+            %{A different account '#{app_instance.oauth_company}' was previously linked to this application, please re-link the same account.}
           when :unauthorized
             'We could not validate your credentials, please try again'
           else
