@@ -24,7 +24,9 @@ module MnoEnterprise
     before { allow_any_instance_of(MnoEnterprise::Impac::Dashboard).to receive(:owner).and_return(user) }
 
     let(:kpi_targets) { { evolution: [{max: "20"}] } }
-    let(:kpi) { build(:impac_kpi, dashboard: dashboard, targets: kpi_targets) }
+    let(:settings) { {} }
+    let(:extra_params) { [] }
+    let(:kpi) { build(:impac_kpi, dashboard: dashboard, targets: kpi_targets, settings: settings, extra_params: extra_params) }
     let(:kpi_hash) { from_api(kpi)[:data].except(:dashboard) }
 
     let(:alert) { build(:impac_alert, kpi: kpi) }
@@ -149,6 +151,66 @@ module MnoEnterprise
     end
 
     describe 'PUT #update' do
+      RSpec.shared_examples 'a kpi update action' do
+        it "updates the kpi" do
+          subject
+          expect(assigns(:kpi).element_watched).to eq('New Watchable')
+          expect(response).to have_http_status(:ok)
+        end
+
+        context "target set for the first time" do
+          let(:kpi_targets) { nil }
+          let(:params) { { targets: {evolution: [{max:'20'}]} } }
+
+          before do
+            api_stub_for(post: "/users/#{user.id}/alerts", response: from_api(alert))
+            api_stub_for(get: "/users/#{user.id}/alerts", response: from_api({}))
+          end
+
+          it "creates an alert" do
+            subject
+            expect(assigns(:kpi).alerts).to eq([alert])
+            expect(response).to have_http_status(:ok)
+          end
+        end
+
+        context "when targets have changed" do
+          let(:alert) { build(:impac_alert, kpi: kpi, sent: true) }
+          let(:params) { { targets: {evolution: [{max:'30'}]} } }
+
+          before { api_stub_for(put: "/alerts/#{alert.id}", response: from_api({})) }
+
+          it "updates the sent status of all the kpi's alerts" do
+            subject
+            expect(assigns(:kpi).alerts).to eq([alert])
+            expect(response).to have_http_status(:ok)
+          end
+        end
+
+        context "when no targets are given / targets are nil" do
+          let(:settings) { { currency: 'GBP' } }
+          let(:params) { { targets: nil } }
+
+          it "does not remove the kpi targets" do
+            subject
+            expect(assigns(:kpi).targets).to eq(kpi_targets.deep_stringify_keys)
+            expect(response).to have_http_status(:ok)
+          end
+        end
+
+        context "when no extra_params are given / extra_params are nil" do
+          let(:settings) { { currency: 'GBP' } }
+          let(:extra_params) { ['some-param'] }
+          let(:params) { { extra_params: nil } }
+
+          it "does not remove the kpi extra_params" do
+            subject
+            expect(assigns(:kpi).extra_params).to eq(['some-param'])
+            expect(response).to have_http_status(:ok)
+          end
+        end
+      end
+
       let(:kpi_hash) { from_api(kpi)[:data].except(:dashboard).merge(element_watched: 'New Watchable') }
       let(:params) { {} }
 
@@ -162,75 +224,17 @@ module MnoEnterprise
 
       before { kpi.save }
 
-      it_behaves_like "jpi v1 authorizable action"
-
-      it "updates the kpi" do
-        subject
-        expect(assigns(:kpi).element_watched).to eq('New Watchable')
-        expect(response).to have_http_status(:ok)
+      context "a dashboard KPI" do
+        it_behaves_like "jpi v1 authorizable action"
+        it_behaves_like "a kpi update action"
       end
 
-      context "target set for the first time" do
-        let(:kpi_targets) { nil }
-        let(:params) { { targets: {evolution: [{max:'20'}]} } }
+      context "a widget KPI" do
+        let(:widget) { build(:impac_widget) }
+        let(:kpi) { build(:impac_kpi, widget: widget, targets: kpi_targets, settings: settings, extra_params: extra_params) }
 
-        before do
-          api_stub_for(post: "/users/#{user.id}/alerts", response: from_api(alert))
-          api_stub_for(get: "/users/#{user.id}/alerts", response: from_api({}))
-        end
-
-        it "creates an alert" do
-          subject
-          expect(assigns(:kpi).alerts).to eq([alert])
-          expect(response).to have_http_status(:ok)
-        end
-      end
-
-      context "when targets have changed" do
-        let(:alert) { build(:impac_alert, kpi: kpi, sent: true) }
-        let(:params) { { targets: {evolution: [{max:'30'}]} } }
-
-        before { api_stub_for(put: "/alerts/#{alert.id}", response: from_api({})) }
-
-        it "updates the sent status of all the kpi's alerts" do
-          subject
-          expect(assigns(:kpi).alerts).to eq([alert])
-          expect(response).to have_http_status(:ok)
-        end
-      end
-
-      context "when a kpi has no targets, nor is being updated with any" do
-        let(:kpi_targets) { nil }
-        let(:params) { { targets: {} } }
-
-        before { api_stub_for(delete: "/alerts/#{alert.id}", response: from_api({})) }
-
-        it "destroys the kpi's alerts" do
-          subject
-          expect(response).to have_http_status(:ok)
-        end
-      end
-
-      context "when no targets are given / targets are nil" do
-        let(:kpi) { build(:impac_kpi, dashboard: dashboard, targets: kpi_targets, settings: { currency: 'GBP' }) }
-        let(:params) { { targets: nil } }
-
-        it "does not remove the kpi targets" do
-          subject
-          expect(assigns(:kpi).targets).to eq(kpi_targets.deep_stringify_keys)
-          expect(response).to have_http_status(:ok)
-        end
-      end
-
-      context "when no extra_params are given / extra_params are nil" do
-        let(:kpi) { build(:impac_kpi, dashboard: dashboard, targets: kpi_targets, extra_params: ['some-param'], settings: { currency: 'GBP' }) }
-        let(:params) { { extra_params: nil } }
-
-        it "does not remove the kpi extra_params" do
-          subject
-          expect(assigns(:kpi).extra_params).to eq(['some-param'])
-          expect(response).to have_http_status(:ok)
-        end
+        it_behaves_like "jpi v1 authorizable action"
+        it_behaves_like "a kpi update action"
       end
     end
 
