@@ -17,19 +17,19 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   #  -> GET /api/mnoe/v1/organizations/:id/widgets
   def index
     render_not_found('organization') unless parent_organization
-    widgets = parent_organization.widgets
+    @widgets = parent_organization.widgets
   end
 
   # POST /mnoe/jpi/v1/impac/dashboards/:id/widgets
   #  -> POST /api/mnoe/v1/dashboards/:id/widgets
   def create
     if widgets
-      if widget = widgets.create(widget_create_params)
+      if @widget = widgets.create(widget_create_params)
         MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Widget Creation', widget)
         @nocontent = true # no data fetch from Connec!
         render 'show'
       else
-        render_bad_request('create widget', widget.errors)
+        render_bad_request('create widget', @widget.errors)
       end
     else
       render_not_found('widget')
