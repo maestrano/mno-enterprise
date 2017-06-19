@@ -11,14 +11,14 @@ namespace :mnoe do
     task :generate => :environment do
       MnoEnterprise::Frontend::LocalesGenerator.new(locales_tmp_folder).generate_json
 
-      Rake::Task['mnoe:locales:append_impac'].invoke
-
       # Copy locales to public
       cp_r("#{locales_tmp_folder}/.","#{locales_dist_folder}/")
+      
+      Rake::Task['mnoe:locales:impac'].invoke
     end
 
-    task :append_impac do
-      # Copy impac locales to public/dashboard/locales/impac
+    desc "Copy impac locales to the public locales folder"
+    task :impac do
       locales_impac_folder = 'tmp/build/frontend/bower_components/impac-angular/dist/locales/'
       cp_r("#{locales_impac_folder}/.","#{locales_dist_folder}/impac/")
 
