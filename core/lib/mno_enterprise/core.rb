@@ -25,6 +25,7 @@ require "httparty"
 require "json_api_client"
 require "json_api_client_extension/json_api_client_orm_adapter"
 require "json_api_client_extension/validations/remote_uniqueness_validation"
+require "json_api_client_extension/custom_parser"
 require "mno_enterprise/engine"
 require 'mno_enterprise/database_extendable'
 

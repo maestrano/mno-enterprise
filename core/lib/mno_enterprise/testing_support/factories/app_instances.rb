@@ -22,6 +22,7 @@ FactoryGirl.define do
       oauth_keys_valid true
       oauth_company 'oauth company'
       app_nid 'app-nid'
+      per_user_licence 1
       app { build(:app, nid: app_nid) }
       sequence(:owner) { |n| build(:organization, id: n.to_s) }
       sequence(:owner_id, &:to_s)

@@ -71,14 +71,9 @@ module MnoEnterprise
     # Return nil in case of failure
     def self.authenticate_user(auth_hash)
       result = self.authenticate({data: {attributes: auth_hash}})
-      if result
-        u = result.first
-        if u && u.id
-          # u.clear_attribute_changes!
-          return u
-        end
+      if (u = result&.first) && u.id
+        u
       end
-      nil
     rescue JsonApiClient::Errors::NotFound
 
     end

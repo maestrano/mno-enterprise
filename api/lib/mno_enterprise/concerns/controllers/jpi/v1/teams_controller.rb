@@ -100,7 +100,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   def update_params
     update = params.require(:team).permit(:name)
     if params[:team] && params[:team][:app_instances]
-      list = params[:team][:app_instances].select { |e| e != {} }.map { |e| e['id'] }
+      list = params[:team][:app_instances].map { |e| e['id'] }.compact
       update[:app_instance_ids] = list
     end
     update

@@ -68,9 +68,9 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
         # Check that the deletion_request has the right status
         if @deletion_request.status == 'pending'
           @deletion_request.freeze_account!
-          format.html { redirect_to({action: :show, id: @deletion_request.id}, notice: 'Your account has been frozen') }
+          format.html { redirect_to @deletion_request, notice: 'Your account has been frozen' }
         else
-          format.html { redirect_to({action: :show, id: @deletion_request.id}, alert: 'Invalid action')}
+          format.html { redirect_to @deletion_request, alert: 'Invalid action' }
         end
       else
         format.html { redirect_to main_app.root_path, alert: 'This deletion request is invalid or expired' }
@@ -95,9 +95,9 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
           #   Finally Perform the checkout
           @deletion_request.status = 'account_checked_out'
           @deletion_request.save
-          format.html { redirect_to({action: :show, id: @deletion_request.id}, notice: 'Checkout has been performed successfully')}
+          format.html { redirect_to @deletion_request, notice: 'Checkout has been performed successfully' }
         else
-          format.html { redirect_to({action: :show, id: @deletion_request.id}, alert: 'Invalid action') }
+          format.html { redirect_to @deletion_request, alert: 'Invalid action' }
         end
       else
         format.html { redirect_to main_app.root_path, alert: 'This deletion request is invalid or expired' }

@@ -9,7 +9,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   included do
     respond_to :json
     before_filter :organization_management_enabled?, only: [:create, :update, :destroy, :update_billing,
-                                                           :invite_members, :update_member, :remove_member]
+                                                            :invite_members, :update_member, :remove_member]
   end
 
   #==================================================================
@@ -57,7 +57,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     # Create new organization
     @organization = MnoEnterprise::Organization.create(organization_update_params)
     # Add the current user as Super Admin
-    @organization.add_user(current_user,'Super Admin')
+    @organization.add_user(current_user, 'Super Admin')
     # Bust cache
     current_user.refresh_user_cache
 
@@ -84,7 +84,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   # PUT /mnoe/jpi/v1/organizations/:id/invite_members
   def invite_members
     # Filter
-    whitelist = ['email','role','team_id']
+    whitelist = ['email', 'role', 'team_id']
     attributes = []
     params[:invites].each do |invite|
       attributes << invite.slice(*whitelist)
@@ -120,10 +120,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     if current_user.role(organization) == 'Admin'
       # Admin cannot assign Super Admin role
       raise CanCan::AccessDenied if attributes[:role] == 'Super Admin'
-
+      member_current_role = if member.is_a?(MnoEnterprise::User)
+                              organization.role(member)
+                            elsif member.is_a?(MnoEnterprise::OrgaInvite)
+                              member.user_role
+                            end
       # Admin cannot edit Super Admin
-      raise CanCan::AccessDenied if (member.is_a?(MnoEnterprise::User) && organization.role(member) == 'Super Admin') || (member.is_a?(MnoEnterprise::OrgaInvite) && member.user_role == 'Super Admin')
-    elsif member.id == current_user.id && attributes[:role] != 'Super Admin' && organization.orga_relations.count {|u| u.role == 'Super Admin'} <= 1
+      if member_current_role == 'Super Admin'
+        raise CanCan::AccessDenied
+      end
+    elsif member.id == current_user.id && attributes[:role] != 'Super Admin' && organization.orga_relations.count { |u| u.role == 'Super Admin' } <= 1
       # A super admin cannot modify his role if he's the last super admin
       raise CanCan::AccessDenied
     end
@@ -161,47 +167,47 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   end
 
   protected
-    def member
-      @member ||= begin
-        email = params.require(:member).require(:email)
-        # Organizations are already loaded with all users
-        organization.users.find { |u| u.email == email } ||
-        organization.orga_invites.find { |u| u.status == 'pending' && u.user_email == email}
-      end
+  def member
+    @member ||= begin
+      email = params.require(:member).require(:email)
+      # Organizations are already loaded with all users
+      organization.users.find { |u| u.email == email } ||
+        organization.orga_invites.find { |u| u.status == 'pending' && u.user_email == email }
     end
+  end
 
-    def organization
-      @organization ||= MnoEnterprise::Organization.find_one(params[:id], :users, :orga_invites, :orga_relations, :credit_card)
+  def organization
+    @organization ||= MnoEnterprise::Organization.find_one(params[:id], :users, :orga_invites, :orga_relations, :credit_card)
+  end
+
+  def organization_permitted_update_params
+    [:name, :soa_enabled, :industry, :size]
+  end
+
+  def organization_update_params
+    params.fetch(:organization, {}).permit(*organization_permitted_update_params)
+  end
+
+  def organization_billing_params
+    params.require(:credit_card).permit(
+      'title', 'first_name', 'last_name', 'number', 'month', 'year', 'country', 'verification_value',
+      'billing_address', 'billing_city', 'billing_postcode', 'billing_country'
+    )
+  end
+
+  def check_valid_payment_method
+    return true unless organization.payment_restriction.present?
+
+    if CreditCardValidations::Detector.new(organization_billing_params[:number]).valid?(*organization.payment_restriction)
+      true
+    else
+      cards = organization.payment_restriction.map(&:capitalize).to_sentence
+      @credit_card.errors.add(:number, "Payment is limited to #{cards} Card Holders")
+      false
     end
+  end
 
-    def organization_permitted_update_params
-      [:name, :soa_enabled, :industry, :size]
-    end
-
-    def organization_update_params
-      params.fetch(:organization, {}).permit(*organization_permitted_update_params)
-    end
-
-    def organization_billing_params
-      params.require(:credit_card).permit(
-        'title', 'first_name', 'last_name', 'number', 'month', 'year', 'country', 'verification_value',
-        'billing_address', 'billing_city', 'billing_postcode', 'billing_country'
-      )
-    end
-
-    def check_valid_payment_method
-      return true unless organization.payment_restriction.present?
-
-      if CreditCardValidations::Detector.new(organization_billing_params[:number]).valid?(*organization.payment_restriction)
-        true
-      else
-        cards = organization.payment_restriction.map(&:capitalize).to_sentence
-        @credit_card.errors.add(:number, "Payment is limited to #{cards} Card Holders")
-        false
-      end
-    end
-
-    def organization_management_enabled?
-      return head :forbidden unless Settings.organization_management.enabled
-    end
+  def organization_management_enabled?
+    return head :forbidden unless Settings.organization_management.enabled
+  end
 end

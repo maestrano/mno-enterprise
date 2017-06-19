@@ -58,14 +58,13 @@ module MnoEnterprise
 
       context 'when the request is pending' do
         it 'freezes the account' do
-          expect(controller.current_user).to receive(:current_deletion_request).and_return(deletion_req)
-          expect(deletion_req).to receive(:freeze_account!)
+          expect_any_instance_of(MnoEnterprise::DeletionRequest).to receive(:freeze_account!)
           subject
         end
 
         it 'redirects to the deletion request' do
           subject
-          expect(response).to redirect_to(deletion_request_url(deletion_req.id))
+          expect(response).to redirect_to(deletion_request_url(deletion_req))
         end
       end
 
@@ -79,7 +78,7 @@ module MnoEnterprise
 
         it 'redirects to the deletion request' do
           subject
-          expect(response).to redirect_to(deletion_request_url(deletion_req.id))
+          expect(response).to redirect_to(deletion_request_url(deletion_req))
         end
 
         it 'displays an error message' do
@@ -112,7 +111,7 @@ module MnoEnterprise
 
         it 'redirects to the deletion request' do
           subject
-          expect(response).to redirect_to(deletion_request_url(deletion_req.id))
+          expect(response).to redirect_to(deletion_request_url(deletion_req))
         end
 
         it 'displays an error message' do

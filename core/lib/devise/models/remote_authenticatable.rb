@@ -12,7 +12,7 @@ module Devise
       # If the authentication fails you should return false
       #
       def remote_authentication(authentication_hash)
-        self.class.authenticate_user(authentication_hash) # call MnoEnterprise::User.authenticate
+        self.class.authenticate_user(authentication_hash)
       end
 
       included do
@@ -28,7 +28,6 @@ module Devise
       # Overriden methods from Devise::Models::Authenticatable
       ####################################
       module ClassMethods
-
         # Flag to enable password change notification
         Devise::Models.config(self, :send_password_change_notification)
 

@@ -77,10 +77,10 @@ module MnoEnterprise
     describe 'POST #create' do
       shared_examples "create kpi action" do
 
-        it "creates the kpi" do
+        xit "creates the kpi" do
           subject
           # TODO: check that the rendered kpi is the created one
-          # expect(assigns(:kpi)).to eq(kpi)
+          expect(assigns(:kpi)).to eq(kpi)
         end
 
         context "when there are kpi targets" do
@@ -90,10 +90,10 @@ module MnoEnterprise
             stub_api_v2(:post, "/alerts", alert)
           end
 
-          it "creates kpi alerts" do
+          xit "creates kpi alerts" do
             subject
             # TODO: Check that the alerts are rendered
-            # expect(assigns(:kpi).alerts).to eq([alert])
+            expect(assigns(:kpi).alerts).to eq([alert])
             expect(response).to have_http_status(:ok)
           end
         end
@@ -140,10 +140,10 @@ module MnoEnterprise
 
         it_behaves_like 'create kpi action'
 
-        it '.widget retrieves the correct widget' do
+        xit '.widget retrieves the correct widget' do
           subject
           # TODO: check that the widget is well rendered
-          #expect(assigns(:widget)).to eq(widget)
+          expect(assigns(:widget)).to eq(widget)
         end
       end
     end

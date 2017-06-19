@@ -58,13 +58,15 @@ module MnoEnterprise
       let(:app) { build(:app, nid: 'my-app') }
       let(:app_instance) { build(:app_instance, app: app, owner: organization, owner_id: organization.id) }
       subject { post :create, organization_id: organization.id, nid: 'my-app' }
-
+      it_behaves_like 'jpi v1 protected action'
       before do
         stub_api_v2(:post, '/app_instances/provision', app_instance)
+        sign_in user
       end
-      it_behaves_like 'jpi v1 protected action'
+
       it {
-        subject
+        expect(subject).to be_successful
+        assert_requested_api_v2(:post, '/app_instances/provision')
       }
     end
 

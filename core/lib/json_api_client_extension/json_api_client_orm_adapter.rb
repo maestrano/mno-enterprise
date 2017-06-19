@@ -19,12 +19,12 @@ module JsonApiClient
       res
     end
 
-    # @see OrmAdapter::Bax``
+    # @see OrmAdapter::Base#get
     def get(id)
       res = klass.includes(:deletion_requests, :organizations, :orga_relations, :dashboards).find(wrap_key(id))
       error = res&.errors&.first
       if(error && error.code != '404')
-        raise  error.detail
+        raise error.detail
       end
       res.first
     end
