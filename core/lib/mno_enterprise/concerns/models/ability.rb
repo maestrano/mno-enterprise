@@ -129,8 +129,11 @@ module MnoEnterprise::Concerns::Models::Ability
     end
 
     can :manage_kpi, MnoEnterprise::Impac::Kpi do |kpi|
-      dashboard = kpi.dashboard
-      authorize! :manage_dashboard, dashboard
+      if kpi.widget.present?
+        authorize! :manage_widget, MnoEnterprise::Impac::Widget.find(kpi.widget.id)
+      else
+        authorize! :manage_dashboard, kpi.dashboard
+      end
     end
 
     can :manage_alert, MnoEnterprise::Impac::Alert do |alert|
