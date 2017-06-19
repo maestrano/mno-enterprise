@@ -13,13 +13,13 @@ namespace :mnoe do
 
       # Copy locales to public
       cp_r("#{locales_tmp_folder}/.","#{locales_dist_folder}/")
-      
+
       Rake::Task['mnoe:locales:impac'].invoke
     end
 
     desc "Copy impac locales to the public locales folder"
     task :impac do
-      locales_impac_folder = 'tmp/build/frontend/bower_components/impac-angular/dist/locales/'
+      locales_impac_folder = 'tmp/build/frontend/bower_components/impac-angular/dist/locales'
       cp_r("#{locales_impac_folder}/.","#{locales_dist_folder}/impac/")
 
       # TODO: remove when locales moved to four letters
