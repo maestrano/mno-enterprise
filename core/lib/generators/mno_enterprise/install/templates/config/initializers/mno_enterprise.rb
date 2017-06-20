@@ -24,12 +24,8 @@ MnoEnterprise.configure do |config|
   #===============================================
   # Emailing
   #===============================================
-  # Mandrill API key for sending email
-  # Defaulted to Maestrano Enterprise demo account
-  # config.mandrill_key = 'some-mandrill-api-key'
-
   # Adapter used to send emails
-  # Default to :mandrill
+  # Default to :smtp
   # config.mail_adapter = :mandrill
   # config.mail_adapter = :sparkpost
   # config.mail_adapter = :smtp
@@ -94,15 +90,6 @@ MnoEnterprise.configure do |config|
   # Configure the API root path
   # config.mno_api_root_path = "/v1"
   config.mno_api_root_path = Settings.mno.paths.root
-
-  #===============================================
-  # Marketplace Listing
-  #===============================================
-  # [DEPRECATED] Please get in touch with our enterprise team
-  # List of applications that should be offered on the marketplace
-  # Set to nil to offer everything
-  # config.marketplace_listing = nil
-  # config.marketplace_listing = ["xero"]
 
   #====================================
   # Impac! widgets templates listing

@@ -7,7 +7,7 @@ module MnoEnterprise
       class << self
         # Return a mandrill client configured with the right API key
         def client
-          @client ||= Mandrill::API.new(ENV['MANDRILL_API_KEY'] || MnoEnterprise.mandrill_key)
+          @client ||= Mandrill::API.new(ENV['MANDRILL_API_KEY'])
         end
 
         # Send a template

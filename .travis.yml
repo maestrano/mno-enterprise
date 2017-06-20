@@ -1,19 +1,23 @@
 language: ruby
 env:
-- GEM=api
-- GEM=core
-- GEM=frontend
+  - GEM=api
+  - GEM=core
+  - GEM=frontend
 before_install:
-- cd $GEM; export BUNDLE_GEMFILE="`pwd`/Gemfile"
+  - cd $GEM; export BUNDLE_GEMFILE="`pwd`/Gemfile"
 script:
-- bundle install --quiet
-- bundle exec rake test_app
-- bundle exec rake spec
+  - bundle install --quiet
+  - bundle exec rake test_app
+  - bundle exec rake spec
 rvm:
-- 2.1.10
-- 2.2.7
-- 2.3.4
-- 2.4.1
+  - 2.3.4
+  - 2.4.1
+# jruby not supported because of redcarpet
+#  - jruby-9.1.7.0
+#matrix:
+#  fast_finish: true
+#  allow_failures:
+#    - rvm: jruby-9.1.7.0
 addons:
   code_climate:
     repo_token: 7b6a43d5fa6ad571f5674176b0b85a79f62bfb7a908eb8bdd52941566706770e

@@ -30,7 +30,6 @@ require 'mno_enterprise/database_extendable'
 require 'config'
 require 'figaro'
 
-require 'mandrill_client'
 require 'accountingjs_serializer'
 
 module MnoEnterprise
@@ -73,12 +72,6 @@ module MnoEnterprise
 
     def sync_oauth_url(id,opts = {})
       host_url("/oauth/#{id}/sync",opts)
-    end
-
-    # @deprecated Impac is now configured through Settings
-    def impac_root_url
-      warn '[DEPRECATION] `impac_root_url` is deprecated. Impac is now configured in the frontend through `Settings`.'
-      URI.join(MnoEnterprise.impac_api_host,MnoEnterprise.impac_api_root_path)
     end
 
     private
@@ -125,17 +118,6 @@ module MnoEnterprise
   @@tenant_key = nil
 
   #====================================
-  # Impac
-  #====================================
-  # @deprecated Impac is now configured through Settings
-
-  mattr_accessor :impac_api_host
-  @@impac_api_host = 'https://api-impac-uat.maestrano.io'
-
-  mattr_accessor :impac_api_root_path
-  @@impac_api_root_path = "/api/v1"
-
-  #====================================
   # Enterprise API
   #====================================
   # The Maestrano Enterprise API Host
@@ -164,21 +146,9 @@ module MnoEnterprise
   #====================================
   # Emailing
   #====================================
-  # @deprecated: Use ENV['MANDRILL_API_KEY']
-  # Mandrill Key for sending emails
-  def self.mandrill_key
-    warn "[DEPRECATION] `mandrill_key` is deprecated. Use `ENV['MANDRILL_API_KEY']`."
-    @@mandrill_key
-  end
-  def self.mandrill_key=(mandrill_key)
-    warn "[DEPRECATION] `mandrill_key` is deprecated. Use `ENV['MANDRILL_API_KEY']`."
-    @@mandrill_key = mandrill_key
-  end
-  @@mandrill_key = nil
-
   # Adapter used to send emails
   # Default to :mandrill
-  mattr_reader(:mail_adapter) { Rails.env.test? ? :test : :mandrill }
+  mattr_reader(:mail_adapter) { Rails.env.test? ? :test : :smtp }
   def self.mail_adapter=(adapter)
     @@mail_adapter = adapter
     MnoEnterprise::MailClient.adapter = self.mail_adapter
@@ -238,14 +208,6 @@ module MnoEnterprise
   mattr_accessor :style
   @@styleguide = nil
   @@style = nil
-
-  #====================================
-  # Marketplace
-  #====================================
-  # List of applications that should be offered on
-  # the marketplace
-  mattr_accessor :marketplace_listing
-  @@marketplace_listing = nil
 
   #====================================
   # Impac! widgets templates listing

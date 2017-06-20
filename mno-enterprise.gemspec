@@ -14,6 +14,8 @@ Gem::Specification.new do |s|
   s.description = "Maestrano Enterprise is your application marketplace, out of the box."
   s.license     = "Apache-2.0"
 
+  s.required_ruby_version = '>= 2.3.1'
+
   # s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.rdoc"]
   s.files = Dir['LICENSE', 'README.md', 'lib/**/*']
   s.test_files = Dir["spec/**/*"]
