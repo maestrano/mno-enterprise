@@ -4,6 +4,7 @@
 
 1. [Upgrading the frontend](#upgrading-the-frontend)
 1. [Upgrading the gem](#upgrading-the-gem)
+    1. [Migrating from v3.2 to v3.3](#migrating-from-v32-to-v33)
     1. [Migrating from v3.0/v3.1 to v3.2](#migrating-from-v30v31-to-v32)
     1. [Migrating from v2 to v3](#migrating-from-v2-to-v3)
 
@@ -39,6 +40,14 @@ _You may want to use GitHub history to retrieve the version corresponding to the
 This is a simple as `bundle update mno-enterprise`.
 
 See below for upgrade between breaking versions.
+
+### Migrating from v3.2 to v3.3
+
+See the [CHANGELOG](CHANGELOG.md#v3.3.0)
+
+No major issues for upgrade apart from the Admin Panel being extracted to a new project and following the new build processs (see v3.2):
+
+- Run `bin/rake mnoe:admin:install` to update the `package.json` file and build the admin panel
 
 ### Migrating from v3.0/v3.1 to v3.2
 
