@@ -9,7 +9,7 @@ require 'rake/clean'
 namespace :mnoe do
   namespace :admin do
     # Default version
-    MNOE_ADMIN_PANEL_VERSION = 'master'
+    MNOE_ADMIN_PANEL_VERSION = 'v1.0.x'
     MNOE_ADMIN_PANEL_PKG = "git+https://git@github.com/maestrano/mnoe-admin-panel.git##{MNOE_ADMIN_PANEL_VERSION}"
 
     # Final build
