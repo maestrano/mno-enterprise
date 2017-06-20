@@ -31,9 +31,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     authorize! :update, organization
     # Save
     organization.attributes = organization_update_params
-    changed = organization.changed
+    changed_attributes = organization.changed_attributes
     if organization.save
-      MnoEnterprise::EventLogger.info('organization_update', current_user.id, 'Organization update', organization, changed)
+      MnoEnterprise::EventLogger.info('organization_update', current_user.id, 'Organization update', organization, changed_attributes)
       render 'show_reduced'
     else
       render json: organization.errors, status: :bad_request
@@ -140,7 +140,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
       orga_relation = MnoEnterprise::OrgaRelation.where(user_id: member.id, organization_id: organization.id).first
       orga_relation.update_attributes(role: attributes[:role])
       MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in org', organization, {email: attributes[:email], role: attributes[:role]})
-    when MnoEnterprise::OrgInvite
+    when MnoEnterprise::OrgaInvite
       member.update_attributes(user_role: attributes[:role])
       MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in invitation', organization, {email: attributes[:email], role: attributes[:role]})
     end

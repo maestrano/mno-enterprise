@@ -90,7 +90,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
                  end
       @team.update_attributes(user_ids: user_ids)
       MnoEnterprise::EventLogger.info('team_update', current_user.id, 'Team composition updated', @team,
-                                      {action: action.to_s, users: users.map(&:email)})
+                                      {action: action.to_s, user_ids: user_ids})
     end
     @team = MnoEnterprise::Team.find_one(params[:id], :organization, :users, :app_instances)
     @parent_organization = MnoEnterprise::Organization.find_one(@team.organization.id, :orga_relations)

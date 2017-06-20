@@ -66,6 +66,7 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations)) }
       before { stub_api_v2(:get, "/teams/#{team.id}", team, %i(organization)) }
       before { stub_api_v2(:patch, "/teams/#{team.id}") }
+      before { stub_audit_events }
       subject { put :add_users, id: team.id, team: {users: [{id: user.id}]} }
 
       # team reload

@@ -233,8 +233,6 @@ module MnoEnterprise
         stub_api_v2(:patch, "/alerts/#{alert.id}", alert)
       }
 
-      before { kpi.save }
-
       context "a dashboard KPI" do
         it_behaves_like "jpi v1 authorizable action"
         it_behaves_like "a kpi update action"

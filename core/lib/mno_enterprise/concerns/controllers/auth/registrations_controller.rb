@@ -47,11 +47,9 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
     build_resource(sign_up_params)
     resource.password ||= Devise.friendly_token
 
-    resource_saved = resource.save
+    if resource.save
 
-    if resource_saved
-
-      MnoEnterprise::EventLogger.info('user_add', resource_saved.id, 'User Signup', resource_saved)
+      MnoEnterprise::EventLogger.info('user_add', resource.id, 'User Signup', resource)
 
       if resource.active_for_authentication?
         set_flash_message :notice, :signed_up if is_flashing_format?

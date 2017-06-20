@@ -9,6 +9,7 @@ module MnoEnterprise::Concerns::Models::Team
   included do
     property :created_at, type: :time
     property :updated_at, type: :time
+    property :organization_id
   end
 
   #==================================================================
@@ -49,7 +50,7 @@ module MnoEnterprise::Concerns::Models::Team
   def to_audit_event
     {
       name: name,
-      organization_id: self.organization.id
+      organization_id: self.organization_id
     }
   end
 end

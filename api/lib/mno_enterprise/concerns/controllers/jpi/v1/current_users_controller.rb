@@ -24,9 +24,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # PUT /mnoe/jpi/v1/current_user
   def update
     @user = current_user
-    @user.update_attributes(user_params)
+    @user.attributes = user_params
+    changed_attributes = @user.changed_attributes
+    @user.save
     if @user.errors.empty?
-      MnoEnterprise::EventLogger.info('user_update', current_user.id, 'User update', @user, @user.changed)
+      MnoEnterprise::EventLogger.info('user_update', current_user.id, 'User update', @user, changed_attributes)
       @user = @user.load_required(:organizations, :deletion_requests)
       render :show
     else

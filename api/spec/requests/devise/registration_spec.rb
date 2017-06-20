@@ -22,6 +22,7 @@ module MnoEnterprise
       subject { post '/mnoe/auth/users', user: signup_attrs }
 
       describe 'success' do
+        before { stub_audit_events }
         before { subject }
 
         it 'signs the user up' do
