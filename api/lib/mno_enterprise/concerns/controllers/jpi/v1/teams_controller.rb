@@ -30,6 +30,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
     authorize! :manage_teams, parent_organization
     @team = parent_organization.teams.create(team_params)
 
+    MnoEnterprise::EventLogger.info('team_add', current_user.id, 'Team created', @team) if @team
+
     render 'show'
   end
 
@@ -45,6 +47,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
     if params[:team] && params[:team][:app_instances]
       list = params[:team][:app_instances].select { |e| e != {} }
       @team.set_access_to(list)
+
+      MnoEnterprise::EventLogger.info('team_apps_update', current_user.id, 'Team apps updated', @team,
+                                      {apps: list.map{|l| l['name']}})
+
     end
 
     render 'show'
@@ -64,7 +70,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   def destroy
     @team = MnoEnterprise::Team.find(params[:id])
     authorize! :manage_teams, @team.organization
+
     @team.destroy
+
+    MnoEnterprise::EventLogger.info('team_delete', current_user.id, 'Team deleted', @team) if @team
 
     head :no_content
   end
@@ -80,7 +89,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
     if params[:team] && params[:team][:users]
       id_list = params[:team][:users].map { |h| h[:id] }.compact
       users = @team.organization.users.where('id.in' => id_list)
+
       users.each { |u| @team.send(action, u) }
+
+      MnoEnterprise::EventLogger.info('team_update', current_user.id, 'Team composition updated', @team,
+                                      {action: action.to_s, users:  users.map(&:email)})
     end
 
     render 'show'

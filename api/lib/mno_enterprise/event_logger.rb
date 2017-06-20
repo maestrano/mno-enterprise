@@ -40,8 +40,8 @@ module MnoEnterprise
 
     # Get the metadata from the object if not provided
     def self.format_metadata(metadata, object)
-      if metadata.blank? && object.respond_to?(:to_audit_event)
-        object.to_audit_event
+      if object.respond_to?(:to_audit_event)
+        metadata.merge(object.to_audit_event)
       else
         metadata
       end

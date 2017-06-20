@@ -77,6 +77,15 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
       path = add_param_to_fragment(path.to_s, 'flash', [{msg: error_message(error_key),  type: :error}.to_json])
     end
 
+    unless params.fetch(:oauth, {})[:error]
+      case params.fetch(:oauth, {})[:action]
+        when 'sync'
+          MnoEnterprise::EventLogger.info('app_connected', current_user.id, 'App connected', app_instance)
+        when 'disconnect'
+          MnoEnterprise::EventLogger.info('app_disconnected', current_user.id, 'App disconnected', app_instance)
+      end
+    end
+
     redirect_to path
   end
 
