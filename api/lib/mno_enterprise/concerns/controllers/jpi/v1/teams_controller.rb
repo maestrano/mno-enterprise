@@ -64,11 +64,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   def destroy
     @team = MnoEnterprise::Team.find_one(params[:id], :organization)
     authorize! :manage_teams, @team.organization
-
-    @team.destroy
-
     MnoEnterprise::EventLogger.info('team_delete', current_user.id, 'Team deleted', @team) if @team
-
+    @team.destroy
     head :no_content
   end
 

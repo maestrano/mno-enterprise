@@ -15,7 +15,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
   #==================================================================
   # GET /mnoe/jpi/v1/organization/1/app_instances
   def index
-    @app_instances = MnoEnterprise::AppInstance.includes(:app, :owner).where(owner_id: parent_organization.id, status: MnoEnterprise::AppInstance::ACTIVE_STATUSES).to_a.select do |i|
+    @app_instances = MnoEnterprise::AppInstance.includes(:app, :owner).where(owner_id: parent_organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES).to_a.select do |i|
       can?(:access,i)
     end
   end

@@ -10,6 +10,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     respond_to :json
   end
 
+  DASHBOARD_DEPENDENCIES = [:widgets, {widgets: :kpis}, :kpis, {kpis: :alerts}]
+
   #==================================================================
   # Instance methods
   #==================================================================
@@ -21,8 +23,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   # GET /mnoe/jpi/v1/impac/dashboards/1
   #   -> GET /api/mnoe/v1/users/1/dashboards
   def show
-    dashboard
-    render_not_found('dashboard') unless @dashboard
+    render_not_found('dashboard') unless dashboard(*DASHBOARD_DEPENDENCIES)
   end
 
   # POST /mnoe/jpi/v1/impac/dashboards
@@ -37,7 +38,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     @dashboard = MnoEnterprise::Dashboard.create(dashboard_create_params)
     if @dashboard.errors.empty?
       MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', @dashboard)
-      @dashboard = dashboard.load_required(:owner, :widgets, :kpis)
+      @dashboard = dashboard.load_required(*DASHBOARD_DEPENDENCIES)
       render 'show'
     else
       render_bad_request('create dashboard', @dashboard.errors)
@@ -54,7 +55,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     dashboard.update_attributes(dashboard_update_params)
     if dashboard.errors.empty?
       # Reload Dashboard
-      @dashboard = dashboard.load_required(:owner, :widgets, :kpis)
+      @dashboard = dashboard.load_required(DASHBOARD_DEPENDENCIES)
       render 'show'
     else
       render_bad_request('update dashboard', dashboard.errors)
@@ -74,12 +75,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
 
   private
 
-    def dashboard
-      @dashboard ||= MnoEnterprise::Dashboard.find_one(params[:id].to_i, :widgets, :kpis, {kpis: :alerts})
+    def dashboard(*included)
+      @dashboard ||= MnoEnterprise::Dashboard.find_one(params[:id].to_i, included)
     end
 
     def dashboards
-      @dashboards ||= MnoEnterprise::Dashboard.includes(:widgets, :kpis, {kpis: :alerts}).find(owner_id: current_user.id)
+      @dashboards ||= MnoEnterprise::Dashboard.includes(:widgets, *DASHBOARD_DEPENDENCIES).find(owner_id: current_user.id)
     end
 
     def whitelisted_params

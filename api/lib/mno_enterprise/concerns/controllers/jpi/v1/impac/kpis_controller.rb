@@ -24,8 +24,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     attrs = params.slice('metadata', 'opts')
     auth = { username: MnoEnterprise.tenant_id, password: MnoEnterprise.tenant_key }
 
-    response = begin
-      MnoEnterprise::ImpacClient.send_get('/api/v2/kpis', attrs, basic_auth: auth)
+    begin
+      response = MnoEnterprise::ImpacClient.send_get('/api/v2/kpis', attrs, basic_auth: auth)
+      # TODO check there was no error, something like
+      # return render json: { message: "Unable to retrieve kpis from Impac API | Error #{response.code}" } unless response.success?
     rescue => e
       return render json: { message: "Unable to retrieve kpis from Impac API | Error #{e}" }
     end

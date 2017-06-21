@@ -101,5 +101,5 @@ MnoEnterprise::BaseResource.connection do |connection|
   connection.use Faraday::Request::BasicAuthentication, MnoEnterprise.tenant_id, MnoEnterprise.tenant_key
 
   # log responses
-  connection.use Faraday::Response::Logger
+  connection.use Faraday::Response::Logger if Rails.env.development?
 end

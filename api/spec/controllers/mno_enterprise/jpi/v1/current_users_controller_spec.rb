@@ -119,7 +119,7 @@ module MnoEnterprise
         updated_user.attributes = attrs
         stub_api_v2(:patch,  "/users/#{user.id}", updated_user)
         # user reload
-        stub_api_v2(:get, "/users/#{user.id}", updated_user, %i(organizations deletion_requests))
+        stub_api_v2(:get, "/users/#{user.id}", updated_user, %i(organizations orga_relations deletion_requests))
       }
 
       subject { put :update, user: attrs }
@@ -141,7 +141,7 @@ module MnoEnterprise
     describe 'PUT #register_developer' do
       before { stub_api_v2(:patch, "/users/#{user.id}/create_api_credentials", user) }
       #user reload
-      before { stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations deletion_requests)) }
+      before { stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations orga_relations deletion_requests)) }
       before { sign_in user }
       subject { put :register_developer }
 
@@ -155,7 +155,7 @@ module MnoEnterprise
       let(:attrs) { {current_password: 'password', password: 'blablabla', password_confirmation: 'blablabla'} }
       before { stub_api_v2(:patch, "/users/#{user.id}", user) }
       #user reload
-      before { stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations deletion_requests)) }
+      before { stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations orga_relations deletion_requests)) }
       subject { put :update_password, user: attrs }
 
       it_behaves_like 'a user management action'

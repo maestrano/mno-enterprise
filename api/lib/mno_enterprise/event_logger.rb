@@ -38,11 +38,14 @@ module MnoEnterprise
 
     # Get the metadata from the object if not provided
     def self.format_metadata(metadata, object)
-      if object.respond_to?(:to_audit_event)
-        metadata.merge(object.to_audit_event)
-      else
-        metadata
-      end
+      res = if object.respond_to?(:to_audit_event)
+               metadata.merge(object.to_audit_event)
+             else
+               metadata
+             end
+      # Make the hash serialization compatible
+      # Fix ActiveJob::SerializationError (Unsupported argument type: Time)
+      res.as_json if res
     end
   end
 end

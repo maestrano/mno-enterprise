@@ -29,7 +29,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     @user.save
     if @user.errors.empty?
       MnoEnterprise::EventLogger.info('user_update', current_user.id, 'User update', @user, changed_attributes)
-      @user = @user.load_required(:organizations, :deletion_requests)
+      @user = @user.load_required(:organizations, :orga_relations, :deletion_requests,)
       render :show
     else
       render json: @user.errors, status: :bad_request
@@ -43,7 +43,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     @user = @user.create_api_credentials.first
     if @user.errors.empty?
       MnoEnterprise::EventLogger.info('register_developer', current_user.id, 'Developer registration', @user)
-      @user = @user.load_required(:organizations, :deletion_requests)
+      @user = @user.load_required(:organizations, :orga_relations, :deletion_requests)
       render :show
     else
       render json: @user.errors, status: :bad_request
@@ -56,7 +56,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     @user.update(password_params.merge(current_password_required: true))
     if @user.errors.empty?
       MnoEnterprise::EventLogger.info('user_update_password', current_user.id, 'User password change', @user)
-      @user = @user.load_required(:organizations, :deletion_requests)
+      @user = @user.load_required(:organizations, :orga_relations, :deletion_requests)
       sign_in @user, bypass: true
       render :show
     else

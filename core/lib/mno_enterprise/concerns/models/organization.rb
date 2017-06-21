@@ -86,7 +86,6 @@ module MnoEnterprise::Concerns::Models::Organization
 
   def add_user(user,role = 'Member')
     MnoEnterprise::OrgaRelation.create(organization_id: self.id, user_id: user.id, role: role)
-    self.users << user
   end
 
   def provision_app_instance(app_nid)

@@ -60,7 +60,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     @organization.add_user(current_user, 'Super Admin')
     # Bust cache
     current_user.refresh_user_cache
-
+    # Reload organization with new changes
+    @organization = @organization.load_required(:users, :orga_invites, :orga_relations)
     MnoEnterprise::EventLogger.info('organization_create', current_user.id, 'Organization created', organization)
     render 'show'
   end
