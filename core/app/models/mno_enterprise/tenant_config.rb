@@ -11,6 +11,55 @@ module MnoEnterprise
       type: "object",
       title: "Settings",
       properties: {
+        system: {
+          type: "object",
+          description: "System Settings",
+          properties: {
+            app_name: {
+              type: "string",
+              description: "Application Name",
+              default: "My Company"
+            },
+            email: {
+              type: "object",
+              description: "System email settings",
+              properties: {
+                support_email: {
+                  type: "string",
+                  description: "Support email address. Displayed in the frontend",
+                  default: "support@example.com"
+                },
+                default_sender: {
+                  type: "object",
+                  description: "Default sender for system generated emails",
+                  properties: {
+                    email: {
+                      type: "string",
+                      # description: "Default sender email for system generated emails",
+                      default: "no-reply@example.com"
+                    },
+                    name: {
+                      type: "string",
+                      # description: "Default sender name for system generated emails",
+                      default: "no-reply@example.com"
+                    }
+                  }
+                }
+              }
+            },
+            i18n: {
+              type: "object",
+              description: "Internationalization settings",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  description: "Enable internationalization",
+                  default: false
+                }
+              }
+            }
+          }
+        },
         audit_log: {
           type: "object",
           properties: {
@@ -255,6 +304,9 @@ module MnoEnterprise
       Settings.add_source!(frontend_config)
       Settings.reload!
 
+      # Reconfigure mnoe
+      reconfigure_mnoe!
+
       # TODO: update JSON_SCHEMA with readonly fields
 
       # # Save settings in YAML format for easy debugging
@@ -264,6 +316,20 @@ module MnoEnterprise
       # end
     end
 
+    # Reconfigure Mnoe settings that were set during initialization
+    def self.reconfigure_mnoe!
+      MnoEnterprise.configure do |config|
+        config.app_name = Settings.system.app_name
+
+        # Emailing
+        config.support_email = Settings.system.email.support_email
+        config.default_sender_name = Settings.system.email.default_sender.name
+        config.default_sender_email = Settings.system.email.default_sender.email
+
+        # I18n
+        config.i18n_enabled = Settings.system.i18n.enabled
+      end
+    end
 
     # Fetch the Tenant#frontend_config from MnoHub
     #

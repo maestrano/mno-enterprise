@@ -40,6 +40,24 @@ describe MnoEnterprise::TenantConfig do
     end
   end
 
+  describe '.reconfigure_mnoe!' do
+    before do
+      Settings.system.app_name = 'New App Name'
+      Settings.system.email.support_email = 'New Support Email'
+      Settings.system.email.default_sender.name = 'New Sender Name'
+      Settings.system.email.default_sender.email = 'New Sender Email'
+      Settings.system.i18n.enabled = 'New I18n'
+
+      described_class.reconfigure_mnoe!
+    end
+
+    it { expect(MnoEnterprise.app_name).to eq('New App Name') }
+    it { expect(MnoEnterprise.support_email).to eq('New Support Email') }
+    it { expect(MnoEnterprise.default_sender_name).to eq('New Sender Name') }
+    it { expect(MnoEnterprise.default_sender_email).to eq('New Sender Email') }
+    it { expect(MnoEnterprise.i18n_enabled).to eq('New I18n') }
+  end
+
   describe '.build_object' do
     subject { described_class.build_object(schema.with_indifferent_access) }
 

@@ -12,7 +12,15 @@ mno:
     root: /api/mnoe/v1
 url_config:
   after_sign_out_url: <%= ENV['AFTER_SIGN_OUT_URL']%>
-frontend_host:
+
+system:
+  app_name: 'My Company'
+  email:
+    support_email: 'support@example.com'
+    sender_name: 'My Company'
+    sender_email: 'no-reply@example.com'
+  i18n:
+    enabled: false
 
 #===============================================
 # Feature Flags

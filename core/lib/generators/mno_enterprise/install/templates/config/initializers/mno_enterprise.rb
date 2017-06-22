@@ -3,12 +3,14 @@ MnoEnterprise.configure do |config|
   # General Configuration
   #===============================================
   # Name of your company/application
-  config.app_name = '<%= @company_name || "My Company" %>'
+  config.app_name = '<%= @company_name || "Settings.system.app_name" %>'
 
+  # TODO: deprecated
   # Fallback default country.
   # Used as default in geolocalised fields (e.g.: country, phone number)
   # config.app_country = 'US'
 
+  # TODO: deprecated
   # Fallback default currency.
   # config.app_currency = 'USD'
 
@@ -31,11 +33,11 @@ MnoEnterprise.configure do |config|
   # config.mail_adapter = :smtp
 
   # Support email address
-  config.support_email = '<%= @support_email || "support@example.com" %>'
+  config.support_email = '<%= @support_email || "Settings.system.email.support_email" %>'
 
   # Default sender for system generated emails
-  config.default_sender_name = '<%= @company_name || "My Company" %>'
-  config.default_sender_email = '<%= @system_email || "no-reply@example.com" %>'
+  config.default_sender_name = '<%= @company_name || "Settings.system.email.default_sender.name || Settings.system.email.app_name" %>'
+  config.default_sender_email = '<%= @system_email || "Settings.system.email.default_sender.email" %>'
 
   #===============================================
   # External Routes
@@ -60,11 +62,12 @@ MnoEnterprise.configure do |config|
   # I18n - Controls:
   #   - Routing in development
   #   - Filter and locale management in controllers
-  config.i18n_enabled = false
+  config.i18n_enabled = Settings.system.i18n.enabled
 
   #===============================================
   # Third Party Plugins
   #===============================================
+  # TODO: Settings
   # Google Tag Manager
   config.google_tag_container = ENV['google_tag_container']
 
