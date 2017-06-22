@@ -245,11 +245,38 @@ module MnoEnterprise
       to_hash.to_yaml
     end
 
-    # == Instance Methods =====================================================
+    # Load the Tenant#frontend_config from MnoHub and add it to the settings
+    #
+    #  TODO: include retry/caching/...
+    def self.load_config!
+      return unless (frontend_config = fetch_tenant_config)
 
-    private
+      # Merge the settings and reload
+      Settings.add_source!(frontend_config)
+      Settings.reload!
+
+      # TODO: update JSON_SCHEMA with readonly fields
+
+      # # Save settings in YAML format for easy debugging
+      # Rails.logger.debug "Settings loaded -> Saving..."
+      # File.open(Rails.root.join('tmp', 'cache', 'settings.yml'), 'w') do |f|
+      #   f.write(Settings.to_hash.deep_stringify_keys.to_yaml)
+      # end
+    end
+
+
+    # Fetch the Tenant#frontend_config from MnoHub
+    #
+    # @return [Hash] Tenant configuration
+    def self.fetch_tenant_config
+      MnoEnterprise::Tenant.show.frontend_config
+    rescue JsonApiClient::Errors::ConnectionError
+      Rails.logger.warn "Couldn't get configuration from MnoHub"
+      puts "Couldn't get configuration from MnoHub"
+    end
 
     # Convert JSON Schema to hash with default value
+    #
     # @param [Hash] schema JSON schema to parse
     def self.build_object(schema)
       case schema['type']

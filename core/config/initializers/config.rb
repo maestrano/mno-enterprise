@@ -8,7 +8,6 @@ Config.setup do |config|
   config.env_parse_values = true
 end
 
-# Use the template as default settings
-default = File.expand_path("../../../lib/generators/mno_enterprise/install/templates/config/settings.yml", __FILE__)
-Settings.prepend_source!(default)
+# Use the JSON Schema as default settings
+Settings.prepend_source!(MnoEnterprise::TenantConfig.to_hash)
 Settings.reload!

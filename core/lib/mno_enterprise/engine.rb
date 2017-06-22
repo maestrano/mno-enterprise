@@ -56,19 +56,9 @@ module MnoEnterprise
     end
 
     config.after_initialize do
-      #  TODO: wrap this in a module and include retry/caching/...
-      puts "Settings loaded -> Fetching Tenant"
-
-      begin
-        frontend_config = MnoEnterprise::Tenant.show.frontend_config
-      rescue JsonApiClient::Errors::ConnectionError
-        puts "Couldn't get configuration from MnoHub"
-        Rails.logger.warn "Couldn't get configuration from MnoHub"
-      end
-
-      if frontend_config
-        Settings.add_source!(frontend_config)
-        Settings.reload!
+      unless Rails.env.test?
+        Rails.logger.debug "Settings loaded -> Fetching Tenant Config"
+        MnoEnterprise::TenantConfig.load_config!
       end
     end
   end
