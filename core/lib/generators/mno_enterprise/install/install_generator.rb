@@ -43,6 +43,11 @@ module MnoEnterprise
 
         @new_relic_app_name = new_relic_app_name
         template "config/newrelic.yml", "config/newrelic.yml"
+
+        # Locales
+        template "config/locales/frontend/en.locale.json", "config/locales/frontend/en.locale.json"
+        template "config/locales/frontend/id.locale.json", "config/locales/frontend/id.locale.json"
+        template "config/locales/frontend/zh.locale.json", "config/locales/frontend/zh.locale.json"
       end
 
       def setup_assets

@@ -5,14 +5,14 @@
 namespace :mnoe do
   namespace :locales do
     locales_dist_folder = 'public/dashboard/locales'
-    locales_tmp_folder = 'tmp/build/frontend/src/locales'
+    locales_src_folder = 'config/locales/frontend'
 
     desc "Generate JSON locales"
     task :generate => :environment do
-      MnoEnterprise::Frontend::LocalesGenerator.new(locales_tmp_folder).generate_json
+      MnoEnterprise::Frontend::LocalesGenerator.new(locales_src_folder).generate_json
 
-      # Copy locales to public
-      cp_r("#{locales_tmp_folder}/.","#{locales_dist_folder}/")
+      # Copy locales to public folder
+      cp_r("#{locales_src_folder}/.","#{locales_dist_folder}/")
 
       Rake::Task['mnoe:locales:impac'].invoke
     end
