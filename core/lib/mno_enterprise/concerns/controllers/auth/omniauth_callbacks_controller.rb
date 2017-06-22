@@ -155,11 +155,11 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
       # was trying to accept an orga
       if !session[:previous_url].blank? && (r = session[:previous_url].match(/\/orga_invites\/(\d+)\?token=(\w+)/))
         invite_params = { id: r.captures[0].to_i, token: r.captures[1] }
-        return false if OrgInvite.where(invite_params).any?
+        return false if MnoEnterprise::OrgaInvite.where(invite_params).any?
       end
 
       # Get remaining invites via email address
-      return MnoEnterprise::OrgInvite.where(user_email: user_email).empty?
+      return MnoEnterprise::OrgaInvite.where(user_email: user_email).empty?
     end
 
     # Create or find the apps provided in argument
@@ -177,7 +177,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
 
       results = []
 
-      apps = MnoEnterprise::App.where('nid.in' => app_nids.compact)
+      apps = MnoEnterprise::App.where(nid: app_nids.compact)
       existing = org.app_instances.active.index_by(&:app_id)
 
       # For each app nid (which is not nil), try to find an existing instance or create one
@@ -186,14 +186,14 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
           results << app_instance
         else
           # Provision instance and add to results
-          app_instance = org.app_instances.create(product: app.nid)
+          app_instance = org.provision_app_instance(app.nid)
           results << app_instance
           MnoEnterprise::EventLogger.info('app_add', user.id, 'App added', app_instance)
         end
 
         # Add oauth keyset if defined and app_instance is
         # oauth ready and does not have a valid set of oauth keys
-        if app_instance && opts[:oauth_keyset].present? && !app_instance.oauth_keys_valid?
+        if app_instance && opts[:oauth_keyset].present? && !app_instance.oauth_keys_valid
           app_instance.oauth_keys = { keyset: opts[:oauth_keyset] }
           app_instance.save
         end

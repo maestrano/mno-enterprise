@@ -1,8 +1,15 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
+
+# Library for stubbing and setting expectations on HTTP requests in Ruby.
+require 'fakeweb'
+require 'webmock/rspec'
+
+
 require 'spec_helper'
 require 'her'
 require 'factory_girl_rails'
+
 
 # Load the Dummy application
 require File.expand_path("../../spec/dummy/config/environment.rb",  __FILE__)

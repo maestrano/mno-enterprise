@@ -6,7 +6,7 @@ module MnoEnterprise
     include MnoEnterprise::TestingSupport::JpiV1TestHelper
     render_views
     routes { MnoEnterprise::Engine.routes }
-    before { request.env["HTTP_ACCEPT"] = 'application/json' }
+    before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
     # Stub ability
     let!(:ability) { stub_ability }
@@ -14,77 +14,78 @@ module MnoEnterprise
 
     # Stub user and user call
     let(:user) { build(:user) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
-    # Stub organization + associations
-    let(:organization) { build(:organization) }
-    before { allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) }
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+
+    # Stub organization and association
+    let!(:organization) {
+      o = build(:organization, orga_relations: [])
+      o.orga_relations << build(:orga_relation, user_id: user.id, organization_id: o.id, role: 'Super Admin')
+      o
+    }
+    before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
 
     describe 'GET #index' do
-      let(:app_instance) { build(:app_instance, status: "running") }
-      let(:app_instance) { build(:app_instance, under_free_trial: false) }
-      let(:app_instances) { instance_double('Her::Model::Relation') }
 
-      before do
-        allow(organization).to receive(:app_instances).and_return(app_instances)
-        # Only active instances
-        allow(app_instances).to receive(:active).and_return(app_instances)
-        # Updated since last tick
-        allow(app_instances).to receive(:where).and_return([app_instance])
-      end
+      let(:app_instance) { build(:app_instance, status: 'running' , under_free_trial: false) }
+
+      before { stub_api_v2(:get, '/app_instances', [app_instance], [:app, :owner], {filter: {owner_id: organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES}}) }
 
       before { sign_in user }
-      let(:timestamp) { nil }
-      subject { get :index, organization_id: organization.id, timestamp: timestamp }
+      subject { get :index, organization_id: organization.id }
 
-      it_behaves_like "jpi v1 protected action"
+      it_behaves_like 'jpi v1 protected action'
 
       describe 'all' do
-        it { subject; expect(assigns(:app_instances)).to eq([app_instance]) }
-
-        it 'filter only active instances' do
-          expect(app_instances).to receive(:active)
+        it {
           subject
-        end
-      end
-
-      context 'with timestamp' do
-        let(:timestamp) { Time.current.to_i }
-
-        it 'filter updates since last request' do
-          expect(app_instances).to receive(:where).with("updated_at.gt" => Time.at(timestamp))
-          subject
-        end
+          # TODO: Test that the rendered json is the expected one
+          # expect(assigns(:app_instances)).to eq([app_instance])
+          assert_requested(:get, api_v2_url('/app_instances', [:app, :owner], {filter: {owner_id: organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES}}))
+        }
       end
 
       context 'without access to the app_instance' do
         before { allow(ability).to receive(:can?).with(any_args).and_return(false) }
-        before { subject }
-        it { expect(assigns(:app_instances)).to be_empty }
+        it {
+          subject
+          expect(assigns(:app_instances)).to be_empty
+        }
       end
     end
 
     describe 'POST #create' do
-      let(:app) { build(:app, nid: 'my-app' ) }
-      let(:app_instance) { build(:app_instance, app: app, owner: organization ) }
+      before { stub_audit_events }
+      let(:app) { build(:app, nid: 'my-app') }
+      let(:app_instance) { build(:app_instance, app: app, owner: organization, owner_id: organization.id) }
       subject { post :create, organization_id: organization.id, nid: 'my-app' }
-
+      it_behaves_like 'jpi v1 protected action'
       before do
-        api_stub_for(post: "/organizations/#{organization.id}/app_instances", response: from_api(app_instance))
-        api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
+        stub_api_v2(:post, '/app_instances/provision', app_instance)
+        sign_in user
       end
-      it_behaves_like "jpi v1 protected action"
+
+      it {
+        expect(subject).to be_successful
+        assert_requested_api_v2(:post, '/app_instances/provision')
+      }
     end
 
     describe 'DELETE #destroy' do
+      before { stub_audit_events }
       let(:app_instance) { build(:app_instance) }
-      before { api_stub_for(get: "/app_instances/#{app_instance.id}", respond_with: app_instance)}
-      before { api_stub_for(delete: "/app_instances/#{app_instance.id}", response: ->{ app_instance.status = 'terminated'; from_api(app_instance) }) }
+      let(:terminated_app_instance) { build(:app_instance, id: app_instance.id, status: 'terminated') }
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance)}
+      before { stub_api_v2(:delete, "/app_instances/#{app_instance.id}/terminate", terminated_app_instance)}
       before { sign_in user }
       subject { delete :destroy, id: app_instance.id }
 
-      it_behaves_like "jpi v1 protected action"
+      it_behaves_like 'jpi v1 protected action'
 
-      it { subject; expect(app_instance.status).to eq('terminated')}
+      it {
+        subject
+        assert_requested_api_v2(:delete, "/app_instances/#{app_instance.id}/terminate")
+        expect(assigns(:app_instance).status).to eq('terminated')
+      }
     end
   end
 end

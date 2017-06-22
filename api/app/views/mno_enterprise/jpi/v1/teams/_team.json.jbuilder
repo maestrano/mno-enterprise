@@ -1,4 +1,3 @@
-org = @parent_organization || team.organization
 @all_apps ||= MnoEnterprise::App.all.to_a
 
 json.id team.id
@@ -7,10 +6,7 @@ json.name team.name
 json.users do
   json.array! team.users do |user|
     json.extract! user, :id, :name, :surname, :email
-
-    # Retrieve role from cached version (org user list)
-    org_user = org.users.to_a.find { |e| e.id == user.id }
-    json.role org_user ? org_user.role : nil
+    json.role @parent_organization.role(user)
   end
 end
 

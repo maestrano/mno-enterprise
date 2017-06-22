@@ -1,31 +1,3 @@
-# == Schema Information
-#
-# Endpoint:
-#  - /v1/organizations
-#  - /v1/users/:user_id/organizations
-#
-#  id                       :integer         not null, primary key
-#  uid                      :string(255)
-#  name                     :string(255)
-#  created_at               :datetime        not null
-#  updated_at               :datetime        not null
-#  account_frozen           :boolean         default(FALSE)
-#  free_trial_end_at        :datetime
-#  soa_enabled              :boolean         default(TRUE)
-#  mails                    :text
-#  logo                     :string(255)
-#  latitude                 :float           default(0.0)
-#  longitude                :float           default(0.0)
-#  geo_country_code         :string(255)
-#  geo_state_code           :string(255)
-#  geo_city                 :string(255)
-#  geo_tz                   :string(255)
-#  geo_currency             :string(255)
-#  meta_data                :text
-#  industry                 :string(255)
-#  size                     :string(255)
-#
-
 module MnoEnterprise::Concerns::Models::Organization
   extend ActiveSupport::Concern
 
@@ -35,29 +7,30 @@ module MnoEnterprise::Concerns::Models::Organization
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
-    attributes :uid, :name, :account_frozen, :free_trial_end_at, :soa_enabled, :mails, :logo,
-      :latitude, :longitude, :geo_country_code, :geo_state_code, :geo_city, :geo_tz, :geo_currency,
-      :meta_data, :industry, :size, :financial_year_end_month
+    custom_endpoint :app_instances_sync, on: :member, request_method: :get
+    custom_endpoint :trigger_app_instances_sync, on: :member, request_method: :post
 
-    scope :in_arrears, -> { where(in_arrears?: true) }
 
-    scope :active, -> { where(account_frozen: false) }
+    property :uid, type: :string
+    property :name, type: :string
+    property :account_frozen, type: :boolean
+    property :free_trial_end_at, type: :string
+    property :soa_enabled, type: :boolean
+    property :mails, type: :string
+    property :logo, type: :string
 
-    default_scope lambda { where(account_frozen: false) }
-
-    #================================
-    # Associations
-    #================================
-    has_many :users, class_name: 'MnoEnterprise::User'
-    has_many :org_invites, class_name: 'MnoEnterprise::OrgInvite'
-    has_many :app_instances, class_name: 'MnoEnterprise::AppInstance'
-    has_many :invoices, class_name: 'MnoEnterprise::Invoice'
-    has_one  :credit_card, class_name: 'MnoEnterprise::CreditCard'
-    has_many :teams, class_name: 'MnoEnterprise::Team'
-    has_many :dashboards, class_name: 'MnoEnterprise::Impac::Dashboard'
-    has_many :widgets, class_name: 'MnoEnterprise::Impac::Widget'
-    has_one :raw_last_invoice, class_name: 'MnoEnterprise::Invoice', path: '/last_invoice'
-    has_one :app_instances_sync, class_name: 'MnoEnterprise::AppInstancesSync'
+    property :latitude, type: :float
+    property :longitude, type: :float
+    property :geo_country_code, type: :string
+    property :geo_state_code, type: :string
+    property :geo_city, type: :string
+    property :geo_tz, type: :string
+    property :geo_currency, type: :string
+    property :metadata
+    property :industry, type: :string
+    property :size, type: :int
+    property :financial_year_end_month, type: :string
+    property :credit_card_id
   end
 
   #==================================================================
@@ -77,35 +50,51 @@ module MnoEnterprise::Concerns::Models::Organization
   #
   # @params [Boolean] show_staged Also displayed staged invites (ie: not sent)
   def members(show_staged=false)
-    invites = show_staged ? self.org_invites.active_or_staged : self.org_invites.active
+    invites = self.orga_invites.select do |invite|
+      if show_staged
+        %w(pending staged).include? invite.status
+      else
+        invite.status == 'staged'
+      end
+    end
     [self.users, invites.to_a].flatten
   end
 
-  # Add a user to the organization with the provided role
-  # TODO: specs
-  def add_user(user,role = 'Member')
-    self.users.create(id: user.id, role: role)
+  def active?
+    !self.account_frozen
   end
 
-  def last_invoice
-    inv = self.raw_last_invoice
-    inv.id ? inv : nil
+  def payment_restriction
+    metadata && metadata['payment_restriction']
   end
-  # def last_invoice_with_nil
-  #   last_invoice.respond_to?(:id) ? last_invoice : nil
-  # end
-  # alias_method_chain :last_invoice, :nil
 
-  # Remove a user from the organization
-  # TODO: specs
+  def role(user)
+    relation = self.orga_relation(user)
+    return relation.role if relation
+  end
+
+  def orga_relation(user)
+    self.orga_relations.find {|r|
+      r.user_id == user.id
+    }
+  end
+
   def remove_user(user)
-    self.users.destroy(id: user.id)
+    relation = self.orga_relation(user)
+    relation.destroy if relation
   end
 
-  # Change a user role in the organization
-  # TODO: specs
-  def update_user(user, role = 'Member')
-    self.users.update(id: user.id, role: role)
+  def add_user(user,role = 'Member')
+    MnoEnterprise::OrgaRelation.create(organization_id: self.id, user_id: user.id, role: role)
+  end
+
+  def provision_app_instance(app_nid)
+    input = {data: {attributes: {app_nid: app_nid, owner_id: id, owner_type: 'Organization'}}}
+    MnoEnterprise::AppInstance.provision(input)
+  end
+
+  def has_credit_card_details?
+    credit_card_id.present?
   end
 
   def to_audit_event
@@ -114,13 +103,5 @@ module MnoEnterprise::Concerns::Models::Organization
       uid: uid,
       name: name
     }
-  end
-
-  def payment_restriction
-    meta_data && meta_data['payment_restriction']
-  end
-
-  def has_credit_card_details?
-    credit_card.persisted?
   end
 end

@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Endpoint:
-#  - /v1/teams
-#  - /v1/organizations/:organization_id/teams
-#
-#  id              :integer         not null, primary key
-#  name            :string(255)
-#  created_at      :datetime        not null
-#  updated_at      :datetime        not null
-#  organization_id :integer
-#
-
 module MnoEnterprise::Concerns::Models::Team
   extend ActiveSupport::Concern
 
@@ -20,14 +7,9 @@ module MnoEnterprise::Concerns::Models::Team
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
-    attributes :id, :name, :organization_id
-
-    #=====================================
-    # Associations
-    #=====================================
-    belongs_to :organization, class_name: 'MnoEnterprise::Organization'
-    has_many :users, class_name: 'MnoEnterprise::User'
-    has_many :app_instances, class_name: 'MnoEnterprise::AppInstance'
+    property :created_at, type: :time
+    property :updated_at, type: :time
+    property :organization_id
   end
 
   #==================================================================
@@ -68,7 +50,7 @@ module MnoEnterprise::Concerns::Models::Team
   def to_audit_event
     {
       name: name,
-      organization_id: self.organization.id
+      organization_id: self.organization_id
     }
   end
 end

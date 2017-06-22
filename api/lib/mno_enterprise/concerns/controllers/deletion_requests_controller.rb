@@ -13,8 +13,8 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
     before_filter :set_meta
 
     def set_meta
-      @meta[:title] = "Account Termination"
-      @meta[:description] = "Account Termination"
+      @meta[:title] = 'Account Termination'
+      @meta[:description] = 'Account Termination'
     end
   end
 
@@ -33,7 +33,7 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
   # GET /deletion_requests/1
   def show
     # authorize! :manage_billing, current_user.organizations.find(@invoice.organization_id)
-    @deletion_request = current_user.deletion_request
+    @deletion_request = current_user.current_deletion_request
 
     respond_to do |format|
       # Check that the user has a deletion_request in progress
@@ -58,7 +58,7 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
 
   # PATCH /deletion_requests/1/freeze_account
   def freeze_account
-    @deletion_request = current_user.deletion_request
+    @deletion_request = current_user.current_deletion_request
 
     respond_to do |format|
       # Check that the user has a deletion_request in progress
@@ -81,7 +81,7 @@ module MnoEnterprise::Concerns::Controllers::DeletionRequestsController
 
   # PATCH /deletion_requests/1/checkout
   def checkout
-    @deletion_request = current_user.deletion_request
+    @deletion_request = current_user.current_deletion_request
 
     respond_to do |format|
       # Check that the user has a deletion_request in progress

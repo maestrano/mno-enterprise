@@ -47,11 +47,9 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
     build_resource(sign_up_params)
     resource.password ||= Devise.friendly_token
 
-    resource_saved = resource.save
+    if resource.save
 
-    if resource_saved
-
-      MnoEnterprise::EventLogger.info('user_add', resource_saved.id, 'User Signup', resource_saved)
+      MnoEnterprise::EventLogger.info('user_add', resource.id, 'User Signup', resource)
 
       if resource.active_for_authentication?
         set_flash_message :notice, :signed_up if is_flashing_format?
@@ -127,13 +125,12 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
 
       # First check previous url to see if the user
       # was trying to accept an orga
-      orga_invites = []
       if !session[:previous_url].blank? && (r = session[:previous_url].match(/\/orga_invites\/(\d+)\?token=(\w+)/))
         invite_params = { id: r.captures[0].to_i, token: r.captures[1] }
-        return false if MnoEnterprise::OrgInvite.where(invite_params).any?
+        return false if MnoEnterprise::OrgaInvite.where(invite_params).any?
       end
 
       # Get remaining invites via email address
-      return MnoEnterprise::OrgInvite.where(user_email: user_attrs['email']).empty?
+      return MnoEnterprise::OrgaInvite.where(user_email: user_attrs['email']).empty?
     end
 end

@@ -36,11 +36,9 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     @apps = params[:apps]
     @organizations = current_user.organizations.to_a
     @organization = @organizations.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
-
     unless @organization
       @organization = @organizations.one? ? @organizations.first : nil
     end
-
     if @organization && cannot?(:manage_app_instances, @organization)
       msg = 'Unfortunately you do not have permission to purchase products for this organization'
       if @organizations.one?
@@ -64,12 +62,12 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     # Avoid double provisioning: previous url would be "/provision/new?apps[]=vtiger&organization_id=1"
     session.delete('previous_url')
 
-    @organization = current_user.organizations.to_a.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
+    @organization = current_user.organizations.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
     authorize! :manage_app_instances, @organization
 
     app_instances = []
     params[:apps].each do |product_name|
-      app_instance = @organization.app_instances.create(product: product_name)
+      app_instance = @organization.provision_app_instance(product_name).first
       app_instances << app_instance
       MnoEnterprise::EventLogger.info('app_add', current_user.id, 'App added', app_instance)
     end

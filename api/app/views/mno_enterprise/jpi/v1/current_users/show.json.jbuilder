@@ -27,20 +27,20 @@ json.cache! ['v1', @user.cache_key] do
     # Embed association if user is persisted
     if @user.id
       json.organizations do
-        json.array! (@user.organizations.active || []) do |o|
+        json.array! (@user.organizations.select(&:active?) || []) do |o|
           json.id o.id
           json.uid o.uid
           json.name o.name
           json.currency o.billing_currency
-          json.current_user_role o.role
-          json.has_myob_essentials_only o.has_myob_essentials_only?
+          json.current_user_role @user.role(o)
+          json.has_myob_essentials_only o.has_myob_essentials_only
           json.financial_year_end_month o.financial_year_end_month
         end
       end
 
-      if @user.deletion_request.present?
+      if @user.current_deletion_request.present?
         json.deletion_request do
-          json.extract! @user.deletion_request, :id, :token
+          json.extract! @user.current_deletion_request, :id, :token
         end
       end
 
@@ -48,3 +48,5 @@ json.cache! ['v1', @user.cache_key] do
     end
   end
 end
+
+

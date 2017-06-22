@@ -10,6 +10,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     respond_to :json
   end
 
+  DASHBOARD_DEPENDENCIES = [:widgets, {widgets: :kpis}, :kpis, {kpis: :alerts}]
+
   #==================================================================
   # Instance methods
   #==================================================================
@@ -21,8 +23,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   # GET /mnoe/jpi/v1/impac/dashboards/1
   #   -> GET /api/mnoe/v1/users/1/dashboards
   def show
-    dashboard
-    render_not_found('dashboard') unless @dashboard
+    render_not_found('dashboard') unless dashboard(*DASHBOARD_DEPENDENCIES)
   end
 
   # POST /mnoe/jpi/v1/impac/dashboards
@@ -34,9 +35,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     # TODO: enable authorization
     # authorize! :manage_dashboard, @dashboard
     # if @dashboard.save
-    if @dashboard = dashboards.create(dashboard_create_params)
+    @dashboard = MnoEnterprise::Dashboard.create(dashboard_create_params)
+    if @dashboard.errors.empty?
       MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', @dashboard)
-
+      @dashboard = dashboard.load_required(*DASHBOARD_DEPENDENCIES)
       render 'show'
     else
       render_bad_request('create dashboard', @dashboard.errors)
@@ -50,8 +52,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
 
     # TODO: enable authorization
     # authorize! :manage_dashboard, dashboard
-
-    if dashboard.update(dashboard_update_params)
+    dashboard.update_attributes(dashboard_update_params)
+    if dashboard.errors.empty?
+      # Reload Dashboard
+      @dashboard = dashboard.load_required(DASHBOARD_DEPENDENCIES)
       render 'show'
     else
       render_bad_request('update dashboard', dashboard.errors)
@@ -62,26 +66,21 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   #   -> DELETE /api/mnoe/v1/dashboards/1
   def destroy
     return render_not_found('dashboard') unless dashboard
-
+    MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', dashboard)
     # TODO: enable authorization
     # authorize! :manage_dashboard, dashboard
-
-    if dashboard.destroy
-      MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', dashboard)
-      head status: :ok
-    else
-      render_bad_request('destroy dashboard', 'Unable to destroy dashboard')
-    end
+    dashboard.destroy
+    head status: :ok
   end
 
   private
 
-    def dashboard
-      @dashboard ||= current_user.dashboards.find(params[:id].to_i)
+    def dashboard(*included)
+      @dashboard ||= MnoEnterprise::Dashboard.find_one(params[:id].to_i, included)
     end
 
     def dashboards
-      @dashboards ||= current_user.dashboards
+      @dashboards ||= MnoEnterprise::Dashboard.includes(:widgets, *DASHBOARD_DEPENDENCIES).find(owner_id: current_user.id)
     end
 
     def whitelisted_params
@@ -95,6 +94,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
         whitelisted[:settings] = params[:dashboard][:metadata] || {}
       end
       .except(:metadata)
+      .merge(owner_type: "User", owner_id: current_user.id)
     end
     alias :dashboard_update_params  :dashboard_params
     alias :dashboard_create_params  :dashboard_params

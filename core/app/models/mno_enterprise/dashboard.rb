@@ -1,11 +1,9 @@
 module MnoEnterprise
-  class Impac::Dashboard < BaseResource
+  class Dashboard < BaseResource
 
-    attributes :full_name, :widgets_order, :settings, :organization_ids, :widgets_templates, :currency
-
-    has_many :widgets, class_name: 'MnoEnterprise::Impac::Widget'
-    has_many :kpis, class_name: 'MnoEnterprise::Impac::Kpi'
-    belongs_to :owner, polymorphic: true
+    property :created_at, type: :time
+    property :updated_at, type: :time
+    property :owner_id, type: :string
 
     #============================================
     # Instance methods
@@ -22,11 +20,10 @@ module MnoEnterprise
       if org_list
         org_list.to_a.select { |e| self.organization_ids.include?(e.uid) }
       else
-        MnoEnterprise::Organization.where('uid.in' => self.organization_ids).to_a
+        MnoEnterprise::Organization.where(uid: self.organization_ids).to_a
       end
     end
 
-    # Filter widgets list based on config
     def filtered_widgets_templates
       if MnoEnterprise.widgets_templates_listing
         return self.widgets_templates.select do |t|
@@ -37,11 +34,21 @@ module MnoEnterprise
       end
     end
 
+    def sorted_widgets
+      ids = self.widgets_order | self.widgets.map(&:id)
+      widgets_per_ids = self.widgets.each_with_object({}) do |w, hash|
+        hash[w.id] = w
+      end
+      ids.map { |i| widgets_per_ids[i] }
+    end
+
     def to_audit_event
       {
         name: name,
-        organization_id: (owner_type == 'MnoEnterprise::Organization') ? owner_id : nil
+        owner_id: owner_id,
+        owner_type: owner_type
       }
     end
+
   end
 end

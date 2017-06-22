@@ -7,8 +7,6 @@ FactoryGirl.define do
       category 'payment_failed'
       status 'pending'
 
-      # Properly build the resource with Her
-      initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
     end
   end
 end

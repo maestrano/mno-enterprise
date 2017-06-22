@@ -10,6 +10,5 @@ end
 
 json.kpis dashboard.kpis, partial: 'mno_enterprise/jpi/v1/impac/kpis/kpi', as: :kpi
 
-json.widgets dashboard.widgets, partial: 'mno_enterprise/jpi/v1/impac/widgets/widget', as: :widget
+json.widgets dashboard.sorted_widgets, partial: 'mno_enterprise/jpi/v1/impac/widgets/widget', as: :widget
 
-json.widgets_templates dashboard.filtered_widgets_templates

@@ -20,12 +20,20 @@ module MnoEnterprise
 
     # Stub model calls
     let(:user) { build(:user) }
-    let(:organization) { build(:organization) }
+    let!(:organization) {
+      o = build(:organization, orga_relations: [])
+      o.orga_relations << build(:orga_relation, user_id: user.id, organization_id: o.id, role: 'Super Admin')
+      o
+    }
+    before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
+
     let(:app) { build(:app) }
-    let(:app_instance) { build(:app_instance) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
-    before { api_stub_for(get: "/app_instances", response: from_api([app_instance])) }
-    before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:app).and_return(app) }
+    let(:app_instance) { build(:app_instance, owner: organization, app: app) }
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+
+    before do
+      stub_api_v2(:get, '/app_instances', [app_instance], %i(owner app), {filter:{uid: app_instance.uid}, page:{number: 1, size: 1}})
+    end
 
     describe 'GET #authorize' do
       let(:redir_params) { extra_params.reject { |k, v| k.to_sym == :perform } }
