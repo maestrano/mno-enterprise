@@ -209,6 +209,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   end
 
   def organization_management_enabled?
-    return head :forbidden unless Settings.organization_management.enabled
+    return head :forbidden unless Settings.dashboard.organization_management.enabled
   end
 end

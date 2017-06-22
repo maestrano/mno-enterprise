@@ -6,7 +6,7 @@ module MnoEnterprise
 
     context 'it is enabled by default' do
       before(:all) do
-        Settings.devise = {}
+        Settings.merge!(dashboard: {registration: {}})
         Rails.application.reload_routes!
       end
 
@@ -21,7 +21,7 @@ module MnoEnterprise
 
     context 'when registration is enabled' do
       before(:all) do
-        Settings.merge!(devise: {registration: {disabled: false}})
+        Settings.merge!(dashboard: {registration: {enabled: true}})
         Rails.application.reload_routes!
       end
 
@@ -36,7 +36,7 @@ module MnoEnterprise
 
     context 'when registration is disabled' do
       before(:all) do
-        Settings.merge!(devise: {registration: {disabled: true}})
+        Settings.merge!(dashboard: {registration: {enabled: false}})
         Rails.application.reload_routes!
       end
 

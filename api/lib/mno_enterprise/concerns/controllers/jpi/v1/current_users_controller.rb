@@ -74,6 +74,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     end
 
     def user_management_enabled?
-      return head :forbidden unless Settings.user_management.enabled
+      return head :forbidden unless Settings.dashboard.user_management.enabled
     end
 end

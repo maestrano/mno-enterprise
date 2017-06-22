@@ -45,7 +45,7 @@ module MnoEnterprise
     #===============================================
     shared_examples 'an organization management action' do
       context 'when Organization management is disabled' do
-        before { Settings.merge!(organization_management: {enabled: false}) }
+        before { Settings.merge!(dashboard: {organization_management: {enabled: false}}) }
         after { Settings.reload! }
 
         it { is_expected.to have_http_status(:forbidden) }

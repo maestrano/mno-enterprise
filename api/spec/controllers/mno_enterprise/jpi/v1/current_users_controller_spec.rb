@@ -69,7 +69,7 @@ module MnoEnterprise
 
     shared_examples 'a user management action' do
       context 'when Organization management is disabled' do
-        before { Settings.merge!(user_management: {enabled: false}) }
+        before { Settings.merge!(dashboard: {user_management: {enabled: false}}) }
         before { sign_in user }
         after { Settings.reload! }
 

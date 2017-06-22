@@ -33,7 +33,7 @@ MnoEnterprise::Engine.routes.draw do
     resources :invoices, only: [:show], constraints: { id: /[\w\-]+/ }
   end
 
-  unless Settings.try(:admin_panel).try(:impersonation).try(:disabled)
+  if Settings&.admin_panel&.impersonation&.enabled
     get "/impersonate/user/:user_id", to: "impersonate#create", as: :impersonate_user
     get "/impersonate/revert", to: "impersonate#destroy", as: :revert_impersonate_user
   end
@@ -43,7 +43,7 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   # Main devise configuration
   skipped_devise_modules = [:omniauth_callbacks]
-  skipped_devise_modules << :registrations if Settings.try(:devise).try(:registration).try(:disabled)
+  skipped_devise_modules << :registrations unless Settings&.dashboard&.registration&.enabled
   devise_for :users, {
       class_name: "MnoEnterprise::User",
       module: :devise,

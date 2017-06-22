@@ -60,29 +60,127 @@ module MnoEnterprise
             }
           }
         },
-        audit_log: {
+        dashboard: {
           type: "object",
+          description: "Dashboard settings",
           properties: {
-            enabled: {
-              type: "boolean",
-              description: "Display Audit Log in Organization Panel",
-              default: false
-            }
-          }
-        },
-        developer: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              description: "Display the Developer section on \"My Account\"",
-              default: false
-            }
-          }
-        },
-        devise: {
-          type: "object",
-          properties: {
+            audit_log: {
+              type: "object",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  description: "Display Audit Log in Organization Panel",
+                  default: false,
+                  readonly: true
+                }
+              }
+            },
+            developer: {
+              type: "object",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  description: "Display the Developer section on \"My Account\"",
+                  default: false
+                }
+              }
+            },
+            dock: {
+              type: "object",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  description: "Enable the App Dock",
+                  default: true
+                }
+              }
+            },
+            marketplace: {
+              type: "object",
+              description: "Marketplace configuration",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  default: true,
+                  description: "Enable the marketplace"
+                },
+                comparison: {
+                  type: "object",
+                  properties: {
+                    enabled: {
+                      type: "boolean",
+                      default: false,
+                      description: "Enable comparison of apps"
+                    }
+                  }
+                },
+                pricing: {
+                  type: "object",
+                  properties: {
+                    enabled: {
+                      type: "boolean",
+                      description: "Display App Pricing on Marketplace",
+                      default: true
+                    },
+                    # currency: {
+                    #   type: "string",
+                    #   description: "Currency to display price in",
+                    #   default: "AUD"
+                    # }
+                  }
+                },
+                reviews: {
+                  type: "object",
+                  properties: {
+                    enabled: {
+                      type: "boolean",
+                      default: false,
+                      description: "Enable app reviews on the marketplace"
+                    }
+                  }
+                },
+              }
+            },
+            onboarding_wizard: {
+              type: "object",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  default: false,
+                  description: "Enable the onboarding wizard"
+                }
+              }
+            },
+            organization_management: {
+              type: "object",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  default: true,
+                  description: "Allow user to create and manage Organizations",
+                },
+                billing: {
+                  type: "object",
+                  properties: {
+                    enabled: {
+                      type: "boolean",
+                      default: true,
+                      description: "Display the billing tab"
+                    }
+                  }
+                }
+              }
+            },
+            # TODO: break - changed  disabled to enabled
+            payment: {
+              type: "object",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  default: true
+                }
+              }
+            },
             registration: {
               type: "object",
               properties: {
@@ -92,110 +190,18 @@ module MnoEnterprise
                   default: true
                 }
               }
-            }
-          }
-        },
-        dock: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              description: "Enable the App Dock",
-              default: true
-            }
-          }
-        },
-        marketplace: {
-          type: "object",
-          description: "Marketplace configuration",
-          properties: {
-            enabled: {
-              type: "boolean",
-              default: true,
-              description: "Enable the marketplace"
             },
-            comparison: {
-              type: "object",
-              properties: {
-                enabled: {
-                  type: "boolean",
-                  default: false,
-                  description: "Enable comparison of apps"
-                }
-              }
-            }
-          }
-        },
-        onboarding_wizard: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              default: false,
-              description: "Enable the onboarding wizard"
-            }
-          }
-        },
-        organization_management: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              default: true,
-              description: "Allow user to create and manage Organizations",
-            },
-            billing: {
+            user_management: {
               type: "object",
               properties: {
                 enabled: {
                   type: "boolean",
                   default: true,
-                  description: "Display the billing tab"
+                  description: "Allow user to edit their information and password"
                 }
               }
-            }
-          }
-        },
-        # TODO: break - changed  disabled to enabled
-        payment: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              default: true
-            }
-          }
-        },
-        # TODO: nest under marketplace
-        pricing: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              description: "Display App Pricing on Marketplace",
-              default: true
-            }
-          }
-        },
-        # TODO: nest under marketplace
-        reviews: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              default: false,
-              description: "Enable app reviews on the marketplace"
-            }
-          }
-        },
-        user_management: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              default: true,
-              description: "Allow user to edit their information and password"
-            }
+            },
+
           }
         },
         admin_panel: {
