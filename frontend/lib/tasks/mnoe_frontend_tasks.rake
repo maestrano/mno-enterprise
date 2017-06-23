@@ -101,9 +101,9 @@ namespace :mnoe do
 
       # Build frontend using Gulp
       Dir.chdir(frontend_tmp_folder) do
-        sh "yarn install"
+        sh 'yarn install'
         sh gulp_cmd
-        sh "#{gulp_cmd} less-concat"
+        sh "#{gulp_cmd} theme-previewer"
       end
 
       # Ensure distribution folder exists
@@ -208,15 +208,15 @@ namespace :mnoe do
 
       # Build the previewer stylesheet
       Dir.chdir(frontend_tmp_folder) do
-        sh "npm install"
-        sh "#{gulp} less-concat"
+        sh 'yarn install'
+        sh "#{gulp_cmd} theme-previewer"
       end
 
       # Copy stylesheet to public
       cp("#{frontend_tmp_folder}/dist/styles/theme-previewer.less","#{frontend_dist_folder}/styles/")
 
       # Copy bower_components to public (used by live previewer)
-      cp_r("#{frontend_tmp_folder}/bower_components","#{frontend_dist_folder}/")
+      cp_r("#{frontend_tmp_folder}/bower_components", "#{frontend_dist_folder}/")
 
       # Generates locales
       Rake::Task['mnoe:locales:generate'].invoke
