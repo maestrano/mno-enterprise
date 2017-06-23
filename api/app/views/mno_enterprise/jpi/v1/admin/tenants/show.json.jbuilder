@@ -1,4 +1,4 @@
 json.tenant do
-  # json.extract! @tenant, :frontend_config
+  # Expose the full settings (not just MnoHub ones)
   json.frontend_config Settings.to_hash
 end

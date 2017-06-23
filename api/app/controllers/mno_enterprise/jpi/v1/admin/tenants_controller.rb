@@ -10,11 +10,15 @@ module MnoEnterprise
     # PATCH /mnoe/jpi/v1/admin/tenant
     def update
       @tenant = MnoEnterprise::Tenant.show
-      @tenant.update(tenant_params)
+      @tenant.update_attributes(tenant_params)
 
-      MnoEnterprise::AppManager.restart
+      if @tenant.errors.empty?
+        MnoEnterprise::AppManager.restart
 
-      render :show
+        render :show
+      else
+        render_bad_request('update tenant', @tenant.errors)
+      end
     end
 
     protected
@@ -22,7 +26,8 @@ module MnoEnterprise
     def tenant_params
       # frontend_config is an arbitrary hash
       # On Rails 5.1 use `permit(frontend_config: {})`
-      params.require(:tenant).tap do |whitelisted|
+      # TODO: add all authorized fields (see TenantResource::TENANT_FIELDS in MnoHub)
+      params.require(:tenant).permit(:domain).tap do |whitelisted|
         whitelisted[:frontend_config] = params[:tenant][:frontend_config]
       end
     end
