@@ -32,6 +32,9 @@ module MnoEnterprise::Concerns::Models::AppInstance
     # end
   end
 
+  def active?
+    status.to_sym.in? ACTIVE_STATUSES
+  end
   #==================================================================
   # Instance methods
   #==================================================================

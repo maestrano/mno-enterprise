@@ -3,12 +3,12 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/cloud_apps
     def index
-      @cloud_apps = MnoEnterprise::App.cloud.all
+      @cloud_apps = MnoEnterprise::App.where(stack: :cloud).all
     end
 
     # PUT /mnoe/jpi/v1/admin/cloud_apps/:id
     def update
-      @cloud_app = MnoEnterprise::App.find params[:id]
+      @cloud_app = MnoEnterprise::App.find_one params[:id]
 
       if @cloud_app.update(cloud_app_params)
         render :show, status: :ok
@@ -19,7 +19,7 @@ module MnoEnterprise
 
     # PUT /mnoe/jpi/v1/admin/cloud_apps/:id/regenerate_api_key
     def regenerate_api_key
-      @cloud_app = MnoEnterprise::App.find params[:id]
+      @cloud_app = MnoEnterprise::App.find_one params[:id]
       @cloud_app.regenerate_api_key!
       render :show
     end

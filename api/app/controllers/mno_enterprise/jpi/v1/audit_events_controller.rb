@@ -7,8 +7,7 @@ module MnoEnterprise
 
       authorize! :administrate, @organization
 
-      query = MnoEnterprise::AuditEvent.where(organization_id: @organization.id)
-      query = MnoEnterprise::AuditEvent.apply_query_params(query, params)
+      query = MnoEnterprise::AuditEvent.apply_query_params(params, MnoEnterprise::AuditEvent.where(organization_id: @organization.id))
 
       response.headers['X-Total-Count'] = query.meta.record_count
       @audit_events = query.to_a

@@ -8,12 +8,32 @@ module MnoEnterprise
     define_callbacks :update
     define_callbacks :save
 
+    # retrieve all the elements
+    def self.fetch_all(list = self.where)
+      result = []
+      loop do
+        result << list.to_a
+        break unless (list.pages.links||{})['next']
+        list = list.pages.next
+      end
+      result
+    end
+
     # TODO: Replace limit and offset parameters by page and per_page
-    def self.apply_query_params(relation, params)
-      relation.paginate(page: params[:offset]/params[:limit], per_page: params[:limit]) if params[:limit] && params[:offset]
-      relation.order_by(params[:order_by]) if params[:order_by]
+    def self.apply_query_params(params, relation = self.where)
+      relation.paginate(page: 1 + params[:offset].to_i/params[:limit].to_i, per_page: params[:limit].to_i) if params[:limit] && params[:offset]
+      relation.order(adapt_order_by(params[:order_by])) if params[:order_by]
       relation.where(params[:where]) if params[:where]
       relation
+    end
+
+    def self.adapt_order_by(input)
+      field, order = input.split('.')
+      if (order == 'desc')
+        '-' + field
+      else
+        field
+      end
     end
 
     def self.find_one(id, *included)

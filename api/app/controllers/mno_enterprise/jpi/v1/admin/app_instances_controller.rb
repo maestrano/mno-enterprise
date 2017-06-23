@@ -3,7 +3,7 @@ module MnoEnterprise
 
     # DELETE /mnoe/jpi/v1/app_instances/1
     def destroy
-      app_instance = MnoEnterprise::AppInstance.find(params[:id])
+      app_instance = MnoEnterprise::AppInstance.find_one(params[:id])
 
       if app_instance
         MnoEnterprise::EventLogger.info('app_destroy', current_user.id, 'App destroyed', app_instance)

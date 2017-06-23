@@ -10,27 +10,22 @@ module MnoEnterprise
         response.headers['X-Total-Count'] = @users.count
       else
         # Index mode
-        @users = MnoEnterprise::User
-        @users = @users.limit(params[:limit]) if params[:limit]
-        @users = @users.skip(params[:offset]) if params[:offset]
-        @users = @users.order_by(params[:order_by]) if params[:order_by]
-        @users = @users.where(params[:where]) if params[:where]
-        @users = @users.all.fetch
-        response.headers['X-Total-Count'] = @users.metadata[:pagination][:count]
+        query = MnoEnterprise::User.apply_query_params(params)
+        @users = query.to_a
+        response.headers['X-Total-Count'] = query.meta.record_count
       end
     end
 
     # GET /mnoe/jpi/v1/admin/users/1
     def show
-      @user = MnoEnterprise::User.find(params[:id])
+      @user = MnoEnterprise::User.find_one(params[:id], :orga_relations, :organizations)
       @user_organizations = @user.organizations
     end
 
     # POST /mnoe/jpi/v1/admin/users
     def create
-      @user = MnoEnterprise::User.build(user_create_params)
-
-      if @user.save
+      @user = MnoEnterprise::User.create(user_create_params)
+      if @user.errors.empty?
         render :show
       else
         render json: @user.errors, status: :bad_request
@@ -41,7 +36,7 @@ module MnoEnterprise
     def update
       # TODO: replace with authorize/ability
       if current_user.admin_role == "admin"
-        @user = MnoEnterprise::User.find(params[:id])
+        @user = MnoEnterprise::User.find_one(params[:id])
         @user.update(user_params)
 
         render :show
@@ -52,7 +47,7 @@ module MnoEnterprise
 
     # DELETE /mnoe/jpi/v1/admin/users/1
     def destroy
-      user = MnoEnterprise::User.find(params[:id])
+      user = MnoEnterprise::User.find_one(params[:id])
       user.destroy
 
       head :no_content
@@ -60,7 +55,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/users/count
     def count
-      users_count = MnoEnterprise::Tenant.get('tenant').users_count
+      users_count = MnoEnterprise::TenantReporting.show.users_count
       render json: {count: users_count }
     end
 
