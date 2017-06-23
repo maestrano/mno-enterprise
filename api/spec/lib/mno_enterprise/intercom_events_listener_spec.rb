@@ -24,7 +24,7 @@ module MnoEnterprise
     let(:users) { double('users') }
     let(:client) { double('client', users: users, events: events, tags: tags) }
     before do
-      expect(Intercom::Client).to receive(:new).with(app_id: MnoEnterprise.intercom_app_id, api_key: MnoEnterprise.intercom_api_key).and_return(client)
+      expect(Intercom::Client).to receive(:new).with(token: MnoEnterprise.intercom_token).and_return(client)
     end
 
     let(:expected_user_data) {

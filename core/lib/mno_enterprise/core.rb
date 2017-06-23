@@ -195,15 +195,12 @@ module MnoEnterprise
   mattr_accessor :intercom_api_secret
   @@intercom_api_secret = nil
 
-  mattr_accessor :intercom_api_key
-  @@intercom_api_key = nil
-
   mattr_accessor :intercom_token
   @@intercom_token = nil
 
   # Define if Intercom is enabled. Only if the gem intercom is present
   def self.intercom_enabled?
-    defined?(::Intercom) && ((intercom_app_id && intercom_api_key) || intercom_token)
+    defined?(::Intercom) && intercom_app_id && intercom_token
   end
 
   #====================================
