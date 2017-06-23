@@ -7,12 +7,7 @@ module MnoEnterprise
     attr_accessor :intercom
 
     def initialize
-      args = if MnoEnterprise.intercom_token
-        {token: MnoEnterprise.intercom_token}
-      else
-        {app_id: MnoEnterprise.intercom_app_id, api_key: MnoEnterprise.intercom_api_key}
-      end
-      self.intercom = ::Intercom::Client.new(args)
+      self.intercom = ::Intercom::Client.new(token: MnoEnterprise.intercom_token)
     end
 
     def info(key, current_user_id, description, subject_type, subject_id, metadata)

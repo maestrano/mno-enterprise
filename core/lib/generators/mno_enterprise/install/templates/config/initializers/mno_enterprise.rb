@@ -71,7 +71,6 @@ MnoEnterprise.configure do |config|
   # Intercom (both API Keys and Personal token are supported)
   config.intercom_token = ENV['INTERCOM_TOKEN']
   config.intercom_app_id = ENV['INTERCOM_APP_ID']
-  config.intercom_api_key = ENV['INTERCOM_API_KEY']
   config.intercom_api_secret = ENV['INTERCOM_API_SECRET']
 
   #===============================================
