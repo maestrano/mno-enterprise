@@ -110,7 +110,7 @@ module MnoEnterprise
   end
   def self.platform_adapter=(adapter)
     @@platform_adapter = adapter
-    MnoEnterprise::AppManager.adapter = self.platform_adapter
+    MnoEnterprise::SystemManager.adapter = self.platform_adapter
   end
 
   #====================================

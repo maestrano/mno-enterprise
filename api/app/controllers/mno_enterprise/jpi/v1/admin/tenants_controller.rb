@@ -13,7 +13,7 @@ module MnoEnterprise
       @tenant.update_attributes(tenant_params)
 
       if @tenant.errors.empty?
-        MnoEnterprise::AppManager.restart
+        MnoEnterprise::SystemManager.restart
 
         render :show
       else

@@ -56,7 +56,7 @@ module MnoEnterprise
       it { is_expected.to have_http_status(:ok) }
 
       it 'restart the app' do
-        expect(MnoEnterprise::AppManager).to receive(:restart)
+        expect(MnoEnterprise::SystemManager).to receive(:restart)
         subject
       end
     end

@@ -1,7 +1,7 @@
 module MnoEnterprise
   # Abstract the app management logic
   #
-  class AppManager
+  class SystemManager
     cattr_reader(:adapter)
 
     # Specify the platform adapter. The default platform adapter is the :local adapter.
