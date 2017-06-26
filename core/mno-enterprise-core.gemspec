@@ -41,11 +41,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'sanitize', '~> 4.0'
 
   # Configuration & Settings
-  # Manage configuration via environment variables
-  # TODO: only needed for development?
-  s.add_dependency 'figaro'
   # Config files per environment
   s.add_dependency 'config', '~> 1.4.0'
+
+  # JSON Schema validation
+  s.add_runtime_dependency 'json-schema'
 
   # Emailing
   s.add_development_dependency 'mandrill-api', '~> 1.0', '>= 1.0.53'

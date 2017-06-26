@@ -1,6 +1,0 @@
-impac:
-  protocol: https
-  host: api-impac.maestrano.com
-mno:
-  protocol: https
-  host: api-hub.maestrano.com

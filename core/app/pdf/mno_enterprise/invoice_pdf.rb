@@ -124,7 +124,7 @@ module MnoEnterprise
 
     # Add a repeated header to the document
     def add_page_header
-      title = Settings.payment.disabled ? 'Account Statement - ' : 'Monthly Invoice - '
+      title = Settings.dashboard.payment.enabled ? 'Monthly Invoice - ' : 'Account Statement - '
       @pdf.repeat :all do
         @pdf.bounding_box([0, @pdf.bounds.top+@format[:header_size]], width: 540, height: @format[:footer_size]) do
           @pdf.float do
@@ -169,7 +169,7 @@ module MnoEnterprise
     # This method is responsible for
     # generating the actual pdf content
     def add_page_body
-      payment_enabled = !Settings.payment.disabled
+      payment_enabled = Settings.dashboard.payment.enabled
 
       @pdf.stroke_color '999999'
 

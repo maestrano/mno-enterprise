@@ -4,29 +4,5 @@
 tenant_id: my_tenant_id
 tenant_key: my_tenant_access_key
 
-# Emailing platform
-# MANDRILL_API_KEY: changeme
-# SPARKPOST_API_KEY: changeme
-
 # Rails secret key
 SECRET_KEY_BASE: <%= SecureRandom.hex(64) %>
-
-# Google Tag Manager
-google_tag_container: GTM-TH3MLB
-
-# Intercom - uncomment and add a valid intercom_id to enable
-# INTERCOM_APP_ID: intercom_app_id
-# INTERCOM_API_SECRET: intercom_api_secret
-# INTERCOM_API_KEY: intercom_api_key
-
-# OmniAuth - uncomment and add a valid values to enable
-
-# OAUTH_LINKEDIN_KEY: changeme
-# OAUTH_LINKEDIN_SECRET: changeme
-
-# OAUTH_GOOGLE_KEY: changeme
-# OAUTH_GOOGLE_SECRET: changeme
-
-# OAUTH_FACEBOOK_KEY: changeme
-# OAUTH_FACEBOOK_SECRET: changeme
-

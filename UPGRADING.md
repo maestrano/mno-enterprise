@@ -41,6 +41,17 @@ This is a simple as `bundle update mno-enterprise`.
 
 See below for upgrade between breaking versions.
 
+### Migrating from v3.3 to v4.0
+
+You must upgrade your ruby version to >= 2.3
+
+#### Settings and feature flags
+
+Settings and feature flags are now managed dynamically at the MnoHub level rather than via `settings.yml` files.
+
+The `config/settings.yml` and `config/settings/#{environment}.yml` files are still supported but the settings from MnoHub take precedence.
+
+
 ### Migrating from v3.2 to v3.3
 
 See the [CHANGELOG](CHANGELOG.md#v3.3.0)

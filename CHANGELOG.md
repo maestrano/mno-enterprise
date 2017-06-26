@@ -1,8 +1,22 @@
 # Change Log
 
-## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/master)
-[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.0...HEAD)
+## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/4.0)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.0...4.0)
 
+- Drop support for Ruby < 2.3
+- Remove deprecated marketplace_listing
+- Remove deprecated MandrillClient
+- Default to SMTP
+- Remove hard dependency on figaro (if using `config/application.yml`, you should add `gem 'figaro'` to your `Gemfile`)
+- Intercom: drop support for api_key (replaced by token)
+
+The settings have been refactored in v4 to make them more consistent.
+
+* All the frontend settings are nested under `dashboard`
+* `admin.impersonation.disabled` is now `admin.impersonation.enabled`
+* `payment.disabled` is now `payment.enabled`
+* `pricing` and `review` configuration are now nested under `marketplace`
+* `devise.registration` is now `devise.registration`
 
 ## [v3.3.0](https://github.com/maestrano/mno-enterprise/tree/v3.3.0) (2017-06-20)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.2.0...v3.3.0)

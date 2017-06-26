@@ -91,6 +91,26 @@ For major upgrade between versions see [UPGRADING](UPGRADING.md).
 
 ## Configuration
 
+### Environement variable
+
+TODO: figaro or anything else
+just need tenant credentials and rake secret
+
+### General configuration (Feature Flags)
+
+See the description of all feature flags on our [Developers Space](https://maestrano.atlassian.net/wiki/display/DEV/Frontend+Feature+Flags)
+
+
+Feature flags are accessed through `Settings.section.config_entry`.
+They're ultimately controlled via MnoHub but here's the order of precedence in which they are set:
+
+1. `TenantConfig::JSON_SCHEMA`: Used for default values. See `core/config/initializers/config.rb` (the schema is converted to a Ruby Hash with `MnoEnterprise::TenantConfig.to_hash`)
+1. `Tenant#frontend_config`: Fetched from MnoHub. See `core/lib/mno_enterprise/engine.rb`
+1. `ENV['SETTINGS__xxxx']`: Not recommended. See `core/config/initializers/config.rb`
+
+The `config/settings.yml` and `config/settings/#{environment}.yml` files are still working, although no longer supported.
+They're evaluated between 1 and 2.
+
 ### Emailing platform
 
 Maestrano Enterprise supports either [Mandrill](https://www.mandrill.com/) or [SparkPost](https://www.sparkpost.com/) as well as regular SMTP.

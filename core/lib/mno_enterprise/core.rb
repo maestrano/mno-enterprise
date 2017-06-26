@@ -31,7 +31,7 @@ require 'mno_enterprise/database_extendable'
 
 # Settings
 require 'config'
-require 'figaro'
+require 'json-schema'
 
 require 'accountingjs_serializer'
 
@@ -96,6 +96,22 @@ module MnoEnterprise
   #==================================================================
   # Module definition
   #==================================================================
+  # Adapter used to manage the app
+  # This shouldn't need to be set manually
+  mattr_reader(:platform_adapter) do
+    if Rails.env.test?
+      :test
+    # TODO: implement NexAdapter
+    # elsif ENV['SELF_NEX_API_KEY'].present?
+    #   :nex
+    else
+      :local
+    end
+  end
+  def self.platform_adapter=(adapter)
+    @@platform_adapter = adapter
+    MnoEnterprise::SystemManager.adapter = self.platform_adapter
+  end
 
   #====================================
   # Tenant

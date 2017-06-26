@@ -52,6 +52,14 @@ module MnoEnterprise
     # Make sure the MailAdapter is correctly configured
     config.to_prepare do
       MnoEnterprise::MailClient.adapter ||= MnoEnterprise.mail_adapter
+      MnoEnterprise::SystemManager.adapter ||= MnoEnterprise.platform_adapter
+    end
+
+    config.after_initialize do
+      unless Rails.env.test?
+        Rails.logger.debug "Settings loaded -> Fetching Tenant Config"
+        MnoEnterprise::TenantConfig.load_config!
+      end
     end
   end
 end
