@@ -9,7 +9,7 @@ require 'rake/clean'
 namespace :mnoe do
   namespace :frontend do
     # Default version
-    MNOE_ANGULAR_VERSION = "v1.1.x"
+    MNOE_ANGULAR_VERSION = "2.0"
     IMPAC_ANGULAR_VERSION = "v1.5.x"
 
     # Final build
