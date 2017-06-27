@@ -152,7 +152,7 @@ namespace :mnoe do
       mkdir_p admin_panel_tmp_folder
       cp_r("#{ADMIN_PANEL_PKG_FOLDER}/.", "#{admin_panel_tmp_folder}/")
 
-      # Default variables to avoid the build to break if there is new variables in the admin panel
+      # Default variables to avoid breaking the build if there are new variables in the admin panel
       mv("#{admin_panel_tmp_folder}/src/app/stylesheets/variables.less", "#{admin_panel_tmp_folder}/src/app/stylesheets/variables-default.less")
 
       # Apply frontend customisations
