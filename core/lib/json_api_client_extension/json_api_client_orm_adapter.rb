@@ -31,7 +31,7 @@ module JsonApiClient
 
     # @see OrmAdapter::Base#find_first
     def find_first(options = {})
-      klass.where(options).limit(1).first
+      find_all(options).first
     end
 
     # @see OrmAdapter::Base#find_all
