@@ -153,7 +153,7 @@ module MnoEnterprise
 
     describe 'PUT #update_password' do
       let(:attrs) { {current_password: 'password', password: 'blablabla', password_confirmation: 'blablabla'} }
-      before { stub_api_v2(:patch, "/users/#{user.id}", user) }
+      before { stub_api_v2(:patch, "/users/#{user.id}/update_password", user) }
       #user reload
       before { stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations orga_relations deletion_requests)) }
       subject { put :update_password, user: attrs }

@@ -12,7 +12,7 @@ module MnoEnterprise
     def self.fetch_all(list = self.where)
       result = []
       loop do
-        result << list.to_a
+        result.push(*list.to_a)
         break unless (list.pages.links||{})['next']
         list = list.pages.next
       end

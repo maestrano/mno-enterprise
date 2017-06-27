@@ -53,7 +53,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # PUT /mnoe/jpi/v1/current_user/update_password
   def update_password
     @user = current_user
-    @user.update(password_params.merge(current_password_required: true))
+    @user = @user.update_password(data: {attributes: password_params.merge(current_password_required: true)}).first
     if @user.errors.empty?
       MnoEnterprise::EventLogger.info('user_update_password', current_user.id, 'User password change', @user)
       @user = @user.load_required(:organizations, :orga_relations, :deletion_requests)

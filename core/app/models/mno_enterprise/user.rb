@@ -63,6 +63,7 @@ module MnoEnterprise
 
     custom_endpoint :create_api_credentials,  on: :member, request_method: :patch
     custom_endpoint :authenticate, on: :collection, request_method: :post
+    custom_endpoint :update_password, on: :member, request_method: :patch
 
     #================================
     # Class Methods
