@@ -28,7 +28,7 @@ module MnoEnterprise
 
       let(:app_instance) { build(:app_instance, status: 'running' , under_free_trial: false) }
 
-      before { stub_api_v2(:get, '/app_instances', [app_instance], [:app, :owner], {filter: {owner_id: organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES}}) }
+      before { stub_api_v2(:get, '/app_instances', [app_instance], [:app], {filter: {owner_id: organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')}}) }
 
       before { sign_in user }
       subject { get :index, organization_id: organization.id }
@@ -40,7 +40,7 @@ module MnoEnterprise
           subject
           # TODO: Test that the rendered json is the expected one
           # expect(assigns(:app_instances)).to eq([app_instance])
-          assert_requested(:get, api_v2_url('/app_instances', [:app, :owner], {filter: {owner_id: organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES}}))
+          assert_requested(:get, api_v2_url('/app_instances', [:app], {filter: {owner_id: organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')}}))
         }
       end
 

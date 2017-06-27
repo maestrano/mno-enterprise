@@ -95,14 +95,20 @@ module MnoEnterprise
     end
 
     def role(organization)
-      relation = self.orga_relation(organization)
-      return relation.role if relation
+      self.role_from_id(organization.id)
     end
 
     def orga_relation(organization)
-      self.orga_relations.find {|r|
-        r.organization_id == organization.id
-      }
+      self.orga_relation_from_id(organization.id)
+    end
+
+    def role_from_id(organization_id)
+      relation = self.orga_relation_from_id(organization_id)
+      return relation.role if relation
+    end
+
+    def orga_relation_from_id(organization_id)
+      self.orga_relations.find {|r| r.organization_id == organization_id }
     end
 
     def create_deletion_request
