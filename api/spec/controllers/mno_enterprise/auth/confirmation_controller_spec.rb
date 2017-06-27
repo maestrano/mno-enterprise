@@ -19,6 +19,7 @@ module MnoEnterprise
       end
 
       context 'unconfirmed user' do
+        before{stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations organizations.orga_relations))}
         let(:user) { unconfirmed_user }
 
         it 'does not sign in the user' do

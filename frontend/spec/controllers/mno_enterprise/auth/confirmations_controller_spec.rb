@@ -41,6 +41,7 @@ module MnoEnterprise
 
         describe 'unconfirmed user' do
           before { user.confirmed_at = nil }
+          before{stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations organizations.orga_relations))}
           before { subject }
           it { expect(response.code).to eq('200') }
           it { expect(assigns(:confirmation_token)).to eq(user.confirmation_token) }

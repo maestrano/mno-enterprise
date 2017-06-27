@@ -170,6 +170,7 @@ module MnoEnterpriseApiTestHelper
 
     def serialize_data(entity, included, included_entities)
       relationships = included.map { |field|
+        next if field.to_s.include? '.'
         relations = entity.send(field)
         next unless relations
         data = if relations.kind_of?(Array)
