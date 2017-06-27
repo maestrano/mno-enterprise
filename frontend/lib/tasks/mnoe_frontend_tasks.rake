@@ -167,7 +167,7 @@ namespace :mnoe do
       # Bootstrap override folder
       # Replace relative image path by absolute path in the LESS files
       mkdir_p("#{frontend_project_folder}/src/app/stylesheets")
-      ['src/app/stylesheets/theme.less','src/app/stylesheets/variables.less'].each do |path|
+      %w(src/app/stylesheets/theme.less src/app/stylesheets/variables.less).each do |path|
         next if File.exist?("#{frontend_project_folder}/#{path}")
 
         # Generate file from template
@@ -182,14 +182,14 @@ namespace :mnoe do
 
       # Setup theme previewer working files so we can safely include
       # them in main.less
-      ['theme-previewer-tmp.less','theme-previewer-published.less'].each do |filename|
-        FileUtils.touch(File.join(Rails.root,"frontend/src/app/stylesheets/#{filename}"))
+      %w(theme-previewer-tmp.less theme-previewer-published.less).each do |filename|
+        FileUtils.touch(File.join(Rails.root, "frontend/src/app/stylesheets/#{filename}"))
       end
 
       # Create custom fonts files so we can safely include them in main.less
       frontend_font_folder = File.join(frontend_project_folder, 'src/fonts')
       unless File.exist?(File.join(frontend_font_folder, 'font-faces.less'))
-        font_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','font-faces.less')
+        font_src = File.join(File.expand_path(File.dirname(__FILE__)), 'templates', 'font-faces.less')
 
         mkdir_p(frontend_font_folder)
         cp(font_src, frontend_font_folder)
@@ -241,6 +241,9 @@ namespace :mnoe do
       rm_rf "#{frontend_tmp_folder}/e2e"
       mkdir_p frontend_tmp_folder
       cp_r("#{FRONTEND_PKG_FOLDER}/.", "#{frontend_tmp_folder}/")
+
+      # Default variables to avoid the build to break if there is new variables in the frontend
+      mv("#{frontend_tmp_folder}/src/app/stylesheets/variables.less", "#{frontend_tmp_folder}/src/app/stylesheets/variables-default.less")
 
       # Apply frontend customisations
       cp_r("#{frontend_project_folder}/.", "#{frontend_tmp_folder}/")
