@@ -139,7 +139,7 @@ MnoEnterprise::Engine.routes.draw do
 
         resources :audit_events, only: [:index]
 
-        resources :subscriptions, only: [:index, :show, :create]
+        resources :subscriptions, only: [:index, :show, :create, :update]
       end
 
       resources :deletion_requests, only: [:show, :create, :destroy] do

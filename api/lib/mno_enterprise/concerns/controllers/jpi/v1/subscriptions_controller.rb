@@ -39,6 +39,20 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     end
   end
 
+  # PUT /mnoe/jpi/v1/organizations/1/subscriptions/abc
+  def update
+    authorize! :manage_subscriptions, parent_organization
+
+    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
+    subscription.update_attributes(subscription_update_params)
+    if subscription.errors.any?
+      render json: subscription.errors, status: :bad_request
+    else
+      MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
+      head :ok
+    end
+  end
+
   protected
 
   def subscription_update_params

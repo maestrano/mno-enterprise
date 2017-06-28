@@ -7,6 +7,10 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
+    # Stub controller ability
+    let!(:ability) { stub_ability }
+    before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
+
     # Stub user and user call
     let!(:user) { build(:user) }
     let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
@@ -34,6 +38,35 @@ module MnoEnterprise
       before { sign_in user }
 
       subject { get :show, organization_id: organization.id, id: subscription.id }
+
+      it_behaves_like 'jpi v1 protected action'
+    end
+
+    describe 'POST #create' do
+      let(:subscription) { build(:subscription) }
+      let(:product) { build(:product) }
+      let(:pricing) { build(:product_pricing, product: product) }
+
+      before { stub_audit_events }
+      before { stub_api_v2(:post, "/subscriptions", subscription, [], {}) }
+      before { sign_in user }
+
+      subject { post :create, organization_id: organization.id }
+
+      it_behaves_like 'jpi v1 protected action'
+    end
+
+    describe 'PUT #update' do
+      let(:subscription) { build(:subscription) }
+      let(:product) { build(:product) }
+      let(:pricing) { build(:product_pricing, product: product) }
+
+      before { stub_audit_events }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
+      before { stub_api_v2(:patch, "/subscriptions/#{subscription.id}", subscription, [], {}) }
+      before { sign_in user }
+
+      subject { put :update, organization_id: organization.id, id: subscription.id }
 
       it_behaves_like 'jpi v1 protected action'
     end
