@@ -20,6 +20,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
 
   # GET /mnoe/jpi/v1/products/id
   def show
-    @product = MnoEnterprise::Product.includes(:values, :assets, {product_categories: :categories}).find(params[:id])
+    @product = MnoEnterprise::Product.includes(:values, :assets, {product_categories: :categories}).find(params[:id]).first
   end
 end

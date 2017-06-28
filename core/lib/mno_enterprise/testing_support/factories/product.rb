@@ -6,5 +6,8 @@ FactoryGirl.define do
     active true
     product_type :application
     externally_provisioned true
+    values []
+    assets []
+    product_categories []
   end
 end
