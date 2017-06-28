@@ -122,7 +122,7 @@ namespace :mnoe do
         next if File.exist?("#{admin_panel_project_folder}/#{path}")
 
         # Generate file from template
-        cp("#{ADMIN_PANEL_PKG_FOLDER}/#{path}","#{admin_panel_project_folder}/#{path}")
+        cp("#{ADMIN_PANEL_PKG_FOLDER}/#{path}", "#{admin_panel_project_folder}/#{path}")
 
         # Replace image relative path
         content = File.read("#{admin_panel_project_folder}/#{path}")
@@ -151,6 +151,9 @@ namespace :mnoe do
       rm_rf "#{admin_panel_tmp_folder}/e2e"
       mkdir_p admin_panel_tmp_folder
       cp_r("#{ADMIN_PANEL_PKG_FOLDER}/.", "#{admin_panel_tmp_folder}/")
+
+      # Default variables to avoid breaking the build if there are new variables in the admin panel
+      mv("#{admin_panel_tmp_folder}/src/app/stylesheets/variables.less", "#{admin_panel_tmp_folder}/src/app/stylesheets/variables-default.less")
 
       # Apply frontend customisations
       cp_r("#{admin_panel_project_folder}/.", "#{admin_panel_tmp_folder}/")
