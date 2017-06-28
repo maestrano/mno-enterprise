@@ -10,7 +10,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     respond_to :json
   end
 
-  DASHBOARD_DEPENDENCIES = [:widgets, {widgets: :kpis}, :kpis, {kpis: :alerts}]
+  DASHBOARD_DEPENDENCIES = [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts']
 
   #==================================================================
   # Instance methods
