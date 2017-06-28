@@ -138,6 +138,8 @@ MnoEnterprise::Engine.routes.draw do
         resources :app_instances_sync, only: [:create, :index]
 
         resources :audit_events, only: [:index]
+
+        resources :subscriptions, only: [:index, :show, :create]
       end
 
       resources :deletion_requests, only: [:show, :create, :destroy] do
@@ -162,6 +164,7 @@ MnoEnterprise::Engine.routes.draw do
         end
       end
 
+      resources :products, only: [:index, :show]
 
       #============================================================
       # Admin
