@@ -153,7 +153,7 @@ module MnoEnterprise
 
     describe 'PUT #update_password' do
       let(:attrs) { {current_password: 'password', password: 'blablabla', password_confirmation: 'blablabla'} }
-      before { stub_api_v2(:patch, "/users/#{user.id}/update_password", user) }
+      let!(:update_password_stub) { stub_api_v2(:patch, "/users/#{user.id}/update_password", user) }
       #user reload
       before { stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations orga_relations deletion_requests)) }
       subject { put :update_password, user: attrs }
@@ -169,8 +169,8 @@ module MnoEnterprise
         before { sign_in user }
         before { subject }
         it { expect(response).to be_success }
-        # TODO: Find a way to compare the users
-        xit { expect(controller.current_user).to eq(user) } # check user is re-signed in
+        it { expect(update_password_stub).to have_been_requested }
+        it { expect(controller.current_user.id).to eq(user.id) } # check user is re-signed in
       end
     end
   end
