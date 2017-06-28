@@ -15,9 +15,19 @@ module MnoEnterprise
         end
     end
 
-    # @see Adapter#restart
+    # @see MnoEnterprise::PlatformAdapters::Adapter#restart
     def self.restart
       adapter.restart
+    end
+
+    # @see MnoEnterprise::PlatformAdapters::Adapter#fetch_assets
+    def self.fetch_assets
+      adapter.fetch_assets
+    end
+
+    # @see MnoEnterprise::PlatformAdapters::Adapter#publish_assets
+    def self.publish_assets
+      adapter.publish_assets
     end
 
     # @see Adapter#add_ssl_certs

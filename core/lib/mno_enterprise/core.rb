@@ -101,9 +101,8 @@ module MnoEnterprise
   mattr_reader(:platform_adapter) do
     if Rails.env.test?
       :test
-    # TODO: implement NexAdapter
-    # elsif ENV['SELF_NEX_API_KEY'].present?
-    #   :nex
+    elsif ENV['SELF_NEX_API_KEY'].present?
+      :nex
     else
       :local
     end

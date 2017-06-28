@@ -50,4 +50,7 @@ Gem::Specification.new do |s|
   # Emailing
   s.add_development_dependency 'mandrill-api', '~> 1.0', '>= 1.0.53'
   s.add_development_dependency 'sparkpost', '~> 0.1.4'
+
+  # Platform
+  s.add_development_dependency 'nex_client', '~> 0.16.0'
 end
