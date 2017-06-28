@@ -93,6 +93,10 @@ module MnoEnterprise::Concerns::Models::Organization
     MnoEnterprise::AppInstance.provision(input)
   end
 
+  def new_credit_card
+    MnoEnterprise::CreditCard.new(owner_id: id, owner_type: 'Organization')
+  end
+
   def has_credit_card_details?
     credit_card_id.present?
   end

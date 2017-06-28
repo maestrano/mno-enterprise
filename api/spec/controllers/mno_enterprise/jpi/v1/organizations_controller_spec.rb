@@ -145,16 +145,30 @@ module MnoEnterprise
 
     describe 'PUT #update_billing' do
       let(:params) { attributes_for(:credit_card) }
+      let!(:credit_card_stub) { stub_api_v2(:patch, "/credit_cards/#{credit_card.id}", credit_card) }
       subject { put :update_billing, id: organization.id, credit_card: params }
-      before { stub_api_v2(:patch, "/credit_cards/#{credit_card.id}", credit_card) }
       it_behaves_like 'jpi v1 protected action'
       it_behaves_like 'an organization management action'
+
+      context 'new credit card' do
+        let(:credit_card) { nil }
+        let(:created_credit_card) { build(:credit_card) }
+        let!(:credit_card_stub) { stub_api_v2(:post, '/credit_cards', created_credit_card) }
+        it 'create a new card' do
+          subject
+          expect(credit_card_stub).to have_been_requested
+        end
+      end
+
       context 'authorized' do
         it 'updates the entity credit card' do
           subject
           expect(organization.credit_card).to_not be_nil
         end
-
+        it do
+          subject
+          expect(credit_card_stub).to have_been_requested
+        end
         it 'returns a partial representation of the entity' do
           subject
           expect(JSON.parse(response.body)).to eq(partial_hash_for_credit_card(organization.credit_card))

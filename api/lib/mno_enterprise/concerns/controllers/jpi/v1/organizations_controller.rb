@@ -69,9 +69,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   # PUT /mnoe/jpi/v1/organizations/:id/update_billing
   def update_billing
     authorize! :manage_billing, organization
-
+    @credit_card = organization.credit_card || organization.new_credit_card
     # Upsert
-    if (@credit_card = organization.credit_card) && check_valid_payment_method
+    if check_valid_payment_method
       @credit_card.update_attributes(organization_billing_params)
     end
 
