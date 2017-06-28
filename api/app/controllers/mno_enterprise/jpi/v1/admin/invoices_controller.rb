@@ -13,10 +13,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/invoices/current_billing_amount
     def current_billing_amount
-      # Backward compatibility with old MnoHub (<= v1.0.2)
-      # TODO: Remove once all mnohub are migrated to newer versions
-      tenant.respond_to?(:current_billing_amount) && current_billing = tenant.current_billing_amount
-
+      current_billing = tenant.current_billing_amount
       render json: {current_billing_amount: format_money(current_billing)}
     end
 
@@ -47,7 +44,7 @@ module MnoEnterprise
     private
 
     def tenant
-      @tenant ||= MnoEnterprise::Tenant.show
+      @tenant ||= MnoEnterprise::TenantReporting.show
     end
 
     def format_money(money)

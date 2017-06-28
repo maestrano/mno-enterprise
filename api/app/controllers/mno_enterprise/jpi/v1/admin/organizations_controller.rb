@@ -1,6 +1,8 @@
 module MnoEnterprise
   class Jpi::V1::Admin::OrganizationsController < Jpi::V1::Admin::BaseResourceController
 
+    DEPENDENCIES = [:app_instances, :'app_instances.app', :users, :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user']
+
     # GET /mnoe/jpi/v1/admin/organizations
     def index
       if params[:terms]
@@ -10,20 +12,16 @@ module MnoEnterprise
         response.headers['X-Total-Count'] = @organizations.count
       else
         # Index mode
-        @organizations = MnoEnterprise::Organization
-        @organizations = @organizations.limit(params[:limit]) if params[:limit]
-        @organizations = @organizations.skip(params[:offset]) if params[:offset]
-        @organizations = @organizations.order_by(params[:order_by]) if params[:order_by]
-        @organizations = @organizations.where(params[:where]) if params[:where]
-        @organizations = @organizations.all.fetch
-        response.headers['X-Total-Count'] = @organizations.metadata[:pagination][:count]
+        query = MnoEnterprise::Organization.apply_query_params(params)
+        @organizations = query.to_a
+        response.headers['X-Total-Count'] = query.meta.record_count
       end
     end
 
     # GET /mnoe/jpi/v1/admin/organizations/1
     def show
-      @organization = MnoEnterprise::Organization.find(params[:id])
-      @organization_active_apps = @organization.app_instances.active.to_a
+      @organization = MnoEnterprise::Organization.find_one(params[:id], *DEPENDENCIES)
+      @organization_active_apps = @organization.app_instances.select(&:active?)
     end
 
     # GET /mnoe/jpi/v1/admin/organizations/in_arrears
@@ -33,7 +31,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/organizations/count
     def count
-      organizations_count = MnoEnterprise::Tenant.get('tenant').organizations_count
+      organizations_count = MnoEnterprise::TenantReporting.show.organizations_count
       render json: {count: organizations_count }
     end
 
@@ -44,7 +42,7 @@ module MnoEnterprise
 
       # OPTIMIZE: move this into a delayed job?
       update_app_list
-
+      @organization = @organization.load_required(*DEPENDENCIES)
       @organization_active_apps = @organization.app_instances
 
       render 'show'
@@ -53,11 +51,10 @@ module MnoEnterprise
     # PATCH /mnoe/jpi/v1/admin/organizations/1
     def update
       # get organization
-      @organization = MnoEnterprise::Organization.find(params[:id])
-
+      @organization = MnoEnterprise::Organization.find_one(params[:id], *DEPENDENCIES)
       update_app_list
-
-      @organization_active_apps = @organization.app_instances.active
+      @organization = @organization.load_required(*DEPENDENCIES)
+      @organization_active_apps = @organization.app_instances.select(&:active?)
 
       render 'show'
     end
@@ -66,21 +63,21 @@ module MnoEnterprise
     # Invite a user to the organization (and create it if needed)
     # This does not send any emails (emails are manually triggered later)
     def invite_member
-      @organization = MnoEnterprise::Organization.find(params[:id])
+      @organization = MnoEnterprise::Organization.find_one(params[:id])
 
       # Find or create a new user - We create it in the frontend as MnoHub will send confirmation instructions for newly
       # created users
       user = MnoEnterprise::User.find_by(email: user_params[:email]) || create_unconfirmed_user(user_params)
 
       # Create the invitation
-      invite = @organization.org_invites.create(
+      invite = MnoEnterprise::OrgaInvite.create(
+        organization_id: organization.id,
         user_email: user.email,
         user_role: params[:user][:role],
         referrer_id: current_user.id,
         status: 'staged' # Will be updated to 'accepted' for unconfirmed users
       )
-
-      @user = user.confirmed? ? invite : user.reload
+      @user = user.confirmed? ? invite : user
     end
 
     protected
@@ -115,24 +112,13 @@ module MnoEnterprise
     def update_app_list
       # Differentiate between a null app_nids params and no app_nids params
       if params[:organization].key?(:app_nids) && (desired_nids = Array(params[:organization][:app_nids]))
-
-        existing_apps = @organization.app_instances.active
-
+        existing_apps = @organization.app_instances.select(&:active?)
         existing_apps.each do |app_instance|
           desired_nids.delete(app_instance.app.nid) || app_instance.terminate
         end
-
         desired_nids.each do |nid|
-          begin
-            @organization.app_instances.create(product: nid)
-          rescue => e
-            Rails.logger.error { "#{e.message} #{e.backtrace.join("\n")}" }
-          end
-
+          @organization.provision_app_instance(nid)
         end
-
-        # Force reload
-        existing_apps.reload
       end
     end
   end

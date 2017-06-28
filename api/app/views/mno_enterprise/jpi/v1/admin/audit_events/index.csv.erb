@@ -6,7 +6,7 @@
   event.user[:name],
   event.user[:email],
   event.organization_id,
-  event.organization[:name],
+  event.organization ? event.organization[:name] : nil,
   event.key,
   event.description,
   event.formatted_details.present? ? %{#{event.formatted_details}} : event.metadata

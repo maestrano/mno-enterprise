@@ -30,7 +30,7 @@ module MnoEnterprise::Jpi::V1::Admin
       else
         status_scope = { status: 'accepted' }
       end
-      MnoEnterprise::OrgInvite.includes(:user).where(status_scope.merge(user_id: user.id, organization_id: organization.id)).first
+      MnoEnterprise::OrgaInvite.includes(:user).where(status_scope.merge(user_id: user.id, organization_id: organization.id)).first
     end
 
     # Send the org invite and update the status

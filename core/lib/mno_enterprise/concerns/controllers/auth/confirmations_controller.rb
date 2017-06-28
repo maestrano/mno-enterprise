@@ -74,7 +74,8 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
 
     # Check if phone number should be required
     # Bypassed for invited users
-    @phone_required = resource.organizations.map(&:users).flatten.count == 1
+    resource_with_organizations = resource.load_required(:organizations, :'organizations.orga_relations')
+    @phone_required = resource_with_organizations.organizations.map(&:orga_relations).flatten.count == 1
     yield(:success, resource) if block_given?
   end
 

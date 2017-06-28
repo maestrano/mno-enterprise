@@ -10,7 +10,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
     property :created_at, type: :time
     property :updated_at, type: :time
 
-    property :owner_id
+    property :owner_id, type: :string
 
     # delete <api_root>/app_instances/:id/terminate
     custom_endpoint :terminate, on: :member, request_method: :delete
@@ -32,6 +32,9 @@ module MnoEnterprise::Concerns::Models::AppInstance
     # end
   end
 
+  def active?
+    status.to_sym.in? ACTIVE_STATUSES
+  end
   #==================================================================
   # Instance methods
   #==================================================================

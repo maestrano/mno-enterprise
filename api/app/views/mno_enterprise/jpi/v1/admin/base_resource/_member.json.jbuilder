@@ -1,7 +1,7 @@
 if member.is_a?(MnoEnterprise::User)
   json.uid member.uid
   json.entity 'User'
-  json.role member.role(organization) if organization
+  json.role organization.role(member) if organization
 
   status = case
            when member.confirmed? then 'active'
@@ -11,8 +11,8 @@ if member.is_a?(MnoEnterprise::User)
 
   user = member
 
-elsif member.is_a?(MnoEnterprise::OrgInvite)
-  json.entity 'OrgInvite'
+elsif member.is_a?(MnoEnterprise::OrgaInvite)
+  json.entity 'OrgaInvite'
   json.role member.user_role
 
   status = case member.status

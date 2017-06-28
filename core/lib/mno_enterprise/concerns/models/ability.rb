@@ -63,8 +63,9 @@ module MnoEnterprise::Concerns::Models::Ability
     # AppInstance
     #===================================================
     can :access, MnoEnterprise::AppInstance do |app_instance|
-      !!user.role(app_instance.owner) && (
-      ['Super Admin','Admin'].include?(user.role(app_instance.owner)) ||
+      role = user.role_from_id(app_instance.owner_id)
+      !!role && (
+      ['Super Admin','Admin'].include?(role) ||
           user.teams.empty? ||
           user.teams.map(&:app_instances).compact.flatten.map(&:id).include?(app_instance.id)
       )

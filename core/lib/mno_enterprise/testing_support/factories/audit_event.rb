@@ -8,7 +8,7 @@ FactoryGirl.define do
       updated_at 2.days.ago
       user_id 1
       description 'Blabla'
-      details 'Details'
+      metadata 'metadata'
       organization_id '1'
       organization { {name: 'Org'} }
       user { {name: 'John', surname: 'Doe'} }
