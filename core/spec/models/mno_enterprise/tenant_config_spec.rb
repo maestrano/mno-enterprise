@@ -47,7 +47,7 @@ describe MnoEnterprise::TenantConfig do
       Settings.system.email.default_sender.name = 'New Sender Name'
       Settings.system.email.default_sender.email = 'New Sender Email'
       Settings.system.i18n.enabled = 'New I18n'
-
+      Settings.system.smtp_settings = {address: 'smtp.test'}
       described_class.reconfigure_mnoe!
     end
 
@@ -56,6 +56,7 @@ describe MnoEnterprise::TenantConfig do
     it { expect(MnoEnterprise.default_sender_name).to eq('New Sender Name') }
     it { expect(MnoEnterprise.default_sender_email).to eq('New Sender Email') }
     it { expect(MnoEnterprise.i18n_enabled).to eq('New I18n') }
+    it { expect(Rails.application.config.action_mailer.smtp_settings).to eq({address: 'smtp.test'}) }
   end
 
   describe '.build_object' do
