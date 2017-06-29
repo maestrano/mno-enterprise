@@ -164,7 +164,9 @@ MnoEnterprise::Engine.routes.draw do
         end
       end
 
-      resources :products, only: [:index, :show]
+      resources :products, only: [:index, :show] do
+        resources :pricings, only: :index
+      end
 
       #============================================================
       # Admin

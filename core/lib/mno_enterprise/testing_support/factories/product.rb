@@ -8,6 +8,8 @@ FactoryGirl.define do
     externally_provisioned true
     values []
     assets []
-    product_categories []
+    categories []
+    product_pricings []
+    product_contracts []
   end
 end
