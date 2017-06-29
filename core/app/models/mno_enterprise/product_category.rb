@@ -5,7 +5,8 @@ module MnoEnterprise
 
     def to_audit_event
       {
-        id: id
+        id: id,
+        name: name
       }
     end
   end

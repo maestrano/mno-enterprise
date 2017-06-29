@@ -20,7 +20,9 @@ module MnoEnterprise
     def to_audit_event
       {
         id: id,
-        status: status
+        status: status,
+        organization_id: organization_id,
+        user_id: user_id
       }
     end
   end

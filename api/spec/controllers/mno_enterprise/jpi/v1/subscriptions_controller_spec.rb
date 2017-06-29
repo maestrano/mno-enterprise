@@ -51,7 +51,7 @@ module MnoEnterprise
       before { stub_api_v2(:post, "/subscriptions", subscription, [], {}) }
       before { sign_in user }
 
-      subject { post :create, organization_id: organization.id }
+      subject { post :create, organization_id: organization.id, subscription: {pricing_id: pricing.id} }
 
       it_behaves_like 'jpi v1 protected action'
     end
@@ -66,7 +66,7 @@ module MnoEnterprise
       before { stub_api_v2(:patch, "/subscriptions/#{subscription.id}", subscription, [], {}) }
       before { sign_in user }
 
-      subject { put :update, organization_id: organization.id, id: subscription.id }
+      subject { put :update, organization_id: organization.id, id: subscription.id, subscription: {pricing_id: pricing.id} }
 
       it_behaves_like 'jpi v1 protected action'
     end
