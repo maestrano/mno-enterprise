@@ -6,6 +6,7 @@ FactoryGirl.define do
     active true
     product_type :application
     externally_provisioned true
+    custom_schema nil
     values []
     assets []
     categories []

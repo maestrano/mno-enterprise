@@ -6,21 +6,21 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   #==================================================================
   # GET /mnoe/jpi/v1/organizations/1/subscriptions
   def index
-    authorize! :read_subscriptions, parent_organization
+    authorize! :manage_app_instances, parent_organization
     @subscriptions = MnoEnterprise::Subscription.includes(:product_instance, :pricing, :contract, :organization, :user, :'license_assignments.user', :'product_instance.product')
                                                 .where(organization_id: parent_organization.id)
   end
 
   # GET /mnoe/jpi/v1/organizations/1/subscriptions/id
   def show
-    authorize! :read_subscriptions, parent_organization
+    authorize! :manage_app_instances, parent_organization
     @subscription = MnoEnterprise::Subscription.includes(:product_instance, :pricing, :contract, :organization, :user, :'license_assignments.user', :'product_instance.product')
                                                 .where(organization_id: parent_organization.id, id: params[:id]).first
   end
 
   # POST /mnoe/jpi/v1/organizations/1/subscriptions
   def create
-    authorize! :manage_subscriptions, parent_organization
+    authorize! :manage_app_instances, parent_organization
 
     create_params = subscription_update_params.merge(organization_id: parent_organization.id, user_id: current_user.id)
     subscription = MnoEnterprise::Subscription.create(create_params)
@@ -34,7 +34,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
 
   # PUT /mnoe/jpi/v1/organizations/1/subscriptions/abc
   def update
-    authorize! :manage_subscriptions, parent_organization
+    authorize! :manage_app_instances, parent_organization
 
     subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
     subscription.update_attributes(subscription_update_params)

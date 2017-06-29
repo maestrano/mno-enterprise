@@ -8,7 +8,7 @@ module MnoEnterprise
     property :active, type: :boolean
     property :product_type, type: :string
     property :logo, type: :string
-    property :custom_schema_url, type: :string
+    property :custom_schema, type: :string
     property :provisioning_url, type: :string
     property :external_id, type: :string
     property :externally_provisioned, type: :boolean
