@@ -66,6 +66,95 @@ namespace :mnoe do
       )
     end
 
+    # TODO: refactor this
+    # Task optimised for theme previewer environment (skip some steps)
+    namespace :previewer do
+      # Reset the frontend build folder and apply local customisations
+      task :prepare_build_folder do
+        # # Ensure frontend is downloaded
+        # Rake::Task['mnoe:frontend:install_frontend'].invoke unless File.directory?(FRONTEND_PKG_FOLDER)
+        #
+        # # Override frontend dependencies
+        # puts "Locking frontend dependencies"
+        # override_frontend_dependencies
+
+        # Reset tmp folder from mno-enterprise-angular source
+        rm_rf "#{frontend_tmp_folder}/src"
+        # rm_rf "#{frontend_tmp_folder}/e2e"
+        mkdir_p frontend_tmp_folder
+        cp_r("#{FRONTEND_PKG_FOLDER}/.", "#{frontend_tmp_folder}/")
+
+        # Default variables to avoid breaking the build if there are new variables in the frontend
+        mv("#{frontend_tmp_folder}/src/app/stylesheets/variables.less", "#{frontend_tmp_folder}/src/app/stylesheets/variables-default.less")
+
+        # Apply frontend customisations
+        cp_r("#{frontend_project_folder}/.", "#{frontend_tmp_folder}/")
+      end
+
+      # Rebuild the Live Previewer Style
+      task :save do
+        # Prepare the build folder
+        Rake::Task['mnoe:frontend:previewer:prepare_build_folder'].execute
+
+        # Build the previewer stylesheet
+        Dir.chdir(frontend_tmp_folder) do
+          # sh 'yarn install'
+          sh "#{gulp_cmd} theme-previewer"
+        end
+
+        # Copy stylesheet to public
+        cp("#{frontend_tmp_folder}/dist/styles/theme-previewer.less","#{frontend_dist_folder}/styles/")
+
+        # Copy bower_components to public (used by live previewer)
+        # cp_r("#{frontend_tmp_folder}/bower_components", "#{frontend_dist_folder}/")
+
+        # Generates locales
+        # Rake::Task['mnoe:locales:generate'].invoke
+
+        # Clear tmp cache in development
+        # if Rails.env.development? || Rails.env.test?
+        #   Rake::Task['tmp:cache:clear'].execute
+        # end
+      end
+
+      task :build do
+        # Prepare the build folder
+        Rake::Task['mnoe:frontend:previewer:prepare_build_folder'].execute
+
+        # Build frontend using Gulp
+        Dir.chdir(frontend_tmp_folder) do
+          # sh 'yarn install'
+          sh gulp_cmd
+          sh "#{gulp_cmd} theme-previewer"
+        end
+
+        # Ensure distribution folder exists
+        mkdir_p frontend_dist_folder
+
+        # Cleanup previously compiled files
+        Dir.glob("#{frontend_dist_folder}/{styles,scripts}/*.{css,js}").each do |f|
+          rm_f f
+        end
+
+        # Copy assets to public
+        cp_r("#{frontend_tmp_folder}/dist/.","#{frontend_dist_folder}/")
+
+        # Copy bower_components to public (used by live previewer)
+        # cp_r("#{frontend_tmp_folder}/bower_components","#{frontend_dist_folder}/")
+
+        # Generates locales
+        # Rake::Task['mnoe:locales:generate'].invoke
+
+        # Clear tmp cache in development - recompile assets otherwise
+        if Rails.env.development? || Rails.env.test?
+          Rake::Task['tmp:cache:clear'].execute
+        else
+          Rake::Task['assets:precompile'].execute
+        end
+      end
+    end
+
+
     ## Tasks
     # TODO: replace with yarn install commands to get latest version
     desc "Yarn package file"
