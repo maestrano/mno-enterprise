@@ -369,7 +369,7 @@ module MnoEnterprise
         # I18n
         config.i18n_enabled = Settings.system.i18n.enabled
       end
-      Rails.application.config.action_mailer.smtp_settings = Settings.system.smtp
+      Rails.application.config.action_mailer.smtp_settings = Settings.system.smtp.to_hash
     end
 
     # Fetch the Tenant#frontend_config from MnoHub
