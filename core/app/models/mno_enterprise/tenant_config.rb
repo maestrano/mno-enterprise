@@ -20,6 +20,40 @@ module MnoEnterprise
               description: "Application Name",
               default: "My Company"
             },
+            smtp: {
+              description: "SMTP Settings",
+              type: "object",
+              properties: {
+                authentication: {
+                  type: "string",
+                  description: "Mail server authentication type",
+                  default: "plain",
+                  "enum": ["plain", "login", "cram_md5"]
+                },
+                address: {
+                  type: "string",
+                  description: "Mail server address",
+                  default: "localhost"
+                },
+                port: {
+                  type: "integer",
+                  description: "Mail server port",
+                  default: 25
+                },
+                domain: {
+                  type: "string",
+                  description: "HELO domain"
+                },
+                user_name: {
+                  type: "string",
+                  description: "Mail username"
+                },
+                password: {
+                  type: "string",
+                  description: "Mail password"
+                }
+              }
+            },
             email: {
               type: "object",
               description: "System email settings",
@@ -335,6 +369,7 @@ module MnoEnterprise
         # I18n
         config.i18n_enabled = Settings.system.i18n.enabled
       end
+      Rails.application.config.action_mailer.smtp_settings = Settings.system.smtp
     end
 
     # Fetch the Tenant#frontend_config from MnoHub

@@ -218,14 +218,6 @@ def update_application_rb
 
     # Mail delivery settings
     config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = {
-      authentication: :plain,
-      address: ENV['SMTP_HOST'],
-      port: ENV['SMTP_PORT'],
-      domain: ENV['SMTP_DOMAIN'],
-      user_name: ENV['SMTP_USERNAME'],
-      password: ENV['SMTP_PASSWORD']
-    }
 
     # STDOUT logging for Rails 4
     # For Rails 5 see https://github.com/heroku/rails_12factor#rails-5-and-beyond
