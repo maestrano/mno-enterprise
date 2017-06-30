@@ -1,0 +1,1 @@
+json.extract! subscription, :id, :status, :subscription_type, :start_date, :end_date, :max_licenses, :available_licenses, :external_id, :custom_data, :product_instance_id, :pricing_id, :contract_id, :organization_id, :user_id
