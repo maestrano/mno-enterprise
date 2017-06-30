@@ -132,17 +132,19 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     end
 
     def kpi
-      @kpi ||= MnoEnterprise::Kpi.find_one(params[:id], :dashboard, :alerts)
+      @kpi ||= MnoEnterprise::Kpi.find_one(params[:id], :dashboard, :widget, :alerts)
       return @kpi || render_not_found('kpi')
-    end
-
-    def kpi_parent
-      widget || dashboard
     end
 
     def kpi_create_params
       whitelist = [:widget_id, :endpoint, :source, :element_watched, {extra_watchables: []}]
-      extract_params(whitelist).merge(dashboard_id: params[:dashboard_id])
+      create_params = extract_params(whitelist)
+      #either it is a widget kpi or a dashboard kpi
+      if create_params[:widget_id]
+        create_params
+      else
+        create_params.merge(dashboard_id: params[:dashboard_id])
+      end
     end
 
     def kpi_update_params

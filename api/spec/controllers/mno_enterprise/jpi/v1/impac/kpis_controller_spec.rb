@@ -24,7 +24,7 @@ module MnoEnterprise
     let(:kpi_targets) { {evolution: [{max: '20'}]} }
     let(:settings) { {} }
     let(:extra_params) { [] }
-    let(:kpi) { build(:impac_kpi, dashboard: dashboard, targets: kpi_targets, settings: settings, extra_params: extra_params) }
+    let(:kpi) { build(:impac_kpi, dashboard: dashboard, widget: nil, targets: kpi_targets, settings: settings, extra_params: extra_params) }
     let(:kpi_hash) { serialize_type(kpi).except(:dashboard) }
 
     let(:alert) { build(:impac_alert, kpi_id: kpi.id) }
@@ -84,7 +84,7 @@ module MnoEnterprise
         end
 
         context "when there are kpi targets" do
-          let(:kpi_targets) { { evolution: [{max: "20"}] } }
+          let(:kpi_targets) { {evolution: [{max: "20"}]} }
 
           before do
             stub_api_v2(:post, "/alerts", alert)
@@ -196,7 +196,7 @@ module MnoEnterprise
         end
 
         context 'when no targets are given / targets are nil' do
-          let(:kpi) { build(:impac_kpi, dashboard: dashboard, targets: kpi_targets, settings: {currency: 'GBP'}) }
+          let(:kpi) { build(:impac_kpi, dashboard: dashboard, widget: nil, targets: kpi_targets, settings: {currency: 'GBP'}) }
           let(:params) { {targets: nil} }
 
           it 'does not remove the kpi targets' do
@@ -207,7 +207,7 @@ module MnoEnterprise
         end
 
         context 'when no extra_params are given / extra_params are nil' do
-          let(:kpi) { build(:impac_kpi, dashboard: dashboard, targets: kpi_targets, extra_params: ['some-param'], settings: {currency: 'GBP'}) }
+          let(:kpi) { build(:impac_kpi, dashboard: dashboard, widget: nil, targets: kpi_targets, extra_params: ['some-param'], settings: {currency: 'GBP'}) }
           let(:updated_kpi) { build(:impac_kpi, id: kpi.id, targets: kpi_targets, extra_params: ['some-param'], settings: {currency: 'GBP'}) }
           let(:params) { {extra_params: nil} }
 
@@ -221,12 +221,13 @@ module MnoEnterprise
 
       let(:kpi_hash) { serialize_type(kpi).except(:dashboard).merge(element_watched: 'New Watchable') }
       let(:params) { {} }
-      let(:updated_kpi) { build(:impac_kpi, id: kpi.id, element_watched: 'New Watchable', targets: kpi_targets)}
+      let(:updated_kpi) { build(:impac_kpi, id: kpi.id, widget: nil, dashboard: dashboard, element_watched: 'New Watchable', targets: kpi_targets) }
       subject { put :update, id: kpi.id, kpi: kpi_hash.merge(params) }
 
       before {
         kpi.alerts << alert
         updated_kpi.alerts << alert
+        stub_api_v2(:get, "/kpis/#{kpi.id}", kpi, %i(dashboard widget alerts))
         # reload of the kpi
         stub_api_v2(:get, "/kpis/#{kpi.id}", updated_kpi, %i(dashboard alerts))
         stub_api_v2(:patch, "/kpis/#{kpi.id}", updated_kpi)
@@ -251,7 +252,7 @@ module MnoEnterprise
       subject { delete :destroy, id: kpi.id }
 
       before {
-        stub_api_v2(:get, "/kpis/#{kpi.id}", kpi, %i(dashboard alerts))
+        stub_api_v2(:get, "/kpis/#{kpi.id}", kpi, %i(dashboard widget alerts))
         stub_api_v2(:delete, "/kpis/#{kpi.id}")
       }
 
