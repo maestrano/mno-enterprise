@@ -157,7 +157,7 @@ MnoEnterprise::Engine.routes.draw do
         resources :audit_events, only: [:index]
         resources :app_instances, only: [:destroy], shallow: true
         resources :app_reviews, only: [:index, :show,  :update]
-        resources :app_comments, only: [:create]
+        resources :app_comments, only: [:create, :update]
         resources :app_answers, only: [:create]
         resources :users, only: [:index, :show, :destroy, :update, :create] do
           collection do

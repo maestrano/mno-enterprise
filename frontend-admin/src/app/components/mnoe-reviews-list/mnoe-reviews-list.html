@@ -36,9 +36,11 @@
           <td>
             <p>{{review.description}}</p>
             <div class="text-right">
-              <button type"" name="button" ng-click="openQuestionReplyModal(review)"  ng-show="review.type == 'Question'">Reply</button>
-              <button type="" name="button" ng-click="openFeedbackReplyModal(review)" ng-show="review.type == 'Feedback'" >Comment</button>
-              <button type="" name="button" ng-click="openEditModal(review)">Edit</button>
+              <button type="" name="button" ng-show="review.type == 'Question'" ng-click="openQuestionReplyModal(review)">Reply</button>
+              <button type="" name="button" ng-show="review.type == 'Feedback'" ng-click="openCommentModal(review)">Comment</button>
+              <button type="" name="button" ng-show="review.type == 'Feedback'" ng-click="openFeedbackEditModal(review)">Edit</button>
+              <button type="" name="button" ng-show="review.type == 'Answer'" ng-click="openAnswerEditModal(review)">Edit</button>
+              <button type="" name="button" ng-show="review.type == 'Comment'" ng-click="openCommentEditModal(review)">Edit</button>
             </div>
           </td>
           <td>

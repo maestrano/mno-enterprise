@@ -1,7 +1,9 @@
 angular.module 'frontendAdmin'
-.controller('QuestionReplyModal', ($scope, $uibModalInstance) ->
+.controller('QuestionReplyModal', ($scope, $uibModalInstance, question) ->
 
   $scope.replyText = ''
+
+  $scope.question = question
 
   # Close the current modal
   $scope.closeModal = ->

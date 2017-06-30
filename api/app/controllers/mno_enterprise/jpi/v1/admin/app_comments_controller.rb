@@ -12,7 +12,18 @@ module MnoEnterprise
       end
     end
 
+    # PATCH /mnoe/jpi/v1/admin/app_comments/1
+    def update
+      @app_review = MnoEnterprise::AppComment.find(params[:id])
+      @app_review.update(app_comment_update_params)
+      render :show
+    end
+
     private
+
+    def app_comment_update_params
+      params.require(:app_comment).permit(:description)
+    end
 
     def app_comment_params
       # for an admin, the organization does not matter

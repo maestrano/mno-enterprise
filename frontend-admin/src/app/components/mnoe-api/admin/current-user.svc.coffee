@@ -20,6 +20,7 @@
   # Get the current user profile
   @getUser = ->
     return userPromise if userPromise?
+    debugger
     userPromise = MnoeApiSvc.one('current_user').get().then(
       (response) ->
         angular.copy(response.data, _self.user)
@@ -27,13 +28,17 @@
     )
 
   @skipIfNotAdmin = () ->
-    if _self.user.admin_role? && _self.user.admin_role == 'admin'
-      return $q.resolve()
-    else
-      $timeout(->
-        # Runs after the authentication promise has been rejected.
-        $state.go('dashboard.home')
-      )
-      $q.reject()
+    deferred = $q.defer()
+    _self.getUser().then(->
+      if _self.user.admin_role? && _self.user.admin_role == 'admin'
+        return deferred.resolve()
+      else
+        $timeout(->
+          # Runs after the authentication promise has been rejected.
+          $state.go('dashboard.home')
+        )
+        deferred.reject()
+    )
+    return deferred
 
   return @

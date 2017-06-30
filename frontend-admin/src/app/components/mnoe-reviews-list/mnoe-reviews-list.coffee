@@ -18,42 +18,62 @@
         controller: 'CommentModal'
       )
 
-    scope.openEditModal = (review) ->
+    scope.openCommentEditModal = (comment) ->
       $uibModal.open(
         templateUrl: 'app/components/mnoe-reviews-list/comment-edit-modal.html'
         controller: 'CommentEditModal'
         resolve:
-          review: review
+          comment: comment
       ).result.then(
-        (review) ->
-          MnoeReviews.updateDescription(review).then(
+        (response) ->
+          console.log response
+          MnoeReviews.updateComment(response).then(
             (response) ->
+              console.log response
               # Remove the edit mode for this review
               #delete scope.editmode[review.id]
           )
-
       )
 
-    scope.openFeedbackReplyModal = (review) ->
+    scope.openFeedbackEditModal = (review) ->
       $uibModal.open(
-        templateUrl: 'app/components/mnoe-reviews-list/feedback-reply-modal.html'
-        controller: 'FeedbackReplyModal'
+        templateUrl: 'app/components/mnoe-reviews-list/feedback-edit-modal.html'
+        controller: 'FeedbackEditModal'
+        resolve:
+          review: review
       ).result.then(
-        (replyText) ->
-          MnoeReviews.replyFeedback(review.id, replyText).then(
+        (feedback) ->
+          MnoeReviews.updateFeedback(review.id, feedback).then(
             (response) ->
               scope.listOfReviews.unshift(response.data.app_comment)
           )
 
       )
 
-    scope.openQuestionReplyModal = (review) ->
+    scope.openAnswerEditModal = (answer) ->
+      $uibModal.open(
+        templateUrl: 'app/components/mnoe-reviews-list/answer-edit-modal.html'
+        controller: 'AnswerEditModal'
+        resolve:
+          answer: answer
+      ).result.then(
+        (description) ->
+          MnoeReviews.updateAnswer(answer.id, description).then(
+            (response) ->
+              scope.listOfReviews.unshift(response.data.app_comment)
+          )
+
+      )
+
+    scope.openQuestionReplyModal = (question) ->
       $uibModal.open(
         templateUrl: 'app/components/mnoe-reviews-list/question-reply-modal.html'
         controller: 'QuestionReplyModal'
+        resolve:
+          question: question
       ).result.then(
         (replyText) ->
-          MnoeReviews.replyQuestion(review.id, replyText).then(
+          MnoeReviews.replyQuestion(question.id, replyText).then(
             (response) ->
               scope.listOfReviews.unshift(response.data.app_answer)
           )

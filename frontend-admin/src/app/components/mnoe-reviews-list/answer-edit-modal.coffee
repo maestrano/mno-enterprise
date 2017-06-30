@@ -1,14 +1,14 @@
 angular.module 'frontendAdmin'
-.controller('CommentEditModal', ($scope, $uibModalInstance, comment) ->
+.controller('AnswerEditModal', ($scope, $uibModalInstance, answer) ->
 
-  $scope.comment = comment
+  $scope.answer = answer
 
   # Close the current modal
   $scope.closeModal = ->
     $uibModalInstance.dismiss()
 
   $scope.submitIteration = ->
-    $uibModalInstance.close(comment)
+    $uibModalInstance.close($scope.answer.description)
 
   return
 )
