@@ -61,16 +61,16 @@ module MnoEnterprise
     # emulate active record call of callbacks
     def save(*args)
       run_callbacks :save do
-        super()
+        run_callbacks :update do
+          super()
+        end
       end
     end
 
     # emulate active record call of callbacks, a bit different as before_update is called before before_save
     def update_attributes(attrs = {})
       self.attributes = attrs
-      run_callbacks :update do
-        save
-      end
+      save
     end
 
     def cache_key(*timestamp_names)
