@@ -101,7 +101,7 @@ module MnoEnterprise
   mattr_reader(:platform_adapter) do
     if Rails.env.test?
       :test
-    elsif ENV['SELF_NEX_API_KEY'].present?
+    elsif ENV['SELF_NEX_API_KEY'].present? && Gem.loaded_specs.has_key?('nex_client')
       :nex
     else
       :local
