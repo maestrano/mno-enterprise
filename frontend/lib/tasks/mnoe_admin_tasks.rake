@@ -88,6 +88,7 @@ namespace :mnoe do
     end
 
     # Install dependencies
+    # TODO: DRY
     task :install_dependencies do
       unless system('which yarn')
         puts 'Yarn executable was not detected in the system.'
@@ -96,7 +97,7 @@ namespace :mnoe do
       end
 
       # Install required tools
-      sh('which bower || npm install -g bower')
+      sh('which bower || yarn global add bower')
     end
 
     # Add 'mnoe-admin-panel' to package.json
