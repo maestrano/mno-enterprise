@@ -28,8 +28,8 @@ module MnoEnterprise
         # @see MnoEnterprise::PlatformAdapters::Adapter#fetch_assets
         # Using `--exact-timestamps` to sync assets from S3 when they have the same size
         def fetch_assets
-          sync_assets('s3://${MINIO_BUCKET}/public/', public_folder, '--delete --exact-timestamps')
-          sync_assets('s3://${MINIO_BUCKET}/frontend/', frontend_folder, '--delete --exact-timestamps')
+          sync_assets('s3://${MINIO_BUCKET}/public/', public_folder, '--exact-timestamps')
+          sync_assets('s3://${MINIO_BUCKET}/frontend/', frontend_folder, '--exact-timestamps')
           copy_asset('s3://${MINIO_BUCKET}/assets/main-logo.png', logo_file)
         end
 
