@@ -40,8 +40,8 @@ describe MnoEnterprise::PlatformAdapters::NexAdapter do
     subject { described_class.fetch_assets }
 
     it 'fetch the assets from the S3 bucket' do
-      expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync s3://${MINIO_BUCKET}/public/ #{Rails.root.join('public')} --delete --exact-timestamps")
-      expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync s3://${MINIO_BUCKET}/frontend/ #{Rails.root.join('frontend', 'src')} --delete --exact-timestamps")
+      expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync s3://${MINIO_BUCKET}/public/ #{Rails.root.join('public')} --exact-timestamps")
+      expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync s3://${MINIO_BUCKET}/frontend/ #{Rails.root.join('frontend', 'src')} --exact-timestamps")
       expect(described_class).to receive(:`).with("#{aws_cmd} s3 cp s3://${MINIO_BUCKET}/assets/main-logo.png #{logo_file}")
       subject
     end
