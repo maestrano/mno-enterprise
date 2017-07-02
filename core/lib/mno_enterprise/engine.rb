@@ -56,7 +56,7 @@ module MnoEnterprise
     end
 
     config.after_initialize do
-      unless Rails.env.test? || defined?(::Rake)
+      unless Rails.env.test? || File.basename($0) == "rake"
         Rails.logger.debug "Settings loaded -> Fetching Tenant Config"
         MnoEnterprise::TenantConfig.load_config!
       end
