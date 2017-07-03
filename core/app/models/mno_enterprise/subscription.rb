@@ -11,11 +11,12 @@ module MnoEnterprise
     property :available_licenses, type: :integer
     property :external_id, type: :string
     property :custom_data, type: :string
-    property :product_instance_id, type: :string
-    property :pricing_id, type: :string
-    property :contract_id, type: :string
-    property :organization_id, type: :string
-    property :user_id, type: :string
+
+    has_one :product_instance
+    has_one :organization
+    has_one :user
+    has_one :product_contract
+    has_one :product_pricing
 
     def to_audit_event
       {
