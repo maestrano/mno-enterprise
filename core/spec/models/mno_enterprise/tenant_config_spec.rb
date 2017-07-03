@@ -65,6 +65,7 @@ describe MnoEnterprise::TenantConfig do
         port: 25
       }
       expect(Rails.application.config.action_mailer.smtp_settings).to eq(expected)
+      expect(ActionMailer::Base.smtp_settings).to eq(expected)
     end
   end
 
