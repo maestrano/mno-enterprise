@@ -110,6 +110,10 @@ module MnoEnterprise
       self.class.find_one(self.id, included)
     end
 
+    def reload
+      load_required
+    end
+
     def ==(o)
       o.class == self.class && o.attributes == attributes
     end

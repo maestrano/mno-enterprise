@@ -3,46 +3,40 @@ require 'rails_helper'
 module MnoEnterprise
   describe Jpi::V1::Admin::AppCommentsController, type: :controller do
     include MnoEnterprise::TestingSupport::JpiV1TestHelper
-
-    #TODO: Fix Spec for Admin Controller
-    before { skip }
-
+    include MnoEnterprise::TestingSupport::ReviewsSharedHelpers
     render_views
     routes { MnoEnterprise::Engine.routes }
-    before { request.env["HTTP_ACCEPT"] = 'application/json' }
-
+    before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
     #===============================================
     # Assignments
     #===============================================
-    let(:user) { build(:user, :admin, :with_organizations) }
-    let(:organization) { user.organizations.first }
-    let(:feedback) { build(:app_feedback) }
+    let(:user) { build(:user, :admin, orga_relations: [orga_relation]) }
+    let!(:orga_relation) { build(:orga_relation) }
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let(:feedback) { build(:feedback) }
 
-    before { api_stub_for(get: "/organization/#{organization.id}", response: from_api(organization)) }
-    before { api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization])) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
-    before { api_stub_for(get: "/app_feedbacks/#{feedback.id}", response: from_api(feedback)) }
+    let(:expected_hash_for_comment) {
+      hash_for_review(comment, COMMENT_ATTRIBUTES).merge('type' => 'Comment', 'feedback_id' => comment.parent_id)
+    }
+    COMMENT_ATTRIBUTES = %w(id description status user_id user_name organization_id organization_name app_id app_name)
+
     before { sign_in user }
 
-    let(:comment_1) { build(:app_comment, feedback_id: 'fid') }
-    let(:expected_hash_for_comment_1) do
-      attrs = %w(id description status user_id user_name organization_id organization_name type app_id feedback_id app_name)
-      comment_1.attributes.slice(*attrs).merge({'type'=>'Comment', 'created_at' => comment_1.created_at.as_json, 'updated_at' => comment_1.updated_at.as_json})
-    end
+    let(:comment) { build(:comment, parent_id: feedback.id) }
 
     describe 'POST #create', focus: true do
-      let(:params) { {description: 'A Review', foo: 'bar'} }
+      let(:params) { {description: 'A Review'} }
 
       before do
-        api_stub_for(post: "/app_comments", response: from_api(comment_1))
-        api_stub_for(get: "/app_comments/#{comment_1.id}", response: from_api(comment_1))
+        stub_api_v2(:get, "/feedbacks/#{feedback.id}", feedback)
+        stub_api_v2(:post, '/comments', comment)
       end
 
       subject { post :create, app_comment: params, feedback_id: feedback.id }
 
       it 'renders the new review' do
-        expect(JSON.parse(subject.body)).to include('app_comment' => expected_hash_for_comment_1)
+        expect(JSON.parse(subject.body)['app_comment']).to eq(expected_hash_for_comment)
       end
     end
   end

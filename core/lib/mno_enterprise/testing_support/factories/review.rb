@@ -3,12 +3,14 @@
 FactoryGirl.define do
   factory :mno_enterprise_app_review, :class => 'AppReview' do
 
-    factory :app_review, class: MnoEnterprise::AppReview do
+    factory :review, class: MnoEnterprise::Review do
       sequence(:id)
       description 'Some Description'
       status 'approved'
       rating 3
       app_id 'app-id'
+      reviewable_id 'app-id'
+      reviewable_type 'App'
       app_name 'the app'
       user_id 'usr-11'
       user_name 'Jean Bon'
@@ -22,29 +24,29 @@ FactoryGirl.define do
       edited_by_id 1
 
       user_admin_role 'admin'
-      # Properly build the resource with Her
-      initialize_with { new(attributes).tap { |e| e.clear_attribute_changes! } }
+      review_type 'Review'
+      versions nil
 
-      factory :app_feedback, class: MnoEnterprise::AppFeedback do
-        type 'Feedback'
+      factory :feedback, class: MnoEnterprise::Feedback do
+        review_type 'Feedback'
         sequence(:description) { |n| "Feedback ##{n}" }
       end
 
-      factory :app_question, class: MnoEnterprise::AppQuestion do
-        type 'Question'
+      factory :question, class: MnoEnterprise::Question do
+        review_type 'Question'
         sequence(:description) { |n| "Question ##{n}" }
       end
 
-      factory :app_comment, class: MnoEnterprise::AppComment do
-        type 'Comment'
+      factory :comment, class: MnoEnterprise::Comment do
+        review_type 'Comment'
         sequence(:description) { |n| "Comment ##{n}" }
-        feedback_id 'feedback-id'
+        parent_id 'feedback-id'
       end
 
-      factory :app_answer, class: MnoEnterprise::AppAnswer do
-        type 'Answer'
+      factory :answer, class: MnoEnterprise::Answer do
+        review_type 'Answer'
         sequence(:description) { |n| "Answer ##{n}" }
-        question_id 'question-id'
+        parent_id 'question-id'
       end
     end
   end

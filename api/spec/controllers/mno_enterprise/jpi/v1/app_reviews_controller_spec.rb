@@ -3,108 +3,114 @@ require 'rails_helper'
 module MnoEnterprise
   describe Jpi::V1::AppReviewsController, type: :controller do
     include MnoEnterprise::TestingSupport::JpiV1TestHelper
-     # TODO: Re-enable Specs
-    before { skip }
+    include MnoEnterprise::TestingSupport::ReviewsSharedHelpers
 
     render_views
     routes { MnoEnterprise::Engine.routes }
-    before { request.env["HTTP_ACCEPT"] = 'application/json' }
+    before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
 
     #===============================================
     # Assignments
     #===============================================
     let(:user) { build(:user) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    let(:organization) { build(:organization) }
+    let(:orga_relation) { build(:orga_relation, user: user, organization: organization) }
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+
     before { sign_in user }
 
     let(:app) { build(:app) }
-    let(:app_review) { build(:app_review) }
-    let(:expected_hash_for_review) do
-      attrs = %w(id rating description status user_id user_name organization_id organization_name app_id app_name json.user_admin_role user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
-      app_review.attributes.slice(*attrs).merge({'created_at' => app_review.created_at.as_json, 'updated_at' => app_review.updated_at.as_json})
-    end
-    let(:expected_hash_for_reviews) do
-      {
-        'app_reviews' => [expected_hash_for_review],
-      }
-    end
+    let(:review) { build(:review) }
+    let(:expected_hash_for_review) { hash_for_review(review).merge('rating' => review.rating) }
 
     before do
-      api_stub_for(get: "/apps/#{app.id}", response: from_api(app))
+      stub_api_v2(:get, "/apps/#{app.id}", app)
     end
+
+    let(:data) { JSON.parse(subject.body) }
+
 
     describe 'GET #index' do
 
       before do
-        api_stub_for(get: "/app_reviews?filter[reviewable_id]=#{app.id}", response: from_api([app_review]))
+        stub_api_v2(:get, '/reviews', [review], [], {filter: {reviewer_type: 'OrgaRelation', reviewable_type: 'App', status: 'approved', reviewable_id: app.id}})
       end
 
       subject { get :index, id: app.id }
 
-      it_behaves_like "jpi v1 protected action"
+      it_behaves_like 'jpi v1 protected action'
 
-      it_behaves_like "a paginated action"
+      it_behaves_like 'a paginated action'
 
       it 'renders the list of reviews' do
         subject
-        expect(JSON.parse(response.body)).to eq(expected_hash_for_reviews)
+        expect(JSON.parse(response.body)['app_reviews'][0]).to eq(expected_hash_for_review)
       end
     end
 
     describe 'POST #create', focus: true do
-      let(:params) { {organization_id: 1, description: 'A Review', rating: 5, foo: 'bar'} }
-      let(:app_review) { build(:app_review) }
-
+      let(:params) { {organization_id: organization.id, description: 'A Review', rating: 5} }
       before do
-        api_stub_for(post: "/app_reviews", response: from_api(app_review))
-        api_stub_for(get: "/app_reviews/#{app_review.id}", response: from_api(app_review))
+        stub_api_v2(:get, '/orga_relations', [orga_relation], [], {filter: {organization_id: organization.id, user_id: user.id}, page: {number: 1, size: 1}})
+        stub_api_v2(:post, '/reviews', review)
       end
 
       subject { post :create, id: app.id, app_review: params }
 
-      it_behaves_like "jpi v1 protected action"
-
+      it_behaves_like 'jpi v1 protected action'
+      let(:data) { JSON.parse(subject.body) }
       it 'renders the new review' do
-        expect(JSON.parse(subject.body)).to include('app_review' => expected_hash_for_review)
+        expect(data['app_review']).to include(expected_hash_for_review)
       end
 
       it 'renders the new average rating' do
-        expect(JSON.parse(subject.body)).to include('average_rating' => app.average_rating)
+        expect(data['average_rating']).to eq(app.average_rating)
       end
     end
 
     describe 'PATCH #update', focus: true do
       let(:params) { {description: 'A Review 2', rating: 1} }
-      let(:app_review) { build(:app_review, user_id: user.id) }
-
+      let(:review) { build(:review, user_id: user.id) }
       before do
-        api_stub_for(put: "/app_reviews/#{app_review.id}", response: from_api(app_review))
-        api_stub_for(get: "/app_reviews/#{app_review.id}", response: from_api(app_review))
+        stub_api_v2(:get, "/reviews/#{review.id}", review)
       end
+      let!(:patch_stub) { stub_api_v2(:patch, "/reviews/#{review.id}", review) }
 
-      subject { put :update, id: app.id, review_id: app_review.id, app_review: params }
+      subject { put :update, id: app.id, review_id: review.id, app_review: params }
+
+      it {
+        subject
+        expect(patch_stub).to have_been_requested
+      }
 
       it 'renders the new review' do
-        expect(JSON.parse(subject.body)).to include('app_review' => expected_hash_for_review)
-        expect(JSON.parse(subject.body)).to include('average_rating' => app.average_rating)
+        expect(data['app_review']).to include(expected_hash_for_review)
+      end
+
+      it 'renders the new average rating' do
+        expect(data['average_rating']).to eq(app.average_rating)
       end
     end
 
     describe 'DELETE #destroy', focus: true do
-      let(:app_review) { build(:app_review, user_id: user.id) }
-
+      let(:review) { build(:review, user_id: user.id) }
+      let!(:delete_stub) { stub_api_v2(:delete, "/reviews/#{review.id}") }
       before do
-        api_stub_for(delete: "/app_reviews/#{app_review.id}", response: from_api(app_review))
-        api_stub_for(get: "/app_reviews/#{app_review.id}", response: from_api(app_review))
+        stub_api_v2(:get, "/reviews/#{review.id}", review)
       end
 
-      subject { delete :destroy, id: app.id, review_id: app_review.id }
+      subject { delete :destroy, id: app.id, review_id: review.id }
 
       it 'renders the new review' do
-        expect(JSON.parse(subject.body)).to include('app_review' => expected_hash_for_review)
-        expect(JSON.parse(subject.body)).to include('average_rating' => app.average_rating)
+        expect(data['average_rating']).to eq(app.average_rating)
       end
+
+      it {
+        subject
+        expect(delete_stub).to have_been_requested
+      }
+
     end
   end
 end

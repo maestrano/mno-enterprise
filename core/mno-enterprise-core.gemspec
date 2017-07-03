@@ -1,7 +1,7 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require_relative 'lib/mno_enterprise/version.rb'
+require_relative 'lib/mno_enterprise/mno_enterprise_version.rb'
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
