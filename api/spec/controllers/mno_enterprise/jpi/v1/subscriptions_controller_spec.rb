@@ -54,6 +54,21 @@ module MnoEnterprise
       subject { post :create, organization_id: organization.id, subscription: {pricing_id: pricing.id} }
 
       it_behaves_like 'jpi v1 protected action'
+
+      it 'passes the correct parameters' do
+        expect(subject).to be_successful
+        assert_requested_api_v2(:post, '/subscriptions',
+                                 body: {
+                                        "data" => {
+                                          "type" => "subscriptions",
+                                          "attributes" => {
+                                            "pricing_id" => pricing.id,
+                                            "organization_id" => organization.id,
+                                            "user_id" => user.id
+                                          }
+                                        }
+                                      }.to_json)
+      end
     end
 
     describe 'PUT #update' do
@@ -69,6 +84,20 @@ module MnoEnterprise
       subject { put :update, organization_id: organization.id, id: subscription.id, subscription: {pricing_id: pricing.id} }
 
       it_behaves_like 'jpi v1 protected action'
+
+      it 'passes the correct parameters' do
+        expect(subject).to be_successful
+        assert_requested_api_v2(:patch, "/subscriptions/#{subscription.id}",
+                                 body: {
+                                        "data" => {
+                                          "id" => subscription.id,
+                                          "type" => "subscriptions",
+                                          "attributes" => {
+                                            "pricing_id" => pricing.id
+                                          }
+                                        }
+                                      }.to_json)
+      end
     end
   end
 end

@@ -37,6 +37,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     authorize! :manage_app_instances, parent_organization
 
     subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
+    return render_not_found('subscription') unless subscription
     subscription.update_attributes(subscription_update_params)
     if subscription.errors.any?
       render json: subscription.errors, status: :bad_request
