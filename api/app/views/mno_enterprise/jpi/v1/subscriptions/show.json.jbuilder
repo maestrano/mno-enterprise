@@ -1,1 +1,3 @@
-json.partial! 'subscription', subscription: @subscription
+json.subscription do
+  json.partial! 'subscription', subscription: @subscription
+end
