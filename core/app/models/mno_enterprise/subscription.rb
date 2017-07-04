@@ -22,8 +22,8 @@ module MnoEnterprise
       {
         id: id,
         status: status,
-        organization_id: organization_id,
-        user_id: user_id
+        organization_id: organization&.id,
+        user_id: user&.id
       }
     end
   end
