@@ -24,6 +24,7 @@ module MnoEnterprise
 
         # Update the domain of the webstore
         # @param [String] domain_name new domain for the webstore
+        # @return [Object] return false in case of error
         def update_domain(domain_name)
           raise NotImplementedError
         end
@@ -33,6 +34,7 @@ module MnoEnterprise
         # @param [String] public_cert Public certificate
         # @param [String] cert_bundle CA bundle
         # @param [String] private_key Certificate private key
+        # @return [Object] return false in case of error
         def add_ssl_certs(cert_name, public_cert, cert_bundle, private_key)
           raise NotImplementedError
         end
