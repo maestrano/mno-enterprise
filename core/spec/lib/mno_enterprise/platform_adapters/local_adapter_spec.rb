@@ -2,8 +2,9 @@
 require "rails_helper"
 
 describe MnoEnterprise::PlatformAdapters::LocalAdapter do
-  # TODO: shared example? "it_behave_likes MnoEnterprise::PlatformAdapters::Adapter"
-  it { expect(described_class).to respond_to(:restart) }
+  include MnoEnterprise::TestingSupport::SharedExamples::PlatformAdapter
+
+  it_behaves_like MnoEnterprise::PlatformAdapters::Adapter
 
   describe '.restart' do
     it 'touches the restart file' do

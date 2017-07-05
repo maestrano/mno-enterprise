@@ -2,12 +2,9 @@
 require "rails_helper"
 
 describe MnoEnterprise::PlatformAdapters::NexAdapter do
-  # TODO: shared example? "it_behave_likes MnoEnterprise::PlatformAdapters::Adapter"
-  it { expect(described_class).to respond_to(:restart) }
-  it { expect(described_class).to respond_to(:publish_assets) }
-  it { expect(described_class).to respond_to(:fetch_assets) }
-  it { expect(described_class).to respond_to(:update_domain) }
-  it { expect(described_class).to respond_to(:add_ssl_certs) }
+  include MnoEnterprise::TestingSupport::SharedExamples::PlatformAdapter
+
+  it_behaves_like MnoEnterprise::PlatformAdapters::Adapter
 
   around do |example|
     env_vars = {
