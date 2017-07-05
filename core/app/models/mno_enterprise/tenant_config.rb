@@ -163,6 +163,16 @@ module MnoEnterprise
                     # }
                   }
                 },
+                questions: {
+                  type: "object",
+                  properties: {
+                    enabled: {
+                      type: "boolean",
+                      default: false,
+                      description: "Enable app questions on the marketplace"
+                    }
+                  }
+                },
                 reviews: {
                   type: "object",
                   properties: {
@@ -211,7 +221,8 @@ module MnoEnterprise
               properties: {
                 enabled: {
                   type: "boolean",
-                  default: true
+                  default: true,
+                  description: "Enable payment section in the company settings"
                 }
               }
             },
@@ -239,7 +250,7 @@ module MnoEnterprise
           }
         },
         admin_panel: {
-          description: "Admin Panel Settings",
+          description: "Settings controlling the behavior of the Admin Panel",
           type: "object",
           properties: {
             apps_management: {
@@ -247,7 +258,8 @@ module MnoEnterprise
               properties: {
                 enabled: {
                   type: "boolean",
-                  default: true
+                  default: true,
+                  description: "Enable adding/removing apps (connection of existing apps is still possible) from the admin panel"
                 }
               }
             },
@@ -269,7 +281,8 @@ module MnoEnterprise
                   properties: {
                     enabled: {
                       type: "boolean",
-                      default: true
+                      default: true,
+                      description: "Control the ability to create or invite customers from the admin panel"
                     }
                   }
                 },
@@ -278,7 +291,8 @@ module MnoEnterprise
                   properties: {
                     enabled: {
                       type: "boolean",
-                      default: true
+                      default: true,
+                      description: "Control the ability to add users to organizations from the admin panel"
                     }
                   }
                 }
@@ -290,7 +304,7 @@ module MnoEnterprise
                 enabled: {
                   type: "boolean",
                   default: true,
-                  description: "disable the finance page, the financial kpis and the invoices in the admin panel"
+                  description: "enable the finance page, the financial kpis and the invoices"
                 }
               }
             },
@@ -299,7 +313,9 @@ module MnoEnterprise
               properties: {
                 enabled: {
                   type: "boolean",
-                  default: true
+                  default: true,
+                  description: "Control the ability to impersonate users from the admin panel"
+
                 }
               }
             },
@@ -308,7 +324,18 @@ module MnoEnterprise
               properties: {
                 enabled: {
                   type: "boolean",
-                  default: true
+                  default: true,
+                  description: "enable staff management"
+                }
+              }
+            },
+            settings: {
+              type: "object",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  default: true,
+                  description: "enable frontend configuration from the Admin Panel"
                 }
               }
             }
@@ -370,6 +397,7 @@ module MnoEnterprise
         config.i18n_enabled = Settings.system.i18n.enabled
       end
       Rails.application.config.action_mailer.smtp_settings = Settings.system.smtp.to_hash
+      ActionMailer::Base.smtp_settings = Settings.system.smtp.to_hash
     end
 
     # Fetch the Tenant#frontend_config from MnoHub
@@ -387,7 +415,7 @@ module MnoEnterprise
     # @param [Hash] schema JSON schema to parse
     def self.build_object(schema)
       case schema['type']
-      when 'string', 'integer', 'boolean'
+      when 'string', 'integer', 'boolean', 'password'
         schema['default']
       when 'object'
         h = {}
