@@ -15,27 +15,25 @@ module MnoEnterprise
         end
     end
 
-    # @see MnoEnterprise::PlatformAdapters::Adapter#restart
-    def self.restart
-      adapter.restart
-    end
+    class << self
+      # @see MnoEnterprise::PlatformAdapters::Adapter#restart
+      delegate :restart, to: :adapter
 
-    # @see MnoEnterprise::PlatformAdapters::Adapter#fetch_assets
-    def self.fetch_assets
-      adapter.fetch_assets
-    end
+      # @see MnoEnterprise::PlatformAdapters::Adapter#fetch_assets
+      delegate :fetch_assets, to: :adapter
 
-    # @see MnoEnterprise::PlatformAdapters::Adapter#publish_assets
-    def self.publish_assets
-      adapter.publish_assets
-    end
+      # @see MnoEnterprise::PlatformAdapters::Adapter#publish_assets
+      delegate :publish_assets, to: :adapter
 
-    # @see Adapter#add_ssl_certs
-    def self.add_ssl_certs(*args)
-      adapter.add_ssl_certs(*args)
+      # @see MnoEnterprise::PlatformAdapters::Adapter#update_domain
+      delegate :update_domain, to: :adapter
+
+      # @see MnoEnterprise::PlatformAdapters::Adapter#add_ssl_certs
+      delegate :add_ssl_certs, to: :adapter
     end
 
     private
+
     def self.load_adapter(name)
       "MnoEnterprise::PlatformAdapters::#{name.to_s.camelize}Adapter".constantize
     end
