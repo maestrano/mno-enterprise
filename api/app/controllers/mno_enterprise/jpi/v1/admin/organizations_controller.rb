@@ -39,7 +39,7 @@ module MnoEnterprise
     def create
       # Create new organization
       @organization = MnoEnterprise::Organization.create(organization_update_params)
-
+      @organization = @organization.load_required(*DEPENDENCIES)
       # OPTIMIZE: move this into a delayed job?
       update_app_list
       @organization = @organization.load_required(*DEPENDENCIES)
@@ -67,16 +67,17 @@ module MnoEnterprise
 
       # Find or create a new user - We create it in the frontend as MnoHub will send confirmation instructions for newly
       # created users
-      user = MnoEnterprise::User.find_by(email: user_params[:email]) || create_unconfirmed_user(user_params)
+      user = MnoEnterprise::User.includes(:orga_relations).where(email: user_params[:email]).first || create_unconfirmed_user(user_params)
 
       # Create the invitation
       invite = MnoEnterprise::OrgaInvite.create(
-        organization_id: organization.id,
+        organization_id: @organization.id,
         user_email: user.email,
         user_role: params[:user][:role],
         referrer_id: current_user.id,
         status: 'staged' # Will be updated to 'accepted' for unconfirmed users
       )
+      invite = invite.load_required(:user)
       @user = user.confirmed? ? invite : user
     end
 
@@ -103,9 +104,9 @@ module MnoEnterprise
 
       # Reset the confirmation field so we can track when the invite is send - #confirmation_sent_at is when the confirmation_token was generated (not sent)
       # Not ideal as we do 2 saves, and the previous save trigger a call to the backend to validate the token uniqueness
-      user.assign_attributes(confirmation_sent_at: nil, confirmation_token: nil)
+      user.attributes = {confirmation_sent_at: nil, confirmation_token: nil}
       user.save
-      user
+      user.load_required(:orga_relations)
     end
 
     # Update App List to match the list passed in params
