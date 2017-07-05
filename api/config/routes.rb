@@ -211,7 +211,12 @@ MnoEnterprise::Engine.routes.draw do
             put :refresh_metadata
           end
         end
-        resource 'tenant'
+        resource 'tenant', only: [:show, :update] do
+          member do
+            post :ssl_certificates, action: :add_certificates
+            match :domain, action: :update_domain, via: [:put, :patch]
+          end
+        end
 
         # Theme Previewer
         post 'theme/save'

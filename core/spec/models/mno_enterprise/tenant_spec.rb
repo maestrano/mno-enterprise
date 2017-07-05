@@ -17,7 +17,8 @@ module MnoEnterprise
           id: tenant.id,
           type: 'tenants',
           attributes: {
-            name: tenant.name
+            name: tenant.name,
+            domain: tenant.domain
           }.merge(params)
         }
       }}
