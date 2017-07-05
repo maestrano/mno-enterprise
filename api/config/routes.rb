@@ -139,7 +139,9 @@ MnoEnterprise::Engine.routes.draw do
 
         resources :audit_events, only: [:index]
 
-        resources :subscriptions, only: [:index, :show, :create, :update]
+        if Settings&.dashboard&.provisioning&.enabled
+          resources :subscriptions, only: [:index, :show, :create, :update]
+        end
       end
 
       resources :deletion_requests, only: [:show, :create, :destroy] do
@@ -164,8 +166,10 @@ MnoEnterprise::Engine.routes.draw do
         end
       end
 
-      resources :products, only: [:index, :show] do
-        resources :pricings, only: :index
+      if Settings&.dashboard&.provisioning&.enabled
+        resources :products, only: [:index, :show] do
+          resources :pricings, only: :index
+        end
       end
 
       #============================================================

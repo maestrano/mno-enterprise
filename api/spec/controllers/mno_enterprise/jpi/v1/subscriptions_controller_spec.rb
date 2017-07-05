@@ -7,6 +7,11 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
+    before(:all) do
+      Settings.merge!(dashboard: {provisioning: {enabled: true}})
+      Rails.application.reload_routes!
+    end
+
     # Stub controller ability
     let!(:ability) { stub_ability }
     before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
