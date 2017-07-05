@@ -36,9 +36,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
   # DELETE /mnoe/jpi/v1/app_instances/1
   def destroy
     @app_instance = MnoEnterprise::AppInstance.find_one(params[:id])
-
     if @app_instance
-      authorize! :manage_app_instances, @app_instance.owner
+      organization = MnoEnterprise::Organization.find_one(@app_instance.owner_id)
+      authorize! :manage_app_instances, organization
       MnoEnterprise::EventLogger.info('app_destroy', current_user.id, 'App destroyed', @app_instance)
       @app_instance = @app_instance.terminate.first
     end
