@@ -16,7 +16,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   # GET /mnoe/jpi/v1/organizations/:organization_id/teams
   def index
     authorize! :read, parent_organization
-    @teams = parent_organization.teams
+    @teams = MnoEnterprise::Team.where(organization_id: params[:organization_id])
   end
 
   # GET /mnoe/jpi/v1/teams/:id
@@ -82,6 +82,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
       users = @team.organization.users.where('id.in' => id_list)
       users.each { |u| @team.send(action, u) }
     end
+    @team.reload
 
     render 'show'
   end
