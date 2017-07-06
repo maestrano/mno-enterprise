@@ -3,10 +3,11 @@ en:
     templates:
       dashboard:
         provisioning:
-          order: "Order"
-          additional_details: "Additional details"
-          confirm: "Confirm"
-          order_summary: "Order summary"
+          breadcrumb:
+            order: "Order"
+            additional_details: "Additional details"
+            confirm: "Confirm"
+            order_summary: "Order summary"
           order:
             title: "Choose your subscription"
             name: "Name"
@@ -30,7 +31,7 @@ en:
             subscriptions: "Subscriptions"
             name: "Name"
             description: "Description"
-            price: "Price",
+            price: "Price"
             go_to_my_app: "Go to my app"
           subscriptions:
             title: "Manage your subscriptions"
