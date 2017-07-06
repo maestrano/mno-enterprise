@@ -1,7 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   extend ActiveSupport::Concern
 
-  SUBSCIPTION_INCLUDES ||= [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
+  SUBSCRIPTION_INCLUDES ||= [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
 
   #==================================================================
   # Instance methods
@@ -60,10 +60,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   end
 
   def fetch_subscriptions(organization_id)
-    MnoEnterprise::Subscription.includes(*SUBSCIPTION_INCLUDES).where(organization_id: organization_id)
+    MnoEnterprise::Subscription.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id)
   end
 
   def fetch_subscription(organization_id, id)
-    MnoEnterprise::Subscription.includes(*SUBSCIPTION_INCLUDES).where(organization_id: organization_id, id: id).first
+    MnoEnterprise::Subscription.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id, id: id).first
   end
 end
