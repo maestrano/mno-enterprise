@@ -43,6 +43,7 @@ module MnoEnterprise
         FileUtils.mkdir_p(File.dirname(Rails.root.join(filepath)))
         File.open(Rails.root.join(filepath),'wb') { |f| f.write(logo_content) }
       end
+      recompile_assets
       SystemManager.publish_assets
       render json: {status:  'Ok'},  status: :created
     end
@@ -79,6 +80,12 @@ module MnoEnterprise
       def publish_style
         Rake::Task['mnoe:frontend:previewer:build'].reenable
         Rake::Task['mnoe:frontend:previewer:build'].invoke
+      end
+
+      # TODO: remove once devise pages have been extracted and we remove the asset pipeline
+      def recompile_assets
+        Rake::Task['assets:precompile'].reenable
+        Rake::Task['assets:precompile'].invoke
       end
 
       # Convert a theme provided as a hash into a properly
