@@ -226,6 +226,16 @@ module MnoEnterprise
                 }
               }
             },
+            provisioning: {
+              type: "object",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  default: false,
+                  description: "Enable external product provisioning"
+                }
+              }
+            },
             registration: {
               type: "object",
               properties: {

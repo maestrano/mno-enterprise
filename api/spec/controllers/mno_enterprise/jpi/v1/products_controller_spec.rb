@@ -7,6 +7,11 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
+    before(:all) do
+      Settings.merge!(dashboard: {provisioning: {enabled: true}})
+      Rails.application.reload_routes!
+    end
+
     # Stub user and user call
     let!(:user) { build(:user) }
     let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
