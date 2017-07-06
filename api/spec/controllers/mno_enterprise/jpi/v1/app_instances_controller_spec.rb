@@ -76,6 +76,7 @@ module MnoEnterprise
       let(:terminated_app_instance) { build(:app_instance, id: app_instance.id, status: 'terminated') }
       before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance)}
       before { stub_api_v2(:delete, "/app_instances/#{app_instance.id}/terminate", terminated_app_instance)}
+      before { stub_api_v2(:get, "/organizations/#{app_instance.owner_id}")}
       before { sign_in user }
       subject { delete :destroy, id: app_instance.id }
 
