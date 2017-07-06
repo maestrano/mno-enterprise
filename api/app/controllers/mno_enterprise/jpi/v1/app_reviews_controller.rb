@@ -86,7 +86,7 @@ module MnoEnterprise
     end
 
     def root_params
-      symbol = self.class.name.demodulize.chomp('Controller').underscore.singularize.to_sym
+      symbol = "app_#{review_klass.table_name}".singularize.to_sym
       params.require(symbol)
     end
 
