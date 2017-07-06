@@ -56,7 +56,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   protected
 
   def subscription_update_params
-    params.require(:subscription).permit(:start_date, :max_licenses, :custom_data)
+    # custom_data is an arbitrary hash
+    # On Rails 5.1 use `permit(custom_data: {})`
+    params.require(:subscription).permit(:start_date, :max_licenses).tap do |whitelisted|
+      whitelisted[:custom_data] = params[:subscription][:custom_data] if params[:subscription].has_key?(:custom_data)
+    end
   end
 
   def fetch_subscriptions(organization_id)
