@@ -8,6 +8,7 @@ module MnoEnterprise
     include ActiveModel::Validations
 
     property :id
+    property :uid, type: :string
     property :created_at, type: :time
     property :updated_at, type: :time
     property :confirmed_at, type: :time
