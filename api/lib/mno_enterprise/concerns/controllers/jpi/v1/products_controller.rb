@@ -6,7 +6,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
   #==================================================================
   # GET /mnoe/jpi/v1/products
   def index
-    @products = MnoEnterprise::Product.includes(:values, :assets, :categories, :product_pricings, :product_contracts).all
+    criteria = MnoEnterprise::Product.includes(:values, :assets, :categories, :product_pricings, :product_contracts)
+    @products = MnoEnterprise::Product.fetch_all(criteria)
   end
 
   # GET /mnoe/jpi/v1/products/id
