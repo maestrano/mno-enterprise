@@ -13,8 +13,11 @@ module MnoEnterprise
         def restart
           # TODO: implement using nex_client
           # For now this work with one node
-          # SELF_NEX_API_KEY="some-api-key"
-          # SELF_NEX_API_ENDPOINT="https://api-nex-uat.maestrano.io"
+
+          # Restart myself
+          # nex_app.restart
+          # puts "success" unless nex_app.errors.any?
+
           FileUtils.touch('tmp/restart.txt')
         end
 
@@ -33,7 +36,60 @@ module MnoEnterprise
           copy_asset('s3://${MINIO_BUCKET}/assets/main-logo.png', logo_file)
         end
 
+        # @see MnoEnterprise::PlatformAdapters::Adapter#update_domain
+        def update_domain(domain_name)
+          domain = NexClient::Domain.new(cname: domain_name)
+          domain.relationships.origin = nex_app
+          domain.save
+
+          # Display errors if any
+          if domain.errors.any?
+            # display_record_errors(domain)
+            false
+          else
+            domain
+          end
+        end
+
+        # @see MnoEnterprise::PlatformAdapters::Adapter#add_ssl_certs
+        def add_ssl_certs(cert_name, public_cert, cert_bundle, private_key)
+          cert = NexClient::SslCertificate.new(
+            cname: cert_name,
+            public_cert: public_cert,
+            cert_bundle: cert_bundle,
+            private_key: private_key
+          )
+          cert.relationships.origin = nex_app
+          cert.save
+
+          # Display errors if any
+          if cert.errors.any?
+            # display_record_errors(cert)
+            false
+          else
+            cert
+          end
+        end
+
         private
+
+        # Configure the Nex!™ client
+        def setup_nex_client
+          # Set endpoint
+          NexClient::BaseResource.site = "#{ENV['SELF_NEX_API_ENDPOINT']}/api/v1"
+
+          # Set authentication
+          NexClient::BaseResource.connection(true) do |connection|
+            connection.use Faraday::Request::BasicAuthentication, ENV['SELF_NEX_API_KEY'], ''
+          end
+        end
+
+        def nex_app
+          @nex_app ||= begin
+            setup_nex_client
+            NexClient::App.find(ENV['SELF_NEX_APP_ID']).first
+          end
+        end
 
         def public_folder
           @public_folder ||= Rails.root.join('public')

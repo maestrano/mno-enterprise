@@ -5,11 +5,10 @@ ENV["RAILS_ENV"] ||= 'test'
 require 'fakeweb'
 require 'webmock/rspec'
 
-
 require 'spec_helper'
 require 'her'
 require 'factory_girl_rails'
-
+require 'shoulda/matchers'
 
 # Load the Dummy application
 require File.expand_path("../../spec/dummy/config/environment.rb",  __FILE__)
@@ -78,4 +77,11 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
 end

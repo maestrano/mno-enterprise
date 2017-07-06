@@ -9,7 +9,7 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
-    let(:tenant) { build(:tenant )}
+    let(:tenant) { build(:tenant,  domain: 'tenant.domain.test')}
     let(:user) { FactoryGirl.build(:user, :admin) }
 
     before do
@@ -17,6 +17,7 @@ module MnoEnterprise
       sign_in user
 
       stub_api_v2(:get, '/tenant', tenant)
+      stub_api_v2(:patch, '/tenant', tenant)
     end
 
     describe 'GET #show' do
@@ -28,10 +29,11 @@ module MnoEnterprise
       it { is_expected.to have_http_status(:ok) }
       it { is_expected.to render_template(:show) }
 
-      it 'returns the frontend config' do
+      it 'returns the tenant information' do
         subject
         expected = {
           tenant: {
+            domain: 'tenant.domain.test',
             frontend_config: Settings.to_hash
           }
         }
@@ -43,10 +45,6 @@ module MnoEnterprise
     end
 
     describe 'PATCH #update' do
-      before {
-        stub_api_v2(:patch, '/tenant', tenant)
-      }
-
       # TODO: fix
       # it_behaves_like 'a jpi v1 admin action'
 
@@ -59,6 +57,54 @@ module MnoEnterprise
         expect(MnoEnterprise::SystemManager).to receive(:restart)
         subject
       end
+    end
+
+    describe 'PATCH #update_domain' do
+      let(:tenant_params) { {domain: 'foo.test'} }
+
+      subject { patch :update_domain, tenant: tenant_params }
+      it { is_expected.to have_http_status(:ok) }
+
+      it 'updates the domain then restart the app' do
+        expect(MnoEnterprise::SystemManager).to receive(:update_domain).with('foo.test').and_return(true).ordered
+        expect(MnoEnterprise::SystemManager).to receive(:restart).ordered
+        subject
+      end
+
+      context 'on Platform error' do
+        before { allow(MnoEnterprise::SystemManager).to receive(:update_domain).and_return(false) }
+
+        it { is_expected.to have_http_status(:bad_request) }
+
+        it 'does not restart the app' do
+          expect(MnoEnterprise::SystemManager).not_to receive(:restart)
+          subject
+        end
+      end
+    end
+
+    describe 'POST #upload_certificates' do
+      let(:tenant_params) { {
+        domain: 'foo.test',
+        certificate: 'my-cert',
+        private_key: 'my-private-key',
+        ca_bundle: 'my-ca-bundle'
+      } }
+
+      subject { post :add_certificates, tenant: tenant_params }
+      it { is_expected.to have_http_status(:ok) }
+
+      it 'adds the certificates then restart the app' do
+        expect(MnoEnterprise::SystemManager).to receive(:add_ssl_certs).with('foo.test', 'my-cert', 'my-ca-bundle', 'my-private-key').and_return(true).ordered
+        subject
+      end
+
+      context 'on Platform error' do
+        before { allow(MnoEnterprise::SystemManager).to receive(:add_ssl_certs).and_return(false) }
+
+        it { is_expected.to have_http_status(:bad_request) }
+      end
+
     end
   end
 end
