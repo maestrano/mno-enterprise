@@ -99,6 +99,7 @@ en:
               history:
                 title: "Edit History"
                 close: "Close"
+            provision: "Provision"
 
           app_selection:
             next: "Next"
