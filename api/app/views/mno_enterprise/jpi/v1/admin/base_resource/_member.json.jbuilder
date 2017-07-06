@@ -1,7 +1,7 @@
 if member.is_a?(MnoEnterprise::User)
   json.uid member.uid
   json.entity 'User'
-  json.role member.role(organization) if organization
+  json.role organization.role(member) if organization
 
   status = case
            when member.confirmed? then 'active'
