@@ -103,10 +103,11 @@ module MnoEnterprise
       user.password = Devise.friendly_token
       user.save!
 
-      # # Reset the confirmation field so we can track when the invite is send - #confirmation_sent_at is when the confirmation_token was generated (not sent)
-      # # Not ideal as we do 2 saves, and the previous save trigger a call to the backend to validate the token uniqueness
-      # user.attributes = {confirmation_sent_at: nil, confirmation_token: nil}
-      # user.save!
+      # Reset the confirmation field so we can track when the invite is send - #confirmation_sent_at is when the confirmation_token was generated (not sent)
+      # Not ideal as we do 2 saves, and the previous save trigger a call to the backend to validate the token uniqueness
+      # TODO: See if we can tell Devise to not set the timestamps
+      user.attributes = {confirmation_sent_at: nil, confirmation_token: nil}
+      user.save!
       user.load_required(:orga_relations)
     end
 

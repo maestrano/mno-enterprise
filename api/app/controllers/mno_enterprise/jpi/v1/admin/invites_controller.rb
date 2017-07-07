@@ -39,6 +39,7 @@ module MnoEnterprise::Jpi::V1::Admin
       # Generate token if not generated
       user.send(:generate_confirmation_token!) if !user.confirmed? && user.confirmation_token.blank?
 
+      # TODO: fix serialisation and use `deliver_later`
       MnoEnterprise::SystemNotificationMailer.organization_invite(invite).deliver_now
 
       # Update staged invite status
