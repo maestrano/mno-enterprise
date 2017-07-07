@@ -6,20 +6,20 @@ module MnoEnterprise::TestingSupport::ReviewsSharedHelpers
     review.attributes.slice(*attributes).merge({'created_at' => review.created_at.as_json, 'updated_at' => review.updated_at.as_json})
   end
 
-  def hash_for_comment(comment)
-    hash_for_review(comment).merge('feedback_id' => comment.parent_id)
+  def hash_for_comment(comment, attributes = REVIEW_ATTRIBUTES)
+    hash_for_review(comment, attributes).merge('feedback_id' => comment.parent_id)
   end
 
-  def hash_for_feedback(feedback)
-    hash_for_review(feedback).merge({'rating' => feedback.rating, 'comments' => feedback.comments.map { |c| hash_for_comment(c) }})
+  def hash_for_feedback(feedback, attributes = REVIEW_ATTRIBUTES)
+    hash_for_review(feedback, attributes).merge({'rating' => feedback.rating, 'comments' => feedback.comments.map { |c| hash_for_comment(c, attributes) }})
   end
 
-  def hash_for_answer(answer)
-    hash_for_review(answer).merge('question_id' => answer.parent_id)
+  def hash_for_answer(answer, attributes = REVIEW_ATTRIBUTES)
+    hash_for_review(answer, attributes).merge('question_id' => answer.parent_id)
   end
 
-  def hash_for_question(question)
-    hash_for_review(question).merge('answers' => question.answers.map { |c| hash_for_answer(c) })
+  def hash_for_question(question, attributes = REVIEW_ATTRIBUTES)
+    hash_for_review(question, attributes).merge('answers' => question.answers.map { |c| hash_for_answer(c, attributes) })
   end
 
 end

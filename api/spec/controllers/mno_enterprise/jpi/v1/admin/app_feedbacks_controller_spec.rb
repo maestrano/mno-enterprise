@@ -1,54 +1,50 @@
 require 'rails_helper'
 
 module MnoEnterprise
-  include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
-
   describe Jpi::V1::Admin::AppFeedbacksController, type: :controller do
+    include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
+    include MnoEnterprise::TestingSupport::ReviewsSharedHelpers
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
-    let(:user) { build(:user, :admin, :with_organizations) }
-    let(:feedback_comment_1) { build(:app_comment) }
-    let(:feedback_comment_2) { build(:app_comment) }
-    let(:app_feedback) { build(:app_feedback, comments: [feedback_comment_1, feedback_comment_2]) }
-    let(:expected_hash_for_comment_1) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
-      feedback_comment_1.attributes.slice(*attrs).merge({'created_at' => feedback_comment_1.created_at.as_json, 'updated_at' => feedback_comment_1.updated_at.as_json})
-    end
-    let(:expected_hash_for_comment_2) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
-      feedback_comment_2.attributes.slice(*attrs).merge({'created_at' => feedback_comment_2.created_at.as_json, 'updated_at' => feedback_comment_2.updated_at.as_json})
-    end
-    let(:expected_array_for_comments) { [expected_hash_for_comment_1, expected_hash_for_comment_2] }
-    let(:expected_hash_for_feedback) do
-      attrs = %w(id rating description status user_id user_name organization_id organization_name app_id app_name user_admin_role comments edited edited_by_name edited_by_admin_role edited_by_id)
-      app_feedback.attributes.slice(*attrs).merge({'created_at' => app_feedback.created_at.as_json, 'updated_at' => app_feedback.updated_at.as_json, 'comments' => expected_array_for_comments})
-    end
-    let(:expected_hash_for_feedbacks) do
-      {
-        'app_feedbacks' => [expected_hash_for_feedback],
-      }
-    end
+
+    FEEDBACK_ATTRIBUTE = %w(id description status app_id app_name user_id user_name organization_id organization_name)
+
+    #===============================================
+    # Assignments
+    #===============================================
+    let(:user) { build(:user, :admin) }
+    let(:organization) { build(:organization) }
+    let(:orga_relation) { build(:orga_relation, user: user, organization: organization) }
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let(:app) { build(:app) }
+    let(:feedback_id) { '1' }
+    let(:feedback_comment1) { build(:comment, parent_id: feedback_id) }
+    let(:feedback_comment2) { build(:comment, parent_id: feedback_id) }
+    let(:feedback) { build(:feedback, id: feedback_id, comments: [feedback_comment1, feedback_comment2]) }
+
+    let(:feedback_hash) {
+      hash = hash_for_feedback(feedback, FEEDBACK_ATTRIBUTE)
+      hash[:comments].each { |c| c[:type] = 'Comment' }
+      hash[:type] = 'Feedback'
+      hash
+    }
+
     before do
-      api_stub_for(get: '/app_feedbacks', response: from_api([app_feedback]))
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
       sign_in user
+      stub_api_v2(:get, '/feedbacks', [feedback], [:comments], {filter: {reviewer_type: 'OrgaRelation', reviewable_type: 'App'}})
     end
 
     describe '#index' do
       subject { get :index }
-
-      it_behaves_like "a jpi v1 admin action"
-
+      it_behaves_like 'a jpi v1 admin action'
       context 'success' do
         before { subject }
-
         it 'returns a list of app_feedbacks' do
           expect(response).to be_success
-          expect(JSON.parse(response.body)).to eq(expected_hash_for_feedbacks)
+          expect(JSON.parse(response.body)['app_feedbacks'][0]).to eq(feedback_hash)
         end
       end
     end
-
   end
 end
