@@ -33,8 +33,7 @@ module MnoEnterprise
 
       subject { get :index, organization_id: organization.id }
 
-      # TODO: Commented out as specs are failing due to an issue with json_api_client stubbing
-      # it_behaves_like 'jpi v1 protected action'
+      it_behaves_like 'jpi v1 protected action'
     end
 
     describe 'GET #show' do
@@ -45,71 +44,64 @@ module MnoEnterprise
 
       subject { get :show, organization_id: organization.id, id: subscription.id }
 
-      # TODO: Commented out as specs are failing due to an issue with json_api_client stubbing
-      # it_behaves_like 'jpi v1 protected action'
+      it_behaves_like 'jpi v1 protected action'
     end
 
     describe 'POST #create' do
       let(:subscription) { build(:subscription) }
       let(:product) { build(:product) }
-      let(:pricing) { build(:product_pricing, product: product) }
+      let(:product_pricing) { build(:product_pricing, product: product) }
 
       before { stub_audit_events }
       before { stub_api_v2(:post, "/subscriptions", subscription, [], {}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
       before { sign_in user }
 
-      subject { post :create, organization_id: organization.id, subscription: {pricing_id: pricing.id} }
+      subject { post :create, organization_id: organization.id, subscription: {custom_data: {foo: :bar}.to_json, product_pricing_id: product_pricing.id} }
 
-      # TODO: Commented out as specs are failing due to an issue with json_api_client stubbing
-      # it_behaves_like 'jpi v1 protected action'
+      it_behaves_like 'jpi v1 protected action'
 
-      xit 'passes the correct parameters' do
+      it 'passes the correct parameters' do
         expect(subject).to be_successful
         assert_requested_api_v2(:post, '/subscriptions',
                                  body: {
-                                        "data" => {
-                                          "type" => "subscriptions",
-                                          "attributes" => {},
-                                          "relationshipts" => {
-                                            "product_pricing" => {"id" => pricing.id, "type" => "product_pricings"},
-                                            "organization" => {"id" => organization.id, "type" => "organizations"},
-                                            "user" => {"id" => user.id, "type" => "users"}
-                                          }
-                                        }
-                                      }.to_json)
+                                  "data" => {
+                                    "type" => "subscriptions",
+                                    "relationships" => {
+                                      "organization" => {"data" => {"type" => "organizations", "id" => organization.id}},
+                                      "user" => {"data" => {"type" => "users", "id" => user.id}},
+                                      "product_pricing" => {"data" => {"type" => "product_pricings", "id" => product_pricing.id}},
+                                      "product_contract" => {"data" => {"type" => "product_contracts", "id" => nil}}
+                                    },
+                                    "attributes" => {"custom_data" => {"foo" => "bar"}.to_json}}
+                                  }.to_json)
       end
     end
 
     describe 'PUT #update' do
       let(:subscription) { build(:subscription) }
       let(:product) { build(:product) }
-      let(:pricing) { build(:product_pricing, product: product) }
+      let(:product_pricing) { build(:product_pricing, product: product) }
 
       before { stub_audit_events }
-      before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
       before { stub_api_v2(:patch, "/subscriptions/#{subscription.id}", subscription, [], {}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
       before { sign_in user }
 
-      subject { put :update, organization_id: organization.id, id: subscription.id, subscription: {pricing_id: pricing.id} }
+      subject { put :update, organization_id: organization.id, id: subscription.id, subscription: {custom_data: {foo: :bar}.to_json, pricing_id: product_pricing.id} }
 
-      # TODO: Commented out as specs are failing due to an issue with json_api_client stubbing
-      # it_behaves_like 'jpi v1 protected action'
+      it_behaves_like 'jpi v1 protected action'
 
-      xit 'passes the correct parameters' do
+      it 'passes the correct parameters' do
         expect(subject).to be_successful
         assert_requested_api_v2(:patch, "/subscriptions/#{subscription.id}",
                                  body: {
-                                        "data" => {
-                                          "id" => subscription.id,
-                                          "type" => "subscriptions",
-                                          "attributes" => {},
-                                          "relationshipts" => {
-                                            "product_pricing" => {"id" => pricing.id, "type" => "product_pricings"},
-                                            "organization" => {"id" => organization.id, "type" => "organizations"},
-                                            "user" => {"id" => user.id, "type" => "users"}
-                                          }
-                                        }
-                                      }.to_json)
+                                  "data" => {
+                                    "id" => subscription.id,
+                                    "type" => "subscriptions",
+                                    "attributes" => {"custom_data" => {"foo" => "bar"}.to_json}}
+                                  }.to_json)
       end
     end
   end

@@ -19,12 +19,10 @@ module MnoEnterprise
     has_one :product_pricing
 
     def to_audit_event
-      {
-        id: id,
-        status: status,
-        organization_id: organization&.id,
-        user_id: user&.id
-      }
+      event = {id: id, status: status}
+      event[:organization_id] = relationships.organization['data']['id'] if relationships.respond_to?(:organization)
+      event[:user_id] = relationships.user['data']['id'] if relationships.respond_to?(:user)
+      event
     end
   end
 end
