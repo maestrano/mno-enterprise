@@ -14,6 +14,8 @@ The Maestrano Enterprise Engine can be included in a Rails project to bootstrap 
 
 The goal of this engine is to provide a base that you can easily extend with custom style or logic.
 
+_Note: `4.0` is actively under development. If you're looking for the stable code, see the `3.x` branch_
+
 - - -
 
 1.  [Install](#install)
@@ -22,6 +24,7 @@ The goal of this engine is to provide a base that you can easily extend with cus
     1. [Emailing Platform](#emailing-platform)
     2. [Intercom](#intercom)
     3. [Active Job Backend](#active-job-backend)
+    4. [Caching](#caching)
 4.  [Building the Frontend](#building-the-frontend)
 5.  [Modifying the style - Theme Previewer](#modifying-the-style---theme-previewer)
 6.  [Extending the Frontend](#extending-the-frontend)
@@ -91,10 +94,15 @@ For major upgrade between versions see [UPGRADING](UPGRADING.md).
 
 ## Configuration
 
-### Environement variable
+### Environment variables
 
-TODO: figaro or anything else
-just need tenant credentials and rake secret
+Maestrano Enterprise requires the following environment variables to be able to run:
+
+* `tenant_id`: Your tenant ID
+* `tenant_key`: Your tenant key
+* `SECRET_KEY_BASE`: Rails secret key used for verifying the integrity of signed cookies. Can be generated with  `rake secret`
+
+In development, you can use [figaro](https://github.com/laserlemon/figaro) to set environment variables from `config/application.yml`
 
 ### General configuration (Feature Flags)
 
@@ -111,7 +119,9 @@ They're ultimately controlled via MnoHub but here's the order of precedence in w
 The `config/settings.yml` and `config/settings/#{environment}.yml` files are still working, although no longer supported.
 They're evaluated between 1 and 2.
 
-### Emailing platform
+### Emailing platform (TO BE UPDATED)
+
+_TODO: To be deprecated when Third Party Providers configuration is implemented_
 
 Maestrano Enterprise supports either [Mandrill](https://www.mandrill.com/) or [SparkPost](https://www.sparkpost.com/) as well as regular SMTP.
 
@@ -149,7 +159,7 @@ MnoEnterprise.configure do |config|
 end
 ```
 
-#### SMTP
+#### SMTP (default)
 
 It's also possible to use a regular SMTP server. In this case, Maestrano Enterprise will use the templates bundled within the gem, see the next section to customise them.
 
@@ -344,6 +354,23 @@ Rails.application.routes.draw do
 end
 ```
 
+### Caching
+
+By default Maestrano Enterprise configures Rails to use `ActiveSupport::Cache::MemoryStore` bound to 32MB
+
+To improve caching, we recommend using `RedisStore` as we can also leverage redis for [Sidekiq](#sidekiq)
+
+```ruby
+# Gemfile
+# Redis cache
+gem 'redis-rails'
+```
+
+```ruby
+# config/application.rb
+config.cache_store = ENV['REDIS_URL'].present? ? :redis_store : :memory_store
+```
+
 
 ## Building the frontend
 The Maestrano Enterprise frontend is a Single Page Application (SPA) that is separate from the Rails project. The source code for this frontend can be found on the [mno-enterprise-angular Github repository](https://github.com/maestrano/mno-enterprise-angular)
@@ -369,36 +396,40 @@ This will upgrade the frontend version, respecting the constraint in `package.js
 ## Modifying the style - Theme Previewer
 The Maestrano Enterprise Express frontend is bundled with a Theme Previewer allowing you to easily modify and save the style of an Express instance without reloading the page.
 
-The Theme Previewer is available by accessing the following path: /dashboard/theme-previewer.html
+The Theme Previewer is available by accessing the following path: `/dashboard/theme-previewer.html`
 ```
 e.g.: http://localhost:7000/dashboard/theme-previewer.html
 ```
 
-Under the hood this Theme Previewer will modify the LESS files located under the /frontend directory.
+Under the hood this Theme Previewer will modify the LESS files located under the `/frontend` directory.
 
 Two types of "save" actions are available in the Theme Previewer.
 
 **Save:**  
-This action will temporarily save the current style in /frontend/src/app/stylesheets/theme-previewer-tmp.less so as to keep it across page reloads on the Theme Previewer only. This action will NOT publish the style, meaning that it will NOT apply the style to the /dashboard/index.html page.
+This action will temporarily save the current style in `/frontend/src/app/stylesheets/theme-previewer-tmp.less` so as to keep it across page reloads on the Theme Previewer only. This action will **NOT** publish the style, meaning that it will **NOT** apply the style to the `/dashboard/index.html` page.
 
 **Publish:**  
-This action will save the current style in /frontend/src/app/stylesheets/theme-previewer-published.less and rebuild the whole frontend. This action WILL publish the style, meaning that it WILL apply the style to the /dashboard/index.html page.
+This action will save the current style in `/frontend/src/app/stylesheets/theme-previewer-published.less` and rebuild the whole frontend. This action **WILL** publish the style, meaning that it **WILL** apply the style to the `/dashboard/index.html` page.
 
 ## Extending the Frontend
-You can easily override or extend the Frontend by adding files to the /frontend directory. All files in this directory will be taken into account during the frontend build and will override the base files of the mno-enterprise-angular project.
-You can also override the login page background adding an image and gif loaders, which is managed by rails,  including the files into the path ../app/assets/images/mno_enterprise. You can generate really cool gifs for this task in pages like http://loading.io/ .
+You can easily override or extend the Frontend by adding files to the `/frontend` directory. All files in this directory will be taken into account during the frontend build and will override the base files of the [mno-enterprise-angular](https://github.com/maestrano/mno-enterprise-angular/) project.
 
-
-Files in this folder MUST follow the [mno-enterprise-angular](https://github.com/maestrano/mno-enterprise-angular) directory structure. For example, you can override the application layout by creating /frontend/src/app/views/layout.html in your project - it will override the original src/app/views/layout.yml file of the mno-enterprise-angular project.
+Files in this folder MUST follow the [mno-enterprise-angular](https://github.com/maestrano/mno-enterprise-angular) directory structure. For example, you can override the application layout by creating `/frontend/src/app/views/layout.html` in your project - it will override the original `src/app/views/layout.html` file of the mno-enterprise-angular project.
 
 You can also add new files to this directory such as adding new views. This allows you to easily extend the current frontend to suit your needs.
 
-While extending the frontend, you can run this command to start the frontend using gulp serve and automatically override the original files with the ones in the frontend folder(be aware it does not take into account images or folders):
+While extending the frontend, you can run this command to start the frontend using gulp serve and automatically override the original files with the ones in the frontend folder  (be aware it does not take into account images or folders):
 ```bash
 foreman start -f Procfile.dev
 ```
 
 This will accelerate your development as the gulp serve task use BrowserSync to reload the browser any time a file is changed.
+
+### Rails pages
+
+Some pages are still served through the Rails (ie: authentication pages), you can override them by adding files in `app/views/mno_enterprise`.
+The assets are loaded from `/app/assets/images/mno_enterprise`.
+To generate loader you can use https://loading.io/.
 
 ### Adding a custom font
 
@@ -417,7 +448,7 @@ NB: Your host project may have been generated or created before the implementati
 
 ### Adding favicon
 
-Use  http://www.favicon-generator.org/ to generate all the favicon and put them in frontend/src/images/favicons
+Use http://www.favicon-generator.org/ to generate all the favicon and put them in `frontend/src/images/favicons`.
 
 
 ## Replacing the Frontend
