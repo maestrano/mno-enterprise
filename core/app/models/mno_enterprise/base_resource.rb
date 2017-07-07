@@ -65,6 +65,11 @@ module MnoEnterprise
       end
     end
 
+    def save!
+      save
+      raise "Could not save: Attributes #{self.attributes}, Errors: #{self.full_messages}" unless self.errors.empty?
+    end
+
     # emulate active record call of callbacks, a bit different as before_update is called before before_save
     def update_attributes(attrs = {})
       self.attributes = attrs
@@ -107,7 +112,11 @@ module MnoEnterprise
 
     # return a new instance with the required loaded
     def load_required(*included)
-      self.class.find_one(self.id, included)
+      if self.id
+        self.class.find_one(self.id, included)
+      else
+        raise "Can't load_required #{self.class} id is nil"
+      end
     end
 
     def ==(o)

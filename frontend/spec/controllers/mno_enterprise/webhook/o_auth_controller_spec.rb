@@ -19,11 +19,12 @@ module MnoEnterprise
     let(:user) { build(:user) }
     let(:organization) { build(:organization) }
     let(:app) { build(:app) }
-    let(:app_instance) { build(:app_instance, app:app) }
+    let(:app_instance) { build(:app_instance, app: app, owner_id: organization.id) }
     let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
 
     before do
-      stub_api_v2(:get, '/app_instances', [app_instance], %i(owner app), {filter: {uid: app_instance.uid}, page: {number: 1, size: 1}})
+      stub_api_v2(:get, '/app_instances', [app_instance], %i(app), {filter: {uid: app_instance.uid}, page: {number: 1, size: 1}})
+      stub_api_v2(:get, "/organizations/#{organization.id}", organization)
     end
 
 

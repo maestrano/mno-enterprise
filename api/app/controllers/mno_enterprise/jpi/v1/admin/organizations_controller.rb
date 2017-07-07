@@ -63,7 +63,7 @@ module MnoEnterprise
     # Invite a user to the organization (and create it if needed)
     # This does not send any emails (emails are manually triggered later)
     def invite_member
-      @organization = MnoEnterprise::Organization.find_one(params[:id])
+      @organization = MnoEnterprise::Organization.find_one(params[:id], :orga_relations)
 
       # Find or create a new user - We create it in the frontend as MnoHub will send confirmation instructions for newly
       # created users
@@ -100,12 +100,14 @@ module MnoEnterprise
     def create_unconfirmed_user(user_params)
       user = MnoEnterprise::User.new(user_params)
       user.skip_confirmation_notification!
-      user.save
+      user.password = Devise.friendly_token
+      user.save!
 
       # Reset the confirmation field so we can track when the invite is send - #confirmation_sent_at is when the confirmation_token was generated (not sent)
       # Not ideal as we do 2 saves, and the previous save trigger a call to the backend to validate the token uniqueness
+      # TODO: See if we can tell Devise to not set the timestamps
       user.attributes = {confirmation_sent_at: nil, confirmation_token: nil}
-      user.save
+      user.save!
       user.load_required(:orga_relations)
     end
 
