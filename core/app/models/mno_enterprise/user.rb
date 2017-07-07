@@ -41,11 +41,11 @@ module MnoEnterprise
     end
 
     devise_modules = [
-      :remote_authenticatable, :registerable, :recoverable, :rememberable,
+      :remote_authenticatable, :recoverable, :rememberable,
       :trackable, :validatable, :lockable, :confirmable, :timeoutable, :password_expirable,
       :omniauthable
     ]
-    devise_modules.delete(:registerable) if Settings.try(:devise).try(:registration).try(:disabled)
+    devise_modules << :registerable if Settings&.dashboard&.registration&.enabled
     devise(*devise_modules, omniauth_providers: Devise.omniauth_providers)
 
     #================================
