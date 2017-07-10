@@ -44,6 +44,18 @@ module MnoEnterprise
       ::Rails.configuration.cache_store = :memory_store, { size: 32.megabytes }
     end
 
+    # Configure the mailer default host
+    config.before_initialize do
+      if ENV['mailer_default_host'].present?
+        opts = {
+          host: ENV['mailer_default_host'],
+          protocol: ENV['mailer_default_protocol'].presence || 'https'
+        }
+        config.action_mailer.default_url_options = opts
+        config.action_mailer.asset_host = opts[:protocol] + '://' + opts[:host]
+      end
+    end
+
     # Enable ActionController caching
     config.before_initialize do
       Rails.application.config.action_controller.perform_caching = true
