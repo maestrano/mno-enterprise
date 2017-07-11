@@ -6,3 +6,8 @@ tenant_key: my_tenant_access_key
 
 # Rails secret key
 SECRET_KEY_BASE: <%= SecureRandom.hex(64) %>
+
+<% unless ENV['RAILS_ENV'] == "test" %>
+mailer_default_host: localhost:7000
+mailer_default_protocol: http
+<% end %>
