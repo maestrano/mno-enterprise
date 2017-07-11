@@ -81,7 +81,7 @@ module MnoEnterprise
     private
 
     def user_params
-      params.require(:user).permit(:admin_role, :mnoe_sub_tenant_id, :client_ids => [])
+      params.require(:user).permit(:name, :surname, :admin_role, :mnoe_sub_tenant_id, :client_ids => [])
     end
 
     def user_create_params
