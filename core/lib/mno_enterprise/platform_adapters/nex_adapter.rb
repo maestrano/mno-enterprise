@@ -122,8 +122,8 @@ module MnoEnterprise
           if ENV['MINIO_URL'] && ENV['MINIO_BUCKET']
             args = [src, dst, options].compact.join(' ')
             %x(#{aws_cli} s3 sync #{args})
+            $?.exitstatus == 0
           end
-          $?.exitstatus == 0
         end
 
         # Copies a local file or S3 object to another location locally or in S3.
@@ -131,8 +131,8 @@ module MnoEnterprise
           if ENV['MINIO_URL'] && ENV['MINIO_BUCKET']
             args = [src, dst, options].compact.join(' ')
             %x(#{aws_cli} s3 cp #{args})
+            $?.exitstatus == 0
           end
-          $?.exitstatus == 0
         end
       end
     end
