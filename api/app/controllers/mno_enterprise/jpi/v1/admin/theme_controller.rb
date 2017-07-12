@@ -45,6 +45,8 @@ module MnoEnterprise
       end
       recompile_assets
       SystemManager.publish_assets
+      # Need to restart in non dev to get the new precompiled assets
+      SystemManager.restart unless Rails.env.development?
       render json: {status:  'Ok'},  status: :created
     end
 
