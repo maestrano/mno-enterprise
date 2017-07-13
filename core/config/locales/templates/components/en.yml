@@ -43,6 +43,9 @@ en:
           success_notification_title: "{name} has been added to your account"
           success_launch_notification_body: "To start using {name}, click on the {name} icon then click on \"Launch\"."
           success_connect_notification_body: "To start using {name}, click on the {name} icon then click on \"Connect\"."
+          app_requires_no_set_up: "No set-up required."
+          app_connects_on_launch: "This app connects when launched."
+          app_connected: "(connected)"
 
         audit_events_list:
           loading_events: Loading Events
