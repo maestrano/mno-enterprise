@@ -9,6 +9,8 @@ module MnoEnterprise
     default_scope -> { where(dashboard_type: 'dashboard') }
     scope :templates, -> { where(dashboard_type: 'template') }
 
+    custom_post :copy
+
     #============================================
     # Instance methods
     #============================================
@@ -44,6 +46,10 @@ module MnoEnterprise
         name: name,
         organization_id: (owner_type == 'MnoEnterprise::Organization') ? owner_id : nil
       }
+    end
+
+    def copy
+      self.class.copy(self.attributes)
     end
   end
 end
