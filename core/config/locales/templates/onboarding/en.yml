@@ -41,8 +41,5 @@ en:
           connect_applications: "Connect your applications"
           apps_to_connect_now: "Connect your application now to start sharing data immediately."
           apps_to_connect_later: "You can connect at any time from your dashboard."
-          app_requires_no_set_up: "No set-up required."
-          app_connects_on_launch: "This app connects when launched."
-          app_connected: "(connected)"
           go_to_dashboard: "Go to my dashboard!"
           skip: "Go to my account!"
