@@ -158,6 +158,8 @@ MnoEnterprise::Engine.routes.draw do
         resources :organizations, only: [] do
           resources :widgets, only: :index
         end
+
+        resources :dashboard_templates, only: :index
       end
 
 
@@ -168,12 +170,6 @@ MnoEnterprise::Engine.routes.draw do
         resources :audit_events, only: [:index]
         resources :app_instances, only: [:destroy], shallow: true
         resources :app_reviews, only: [:index, :show,  :update]
-        resources :dashboard_templates, only: [:index, :show, :destroy, :update, :create] do
-          resources :widgets, shallow: true, only: [:create, :update, :destroy]
-          resources :kpis, shallow: true, only: [:show, :create, :update, :destroy] do
-            resources :alerts, shallow: true, only: [:create, :update, :destroy]
-          end
-        end
         resources :app_comments, only: [:create]
         resources :app_answers, only: [:create]
         resources :users, only: [:index, :show, :destroy, :update, :create] do
