@@ -17,8 +17,9 @@ module MnoEnterprise
         query = query.where(params[:where]) if params[:where]
         all = query.all
 
-        all.params[:sub_tenant_id] = current_user.mnoe_sub_tenant_id
-        all.params[:account_manager_id] = current_user.id
+        all.params[:sub_tenant_id] = params[:sub_tenant_id]
+        all.params[:account_manager_id] = params[:account_manager_id]
+
         @organizations = all.fetch
 
         response.headers['X-Total-Count'] = @organizations.metadata[:pagination][:count]

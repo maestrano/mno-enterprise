@@ -1,7 +1,7 @@
 module MnoEnterprise
   class Jpi::V1::Admin::SubTenantsController < Jpi::V1::Admin::BaseResourceController
 
-    before_filter :check_sub_tenant_authorization
+    before_filter :check_sub_tenant_authorization, only: [:create, :update, :delete]
 
     # GET /mnoe/jpi/v1/admin/sub_tenants
     def index

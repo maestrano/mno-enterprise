@@ -16,6 +16,7 @@ json.cache! ['v1', @user.cache_key] do
     json.sso_session @user.sso_session
     json.admin_role @user.admin_role
     json.avatar_url avatar_url(@user)
+    json.mnoe_sub_tenant_id @user.mnoe_sub_tenant_id
     if current_impersonator
       json.current_impersonator true
     end

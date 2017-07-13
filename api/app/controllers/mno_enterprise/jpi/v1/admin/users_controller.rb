@@ -15,10 +15,10 @@ module MnoEnterprise
         query = query.skip(params[:offset]) if params[:offset]
         query = query.order_by(params[:order_by]) if params[:order_by]
         query = query.where(params[:where]) if params[:where]
-
         all = query.all
-        all.params[:sub_tenant_id] = current_user.mnoe_sub_tenant_id
-        all.params[:account_manager_id] = current_user.id
+        all.params[:sub_tenant_id] = params[:sub_tenant_id]
+        all.params[:account_manager_id] = params[:account_manager_id]
+
         @users = all.fetch
 
         response.headers['X-Total-Count'] = @users.metadata[:pagination][:count]
@@ -35,7 +35,6 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/admin/users
     def create
       @user = MnoEnterprise::User.build(user_create_params)
-
       if @user.save
         render :show
       else
@@ -46,8 +45,9 @@ module MnoEnterprise
     # PATCH /mnoe/jpi/v1/admin/users/:id
     def update
       # TODO: replace with authorize/ability
-      if current_user.admin_role == "admin"
+      if current_user.admin_role.in? %w(admin sub_tenant_admin)
         @user = MnoEnterprise::User.find(params[:id])
+
         @user.update(user_params)
         @user_clients = @user.clients
         render :show
@@ -80,19 +80,18 @@ module MnoEnterprise
 
     private
 
-    def user_params
-      params.require(:user).permit(:name, :surname, :admin_role, :mnoe_sub_tenant_id, :client_ids => [])
-    end
-
-    def user_create_params
-      attrs = [:name, :surname, :email, :phone, :mnoe_sub_tenant_id, client_ids: []]
+    def user_update_params
+      attrs = [:name, :surname, :email, :phone, client_ids: []]
       # TODO: replace with authorize/ability
       if current_user.admin_role == 'admin'
         attrs << :admin_role
+        attrs << :mnoe_sub_tenant_id
       end
-      params.require(:user).permit(attrs).merge(
-        password: Devise.friendly_token.first(12)
-      )
+      params.require(:user).permit(attrs)
+    end
+
+    def user_create_params
+      user_update_params.merge(password: Devise.friendly_token.first(12))
     end
   end
 end
