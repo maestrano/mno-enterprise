@@ -215,6 +215,18 @@ MnoEnterprise::Engine.routes.draw do
         post 'theme/save'
         post 'theme/reset'
         put 'theme/logo'
+
+        # Dashboard templates designer
+        namespace :impac do
+          resources :dashboard_templates, only: [:index, :show, :destroy, :update, :create] do
+            resources :widgets, shallow: true, only: [:create, :update, :destroy]
+
+            # TODO: activate KPIs and alerts for dashboard templates
+            # resources :kpis, shallow: true, only: [:show, :create, :update, :destroy] do
+            #   resources :alerts, shallow: true, only: [:create, :update, :destroy]
+            # end
+          end
+        end
       end
     end
   end
