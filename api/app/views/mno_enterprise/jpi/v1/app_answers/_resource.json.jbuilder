@@ -1,4 +1,5 @@
-json.partial! 'app_review', app_review: app_answer, show_rating: false
-
-json.question_id app_answer[:question_id]
+if app_answer
+  json.partial! 'app_review', app_review: app_answer, show_rating: false
+  json.question_id app_answer[:parent_id]
+end
 

@@ -3,84 +3,70 @@ require 'rails_helper'
 module MnoEnterprise
   describe Jpi::V1::AppFeedbacksController, type: :controller do
     include MnoEnterprise::TestingSupport::JpiV1TestHelper
-    # TODO: Re-enable Specs
-    before { skip }
+    include MnoEnterprise::TestingSupport::ReviewsSharedHelpers
 
     render_views
     routes { MnoEnterprise::Engine.routes }
-    before { request.env["HTTP_ACCEPT"] = 'application/json' }
+    before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
 
     #===============================================
     # Assignments
     #===============================================
     let(:user) { build(:user) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    let(:organization) { build(:organization) }
+    let(:orga_relation) { build(:orga_relation, user: user, organization: organization) }
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+
     before { sign_in user }
 
     let(:app) { build(:app) }
-    let(:feedback_comment_1) { build(:app_comment) }
-    let(:feedback_comment_2) { build(:app_comment) }
-    let(:app_feedback) { build(:app_feedback, comments: [feedback_comment_1, feedback_comment_2]) }
-    let(:expected_hash_for_comment_1) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
-      feedback_comment_1.attributes.slice(*attrs).merge({'created_at' => feedback_comment_1.created_at.as_json, 'updated_at' => feedback_comment_1.updated_at.as_json})
-    end
-    let(:expected_hash_for_comment_2) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
-      feedback_comment_2.attributes.slice(*attrs).merge({'created_at' => feedback_comment_2.created_at.as_json, 'updated_at' => feedback_comment_2.updated_at.as_json})
-    end
-    let(:expected_array_for_comments) { [expected_hash_for_comment_1, expected_hash_for_comment_2] }
-    let(:expected_hash_for_feedback) do
-      attrs = %w(id rating description status user_id user_name organization_id organization_name app_id app_name user_admin_role comments edited edited_by_name edited_by_admin_role edited_by_id)
-      app_feedback.attributes.slice(*attrs).merge({'created_at' => app_feedback.created_at.as_json, 'updated_at' => app_feedback.updated_at.as_json, 'comments' => expected_array_for_comments})
-    end
-    let(:expected_hash_for_feedbacks) do
-      {
-        'app_feedbacks' => [expected_hash_for_feedback],
-      }
-    end
+    let(:feedback_id) { '1' }
+    let(:feedback_comment1) { build(:comment, parent_id: feedback_id) }
+    let(:feedback_comment2) { build(:comment, parent_id: feedback_id) }
+    let(:feedback) { build(:feedback, id: feedback_id, comments: [feedback_comment1, feedback_comment2]) }
+
 
     before do
-      api_stub_for(get: "/apps/#{app.id}", response: from_api(app))
+      stub_api_v2(:get, "/apps/#{app.id}", app)
     end
 
     describe 'GET #index' do
 
       before do
-        api_stub_for(get: "/app_feedbacks?filter[reviewable_id]=#{app.id}", response: from_api([app_feedback]))
+        stub_api_v2(:get, '/feedbacks', [feedback], [:comments], {filter: {reviewer_type: 'OrgaRelation', reviewable_type: 'App', status: 'approved', reviewable_id: app.id}})
       end
 
       subject { get :index, id: app.id }
 
-      it_behaves_like "jpi v1 protected action"
+      it_behaves_like 'jpi v1 protected action'
 
-      it_behaves_like "a paginated action"
+      it_behaves_like 'a paginated action'
 
       it 'renders the list of reviews' do
         subject
-        expect(JSON.parse(response.body)).to eq(expected_hash_for_feedbacks)
+        expect(JSON.parse(response.body)['app_feedbacks'][0]).to eq(hash_for_feedback(feedback))
       end
     end
 
     describe 'POST #create', focus: true do
-      let(:params) { {organization_id: 1, description: 'A Review', rating: 5, foo: 'bar'} }
-
+      let(:params) { {organization_id: organization.id, description: 'A Review', rating: 5} }
+      let(:feedback) { build(:feedback, id: feedback_id, comments: []) }
       before do
-        api_stub_for(post: "/app_feedbacks", response: from_api(app_feedback))
-        api_stub_for(get: "/app_feedbacks/#{app_feedback.id}", response: from_api(app_feedback))
+        stub_api_v2(:get, '/orga_relations', [orga_relation], [], {filter: {organization_id: organization.id, user_id: user.id}, page: {number: 1, size: 1}})
+        stub_api_v2(:post, '/feedbacks', feedback)
       end
 
       subject { post :create, id: app.id, app_feedback: params }
 
-      it_behaves_like "jpi v1 protected action"
-
+      it_behaves_like 'jpi v1 protected action'
+      let(:data) { JSON.parse(subject.body) }
       it 'renders the new review' do
-        expect(JSON.parse(subject.body)).to include('app_feedback' => expected_hash_for_feedback)
+        expect(data['app_feedback']).to include(hash_for_feedback(feedback))
       end
 
       it 'renders the new average rating' do
-        expect(JSON.parse(subject.body)).to include('average_rating' => app.average_rating)
+        expect(data['average_rating']).to eq(app.average_rating)
       end
     end
   end

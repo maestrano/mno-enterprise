@@ -72,7 +72,7 @@ namespace :gem do
 
   desc 'Bump all versions to match MNOE_VERSION'
   task :update_version do
-    file = File.join(root, 'core/lib/mno_enterprise/version.rb')
+    file = File.join(root, 'core/lib/mno_enterprise/mno_enterprise_version.rb')
     ruby = File.read(file)
 
     ruby.gsub!(/^(\s*)VERSION(\s*)= '.*?'$/, "\\1VERSION = '#{version}'")
