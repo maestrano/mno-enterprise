@@ -6,6 +6,8 @@ en:
         single_billing: "Single billing"
         data_sharing: "Data-sharing"
       onboarding:
+        menu:
+          logout: "Log out"
         breadcrumb:
           step1: "Welcome"
           step2: "Select your application(s)"
