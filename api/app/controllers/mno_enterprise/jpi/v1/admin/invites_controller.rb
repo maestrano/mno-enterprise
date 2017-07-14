@@ -10,6 +10,7 @@ module MnoEnterprise::Jpi::V1::Admin
         invite = find_org_invite(@organization, user)
         return render json: {error: 'No active invitation found'}, status: :not_found unless invite
         send_org_invite(invite)
+        invite = invite.load_required(:user)
       else
         user.resend_confirmation_instructions
       end
