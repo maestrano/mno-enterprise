@@ -61,6 +61,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
       # Creates a default alert for kpis created with targets defined.
       if kpi.targets.present?
         current_user.alerts.create({service: 'inapp', impac_kpi_id: kpi.id})
+        # TODO: should widget KPIs create an email alert automatically?
+        current_user.alerts.create({service: 'email', impac_kpi_id: kpi.id}) if widget.present?
         # TODO: reload is adding the recipients to the kpi alerts (making another request).
         kpi.reload
       end

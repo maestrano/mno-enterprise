@@ -84,21 +84,6 @@ module MnoEnterprise
           expect(assigns(:kpi)).to eq(kpi)
         end
 
-        context "when there are kpi targets" do
-          let(:kpi_targets) { { evolution: [{max: "20"}] } }
-
-          before do
-            api_stub_for(post: "/users/#{user.id}/alerts", response: from_api(alert))
-            api_stub_for(get: "/users/#{user.id}/alerts", response: from_api({}))
-          end
-
-          it "creates kpi alerts" do
-            subject
-            expect(assigns(:kpi).alerts).to eq([alert])
-            expect(response).to have_http_status(:ok)
-          end
-        end
-
         it { subject; expect(response).to have_http_status(:ok) }
       end
 
@@ -124,6 +109,21 @@ module MnoEnterprise
           subject
           expect(assigns(:dashboard)).to eq(dashboard)
         end
+
+        context "when there are kpi targets" do
+          let(:kpi_targets) { { evolution: [{max: "20"}] } }
+
+          before do
+            api_stub_for(post: "/users/#{user.id}/alerts", response: from_api(alert))
+            api_stub_for(get: "/users/#{user.id}/alerts", response: from_api({}))
+          end
+
+          it "creates a kpi inapp alert" do
+            subject
+            expect(assigns(:kpi).alerts).to eq([alert])
+            expect(response).to have_http_status(:ok)
+          end
+        end
       end
 
       context "a widget KPI" do
@@ -146,6 +146,25 @@ module MnoEnterprise
         it ".widget retrieves the correct widget" do
           subject
           expect(assigns(:widget)).to eq(widget)
+        end
+
+        context "when there are kpi targets" do
+          let(:kpi_targets) { { evolution: [{max: "20"}] } }
+
+          let(:email_alert) { build(:impac_alert, kpi: kpi, service: 'email') }
+          let(:alerts_hashes) { [from_api(alert)[:data], from_api(email_alert)[:data]] }
+
+          before do
+            api_stub_for(post: "/users/#{user.id}/alerts", response: from_api(alert), body: {service: 'inapp', impac_kpi_id: kpi.id})
+            api_stub_for(post: "/users/#{user.id}/alerts", response: from_api(email_alert), body: {service: 'email', impac_kpi_id: kpi.id})
+            api_stub_for(get: "/users/#{user.id}/alerts", response: from_api({}))
+          end
+
+          it "creates kpi alerts" do
+            subject
+            expect(assigns(:kpi).alerts).to eq([alert, email_alert])
+            expect(response).to have_http_status(:ok)
+          end
         end
       end
     end
