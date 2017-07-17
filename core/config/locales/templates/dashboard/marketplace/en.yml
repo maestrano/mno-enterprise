@@ -91,7 +91,7 @@ en:
               delete_modal_cancel: "Cancel"
               delete_modal_delete: "Delete"
               hide_comments: "Hide Comments"
-              feeback_list_links: "Comment{COUNT, select, undefined{} other{{COUNT, plural, one{ (#)} other{s (#)}}}}"
+              feedback_list_links: "Comment{COUNT, select, undefined{} other{{COUNT, plural, one{ (#)} other{s (#)}}}}"
             answer:
               delete_modal_header: "Delete an answer"
               delete_modal_body: "Do you really want to delete your answer?"
