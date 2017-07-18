@@ -16,7 +16,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   # GET /mnoe/jpi/v1/organizations/:organization_id/teams
   def index
     authorize! :read, parent_organization
-    @teams = parent_organization.teams
+    @teams = MnoEnterprise::Team.where(organization_id: params[:organization_id])
   end
 
   # GET /mnoe/jpi/v1/teams/:id
@@ -95,6 +95,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
       MnoEnterprise::EventLogger.info('team_update', current_user.id, 'Team composition updated', @team,
                                       {action: action.to_s, users:  users.map(&:email)})
     end
+    @team.reload
 
     render 'show'
   end
