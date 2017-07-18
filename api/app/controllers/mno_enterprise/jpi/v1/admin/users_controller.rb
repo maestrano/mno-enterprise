@@ -48,7 +48,7 @@ module MnoEnterprise
       if current_user.admin_role.in? %w(admin sub_tenant_admin)
         @user = MnoEnterprise::User.find(params[:id])
 
-        @user.update(user_params)
+        @user.update(user_update_params)
         @user_clients = @user.clients
         render :show
       else
