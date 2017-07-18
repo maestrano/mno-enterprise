@@ -39,6 +39,7 @@ module MnoEnterprise
           'surname' => user.surname,
           'admin_role' => user.admin_role,
           'created_at' => user.created_at,
+          'updated_at' => user.updated_at,
           'last_sign_in_at' => user.last_sign_in_at,
           'confirmed_at' => user.confirmed_at,
           'sign_in_count' => user.sign_in_count,
