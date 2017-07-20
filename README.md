@@ -35,7 +35,7 @@ _Note: `4.0` is actively under development. If you're looking for the stable cod
     1. [Overriding Models and Controllers with the Decorator Pattern](#overriding-models-and-controllers-with-the-decorator-pattern)
     2. [Generating a database extension](#generating-a-database-extension)
 9.  [Deploying](#deploying)
-    1.  [Deploy a Puma stack on EC2 via Webistrano/Capistrano](#deploy-a-puma-stack-on-ec2-via-webistranocapistrano)
+    1.  [Docker](#docker)
     2.  [Sample nginx config for I18n](#sample-nginx-config-for-i18n)
     3.  [Health Checks](#health-checks)
 10. [Contributing](#contributing)
@@ -538,7 +538,7 @@ rails g mno_enterprise:database_extension Organization growth_type:string
 
 ## Deploying
 
-### Docker file
+### Docker
 
 TBC
 
