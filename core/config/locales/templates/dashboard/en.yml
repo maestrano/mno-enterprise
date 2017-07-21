@@ -72,3 +72,9 @@ en:
           logout: Logout
           new_company: New Company
           access_admin_panel: Access Admin Panel
+
+        create_company:
+          title: Create New Company
+          enter_name: Enter a name for your new company
+          cancel: Cancel
+          create: Create
