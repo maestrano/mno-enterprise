@@ -69,3 +69,6 @@ en:
           same_password: 'Same password'
           save: 'Save'
           cancel: 'Cancel'
+
+        language_selectbox:
+          language: 'Language'
