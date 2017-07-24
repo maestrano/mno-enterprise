@@ -6,6 +6,8 @@ en:
         single_billing: "Single billing"
         data_sharing: "Data-sharing"
       onboarding:
+        menu:
+          logout: "Log out"
         breadcrumb:
           step1: "Welcome"
           step2: "Select your application(s)"
@@ -39,7 +41,7 @@ en:
           free_trial: "{duration} days free trial"
         connect_apps:
           connect_applications: "Connect your applications"
-          apps_to_connect: "Click on <b>Connect an existing account</b> button on each application to connect them now, you can skip this step if you want to connect your {nb, plural, one{application} other{applications}} later."
-          all_apps_connected: "{nb, plural, one{Your application is connected} other{Your applications are all connected}}! Click on the button below to go to the last step."
+          apps_to_connect_now: "Connect your application now to start sharing data immediately."
+          apps_to_connect_later: "You can connect at any time from your dashboard."
           go_to_dashboard: "Go to my dashboard!"
-          skip: "Skip & Go to my dashboard!"
+          skip: "Go to my account!"

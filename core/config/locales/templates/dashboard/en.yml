@@ -73,3 +73,9 @@ en:
           new_company: New Company
           access_admin_panel: Access Admin Panel
           subscriptions: Subscriptions
+
+        create_company:
+          title: Create New Company
+          enter_name: Enter a name for your new company
+          cancel: Cancel
+          create: Create

@@ -47,7 +47,8 @@ module MnoEnterprise
         'subcategories' => app.subcategories,
         'average_rating' => app.average_rating,
         'add_on' => app.add_on?,
-        'running_instances_count' => app.running_instances_count
+        'running_instances_count' => app.running_instances_count,
+        'pricing_text' => app.pricing_text
       }
     end
 
