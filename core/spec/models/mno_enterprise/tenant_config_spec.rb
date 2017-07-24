@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe MnoEnterprise::TenantConfig do
 
-  it { expect(described_class).to  be_const_defined(:CONFIG_JSON_SCHEMA) }
+  it { expect(described_class).to  respond_to(:json_schema) }
 
   let(:tenant) { build(:tenant, frontend_config: {'foo' => 'bar'})}
 

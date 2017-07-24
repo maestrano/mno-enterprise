@@ -48,7 +48,7 @@ module MnoEnterprise
 
     # Validates frontend_config against the JSON Schema
     def must_match_json_schema
-      json_errors = JSON::Validator.fully_validate(MnoEnterprise::TenantConfig::CONFIG_JSON_SCHEMA, frontend_config)
+      json_errors = JSON::Validator.fully_validate(MnoEnterprise::TenantConfig.json_schema, frontend_config)
       json_errors.each do |error|
         errors.add(:frontend_config, error)
       end
