@@ -1,6 +1,8 @@
 module MnoEnterprise
   class App < BaseResource
 
+    property :pricing_text # Backward compatibility with MnoHub
+
     property :created_at, type: :time
     property :updated_at, type: :time
 
