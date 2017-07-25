@@ -31,6 +31,7 @@ json.cache! ['v1', @user.cache_key] do
         json.array! (@user.organizations.active || []) do |o|
           json.id o.id
           json.uid o.uid
+          json.orga_relation_id o.orga_relation_id
           json.name o.name
           json.currency o.billing_currency
           json.current_user_role o.role

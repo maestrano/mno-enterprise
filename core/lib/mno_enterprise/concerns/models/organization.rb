@@ -35,7 +35,7 @@ module MnoEnterprise::Concerns::Models::Organization
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
-    attributes :uid, :name, :account_frozen, :free_trial_end_at, :soa_enabled, :mails, :logo,
+    attributes :uid, :orga_relation_id, :name, :account_frozen, :free_trial_end_at, :soa_enabled, :mails, :logo,
       :latitude, :longitude, :geo_country_code, :geo_state_code, :geo_city, :geo_tz, :geo_currency,
       :meta_data, :industry, :size, :financial_year_end_month
 
