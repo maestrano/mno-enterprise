@@ -44,7 +44,7 @@ module MnoEnterprise
     def update
       return render_not_found('task') unless task
       if task.update(task_params)
-        task.recipients.map! { |recipient| recipient.update(recipient_params) }
+        task.recipients.map! { |recipient| recipient.update(recipient_params) } if send_task
         render 'show'
       else
         render_bad_request('update task', task.errors)
