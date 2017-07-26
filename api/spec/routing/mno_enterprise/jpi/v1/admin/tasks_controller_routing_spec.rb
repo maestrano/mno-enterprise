@@ -15,5 +15,9 @@ module MnoEnterprise
     it 'routes to #create' do
       expect(post('/jpi/v1/admin/tasks')).to route_to("mno_enterprise/jpi/v1/admin/tasks#create", format: "json")
     end
+    
+    it 'routes to #update' do
+      expect(put('/jpi/v1/admin/tasks/1')).to route_to("mno_enterprise/jpi/v1/admin/tasks#update", id:'1')
+    end
   end
 end

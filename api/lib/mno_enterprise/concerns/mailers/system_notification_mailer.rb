@@ -163,6 +163,9 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     )
   end
 
+  def task_notification()
+  end
+
   protected
 
   def recipient(record, new_user = false)

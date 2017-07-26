@@ -13,7 +13,7 @@
 # updated_at            datetime
 
 module MnoEnterprise
-  class TaskRecipient < BaseResource
+  class Recipient < BaseResource
     
     #==============================================================
     # Associations

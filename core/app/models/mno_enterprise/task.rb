@@ -22,7 +22,7 @@ module MnoEnterprise
     #============================================
     belongs_to :mnoe_tenant
     has_one :orga_relation, as: :owner, dependent: :destroy
-    has_many :task_recipients
+    has_many :recipients
 
   end
 end
