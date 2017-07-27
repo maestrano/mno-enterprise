@@ -28,7 +28,7 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/admin/tasks
     def create
       if @task = MnoEnterprise::Task.create(task_params)
-        @task.recipients.create(recipient_params)
+        @task.recipients.create(task_recipient_params)
         MnoEnterprise::EventLogger.info('task_create', current_user.id, 'Task Creation', @task)
         MnoEnterprise::SystemNotificationMailer.task_notification().deliver_now unless send_task
         render 'show'
@@ -41,7 +41,7 @@ module MnoEnterprise
     def update
       return render_not_found('task') unless task
       if task.update(task_params)
-        task.recipients.map! { |recipient| recipient.update(recipient_params) } if send_task
+        task.task_recipients.map! { |recipient| recipient.update(task_recipient_params) } if send_task
         render 'show'
       else
         render_bad_request('update task', task.errors)
@@ -62,7 +62,7 @@ module MnoEnterprise
       params[:task][:status] == 'sent'
     end
 
-    def recipient_params
+    def task_recipient_params
       permitted_params = params.require(:task).permit(:orga_relation_id, :reminder_date, :read_at)
         .merge(task_id: @task.id)
       # Update the param notified_at when the task is sent
@@ -72,9 +72,9 @@ module MnoEnterprise
 
     def task_params
       # For an admin, the owner_id isn't important, so we pass the first one
-      owner_id = current_user.organizations.first.orga_relation_id
+      orga_relation = current_user.organizations.first.orga_relation_id
       permitted_params = params.require(:task).permit( :title, :message, :send_at, :status, :due_date, :completed_at, :completed_notified_at, :orga_relation_id)
-        .merge(owner_id: owner_id)
+        .merge(owner_id: orga_relation)
       permitted_params
     end
   end
