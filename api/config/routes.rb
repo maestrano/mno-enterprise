@@ -102,7 +102,8 @@ MnoEnterprise::Engine.routes.draw do
     namespace :v1 do
 
       resources :tasks, only: [:create, :index, :show, :update]
-
+      resources :orga_relations, only: [:index, :show]
+      
       resources :marketplace, only: [:index, :show] do
         member do
           %i(app_reviews app_feedbacks app_comments app_questions app_answers).each do |name|
@@ -172,6 +173,7 @@ MnoEnterprise::Engine.routes.draw do
       # Admin
       #============================================================
       namespace :admin, defaults: {format: 'json'} do
+        resources :orga_relations, only: [:index, :show]
         resources :tasks, only: [:create, :index, :show, :update]
         resources :audit_events, only: [:index]
         resources :app_feedbacks, only: [:index]
