@@ -82,7 +82,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   def copy
     return render_not_found('template') unless template
 
-    @dashboard = template.copy(current_user, dashboard_params[:organization_ids])
+    # Owner is the current user by default, can be overriden to something else (eg: current organization)
+    @dashboard = template.copy(current_user, dashboard_params[:name], dashboard_params[:organization_ids])
     return render_bad_request('copy template', 'Unable to copy template') unless dashboard.present?
 
     render 'show'
