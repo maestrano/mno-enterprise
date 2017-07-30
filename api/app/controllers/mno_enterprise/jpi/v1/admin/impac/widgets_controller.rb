@@ -19,8 +19,9 @@ module MnoEnterprise
 
     # PUT /mnoe/jpi/v1/admin/impac/widgets/:id
     def update
-      widget.update(widget_update_params)
-      return render json: { errors: widget&.errors }, status: :bad_request unless widget&.valid?
+      unless widget&.update(widget_update_params)
+        return render json: { errors: 'Cannot update widget' }, status: :bad_request
+      end
 
       MnoEnterprise::EventLogger.info('widget_update', current_user.id, 'Template Widget Update', widget)
       @nocontent = !params['metadata']
@@ -29,7 +30,9 @@ module MnoEnterprise
 
     # DELETE /mnoe/jpi/v1/admin/impac/widgets/:id
     def destroy
-      return render json: { errors: 'Cannot delete widget' }, status: :bad_request unless widget&.destroy
+      unless widget&.destroy
+        return render json: { errors: 'Cannot delete widget' }, status: :bad_request
+      end
 
       MnoEnterprise::EventLogger.info('widget_delete', current_user.id, 'Template Widget Deletion', widget)
       head status: :ok
