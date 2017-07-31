@@ -28,13 +28,24 @@ module MnoEnterprise
 
       # Write the json file
       def generate_locale(locale_code, translation_hash)
-        locale = {}
+        locale = impac_translation_hash(locale_code)
         flatten_translations('', translation_hash, locale)
 
         output_file = File.join(@path, "#{locale_code}.locale.json")
 
         File.open(output_file, 'w') {|f| f.write(JSON.pretty_generate(locale)) }
         puts "--> Generated #{output_file}"
+      end
+
+      # If an impac locale file exist, use it as the base for translation
+      # It's then overriden by the App translation
+      def impac_translation_hash(locale_code)
+        file = File.join(@path, 'impac', "#{locale_code}.json")
+        if File.exist?(file)
+          JSON.parse(File.read(file))
+        else
+          {}
+        end
       end
 
       # Flatten key
