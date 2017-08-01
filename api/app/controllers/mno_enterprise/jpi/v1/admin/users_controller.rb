@@ -87,7 +87,14 @@ module MnoEnterprise
         attrs << :admin_role
         attrs << :mnoe_sub_tenant_id
       end
-      params.require(:user).permit(attrs)
+      user_param = params.require(:user)
+      updated_params = user_param.permit(attrs)
+      updated_params[:client_ids] ||= [] if user_param.has_key?(:client_ids)
+      # if the user is updated to admin or division admin, his clients are cleared
+      if updated_params[:admin_role] && updated_params[:admin_role] != 'staff'
+        updated_params[:client_ids] = []
+      end
+      updated_params
     end
 
     def user_create_params
