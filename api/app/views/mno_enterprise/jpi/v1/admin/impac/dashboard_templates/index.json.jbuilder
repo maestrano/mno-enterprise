@@ -1,1 +1,1 @@
-json.array! @dashboard_templates, partial: 'mno_enterprise/jpi/v1/impac/dashboards/dashboard', as: :dashboard
+json.array! @dashboard_templates, partial: 'template', as: :template
