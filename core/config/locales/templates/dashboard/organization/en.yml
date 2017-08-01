@@ -86,6 +86,8 @@ en:
             invite_modal:
               title_name: "Edit Member: {name} {surname}"
               title_email: "Edit Member: {email}"
+              title_enter_emails: "Enter email addresses"
+              title_select_roles: "Select role for each new member"
               description: Enter the email addresses of the people you want to invite in your company
               example: "One address per line, e.g.:"
               disclaimer: Please note that for security reasons unaccepted invites will automatically expire after 3 days.

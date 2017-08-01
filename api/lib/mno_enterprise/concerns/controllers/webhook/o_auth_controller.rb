@@ -1,5 +1,6 @@
 module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
   extend ActiveSupport::Concern
+  include MnoEnterprise::ImageHelper
 
   #==================================================================
   # Included methods
@@ -12,7 +13,7 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
     before_filter :check_permissions, only: [:authorize, :disconnect, :sync]
 
     PROVIDERS_WITH_OPTIONS = ['xero','myob']
-
+    helper_method :main_logo_white_bg # To use in the provision view
     private
       def app_instance
         @app_instance ||= MnoEnterprise::AppInstance.where(uid: params[:id]).first
@@ -41,7 +42,7 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
       def error_message(error_key)
         case error_key.to_sym
           when :bad_relinking
-            %{A different account "#{app_instance.oauth_company}" was previously linked to this application, please re-link the same account.}
+            %{A different account '#{app_instance.oauth_company}' was previously linked to this application, please re-link the same account.}
           when :unauthorized
             'We could not validate your credentials, please try again'
           else
@@ -74,6 +75,15 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
 
     if error_key = params.fetch(:oauth, {})[:error]
       path = add_param_to_fragment(path.to_s, 'flash', [{msg: error_message(error_key),  type: :error}.to_json])
+    end
+
+    unless params.fetch(:oauth, {})[:error]
+      case params.fetch(:oauth, {})[:action]
+        when 'sync'
+          MnoEnterprise::EventLogger.info('app_connected', current_user.id, 'App connected', app_instance)
+        when 'disconnect'
+          MnoEnterprise::EventLogger.info('app_disconnected', current_user.id, 'App disconnected', app_instance)
+      end
     end
 
     redirect_to path

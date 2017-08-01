@@ -18,6 +18,7 @@ json.cache! ['v1', @user.cache_key] do
     json.avatar_url avatar_url(@user)
     if current_impersonator
       json.current_impersonator true
+      json.current_impersonator_role current_impersonator.admin_role
     end
 
     if @user.respond_to?(:intercom_user_hash)

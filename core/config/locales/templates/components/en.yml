@@ -34,12 +34,18 @@ en:
           conflicting_app: "You cannot install this App as it is incompatible with:"
           start_app: "Start Now!"
           launch_app: "Launch App"
-          connect_app: "Connect App"
+          create_account: "Create an account"
+          create_account_tooltip: "A new tab will open for you to create an account. Afterwards, return here to connect it."
+          connect_app: "Connect an existing account"
           access_addon: "Access Add-on"
+          access_addon_tooltip: "This application requires you to set-up the connection in a separate screen."
           insufficient_privilege: "You do not have the sufficient privileges. Contact your administrator."
           success_notification_title: "{name} has been added to your account"
           success_launch_notification_body: "To start using {name}, click on the {name} icon then click on \"Launch\"."
           success_connect_notification_body: "To start using {name}, click on the {name} icon then click on \"Connect\"."
+          app_requires_no_set_up: "No set-up required."
+          app_connects_on_launch: "This app connects when launched."
+          app_connected: "(connected)"
 
         audit_events_list:
           loading_events: Loading Events
@@ -51,3 +57,18 @@ en:
 
         mno_pagination:
           items_per_page: "Items per page: "
+
+        mno_password:
+          current_password: 'Current Password'
+          new_password: 'New Password'
+          confirm_password: 'Confirm Password'
+          eight_characters_minimum: 'Eight characters minimum'
+          one_uppercase_character: 'One uppercase character'
+          one_number: 'One number'
+          one_lowercase_character: 'One lowercase character'
+          same_password: 'Same password'
+          save: 'Save'
+          cancel: 'Cancel'
+
+        language_selectbox:
+          language: 'Language'

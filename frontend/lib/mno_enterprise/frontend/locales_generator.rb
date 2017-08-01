@@ -49,7 +49,8 @@ module MnoEnterprise
             flatten_translations(prefix + key.to_s, value, locale)
           }
         else
-          locale.merge!({prefix => x})
+          locale[prefix] = x
+          locale
         end
       end
     end

@@ -31,6 +31,9 @@ onboarding_wizard:
 # Enable Reviews in the marketplace
 reviews:
   enabled: false
+# Enable Questions in the marketplace
+questions:
+  enabled: false
 # Disable payment
 payment:
   disabled: false

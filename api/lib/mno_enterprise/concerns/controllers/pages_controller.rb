@@ -1,5 +1,6 @@
 module MnoEnterprise::Concerns::Controllers::PagesController
   extend ActiveSupport::Concern
+  include MnoEnterprise::ImageHelper
 
   #==================================================================
   # Included methods
@@ -9,6 +10,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
   included do
     before_filter :authenticate_user!, only: [:launch]
     before_filter :redirect_to_lounge_if_unconfirmed, only: [:launch]
+    helper_method :main_logo_white_bg_path # To use in the provision view
   end
 
   #==================================================================
