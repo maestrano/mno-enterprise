@@ -6,7 +6,10 @@ module MnoEnterprise
     has_many :widgets, class_name: 'MnoEnterprise::Impac::Widget'
     has_many :kpis, class_name: 'MnoEnterprise::Impac::Kpi'
     belongs_to :owner, polymorphic: true
+    default_scope -> { where(dashboard_type: 'dashboard') }
     scope :templates, -> { where(dashboard_type: 'template') }
+
+    custom_post :copy
 
     #============================================
     # Instance methods
@@ -43,6 +46,18 @@ module MnoEnterprise
         name: name,
         organization_id: (owner_type == 'MnoEnterprise::Organization') ? owner_id : nil
       }
+    end
+
+    def copy(owner, name, organization_ids)
+      owner_type = owner.class.name.demodulize
+      attrs = {
+        id: self.id,
+        name: name,
+        organization_ids: organization_ids,
+        owner_type: owner_type,
+        owner_id: owner.id
+      }
+      self.class.copy(attrs)
     end
   end
 end

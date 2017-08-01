@@ -35,6 +35,7 @@ en:
           start_app: "Start Now!"
           launch_app: "Launch App"
           connect_app: "Connect App"
+          access_addon: "Access Add-on"
           insufficient_privilege: "You do not have the sufficient privileges. Contact your administrator."
           success_notification_title: "{name} has been added to your account"
           success_launch_notification_body: "To start using {name}, click on the {name} icon then click on \"Launch\"."
