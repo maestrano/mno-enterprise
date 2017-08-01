@@ -218,9 +218,7 @@ MnoEnterprise::Engine.routes.draw do
         namespace :impac do
           resources :dashboard_templates, only: [:index, :show, :destroy, :update, :create] do
             resources :widgets, shallow: true, only: [:create, :update, :destroy]
-
-            # TODO: activate KPIs and alerts for dashboard templates
-            # resources :kpis, shallow: true, only: [:show, :create, :update, :destroy] do
+            resources :kpis, shallow: true, only: [:create, :update, :destroy] #do
             #   resources :alerts, shallow: true, only: [:create, :update, :destroy]
             # end
           end
