@@ -64,4 +64,11 @@ module MnoEnterprise::Concerns::Models::Team
     self.reload
     self
   end
+
+  def to_audit_event
+    {
+      name: name,
+      organization_id: self.organization.id
+    }
+  end
 end

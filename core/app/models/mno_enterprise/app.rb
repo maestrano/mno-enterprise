@@ -33,7 +33,7 @@ module MnoEnterprise
     attributes :id, :uid, :nid, :name, :description, :tiny_description, :created_at, :updated_at, :logo, :website, :slug,
                :categories, :key_benefits, :key_features, :testimonials, :worldwide_usage, :tiny_description,
                :popup_description, :stack, :terms_url, :pictures, :tags, :api_key, :metadata_url, :metadata, :details, :rank,
-               :multi_instantiable, :subcategories, :reviews, :average_rating, :running_instances_count
+               :multi_instantiable, :subcategories, :reviews, :average_rating, :running_instances_count, :pricing_text
 
 
     #================================
@@ -61,7 +61,7 @@ module MnoEnterprise
     # Sanitize the app description
     # E.g.: replace any mention of Maestrano by the tenant name
     def sanitized_description
-      @sanitized_description ||= (self.description || '').gsub(/maestrano/i,MnoEnterprise.app_name)
+      @sanitized_description ||= (self.description || '').gsub(/(?!cdn\.)maestrano(?!\.com)/i,MnoEnterprise.app_name)
     end
 
     # Methods for appinfo flags

@@ -1,5 +1,6 @@
 module MnoEnterprise
   class InvoicePdf
+    include MnoEnterprise::ImageHelper
     attr_reader :invoice, :pdf, :data
 
     # InvoicePdf requires to be initialized
@@ -116,21 +117,10 @@ module MnoEnterprise
       }
     end
 
-    # Helper method to easily access
-    # images
-    def image_path(name)
-      path = "/app/assets/images/#{name}"
-      engine_path = "#{MnoEnterprise::Engine.root}#{path}"
-      app_path = "#{Rails.root}#{path}"
-
-      File.exists?(app_path) ? app_path : engine_path
-    end
-
     # Format a money object
     def money(m)
       "#{m.format(symbol: false)} #{m.currency_as_string}"
     end
-
 
     # Add a repeated header to the document
     def add_page_header
@@ -138,7 +128,7 @@ module MnoEnterprise
       @pdf.repeat :all do
         @pdf.bounding_box([0, @pdf.bounds.top+@format[:header_size]], width: 540, height: @format[:footer_size]) do
           @pdf.float do
-            @pdf.image image_path('mno_enterprise/main-logo.png'), scale: 0.5
+            @pdf.image main_logo_white_bg_path(true), scale: 0.5
           end
           @pdf.move_down 52
           @pdf.font_size(20) { @pdf.text "#{title} #{@data[:period_month]}", style: :bold, align: :right }

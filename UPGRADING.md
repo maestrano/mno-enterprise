@@ -4,6 +4,7 @@
 
 1. [Upgrading the frontend](#upgrading-the-frontend)
 1. [Upgrading the gem](#upgrading-the-gem)
+    1. [Migrating from v3.2 to v3.3](#migrating-from-v32-to-v33)
     1. [Migrating from v3.0/v3.1 to v3.2](#migrating-from-v30v31-to-v32)
     1. [Migrating from v2 to v3](#migrating-from-v2-to-v3)
 
@@ -40,9 +41,17 @@ This is a simple as `bundle update mno-enterprise`.
 
 See below for upgrade between breaking versions.
 
+### Migrating from v3.2 to v3.3
+
+See the [CHANGELOG](CHANGELOG.md#v3.3.0)
+
+No major issues for upgrade apart from the Admin Panel being extracted to a new project and following the new build processs (see v3.2):
+
+- Run `bin/rake mnoe:admin:install` to update the `package.json` file and build the admin panel
+
 ### Migrating from v3.0/v3.1 to v3.2
 
-See the [CHANGELOG](CHANGELOG.md)
+See the [CHANGELOG](CHANGELOG.md#v3.2.0)
 
 #### New frontend build process
 
@@ -53,6 +62,13 @@ The frontend build process has been refactored, `package.json` is now replacing 
 - Run `bin/rake mnoe:frontend:update` if you've edited `package.json`
 - Delete the obsolete `bower.json` file
 
+### Event Logger
+
+If you're doing custom event login in your app, the `EventLogger.info` signature has changed:
+```diff
+-self.info(key, current_user_id, description, metadata, object)
++self.info(key, current_user_id, description, object, metadata = {})
+```
 
 ### Migrating from v2 to v3
 

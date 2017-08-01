@@ -1,5 +1,5 @@
 json.extract! app, :id, :nid, :name, :stack, :key_benefits, :categories, :tags, :tiny_description,
-              :testimonials, :pictures, :pricing_plans, :rank, :support_url, :key_workflows, :key_features
+  :testimonials, :pictures, :pricing_plans, :rank, :support_url, :key_workflows, :key_features, :pricing_text
 
 json.description markdown(app.sanitized_description)
 json.known_limitations markdown(app.known_limitations)

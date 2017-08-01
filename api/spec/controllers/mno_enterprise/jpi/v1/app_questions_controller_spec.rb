@@ -18,7 +18,8 @@ module MnoEnterprise
     let(:app) { build(:app) }
     let(:question_answer_1) { build(:app_answer) }
     let(:question_answer_2) { build(:app_answer) }
-    let(:app_question) { build(:app_question, answers: [question_answer_1, question_answer_2]) }
+    let(:rejected_answer) { build(:app_answer, status: 'rejected') }
+    let(:app_question) { build(:app_question, answers: [question_answer_1, question_answer_2, rejected_answer]) }
     let(:expected_hash_for_answer_1) do
       attrs = %w(id description status user_id user_name organization_id organization_name app_id question_id app_name user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
       question_answer_1.attributes.slice(*attrs).merge({'created_at' => question_answer_1.created_at.as_json, 'updated_at' => question_answer_1.updated_at.as_json})

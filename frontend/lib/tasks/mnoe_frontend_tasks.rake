@@ -9,8 +9,8 @@ require 'rake/clean'
 namespace :mnoe do
   namespace :frontend do
     # Default version
-    MNOE_ANGULAR_VERSION = "master"
-    IMPAC_ANGULAR_VERSION = "1.5.0"
+    MNOE_ANGULAR_VERSION = "v1.1.x"
+    IMPAC_ANGULAR_VERSION = "v1.5.x"
 
     # Final build
     frontend_dist_folder = "public/dashboard"

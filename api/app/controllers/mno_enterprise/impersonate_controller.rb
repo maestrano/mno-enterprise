@@ -15,7 +15,11 @@ module MnoEnterprise
       else
         flash[:notice] = "User doesn't exist"
       end
-      redirect_to mnoe_home_path
+
+      path = mnoe_home_path
+      path = add_param_to_fragment(path, 'dhbRefId', params[:dhbRefId]) if params[:dhbRefId].present?
+
+      redirect_to path
     end
 
     # Revert the user impersonation

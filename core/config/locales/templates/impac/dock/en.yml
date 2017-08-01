@@ -8,6 +8,8 @@ en:
           settings: Settings
           add_more_apps: Add more apps
           cancel: Cancel
+          do_not_have_apps: "It looks like you don't have any apps"
+          click_here: click here to get started
           settings:
             settings: Settings
             status: Status
@@ -24,5 +26,5 @@ en:
             developer_details: developer details
             linked_to: Linked to
             organization_id: Organization id
-            group_id: Group id (uid) 
+            group_id: Group id (uid)
 
