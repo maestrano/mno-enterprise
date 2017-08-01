@@ -31,7 +31,7 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/tasks
     def create
       if @task = MnoEnterprise::Task.create(task_params)
-        @task.recipients.create(task_recipient_params)
+        @task.task_recipients.create(task_recipient_params)
         MnoEnterprise::EventLogger.info('task_create', current_user.id, 'Task Creation', @task)
         MnoEnterprise::SystemNotificationMailer.task_notification().deliver_now if send_task
         render 'show'
@@ -54,7 +54,15 @@ module MnoEnterprise
     private
 
     def tasks
-      @tasks ||= MnoEnterprise::Task
+      if params[:inbox] == 'true'
+        # retrieve tasks inbox, tasks where I am the recipient
+        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: params[:user_id], organization_id: params[:organization_id]).first.id
+        @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id)
+      else
+        # retrieve tasks outbox, tasks where I am the owner
+        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: params[:user_id], organization_id: params[:organization_id]).first.id
+        @task ||= MnoEnterprise::Task.where(owner_id: orga_relation_id)
+      end
     end
 
     def task
@@ -63,6 +71,10 @@ module MnoEnterprise
 
     def send_task
       params[:task][:status] == 'sent'
+    end
+
+    def task_completed
+      params[:task][:status] == 'done'
     end
 
     def task_recipient_params
@@ -74,7 +86,12 @@ module MnoEnterprise
     end
 
     def task_params
-      permitted_params = params.require(:task).permit(:owner_id, :title, :message, :send_at, :status, :due_date, :completed_at, :completed_notified_at)
+      permitted_params = params.require(:task).permit(:owner_id, :title, :message, :status, :due_date, :sent_at)
+      # Update the param send_at the day the task is sent
+      permitted_params.merge!(send_at: Time.new) if send_task
+      # Update the task when is completed
+      permitted_params.merge!(completed_at: Time.new) if task_completed
+      permitted_params.merge!(completed_notified_at: Time.new) if task_completed
       permitted_params
     end
   end

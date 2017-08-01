@@ -15,6 +15,8 @@ module MnoEnterprise
         @orga_relations = @orga_relations.order_by(params[:order_by]) if params[:order_by]
         @orga_relations = @orga_relations.where(params[:where]) if params[:where]
         @orga_relations = @orga_relations.all.fetch
+        # remove duplicated orga_rel.user
+        @orga_relations.uniq! { |orga_relation| orga_relation[:user][:email] }
         response.headers['X-Total-Count'] = @orga_relations.metadata[:pagination][:count]
       end
     end
@@ -28,7 +30,8 @@ module MnoEnterprise
     private
 
     def orga_relations
-      @orga_relations ||= MnoEnterprise::OrgaRelation
+      # we retrieve only the admins
+      @orga_relations ||= MnoEnterprise::OrgaRelation.where('users.admin_role'=> 'admin')
     end
 
     def orga_relation
