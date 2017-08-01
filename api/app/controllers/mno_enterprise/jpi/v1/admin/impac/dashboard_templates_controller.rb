@@ -76,7 +76,7 @@ module MnoEnterprise
     # for the Her "meta_data" issue.
     def dashboard_template_params
       params.require(:dashboard).permit(*whitelisted_params).tap do |whitelisted|
-        whitelisted[:settings] = params[:dashboard_template][:metadata] || {}
+        whitelisted[:settings] = params[:dashboard][:metadata] || {}
       end
       .except(:metadata)
     end
