@@ -1,7 +1,7 @@
 module MnoEnterprise
   class Jpi::V1::Admin::TasksController < Jpi::V1::Admin::BaseResourceController
 
-    # GET /mnoe/jpi/v1/admin/tasks
+    # GET /mnoe/jpi/v1/admin/organizations/:organization/tasks
     def index
       if params[:terms]
         # For search mode
@@ -19,13 +19,13 @@ module MnoEnterprise
       end
     end
 
-    # GET /mnoe/jpi/v1/admin/tasks/1
+    # GET /mnoe/jpi/v1/admin/organizations/:organization/tasks/1
     def show
       task
       render_not_found('task') unless @task
     end
 
-    # POST /mnoe/jpi/v1/admin/tasks
+    # POST /mnoe/jpi/v1/admin/organizations/:organization/tasks
     def create
       if @task = MnoEnterprise::Task.create(task_params)
         @task.task_recipients.create(task_recipient_params)
@@ -37,7 +37,7 @@ module MnoEnterprise
       end
     end
 
-    # PATCH /mnoe/jpi/v1/admin/tasks/1
+    # PATCH /mnoe/jpi/v1/admin/organizations/:organization/tasks/1
     def update
       return render_not_found('task') unless task
       if task.update(task_params)
