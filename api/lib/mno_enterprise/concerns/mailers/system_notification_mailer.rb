@@ -156,16 +156,15 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   #   :registration_link
   def registration_instructions(email)
     MnoEnterprise::MailClient.deliver(
-      
+      'registration-instructions',
+      default_sender,
+      {email: email},
+      {registration_link: new_user_registration_url}
     )
   end
 
   def task_notification(user)
     MnoEnterprise::MailClient.deliver(
-      'task-created',
-      default_sender,
-      {email: email},
-      {registration_link: new_user_registration_url}
     )  
   end
 

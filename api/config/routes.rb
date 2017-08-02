@@ -100,7 +100,10 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   namespace :jpi do
     namespace :v1 do
-      
+    
+      # Orga relations
+      resources :orga_relations, only: [:index, :show]
+    
       resources :marketplace, only: [:index, :show] do
         member do
           %i(app_reviews app_feedbacks app_comments app_questions app_answers).each do |name|
@@ -128,9 +131,6 @@ MnoEnterprise::Engine.routes.draw do
         
         # Tasks
         resources :tasks, only: [:create, :index, :show, :update]
-
-        # Orga relations
-        resources :orga_relations, only: [:index, :show]
 
         # Teams
         resources :teams, only: [:index, :show, :create, :update, :destroy], shallow: true do
@@ -176,6 +176,10 @@ MnoEnterprise::Engine.routes.draw do
       # Admin
       #============================================================
       namespace :admin, defaults: {format: 'json'} do
+
+        # Orga relations
+        resources :orga_relations, only: [:index, :show]
+          
         resources :orga_relations, only: [:index, :show]
         resources :tasks, only: [:create, :index, :show, :update]
         resources :audit_events, only: [:index]
@@ -195,9 +199,6 @@ MnoEnterprise::Engine.routes.draw do
 
           # Tasks
           resources :tasks, only: [:create, :index, :show, :update]
-
-          # Orga relations
-          resources :orga_relations, only: [:index, :show]
 
           collection do
             get :in_arrears
