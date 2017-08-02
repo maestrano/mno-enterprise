@@ -89,7 +89,7 @@ module MnoEnterprise
     def task_params
       # For an admin, the owner_id isn't important, so we pass the first one
       owner_id = current_user.organizations.first.orga_relation_id
-      permitted_params = params.require(:task).permit( :title, :message, :status, :due_date, :orga_relation_id, :send_at, :organization_id)
+      permitted_params = params.require(:task).permit( :title, :message, :status, :due_date, :orga_relation_id, :send_at)
         .merge(owner_id: owner_id)
       # Update the param send_at the day the task is sent
       permitted_params.merge!(send_at: Time.new) if send_task

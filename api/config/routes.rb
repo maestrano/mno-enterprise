@@ -100,9 +100,6 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   namespace :jpi do
     namespace :v1 do
-
-      resources :tasks, only: [:create, :index, :show, :update]
-      resources :orga_relations, only: [:index, :show]
       
       resources :marketplace, only: [:index, :show] do
         member do
@@ -128,6 +125,12 @@ MnoEnterprise::Engine.routes.draw do
 
         # AppInstances
         resources :app_instances, only: [:index, :create, :destroy], shallow: true
+        
+        # Tasks
+        resources :tasks, only: [:create, :index, :show, :update]
+
+        # Orga relations
+        resources :orga_relations, only: [:index, :show]
 
         # Teams
         resources :teams, only: [:index, :show, :create, :update, :destroy], shallow: true do
@@ -189,6 +192,13 @@ MnoEnterprise::Engine.routes.draw do
           end
         end
         resources :organizations, only: [:index, :show, :update, :create] do
+
+          # Tasks
+          resources :tasks, only: [:create, :index, :show, :update]
+
+          # Orga relations
+          resources :orga_relations, only: [:index, :show]
+
           collection do
             get :in_arrears
             get :count
