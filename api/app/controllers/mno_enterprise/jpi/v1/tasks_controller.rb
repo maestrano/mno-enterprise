@@ -56,11 +56,11 @@ module MnoEnterprise
     def tasks
       if params[:inbox] == 'true'
         # retrieve tasks inbox, tasks where I am the recipient
-        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: params[:user_id], organization_id: params[:organization_id]).first.id
+        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
         @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id)
       else
         # retrieve tasks outbox, tasks where I am the owner
-        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: params[:user_id], organization_id: params[:organization_id]).first.id
+        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
         @task ||= MnoEnterprise::Task.where(owner_id: orga_relation_id)
       end
     end
@@ -80,7 +80,7 @@ module MnoEnterprise
     def send_mail_notification(recipients)
       recipients.map { |recipient| MnoEnterprise::SystemNotificationMailer.task_notification(recipient.user).deliver_now  }
     end
-    
+
     def task_recipient_params
       permitted_params = params.require(:task).permit(:orga_relation_id, :reminder_date, :read_at)
         .merge(task_id: @task.id)
@@ -90,7 +90,11 @@ module MnoEnterprise
     end
 
     def task_params
-      permitted_params = params.require(:task).permit(:owner_id, :title, :message, :status, :due_date, :sent_at)
+
+      permitted_params = params.require(:task).permit(:owner_id, :title, :message, :status, :due_date, :sent_at, :organization_id)
+      owner_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
+      # Merge the owner of the task
+      permitted_params.merge!(owner_id: owner_id)
       # Update the param send_at the day the task is sent
       permitted_params.merge!(send_at: Time.new) if send_task
       # Update the task when is completed

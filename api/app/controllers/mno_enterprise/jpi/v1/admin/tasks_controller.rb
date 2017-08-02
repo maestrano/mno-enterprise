@@ -53,11 +53,11 @@ module MnoEnterprise
     def tasks
       if params[:inbox] == 'true'
         # retrieve tasks inbox
-        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: params[:user_id], organization_id: params[:organization_id]).first.id
+        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
         @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id)
       else
         # retrieve tasks outbox
-        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: params[:user_id], organization_id: params[:organization_id]).first.id
+        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
         @task ||= MnoEnterprise::Task.where(owner_id: orga_relation_id)
       end
     end
@@ -89,7 +89,7 @@ module MnoEnterprise
     def task_params
       # For an admin, the owner_id isn't important, so we pass the first one
       owner_id = current_user.organizations.first.orga_relation_id
-      permitted_params = params.require(:task).permit( :title, :message, :status, :due_date, :orga_relation_id, :send_at)
+      permitted_params = params.require(:task).permit( :title, :message, :status, :due_date, :orga_relation_id, :send_at, :organization_id)
         .merge(owner_id: owner_id)
       # Update the param send_at the day the task is sent
       permitted_params.merge!(send_at: Time.new) if send_task
