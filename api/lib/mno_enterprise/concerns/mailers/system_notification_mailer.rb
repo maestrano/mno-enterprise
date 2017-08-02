@@ -164,8 +164,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   end
 
   def task_notification(user)
-    MnoEnterprise::MailClient.deliver(
-    )  
+
   end
 
   protected
