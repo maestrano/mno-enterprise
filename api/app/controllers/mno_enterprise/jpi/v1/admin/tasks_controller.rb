@@ -51,14 +51,14 @@ module MnoEnterprise
     private
 
     def tasks
-      if params[:inbox] == 'true'
-        # retrieve tasks inbox
-        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
-        @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id)
-      else
+      if params[:outbox] == 'true'
         # retrieve tasks outbox
         orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
         @task ||= MnoEnterprise::Task.where(owner_id: orga_relation_id)
+      else
+        # retrieve tasks inbox
+        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
+        @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id)
       end
     end
 
