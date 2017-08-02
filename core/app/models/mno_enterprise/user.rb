@@ -31,6 +31,11 @@ module MnoEnterprise
     property :locked_at, type: :time
     property :last_sign_in_ip
 
+
+    has_many :user_access_requests
+    has_many :requested_user_accesses, class_name: 'UserAccessRequest'
+
+
     define_model_callbacks :validation #required by Devise
     define_model_callbacks :update #required by Devise
     define_model_callbacks :create #required by Devise
@@ -56,13 +61,12 @@ module MnoEnterprise
       validates :password, format: { with: Devise.password_regex, message: Devise.password_regex_message }, if: :password_required?
     end
 
-
     def initialize(params = {})
-     attributes
+      attributes
       super
     end
 
-    custom_endpoint :create_api_credentials,  on: :member, request_method: :patch
+    custom_endpoint :create_api_credentials, on: :member, request_method: :patch
     custom_endpoint :authenticate, on: :collection, request_method: :post
     custom_endpoint :update_password, on: :member, request_method: :patch
 
@@ -72,7 +76,7 @@ module MnoEnterprise
     # The auth_hash includes an email and password
     # Return nil in case of failure
     def self.authenticate_user(auth_hash)
-      result = self.authenticate({data: {attributes: auth_hash}})
+      result = self.authenticate({ data: { attributes: auth_hash } })
       if (u = result&.first) && u.id
         u
       end
@@ -109,7 +113,7 @@ module MnoEnterprise
     end
 
     def orga_relation_from_id(organization_id)
-      self.orga_relations.find {|r| r.organization_id == organization_id }
+      self.orga_relations.find { |r| r.organization_id == organization_id }
     end
 
     def create_deletion_request
@@ -118,15 +122,15 @@ module MnoEnterprise
 
     def current_deletion_request
       @current_deletion_request ||= if self.account_frozen
-        self.deletion_requests.sort_by(&:created_at).last
-      else
-        self.deletion_requests.select(&:active?).sort_by(&:created_at).first
-      end
+                                      self.deletion_requests.sort_by(&:created_at).last
+                                    else
+                                      self.deletion_requests.select(&:active?).sort_by(&:created_at).first
+                                    end
     end
 
     # Find a user using a confirmation token
     def self.find_for_confirmation(confirmation_token)
-      original_token     = confirmation_token
+      original_token = confirmation_token
       confirmation_token = Devise.token_generator.digest(self, :confirmation_token, confirmation_token)
 
       confirmable = find_or_initialize_with_error_by(:confirmation_token, confirmation_token)
@@ -206,10 +210,23 @@ module MnoEnterprise
       }
     end
 
-
     def password_required?
       !persisted? || !password.nil? || !password_confirmation.nil?
     end
 
+    def access_request_status(user)
+      status = 'never_requested'
+      user_access_requests.select { |r| r.requester_id == user.id }.sort_by { |r| r.created_at }.reverse.each { |r|
+        if r.status == 'approved'
+          if r.created_at > 1.day.ago
+            return 'approved'
+          else
+            return 'expired'
+          end
+        end
+        return r.status
+      }
+      status
+    end
   end
 end

@@ -1,7 +1,7 @@
 module MnoEnterprise
   class Jpi::V1::Admin::OrganizationsController < Jpi::V1::Admin::BaseResourceController
 
-    DEPENDENCIES = [:app_instances, :'app_instances.app', :users, :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user']
+    DEPENDENCIES = [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user']
 
     # GET /mnoe/jpi/v1/admin/organizations
     def index
