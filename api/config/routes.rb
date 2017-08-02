@@ -132,6 +132,9 @@ MnoEnterprise::Engine.routes.draw do
         # Tasks
         resources :tasks, only: [:create, :index, :show, :update]
 
+        # Notifications
+        resources :notifications, only: [:index]
+          
         # Teams
         resources :teams, only: [:index, :show, :create, :update, :destroy], shallow: true do
           member do
@@ -199,6 +202,9 @@ MnoEnterprise::Engine.routes.draw do
 
           # Tasks
           resources :tasks, only: [:create, :index, :show, :update]
+
+          # Notifications
+          resources :notifications, only: [:index]
 
           collection do
             get :in_arrears
