@@ -24,7 +24,8 @@ module MnoEnterprise
     let(:question_id) { "1" }
     let(:question_answer1) { build(:answer, parent_id: question_id) }
     let(:question_answer2) { build(:answer, parent_id: question_id) }
-    let(:question) { build(:question, id: question_id, answers: [question_answer1, question_answer2]) }
+    let(:rejected_answer) { build(:answer, parent_id: question_id, status: 'rejected') }
+    let(:question) { build(:question, id: question_id, answers: [question_answer1, question_answer2, rejected_answer]) }
 
     before do
       stub_api_v2(:get, "/apps/#{app.id}", app)
@@ -44,7 +45,10 @@ module MnoEnterprise
 
       it 'renders the list of reviews' do
         subject
-        expect(JSON.parse(response.body)['app_questions'][0]).to eq(hash_for_question(question))
+        expected = hash_for_question(question)
+        # Only approved answers
+        expected['answers'] = [hash_for_answer(question_answer1), hash_for_answer(question_answer2)]
+        expect(JSON.parse(response.body)['app_questions'][0]).to eq(expected)
       end
     end
 
