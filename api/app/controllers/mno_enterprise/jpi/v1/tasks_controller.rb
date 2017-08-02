@@ -33,7 +33,7 @@ module MnoEnterprise
       if @task = MnoEnterprise::Task.create(task_params)
         @task.task_recipients.create(task_recipient_params)
         MnoEnterprise::EventLogger.info('task_create', current_user.id, 'Task Creation', @task)
-        MnoEnterprise::SystemNotificationMailer.task_notification().deliver_now if send_task
+        send_mail_notification(@task.task_recipients) if send_task
         render 'show'
       else
         render_bad_request('create task', @task.errors)
@@ -77,6 +77,10 @@ module MnoEnterprise
       params[:task][:status] == 'done'
     end
 
+    def send_mail_notification(recipients)
+      recipients.map { |recipient| MnoEnterprise::SystemNotificationMailer.task_notification(recipient.user).deliver_now  }
+    end
+    
     def task_recipient_params
       permitted_params = params.require(:task).permit(:orga_relation_id, :reminder_date, :read_at)
         .merge(task_id: @task.id)
