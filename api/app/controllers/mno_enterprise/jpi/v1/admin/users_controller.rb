@@ -6,11 +6,12 @@ module MnoEnterprise
       if params[:terms]
         # Search mode
         @users = []
-        JSON.parse(params[:terms]).map { |t| @users = @users | MnoEnterprise::User.where(Hash[*t]) }
+        JSON.parse(params[:terms]).map { |t| @users = @users | MnoEnterprise::User.includes(:user_access_requests).where(Hash[*t]) }
         response.headers['X-Total-Count'] = @users.count
       else
         # Index mode
         query = MnoEnterprise::User.apply_query_params(params)
+        query = query.includes(:user_access_requests)
         @users = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
       end

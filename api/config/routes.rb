@@ -195,6 +195,7 @@ MnoEnterprise::Engine.routes.draw do
             get :count
             post :signup_email
           end
+          resource :access_requests, only: [:create]
         end
 
         resources :products, only: [:index, :show, :destroy, :update, :create] do
