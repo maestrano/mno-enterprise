@@ -28,6 +28,7 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/admin/organizations/:organization/tasks
     def create
       if @task = MnoEnterprise::Task.create(task_params)
+        return render_bad_request('create task', @task.errors) unless @task.id
         @task.task_recipients.create(task_recipient_params)
         MnoEnterprise::EventLogger.info('task_create', current_user.id, 'Task Creation', @task)
         send_mail_notification(@task.task_recipients) if send_task
@@ -53,11 +54,11 @@ module MnoEnterprise
     def tasks
       if params[:outbox] == 'true'
         # retrieve tasks outbox
-        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
+        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
         @task ||= MnoEnterprise::Task.where(owner_id: orga_relation_id)
       else
         # retrieve tasks inbox
-        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
+        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
         @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id)
       end
     end

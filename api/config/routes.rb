@@ -134,6 +134,8 @@ MnoEnterprise::Engine.routes.draw do
 
         # Notifications
         resources :notifications, only: [:index]
+        # Create an update method with no :id in the url
+        put '/notifications', to: 'notifications#update'
           
         # Teams
         resources :teams, only: [:index, :show, :create, :update, :destroy], shallow: true do
