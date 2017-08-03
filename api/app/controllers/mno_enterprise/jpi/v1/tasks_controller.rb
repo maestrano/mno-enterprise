@@ -91,7 +91,7 @@ module MnoEnterprise
     end
 
     def task_params
-      permitted_params = params.require(:task).permit(:owner_id, :title, :message, :status, :due_date, :sent_at, :organization_id)
+      permitted_params = params.require(:task).permit(:owner_id, :title, :message, :status, :due_date, :sent_at)
 
       owner_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
       # Merge the owner of the task
@@ -100,7 +100,6 @@ module MnoEnterprise
       permitted_params.merge!(send_at: Time.new, completed_at: nil, completed_notified_at: nil) if send_task
       # Update the task when is completed
       permitted_params.merge!(completed_at: Time.new) if task_completed
-      # permitted_params.merge!(completed_notified_at: Time.new) if task_completed
       permitted_params
     end
   end

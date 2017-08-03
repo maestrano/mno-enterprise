@@ -7,18 +7,11 @@ module MnoEnterprise
     end
 
     def update
+      object = fetch_object
       # current user created the notification
-      if is_owner_notification
-        return render_not_found('notification') unless @object
-        update_owner_notification
-        render json: {status:  'Ok'},  status: :updated
-      else
-        # current user is the recipient of the notification
-        @object = fetch_object_recipient
-        return render_not_found('notification') unless @object
-        update_recipent_notification
-        render json: {status:  'Ok'},  status: :updated
-      end
+      return render_not_found('notification') unless @object
+      update_notification(object)
+      render json: {status:  'Ok'},  status: :updated
     end
 
     private
@@ -35,7 +28,6 @@ module MnoEnterprise
 
     def is_owner_notification
       @orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
-      @object = fetch_object
       @orga_relation_id == @object.owner_id
     end
 
@@ -43,24 +35,26 @@ module MnoEnterprise
       # extract the class from params[:object_type]
       klass = "MnoEnterprise::#{params[:object_type].camelize}".constantize
       # retrieve the objects base on the klass
-      object ||= klass.find(params[:object_id].to_i)
+      @object ||= klass.find(params[:object_id].to_i)
+      return @object if @object && is_owner_notification
+      return false unless @object
+      fetch_object_recipient
     end
 
     def fetch_object_recipient
-      # find objects recipients
+      # object's recipient model
       klass = "MnoEnterprise::#{params[:object_type].camelize}Recipient".constantize
-      # retrieve the objects recipient base on the klass
-      recipient ||= klass.where("#{params[:object_type]}_id"=> @object.id, 'orga_relation_id'=> @orga_relation_id).first
+      # retrieve the object's recipient
+      @object ||= klass.where("#{params[:object_type]}_id"=> @object.id, 'orga_relation_id'=> @orga_relation_id).first
     end
 
-    def update_recipent_notification
-      @object.update(notified_at: Time.new) if params[:notified]
-      @object.update(read_at: Time.new) if params[:read]
-      @object.update(reminder_notified_at: Time.new) if params[:reminder_notified]
-    end
-
-    def update_owner_notification
-      @object.update(completed_notified_at: Time.new)  
+    def update_notification(object)
+      # param for object owner
+      object.update(completed_notified_at: Time.new) if params[:completed_notified]
+      # params for recipient
+      object.update(read_at: Time.new) if params[:read]
+      object.update(notified_at: Time.new) if params[:notified]
+      object.update(reminder_notified_at: Time.new) if params[:reminder_notified]
     end
 
     # Task notifications 

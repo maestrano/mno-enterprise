@@ -74,13 +74,13 @@ module MnoEnterprise
     def task_completed
       params[:task][:status] == 'done'
     end
-    
+
     def send_mail_notification(recipients)
       recipients.map { |recipient| MnoEnterprise::SystemNotificationMailer.task_notification(recipient.user).deliver_now  }
     end
 
     def task_recipient_params
-      permitted_params = params.require(:task).permit(:orga_relation_id, :reminder_date, :read_at)
+      permitted_params = params.require(:task).permit(:orga_relation_id, :reminder_date)
         .merge(task_id: @task.id)
       # Update the param notified_at when the task is sent
       permitted_params.merge!(notified_at: Time.new) if send_task
@@ -93,10 +93,9 @@ module MnoEnterprise
       permitted_params = params.require(:task).permit( :title, :message, :status, :due_date, :orga_relation_id, :send_at)
         .merge(owner_id: owner_id)
       # Update the param send_at the day the task is sent
-      permitted_params.merge!(send_at: Time.new) if send_task
+      permitted_params.merge!(send_at: Time.new, completed_at: nil, completed_notified_at: nil) if send_task
       # Update the task when is completed
       permitted_params.merge!(completed_at: Time.new) if task_completed
-      permitted_params.merge!(completed_notified_at: Time.new) if task_completed
       permitted_params
     end
   end
