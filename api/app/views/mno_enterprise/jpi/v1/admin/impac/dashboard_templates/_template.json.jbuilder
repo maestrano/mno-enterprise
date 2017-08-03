@@ -8,8 +8,8 @@ json.data_sources template.organizations(current_user.organizations).compact.map
   json.label org.name
 end
 
-json.kpis template.kpis, partial: 'mno_enterprise/jpi/v1/impac/kpis/kpi', as: :kpi
-json.widgets template.widgets, partial: 'mno_enterprise/jpi/v1/impac/widgets/widget', as: :widget
+json.kpis template.kpis, partial: 'mno_enterprise/jpi/v1/admin/impac/kpis/kpi', as: :kpi
+json.widgets template.widgets, partial: 'mno_enterprise/jpi/v1/admin/impac/widgets/widget', as: :widget
 
 json.created_at template.created_at
 json.updated_at template.updated_at
