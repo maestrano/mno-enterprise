@@ -8,7 +8,7 @@ module MnoEnterprise
       return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless template.present?
 
       @kpi = template.kpis.create(kpi_create_params)
-      return render json: { errors: kpi&.errors }, status: :bad_request unless kpi&.valid?
+      return render json: { errors: (kpi && kpi.errors).to_a }, status: :bad_request unless kpi.present? && kpi.valid?
 
       MnoEnterprise::EventLogger.info('kpi_create', current_user.id, 'Template KPI Creation', kpi)
       @no_content = true
@@ -17,7 +17,7 @@ module MnoEnterprise
 
     # PUT /mnoe/jpi/v1/admin/impac/kpis/:id
     def update
-      unless kpi&.update(kpi_update_params)
+      unless kpi.present? && kpi.update(kpi_update_params)
         return render json: { errors: 'Cannot update kpi' }, status: :bad_request
       end
 
@@ -28,7 +28,7 @@ module MnoEnterprise
 
     # DELETE /mnoe/jpi/v1/admin/impac/kpis/:id
     def destroy
-      unless kpi&.destroy
+      unless kpi.present? && kpi.destroy
         return render json: { errors: 'Cannot delete kpi' }, status: :bad_request
       end
 

@@ -10,7 +10,7 @@ module MnoEnterprise
       return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless template.present?
 
       @widget = template.widgets.create(widget_create_params)
-      return render json: { errors: widget&.errors }, status: :bad_request unless widget&.valid?
+      return render json: { errors: (widget && widget.errors).to_a }, status: :bad_request unless widget.present? && widget.valid?
 
       MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Template Widget Creation', widget)
       @no_content = true
@@ -19,7 +19,7 @@ module MnoEnterprise
 
     # PUT /mnoe/jpi/v1/admin/impac/widgets/:id
     def update
-      unless widget&.update(widget_update_params)
+      unless widget.present? && widget.update(widget_update_params)
         return render json: { errors: 'Cannot update widget' }, status: :bad_request
       end
 
@@ -30,7 +30,7 @@ module MnoEnterprise
 
     # DELETE /mnoe/jpi/v1/admin/impac/widgets/:id
     def destroy
-      unless widget&.destroy
+      unless widget.present? && widget.destroy
         return render json: { errors: 'Cannot delete widget' }, status: :bad_request
       end
 
