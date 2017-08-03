@@ -50,14 +50,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   #   -> POST /api/mnoe/v1/dashboards/:id/kpis
   #   -> POST /api/mnoe/v1/users/:id/alerts
   def create
-    return render_not_found('widget') if params[:kpi][:widget_id].present? && widget.blank?
-    return render_not_found('dashboard') unless dashboard.present?
-
-    if widget.present?
+    if params[:kpi][:widget_id].present?
+      return render_not_found('widget') if widget.blank?
       authorize! :manage_widget, widget
     else
+      return render_not_found('dashboard') if dashboard.blank?
       authorize! :manage_dashboard, dashboard
-    end
+    end  
 
     # TODO: nest alert in as a param, with the current user as a recipient.
     @kpi = kpi_parent.kpis.create(kpi_create_params)

@@ -96,7 +96,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     end
 
     def dashboard
-      @dashboard ||= dashboards.find(params[:id].to_i)
+      @dashboard ||= current_user.dashboards.find(params[:id].to_i)
     end
 
     def templates

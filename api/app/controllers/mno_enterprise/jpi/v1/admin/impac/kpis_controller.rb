@@ -52,7 +52,7 @@ module MnoEnterprise
     end
 
     def kpi_update_params
-      whitelist = [:name, :element_watched, {extra_watchables: []}]
+      whitelist = [:element_watched, {extra_watchables: []}]
       extract_params(whitelist)
     end
 
