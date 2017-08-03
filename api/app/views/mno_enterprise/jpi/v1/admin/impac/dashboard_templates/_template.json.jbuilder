@@ -13,3 +13,4 @@ json.widgets template.widgets, partial: 'mno_enterprise/jpi/v1/admin/impac/widge
 
 json.created_at template.created_at
 json.updated_at template.updated_at
+json.published template.published

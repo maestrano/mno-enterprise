@@ -69,7 +69,7 @@ module MnoEnterprise
     end
 
     def whitelisted_params
-      [:name, :currency, { widgets_order: [] }, { organization_ids: [] }]
+      [:name, :currency, { widgets_order: [] }, { organization_ids: [] }, :published]
     end
 
     # Allows all metadata attrs to be permitted, and maps it to :settings

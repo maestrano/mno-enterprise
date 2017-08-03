@@ -57,7 +57,7 @@ module MnoEnterprise
       before do
         api_stub_for(
           get: '/dashboards',
-          params: { filter: { 'dashboard_type' => 'template' } },
+          params: { filter: { 'dashboard_type' => 'template', 'published' => true } },
           response: from_api([template])
         )
         api_stub_for(
