@@ -1,13 +1,14 @@
 module MnoEnterprise
   class Impac::Dashboard < BaseResource
 
-    attributes :full_name, :widgets_order, :settings, :organization_ids, :widgets_templates, :currency
+    attributes :full_name, :widgets_order, :settings, :organization_ids, :widgets_templates, :currency, :published
 
     has_many :widgets, class_name: 'MnoEnterprise::Impac::Widget'
     has_many :kpis, class_name: 'MnoEnterprise::Impac::Kpi'
     belongs_to :owner, polymorphic: true
     default_scope -> { where(dashboard_type: 'dashboard') }
     scope :templates, -> { where(dashboard_type: 'template') }
+    scope :published_templates, -> { where(dashboard_type: 'template', published: true) }
 
     custom_post :copy
 
@@ -44,7 +45,7 @@ module MnoEnterprise
     def to_audit_event
       {
         name: name,
-        organization_id: (owner.class.name == 'MnoEnterprise::Organization') ? owner.id : nil
+        organization_id: (owner_type == 'Organization') ? owner_id : nil
       }
     end
 

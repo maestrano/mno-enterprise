@@ -15,6 +15,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardTemplatesC
   #==================================================================
   # GET /mnoe/jpi/v1/impac/dashboard_templates
   def index
-    @templates = MnoEnterprise::Impac::Dashboard.templates
+    @templates = MnoEnterprise::Impac::Dashboard.published_templates
   end
 end
