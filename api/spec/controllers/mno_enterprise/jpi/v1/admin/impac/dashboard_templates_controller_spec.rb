@@ -32,7 +32,7 @@ module MnoEnterprise
     let(:user) { build(:user, :admin, :with_organizations) }
     let(:org) { build(:organization, users: [user]) }
     let(:metadata) { { hist_parameters: { from: '2015-01-01', to: '2015-03-31', period: 'MONTHLY' } } }
-    let(:template) { build(:impac_dashboard, dashboard_type: 'template', organization_ids: [org.uid], currency: 'EUR', settings: metadata) }
+    let(:template) { build(:impac_dashboard, dashboard_type: 'template', organization_ids: [org.uid], currency: 'EUR', settings: metadata, owner_type: nil, owner_id: nil) }
     let(:widget) { build(:impac_widget, dashboard: template) }
     let(:d_kpi) { build(:impac_kpi, dashboard: template) }
     let(:w_kpi) { build(:impac_kpi, widget: widget) }
