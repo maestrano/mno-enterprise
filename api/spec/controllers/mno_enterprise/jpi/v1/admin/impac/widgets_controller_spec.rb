@@ -19,8 +19,7 @@ module MnoEnterprise
       {
         "id" => kpi.id,
         "element_watched" => kpi.element_watched,
-        "endpoint" => kpi.endpoint,
-        "alerts" => []
+        "endpoint" => kpi.endpoint
       }
     end
     let(:hash_for_widget) do
@@ -79,6 +78,11 @@ module MnoEnterprise
         subject
         expect(JSON.parse(response.body)).to eq(hash_for_widget)
       end
+
+      # api_stub should be modified to allow this case to be stubbed
+      context 'when the template cannot be found' do
+        xit 'spec to be described'
+      end
     end
 
     describe '#update' do
@@ -114,6 +118,11 @@ module MnoEnterprise
         subject
         expect(JSON.parse(response.body)).to eq(hash_for_widget)
       end
+
+      # api_stub should be modified to allow this case to be stubbed
+      context 'when the widget update is unsuccessful' do
+        xit 'spec to be described'
+      end
     end
 
     describe '#destroy' do
@@ -131,6 +140,11 @@ module MnoEnterprise
       end
 
       it_behaves_like "a jpi v1 admin action"
+
+      # api_stub should be modified to allow this case to be stubbed
+      context 'when the widget destruction is invalidunsuccessful' do
+        xit 'spec to be described'
+      end
     end
   end
 end

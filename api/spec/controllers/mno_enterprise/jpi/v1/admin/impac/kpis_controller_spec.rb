@@ -19,8 +19,7 @@ module MnoEnterprise
         "id" => kpi.id,
         'settings' => metadata.deep_stringify_keys,
         "element_watched" => kpi.element_watched,
-        "endpoint" => kpi.endpoint,
-        "alerts" => []
+        "endpoint" => kpi.endpoint
       }
     end
 
@@ -67,6 +66,11 @@ module MnoEnterprise
         subject
         expect(JSON.parse(response.body)).to eq(hash_for_kpi)
       end
+
+      # api_stub should be modified to allow this case to be stubbed
+      context 'when the template cannot be found' do
+        xit 'spec to be described'
+      end
     end
 
     describe '#update' do
@@ -98,6 +102,11 @@ module MnoEnterprise
         subject
         expect(JSON.parse(response.body)).to eq(hash_for_kpi)
       end
+
+      # api_stub should be modified to allow this case to be stubbed
+      context 'when the kpi update is unsuccessful' do
+        xit 'spec to be described'
+      end
     end
 
     describe '#destroy' do
@@ -115,6 +124,11 @@ module MnoEnterprise
       end
 
       it_behaves_like "a jpi v1 admin action"
+
+      # api_stub should be modified to allow this case to be stubbed
+      context 'when the kpi destruction is unsuccessful' do
+        xit 'spec to be described'
+      end
     end
   end
 end
