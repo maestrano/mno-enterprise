@@ -163,8 +163,19 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     )
   end
 
-  def task_notification(user)
+  def task_notification(recipient, task)
+    MnoEnterprise::MailClient.deliver(
+      'task-notification',
+      default_sender,
+      {email: recipient[:email]},
+      {
+        first_name: recipient[:name],
+        title: task[:title],
+        content: task[:message],
+        due_date: task[:due_date]
+      }
 
+    )
   end
 
   protected
