@@ -8,29 +8,23 @@ module MnoEnterprise
 
     def update
       object = fetch_object
-
       notifiction_type = params[:notifiction_type]
       case notifiction_type
-
       when 'status_change'
-        return render_not_found('notification') unless object        
+        return render_not_found("#{notifiction_type}") unless object        
         object.update(completed_notified_at: Time.new)
-
       when 'reminder'
         object_recipient = fetch_object_recipient(object)
-        return render_not_found('notification') unless object_recipient
+        return render_not_found("#{notifiction_type}") unless object_recipient
         object_recipient.update(reminder_notified_at: Time.new)
-
       when 'due_date'
         object_recipient = fetch_object_recipient(object)
-        return render_not_found('notification') unless object_recipient
+        return render_not_found("#{notifiction_type}") unless object_recipient
         object.update(read_at: Time.new) if params[:notified]
         object.update(notified_at: Time.new) if params[:notified]
-
       else
         return render_bad_request("update #{params[:object_type]} notification", object)
       end
-
       render json: {status:  'Ok'},  status: :updated
     end
 

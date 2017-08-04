@@ -31,7 +31,7 @@ module MnoEnterprise
 
     def orga_relations
       # we retrieve only the admins
-      @orga_relations ||= MnoEnterprise::OrgaRelation.where('users.admin_role'=> 'admin')
+      @orga_relations ||= MnoEnterprise::OrgaRelation.where('users.admin_role'=> 'admin', 'users.id' => current_user.id)
     end
 
     def orga_relation
