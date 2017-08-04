@@ -25,6 +25,10 @@ module MnoEnterprise
       it 'routes to #update' do
         expect(put('/jpi/v1/organizations/1/subscriptions/abc')).to route_to("mno_enterprise/jpi/v1/subscriptions#update", id: 'abc', organization_id: '1')
       end
+
+      it 'routes to #cancel' do
+        expect(post('/jpi/v1/organizations/1/subscriptions/abc/cancel')).to route_to("mno_enterprise/jpi/v1/subscriptions#cancel", id: 'abc', organization_id: '1')
+      end
     end
 
     context "Product provisioning is disabled" do

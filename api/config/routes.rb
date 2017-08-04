@@ -140,7 +140,11 @@ MnoEnterprise::Engine.routes.draw do
         resources :audit_events, only: [:index]
 
         if Settings&.dashboard&.provisioning&.enabled
-          resources :subscriptions, only: [:index, :show, :create, :update]
+          resources :subscriptions, only: [:index, :show, :create, :update] do
+            member do
+              post :cancel
+            end
+          end
         end
       end
 

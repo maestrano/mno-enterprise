@@ -18,6 +18,8 @@ module MnoEnterprise
     has_one :product_contract
     has_one :product_pricing
 
+    custom_endpoint :cancel, on: :member, request_method: :post
+
     def to_audit_event
       event = {id: id, status: status}
       event[:organization_id] = relationships.organization&.dig('data', 'id') if relationships.respond_to?(:organization)
