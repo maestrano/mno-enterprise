@@ -1,5 +1,5 @@
 module MnoEnterprise
-  class Jpi::V1::NotificationsController < Jpi::V1::BaseResourceController
+  class Jpi::V1::Admin::NotificationsController < Jpi::V1::Admin::BaseResourceController
 
     def index
       @orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
@@ -67,7 +67,7 @@ module MnoEnterprise
     # Notifications 
     def reminder
       tasks = MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> @orga_relation_id, 'completed_at' => '',
-        'task_recipients.reminder_date.ne' => '', 'task_recipients.reminder_notified_at' => '', 'task_recipients.reminder_date.gt' => Time.new).fetch
+        'task_recipients.reminder_date.ne' => '', 'task_recipients.reminder_notified_at' => '', 'task_recipients.reminder_date.gt' => Time.new)
       build_notifications(tasks, 'reminder')
     end
 

@@ -208,6 +208,11 @@ MnoEnterprise::Engine.routes.draw do
           # Notifications
           resources :notifications, only: [:index]
 
+          # Notifications
+          resources :notifications, only: [:index]
+          # Create an update method with no :id in the url
+          put '/notifications', to: 'notifications#update'
+
           collection do
             get :in_arrears
             get :count
