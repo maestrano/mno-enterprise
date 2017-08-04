@@ -1,0 +1,376 @@
+---
+:zh:
+  :mno_enterprise:
+    :templates:
+      :app_feature:
+        :single_sign_on: 你好
+        :single_billing: 你好
+        :data_sharing: 你好
+      :onboarding:
+        :menu:
+          :logout: 你好
+        :breadcrumb:
+          :step1: 你好
+          :step2: 你好
+          :step3: 你好
+          :step4: 你好
+        :welcome:
+          :title: 你好
+          :intro: 你好
+          :setup: 你好
+          :choose_my_apps: 你好
+          :connect_my_apps: 你好
+          :discover_your_account: 你好
+        :select_your_app:
+          :title: 你好
+          :search: 你好
+          :categories: 你好
+          :max_apps_selected: 你好
+        :data_sync:
+          :what_data: 你好
+          :start: 你好
+          :learn_more: 你好
+          :no_entity_shared: 你好
+        :app_infos_modal:
+          :what_is: 你好
+          :how_is_app_integrated:
+            :title: 你好
+            :connector: 你好
+            :cloud: 你好
+            :cube: 你好
+          :what_is_shared: 你好
+          :free_trial: 你好
+        :connect_apps:
+          :connect_applications: 你好
+          :apps_to_connect_now: 你好
+          :apps_to_connect_later: 你好
+          :go_to_dashboard: 你好
+          :skip: 你好
+      :impac:
+        :dock:
+          :launch: 你好
+          :connect: 你好
+          :settings:
+            :settings: 你好
+            :status: 你好
+            :app_name: 你好
+            :access_add-on_settings: 你好
+            :manual_data_sharing: 你好
+            :manual_data_sync: 你好
+            :disconnect_link: 你好
+            :delete: 你好
+            :confirm_app_deletion: 你好
+            :please_note_this_app: 你好
+            :delete_instructions: 你好
+            :cancel: 你好
+            :developer_details: 你好
+            :linked_to: 你好
+            :organization_id: 你好
+            :group_id: 你好
+          :add_more_apps: 你好
+          :cancel: 你好
+          :do_not_have_apps: 你好
+          :click_here: 你好
+        :modals:
+          :create:
+            :title: 你好
+            :label_name: 你好
+            :label_current_company: 你好
+            :label_multi_company: 你好
+            :unauthorized_to_access_company_reporting: 你好
+            :please_select_multi_company: 你好
+            :label_companies: 你好
+            :cancel: 你好
+            :add: 你好
+          :delete:
+            :title: 你好
+            :are_you_sure: 你好
+            :cancel: 你好
+            :add: 你好
+          :formula_modal:
+            :title: 你好
+            :calculation_explanation: 你好
+            :data_being_retrieved: 你好
+            :type_formula_below: 你好
+            :formula_result: 你好
+            :formula_legend: 你好
+            :cancel: 你好
+            :save: 你好
+      :dashboard:
+        :organization:
+          :audit_log:
+            :export: 你好
+          :credit_card:
+            :cc_form:
+              :placeholder_name: 你好
+              :placeholder_surname: 你好
+              :unaccepted_type: 你好
+          :index:
+            :audit_log:
+              :title: 你好
+            :billing:
+              :account_statement: 你好
+          :members:
+            :invite_modal:
+              :title_name: 你好
+              :title_email: 你好
+              :title_enter_emails: 你好
+              :title_select_roles: 你好
+            :removal_modal:
+              :body_name: 你好
+              :body_email: 你好
+        :provisioning:
+          :breadcrumb:
+            :order: 你好
+            :additional_details: 你好
+            :confirm: 你好
+            :order_summary: 你好
+          :order:
+            :title: 你好
+            :name: 你好
+            :description: 你好
+            :price: 你好
+            :next: 你好
+          :details:
+            :title: 你好
+            :next: 你好
+          :confirm:
+            :title: 你好
+            :name: 你好
+            :description: 你好
+            :edit_order: 你好
+            :validate: 你好
+            :price: 你好
+          :summary:
+            :title: 你好
+            :order_being_processed: 你好
+            :manage_subscriptions: 你好
+            :subscriptions: 你好
+            :name: 你好
+            :description: 你好
+            :price: 你好
+            :go_to_my_app: 你好
+          :subscriptions:
+            :title: 你好
+            :name: 你好
+            :description: 你好
+            :price: 你好
+            :product: 你好
+            :subscription: 你好
+            :amount: 你好
+            :start_date: 你好
+            :end_date: 你好
+            :status: 你好
+            :modify: 你好
+            :empty_list: 你好
+        :marketplace:
+          :index:
+            :search: 你好
+            :compare: 你好
+            :select_apps: 你好
+            :toastr:
+              :error: 你好
+            :cancel: 你好
+            :compare_apps: 你好
+          :show:
+            :launch_app: 你好
+            :connect_app: 你好
+            :price: 你好
+            :conflicting_app: 你好
+            :success_notification_title: 你好
+            :success_launch_notification_body: 你好
+            :success_connect_notification_body: 你好
+            :no_reviews: 你好
+            :write_review: 你好
+            :number_of_reviews: 你好
+            :success_toastr: 你好
+            :error_toastr: 你好
+            :from: 你好
+            :on: 你好
+            :platform_admin: 你好
+            :edited_by_user: 你好
+            :edited_by_user_tooltip: 你好
+            :edited_by_admin: 你好
+            :just_now: 你好
+            :company_feedback: 你好
+            :review_title: 你好
+            :reviews: 你好
+            :no_app_no_review: 你好
+            :tell_others: 你好
+            :cancel: 你好
+            :submit: 你好
+            :comment_title: 你好
+            :comment_placeholder: 你好
+            :question_title: 你好
+            :questions: 你好
+            :question_search: 你好
+            :question_ask: 你好
+            :question_ask_placeholder: 你好
+            :no_review: 你好
+            :answers: 你好
+            :answer_q: 你好
+            :answer_placeholder: 你好
+            :delete: 你好
+            :delete_q: 你好
+            :edit: 你好
+            :edit_review: 你好
+            :edit_answer: 你好
+            :edit_question: 你好
+            :edit_comment: 你好
+            :edit_q: 你好
+            :filter: 你好
+            :filter_rating_desc: 你好
+            :filter_rating_ask: 你好
+            :filter_date_desc: 你好
+            :filter_date_ask: 你好
+            :success_toastr_2: 你好
+            :success_toastr_answer: 你好
+            :success_toastr_question: 你好
+            :error_toastr_answer: 你好
+            :error_toastr_question: 你好
+            :review:
+              :delete_modal_header: 你好
+              :delete_modal_body: 你好
+              :delete_modal_cancel: 你好
+              :delete_modal_delete: 你好
+            :question:
+              :delete_modal_header: 你好
+              :delete_modal_body: 你好
+              :delete_modal_cancel: 你好
+              :delete_modal_delete: 你好
+              :no_question: 你好
+            :comment:
+              :delete_modal_header: 你好
+              :delete_modal_body: 你好
+              :delete_modal_cancel: 你好
+              :delete_modal_delete: 你好
+              :hide_comments: 你好
+              :feedback_list_links: 你好
+            :answer:
+              :delete_modal_header: 你好
+              :delete_modal_body: 你好
+              :delete_modal_cancel: 你好
+              :delete_modal_delete: 你好
+            :edited: 你好
+            :edited_tooltip: 你好
+            :modals:
+              :history:
+                :title: 你好
+                :close: 你好
+            :provision: 你好
+          :app_selection:
+            :next: 你好
+            :cancel: 你好
+            :select_orga: 你好
+            :no_orga_authorized: 你好
+            :unauthorized_to_add_app: 你好
+          :compare:
+            :title: 你好
+            :application_provider: 你好
+            :category: 你好
+            :key_benefits: 你好
+            :short_description: 你好
+            :rating: 你好
+            :companies_number: 你好
+            :pricing: 你好
+            :pricing_not_available: 你好
+        :account:
+          :my_account: 你好
+          :settings: 你好
+          :developer: 你好
+          :are_you_developer: 你好
+          :register: 你好
+          :api_key: 你好
+          :secret_key: 你好
+          :show: 你好
+          :hide: 你好
+          :name: 你好
+          :uid: 你好
+          :view_developer_docs: 你好
+          :here: 你好
+          :conceal: 你好
+          :organizations: 你好
+        :apps_list:
+          :manual_data_sync_tooltip: 你好
+          :disconnect_link_tooltip: 你好
+          :tutorial: 你好
+        :menu:
+          :access_admin_panel: 你好
+          :subscriptions: 你好
+          :modals:
+            :new_company:
+              :title: 你好
+              :name: 你好
+              :cancel: 你好
+              :create: 你好
+        :create_company:
+          :title: 你好
+          :enter_name: 你好
+          :cancel: 你好
+          :create: 你好
+      :components:
+        :layout:
+          :your_dashboard_is_loading: 你好
+        :without_organisation:
+          :hello: 你好
+          :text: 你好
+          :text_if_can_create: 你好
+          :button: 你好
+          :logout: 你好
+        :app_install_btn:
+          :conflicting_app: 你好
+          :start_app: 你好
+          :launch_app: 你好
+          :create_account: 你好
+          :create_account_tooltip: 你好
+          :connect_app: 你好
+          :access_addon: 你好
+          :access_addon_tooltip: 你好
+          :insufficient_privilege: 你好
+          :success_notification_title: 你好
+          :success_launch_notification_body: 你好
+          :success_connect_notification_body: 你好
+          :app_requires_no_set_up: 你好
+          :app_connects_on_launch: 你好
+          :app_connected: 你好
+        :audit_events_list:
+          :loading_events: 你好
+          :table:
+            :date: 你好
+            :user: 你好
+            :action: 你好
+            :description: 你好
+        :mno_pagination:
+          :items_per_page: 你好
+        :mno_password:
+          :current_password: 你好
+          :new_password: 你好
+          :confirm_password: 你好
+          :eight_characters_minimum: 你好
+          :one_uppercase_character: 你好
+          :one_number: 你好
+          :one_lowercase_character: 你好
+          :same_password: 你好
+          :save: 你好
+          :cancel: 你好
+        :language_selectbox:
+          :language: 你好
+    :webhook:
+      :o_auth:
+        :providers:
+          :cancel: 你好
+          :myob:
+            :connect_to: 你好
+          :xero:
+            :payroll: 你好
+            :connect_to: 你好
+    :auth:
+      :shared:
+        :links:
+          :or_sign_in_using: 你好
+      :registrations:
+        :new:
+          :title: 你好
+          :create: 你好
+          :user_accept: 你好
+          :tos: 你好
