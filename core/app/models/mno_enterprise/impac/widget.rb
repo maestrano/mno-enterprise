@@ -9,7 +9,7 @@ module MnoEnterprise
 
     def to_audit_event
 
-      if settings['organization_ids'].any?
+      if settings.present? && settings['organization_ids'].present?
         organization = MnoEnterprise::Organization.find_by(uid: settings['organization_ids'].first)
         { name: name, organization_id: organization.id }
       else

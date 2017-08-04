@@ -74,14 +74,37 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     end
   end
 
+  # Allows to create a dashboard using another dashboard as a source
+  # At the moment, only dashboards of type "template" can be copied
+  # Ultimately we could allow the creation of dashboards from any other dashboard
+  # ---------------------------------
+  # POST mnoe/jpi/v1/impac/dashboards/1/copy
+  def copy
+    return render_not_found('template') unless template
+
+    # Owner is the current user by default, can be overriden to something else (eg: current organization)
+    @dashboard = template.copy(current_user, dashboard_params[:name], dashboard_params[:organization_ids])
+    return render_bad_request('copy template', 'Unable to copy template') unless dashboard.present?
+
+    render 'show'
+  end
+
   private
+
+    def dashboards
+      @dashboards ||= current_user.dashboards
+    end
 
     def dashboard
       @dashboard ||= current_user.dashboards.find(params[:id].to_i)
     end
 
-    def dashboards
-      @dashboards ||= current_user.dashboards
+    def templates
+      @templates ||= MnoEnterprise::Impac::Dashboard.templates
+    end
+
+    def template
+      @template ||= templates.find(params[:id].to_i)
     end
 
     def whitelisted_params

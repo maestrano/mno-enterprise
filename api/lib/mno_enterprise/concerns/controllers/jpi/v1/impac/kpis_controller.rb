@@ -50,11 +50,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   #   -> POST /api/mnoe/v1/dashboards/:id/kpis
   #   -> POST /api/mnoe/v1/users/:id/alerts
   def create
-    if widget.present?
+    if params[:kpi][:widget_id].present?
+      return render_not_found('widget') if widget.blank?
       authorize! :manage_widget, widget
     else
+      return render_not_found('dashboard') if dashboard.blank?
       authorize! :manage_dashboard, dashboard
-    end
+    end  
+
     # TODO: nest alert in as a param, with the current user as a recipient.
     @kpi = kpi_parent.kpis.create(kpi_create_params)
     unless kpi.errors?
@@ -76,6 +79,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   # PUT /mnoe/jpi/v1/impac/kpis/:id
   #   -> PUT /api/mnoe/v1/kpis/:id
   def update
+    render_not_found('kpi') unless kpi.present?
+
     authorize! :manage_kpi, kpi
 
     params = kpi_update_params
@@ -107,6 +112,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   # DELETE /mnoe/jpi/v1/impac/kpis/:id
   #   -> DELETE /api/mnoe/v1/kpis/:id
   def destroy
+    render_not_found('kpi') unless kpi.present?
+
     authorize! :manage_kpi, kpi
 
     if kpi.destroy
@@ -122,21 +129,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   private
 
     def dashboard
-      @dashboard ||= MnoEnterprise::Impac::Dashboard.find(params.require(:dashboard_id))
-      return render_not_found('dashboard') unless @dashboard
-      @dashboard
+      @dashboard ||= MnoEnterprise::Impac::Dashboard.find(params.require(:dashboard_id).to_i)
     end
 
     def widget
-      return nil if (id = params.require(:kpi)[:widget_id]).blank?
-      @widget ||= MnoEnterprise::Impac::Widget.find(id)
-      return render_not_found('widget') unless @widget
-      @widget
+      widget_id = params.require(:kpi)[:widget_id]
+      @widget ||= (widget_id.present? && MnoEnterprise::Impac::Widget.find(widget_id.to_i))
     end
 
     def kpi
-      @kpi ||= MnoEnterprise::Impac::Kpi.find(params[:id])
-      return @kpi || render_not_found('kpi')
+      @kpi ||= MnoEnterprise::Impac::Kpi.find(params.require(:id).to_i)
     end
 
     def kpi_parent

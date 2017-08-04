@@ -145,6 +145,8 @@ MnoEnterprise::Engine.routes.draw do
       end
 
       namespace :impac do
+        post 'dashboards/:id/copy', to: 'dashboards#copy'
+
         resources :dashboards, only: [:index, :show, :create, :update, :destroy] do
           resources :widgets, shallow: true, only: [:create, :update, :destroy]
           resources :kpis, shallow: true, only: [:show, :create, :update, :destroy] do
@@ -158,6 +160,8 @@ MnoEnterprise::Engine.routes.draw do
         resources :organizations, only: [] do
           resources :widgets, only: :index
         end
+
+        resources :dashboard_templates, only: :index
       end
 
 
@@ -211,6 +215,14 @@ MnoEnterprise::Engine.routes.draw do
         post 'theme/save'
         post 'theme/reset'
         put 'theme/logo'
+
+        # Dashboard templates designer
+        namespace :impac do
+          resources :dashboard_templates, only: [:index, :show, :destroy, :update, :create] do
+            resources :widgets, shallow: true, only: [:create, :update, :destroy]
+            resources :kpis, shallow: true, only: [:create, :update, :destroy]
+          end
+        end
       end
     end
   end
