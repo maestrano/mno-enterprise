@@ -34,6 +34,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     else
       MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription)
       @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      render :show
     end
   end
 
@@ -50,6 +51,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     else
       MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
       @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      render :show
     end
   end
 
@@ -66,6 +68,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     else
       MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription cancelled', subscription)
       @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      render :show
     end
   end
 
