@@ -175,5 +175,25 @@ module MnoEnterprise
         subject.registration_instructions('test@example.com').deliver_now
       end
     end
+
+    describe 'task_notification' do
+      let(:task) { build(:task) }
+
+      it 'sends the correct email' do
+        expect(MnoEnterprise::MailClient).to receive(:deliver).with(
+            'task-notification',
+            SystemNotificationMailer::DEFAULT_SENDER,
+            { email: user.email},
+            {
+              first_name: user.name,
+              title: task.title,
+              content: task.message,
+              due_date: task.due_date
+            }
+        )
+
+        subject.task_notification(user, task).deliver_now
+      end
+    end
   end
 end

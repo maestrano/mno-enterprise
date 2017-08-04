@@ -174,7 +174,6 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
         content: task[:message],
         due_date: task[:due_date]
       }
-
     )
   end
 
