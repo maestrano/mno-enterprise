@@ -46,8 +46,8 @@ en:
             status: "Status"
             modify: "Modify subscription"
             empty_list: "You don't have any subscriptions"
-            cancel: "Cancel subscription",
-            cancel_modal.title: "Cancel subscription",
+            cancel: "Cancel subscription"
+            cancel_modal.title: "Cancel subscription"
             cancel_modal.body: "Do you want to cancel this subscription?"
             cancel_modal.yes: "Yes"
             cancel_modal.no: "No"
