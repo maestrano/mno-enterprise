@@ -5,19 +5,19 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     
     it 'routes to #index' do
-      expect(get('/jpi/v1/admin/tasks')).to route_to("mno_enterprise/jpi/v1/admin/tasks#index", format: "json")
+      expect(get('/jpi/v1/admin/organizations/1/tasks')).to route_to("mno_enterprise/jpi/v1/admin/tasks#index", format: "json", organization_id: '1')
     end
     
     it 'routes to #show' do
-      expect(get('/jpi/v1/admin/tasks/1')).to route_to("mno_enterprise/jpi/v1/admin/tasks#show", format: "json", id:'1')
+      expect(get('/jpi/v1/admin/organizations/1/tasks/1')).to route_to("mno_enterprise/jpi/v1/admin/tasks#show", format: "json", id:'1', organization_id: '1')
     end
     
     it 'routes to #create' do
-      expect(post('/jpi/v1/admin/tasks')).to route_to("mno_enterprise/jpi/v1/admin/tasks#create", format: "json")
+      expect(post('/jpi/v1/admin/organizations/1/tasks')).to route_to("mno_enterprise/jpi/v1/admin/tasks#create", format: "json", organization_id: '1')
     end
     
     it 'routes to #update' do
-      expect(put('/jpi/v1/admin/tasks/1')).to route_to("mno_enterprise/jpi/v1/admin/tasks#update",  format: 'json', id:'1')
+      expect(put('/jpi/v1/admin/organizations/1/tasks/1')).to route_to("mno_enterprise/jpi/v1/admin/tasks#update",  format: 'json', id:'1', organization_id: '1')
     end
   end
 end
