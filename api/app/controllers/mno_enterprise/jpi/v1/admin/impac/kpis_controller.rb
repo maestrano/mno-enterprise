@@ -8,9 +8,9 @@ module MnoEnterprise
       return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless template.present?
 
       @kpi = template.kpis.create(kpi_create_params)
-      return render json: { errors: (kpi && kpi.errors).to_a }, status: :bad_request unless kpi.present? && kpi.valid?
+      return render json: { errors: (@kpi && @kpi.errors).to_a }, status: :bad_request unless @kpi.present? && @kpi.valid?
 
-      MnoEnterprise::EventLogger.info('kpi_create', current_user.id, 'Template KPI Creation', kpi)
+      MnoEnterprise::EventLogger.info('kpi_create', current_user.id, 'Template KPI Creation', @kpi)
       @no_content = true
       render 'show'
     end
@@ -47,7 +47,7 @@ module MnoEnterprise
     end
 
     def kpi_create_params
-      whitelist = [:dashboard_id, :widget_id, :endpoint, :source, :element_watched, {extra_watchables: []}]
+      whitelist = [:dashboard_id, :widget_id, :endpoint, :source, :element_watched, { extra_watchables: [] }]
       extract_params(whitelist)
     end
 
@@ -60,8 +60,8 @@ module MnoEnterprise
       (p = params).require(:kpi).permit(*whitelist).tap do |whitelisted|
         whitelisted[:settings] = p[:kpi][:metadata] || {}
         # TODO: strong params for targets & extra_params attributes (keys will depend on the kpi).
-        whitelisted[:targets] = p[:kpi][:targets] unless p[:kpi][:targets].blank?
-        whitelisted[:extra_params] = p[:kpi][:extra_params] unless p[:kpi][:extra_params].blank?
+        whitelisted[:targets] = p[:kpi][:targets] if p[:kpi][:targets].present?
+        whitelisted[:extra_params] = p[:kpi][:extra_params] if p[:kpi][:extra_params].present?
       end
       .except(:metadata)
     end
