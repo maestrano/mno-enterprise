@@ -24,8 +24,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/impac/dashboard_templates/1
     def show
-      return dashboard_template if dashboard_template.present?
-      render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found
+      render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless dashboard_template.present?
     end
 
     # POST /mnoe/jpi/v1/admin/impac/dashboard_templates
