@@ -5,7 +5,6 @@ en:
         dock:
           launch: Launch
           connect: Connect
-          settings: Settings
           add_more_apps: Add more apps
           cancel: Cancel
           do_not_have_apps: "It looks like you don't have any apps"

@@ -46,6 +46,26 @@ zh:
           go_to_dashboard: 你好
           skip: 你好
       impac:
+        index:
+          dashboard: 你好
+          new_dashboard: 你好
+          source: 你好
+          add_widget: 你好
+          delete_dashboard: 你好
+          widget_added: 你好
+          select_widgets_to_add: 你好
+          all_categories: 你好
+          cat_accounting: 你好
+          cat_invoicing: 你好
+          cat_hr_payroll: 你好
+          cat_sales: 你好
+          no_dashboard_warning: 你好
+          benefits_of_dashboards_html: 你好
+          create_dashboard: 你好
+          note_on_permissions: 你好
+          no_widgets_warning: 你好
+          click_below_to_add_widgets: 你好
+          add_new_widget: 你好
         dock:
           launch: 你好
           connect: 你好
@@ -95,29 +115,225 @@ zh:
             formula_legend: 你好
             cancel: 你好
             save: 你好
+        widgets:
+          accouts_accounting_values:
+            widget_settings: 你好
+            cancel: 你好
+            save: 你好
+            data_being_retrieved: 你好
+          accounts_assets_summary:
+            widget_settings: 你好
+            cancel: 你好
+            save: 你好
+            data_being_retrieved: 你好
+          accounts_balance:
+            widget_settings: 你好
+            cancel: 你好
+            save: 你好
+            data_being_retrieved: 你好
+          accounts_comparison:
+            widget_settings: 你好
+            select_accounts_to_compare: 你好
+            cancel: 你好
+            save: 你好
+            add_account: 你好
+            data_being_retrieved: 你好
+          accounts_custom_calculation:
+            data_being_retrieved: 你好
+          accounts_expenses_revenue:
+            widget_settings: 你好
+            cancel: 你好
+            save: 你好
+            label_expenses: 你好
+            label_revenue: 你好
+          accounts_payable_receivable:
+            widget_settings: 你好
+            cancel: 你好
+            save: 你好
+            label_payable: 你好
+            label_receivable: 你好
+            label_accounts_receivable: 你好
+            label_accounts_payable: 你好
+            data_being_retrieved: 你好
+          invoices_list:
+            widget_settings: 你好
+            cancel: 你好
+            save: 你好
+            data_being_retrieved: 你好
+            label_paid: 你好
+            label_due: 你好
+            label_invoiced: 你好
+            no_invoices_found_for: 你好
+          invoices_summary:
+            widget_settings: 你好
+            cancel: 你好
+            save: 你好
+            data_being_retrieved: 你好
+          common:
+            data_not_found:
+              data_not_found: 你好
+              are_you_missing_an_app: 你好
+          settings:
+            account:
+              title: 你好
+            chart_filters:
+              title: 你好
+              label_top: 你好
+            hist_mode:
+              label_current: 你好
+              label_history: 你好
+            organizations:
+              select_companies: 你好
+            time_range:
+              title: 你好
+              show_last: 你好
       dashboard:
         organization:
+          arrears:
+            title: 你好
+            explanation: 你好
+            recommendation: 你好
+            warning: 你好
+            retry: 你好
           audit_log:
             export: 你好
+          billing:
+            current_billing_html: 你好
+            current_credit_html: 你好
+            disclaimer: 你好
+            about_title: 你好
+            about_body: 你好
           credit_card:
+            title: 你好
+            subtitle: 你好
+            cancel: 你好
+            save: 你好
             cc_form:
+              title: 你好
+              title_select: 你好
+              name: 你好
               placeholder_name: 你好
               placeholder_surname: 你好
+              number: 你好
               unaccepted_type: 你好
+              cvv: 你好
+              country: 你好
+              country_select: 你好
+              expiry: 你好
+              month_select: 你好
+              year_select: 你好
+            billing_form:
+              header: 你好
+              street: 你好
+              city: 你好
+              postcode: 你好
+              country: 你好
+              country_select: 你好
           index:
+            title: 你好
             audit_log:
               title: 你好
             billing:
+              title: 你好
+              current_billing: 你好
+              billing_details: 你好
+              past_invoices: 你好
               account_statement: 你好
+            members:
+              title: 你好
+            teams:
+              title: 你好
+              subtitle: 你好
+              control_access: 你好
+            settings:
+              title: 你好
+          invoices:
+            disclaimer: 你好
+            period: 你好
+            amount: 你好
+            paid: 你好
+            download: 你好
           members:
+            invite_users: 你好
+            name: 你好
+            surname: 你好
+            email: 你好
+            role: 你好
+            team: 你好
+            team_select: 你好
+            edit: 你好
+            remove: 你好
             invite_modal:
               title_name: 你好
               title_email: 你好
               title_enter_emails: 你好
               title_select_roles: 你好
+              description: 你好
+              example: 你好
+              disclaimer: 你好
+              cancel: 你好
+              next: 你好
+              invite: 你好
+            edition_modal:
+              cancel: 你好
+              change: 你好
+              roles:
+                member: 你好
+                power_user: 你好
+                admin: 你好
+                super_admin: 你好
             removal_modal:
+              title: 你好
               body_name: 你好
               body_email: 你好
+              cancel: 你好
+              remove: 你好
+          settings:
+            company_name: 你好
+            connec_data_sharing: 你好
+            enable: 你好
+            disable: 你好
+            cancel: 你好
+            save: 你好
+        teams:
+          index:
+            no_teams_warning: 你好
+            add_team: 你好
+            add_team_light: 你好
+            admin_permission_warning: 你好
+            all: 你好
+            no_apps_warning: 你好
+            add_app: 你好
+          member_add_modal:
+            title: 你好
+            all_belong_to_team_warning: 你好
+            select_company_members: 你好
+            close: 你好
+            cancel: 你好
+            add: 你好
+          member_removal_modal:
+            title: 你好
+            confirmation: 你好
+            cancel: 你好
+            remove: 你好
+          team_add_modal:
+            title: 你好
+            enter_team_name: 你好
+            cancel: 你好
+            create: 你好
+          team_delete_modal:
+            title: 你好
+            confirmation: 你好
+            cancel: 你好
+            remove: 你好
+          team_list:
+            no_team_member_warning: 你好
+            add_team_members: 你好
+            tbl_name: 你好
+            tbl_surname: 你好
+            tbl_email: 你好
+            tbl_role: 你好
+            remove: 你好
         provisioning:
           breadcrumb:
             order: 你好
@@ -164,6 +380,8 @@ zh:
             empty_list: 你好
         marketplace:
           index:
+            title: 你好
+            select_all: 你好
             search: 你好
             compare: 你好
             select_apps: 你好
@@ -172,9 +390,14 @@ zh:
             cancel: 你好
             compare_apps: 你好
           show:
+            back: 你好
+            start_app: 你好
             launch_app: 你好
             connect_app: 你好
             price: 你好
+            tag_responsive: 你好
+            tag_star: 你好
+            tag_connec: 你好
             conflicting_app: 你好
             success_notification_title: 你好
             success_launch_notification_body: 你好
@@ -345,6 +568,23 @@ zh:
           cancel: 你好
           create: 你好
       components:
+        loading_lounge:
+          redirecting_to_app: 你好
+          you_will_be_redirected_in: 你好
+          go_to_my_app: 你好
+          app_is_getting_configured: 你好
+          app_should_be_available_soon: 你好
+          app_is_loading: 你好
+          app_has_been_idle_for_long: 你好
+          app_is_getting_setup: 你好
+          app_is_preparing_for_first_use: 你好
+          app_has_been_deleted: 你好
+          app_has_been_removed_by_admin: 你好
+          app_is_idle: 你好
+          cannot_start_app: 你好
+          app_not_found: 你好
+          app_not_managed_by_us: 你好
+          did_you_type_the_right_url: 你好
         layout:
           your_dashboard_is_loading: 你好
         without_organisation:
@@ -391,6 +631,12 @@ zh:
           cancel: 你好
         language_selectbox:
           language: 你好
+      modals:
+        new_organization:
+          title: 你好
+          enter_new_company_name: 你好
+          cancel: 你好
+          create: 你好
     webhook:
       o_auth:
         providers:
