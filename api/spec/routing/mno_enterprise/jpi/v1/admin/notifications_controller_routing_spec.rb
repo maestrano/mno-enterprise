@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module MnoEnterprise
-  RSpec.describe Jpi::V1::NotificationController, type: :routing do
+  RSpec.describe Jpi::V1::NotificationsController, type: :routing do
     routes { MnoEnterprise::Engine.routes }
     
     it 'routes to #index' do
