@@ -34,19 +34,69 @@ module MnoEnterprise
       [reminder, due_date, status_change].flatten
     end
 
-    # Create notifications from objects
+    # Create notifications from objects depending on notification type
     def build_notifications(objects, notification_type)
-      objects.map { |object| { object_id: object.id, object_type: object.class.name.split("::").last.downcase, title: object.title,
-        notification_type: notification_type, due_date: object.due_date, from: notification_sender(object) } }
+      case notification_type
+      when 'status_change'
+        build_status_change(objects)
+      when 'reminder'
+        build_reminder(objects)
+      when 'due_date'
+        build_due_date(objects)
+      end 
+    end
+    
+    # build due_date notification object
+    def build_due_date(objects)
+      objects.map do |object| 
+        {
+          object_id: object.id,
+          object_type: object.class.name.split("::").last.downcase,
+          title: "Task due #{date(object.due_date)}",
+          message: "Title: #{object.title}\n From: #{notification_sender(object)}\n"\
+            "See your due tasks for more details"
+        }
+      end  
+    end
+    
+    # build status_change notification object
+    def build_status_change(objects)
+      objects.map do |object|
+        {
+          object_id: object.id,
+          object_type: object.class.name.split("::").last.downcase,
+          title: 'Task completed',
+          message: "#{object.recipients.first[:user][:name]} #{object.recipients.first[:user][:surname]}"\
+            "from #{object.recipients.first[:organization][:name]}"\
+            "has completed\n the task: #{object.title}.\n See your messages for more details."
+        }
+      end
+    end
+
+    # build reminder notification object
+    def build_reminder(objects)
+      objects.map do |object|
+        {
+          object_id: object.id,
+          object_type: object.class.name.split("::").last.downcase,
+          title: 'Task Reminder',
+          message: "Title: #{object.title}\n From: #{notification_sender(object)}\n"\
+            "Due date: #{date(object.due_date)}\n See your due tasks for more details"
+        }
+      end
+    end
+
+    def date(date)
+      if date.today?
+        'today'
+      else
+        (date).strftime('%a, %d %b %Y')
+      end
     end
 
     def notification_sender(object)
       orga_relation = MnoEnterprise::OrgaRelation.find(object.owner_id)
-      { 
-        sender_name: orga_relation.user.name,
-        sender_surname: orga_relation.user.surname,
-        sender_organization: orga_relation.organization.name
-      }
+      "#{orga_relation.user.name} #{orga_relation.user.surname} - #{orga_relation.organization.name}"
     end
 
     def fetch_object
