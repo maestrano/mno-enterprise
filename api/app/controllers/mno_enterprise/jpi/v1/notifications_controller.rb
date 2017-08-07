@@ -2,135 +2,111 @@ module MnoEnterprise
   class Jpi::V1::NotificationsController < Jpi::V1::BaseResourceController
 
     def index
-      @orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first.id
-      @notifications = list_of_notifications
+      orga_relation = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first
+      return render_bad_request("could not find orga_relation for user #{current_user.id} in organization_id #{params[:organization_id]}", nil) unless orga_relation
+      orga_relation_id = orga_relation.id
+      @notifications = [
+        fetch_reminder_notifications(orga_relation_id), 
+        fetch_due_date_notifications(orga_relation_id),
+        fetch_status_change_notifications(orga_relation_id)
+      ].flatten
     end
 
     def update
-      object = fetch_object
-      notification_type = params[:notification_type]
-      case notification_type
-      when 'status_change'
-        return render_not_found("#{notification_type}") unless object
-        object.update(completed_notified_at: Time.new)
-      when 'reminder'
-        object_recipient = fetch_object_recipient(object)
-        return render_not_found("#{notification_type}") unless object_recipient
-        object_recipient.update(reminder_notified_at: Time.new)
-      when 'due_date'
-        object_recipient = fetch_object_recipient(object)
-        return render_not_found("#{notification_type}") unless object_recipient
-        object.update(read_at: Time.new) if params[:notified]
-        object.update(notified_at: Time.new) if params[:notified]
+      if params[:object_type] == 'task'
+        update_task
       else
-        return render_bad_request("update #{params[:object_type]} notification", object)
+        return render_bad_request("update, object type do not exist or it is missing", nil)
       end
-      render json: {status:  'Ok'},  status: :updated
     end
 
     private
 
-    def list_of_notifications
-      [reminder, due_date, status_change].flatten
-    end
-
-    # Create notifications from objects depending on notification type
-    def build_notifications(objects, notification_type)
-      case notification_type
-      when 'status_change'
-        build_status_change(objects)
-      when 'reminder'
-        build_reminder(objects)
-      when 'due_date'
-        build_due_date(objects)
-      end 
-    end
-
-    # build due_date notification object
-    def build_due_date(objects)
-      objects.map do |object| 
+    # Fetch notifications 
+    def fetch_reminder_notifications(orga_relation_id)
+      tasks = MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id, 'completed_at' => '',
+        'task_recipients.reminder_date.ne' => '', 'task_recipients.reminder_notified_at' => '', 'task_recipients.reminder_date.gt' => Time.new)
+      tasks.map do |task|
         {
-          object_id: object.id,
-          object_type: object.class.name.split("::").last.downcase,
-          title: "Task due #{date(object.due_date)}",
-          message: "Title: #{object.title}\n From: #{notification_sender(object)}\n"\
-            "See your due tasks for more details"
+          object_id: task.id,
+          object_type: 'task',
+          notification_type: "reminder",
+          title: 'Task Reminder',
+          message: ["Title: #{task.title}",
+            "From: #{format_notification_sender(task)}",
+            "Due date: #{format_date(task.due_date)}",
+            "See your due tasks for more details"].join("\n")
+        }
+      end
+    end
+
+    def fetch_due_date_notifications(orga_relation_id)
+      tasks = MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id, 'due_date.ne' => '',
+        'completed_at' => '', 'due_date.gt' => Time.new, 'task_recipients.notified_at' => '')
+      tasks.map do |task|
+        {
+          object_id: task.id,
+          object_type: 'task',
+          notification_type: "due_date",
+          title: "Task due #{format_date(task.due_date)}",
+          message: ["Title: #{task.title}",
+            "From: #{format_notification_sender(task)}",
+            "See your due tasks for more details"].join("\n")
         }
       end  
     end
 
-    # build status_change notification object
-    def build_status_change(objects)
-      objects.map do |object|
-        {
-          object_id: object.id,
-          object_type: object.class.name.split("::").last.downcase,
-          title: 'Task completed',
-          message: "#{object.recipients.first[:user][:name]} #{object.recipients.first[:user][:surname]}"\
-            "from #{object.recipients.first[:organization][:name]}"\
-            "has completed\n the task: #{object.title}.\n See your messages for more details."
-        }
-      end
-    end
-
-    # build reminder notification object
-    def build_reminder(objects)
-      objects.map do |object|
-        {
-          object_id: object.id,
-          object_type: object.class.name.split("::").last.downcase,
-          title: 'Task Reminder',
-          message: "Title: #{object.title}\n From: #{notification_sender(object)}\n"\
-            "Due date: #{date(object.due_date)}\n See your due tasks for more details"
-        }
-      end
-    end
-
-    def date(date)
-      if date.today?
-        'today'
-      else
-        (date).strftime('%a, %d %b %Y')
-      end
-    end
-
-    def notification_sender(object)
-      orga_relation = MnoEnterprise::OrgaRelation.find(object.owner_id)
-      "#{orga_relation.user.name} #{orga_relation.user.surname} - #{orga_relation.organization.name}"
-    end
-
-    def fetch_object
-      # extract the class from params[:object_type]
-      klass = "MnoEnterprise::#{params[:object_type].camelize}".constantize
-      # retrieve the object
-      object ||= klass.find(params[:object_id].to_i)
-    end
-
-    def fetch_object_recipient(object)
-      orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
-      # object's recipient model
-      klass = "MnoEnterprise::#{params[:object_type].camelize}Recipient".constantize
-      # retrieve the object's recipient
-      object ||= klass.where("#{params[:object_type]}_id"=> object.id, 'orga_relation_id'=> orga_relation_id).first
-    end
-
-    # Notifications 
-    def reminder
-      tasks = MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> @orga_relation_id, 'completed_at' => '',
-        'task_recipients.reminder_date.ne' => '', 'task_recipients.reminder_notified_at' => '', 'task_recipients.reminder_date.gt' => Time.new).fetch
-      build_notifications(tasks, 'reminder')
-    end
-
-    def due_date
-      tasks = MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> @orga_relation_id, 'due_date.ne' => '',
-        'completed_at' => '', 'due_date.gt' => Time.new, 'task_recipients.notified_at' => '')
-      build_notifications(tasks, 'due_date')
-    end
-
-    def status_change
-      tasks = MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> @orga_relation_id, 'completed_at.ne' => '',
+    def fetch_status_change_notifications(orga_relation_id)
+      tasks = MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id, 'completed_at.ne' => '',
         'completed_notified_at' => '')
-      build_notifications(tasks, 'status_change')
+      tasks.map do |task|
+        {
+          object_id: task.id,
+          object_type: 'task',
+          notification_type: "status_change",
+          title: 'Task completed',
+          message: ["#{task.recipients.first[:user][:name]} #{task.recipients.first[:user][:surname]}",
+            "#{task.recipients.first[:organization][:name]}",
+            "has completed the task: #{task.title}.",
+            "See your messages for more details."].join("\n")
+        }
+      end
+    end
+
+    def update_task
+      task = MnoEnterprise::Task.find(params[:object_id].to_i)
+      return render_not_found("#{notification_type}") unless task
+      notification_type = params[:notification_type]
+      case notification_type
+      when 'status_change'
+        task.update(completed_notified_at: Time.new)
+      when 'reminder'
+        task_recipient = fetch_task_recipient(task)
+        return render_not_found("#{notification_type}") unless task_recipient
+        task_recipient.update(reminder_notified_at: Time.new)
+      when 'due_date'
+        task_recipient = fetch_task_recipient(task)
+        return render_not_found("#{notification_type}") unless task_recipient
+        task.update(notified_at: Time.new) if params[:notified]
+      else
+        return render_bad_request("update #{params[:object_type]} notification", task)
+      end
+      head :ok
+    end
+
+    def fetch_task_recipient(task)
+      orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
+      MnoEnterprise::TaskRecipient.where("task_id"=> task.id, 'orga_relation_id'=> orga_relation_id).first
+    end
+
+    # format notification sender details
+    def format_notification_sender(task)
+      "#{task[:owner][:user][:name]} #{task[:owner][:user][:surname]} - #{task.owner[:organization][:name]}"
+    end
+
+    # format date
+    def format_date(date)
+      date.today? ? 'today' : date.strftime('%a, %d %b %Y')
     end
   end
 end
