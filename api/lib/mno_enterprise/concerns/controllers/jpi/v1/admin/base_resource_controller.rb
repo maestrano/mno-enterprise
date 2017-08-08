@@ -22,6 +22,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
     @parent_organization ||= current_user.organizations.to_a.find { |o| o.id.to_s == params[:organization_id].to_s }
   end
 
+  def render_not_found(resource)
+    render json: { errors: {message: "#{resource.titleize} not found (id=#{params[:id]})", code: 404, params: params} }, status: :not_found
+  end
+
+  def render_bad_request(attempted_action, issue)
+    render json: { errors: {message: "Error while trying to #{attempted_action}: #{issue}", code: 400, params: params} }, status: :bad_request
+  end
+
   # Check current user is logged in
   # Check organization is valid if specified
   def check_authorization
