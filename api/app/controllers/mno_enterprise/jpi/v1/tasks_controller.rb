@@ -34,7 +34,7 @@ module MnoEnterprise
         return render_bad_request('create task', @task.errors) unless @task.id
         @task.task_recipients.create(task_recipient_params)
         MnoEnterprise::EventLogger.info('task_create', current_user.id, 'Task Creation', @task)
-        send_mail_notification(@task.task_recipients) if send_task
+        send_mail_notification(@task.task_recipients) if params[:task][:status] == 'sent'
         render 'show'
       else
         render_bad_request('create task', @task.errors)
@@ -45,7 +45,7 @@ module MnoEnterprise
     def update
       return render_not_found('task') unless task
       if task.update(task_params)
-        task.task_recipients.map! { |recipient| recipient.update(task_recipient_params) } if send_task
+        task.task_recipients.map! { |recipient| recipient.update(task_recipient_params) }
         render 'show'
       else
         render_bad_request('update task', task.errors)
@@ -68,10 +68,6 @@ module MnoEnterprise
 
     def task
       @task ||= MnoEnterprise::Task.find(params[:id].to_i)
-    end
-
-    def send_task
-      params[:task][:status] == 'sent'
     end
 
     def task_completed
