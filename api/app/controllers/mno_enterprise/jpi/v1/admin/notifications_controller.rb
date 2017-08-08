@@ -1,10 +1,10 @@
 module MnoEnterprise
   class Jpi::V1::Admin::NotificationsController < Jpi::V1::Admin::BaseResourceController
-
+    
+    # GET mnoe/jpi/v1/admin/notifications
     def index
-      orga_relation = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: params[:organization_id]).first
-      return render_bad_request("could not find orga_relation for user #{current_user.id} in organization_id #{params[:organization_id]}", nil) unless orga_relation
-      orga_relation_id = orga_relation.id
+      orga_relation_id = current_user.organizations.first.orga_relation_id
+      return render_bad_request("could not find orga_relation for user #{current_user.id} in organization_id #{params[:organization_id]}", nil) unless orga_relation_id
       @notifications = [
         fetch_reminder_notifications(orga_relation_id), 
         fetch_due_date_notifications(orga_relation_id),
@@ -12,6 +12,7 @@ module MnoEnterprise
       ].flatten
     end
 
+   # PUT mnoe/jpi/v1/admin/notifications
     def update
       if params[:object_type] == 'task'
         update_task
@@ -95,7 +96,7 @@ module MnoEnterprise
     end
 
     def fetch_task_recipient(task)
-      orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
+      orga_relation_id = current_user.organizations.first.orga_relation_id
       MnoEnterprise::TaskRecipient.where("task_id"=> task.id, 'orga_relation_id'=> orga_relation_id).first
     end
 

@@ -1,7 +1,7 @@
 module MnoEnterprise
   class Jpi::V1::Admin::TasksController < Jpi::V1::Admin::BaseResourceController
 
-    # GET /mnoe/jpi/v1/admin/organizations/:organization/tasks
+    # GET /mnoe/jpi/v1/admin/tasks
     def index
       if params[:terms]
         # For search mode
@@ -19,13 +19,13 @@ module MnoEnterprise
       end
     end
 
-    # GET /mnoe/jpi/v1/admin/organizations/:organization/tasks/1
+    # GET /mnoe/jpi/v1/admin/tasks/1
     def show
       task
       render_not_found('task') unless @task
     end
 
-    # POST /mnoe/jpi/v1/admin/organizations/:organization/tasks
+    # POST /mnoe/jpi/v1/admin/tasks
     def create
       if @task = MnoEnterprise::Task.create(task_params)
         return render_bad_request('create task', @task.errors) unless @task.id
@@ -38,7 +38,7 @@ module MnoEnterprise
       end
     end
 
-    # PATCH /mnoe/jpi/v1/admin/organizations/:organization/tasks/1
+    # PATCH /mnoe/jpi/v1/admin/tasks/1
     def update
       return render_not_found('task') unless task
       if task.update(task_params)
@@ -54,12 +54,10 @@ module MnoEnterprise
     def tasks
       if params[:outbox] == 'true'
         # retrieve tasks outbox
-        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
-        @task ||= MnoEnterprise::Task.where(owner_id: orga_relation_id)
+        @tasks ||= MnoEnterprise::Task.where(owner_id: current_user.organizations.first.orga_relation_id)
       else
         # retrieve tasks inbox
-        orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
-        @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id)
+        @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> current_user.organizations.first.orga_relation_id)
       end
     end
 

@@ -200,19 +200,18 @@ MnoEnterprise::Engine.routes.draw do
             post :signup_email
           end
         end
+        # Tasks
+        resources :tasks, only: [:create, :index, :show, :update]
+
+        # Notifications
+        resources :notifications, only: [:index]
+
+        # Notifications
+        resources :notifications, only: [:index]
+        # Create an update method with no :id in the url
+        put '/notifications', to: 'notifications#update'
+
         resources :organizations, only: [:index, :show, :update, :create] do
-
-          # Tasks
-          resources :tasks, only: [:create, :index, :show, :update]
-
-          # Notifications
-          resources :notifications, only: [:index]
-
-          # Notifications
-          resources :notifications, only: [:index]
-          # Create an update method with no :id in the url
-          put '/notifications', to: 'notifications#update'
-
           collection do
             get :in_arrears
             get :count
