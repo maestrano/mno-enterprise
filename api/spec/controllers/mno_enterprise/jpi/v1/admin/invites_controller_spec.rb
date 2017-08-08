@@ -27,7 +27,6 @@ module MnoEnterprise
 
     before { stub_audit_events }
 
-
     # API stubs
     before do
       allow(MnoEnterprise::User).to receive(:find) do |user_id|

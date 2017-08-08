@@ -112,8 +112,13 @@ MnoEnterprise::Engine.routes.draw do
       resource :current_user, only: [:show, :update] do
         put :update_password
         put :register_developer
-        #post :deletion_request, action: :create_deletion_request
-        #delete :deletion_request, action: :cancel_deletion_request
+      end
+
+      resources :user_access_requests, only: [:index] do
+        member do
+          put :approve
+          put :deny
+        end
       end
 
       resources :organizations, only: [:index, :show, :create, :update, :destroy] do
@@ -188,7 +193,7 @@ MnoEnterprise::Engine.routes.draw do
             get :count
             post :signup_email
           end
-          resource :access_requests, only: [:create]
+          resource :user_access_requests, only: [:create]
         end
         resources :organizations, only: [:index, :show, :update, :create] do
           collection do

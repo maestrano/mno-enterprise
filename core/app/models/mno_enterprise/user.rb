@@ -216,16 +216,18 @@ module MnoEnterprise
 
     def access_request_status(user)
       status = 'never_requested'
-      user_access_requests.select { |r| r.requester_id == user.id }.sort_by { |r| r.created_at }.reverse.each { |r|
-        if r.status == 'approved'
-          if r.created_at > 1.day.ago
-            return 'approved'
-          else
-            return 'expired'
+      if user_access_requests
+        user_access_requests.select { |r| r.requester_id == user.id }.sort_by { |r| r.created_at }.reverse.each { |r|
+          if r.status == 'approved'
+            if r.created_at > 1.day.ago
+              return 'approved'
+            else
+              return 'expired'
+            end
           end
-        end
-        return r.status
-      }
+          return r.status
+        }
+      end
       status
     end
   end

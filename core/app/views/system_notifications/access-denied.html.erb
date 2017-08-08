@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <%= stylesheet_link_tag('mno_enterprise/mail.css') %>
+  </head>
+  <body>
+    <p class="header">
+      <%= image_tag('mno_enterprise/main-logo.png') %>
+    </p>
+
+    <p>Hi <%= @info[:first_name] %>,</p>
+
+    <p><%= @info[:requested_first_name] %> <%= @info[:requested_last_name] %> has denied your request to access their account.</p>
+
+    <p>
+      Regards,<br/>
+      The Marketplace team
+    </p>
+
+    <p class="footer">
+      <%= @info[:company] %>
+    </p>
+  </body>
+</html>

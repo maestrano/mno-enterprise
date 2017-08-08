@@ -163,6 +163,54 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     )
   end
 
+
+  def request_access(user_access_request_id)
+    user_access_request = MnoEnterprise::UserAccessRequest.find_one(user_access_request_id, :user, :requester)
+    user = user_access_request.user
+    requester = user_access_request.requester
+    MnoEnterprise::MailClient.deliver(
+      'request-access',
+      default_sender,
+      recipient(user),
+      user_vars(user).merge(
+        requester_first_name: requester.name,
+        requester_last_name: requester.surname,
+        dashboard_link: root_url
+      )
+    )
+  end
+
+  def access_denied(user_access_request_id)
+    user_access_request = MnoEnterprise::UserAccessRequest.find_one(user_access_request_id, :user, :requester)
+    user = user_access_request.user
+    requester = user_access_request.requester
+    MnoEnterprise::MailClient.deliver(
+      'access-denied',
+      default_sender,
+      recipient(requester),
+      user_vars(requester).merge(
+        requested_first_name: user.name,
+        requested_last_name: user.surname
+      )
+    )
+  end
+
+  def access_approved(user_access_request_id)
+    user_access_request = MnoEnterprise::UserAccessRequest.find_one(user_access_request_id, :user, :requester)
+    user = user_access_request.user
+    requester = user_access_request.requester
+    MnoEnterprise::MailClient.deliver(
+      'access-approved',
+      default_sender,
+      recipient(requester),
+      user_vars(requester).merge(
+        requested_first_name: user.name,
+        requested_last_name: user.surname
+      )
+    )
+  end
+
+
   protected
 
   def recipient(record, new_user = false)

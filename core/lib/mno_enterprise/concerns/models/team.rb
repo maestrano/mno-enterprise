@@ -50,7 +50,7 @@ module MnoEnterprise::Concerns::Models::Team
   def to_audit_event
     {
       name: name,
-      organization_id: self.organization_id
+      organization_id: organization_id
     }
   end
 end
