@@ -30,7 +30,8 @@ module MnoEnterprise
 
     # POST /mnoe/jpi/v1/organizations/:organization/tasks
     def create
-      if @task = MnoEnterprise::Task.create(task_params)
+      owner_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
+      if @task = MnoEnterprise::Task.create(task_params.merge!(owner_id: owner_id))
         return render_bad_request('create task', @task.errors) unless @task.id
         @task.task_recipients.create(task_recipient_params)
         MnoEnterprise::EventLogger.info('task_create', current_user.id, 'Task Creation', @task)
@@ -92,10 +93,6 @@ module MnoEnterprise
 
     def task_params
       permitted_params = params.require(:task).permit(:owner_id, :title, :message, :status, :due_date, :sent_at)
-
-      owner_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
-      # Merge the owner of the task
-      permitted_params.merge!(owner_id: owner_id)
       # Update the param send_at the day the task is sent
       permitted_params.merge!(send_at: Time.new, completed_at: nil, completed_notified_at: nil) if send_task
       # Update the task when is completed
