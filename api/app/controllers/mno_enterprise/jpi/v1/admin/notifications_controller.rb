@@ -88,7 +88,7 @@ module MnoEnterprise
       when 'due_date'
         task_recipient = fetch_task_recipient(task)
         return render_not_found("#{notification_type}") unless task_recipient
-        task.update(notified_at: Time.new) if params[:notified]
+        task.update(notified_at: Time.new)
       else
         return render_bad_request("update #{params[:object_type]} notification", task)
       end
