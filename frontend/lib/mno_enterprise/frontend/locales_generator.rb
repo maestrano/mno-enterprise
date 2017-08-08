@@ -18,6 +18,50 @@ module MnoEnterprise
         end
       end
 
+      def generate_dummy
+        translations_hash = get_translations
+        base = translations_hash[:en].dup
+        target = translations_hash[:zh]
+
+        target.delete_if {|k,v| k != :mno_enterprise}
+        base.delete_if {|k,v| k != :mno_enterprise}
+
+        prune_translation(base, target)
+        dummy_translate(base)
+
+        output = {zh: base}
+        output_file = File.join(@path, "dummy.zh.yaml")
+
+        File.open(output_file, 'w') {|f| f.write(output.to_yaml) }
+        puts "--> Generated #{output_file}"
+      end
+
+      def prune_translation(base, target)
+        target.each do |key, value|
+          next unless base.has_key?(key)
+          if value.is_a?(Hash)
+            prune_translation(base[key], target[key])
+            base.delete(key) if base[key].empty?
+          elsif value.is_a?(String)
+            base.delete(key)
+          else
+            puts value.class.inspect
+          end
+        end
+      end
+
+      def dummy_translate(base)
+        base.each do |key, value|
+          if value.is_a?(Hash)
+            dummy_translate(value)
+          elsif value.is_a?(String)
+            base[key] = '你好'
+          else
+            puts value.class
+          end
+        end
+      end
+
       private
 
       # Return the I18n translation hash
