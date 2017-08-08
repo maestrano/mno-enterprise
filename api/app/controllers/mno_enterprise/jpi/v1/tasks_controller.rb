@@ -34,7 +34,7 @@ module MnoEnterprise
         return render_bad_request('create task', @task.errors) unless @task.id
         @task.task_recipients.create(task_recipient_params)
         MnoEnterprise::EventLogger.info('task_create', current_user.id, 'Task Creation', @task)
-        send_mail_notification(@task.task_recipients) if params[:task][:status] == 'sent'
+        send_mail_notification(@task.task_recipients) if send_task
         render 'show'
       else
         render_bad_request('create task', @task.errors)
@@ -68,6 +68,10 @@ module MnoEnterprise
 
     def task
       @task ||= MnoEnterprise::Task.find(params[:id].to_i)
+    end
+
+    def send_task
+      params[:task][:status] == 'sent'
     end
 
     def task_completed
