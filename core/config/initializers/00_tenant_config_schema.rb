@@ -25,7 +25,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               type: "string",
               description: "Mail server authentication type",
               default: "plain",
-              "enum": ["plain", "login", "cram_md5"]
+              enum: ["plain", "login", "cram_md5"]
             },
             address: {
               type: "string",
@@ -82,6 +82,16 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           type: "object",
           description: "Internationalization settings",
           properties: {
+            preferred_locale: {
+              title: "Platform Language",
+              type: "string",
+              description: "Default locale used when no locale has been specified by the user",
+              default: 'en-AU',
+              enum: ['en-AU'],
+              'x-schema-form': {
+                titleMap: {'en-AU': 'English (Australia)'}
+              }
+            },
             enabled: {
               type: "boolean",
               description: "Enable internationalization",
@@ -93,14 +103,13 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               description: "List of locales available to the end user",
               items: {
                 type: "string",
-                # TODO: double check
-                enum: I18n.available_locales
+                # TODO: double check # Proc?
+                enum: I18n.available_locales,
+                default: ['en-AU']
+              },
+              'x-schema-form': {
+                titleMap: {'en-AU': 'English (Australia)'}
               }
-            },
-            preferred_locale: {
-              title: "Preferred Locale",
-              type: "string",
-              description: "Default locale used when no locale has been specified by the user"
             }
           }
         }

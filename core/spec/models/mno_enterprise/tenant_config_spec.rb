@@ -69,6 +69,53 @@ describe MnoEnterprise::TenantConfig do
     end
   end
 
+  describe '.refresh_json_schema!' do
+    subject { described_class.refresh_json_schema! }
+
+    let(:preferred_locale_hash) do
+      {
+        'enum' => %w(fr-FR en-GB en-AU),
+        'x-schema-form' => {
+          'titleMap' => {
+            'fr-FR' => 'fr-FR',
+            'en-GB' => 'en-GB',
+            'en-AU' => 'en-AU'
+          }
+        }
+      }
+    end
+
+    let(:available_locales_hash) do
+      {
+        'x-schema-form' => {
+          'titleMap' => {
+            'fr-FR' => 'fr-FR',
+            'en-GB' => 'en-GB',
+            'en-AU' => 'en-AU'
+          }
+        }
+      }
+    end
+
+    let(:available_locale_items_hash) do
+      {
+        'enum' => %w(fr-FR en-GB en-AU)
+      }
+    end
+
+    it 'is pending' do
+      I18n.available_locales = %w(fr-FR fr en en-GB en-AU)
+
+      subject
+
+      i18n_properties = described_class.json_schema['properties']['system']['properties']['i18n']['properties']
+
+      expect(i18n_properties['preferred_locale']).to include(preferred_locale_hash)
+      expect(i18n_properties['available_locales']).to include(available_locales_hash)
+      expect(i18n_properties['available_locales']['items']).to include(available_locale_items_hash)
+    end
+  end
+
   describe '.build_object' do
     subject { described_class.build_object(schema.with_indifferent_access) }
 
