@@ -34,7 +34,8 @@ module MnoEnterprise
         'sso_session' => res.sso_session,
         'admin_role' => res.admin_role,
         'avatar_url' => avatar_url(res),
-        'user_hash' => res.intercom_user_hash,
+        'settings' => res.settings,
+        'user_hash' => res.intercom_user_hash
       }
 
       if res.id

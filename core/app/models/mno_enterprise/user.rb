@@ -31,6 +31,7 @@ module MnoEnterprise
     property :phone, type: :string
     property :phone_country_code, type: :string
     property :unconfirmed_email
+    property :settings
     property :sso_session, type: :string
     property :surname, type: :string
     property :website, type: :string
