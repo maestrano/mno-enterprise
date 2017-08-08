@@ -21,8 +21,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/orga_relations/1
     def show
-      orga_relation
-      render_not_found('orga relation') unless @orga_relation
+      render_not_found('orga relation') unless orga_relation
     end
 
     private

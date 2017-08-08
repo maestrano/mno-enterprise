@@ -35,7 +35,7 @@ module MnoEnterprise
         return render_bad_request('create task', @task.errors) unless @task.id
         @task.task_recipients.create(task_recipient_params)
         MnoEnterprise::EventLogger.info('task_create', current_user.id, 'Task Creation', @task)
-        send_mail_notification(@task.task_recipients) if send_task
+        send_mail_notification(@task.task_recipients) if task_sent
         render 'show'
       else
         render_bad_request('create task', @task.errors)
@@ -56,7 +56,7 @@ module MnoEnterprise
     private
 
     def tasks
-      if params[:outbox] == 'true'
+      if params[:outbox]
         # retrieve tasks outbox, tasks where I am the owner
         orga_relation_id = MnoEnterprise::OrgaRelation.where(user_id: current_user.id, organization_id: parent_organization.id).first.id
         @task ||= MnoEnterprise::Task.where(owner_id: orga_relation_id)
@@ -71,7 +71,7 @@ module MnoEnterprise
       @task ||= MnoEnterprise::Task.find(params[:id].to_i)
     end
 
-    def send_task
+    def task_sent
       params[:task][:status] == 'sent'
     end
 
@@ -87,14 +87,14 @@ module MnoEnterprise
       permitted_params = params.require(:task).permit(:orga_relation_id, :reminder_date, :read_at)
         .merge(task_id: @task.id)
       # Update the param notified_at the day the task is sent
-      permitted_params.merge!(notified_at: Time.new) if send_task
+      permitted_params.merge!(notified_at: Time.new) if task_sent
       permitted_params
     end
 
     def task_params
       permitted_params = params.require(:task).permit(:owner_id, :title, :message, :status, :due_date, :sent_at)
       # Update the param send_at the day the task is sent
-      permitted_params.merge!(send_at: Time.new, completed_at: nil, completed_notified_at: nil) if send_task
+      permitted_params.merge!(send_at: Time.new, completed_at: nil, completed_notified_at: nil) if task_sent
       # Update the task when is completed
       permitted_params.merge!(completed_at: Time.new) if task_completed
       permitted_params
