@@ -78,3 +78,5 @@ admin_panel:
     disabled: false
   staff:
     enabled: true
+  tasks:
+    enabled: false
