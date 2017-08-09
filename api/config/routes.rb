@@ -92,7 +92,7 @@ MnoEnterprise::Engine.routes.draw do
       end
     end
     # Maestrano-hub events
-    resources :events, only: [:create] 
+    resources :events, only: [:create]
   end
 
   #============================================================
@@ -100,10 +100,10 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   namespace :jpi do
     namespace :v1 do
-    
+
       # Orga relations
       resources :orga_relations, only: [:index, :show]
-    
+
       resources :marketplace, only: [:index, :show] do
         member do
           %i(app_reviews app_feedbacks app_comments app_questions app_answers).each do |name|
@@ -128,15 +128,17 @@ MnoEnterprise::Engine.routes.draw do
 
         # AppInstances
         resources :app_instances, only: [:index, :create, :destroy], shallow: true
-        
+
         # Tasks
         resources :tasks, only: [:create, :index, :show, :update]
 
         # Notifications
-        resources :notifications, only: [:index]
-        # Create an update method with no :id in the url
-        put '/notifications', to: 'notifications#update'
-          
+        resources :notifications, only: [:index] do
+          collection do
+            post :notified
+          end
+        end
+
         # Teams
         resources :teams, only: [:index, :show, :create, :update, :destroy], shallow: true do
           member do
@@ -184,7 +186,7 @@ MnoEnterprise::Engine.routes.draw do
 
         # Orga relations
         resources :orga_relations, only: [:index, :show]
-          
+
         resources :orga_relations, only: [:index, :show]
         resources :tasks, only: [:create, :index, :show, :update]
         resources :audit_events, only: [:index]
@@ -204,12 +206,11 @@ MnoEnterprise::Engine.routes.draw do
         resources :tasks, only: [:create, :index, :show, :update]
 
         # Notifications
-        resources :notifications, only: [:index]
-
-        # Notifications
-        resources :notifications, only: [:index]
-        # Create an update method with no :id in the url
-        put '/notifications', to: 'notifications#update'
+        resources :notifications, only: [:index] do
+          collection do
+            post :notified
+          end
+        end
 
         resources :organizations, only: [:index, :show, :update, :create] do
           collection do
