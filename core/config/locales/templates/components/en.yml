@@ -72,3 +72,32 @@ en:
 
         language_selectbox:
           language: 'Language'
+
+        mnoe-tasks:
+          compose_button_text: 'Compose'
+          menus:
+            inbox: 'Inbox'
+            sent: 'Sent'
+            draft: 'Draft'
+          tasks_filters:
+            all_tasks_and_msgs: 'All tasks & messages'
+            all_tasks: 'All tasks'
+            all_messages: 'All messages'
+            due_tasks: 'Due tasks'
+            completed_tasks: 'Completed tasks'
+          tasks:
+            column_label:
+              from: 'From'
+              to: 'To'
+              title: 'Title'
+              message: 'Message'
+              received: 'Received'
+              sent: 'Sent'
+              read: 'Read'
+              updated_at: 'Updated At'
+              due_date: 'Due date'
+              done: 'Done'
+          toastr_error:
+            get_tasks: 'An error occured while retrieving your Messages'
+            create_task: 'An error occured while creating your Message'
+            update_task: 'An error occured while updating your Message'
