@@ -98,6 +98,6 @@ en:
               due_date: 'Due date'
               done: 'Done'
           toastr_error:
-            get_tasks: 'An error occured while retrieving your Messages'
-            create_task: 'An error occured while creating your Message'
-            update_task: 'An error occured while updating your Message'
+            get_tasks: 'An error occurred while retrieving your Messages'
+            create_task: 'An error occurred while creating your Message'
+            update_task: 'An error occurred while updating your Message'
