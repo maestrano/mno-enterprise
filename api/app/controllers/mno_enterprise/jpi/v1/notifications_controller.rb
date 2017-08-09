@@ -6,13 +6,13 @@ module MnoEnterprise
       return render_bad_request("could not find orga_relation for user #{current_user.id} in organization_id #{params[:organization_id]}", nil) unless orga_relation
       orga_relation_id = orga_relation.id
       @notifications = [
-        fetch_reminder_notifications(orga_relation_id), 
+        fetch_reminder_notifications(orga_relation_id),
         fetch_due_date_notifications(orga_relation_id),
         fetch_status_change_notifications(orga_relation_id)
       ].flatten
     end
 
-    def update
+    def notified
       if params[:object_type] == 'task'
         update_task
       else
@@ -22,10 +22,10 @@ module MnoEnterprise
 
     private
 
-    # Fetch notifications 
+    # Fetch notifications
     def fetch_reminder_notifications(orga_relation_id)
       tasks = MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id, 'completed_at' => '',
-        'task_recipients.reminder_date.ne' => '', 'task_recipients.reminder_notified_at' => '', 'task_recipients.reminder_date.gt' => Time.new)
+        'task_recipients.reminder_date.ne' => '', 'task_recipients.reminder_notified_at' => '', 'task_recipients.reminder_date.lt' => Time.new)
       tasks.map do |task|
         {
           object_id: task.id,
@@ -42,7 +42,7 @@ module MnoEnterprise
 
     def fetch_due_date_notifications(orga_relation_id)
       tasks = MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id, 'due_date.ne' => '',
-        'completed_at' => '', 'due_date.gt' => Time.new, 'task_recipients.notified_at' => '')
+        'completed_at' => '', 'due_date.lt' => Time.new, 'task_recipients.notified_at' => '')
       tasks.map do |task|
         {
           object_id: task.id,
@@ -53,11 +53,11 @@ module MnoEnterprise
             "From: #{format_notification_sender(task)}",
             "See your due tasks for more details"].join("\n")
         }
-      end  
+      end
     end
 
     def fetch_status_change_notifications(orga_relation_id)
-      tasks = MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id, 'completed_at.ne' => '',
+      tasks = MnoEnterprise::Task.where(owner_id: orga_relation_id, 'completed_at.ne' => '',
         'completed_notified_at' => '')
       tasks.map do |task|
         {
@@ -74,7 +74,7 @@ module MnoEnterprise
     end
 
     def update_task
-      task = MnoEnterprise::Task.find(params[:object_id].to_i)
+      task = MnoEnterprise::Task.find(params[:object_id])
       return render_not_found("#{notification_type}") unless task
       notification_type = params[:notification_type]
       case notification_type
@@ -87,7 +87,7 @@ module MnoEnterprise
       when 'due_date'
         task_recipient = fetch_task_recipient(task)
         return render_not_found("#{notification_type}") unless task_recipient
-        task.update(notified_at: Time.new) if params[:notified]
+        task_recipient.update(notified_at: Time.new)
       else
         return render_bad_request("update #{params[:object_type]} notification", task)
       end

@@ -86,8 +86,6 @@ module MnoEnterprise
     def task_recipient_params
       permitted_params = params.require(:task).permit(:orga_relation_id, :reminder_date, :read_at)
         .merge(task_id: @task.id)
-      # Update the param notified_at the day the task is sent
-      permitted_params.merge!(notified_at: Time.new) if task_sent
       permitted_params
     end
 
