@@ -11,17 +11,9 @@ module MnoEnterprise
     PRICING_ATTRIBUTES = [:name, :description, :position, :free, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, :prices, :external_id]
 
     def index
-      if params[:terms]
-        # Search mode
-        @products = []
-        JSON.parse(params[:terms]).map { |t| @products = @products | MnoEnterprise::Product.where(Hash[*t]) }
-        response.headers['X-Total-Count'] = @products.count
-      else
-        # Index mode
-        query = MnoEnterprise::Product.apply_query_params(params).where(local: true)
-        @products = query.to_a
-        response.headers['X-Total-Count'] = query.meta.record_count
-      end
+      query = MnoEnterprise::Product.apply_query_params(params).where(local: true)
+      @products = query.to_a
+      response.headers['X-Total-Count'] = query.meta.record_count
     end
 
     # GET /mnoe/jpi/v1/admin/products/id
