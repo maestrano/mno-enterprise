@@ -193,6 +193,8 @@ MnoEnterprise::Engine.routes.draw do
             post :signup_email
           end
         end
+        resources :products, only: [:index, :show, :destroy, :update, :create]
+
         resources :organizations, only: [:index, :show, :update, :create] do
           collection do
             get :in_arrears
