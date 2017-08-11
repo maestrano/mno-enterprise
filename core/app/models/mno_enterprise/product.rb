@@ -13,6 +13,12 @@ module MnoEnterprise
     property :external_id, type: :string
     property :externally_provisioned, type: :boolean
     property :parent_id, type: :string
+    property :local, type: :boolean
+
+    has_many :values
+    has_many :categories
+    has_many :product_pricings
+    has_many :product_contracts
 
     def to_audit_event
       {
