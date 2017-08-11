@@ -28,8 +28,8 @@ module MnoEnterprise
       unless @product.errors.empty?
         render json: @product.errors, status: :bad_request
       end
-      if pricings = product_params[:product_pricings]
-        pricings.each do |p|
+      if pricing_params
+        pricing_params.each do |p|
           attributes = p.permit(*PRICING_ATTRIBUTES).merge(product_id: @product.id)
           pricing = MnoEnterprise::ProductPricing.create(attributes)
           unless pricing.errors.empty?
@@ -46,26 +46,19 @@ module MnoEnterprise
     def update
       @product = MnoEnterprise::Product.find_one(params[:id])
       @product.update(product_update_params)
-      if @product.errors.any?
-        render json: @product.errors, status: :bad_request
-      end
-
-      if pricings = product_params[:product_pricings]
+      return render json: @product.errors, status: :bad_request if @product.errors.any?
+      if pricing_params
         @product = @product.load_required(:product_pricings)
         id_to_pricing = @product.product_pricings.map { |p| [p.id, p] }.to_h
-        pricings.each do |p|
+        pricing_params.each do |p|
           attributes = p.permit(*PRICING_ATTRIBUTES)
-          if p[:id]
-            pricing = id_to_pricing.delete(p[:id])
-          end
+          pricing = id_to_pricing.delete(p[:id])
           if pricing
             pricing.update(attributes)
           else
             pricing = MnoEnterprise::ProductPricing.create(attributes.merge(product_id: @product.id))
           end
-          if pricing.errors.any?
-            render json: pricing.errors, status: :bad_request
-          end
+          return render json: pricing.errors, status: :bad_request if pricing.errors.any?
         end
         id_to_pricing.each_value { |p| p.destroy }
       end
@@ -83,6 +76,13 @@ module MnoEnterprise
     end
 
     private
+
+    def pricing_params
+      # Rails consider empty array to be nil
+      # https://stackoverflow.com/questions/20164354/rails-strong-parameters-with-empty-arrays
+      product_params[:product_pricings] ||= [] if product_params.has_key?(:product_pricings)
+      product_params[:product_pricings]
+    end
 
     def product_params
       params.require(:product)
