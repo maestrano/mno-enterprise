@@ -109,6 +109,9 @@ MnoEnterprise::Engine.routes.draw do
           end
         end
       end
+
+      resources :products, only: [:index, :show]
+
       resource :current_user, only: [:show, :update] do
         put :update_password
         put :register_developer
