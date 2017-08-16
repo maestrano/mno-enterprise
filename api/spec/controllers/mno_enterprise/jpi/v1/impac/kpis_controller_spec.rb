@@ -20,6 +20,8 @@ module MnoEnterprise
     let(:dashboard) { build(:impac_dashboard) }
 
     # TODO KPI DISABLED TEST CASES
+    # TODO: Review the whole spec logic
+    pending "Review test logic of #{__FILE__}"
 
     let(:kpi_targets) { {evolution: [{max: '20'}]} }
     let(:settings) { {} }
@@ -83,21 +85,6 @@ module MnoEnterprise
           expect(assigns(:kpi)).to eq(kpi)
         end
 
-        context "when there are kpi targets" do
-          let(:kpi_targets) { {evolution: [{max: "20"}]} }
-
-          before do
-            stub_api_v2(:post, "/alerts", alert)
-          end
-
-          xit "creates kpi alerts" do
-            subject
-            # TODO: Check that the alerts are rendered
-            expect(assigns(:kpi).alerts).to eq([alert])
-            expect(response).to have_http_status(:ok)
-          end
-        end
-
         it { subject; expect(response).to have_http_status(:ok) }
       end
 
@@ -120,6 +107,16 @@ module MnoEnterprise
 
         it '.dashboard retrieves the correct dashboard' do
           subject
+        end
+
+        context "when there are kpi targets" do
+          let(:kpi_targets) { {evolution: [{max: "20"}]} }
+
+          it "creates a kpi inapp alert" do
+            expect(MnoEnterprise::Alert).to receive(:create).once.with(hash_including(service: 'inapp'))
+            subject
+            expect(response).to have_http_status(:ok)
+          end
         end
       end
 
@@ -144,6 +141,18 @@ module MnoEnterprise
           subject
           # TODO: check that the widget is well rendered
           expect(assigns(:widget)).to eq(widget)
+        end
+
+        context "when there are kpi targets" do
+          let(:kpi_targets) { { evolution: [{max: "20"}] } }
+
+          it "creates kpi alerts" do
+            expect(MnoEnterprise::Alert).to receive(:create).once.with(hash_including(service: 'inapp'))
+            expect(MnoEnterprise::Alert).to receive(:create).once.with(hash_including(service: 'email'))
+
+            subject
+            expect(response).to have_http_status(:ok)
+          end
         end
       end
     end

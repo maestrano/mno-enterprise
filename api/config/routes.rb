@@ -140,7 +140,11 @@ MnoEnterprise::Engine.routes.draw do
         resources :audit_events, only: [:index]
 
         if Settings&.dashboard&.provisioning&.enabled
-          resources :subscriptions, only: [:index, :show, :create, :update]
+          resources :subscriptions, only: [:index, :show, :create, :update] do
+            member do
+              post :cancel
+            end
+          end
         end
       end
 
@@ -177,6 +181,8 @@ MnoEnterprise::Engine.routes.draw do
       #============================================================
       namespace :admin, defaults: {format: 'json'} do
         resources :audit_events, only: [:index]
+        resources :app_feedbacks, only: [:index]
+        resources :app_questions, only: [:index]
         resources :app_instances, only: [:destroy], shallow: true
         resources :app_reviews, only: [:index, :show,  :update]
         resources :app_comments, only: [:create]

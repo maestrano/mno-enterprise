@@ -1,7 +1,7 @@
 # Change Log
 
 ## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/4.0)
-[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.0...4.0)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.1...4.0)
 
 - Drop support for Ruby < 2.3
 - Remove deprecated marketplace_listing
@@ -17,6 +17,31 @@ The settings have been refactored in v4 to make them more consistent.
 * `payment.disabled` is now `payment.enabled`
 * `pricing` and `review` configuration are now nested under `marketplace`
 * `devise.registration` is now `devise.registration`
+
+## [v3.3.1](https://github.com/maestrano/mno-enterprise/tree/v3.3.1) (2017-07-24)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.0...v3.3.1)
+
+**Implemented enhancements:**
+
+- Add caching to marketplace endpoint [\#377](https://github.com/maestrano/mno-enterprise/pull/377) ([ouranos](https://github.com/ouranos))
+- \[IMPAC-623\] create email alert on widget kpi create [\#375](https://github.com/maestrano/mno-enterprise/pull/375) ([xaun](https://github.com/xaun))
+- \[MNOE-499\] Add locales [\#368](https://github.com/maestrano/mno-enterprise/pull/368) ([hedudelgado](https://github.com/hedudelgado))
+- \[MNOE-501\] Locales added for on-boarding improvement [\#333](https://github.com/maestrano/mno-enterprise/pull/333) ([rheasunshine](https://github.com/rheasunshine))
+- \[MNOE-474\] Add endpoints to admin api [\#327](https://github.com/maestrano/mno-enterprise/pull/327) ([adamaziz15](https://github.com/adamaziz15))
+
+**Fixed bugs:**
+
+- Fix missing locales [\#381](https://github.com/maestrano/mno-enterprise/pull/381) ([alexnoox](https://github.com/alexnoox))
+- Fix impac locales task [\#379](https://github.com/maestrano/mno-enterprise/pull/379) ([ouranos](https://github.com/ouranos))
+- \[MNOE-554\] Exclude Maestrano CDN from app description sanitisation [\#378](https://github.com/maestrano/mno-enterprise/pull/378) ([ouranos](https://github.com/ouranos))
+- \[MNOE-474\] Fix locale typo [\#376](https://github.com/maestrano/mno-enterprise/pull/376) ([ouranos](https://github.com/ouranos))
+- \[DEVPL-158\] Pricing Sync [\#372](https://github.com/maestrano/mno-enterprise/pull/372) ([adamaziz15](https://github.com/adamaziz15))
+- \[MNOE-544\] Onboarding: fix locales [\#370](https://github.com/maestrano/mno-enterprise/pull/370) ([alexnoox](https://github.com/alexnoox))
+- \[MNOE-533\] Reload her team object and fix fetch teams [\#360](https://github.com/maestrano/mno-enterprise/pull/360) ([hedudelgado](https://github.com/hedudelgado))
+
+**Merged pull requests:**
+
+- \[MNOE-474\] Update locales for review frontend [\#334](https://github.com/maestrano/mno-enterprise/pull/334) ([adamaziz15](https://github.com/adamaziz15))
 
 ## [v3.3.0](https://github.com/maestrano/mno-enterprise/tree/v3.3.0) (2017-06-20)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.2.0...v3.3.0)

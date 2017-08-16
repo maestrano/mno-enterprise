@@ -45,20 +45,35 @@ describe 'mnoe:locales:impac' do
     allow(Dir).to receive(:foreach) { [] }
   end
 
-  it 'copies the locales to the public folder' do
-    expect_any_instance_of(Rake::FileUtilsExt).to receive(:cp_r).with(
-      'tmp/build/frontend/bower_components/impac-angular/dist/locales/.',
-      'public/dashboard/locales/impac/'
-    )
-    subject.invoke
+  let(:impac_locales_path) { 'tmp/build/frontend/bower_components/impac-angular/dist/locales' }
+
+  context 'when the impac locales folder does not exist' do
+    before { allow(Dir).to receive(:exists?).with(impac_locales_path) { false } }
+
+    it 'does not copy the locales' do
+      expect_any_instance_of(Rake::FileUtilsExt).not_to receive(:cp_r)
+      expect(File).not_to receive(:rename)
+      subject.invoke
+    end
   end
 
-  it 'transform 4 letters locales to 2 letters locales' do
-    allow(Dir).to receive(:foreach).and_yield('en-GB.json')
-    expect(File).to receive(:rename).with(
-      'public/dashboard/locales/impac/en-GB.json',
-      'public/dashboard/locales/impac/en.json'
-    )
-    subject.invoke
+  context 'when the impac locales folder exists' do
+    before { allow(Dir).to receive(:exists?).with(impac_locales_path) { true } }
+    it 'copies the locales to the public folder' do
+      expect_any_instance_of(Rake::FileUtilsExt).to receive(:cp_r).with(
+        'tmp/build/frontend/bower_components/impac-angular/dist/locales/.',
+        'public/dashboard/locales/impac/'
+      )
+      subject.invoke
+    end
+
+    it 'transform 4 letters locales to 2 letters locales' do
+      allow(Dir).to receive(:foreach).and_yield('en-GB.json')
+      expect(File).to receive(:rename).with(
+        'public/dashboard/locales/impac/en-GB.json',
+        'public/dashboard/locales/impac/en.json'
+      )
+      subject.invoke
+    end
   end
 end

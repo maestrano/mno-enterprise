@@ -24,8 +24,8 @@ module MnoEnterprise
     let(:feedback_id) { '1' }
     let(:feedback_comment1) { build(:comment, parent_id: feedback_id) }
     let(:feedback_comment2) { build(:comment, parent_id: feedback_id) }
-    let(:feedback) { build(:feedback, id: feedback_id, comments: [feedback_comment1, feedback_comment2]) }
-
+    let(:rejected_feedback_comment) { build(:comment, parent_id: feedback_id, status: 'rejected') }
+    let(:feedback) { build(:feedback, id: feedback_id, comments: [feedback_comment1, feedback_comment2, rejected_feedback_comment]) }
 
     before do
       stub_api_v2(:get, "/apps/#{app.id}", app)
@@ -45,7 +45,10 @@ module MnoEnterprise
 
       it 'renders the list of reviews' do
         subject
-        expect(JSON.parse(response.body)['app_feedbacks'][0]).to eq(hash_for_feedback(feedback))
+        expected = hash_for_feedback(feedback)
+        # Only approved comments
+        expected['comments'] = [hash_for_comment(feedback_comment1), hash_for_comment(feedback_comment2)]
+        expect(JSON.parse(response.body)['app_feedbacks'][0]).to eq(expected)
       end
     end
 

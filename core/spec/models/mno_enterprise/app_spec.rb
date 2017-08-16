@@ -36,6 +36,11 @@ module MnoEnterprise
       it 'replaces any mention of maestrano by the name of the platform' do
         expect(app.sanitized_description).to eq("Some description by #{MnoEnterprise.app_name}")
       end
+
+      it 'does not replace the CDN url' do
+        app.description = 'Screenshot: <img src="//cdn.maestrano.com/web/mno/screenshot.png"/>'
+        expect(app.sanitized_description).to eq(app.description)
+      end
     end
 
     describe '#regenerate_api_key!' do

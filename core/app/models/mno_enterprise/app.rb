@@ -1,6 +1,8 @@
 module MnoEnterprise
   class App < BaseResource
 
+    property :pricing_text # Backward compatibility with MnoHub
+
     property :created_at, type: :time
     property :updated_at, type: :time
 
@@ -27,8 +29,10 @@ module MnoEnterprise
       !!(appinfo.presence && appinfo['connecReady'])
     end
 
+    # Sanitize the app description
+    # E.g.: replace any mention of Maestrano by the tenant name
     def sanitized_description
-      @sanitized_description ||= (self.description || '').gsub(/maestrano/i, MnoEnterprise.app_name)
+      @sanitized_description ||= (self.description || '').gsub(/(?!cdn\.)maestrano(?!\.com)/i,MnoEnterprise.app_name)
     end
 
     def regenerate_api_key!
