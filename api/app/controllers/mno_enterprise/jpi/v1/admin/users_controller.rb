@@ -57,6 +57,12 @@ module MnoEnterprise
       render json: {count: users_count }
     end
 
+    # GET /mnoe/jpi/v1/admin/users/kpi
+    def metrics
+      user_metrics = MnoEnterprise::TenantReporting.show.user_metrics
+      render json: {metrics: user_metrics }
+    end
+
     # POST /mnoe/jpi/v1/admin/users/signup_email
     # Send an email to a user with the link to the registration page
     def signup_email

@@ -198,7 +198,7 @@ MnoEnterprise::Engine.routes.draw do
         resources :app_answers, only: [:create]
         resources :users, only: [:index, :show, :destroy, :update, :create] do
           collection do
-            get :count
+            get :metrics
             post :signup_email
           end
           resource :user_access_requests, only: [:create]
@@ -231,12 +231,15 @@ MnoEnterprise::Engine.routes.draw do
             put :refresh_metadata
           end
         end
+
         resource 'tenant', only: [:show, :update] do
           member do
             post :ssl_certificates, action: :add_certificates
             match :domain, action: :update_domain, via: [:put, :patch]
           end
         end
+
+        resources :app_metrics, only: [:index, :show]
 
         # Theme Previewer
         post 'theme/save'
