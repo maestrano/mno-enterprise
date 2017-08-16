@@ -12,7 +12,7 @@ module Devise
       # If the authentication fails you should return false
       #
       def remote_authentication(authentication_hash)
-        self.class.authenticate(authentication_hash) # call MnoEnterprise::User.authenticate
+        self.class.authenticate_user(authentication_hash)
       end
 
       included do
@@ -31,6 +31,7 @@ module Devise
         # Flag to enable password change notification
         Devise::Models.config(self, :send_password_change_notification)
 
+
         # This method is called from:
         # Warden::SessionSerializer in devise
         #
@@ -41,7 +42,7 @@ module Devise
         def serialize_from_session(key,salt)
           record = Rails.cache.fetch(['user', key], expires_in: 1.minutes) do
             to_adapter.get(key)
-          end.tap {|r| r && r.clear_association_cache}
+          end
           record if record && record.authenticatable_salt == salt
         end
 

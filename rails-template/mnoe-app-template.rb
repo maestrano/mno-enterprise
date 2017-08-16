@@ -50,11 +50,6 @@ def apply_template!
   # Create uat environment
   copy_file File.join(destination_root, 'config/environments/production.rb'), 'config/environments/uat.rb'
 
-  # Edit config/environments/*.rb
-  Dir["config/environments/*.rb"].each do |file|
-    insert_into_file file, "\n  config.action_mailer.default_url_options = {host: 'localhost:7000', protocol: 'http'}\n", before: /^end$/
-  end
-
   # secrets
   append_to_file 'config/secrets.yml' do
     'uat:
@@ -154,8 +149,13 @@ def mnoe_gemfile_entry
     gems << GemfileEntry.path('mno-enterprise', MNOE_DEV_PATH)
   end
 
+  # Emailing
+  gems << GemfileEntry.new('mandrill-api', '~> 1.0.53', 'Emailing', {}, true)
+  gems << GemfileEntry.new('sparkpost', '~> 0.1.4', nil, {}, true)
+
   gems << GemfileEntry.new('intercom', '~> 3.5.4', 'Enable Intercom', {}, true)
 
+  # Omniauth
   gems << GemfileEntry.new('omniauth-openid', '~> 1.0', 'Omniauth authentication strategies', {}, true)
   gems << GemfileEntry.new('openid-store-redis', '~> 1.0', nil, {}, true)
   gems << GemfileEntry.new('omniauth-linkedin-oauth2', '~> 0.1.5', nil, {}, true)
@@ -213,14 +213,6 @@ def update_application_rb
 
     # Mail delivery settings
     config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = {
-      authentication: :plain,
-      address: ENV['SMTP_HOST'],
-      port: ENV['SMTP_PORT'],
-      domain: ENV['SMTP_DOMAIN'],
-      user_name: ENV['SMTP_USERNAME'],
-      password: ENV['SMTP_PASSWORD']
-    }
 
     # STDOUT logging for Rails 4
     # For Rails 5 see https://github.com/heroku/rails_12factor#rails-5-and-beyond

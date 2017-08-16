@@ -20,8 +20,8 @@ module MnoEnterprise
       expect(delete('/jpi/v1/admin/users/1')).to route_to("mno_enterprise/jpi/v1/admin/users#destroy", id: '1', format: 'json')
     end
 
-    it 'routes to #count' do
-      expect(get('/jpi/v1/admin/users/count')).to route_to("mno_enterprise/jpi/v1/admin/users#count", format: 'json')
+    it 'routes to #kpi' do
+      expect(get('/jpi/v1/admin/users/kpi')).to route_to("mno_enterprise/jpi/v1/admin/users#kpi", format: 'json')
     end
 
     it 'routes to #signup_email' do

@@ -11,8 +11,7 @@ module MnoEnterprise
       context 'when the identity exist' do
         before do
           filter = {uid: auth.uid, provider: auth.provider}
-          api_stub_for(get: "/identities", params: {filter: filter}, response: from_api([identity]))
-          # We don't stub POST identities therefore testing there's no creation
+          stub_api_v2(:get, '/identities', [identity], [], {filter: filter, page: {number: 1, size: 1}})
         end
 
         it 'returns the existing entity' do
@@ -23,15 +22,14 @@ module MnoEnterprise
       context 'when the identity does not exist' do
         before do
           filter = {uid: auth.uid, provider: auth.provider}
-          api_stub_for(get: "/identities", params: {filter: filter}, response: from_api([]))
-
-          # Test that it creates the entity? How can we add expect on post?
-          api_stub_for(post: "/identities", response: from_api(identity))
+          stub_api_v2(:get, '/identities', [], [], {filter: filter, page: {number: 1, size: 1}})
+          stub_api_v2(:post, '/identities', identity)
         end
 
         # find or create
         it 'creates the identity and returns it' do
           expect(subject).to eq(identity)
+          assert_requested_api_v2(:post, '/identities')
         end
       end
     end

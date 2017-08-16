@@ -16,13 +16,14 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
     helper_method :main_logo_white_bg # To use in the provision view
     private
       def app_instance
-        @app_instance ||= MnoEnterprise::AppInstance.where(uid: params[:id]).first
+        @app_instance ||= MnoEnterprise::AppInstance.includes(:app).where(uid: params[:id]).first
       end
 
       # Redirect with an error if user is unauthorized
       def check_permissions
-        unless can?(:manage_app_instances, app_instance.owner)
-          redirect_to mnoe_home_path, alert: "You are not authorized to perform this action"
+        organization = MnoEnterprise::Organization.find_one(app_instance.owner_id)
+        unless can?(:manage_app_instances, organization)
+          redirect_to mnoe_home_path, alert: 'You are not authorized to perform this action'
           return false
         end
         true

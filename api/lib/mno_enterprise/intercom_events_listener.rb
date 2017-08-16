@@ -7,16 +7,11 @@ module MnoEnterprise
     attr_accessor :intercom
 
     def initialize
-      args = if MnoEnterprise.intercom_token
-        {token: MnoEnterprise.intercom_token}
-      else
-        {app_id: MnoEnterprise.intercom_app_id, api_key: MnoEnterprise.intercom_api_key}
-      end
-      self.intercom = ::Intercom::Client.new(args)
+      self.intercom = ::Intercom::Client.new(token: MnoEnterprise.intercom_token)
     end
 
     def info(key, current_user_id, description, subject_type, subject_id, metadata)
-      u = User.find(current_user_id)
+      u = ::MnoEnterprise::User.find_one(current_user_id, :organizations)
       data = {created_at: Time.now.to_i, email: u.email, user_id: u.id, event_name: key.tr('_', '-')}
       case key
         when 'user_update', 'organization_update'
@@ -63,14 +58,16 @@ module MnoEnterprise
 
     # If a source is set, tag the user with it
     def tag_user(user)
-      if user.meta_data && user.meta_data[:source].present?
-        intercom.tags.tag(name: user.meta_data[:source], users: [{user_id: user.id}])
+      if user.metadata && user.metadata[:source].present?
+        intercom.tags.tag(name: user.metadata[:source], users: [{user_id: user.id}])
       end
     end
 
     # Formatting
     # TODO: extract to a CRM service
+    # TODO: Very expensive calls, needs to see if we can retrieve all the informations in one go
     def format_company(organization)
+      organization = organization.load_required(:credit_card, :app_instances, :users)
       {
         company_id: organization.id,
         name: organization.name,
@@ -79,7 +76,7 @@ module MnoEnterprise
           industry: organization.industry,
           size: organization.size,
           credit_card_details: organization.has_credit_card_details?,
-          credit_card_expiry: organization.credit_card.expiry_date,
+          credit_card_expiry: organization.credit_card ? organization.credit_card.expiry_date: nil,
           app_count: organization.app_instances.count,
           app_list: organization.app_instances.map(&:name).sort.to_sentence,
           user_count: organization.users.count

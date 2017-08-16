@@ -74,7 +74,8 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
 
     # Check if phone number should be required
     # Bypassed for invited users
-    @phone_required = resource.organizations.map(&:users).flatten.count == 1
+    resource_with_organizations = resource.load_required(:organizations, :'organizations.orga_relations')
+    @phone_required = resource_with_organizations.organizations.map(&:orga_relations).flatten.count == 1
     yield(:success, resource) if block_given?
   end
 
@@ -92,7 +93,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
     end
 
     if resource.errors.empty?
-      resource.assign_attributes(params[:user]) unless resource.confirmed?
+      resource.attributes = params[:user] unless resource.confirmed?
       resource.perform_confirmation(@confirmation_token)
       resource.save
       sign_in resource, bypass: true
@@ -162,11 +163,11 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
         org_invites = []
         if !session[:previous_url].blank? && (r = session[:previous_url].match(/\/org_invites\/(\d+)\?token=(\w+)/))
           invite_params = { id: r.captures[0].to_i, token: r.captures[1] }
-          org_invites << MnoEnterprise::OrgInvite.where(invite_params).first
+          org_invites << MnoEnterprise::OrgaInvite.where(invite_params).first
         end
 
         # Get remaining invites via email address
-        org_invites << MnoEnterprise::OrgInvite.where(user_email: resource.email).to_a
+        org_invites << MnoEnterprise::OrgaInvite.where(user_email: resource.email).to_a
         org_invites.flatten!
         org_invites.uniq!
 

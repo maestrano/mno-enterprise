@@ -10,7 +10,7 @@ module MnoEnterprise
       end
 
       context 'without a date' do
-        let(:credit_card) { MnoEnterprise::CreditCard.new }
+        let(:credit_card) { build(:credit_card, year: nil, month: nil)}
         it { expect(credit_card.expiry_date).to be nil }
       end
     end

@@ -3,71 +3,63 @@ require 'rails_helper'
 module MnoEnterprise
   describe Jpi::V1::AppCommentsController, type: :controller do
     include MnoEnterprise::TestingSupport::JpiV1TestHelper
+    include MnoEnterprise::TestingSupport::ReviewsSharedHelpers
+
     render_views
     routes { MnoEnterprise::Engine.routes }
-    before { request.env["HTTP_ACCEPT"] = 'application/json' }
-
+    before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
     #===============================================
     # Assignments
     #===============================================
     let(:user) { build(:user) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    let(:organization) { build(:organization) }
+    let(:orga_relation) { build(:orga_relation, user: user, organization: organization) }
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+
     before { sign_in user }
 
     let(:app) { build(:app) }
-    let(:comment_1) { build(:app_comment, feedback_id: 'fid') }
-    let(:comment_2) { build(:app_comment, feedback_id: 'fid') }
-    let(:expected_hash_for_comment_1) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
-      comment_1.attributes.slice(*attrs).merge({'created_at' => comment_1.created_at.as_json, 'updated_at' => comment_1.updated_at.as_json})
-    end
-    let(:expected_hash_for_comment_2) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id feedback_id app_name user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
-      comment_2.attributes.slice(*attrs).merge({'created_at' => comment_2.created_at.as_json, 'updated_at' => comment_2.updated_at.as_json})
-    end
-    let(:expected_hash_for_comments) do
-      {
-        'app_comments' => [expected_hash_for_comment_1, expected_hash_for_comment_2],
-      }
-    end
+    let(:comment1) { build(:comment, parent_id: 'fid') }
+    let(:comment2) { build(:comment, parent_id: 'fid') }
 
     before do
-      api_stub_for(get: "/apps/#{app.id}", response: from_api(app))
+      stub_api_v2(:get, "/apps/#{app.id}", app)
     end
 
     describe 'GET #index' do
-
       before do
-        api_stub_for(get: "/app_comments?filter[feedback_id]=fid&filter[status]=approved", response: from_api([expected_hash_for_comment_1, expected_hash_for_comment_2]))
+        stub_api_v2(:get, '/comments', [comment1, comment2], [], {filter: {parent_id: 'fid', reviewer_type: 'OrgaRelation', reviewable_type: 'App', status: 'approved', reviewable_id: app.id}})
       end
 
-      subject { get :index, id: app.id, feedback_id: 'fid' }
+      subject { get :index, id: app.id, parent_id: 'fid' }
 
-      it_behaves_like "jpi v1 protected action"
+      it_behaves_like 'jpi v1 protected action'
 
-      it_behaves_like "a paginated action"
+      it_behaves_like 'a paginated action'
 
       it 'renders the list of reviews' do
         subject
-        expect(JSON.parse(response.body)).to eq(expected_hash_for_comments)
+        app_comments = JSON.parse(response.body)['app_comments']
+        expect(app_comments[0]).to eq(hash_for_comment(comment1))
+        expect(app_comments[1]).to eq(hash_for_comment(comment2))
       end
     end
 
     describe 'POST #create', focus: true do
-      let(:params) { {organization_id: 1, description: 'A Review', foo: 'bar', feedback_id: 'fid'} }
+      let(:params) { {organization_id: organization.id, description: 'A Review', foo: 'bar', feedback_id: 'fid'} }
 
       before do
-        api_stub_for(post: "/app_comments", response: from_api(comment_1))
-        api_stub_for(get: "/app_comments/#{comment_1.id}", response: from_api(comment_1))
+        stub_api_v2(:get, '/orga_relations', [orga_relation], [], {filter: {organization_id: organization.id, user_id: user.id}, page: {number: 1, size: 1}})
+        stub_api_v2(:post, '/comments', comment1)
       end
 
       subject { post :create, id: app.id, app_comment: params }
 
-      it_behaves_like "jpi v1 protected action"
+      it_behaves_like 'jpi v1 protected action'
 
       it 'renders the new review' do
-        expect(JSON.parse(subject.body)).to include('app_comment' => expected_hash_for_comment_1)
+        expect(JSON.parse(subject.body)['app_comment']).to eq(hash_for_comment(comment1))
       end
     end
   end

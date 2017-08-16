@@ -2,7 +2,7 @@ module MnoEnterprise
   class Admin::InvoicesController < MnoEnterprise::Jpi::V1::Admin::BaseResourceController
     # GET /mnoe/invoices/201504-NU4
     def show
-      @invoice = MnoEnterprise::Invoice.where(slug: params[:id].upcase).reload.first
+      @invoice = MnoEnterprise::Invoice.includes(:organization).where(slug: params[:id].upcase).first
 
       respond_to do |format|
         if @invoice

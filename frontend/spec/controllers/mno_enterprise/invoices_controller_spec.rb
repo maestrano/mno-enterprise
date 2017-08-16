@@ -12,12 +12,13 @@ module MnoEnterprise
     # Stub model calls
     let(:user) { build(:user) }
     let(:organization) { build(:organization) }
-    let(:invoice) { build(:invoice, organization_id: organization.id) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
-    before { api_stub_for(get: "/organizations/#{organization.id}", response: from_api(organization)) }
-    before { api_stub_for(get: "/users/#{user.id}/organizations/#{organization.id}", response: from_api(organization)) }
-    before { api_stub_for(get: "/invoices", params: { filter: { slug: '**' } }, response: from_api([invoice])) }
+    let(:invoice) {build(:invoice, organization: organization, organization_id: organization.id)}
 
+    before do
+      stub_api_v2(:get, '/invoices', [invoice], [:organization], {filter:{slug:invoice.slug}, page:{number: 1, size: 1}})
+    end
+
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
 
     describe "GET #show" do
       before { sign_in user }

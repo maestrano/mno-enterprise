@@ -36,19 +36,27 @@ module MnoEnterprise
       it 'replaces any mention of maestrano by the name of the platform' do
         expect(app.sanitized_description).to eq("Some description by #{MnoEnterprise.app_name}")
       end
+
+      it 'does not replace the CDN url' do
+        app.description = 'Screenshot: <img src="//cdn.maestrano.com/web/mno/screenshot.png"/>'
+        expect(app.sanitized_description).to eq(app.description)
+      end
     end
 
     describe '#regenerate_api_key!' do
       let(:app) { build(:app) }
       let(:response) { build(:app, api_key: 'secret-key') }
 
-      before { api_stub_for(put: "/apps/#{app.id}", response: from_api(response)) }
+      before {
+        stub_api_v2(:put, "/apps/#{app.id}", app)
+        stub_api_v2(:patch, "/apps/#{app.id}/regenerate_api_key", response)
+      }
 
       subject { app.regenerate_api_key! }
 
       it 'regenerate the api key' do
-        expect(app).to receive(:put).with(operation: 'regenerate_api_key').and_call_original
         subject
+        assert_requested_api_v2(:patch, "/apps/#{app.id}/regenerate_api_key")
       end
 
       it 'refreshes the #api_key field' do

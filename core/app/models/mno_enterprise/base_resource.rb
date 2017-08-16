@@ -1,96 +1,83 @@
-# TODO: spec the ActiveRecord behaviour
-# - processing of remote errors
-# - response parsing (using data: [] format)
-# - save methods
+require 'json_api_client'
 module MnoEnterprise
-  class BaseResource
-    include Her::Model
-    include HerExtension::Validations::RemoteUniquenessValidation
-    include GlobalID::Identification
+  class BaseResource < ::JsonApiClient::Resource
+    include ActiveModel::Callbacks
+    self.site = URI.join(MnoEnterprise.api_host, MnoEnterprise.mno_api_v2_root_path).to_s
+    self.parser = JsonApiClientExtension::CustomParser
 
-    include_root_in_json :data
-    use_api MnoEnterprise.mnoe_api_v1
+    define_callbacks :update
+    define_callbacks :save
 
-    # TODO: spec that changed_attributes is empty
-    # after a KLASS.all / KLASS.where etc..
-    after_find { |res| res.instance_variable_set(:@changed_attributes, {}) }
-
-    # Attributes common to all classes
-    attributes :id, :created_at, :updated_at
-
-    # Class query methods
-    class << self
-      # Delegate the following methods to `scoped`
-      # Clear relation params for each class level query
-      [:all, :where, :create, :find, :first_or_create, :first_or_initialize, :limit, :skip, :order_by, :sort_by, :order, :sort].each do |method|
-        class_eval <<-RUBY, __FILE__, __LINE__ + 1
-          def #{method}(*params)
-            Her::Model::Relation.new(self).send(#{method.to_sym.inspect}, *params)
-          end
-        RUBY
+    # retrieve all the elements
+    def self.fetch_all(list = self.where)
+      result = []
+      loop do
+        result.push(*list.to_a)
+        break unless (list.pages.links||{})['next']
+        list = list.pages.next
       end
+      result
+    end
 
-      # ActiveRecord Compatibility for Her
-      def first(n = 1)
-        return [] unless n > 0
-        q = self.order_by('id.asc').limit(n)
-        n == 1 ? q.to_a.first : q.to_a
-      end
+    # TODO: Replace limit and offset parameters by page and per_page
+    def self.apply_query_params(params, relation = self.where)
+      relation.paginate(page: 1 + params[:offset].to_i/params[:limit].to_i, per_page: params[:limit].to_i) if params[:limit] && params[:offset]
+      relation.order(adapt_order_by(params[:order_by])) if params[:order_by]
+      relation.where(params[:where]) if params[:where]
+      relation
+    end
 
-      # ActiveRecord Compatibility for Her
-      def last(n = 1)
-        return [] unless n > 0
-        q = self.order_by('id.desc').limit(n)
-        n == 1 ? q.to_a.first : q.to_a
-      end
-
-      # Find first record using a hash of attributes
-      def find_by(hash)
-        self.where(hash).limit(1).first
-      end
-
-      # ActiveRecord Compatibility for Her
-      def exists?(hash)
-        find_by(hash).present?
-      end
-
-      # ActiveRecord Compatibility for Her
-      # Returns the class descending directly from MnoEnterprise::BaseResource, or
-      # an abstract class, if any, in the inheritance hierarchy.
-      #
-      # If A extends MnoEnterprise::BaseResource, A.base_class will return A. If B descends from A
-      # through some arbitrarily deep hierarchy, B.base_class will return A.
-      #
-      # If B < A and C < B and if A is an abstract_class then both B.base_class
-      # and C.base_class would return B as the answer since A is an abstract_class.
-      def base_class
-        unless self < BaseResource
-          raise Error, "#{name} doesn't belong in a hierarchy descending from BaseResource"
-        end
-
-        if superclass == BaseResource || superclass.abstract_class?
-          self
-        else
-          superclass.base_class
-        end
+    def self.adapt_order_by(input)
+      field, order = input.split('.')
+      if (order == 'desc')
+        '-' + field
+      else
+        field
       end
     end
 
-    #======================================================================
-    # Instance methods
-    #======================================================================
-    # Returns a cache key that can be used to identify this record.
-    #
-    #   Product.new.cache_key     # => "products/new"
-    #   Product.find(5).cache_key # => "products/5" (updated_at not available)
-    #   Person.find(5).cache_key  # => "people/5-20071224150000" (updated_at available)
-    #
-    # You can also pass a list of named timestamps, and the newest in the list will be
-    # used to generate the key:
-    #
-    #   Person.find(5).cache_key(:updated_at, :last_reviewed_at)
-    #
-    # Notes: copied from ActiveRecord
+    def self.find_one(id, *included)
+      array = self.includes(included).find(id)
+      array[0] if array.any?
+    end
+
+    def self.exists?(query)
+      self.find(query).any?
+    end
+
+    def self.to_adapter
+      @_to_adapter ||= JsonApiClient::OrmAdapter.new(self)
+    end
+
+    def self.find_by_or_create(attributes)
+      where(attributes).first || create(attributes)
+    end
+
+    #add missing method
+    def update_attribute(name, value)
+      self.update_attributes(Hash[name, value])
+    end
+
+    # emulate active record call of callbacks
+    def save(*args)
+      run_callbacks :save do
+        super()
+      end
+    end
+
+    def save!
+      save
+      raise "Could not save: Attributes #{self.attributes}, Errors: #{self.full_messages}" unless self.errors.empty?
+    end
+
+    # emulate active record call of callbacks, a bit different as before_update is called before before_save
+    def update_attributes(attrs = {})
+      self.attributes = attrs
+      run_callbacks :update do
+        save
+      end
+    end
+
     def cache_key(*timestamp_names)
       case
         when new?
@@ -107,131 +94,45 @@ module MnoEnterprise
       end
     end
 
+    # expire the json view cache(using json.cache! ['v1', @user.cache_key] )
+    def expire_view_cache
+      Rails.cache.delete_matched("jbuilder/v1/#{model_name.cache_key}/#{id}*")
+    end
+
+    def new?
+      id.nil?
+    end
+
     def max_updated_column_timestamp(timestamp_names = [:updated_at])
       timestamp_names
-          .map { |attr| self[attr] }
-          .compact
-          .map(&:to_time)
-          .max
+        .map { |attr| self[attr] }
+        .compact
+        .max
     end
 
-    # Clear the record association cache
-    def clear_association_cache
-      self.class.associations[:has_many].each do |assoc|
-        instance_variable_set(:"@_her_association_#{assoc[:name]}", nil)
-        attributes.delete(assoc[:name].to_s)
-      end
-    end
-
-    # ActiveRecord Compatibility for Her
-    def read_attribute(attr_name)
-      get_attribute(attr_name)
-    end
-
-    # ActiveRecord Compatibility for Her
-    def write_attribute(attr_name, value)
-      assign_attributes(attr_name => value)
-    end
-    alias []= write_attribute
-
-    # ActiveRecord Compatibility for Her
-    def save(options={})
-      if perform_validations(options)
-        ret = super()
-        process_response_errors
-        ret
+    # return a new instance with the required loaded
+    def load_required(*included)
+      if self.id
+        self.class.find_one(self.id, included)
       else
-        false
+        raise "Can't load_required #{self.class} id is nil"
       end
     end
 
-    # ActiveRecord Compatibility for Her
-    def save!(options={})
-      if perform_validations(options)
-        ret = super()
-        process_response_errors
-        raise_record_invalid if self.errors.any?
-        ret
-      else
-        raise_record_invalid
-      end
+    def reload
+      load_required
     end
 
-    # ActiveRecord Compatibility for Her
-    def reload(options = nil)
-      @attributes.update(self.class.find(self.id).attributes)
-      self.run_callbacks :find
-      self
+    def ==(o)
+      o.class == self.class && o.attributes == attributes
     end
-
-    # ActiveRecord Compatibility for Her
-    def update(attributes)
-      assign_attributes(attributes)
-      save
-    end
-
-    # Reset the ActiveModel hash containing all attribute changes
-    # Useful when initializing a existing resource using a hash fetched
-    # via http call (e.g.: MnoEnterprise::User.authenticate)
-    def clear_attribute_changes!
-      self.instance_variable_set(:@changed_attributes, {})
-    end
-
-    # Returns true if +comparison_object+ is the same exact object, or +comparison_object+
-    # is of the same type and +self+ has an ID and it is equal to +comparison_object.id+.
-    #
-    # Note that new records are different from any other record by definition, unless the
-    # other record is the receiver itself. Besides, if you fetch existing records with
-    # +select+ and leave the ID out, you're on your own, this predicate will return false.
-    #
-    # Note also that destroying a record preserves its ID in the model instance, so deleted
-    # models are still comparable.
-    def ==(comparison_object)
-      super ||
-        comparison_object.instance_of?(self.class) &&
-        !id.nil? &&
-        comparison_object.id == id
-    end
-    alias :eql? :==
-
-    protected
-      # Process errors from the servers and add them to the
-      # model
-      # Servers are returned using the jsonapi format
-      # E.g.:
-      # errors: [
-      #   {
-      #     :id=>"f720ca10-b104-0132-dbc0-600308937d74",
-      #     :href=>"http://maestrano.github.io/enterprise/#users-users-list-post",
-      #     :status=>"400",
-      #     :code=>"name-can-t-be-blank",
-      #     :title=>"Name can't be blank",
-      #     :detail=>"Name can't be blank"
-      #     :attribute => "name"
-      #     :value => "can't be blank"
-      #   }
-      # ]
-      def process_response_errors
-        if self.response_errors && self.response_errors.any?
-          self.response_errors.each do |error|
-            key = error[:attribute] && !error[:attribute].empty? ? error[:attribute] : :base
-            val = error[:value] && !error[:value].empty? ? error[:value] : error[:title]
-            self.errors[key.to_sym] << val
-          end
-        end
-      end
-
-      # ActiveRecord Compatibility for Her
-      def raise_record_invalid
-        raise(Her::Errors::ResourceInvalid.new(self))
-      end
-
-      # ActiveRecord Compatibility for Her
-      def perform_validations(options={}) # :nodoc:
-        # errors.blank? to avoid the unexpected case when errors is nil...
-        # -> THIS IS A TEMPORARY UGLY FIX
-        options[:validate] == false || self.errors.nil? || valid?(options[:context])
-      end
 
   end
+end
+
+MnoEnterprise::BaseResource.connection do |connection|
+  connection.use Faraday::Request::BasicAuthentication, MnoEnterprise.tenant_id, MnoEnterprise.tenant_key
+
+  # log responses
+  connection.use Faraday::Response::Logger if Rails.env.development?
 end

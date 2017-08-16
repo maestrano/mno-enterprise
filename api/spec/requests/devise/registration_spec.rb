@@ -6,35 +6,23 @@ module MnoEnterprise
     let(:confirmation_token) { 'wky763pGjtzWR7dP44PD' }
     let(:user) { build(:user, :unconfirmed, confirmation_token: confirmation_token) }
     let(:email_uniq_resp) { [] }
-    let(:signup_attrs) { {name: "John", surname: "Doe", email: 'john@doecorp.com', password: 'securepassword'} }
+    let(:signup_attrs) { {name: 'John', surname: 'Doe', email: 'john@doecorp.com', password: 'securepassword'} }
 
     # Stub user calls
-    before { api_stub_for(post: '/users', response: from_api(user)) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
-    before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
+    before {
+      stub_api_v2(:post, '/users', user)
+      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
+      stub_api_v2(:patch, "/users/#{user.id}", user)
+      stub_api_v2(:get, '/orga_invites', [], [], {filter: {user_email: signup_attrs[:email]}})
 
-    # Stub user retrieval using confirmation token
-    before { api_stub_for(
-        get: '/users',
-        params: {filter: {confirmation_token: '**'}, limit: 1},
-        response: from_api([])
-    ) }
-
-    # Stub user email uniqueness check
-    before { api_stub_for(
-        get: '/users',
-        params: {filter: {email: '**'}, limit: 1},
-        response: -> { from_api(email_uniq_resp) }
-    ) }
-
-    # Stub org_invites retrieval
-    before { api_stub_for(get: '/org_invites', response: from_api([])) }
-
+      stub_api_v2(:get, '/users', email_uniq_resp, [], {filter: {email: signup_attrs[:email]}, page: {number: 1, size: 1}})
+    }
 
     describe 'signup' do
       subject { post '/mnoe/auth/users', user: signup_attrs }
 
       describe 'success' do
+        before { stub_audit_events }
         before { subject }
 
         it 'signs the user up' do
@@ -51,7 +39,7 @@ module MnoEnterprise
       end
 
       describe 'failure' do
-        let(:email_uniq_resp) { [from_api(user)] }
+        let(:email_uniq_resp) { [user] }
         before { subject }
 
         it 'does not log the user in' do

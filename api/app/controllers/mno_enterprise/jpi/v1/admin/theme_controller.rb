@@ -20,7 +20,7 @@ module MnoEnterprise
         save_previewer_style(params[:theme])
         rebuild_previewer_style
       end
-
+      SystemManager.publish_assets
       render json: {status:  'Ok'},  status: :created
     end
 
@@ -28,6 +28,7 @@ module MnoEnterprise
     def reset
       reset_previewer_style
       rebuild_previewer_style
+      SystemManager.publish_assets
       render json: {status:  'Ok'}
     end
 
@@ -42,6 +43,10 @@ module MnoEnterprise
         FileUtils.mkdir_p(File.dirname(Rails.root.join(filepath)))
         File.open(Rails.root.join(filepath),'wb') { |f| f.write(logo_content) }
       end
+      recompile_assets
+      SystemManager.publish_assets
+      # Need to restart in non dev to get the new precompiled assets
+      SystemManager.restart unless Rails.env.development?
       render json: {status:  'Ok'},  status: :created
     end
 
@@ -70,13 +75,19 @@ module MnoEnterprise
       end
 
       def rebuild_previewer_style
-        Rake::Task['mnoe:frontend:rebuild_previewer_style'].reenable
-        Rake::Task['mnoe:frontend:rebuild_previewer_style'].invoke
+        Rake::Task['mnoe:frontend:previewer:save'].reenable
+        Rake::Task['mnoe:frontend:previewer:save'].invoke
       end
 
       def publish_style
-        Rake::Task['mnoe:frontend:dist'].reenable
-        Rake::Task['mnoe:frontend:dist'].invoke
+        Rake::Task['mnoe:frontend:previewer:build'].reenable
+        Rake::Task['mnoe:frontend:previewer:build'].invoke
+      end
+
+      # TODO: remove once devise pages have been extracted and we remove the asset pipeline
+      def recompile_assets
+        Rake::Task['assets:precompile'].reenable
+        Rake::Task['assets:precompile'].invoke
       end
 
       # Convert a theme provided as a hash into a properly

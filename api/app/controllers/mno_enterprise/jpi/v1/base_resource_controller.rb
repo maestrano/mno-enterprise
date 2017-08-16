@@ -8,10 +8,17 @@ module MnoEnterprise
         @timestamp ||= (params[:timestamp] || 0).to_i
       end
 
+      def is_integer?(string)
+        string.to_i.to_s == string
+      end
+
       def parent_organization
-        @parent_organization ||= current_user.organizations.to_a.find do |o|
-          key = (params[:organization_id].to_i == 0) ? o.uid : o.id.to_s
-          key == params[:organization_id].to_s
+        @parent_organization ||= begin
+          id_or_uid = params[:organization_id]
+          query = is_integer?(id_or_uid) ? id_or_uid : {uid: id_or_uid}
+          o = MnoEnterprise::Organization.includes(:orga_relations, :users).find(query).first
+          ## check that user is in the organization
+          o if o && o.orga_relation(current_user)
         end
       end
 
@@ -29,8 +36,8 @@ module MnoEnterprise
         true
       end
 
-      def render_not_found(resource)
-        render json: { errors: {message: "#{resource.titleize} not found (id=#{params[:id]})", code: 404, params: params} }, status: :not_found
+      def render_not_found(resource, id = params[:id])
+        render json: { errors: {message: "#{resource.titleize} not found (id=#{id})", code: 404, params: params} }, status: :not_found
       end
 
       def render_bad_request(attempted_action, issue)

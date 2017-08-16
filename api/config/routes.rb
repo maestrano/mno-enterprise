@@ -12,6 +12,8 @@ MnoEnterprise::Engine.routes.draw do
   get '/version', to: 'status#version'
   get 'health_check(/:checks)(.:format)', to: '/health_check/health_check#index'
 
+  get 'config', to: 'config#show'
+
   # App Provisioning
   resources :provision, only: [:new, :create]
 
@@ -31,7 +33,7 @@ MnoEnterprise::Engine.routes.draw do
     resources :invoices, only: [:show], constraints: { id: /[\w\-]+/ }
   end
 
-  unless Settings.try(:admin_panel).try(:impersonation).try(:disabled)
+  if Settings&.admin_panel&.impersonation&.enabled
     get "/impersonate/user/:user_id", to: "impersonate#create", as: :impersonate_user
     get "/impersonate/revert", to: "impersonate#destroy", as: :revert_impersonate_user
   end
@@ -41,7 +43,7 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   # Main devise configuration
   skipped_devise_modules = [:omniauth_callbacks]
-  skipped_devise_modules << :registrations if Settings.try(:devise).try(:registration).try(:disabled)
+  skipped_devise_modules << :registrations unless Settings&.dashboard&.registration&.enabled
   devise_for :users, {
       class_name: "MnoEnterprise::User",
       module: :devise,
@@ -92,7 +94,7 @@ MnoEnterprise::Engine.routes.draw do
       end
     end
     # Maestrano-hub events
-    resources :events, only: [:create] 
+    resources :events, only: [:create]
   end
 
   #============================================================
@@ -136,6 +138,14 @@ MnoEnterprise::Engine.routes.draw do
         resources :app_instances_sync, only: [:create, :index]
 
         resources :audit_events, only: [:index]
+
+        if Settings&.dashboard&.provisioning&.enabled
+          resources :subscriptions, only: [:index, :show, :create, :update] do
+            member do
+              post :cancel
+            end
+          end
+        end
       end
 
       resources :deletion_requests, only: [:show, :create, :destroy] do
@@ -160,19 +170,26 @@ MnoEnterprise::Engine.routes.draw do
         end
       end
 
+      if Settings&.dashboard&.provisioning&.enabled
+        resources :products, only: [:index, :show] do
+          resources :pricings, only: :index
+        end
+      end
 
       #============================================================
       # Admin
       #============================================================
       namespace :admin, defaults: {format: 'json'} do
         resources :audit_events, only: [:index]
+        resources :app_feedbacks, only: [:index]
+        resources :app_questions, only: [:index]
         resources :app_instances, only: [:destroy], shallow: true
         resources :app_reviews, only: [:index, :show,  :update]
         resources :app_comments, only: [:create]
         resources :app_answers, only: [:create]
         resources :users, only: [:index, :show, :destroy, :update, :create] do
           collection do
-            get :count
+            get :kpi
             post :signup_email
           end
         end
@@ -204,6 +221,15 @@ MnoEnterprise::Engine.routes.draw do
             put :refresh_metadata
           end
         end
+
+        resource 'tenant', only: [:show, :update] do
+          member do
+            post :ssl_certificates, action: :add_certificates
+            match :domain, action: :update_domain, via: [:put, :patch]
+          end
+        end
+
+        resources :appkpis, only: [:index, :show]
 
         # Theme Previewer
         post 'theme/save'

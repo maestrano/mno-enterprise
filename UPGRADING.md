@@ -4,6 +4,7 @@
 
 1. [Upgrading the frontend](#upgrading-the-frontend)
 1. [Upgrading the gem](#upgrading-the-gem)
+    1. [Migrating from v3.3 to v4.0](#migrating-from-v33-to-v40)
     1. [Migrating from v3.2 to v3.3](#migrating-from-v32-to-v33)
     1. [Migrating from v3.0/v3.1 to v3.2](#migrating-from-v30v31-to-v32)
     1. [Migrating from v2 to v3](#migrating-from-v2-to-v3)
@@ -40,6 +41,55 @@ _You may want to use GitHub history to retrieve the version corresponding to the
 This is a simple as `bundle update mno-enterprise`.
 
 See below for upgrade between breaking versions.
+
+### Migrating from v3.3 to v4.0
+
+See the [CHANGELOG](CHANGELOG.md#v4.0.0)
+
+#### Dependencies
+
+##### Ruby version
+
+You must upgrade your ruby version to >= 2.3
+
+##### Frontend packages
+
+You must upgrade the frontend components (`mno-enterprise-angular` and `mnoe-admin-panel`) to the `2.0` version.
+
+##### Gems
+
+[figaro](https://github.com/laserlemon/figaro) is no longer a `mno-enterprise` dependency, if you rely on it to set
+environment variables, add it to your `Gemfile`:
+
+```ruby
+group :development, :test do
+  ...
+  gem 'figaro'
+end
+```
+
+If deploying on Nex!™, add the [nex_client](https://github.com/maestrano/nex_client) gem to your Gemfile:
+
+```ruby
+group :uat, :production do
+  ...
+  gem 'nex_client', '~> 0.16.0'
+end
+```
+
+#### Settings and feature flags
+
+Settings and feature flags are now managed dynamically at the MnoHub level rather than via `settings.yml` files.
+
+The `config/settings.yml` and `config/settings/#{environment}.yml` files are still supported but the settings from MnoHub take precedence.
+
+##### MnoEnterprise Initializer
+
+Your mno-enterprise initializer (`config/initializers/mno_enterprise.rb`) most likely contains some hardcoded settings.
+If you want to leverage the dynamic configuration introduced in v4, replace them with the appropriate `Settings` config entry.
+See the [template](https://github.com/maestrano/mno-enterprise/blob/4.0/core/lib/generators/mno_enterprise/install/templates/config/initializers/mno_enterprise.rb)
+for more details.
+
 
 ### Migrating from v3.2 to v3.3
 

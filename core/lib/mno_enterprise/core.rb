@@ -22,15 +22,17 @@ require "her_extension/middleware/mnoe_api_v1_parse_json"
 require "her_extension/middleware/mnoe_raise_error"
 require "faraday_middleware"
 require "httparty"
+require "json_api_client"
+require "json_api_client_extension/json_api_client_orm_adapter"
+require "json_api_client_extension/validations/remote_uniqueness_validation"
+require "json_api_client_extension/custom_parser"
 require "mno_enterprise/engine"
-
 require 'mno_enterprise/database_extendable'
 
 # Settings
 require 'config'
-require 'figaro'
+require 'json-schema'
 
-require 'mandrill_client'
 require 'accountingjs_serializer'
 
 module MnoEnterprise
@@ -75,12 +77,6 @@ module MnoEnterprise
       host_url("/oauth/#{id}/sync",opts)
     end
 
-    # @deprecated Impac is now configured through Settings
-    def impac_root_url
-      warn '[DEPRECATION] `impac_root_url` is deprecated. Impac is now configured in the frontend through `Settings`.'
-      URI.join(MnoEnterprise.impac_api_host,MnoEnterprise.impac_api_root_path)
-    end
-
     private
       def base_path
         MnoEnterprise.mno_api_root_path
@@ -100,6 +96,21 @@ module MnoEnterprise
   #==================================================================
   # Module definition
   #==================================================================
+  # Adapter used to manage the app
+  # This shouldn't need to be set manually
+  mattr_reader(:platform_adapter) do
+    if Rails.env.test?
+      :test
+    elsif ENV['SELF_NEX_API_KEY'].present? && Gem.loaded_specs.has_key?('nex_client')
+      :nex
+    else
+      :local
+    end
+  end
+  def self.platform_adapter=(adapter)
+    @@platform_adapter = adapter
+    MnoEnterprise::SystemManager.adapter = self.platform_adapter
+  end
 
   #====================================
   # Tenant
@@ -125,17 +136,6 @@ module MnoEnterprise
   @@tenant_key = nil
 
   #====================================
-  # Impac
-  #====================================
-  # @deprecated Impac is now configured through Settings
-
-  mattr_accessor :impac_api_host
-  @@impac_api_host = 'https://api-impac-uat.maestrano.io'
-
-  mattr_accessor :impac_api_root_path
-  @@impac_api_root_path = "/api/v1"
-
-  #====================================
   # Enterprise API
   #====================================
   # The Maestrano Enterprise API Host
@@ -156,6 +156,9 @@ module MnoEnterprise
   mattr_reader :mnoe_api_v1
   @@mnoe_api_v1 = nil
 
+  mattr_accessor :mno_api_v2_root_path
+  @@mno_api_v2_root_path = "/api/mnoe/v2"
+
   # Hold the Maestrano enterprise router (redirection to central enterprise platform)
   mattr_reader :router
   @@router = Router.new
@@ -164,21 +167,9 @@ module MnoEnterprise
   #====================================
   # Emailing
   #====================================
-  # @deprecated: Use ENV['MANDRILL_API_KEY']
-  # Mandrill Key for sending emails
-  def self.mandrill_key
-    warn "[DEPRECATION] `mandrill_key` is deprecated. Use `ENV['MANDRILL_API_KEY']`."
-    @@mandrill_key
-  end
-  def self.mandrill_key=(mandrill_key)
-    warn "[DEPRECATION] `mandrill_key` is deprecated. Use `ENV['MANDRILL_API_KEY']`."
-    @@mandrill_key = mandrill_key
-  end
-  @@mandrill_key = nil
-
   # Adapter used to send emails
   # Default to :mandrill
-  mattr_reader(:mail_adapter) { Rails.env.test? ? :test : :mandrill }
+  mattr_reader(:mail_adapter) { Rails.env.test? ? :test : :smtp }
   def self.mail_adapter=(adapter)
     @@mail_adapter = adapter
     MnoEnterprise::MailClient.adapter = self.mail_adapter
@@ -219,15 +210,12 @@ module MnoEnterprise
   mattr_accessor :intercom_api_secret
   @@intercom_api_secret = nil
 
-  mattr_accessor :intercom_api_key
-  @@intercom_api_key = nil
-
   mattr_accessor :intercom_token
   @@intercom_token = nil
 
   # Define if Intercom is enabled. Only if the gem intercom is present
   def self.intercom_enabled?
-    defined?(::Intercom) && ((intercom_app_id && intercom_api_key) || intercom_token)
+    defined?(::Intercom) && intercom_app_id && intercom_token
   end
 
   #====================================
@@ -238,14 +226,6 @@ module MnoEnterprise
   mattr_accessor :style
   @@styleguide = nil
   @@style = nil
-
-  #====================================
-  # Marketplace
-  #====================================
-  # List of applications that should be offered on
-  # the marketplace
-  mattr_accessor :marketplace_listing
-  @@marketplace_listing = nil
 
   #====================================
   # Impac! widgets templates listing
@@ -265,7 +245,9 @@ module MnoEnterprise
     @@style
   end
 
-
+  def self.api_host
+   @@mno_api_private_host || @@mno_api_host
+  end
 
   # Default way to setup MnoEnterprise. Run rails generate mno-enterprise:install to create
   # a fresh initializer with all configuration values.
@@ -295,7 +277,6 @@ module MnoEnterprise
   private
     # Return the options to use in the setup of the API
     def self.api_options
-      api_host = @@mno_api_private_host || @@mno_api_host
       {
           url: "#{URI.join(api_host,@@mno_api_root_path).to_s}",
           send_only_modified_attributes: true

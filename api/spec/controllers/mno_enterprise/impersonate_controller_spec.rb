@@ -9,18 +9,21 @@ module MnoEnterprise
     let(:user) { build(:user, :admin) }
     let(:user2) { build(:user) }
     before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(put: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(get: "/users/#{user2.id}", response: from_api(user2))
-      api_stub_for(put: "/users/#{user2.id}", response: from_api(user2))
-    end
+      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
+      stub_api_v2(:get, "/users/#{user2.id}", user2, %i(deletion_requests organizations orga_relations dashboards))
 
-    context "admin user" do
+      stub_api_v2(:patch, "/users/#{user.id}")
+      stub_api_v2(:patch, "/users/#{user2.id}")
+
+    end
+    before { stub_audit_events }
+
+    context 'admin user' do
       before do
         sign_in user
       end
 
-      describe "#create" do
+      describe '#create' do
         it do
           expect(controller.current_user.id).to eq(user.id)
           get :create, user_id: user2.id
@@ -34,7 +37,7 @@ module MnoEnterprise
         end
       end
 
-      describe "#destroy" do
+      describe '#destroy' do
         subject { get :destroy }
 
         context 'without redirect_path' do

@@ -20,7 +20,7 @@ module MnoEnterprise::Concerns::Models::Ability
   # Instance methods
   #==================================================================
   def initialize(user)
-    user ||= MnoEnterprise::User.new
+    user ||= MnoEnterprise::User.new(id: nil)
 
     #===================================================
     # Organization
@@ -35,6 +35,9 @@ module MnoEnterprise::Concerns::Models::Ability
       user.role(organization) == 'Super Admin'
     end
 
+
+
+    # TODO: replace by organization_id, no need to load a full organization, and make user.role accept a string
     can [:upload,
          :purchase,
          :invite_member,
@@ -45,11 +48,13 @@ module MnoEnterprise::Concerns::Models::Ability
     end
 
     # To be updated
+    # TODO: replace by organization_id, no need to load a full organization
     can :sync_apps, MnoEnterprise::Organization do |organization|
       user.role(organization)
     end
 
     # To be updated
+    # TODO: replace by organization_id, no need to load a full organization
     can :check_apps_sync, MnoEnterprise::Organization do |organization|
       user.role(organization)
     end
@@ -58,8 +63,9 @@ module MnoEnterprise::Concerns::Models::Ability
     # AppInstance
     #===================================================
     can :access, MnoEnterprise::AppInstance do |app_instance|
-      !!user.role(app_instance.owner) && (
-      ['Super Admin','Admin'].include?(user.role(app_instance.owner)) ||
+      role = user.role_from_id(app_instance.owner_id)
+      !!role && (
+      ['Super Admin','Admin'].include?(role) ||
           user.teams.empty? ||
           user.teams.map(&:app_instances).compact.flatten.map(&:id).include?(app_instance.id)
       )
@@ -104,13 +110,13 @@ module MnoEnterprise::Concerns::Models::Ability
   end
 
   def impac_abilities(user)
-    can :manage_impac, MnoEnterprise::Impac::Dashboard do |dhb|
+    can :manage_impac, MnoEnterprise::Dashboard do |dhb|
       dhb.organizations.any? && dhb.organizations.all? do |org|
         !!user.role(org) && ['Super Admin', 'Admin'].include?(user.role(org))
       end
     end
 
-    can :manage_dashboard, MnoEnterprise::Impac::Dashboard do |dashboard|
+    can :manage_dashboard, MnoEnterprise::Dashboard do |dashboard|
       if dashboard.owner_type == "Organization"
         # The current user is a member of the organization that owns the dashboard that has the kpi attached to
         owner = MnoEnterprise::Organization.find(dashboard.owner_id)
@@ -123,20 +129,20 @@ module MnoEnterprise::Concerns::Models::Ability
       end
     end
 
-    can :manage_widget, MnoEnterprise::Impac::Widget do |widget|
+    can :manage_widget, MnoEnterprise::Widget do |widget|
       dashboard = widget.dashboard
       authorize! :manage_dashboard, dashboard
     end
 
-    can :manage_kpi, MnoEnterprise::Impac::Kpi do |kpi|
+    can :manage_kpi, MnoEnterprise::Kpi do |kpi|
       if kpi.widget.present?
-        authorize! :manage_widget, MnoEnterprise::Impac::Widget.find(kpi.widget.id)
+        authorize! :manage_widget, MnoEnterprise::Widget.find(kpi.widget.id)
       else
         authorize! :manage_dashboard, kpi.dashboard
       end
     end
 
-    can :manage_alert, MnoEnterprise::Impac::Alert do |alert|
+    can :manage_alert, MnoEnterprise::Alert do |alert|
       kpi = alert.kpi
       authorize! :manage_kpi, kpi
     end

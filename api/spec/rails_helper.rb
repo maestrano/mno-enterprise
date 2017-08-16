@@ -48,6 +48,8 @@ RSpec.configure do |config|
   # instead of true.
   # config.use_transactional_fixtures = true
 
+  config.filter_run_excluding ignore: true
+
   # Include FactoryGirl methods to avoid typing FactoryGirl.create(...)
   config.include FactoryGirl::Syntax::Methods
 

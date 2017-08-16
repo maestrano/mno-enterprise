@@ -4,7 +4,7 @@ module MnoEnterprise
   class MailClient
     cattr_reader(:adapter)
 
-    # Specify the mail adapter. The default email adapter is the :mandrill adapter.
+    # Specify the mail adapter. The default email adapter is the :smtp adapter.
     def self.adapter=(name_or_adapter)
       @@adapter = \
         case name_or_adapter

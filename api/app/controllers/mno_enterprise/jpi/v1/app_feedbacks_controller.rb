@@ -4,11 +4,15 @@ module MnoEnterprise
     private
 
     def permitted_params
-      params.require(:app_feedback).permit(:rating, :description, :organization_id)
+      root_params.permit(:rating, :description)
     end
 
     def review_klass
-      MnoEnterprise::AppFeedback
+      MnoEnterprise::Feedback
+    end
+
+    def initial_scope
+      review_klass.includes(:comments)
     end
   end
 end

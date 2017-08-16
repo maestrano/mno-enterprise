@@ -1,8 +1,142 @@
 # Change Log
 
-## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/master)
+## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/4.0)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.1...4.0)
 
-[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.2.0...HEAD)
+- Drop support for Ruby < 2.3
+- Remove deprecated marketplace_listing
+- Remove deprecated MandrillClient
+- Default to SMTP
+- Remove hard dependency on figaro (if using `config/application.yml`, you should add `gem 'figaro'` to your `Gemfile`)
+- Intercom: drop support for api_key (replaced by token)
+
+The settings have been refactored in v4 to make them more consistent.
+
+* All the frontend settings are nested under `dashboard`
+* `admin.impersonation.disabled` is now `admin.impersonation.enabled`
+* `payment.disabled` is now `payment.enabled`
+* `pricing` and `review` configuration are now nested under `marketplace`
+* `devise.registration` is now `devise.registration`
+
+## [v3.3.1](https://github.com/maestrano/mno-enterprise/tree/v3.3.1) (2017-07-24)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.0...v3.3.1)
+
+**Implemented enhancements:**
+
+- Add caching to marketplace endpoint [\#377](https://github.com/maestrano/mno-enterprise/pull/377) ([ouranos](https://github.com/ouranos))
+- \[IMPAC-623\] create email alert on widget kpi create [\#375](https://github.com/maestrano/mno-enterprise/pull/375) ([xaun](https://github.com/xaun))
+- \[MNOE-499\] Add locales [\#368](https://github.com/maestrano/mno-enterprise/pull/368) ([hedudelgado](https://github.com/hedudelgado))
+- \[MNOE-501\] Locales added for on-boarding improvement [\#333](https://github.com/maestrano/mno-enterprise/pull/333) ([rheasunshine](https://github.com/rheasunshine))
+- \[MNOE-474\] Add endpoints to admin api [\#327](https://github.com/maestrano/mno-enterprise/pull/327) ([adamaziz15](https://github.com/adamaziz15))
+
+**Fixed bugs:**
+
+- Fix missing locales [\#381](https://github.com/maestrano/mno-enterprise/pull/381) ([alexnoox](https://github.com/alexnoox))
+- Fix impac locales task [\#379](https://github.com/maestrano/mno-enterprise/pull/379) ([ouranos](https://github.com/ouranos))
+- \[MNOE-554\] Exclude Maestrano CDN from app description sanitisation [\#378](https://github.com/maestrano/mno-enterprise/pull/378) ([ouranos](https://github.com/ouranos))
+- \[MNOE-474\] Fix locale typo [\#376](https://github.com/maestrano/mno-enterprise/pull/376) ([ouranos](https://github.com/ouranos))
+- \[DEVPL-158\] Pricing Sync [\#372](https://github.com/maestrano/mno-enterprise/pull/372) ([adamaziz15](https://github.com/adamaziz15))
+- \[MNOE-544\] Onboarding: fix locales [\#370](https://github.com/maestrano/mno-enterprise/pull/370) ([alexnoox](https://github.com/alexnoox))
+- \[MNOE-533\] Reload her team object and fix fetch teams [\#360](https://github.com/maestrano/mno-enterprise/pull/360) ([hedudelgado](https://github.com/hedudelgado))
+
+**Merged pull requests:**
+
+- \[MNOE-474\] Update locales for review frontend [\#334](https://github.com/maestrano/mno-enterprise/pull/334) ([adamaziz15](https://github.com/adamaziz15))
+
+## [v3.3.0](https://github.com/maestrano/mno-enterprise/tree/v3.3.0) (2017-06-20)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.2.0...v3.3.0)
+
+See [UPGRADING](UPGRADING.md#migrating-from-v32-to-v33)
+
+**Summary:**
+
+* Onboarding wizard
+* Audit Log in the dashboard and admin panel 
+* Better app generation
+* Extracted Admin Panel to a separate project (feature flags & style customisation)
+* Improved design of static pages
+* Improved Intercom integration
+* [Lots of new feature flags](https://github.com/maestrano/mno-enterprise/compare/v3.2...3.3#TODO)
+
+**Implemented enhancements:**
+
+- Impac! i18n [\#322](https://github.com/maestrano/mno-enterprise/pull/322) ([cesar-tonnoir](https://github.com/cesar-tonnoir))
+- Implement Fast Ruby idioms [\#318](https://github.com/maestrano/mno-enterprise/pull/318) ([ouranos](https://github.com/ouranos))
+- \[MNOE-473\] Update settings template to include question feature flag [\#317](https://github.com/maestrano/mno-enterprise/pull/317) ([adamaziz15](https://github.com/adamaziz15))
+- Ability - case insensitive check of admin\_role [\#316](https://github.com/maestrano/mno-enterprise/pull/316) ([ouranos](https://github.com/ouranos))
+- \[MNOE-426\] - Logged additional events [\#309](https://github.com/maestrano/mno-enterprise/pull/309) ([fgourichon](https://github.com/fgourichon))
+- \[MNOE-447\] Add admin dashboard templates: [\#308](https://github.com/maestrano/mno-enterprise/pull/308) ([hedudelgado](https://github.com/hedudelgado))
+- \[IMPAC-578\] Create Widget KPIs [\#306](https://github.com/maestrano/mno-enterprise/pull/306) ([xaun](https://github.com/xaun))
+- Update impac-angular and minimum node version [\#304](https://github.com/maestrano/mno-enterprise/pull/304) ([ouranos](https://github.com/ouranos))
+- Add new fields and cache to the Marketplace [\#302](https://github.com/maestrano/mno-enterprise/pull/302) ([ouranos](https://github.com/ouranos))
+- \[MNOE-407\] Onboarding wizard [\#301](https://github.com/maestrano/mno-enterprise/pull/301) ([alexnoox](https://github.com/alexnoox))
+- \[MNO-643\] Fix logos no readable on white background in invoices [\#298](https://github.com/maestrano/mno-enterprise/pull/298) ([hedudelgado](https://github.com/hedudelgado))
+- Displays frozen organisations [\#297](https://github.com/maestrano/mno-enterprise/pull/297) ([x4d3](https://github.com/x4d3))
+- \[MNOE-246\] Follow NewRelic naming conventions [\#287](https://github.com/maestrano/mno-enterprise/pull/287) ([ouranos](https://github.com/ouranos))
+- Add billing feature flag [\#282](https://github.com/maestrano/mno-enterprise/pull/282) ([ouranos](https://github.com/ouranos))
+- \[MNOE-420\] Implement Organization freeze/unfreeze [\#279](https://github.com/maestrano/mno-enterprise/pull/279) ([x4d3](https://github.com/x4d3))
+- \[MNOE-399\] Add ACL and settings [\#273](https://github.com/maestrano/mno-enterprise/pull/273) ([ouranos](https://github.com/ouranos))
+- \[MNOE-399\] Add AuditLog to dashboard [\#272](https://github.com/maestrano/mno-enterprise/pull/272) ([ouranos](https://github.com/ouranos))
+- \[MNOE-399\] Improve CSV export [\#271](https://github.com/maestrano/mno-enterprise/pull/271) ([ouranos](https://github.com/ouranos))
+- Update travis rubies [\#269](https://github.com/maestrano/mno-enterprise/pull/269) ([ouranos](https://github.com/ouranos))
+- \[MNOE-399\] Audit Log [\#261](https://github.com/maestrano/mno-enterprise/pull/261) ([ouranos](https://github.com/ouranos))
+- \[MNOE-389\] Expose invoices in admin api [\#260](https://github.com/maestrano/mno-enterprise/pull/260) ([ouranos](https://github.com/ouranos))
+- \[MNOE-246\] Update Rails template & Install generator [\#259](https://github.com/maestrano/mno-enterprise/pull/259) ([ouranos](https://github.com/ouranos))
+- Add Admin Panel feature flags [\#258](https://github.com/maestrano/mno-enterprise/pull/258) ([ouranos](https://github.com/ouranos))
+- \[MNOE-143\] Add marketplace settings [\#257](https://github.com/maestrano/mno-enterprise/pull/257) ([ouranos](https://github.com/ouranos))
+- Bump default impac-angular version [\#256](https://github.com/maestrano/mno-enterprise/pull/256) ([ouranos](https://github.com/ouranos))
+- \[MNOE-379\] User & Organization management feature flag [\#254](https://github.com/maestrano/mno-enterprise/pull/254) ([ouranos](https://github.com/ouranos))
+- Update UPGRADING.md [\#245](https://github.com/maestrano/mno-enterprise/pull/245) ([ouranos](https://github.com/ouranos))
+- \[MNOE-361\] Feature Flag - Disable Signup routes [\#243](https://github.com/maestrano/mno-enterprise/pull/243) ([ouranos](https://github.com/ouranos))
+- \[MNOE-362\] Disable Payment [\#242](https://github.com/maestrano/mno-enterprise/pull/242) ([clemthenem](https://github.com/clemthenem))
+- \[MNOE-360\] - add flag for impersonating [\#239](https://github.com/maestrano/mno-enterprise/pull/239) ([clemthenem](https://github.com/clemthenem))
+- \[MNOE-301\] - Refactor billing details page to use the auth design [\#237](https://github.com/maestrano/mno-enterprise/pull/237) ([clemthenem](https://github.com/clemthenem))
+- Add add\_on field for marketplace apps [\#235](https://github.com/maestrano/mno-enterprise/pull/235) ([hedudelgado](https://github.com/hedudelgado))
+- Add endpoint for events webhook [\#231](https://github.com/maestrano/mno-enterprise/pull/231) ([hedudelgado](https://github.com/hedudelgado))
+- Admin Panel build [\#230](https://github.com/maestrano/mno-enterprise/pull/230) ([alexnoox](https://github.com/alexnoox))
+- Update default packages version [\#228](https://github.com/maestrano/mno-enterprise/pull/228) ([ouranos](https://github.com/ouranos))
+- Feature - Rework impac interfaces [\#222](https://github.com/maestrano/mno-enterprise/pull/222) ([cesar-tonnoir](https://github.com/cesar-tonnoir))
+- Add a new loader gif accordind to the new color palette [\#202](https://github.com/maestrano/mno-enterprise/pull/202) ([alexnoox](https://github.com/alexnoox))
+- Redesigned the confirmation email page. [\#198](https://github.com/maestrano/mno-enterprise/pull/198) ([clemthenem](https://github.com/clemthenem))
+- Fix static pages build [\#184](https://github.com/maestrano/mno-enterprise/pull/184) ([alexnoox](https://github.com/alexnoox))
+- \[MNO-287\] Change developer registration event description [\#171](https://github.com/maestrano/mno-enterprise/pull/171) ([hedudelgado](https://github.com/hedudelgado))
+
+**Fixed bugs:**
+
+- Fix Impac! I18n specs [\#325](https://github.com/maestrano/mno-enterprise/pull/325) ([ouranos](https://github.com/ouranos))
+- \[IMPAC-598\] Extend manage\_kpi ability for widget kpis [\#324](https://github.com/maestrano/mno-enterprise/pull/324) ([xaun](https://github.com/xaun))
+- \[MNOE-463\] - Display error message when connecting wrong Xero  [\#323](https://github.com/maestrano/mno-enterprise/pull/323) ([fgourichon](https://github.com/fgourichon))
+- \[MNOE-307\] - Impersonate with the right organization [\#314](https://github.com/maestrano/mno-enterprise/pull/314) ([fgourichon](https://github.com/fgourichon))
+- Fix backward compatibility with MnoHub [\#305](https://github.com/maestrano/mno-enterprise/pull/305) ([ouranos](https://github.com/ouranos))
+- Fix locales [\#303](https://github.com/maestrano/mno-enterprise/pull/303) ([hedudelgado](https://github.com/hedudelgado))
+- Fix no organisation locale [\#299](https://github.com/maestrano/mno-enterprise/pull/299) ([alexnoox](https://github.com/alexnoox))
+- Fix locale [\#295](https://github.com/maestrano/mno-enterprise/pull/295) ([hedudelgado](https://github.com/hedudelgado))
+- \[MNOE-88\] Generate nginx config file [\#293](https://github.com/maestrano/mno-enterprise/pull/293) ([ouranos](https://github.com/ouranos))
+- \[MNOE-291\] Fix association cache bug [\#291](https://github.com/maestrano/mno-enterprise/pull/291) ([ouranos](https://github.com/ouranos))
+- \[MNOE-401\] Locales: Access of user without organizations [\#289](https://github.com/maestrano/mno-enterprise/pull/289) ([alexnoox](https://github.com/alexnoox))
+- Fix connec\_ready? star\_ready? and responsive methods of App [\#286](https://github.com/maestrano/mno-enterprise/pull/286) ([x4d3](https://github.com/x4d3))
+- \[MNOE-418\] Improve Intercom integration [\#285](https://github.com/maestrano/mno-enterprise/pull/285) ([ouranos](https://github.com/ouranos))
+- \[MNOE-439\] Fix email address change notification wording [\#284](https://github.com/maestrano/mno-enterprise/pull/284) ([ouranos](https://github.com/ouranos))
+- \[MNOE-433\] Fix flash helper for angular 1.6 [\#283](https://github.com/maestrano/mno-enterprise/pull/283) ([ouranos](https://github.com/ouranos))
+- \[MNOE-399\] Fix locale [\#277](https://github.com/maestrano/mno-enterprise/pull/277) ([ouranos](https://github.com/ouranos))
+- \[MNOE-399\] Fix ACL [\#274](https://github.com/maestrano/mno-enterprise/pull/274) ([ouranos](https://github.com/ouranos))
+- \[MNOE-399\] Fix improve audit log config [\#270](https://github.com/maestrano/mno-enterprise/pull/270) ([ouranos](https://github.com/ouranos))
+- \[MNOE-403\] Fix tooltip locale [\#266](https://github.com/maestrano/mno-enterprise/pull/266) ([alexnoox](https://github.com/alexnoox))
+- Fix doc hyperlinks [\#250](https://github.com/maestrano/mno-enterprise/pull/250) ([ouranos](https://github.com/ouranos))
+- Admin Panel: Fix logout [\#247](https://github.com/maestrano/mno-enterprise/pull/247) ([alexnoox](https://github.com/alexnoox))
+- Fix the bang on Angular 1.6 [\#244](https://github.com/maestrano/mno-enterprise/pull/244) ([clemthenem](https://github.com/clemthenem))
+- \[MNOE-155\] - Staff invite workflow [\#182](https://github.com/maestrano/mno-enterprise/pull/182) ([clemthenem](https://github.com/clemthenem))
+
+**Merged pull requests:**
+
+- \[MNOE-407\] Onboarding: Create account locales [\#321](https://github.com/maestrano/mno-enterprise/pull/321) ([alexnoox](https://github.com/alexnoox))
+- \[MNOE-407\] Onboarding: fix missing locale [\#315](https://github.com/maestrano/mno-enterprise/pull/315) ([alexnoox](https://github.com/alexnoox))
+- \[MNOE-407\] Onboarding locales update [\#313](https://github.com/maestrano/mno-enterprise/pull/313) ([alexnoox](https://github.com/alexnoox))
+- \[DEVPL-407\] Onboarding locales update [\#311](https://github.com/maestrano/mno-enterprise/pull/311) ([alexnoox](https://github.com/alexnoox))
+- \[MNOE-407\] Onboarding locales [\#310](https://github.com/maestrano/mno-enterprise/pull/310) ([alexnoox](https://github.com/alexnoox))
+- Fix locale [\#296](https://github.com/maestrano/mno-enterprise/pull/296) ([hedudelgado](https://github.com/hedudelgado))
+- Add URL\_CONFIG [\#290](https://github.com/maestrano/mno-enterprise/pull/290) ([fgourichon](https://github.com/fgourichon))
+
 
 ## [v3.2.0](https://github.com/maestrano/mno-enterprise/tree/v3.2.0) (2017-06-14)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.4...v3.2.0)

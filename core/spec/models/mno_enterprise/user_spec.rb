@@ -11,14 +11,18 @@ module MnoEnterprise
     end
 
     describe 'password strength' do
-      let(:user) do
-        # Initialize this way so the class reload is taken into account (the factory doesnt reload the User class)
-        MnoEnterprise::User.new(attributes_for(:user, password: 'password')).tap {|u| u.clear_attribute_changes!}
+      # Initialize this way so the class reload is taken into account (the factory doesnt reload the User class)
+      subject {
+        MnoEnterprise::User.new(attributes_for(:user, password: 'password', email: 'totolebeau@hotmail.com'))
+      }
+
+      before do
+        stub_api_v2(:get, '/users', [], [], {filter:{email: 'totolebeau@hotmail.com'}, page:{number: 1, size: 1}})
       end
 
       context 'without password regex' do
         it 'does not validate the password strength' do
-          expect(user).to be_valid
+          expect(subject).to be_valid
         end
       end
 
@@ -29,8 +33,8 @@ module MnoEnterprise
         end
 
         it 'validates the password strength' do
-          expect(user).to be_invalid
-          expect(user.errors[:password].first).to eq('must contains at least one uppercase letter, one lower case letter and a number')
+          expect(subject).to be_invalid
+          expect(subject.errors[:password].first).to eq('must contains at least one uppercase letter, one lower case letter and a number')
         end
 
         after do
@@ -43,65 +47,51 @@ module MnoEnterprise
     end
 
     describe 'IntercomUser' do
-      context 'without Intercom' do
-        # default
-        let(:user) { MnoEnterprise::User.new(email: 'admin@example.com') }
+      before do
+        allow(MnoEnterprise).to receive(:intercom_enabled?).and_return(true)
+        allow(MnoEnterprise).to receive(:intercom_api_secret).and_return('mysecret')
 
-        describe :intercom_data do
-          it { expect(user).not_to respond_to(:intercom_data) }
-        end
+        # Reload User class to include IntercomUser concern
+        MnoEnterprise.send(:remove_const, :User)
+        load 'app/models/mno_enterprise/user.rb'
+      end
+      after do
+        # Reset to default
+        MnoEnterprise.send(:remove_const, :User)
+        load 'app/models/mno_enterprise/user.rb'
+      end
 
-        describe :intercom_user_hash do
-          it { expect(user).not_to respond_to(:intercom_user_hash) }
+      let(:user) { MnoEnterprise::User.new(attributes_for(:user, admin_role: 'admin')) }
+
+      describe :intercom_user_hash do
+        it 'returns the user intercom secure hash' do
+          expect(user.intercom_user_hash).not_to be_nil
         end
       end
 
-      context 'with Intercom' do
-        before do
-          allow(MnoEnterprise).to receive(:intercom_enabled?).and_return(true)
-          allow(MnoEnterprise).to receive(:intercom_api_secret).and_return('mysecret')
-
-          # Reload User class to include IntercomUser concern
-          MnoEnterprise.send(:remove_const, :User)
-          load 'app/models/mno_enterprise/user.rb'
-        end
-        after do
-          # Reset to default
-          MnoEnterprise.send(:remove_const, :User)
-          load 'app/models/mno_enterprise/user.rb'
-        end
-
-        let(:user) { MnoEnterprise::User.new(attributes_for(:user, admin_role: 'admin')) }
-
-        describe :intercom_user_hash do
-          it 'returns the user intercom secure hash' do
-            expect(user.intercom_user_hash).not_to be_nil
-          end
-        end
-
-        describe :intercom_data do
-          let(:expected) {
-            {
-              user_id: user.id,
-              name: [user.name, user.surname].join(' '),
-              email: user.email,
-              created_at: user.created_at.to_i,
-              last_seen_ip: user.last_sign_in_ip,
-              custom_attributes: {
-                first_name: user.name,
-                surname: user.surname,
-                confirmed_at: user.confirmed_at,
-                phone: user.phone,
-                admin_role: user.admin_role
-              },
-              update_last_request_at: true
-            }
+      describe :intercom_data do
+        let(:expected) {
+          {
+            user_id: user.id,
+            name: [user.name, user.surname].join(' '),
+            email: user.email,
+            created_at: user.created_at.to_i,
+            last_seen_ip: user.last_sign_in_ip,
+            custom_attributes: {
+              first_name: user.name,
+              surname: user.surname,
+              confirmed_at: user.confirmed_at,
+              phone: user.phone,
+              admin_role: user.admin_role,
+              external_id: user.external_id
+            },
+            update_last_request_at: true
           }
+        }
 
-          it {
-            expect(user.intercom_data).to eq(expected)
-          }
-        end
+        it {
+          expect(user.intercom_data).to eq(expected)
+        }
       end
     end
 
@@ -131,12 +121,15 @@ module MnoEnterprise
 
           context 'with a matching identity' do
             let(:user) { build(:user, email: auth.info.email) }
-            let(:identity) { build(:identity, provider: auth.provider, uid: auth.uid, user: user.attributes) }
+            let(:identity) { build(:identity, provider: auth.provider, uid: auth.uid, user_id: user.id) }
 
-            before { expect(Identity).to receive(:find_for_oauth) { identity } }
+            before do
+              stub_api_v2(:get, '/identities', [identity],[], {filter: {provider: auth.provider, uid: auth.uid}, page: {number: 1, size: 1}})
+              stub_api_v2(:get, "/users/#{user.id}", [user],[])
+            end
 
             it 'returns the matching user' do
-              expect(subject).to eq(user)
+              expect(subject.id).to eq(user.id)
             end
 
             it 'does not create a new user' do
@@ -152,8 +145,8 @@ module MnoEnterprise
             context 'when a user with a matching email exists' do
               let(:user) { build(:user, email: auth.info.email) }
               before do
-                api_stub_for(get: "/users", params: {filter: {email: auth.info.email}}, response: from_api([user]))
-                api_stub_for(post: "/identities", response: from_api(identity))
+                stub_api_v2(:get, '/users',[user],[], {filter: {email: auth.info.email}, page: {number: 1, size: 1}})
+                stub_api_v2(:post, '/identities', identity)
               end
 
               it 'associates the new identity with the user' do
@@ -162,7 +155,7 @@ module MnoEnterprise
               end
 
               it 'returns the matching user' do
-                expect(subject).to eq(user)
+                expect(subject.id).to eq(user.id)
               end
 
               it 'does not create a new user' do
@@ -193,8 +186,8 @@ module MnoEnterprise
               let(:identity) { build(:identity, provider: auth.provider, uid: auth.uid) }
 
               before do
-                api_stub_for(get: "/users", params: {filter: {email: auth.info.email}}, response: from_api(nil))
-                api_stub_for(post: "/identities", response: from_api(identity))
+                stub_api_v2(:get, '/users',[],[], {filter: {email: auth.info.email}, page: {number: 1, size: 1}})
+                stub_api_v2(:post, '/identities', identity)
               end
 
               it 'creates and returns a new user' do
@@ -210,7 +203,7 @@ module MnoEnterprise
           subject { described_class.find_for_oauth(auth, {}, user) }
 
           context 'when the identity match the current user' do
-            let(:identity) { build(:identity, provider: auth.provider, uid: auth.uid, user: user.attributes) }
+            let(:identity) { build(:identity, provider: auth.provider, uid: auth.uid, user_id: user.id) }
             before { expect(Identity).to receive(:find_for_oauth) { identity } }
 
             it 'does not touch the identity' do
@@ -233,7 +226,7 @@ module MnoEnterprise
             before { expect(Identity).to receive(:find_for_oauth) { identity } }
 
             before do
-              api_stub_for(post: "/identities", response: from_api(identity))
+              stub_api_v2(:post, '/identities', identity)
             end
 
             it 're-assign the identity to the current user' do
@@ -255,10 +248,14 @@ module MnoEnterprise
 
       describe '.create_from_omniauth' do
         let(:user) { build(:user) }
-
+        let(:created_user) {
+          u = build(:user)
+          u.attributes = user.attributes
+          u
+        }
         before do
-          allow(MnoEnterprise::User).to receive(:new) { user }
-          allow(user).to receive(:save) { user }
+          stub_api_v2(:get, '/users', [], [], {filter: {email: auth.info.email}, page: {number: 1, size: 1}})
+          stub_api_v2(:post, '/users', created_user)
         end
 
         subject { described_class.create_from_omniauth(auth) }
@@ -276,7 +273,7 @@ module MnoEnterprise
         end
 
         it 'skips email confirmation' do
-          expect(user).to receive(:skip_confirmation!)
+          expect_any_instance_of(MnoEnterprise::User).to receive(:skip_confirmation!)
           expect(subject).to be_confirmed
         end
 
@@ -290,6 +287,12 @@ module MnoEnterprise
         end
 
         context 'with some params' do
+          let(:created_user) {
+            u = build(:user)
+            u.attributes = user.attributes
+            u.company = comp_name
+            u
+          }
           let(:comp_name) { 'some company to be set' }
           subject { described_class.create_from_omniauth(auth, company: comp_name) }
 
@@ -327,7 +330,7 @@ module MnoEnterprise
 
         context 'enabled' do
           before do
-            Settings.merge!(devise: { registration: { disabled: false } })
+            Settings.merge!(dashboard: { registration: { disabled: true } })
             reload_user
           end
           it 'is registerable' do
@@ -337,7 +340,7 @@ module MnoEnterprise
 
         context 'disabled' do
           before do
-            Settings.merge!(devise: { registration: { disabled: true } })
+            Settings.merge!(dashboard: { registration: { enabled: false } })
             reload_user
           end
           it 'is not registerable' do

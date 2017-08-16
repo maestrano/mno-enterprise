@@ -10,19 +10,21 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
 
     # Create user and organization + mutual associations
-    let(:organization) { build(:organization) }
-    let(:user) { build(:user, :admin) }
-
+    let(:user) { build(:user, :admin, :with_organizations) }
+    let(:organization) { user.organizations.first }
     let!(:ability) { stub_ability }
+    let(:organizations) { [organization] }
+
+    before { stub_audit_events }
 
     before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      allow(organization).to receive(:users).and_return([user])
-      allow_any_instance_of(User).to receive(:organizations).and_return([organization])
+      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
+      allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return(organizations)
     end
 
     describe 'GET #new' do
       let(:params_org_id) { organization.id }
+
       let(:params) { {apps: ['vtiger'], organization_id: params_org_id} }
       subject { get :new, params }
 
@@ -34,7 +36,6 @@ module MnoEnterprise
       context 'signed in' do
         let(:authorized) { true }
         before do
-          allow_any_instance_of(User).to receive(:organizations).and_return(organizations)
           sign_in user
           allow(ability).to receive(:cannot?).with(:manage_app_instances, organization).and_return(!authorized)
           subject
@@ -107,8 +108,7 @@ module MnoEnterprise
       let(:params) { {apps: ['vtiger'], organization_id: params_org_id} }
       subject { post :create, params }
       before do
-        api_stub_for(get: "/organizations/#{params_org_id}/app_instances", response: from_api([app_instance]))
-        api_stub_for(post: "/organizations/#{params_org_id}/app_instances", response: from_api(app_instance))
+        stub_api_v2(:post, "/app_instances/provision", app_instance)
       end
 
       describe 'guest' do
@@ -125,6 +125,8 @@ module MnoEnterprise
         end
 
         it { expect(response).to be_success }
+
+        it('audits the event') { assert_requested_audit_event }
 
         it 'deletes the previous url from session to avoid double provisioning' do
           subject

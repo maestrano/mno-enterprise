@@ -3,12 +3,14 @@ MnoEnterprise.configure do |config|
   # General Configuration
   #===============================================
   # Name of your company/application
-  config.app_name = '<%= @company_name || "My Company" %>'
+  config.app_name = '<%= @company_name || "Settings.system.app_name" %>'
 
+  # TODO: deprecated
   # Fallback default country.
   # Used as default in geolocalised fields (e.g.: country, phone number)
   # config.app_country = 'US'
 
+  # TODO: deprecated
   # Fallback default currency.
   # config.app_currency = 'USD'
 
@@ -24,22 +26,18 @@ MnoEnterprise.configure do |config|
   #===============================================
   # Emailing
   #===============================================
-  # Mandrill API key for sending email
-  # Defaulted to Maestrano Enterprise demo account
-  # config.mandrill_key = 'some-mandrill-api-key'
-
   # Adapter used to send emails
-  # Default to :mandrill
+  # Default to :smtp
   # config.mail_adapter = :mandrill
   # config.mail_adapter = :sparkpost
   # config.mail_adapter = :smtp
 
   # Support email address
-  config.support_email = '<%= @support_email || "support@example.com" %>'
+  config.support_email = '<%= @support_email || "Settings.system.email.support_email" %>'
 
   # Default sender for system generated emails
-  config.default_sender_name = '<%= @company_name || "My Company" %>'
-  config.default_sender_email = '<%= @system_email || "no-reply@example.com" %>'
+  config.default_sender_name = '<%= @company_name || "Settings.system.email.default_sender.name || Settings.system.email.app_name" %>'
+  config.default_sender_email = '<%= @system_email || "Settings.system.email.default_sender.email" %>'
 
   #===============================================
   # External Routes
@@ -64,18 +62,18 @@ MnoEnterprise.configure do |config|
   # I18n - Controls:
   #   - Routing in development
   #   - Filter and locale management in controllers
-  config.i18n_enabled = false
+  config.i18n_enabled = Settings.system.i18n.enabled
 
   #===============================================
   # Third Party Plugins
   #===============================================
+  # TODO: Settings
   # Google Tag Manager
   config.google_tag_container = ENV['google_tag_container']
 
   # Intercom (both API Keys and Personal token are supported)
   config.intercom_token = ENV['INTERCOM_TOKEN']
   config.intercom_app_id = ENV['INTERCOM_APP_ID']
-  config.intercom_api_key = ENV['INTERCOM_API_KEY']
   config.intercom_api_secret = ENV['INTERCOM_API_SECRET']
 
   #===============================================
@@ -94,15 +92,6 @@ MnoEnterprise.configure do |config|
   # Configure the API root path
   # config.mno_api_root_path = "/v1"
   config.mno_api_root_path = Settings.mno.paths.root
-
-  #===============================================
-  # Marketplace Listing
-  #===============================================
-  # [DEPRECATED] Please get in touch with our enterprise team
-  # List of applications that should be offered on the marketplace
-  # Set to nil to offer everything
-  # config.marketplace_listing = nil
-  # config.marketplace_listing = ["xero"]
 
   #====================================
   # Impac! widgets templates listing

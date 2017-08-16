@@ -3,16 +3,19 @@ require 'rails_helper'
 module MnoEnterprise
   RSpec.describe IntercomEventsListener do
     let(:app) { build(:app) }
-    let(:app_instance) { build(:app_instance, app: app, organization_id: organization.id) }
-    let(:user) { build(:user).tap {|u| u.extend(MnoEnterprise::Concerns::Models::IntercomUser)} }
-    let(:credit_card) { build(:credit_card) }
-    let(:organization) { build(:organization) }
+    let(:app_instance) { build(:app_instance, app: app) }
+    let(:user) { build(:user, organizations: [organization])}
+    let(:credit_card) { build(:credit_card)}
+    let(:credit_card_id) { credit_card.id }
+
+    let(:organization) {
+      o = build(:organization, app_instances: [app_instance, build(:app_instance, app: app)], credit_card: credit_card)
+      o.credit_card_id = credit_card_id
+      o
+    }
     before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization]))
-      api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
-      api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api(credit_card))
-      api_stub_for(get: "/organizations/#{organization.id}/users", response: from_api([user]))
+      stub_api_v2(:get, "/users/#{user.id}", user, [:organizations])
+      stub_api_v2(:get, "/organizations/#{organization.id}", organization, [:credit_card, :app_instances, :users])
     end
 
     # Stub Intercom client
@@ -21,7 +24,7 @@ module MnoEnterprise
     let(:users) { double('users') }
     let(:client) { double('client', users: users, events: events, tags: tags) }
     before do
-      expect(Intercom::Client).to receive(:new).with(app_id: MnoEnterprise.intercom_app_id, api_key: MnoEnterprise.intercom_api_key).and_return(client)
+      expect(Intercom::Client).to receive(:new).with(token: MnoEnterprise.intercom_token).and_return(client)
     end
 
     let(:expected_user_data) {
@@ -36,7 +39,8 @@ module MnoEnterprise
           surname: user.surname,
           confirmed_at: user.confirmed_at,
           phone: user.phone,
-          admin_role: user.admin_role
+          admin_role: user.admin_role,
+          external_id: user.external_id
         },
         update_last_request_at: true,
         companies:[
@@ -51,7 +55,7 @@ module MnoEnterprise
               credit_card_expiry: organization.credit_card.expiry_date,
               app_count: organization.app_instances.count,
               app_list: organization.app_instances.map { |app| app.name }.to_sentence,
-              user_count: 1
+              user_count: 0
             }
           }
         ]
@@ -103,7 +107,7 @@ module MnoEnterprise
       end
 
       context 'when the user has a source' do
-        before { user.meta_data = {source: 'acme'}}
+        before { user.metadata = {source: 'acme'}}
         it 'tags the user' do
           expect(tags).to receive(:tag).with(name: 'acme', users: [{user_id: user.id}])
           subject
@@ -114,14 +118,6 @@ module MnoEnterprise
     # TODO: a bit redundant with the full hash above
     # To be refactored when extracting to a service
     describe '#format_company' do
-      let(:organization) do
-        MnoEnterprise::Organization.new(attributes_for(:organization)).tap do |o|
-          o.credit_card = credit_card
-          o.app_instances = [build(:app_instance, name: 'Xero'), build(:app_instance, name: 'Shopify')]
-          o.users = [build(:user)]
-        end
-      end
-
       let(:intercom_data) { subject.format_company(organization) }
       let(:custom_attributes) { intercom_data[:custom_attributes] }
 
@@ -130,19 +126,19 @@ module MnoEnterprise
       it { expect(intercom_data[:name]).to eq(organization.name) }
 
       it { expect(custom_attributes[:app_count]).to eq(2) }
-      it { expect(custom_attributes[:app_list]).to eq("Shopify and Xero") }
-      it { expect(custom_attributes[:user_count]).to eq(1) }
+      it { expect(custom_attributes[:app_list]).to eq(organization.app_instances.map { |app| app.name }.to_sentence) }
+      it { expect(custom_attributes[:user_count]).to eq(0) }
 
       context 'with a credit card' do
-        it 'does not return CC data' do
+        it 'returns CC data' do
           expect(custom_attributes[:credit_card_details]).to be true
           expect(custom_attributes[:credit_card_expiry]).to be_a Date
         end
       end
 
       context 'without a credit card' do
-        let(:credit_card) { MnoEnterprise::CreditCard.new }
-
+        let(:credit_card_id) { nil }
+        let(:credit_card) { nil }
         it 'does not return CC data' do
           expect(custom_attributes[:credit_card_details]).to be false
           expect(custom_attributes[:credit_card_expiry]).to be nil

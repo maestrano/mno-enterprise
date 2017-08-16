@@ -9,7 +9,7 @@ module MnoEnterprise
     # GET /impersonate/user/123
     def create
       session[:impersonator_redirect_path] = params[:redirect_path].presence
-      @user = MnoEnterprise::User.find(params[:user_id])
+      @user = MnoEnterprise::User.find_one(params[:user_id], :deletion_requests, :organizations, :orga_relations, :dashboards)
       if @user.present?
         impersonate(@user)
       else

@@ -3,77 +3,68 @@ require 'rails_helper'
 module MnoEnterprise
   describe Jpi::V1::AppQuestionsController, type: :controller do
     include MnoEnterprise::TestingSupport::JpiV1TestHelper
+    include MnoEnterprise::TestingSupport::ReviewsSharedHelpers
+
     render_views
     routes { MnoEnterprise::Engine.routes }
-    before { request.env["HTTP_ACCEPT"] = 'application/json' }
-
+    before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
     #===============================================
     # Assignments
     #===============================================
     let(:user) { build(:user) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
+    let(:organization) { build(:organization) }
+    let(:orga_relation) { build(:orga_relation, user: user, organization: organization) }
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+
     before { sign_in user }
 
     let(:app) { build(:app) }
-    let(:question_answer_1) { build(:app_answer) }
-    let(:question_answer_2) { build(:app_answer) }
-    let(:app_question) { build(:app_question, answers: [question_answer_1, question_answer_2]) }
-    let(:expected_hash_for_answer_1) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id question_id app_name user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
-      question_answer_1.attributes.slice(*attrs).merge({'created_at' => question_answer_1.created_at.as_json, 'updated_at' => question_answer_1.updated_at.as_json})
-    end
-    let(:expected_hash_for_answer_2) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id question_id app_name user_admin_role edited edited_by_name edited_by_admin_role edited_by_id)
-      question_answer_2.attributes.slice(*attrs).merge({'created_at' => question_answer_2.created_at.as_json, 'updated_at' => question_answer_2.updated_at.as_json})
-    end
-    let(:expected_array_for_answers) { [expected_hash_for_answer_1, expected_hash_for_answer_2] }
-    let(:expected_hash_for_question) do
-      attrs = %w(id description status user_id user_name organization_id organization_name app_id app_name user_admin_role answers edited edited_by_name edited_by_admin_role edited_by_id)
-      app_question.attributes.slice(*attrs).merge({'created_at' => app_question.created_at.as_json, 'updated_at' => app_question.updated_at.as_json, 'answers' => expected_array_for_answers})
-    end
-    let(:expected_hash_for_questions) do
-      {
-        'app_questions' => [expected_hash_for_question],
-      }
-    end
+
+    let(:question_id) { "1" }
+    let(:question_answer1) { build(:answer, parent_id: question_id) }
+    let(:question_answer2) { build(:answer, parent_id: question_id) }
+    let(:rejected_answer) { build(:answer, parent_id: question_id, status: 'rejected') }
+    let(:question) { build(:question, id: question_id, answers: [question_answer1, question_answer2, rejected_answer]) }
 
     before do
-      api_stub_for(get: "/apps/#{app.id}", response: from_api(app))
+      stub_api_v2(:get, "/apps/#{app.id}", app)
     end
 
     describe 'GET #index' do
 
       before do
-        api_stub_for(get: "/app_questions?filter[reviewable_id]=#{app.id}", response: from_api([app_question]))
+        stub_api_v2(:get, '/questions', [question], [:answers], {filter: {reviewer_type: 'OrgaRelation', reviewable_type: 'App', status: 'approved', reviewable_id: app.id}})
       end
 
       subject { get :index, id: app.id }
 
-      it_behaves_like "jpi v1 protected action"
+      it_behaves_like 'jpi v1 protected action'
 
-      it_behaves_like "a paginated action"
+      it_behaves_like 'a paginated action'
 
       it 'renders the list of reviews' do
         subject
-        expect(JSON.parse(response.body)).to eq(expected_hash_for_questions)
+        expected = hash_for_question(question)
+        # Only approved answers
+        expected['answers'] = [hash_for_answer(question_answer1), hash_for_answer(question_answer2)]
+        expect(JSON.parse(response.body)['app_questions'][0]).to eq(expected)
       end
     end
 
     describe 'POST #create', focus: true do
-      let(:params) { {organization_id: 1, description: 'A Review', foo: 'bar'} }
-
+      let(:params) { {organization_id: organization.id, description: 'A Review', foo: 'bar'} }
+      let(:question) { build(:question, id: question_id, answers: []) }
       before do
-        api_stub_for(post: "/app_questions", response: from_api(app_question))
-        api_stub_for(get: "/app_questions/#{app_question.id}", response: from_api(app_question))
+        stub_api_v2(:get, '/orga_relations', [orga_relation], [], {filter: {organization_id: organization.id, user_id: user.id}, page: {number: 1, size: 1}})
+        stub_api_v2(:post, '/questions', question)
       end
-
       subject { post :create, id: app.id, app_question: params }
 
-      it_behaves_like "jpi v1 protected action"
+      it_behaves_like 'jpi v1 protected action'
 
       it 'renders the new review' do
-        expect(JSON.parse(subject.body)).to include('app_question' => expected_hash_for_question)
+        expect(JSON.parse(subject.body)['app_question']).to include(hash_for_question(question))
       end
     end
   end

@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'her'
 require 'factory_girl_rails'
 require 'fakeweb'
-
+require 'webmock/rspec'
 require 'mno_enterprise/testing_support/user_action_shared'
 
 # Load the Dummy application
@@ -68,7 +68,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     FakeWeb.allow_net_connect = false
-    FakeWeb.register_uri(:post, 'https://my_tenant_id:my_tenant_access_key@api-enterprise.maestrano.com/api/mnoe/v1/audit_events', status: 200)
+    FakeWeb.register_uri(:post, 'https://my_tenant_id:my_tenant_access_key@api-enterprise.maestrano.test/api/mnoe/v1/audit_events', status: 200)
   end
 
   config.after(:suite) do

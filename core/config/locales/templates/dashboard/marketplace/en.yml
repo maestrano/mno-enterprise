@@ -19,6 +19,7 @@ en:
             start_app: "Start Now!"
             launch_app: "Launch app"
             connect_app: "Connect App"
+            price: "Price"
             tag_responsive: "Responsive"
             tag_star: "Star!™ Tutorials"
             tag_connec: "Connec!™ Ready"
@@ -40,6 +41,7 @@ en:
             just_now: "Just Now"
             company_feedback: "Company feedback"
             review_title: "Review"
+            reviews: "Reviews"
             no_app_no_review: "You need to have the app running in order to give your feedback."
             tell_others: "Tell others what you think about this application (optional)"
             cancel: "Cancel"
@@ -47,6 +49,7 @@ en:
             comment_title: "Comment this feedback:"
             comment_placeholder: "Enter your comment here..."
             question_title: "Question"
+            questions: "Questions"
             question_search: "Search..."
             question_ask: "Ask a question"
             question_ask_placeholder: "Enter your question here..."
@@ -88,6 +91,8 @@ en:
               delete_modal_body: "Do you really want to delete your comment?"
               delete_modal_cancel: "Cancel"
               delete_modal_delete: "Delete"
+              hide_comments: "Hide Comments"
+              feedback_list_links: "Comment{COUNT, select, undefined{} other{{COUNT, plural, one{ (#)} other{s (#)}}}}"
             answer:
               delete_modal_header: "Delete an answer"
               delete_modal_body: "Do you really want to delete your answer?"
@@ -99,6 +104,7 @@ en:
               history:
                 title: "Edit History"
                 close: "Close"
+            provision: "Provision"
 
           app_selection:
             next: "Next"

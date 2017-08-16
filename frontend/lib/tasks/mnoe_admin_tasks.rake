@@ -9,7 +9,7 @@ require 'rake/clean'
 namespace :mnoe do
   namespace :admin do
     # Default version
-    MNOE_ADMIN_PANEL_VERSION = 'master'
+    MNOE_ADMIN_PANEL_VERSION = '2.0'
     MNOE_ADMIN_PANEL_PKG = "git+https://git@github.com/maestrano/mnoe-admin-panel.git##{MNOE_ADMIN_PANEL_VERSION}"
 
     # Final build
@@ -88,6 +88,7 @@ namespace :mnoe do
     end
 
     # Install dependencies
+    # TODO: DRY
     task :install_dependencies do
       unless system('which yarn')
         puts 'Yarn executable was not detected in the system.'
@@ -96,7 +97,7 @@ namespace :mnoe do
       end
 
       # Install required tools
-      sh('which bower || npm install -g bower')
+      sh('which bower || yarn global add bower')
     end
 
     # Add 'mnoe-admin-panel' to package.json
@@ -122,7 +123,7 @@ namespace :mnoe do
         next if File.exist?("#{admin_panel_project_folder}/#{path}")
 
         # Generate file from template
-        cp("#{ADMIN_PANEL_PKG_FOLDER}/#{path}","#{admin_panel_project_folder}/#{path}")
+        cp("#{ADMIN_PANEL_PKG_FOLDER}/#{path}", "#{admin_panel_project_folder}/#{path}")
 
         # Replace image relative path
         content = File.read("#{admin_panel_project_folder}/#{path}")
@@ -151,6 +152,9 @@ namespace :mnoe do
       rm_rf "#{admin_panel_tmp_folder}/e2e"
       mkdir_p admin_panel_tmp_folder
       cp_r("#{ADMIN_PANEL_PKG_FOLDER}/.", "#{admin_panel_tmp_folder}/")
+
+      # Default variables to avoid breaking the build if there are new variables in the admin panel
+      mv("#{admin_panel_tmp_folder}/src/app/stylesheets/variables.less", "#{admin_panel_tmp_folder}/src/app/stylesheets/variables-default.less")
 
       # Apply frontend customisations
       cp_r("#{admin_panel_project_folder}/.", "#{admin_panel_tmp_folder}/")

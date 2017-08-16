@@ -12,20 +12,23 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
 
   # GET /jpi/v1/impac/alerts
   def index
-    @alerts = current_user.alerts
+    u = current_user.load_required(:alerts)
+    @alerts = u.alerts
   end
 
   # POST /jpi/v1/impac/kpis/:kpi_id/alerts
   def create
     return render_bad_request('attach alert to kpi', 'no alert specified') unless params.require(:alert)
-    return render_not_found('kpi') unless kpi_alert.kpi
+    return render_not_found('kpi') unless MnoEnterprise::Kpi.find_one(params.require(:kpi_id))
 
-    authorize! :manage_alert, kpi_alert
+    # TODO: Manage authorization
+    #authorize! :manage_alert, kpi_alert
 
-    if (@alert = current_user.alerts.create(kpi_alert.attributes))
+    @alert = MnoEnterprise::Alert.create(alert_params.merge(recipient_ids: [current_user.id]))
+    if @alert.errors.empty?
       render 'show'
     else
-      render_bad_request('attach alert to kpi', "impossible to save record: #{@kpi_alert.inspect}")
+      render_bad_request('attach alert to kpi', @alert.errors)
     end
   end
 
@@ -36,12 +39,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
 
     attributes = params.require(:alert).permit(:title, :webhook, :sent)
 
-    authorize! :manage_alert, alert
+    # TODO: Manage authorization
+    # authorize! :manage_alert, alert
 
-    if alert.update(attributes)
+    if alert.update_attributes(attributes)
       render 'show'
     else
-      render_bad_request('update alert', "unable to save record: #{alert.inspect}")
+      render_bad_request('update alert', alert.errors)
     end
   end
 
@@ -49,13 +53,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
   def destroy
     return render_not_found('alert') unless alert
 
-    authorize! :manage_alert, alert
+    # TODO: Manage authorization
+    # authorize! :manage_alert, alert
 
     service = alert.service
     if alert.destroy
       render json: { deleted: { service: service } }
     else
-      render_bad_request('destroy alert', "impossible to destroy record: #{alert.inspect}")
+      render_bad_request('destroy alert', "impossible to destroy record: #{alert.errors}")
     end
   end
 
@@ -63,14 +68,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
   private
 
     def alert
-      @alert ||= MnoEnterprise::Impac::Alert.find(params.require(:id))
+      @alert ||= MnoEnterprise::Alert.find_one(params.require(:id))
     end
 
-    def kpi_alert
-      @alert ||= (
-        kpi_id = params.require(:kpi_id)
-        attributes = params.require(:alert).merge(impac_kpi_id: kpi_id)
-        MnoEnterprise::Impac::Alert.new(attributes)
-      )
+    def alert_params
+      params.require(:alert).merge(kpi_id: params.require(:kpi_id))
     end
 end

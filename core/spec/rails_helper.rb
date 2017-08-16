@@ -1,8 +1,14 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
+
+# Library for stubbing and setting expectations on HTTP requests in Ruby.
+require 'fakeweb'
+require 'webmock/rspec'
+
 require 'spec_helper'
 require 'her'
 require 'factory_girl_rails'
+require 'shoulda/matchers'
 
 # Load the Dummy application
 require File.expand_path("../../spec/dummy/config/environment.rb",  __FILE__)
@@ -24,6 +30,7 @@ Dir[Rails.root.join("../..","spec/support/**/*.rb")].each { |f| require f }
 
 # Require all factories
 require 'mno_enterprise/testing_support/factories'
+require 'mno_enterprise/testing_support/climate_control'
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -70,4 +77,11 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
 end

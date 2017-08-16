@@ -1,19 +1,17 @@
 require 'rails_helper'
 
 module MnoEnterprise
-  RSpec.describe "Remote Authentication", type: :request do
+  RSpec.describe 'Remote Authentication', type: :request do
 
     let(:user) { build(:user) }
-    before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
-    before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
+    before {
+      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
+      stub_api_v2(:patch, "/users/#{user.id}", user)
+    }
+    let!(:authentication_stub){ stub_api_v2(:post, "/users/authenticate", user)}
 
-    # Stub session authentication
-    let(:session_resp_code) { 200 }
-    let(:session_resp) { from_api(user) }
-    before { api_stub_for(post: '/user_sessions',
-                          code: -> { session_resp_code },
-                          response: -> { session_resp }
-    ) }
+    before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
+    before { stub_audit_events }
 
     describe 'login' do
       subject { post '/mnoe/auth/users/sign_in', user: {email: user.email, password: 'securepassword'} }
@@ -29,8 +27,8 @@ module MnoEnterprise
       end
 
       describe 'failure' do
-        let(:session_resp_code) { 404 }
-        let(:session_resp) { {errors: "does not exist"} }
+        let!(:authentication_stub){ stub_api_v2_error(:post, "/users/authenticate", 404, 'Could not find')}
+
         before { subject }
 
         it 'does logs the user in' do

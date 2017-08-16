@@ -1,22 +1,14 @@
-# == Schema Information
-#
-# Table name: deletion_requests
-#
-#  id             :integer         not null, primary key
-#  token          :string(255)
-#  status         :string(255)
-#  created_at     :datetime        not null
-#  updated_at     :datetime        not null
-#
-
 module MnoEnterprise
   class DeletionRequest < BaseResource
-    attributes :id, :token, :status, :user_id
+    property :created_at, type: :time
+    property :updated_at, type: :time
 
-    #==============================================================
-    # Associations
-    #==============================================================
-    belongs_to :user, class_name: 'MnoEnterprise::User'
+    custom_endpoint :freeze, on: :member, request_method: :patch
+
+    #============================================
+    # CONSTANTS
+    #============================================
+    EXPIRATION_TIME = 60 #minutes
 
     #============================================
     # Instance methods
@@ -26,10 +18,14 @@ module MnoEnterprise
       self.token
     end
 
-    # TODO: specs
-    # Freeze user acocunt and update the deletion request
-    def freeze_account!
-      self.put(operation: 'freeze')
+    def active?
+      self.status != 'cancelled' && self.created_at >=  EXPIRATION_TIME.minutes.ago
     end
+
+    def freeze_account!
+      self.freeze
+    end
+
   end
 end
+

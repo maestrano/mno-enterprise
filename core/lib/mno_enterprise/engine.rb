@@ -44,6 +44,18 @@ module MnoEnterprise
       ::Rails.configuration.cache_store = :memory_store, { size: 32.megabytes }
     end
 
+    # Configure the mailer default host
+    config.before_initialize do
+      if ENV['mailer_default_host'].present?
+        opts = {
+          host: ENV['mailer_default_host'],
+          protocol: ENV['mailer_default_protocol'].presence || 'https'
+        }
+        config.action_mailer.default_url_options = opts
+        config.action_mailer.asset_host = opts[:protocol] + '://' + opts[:host]
+      end
+    end
+
     # Enable ActionController caching
     config.before_initialize do
       Rails.application.config.action_controller.perform_caching = true
@@ -52,6 +64,14 @@ module MnoEnterprise
     # Make sure the MailAdapter is correctly configured
     config.to_prepare do
       MnoEnterprise::MailClient.adapter ||= MnoEnterprise.mail_adapter
+      MnoEnterprise::SystemManager.adapter ||= MnoEnterprise.platform_adapter
+    end
+
+    config.after_initialize do
+      unless Rails.env.test? || File.basename($0) == "rake"
+        Rails.logger.debug "Settings loaded -> Fetching Tenant Config"
+        MnoEnterprise::TenantConfig.load_config!
+      end
     end
   end
 end

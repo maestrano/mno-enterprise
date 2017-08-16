@@ -1,7 +1,7 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require_relative 'lib/mno_enterprise/version.rb'
+require_relative 'lib/mno_enterprise/mno_enterprise_version.rb'
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
@@ -17,10 +17,13 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"]
 
+  s.required_ruby_version = '>= 2.3.1'
+
   s.add_dependency 'rails', '~> 4.2', '>= 4.2.0'
   s.add_dependency "her", "~> 0.7.3"
   s.add_dependency "faraday_middleware", "~> 0.10.0"
   s.add_dependency "httparty", '~> 0.11'
+  s.add_dependency 'json_api_client', '~> 1.3'
   s.add_dependency 'countries', '~> 0.11.3'
   s.add_dependency 'jwt', '~> 1.4'
   s.add_dependency 'deepstruct', '~> 0.0.7'
@@ -33,21 +36,21 @@ Gem::Specification.new do |s|
   s.add_dependency 'cancancan', '~> 1.10'
   s.add_dependency 'omniauth', '~> 1.3.1'
 
-  # Email
-  # TODO: remove in 3.2, left for backward compatibility
-  s.add_dependency 'mandrill-api', '~> 1.0', '>= 1.0.53'
-
   # Markdown parsing
   s.add_dependency 'redcarpet', '~> 3.3', '>= 3.3.3'
   s.add_dependency 'sanitize', '~> 4.0'
 
   # Configuration & Settings
-  # Manage configuration via environment variables
-  s.add_dependency 'figaro'
   # Config files per environment
-  s.add_dependency 'config', '~> 1.0', '< 1.3'
+  s.add_dependency 'config', '~> 1.4.0'
+
+  # JSON Schema validation
+  s.add_runtime_dependency 'json-schema'
 
   # Emailing
-  # s.add_development_dependency 'mandrill-api', '~> 1.0.53'
+  s.add_development_dependency 'mandrill-api', '~> 1.0', '>= 1.0.53'
   s.add_development_dependency 'sparkpost', '~> 0.1.4'
+
+  # Platform
+  s.add_development_dependency 'nex_client', '~> 0.16.0'
 end

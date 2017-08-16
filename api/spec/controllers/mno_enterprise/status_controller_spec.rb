@@ -18,7 +18,6 @@ module MnoEnterprise
       it { is_expected.to respond_with(200) }
 
       it 'returns the main app version' do
-        puts MnoEnterprise::APP_VERSION
         expect(data['app-version']).to eq(MnoEnterprise::APP_VERSION)
       end
 
@@ -31,7 +30,7 @@ module MnoEnterprise
       end
 
       it 'returns the mno-api-host' do
-        expect(data['mno-api-host']).to eq('https://api-enterprise.maestrano.com')
+        expect(data['mno-api-host']).to eq('https://api-enterprise.maestrano.test')
       end
     end
   end

@@ -10,10 +10,13 @@ group :test do
   gem 'factory_girl_rails'
   gem 'shoulda-matchers'
   gem 'fakeweb', '~> 1.3'
+  gem 'webmock', '~> 3.0.1'
   gem 'timecop'
+  gem 'climate_control'
   # gem 'simplecov'
 end
 
 group :test, :development do
+  gem 'figaro'
   # gem 'rubocop', require: false
 end
