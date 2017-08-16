@@ -58,7 +58,7 @@ module MnoEnterprise
     end
 
     def fetch_status_change_notifications(orga_relation_id)
-      tasks = MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> orga_relation_id, 'completed_at.ne' => '',
+      tasks = MnoEnterprise::Task.where(owner_id: orga_relation_id, 'completed_at.ne' => '',
         'completed_notified_at' => '')
       tasks.map do |task|
         {
@@ -88,7 +88,7 @@ module MnoEnterprise
       when 'due_date'
         task_recipient = fetch_task_recipient(task)
         return render_not_found("#{notification_type}") unless task_recipient
-        task.update(notified_at: Time.new)
+        task_recipient.update(notified_at: Time.new)
       else
         return render_bad_request("update #{params[:object_type]} notification", task)
       end
