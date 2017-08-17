@@ -10,7 +10,6 @@ module MnoEnterprise
     }
     let!(:authentication_stub){ stub_api_v2(:post, "/users/authenticate", user)}
 
-    before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
     before { stub_audit_events }
 
     describe 'login' do
