@@ -4,5 +4,8 @@ FactoryGirl.define do
     status 'requested'
     user { build(:user) }
     requester { build(:user) }
+    created_at 2.hour.ago
+    updated_at 1.hour.ago
+    approved_at 1.hour.ago
   end
 end

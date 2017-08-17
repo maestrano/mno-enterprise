@@ -10,8 +10,7 @@ module MnoEnterprise
         response.headers['X-Total-Count'] = @users.count
       else
         # Index mode
-        query = MnoEnterprise::User.apply_query_params(params)
-        query = query.includes(:user_access_requests)
+        query = MnoEnterprise::User.apply_query_params(params).includes(:user_access_requests)
         @users = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
       end
@@ -19,7 +18,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/users/1
     def show
-      @user = MnoEnterprise::User.find_one(params[:id], :orga_relations, :organizations)
+      @user = MnoEnterprise::User.find_one(params[:id], :orga_relations, :organizations, :user_access_requests)
       @user_organizations = @user.organizations
     end
 
@@ -39,7 +38,6 @@ module MnoEnterprise
       if current_user.admin_role == "admin"
         @user = MnoEnterprise::User.find_one(params[:id])
         @user.update(user_params)
-
         render :show
       else
         render :index, status: :unauthorized
@@ -50,7 +48,6 @@ module MnoEnterprise
     def destroy
       user = MnoEnterprise::User.find_one(params[:id])
       user.destroy
-
       head :no_content
     end
 
