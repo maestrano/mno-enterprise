@@ -349,5 +349,27 @@ module MnoEnterprise
         end
       end
     end
+
+    describe '#access_request_status' do
+      subject { user.access_request_status(other_user) }
+      let(:other_user) { build(:user) }
+      context 'when the user does not contains user_access_requests' do
+        let(:user) { build(:user) }
+        it { is_expected.to eq 'never_requested' }
+      end
+      context 'when the user contains user_access_requests' do
+        let(:user) { user = build(:user, user_access_requests: [user_access_request1, user_access_request2]) }
+        let(:user_access_request1) { build(:user_access_request, requester_id: requester_id, status: 'approved', created_at: 1.hours.ago, approved_at: Time.now) }
+        let(:user_access_request2) { build(:user_access_request, requester_id: requester_id, status: 'denied', created_at: 2.hours.ago) }
+        context 'with the correct requester_id' do
+          let(:requester_id) { other_user.id }
+          it { is_expected.to eq 'approved' }
+        end
+        context 'with another requester_id' do
+          let(:requester_id) { 'fake' }
+          it { is_expected.to eq 'never_requested' }
+        end
+      end
+    end
   end
 end

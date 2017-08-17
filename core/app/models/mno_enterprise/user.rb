@@ -31,11 +31,6 @@ module MnoEnterprise
     property :locked_at, type: :time
     property :last_sign_in_ip
 
-
-    has_many :user_access_requests
-    has_many :requested_user_accesses, class_name: 'UserAccessRequest'
-
-
     define_model_callbacks :validation #required by Devise
     define_model_callbacks :update #required by Devise
     define_model_callbacks :create #required by Devise
@@ -215,20 +210,12 @@ module MnoEnterprise
     end
 
     def access_request_status(user)
-      status = 'never_requested'
       if user_access_requests
-        user_access_requests.select { |r| r.requester_id == user.id }.sort_by { |r| r.created_at }.reverse.each { |r|
-          if r.status == 'approved'
-            if r.created_at > 1.day.ago
-              return 'approved'
-            else
-              return 'expired'
-            end
-          end
-          return r.status
-        }
+        request = user_access_requests.select { |r| r.requester_id == user.id }.sort_by(&:created_at).last
+        return request.current_status if request
       end
-      status
+      'never_requested'
     end
+
   end
 end

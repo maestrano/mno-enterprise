@@ -12,7 +12,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::UserAccessRequestsControll
 
   # GET /mnoe/jpi/v1/user_access_requests
   def index
-    @user_access_requests = MnoEnterprise::UserAccessRequest.includes(:requester).where(user_id: current_user.id, status: 'requested').to_a
+    @user_access_requests = MnoEnterprise::UserAccessRequest.active_requested(current_user.id)
   end
 
   # PUT /mnoe/jpi/v1/user_access_requests/:id/deny

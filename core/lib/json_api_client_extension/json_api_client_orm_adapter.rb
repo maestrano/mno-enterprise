@@ -10,7 +10,7 @@ module JsonApiClient
     INCLUDED_DEPENDENCIES = [:deletion_requests, :organizations, :orga_relations, :dashboards]
     # get a list of column names for a given class
     def column_names
-      @columns ||= klass.instance_methods.grep(/_will_change!$/).map { |e| e.to_s.gsub('_will_change!', '') }
+      @columns ||= klass.instance_methods.grep(/_will_change!$/).map { |e| e.to_s.remove('_will_change!') }
     end
 
     # @see OrmAdapter::Base#get!

@@ -33,6 +33,7 @@ FactoryGirl.define do
     kpi_enabled true
     organizations []
     orga_relations []
+    user_access_requests []
     dashboards []
     metadata {{}}
     external_id 1

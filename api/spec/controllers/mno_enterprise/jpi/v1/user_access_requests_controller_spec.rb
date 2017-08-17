@@ -8,6 +8,14 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
+    before do
+      Timecop.freeze(Time.local(1985))
+    end
+
+    after do
+      Timecop.return
+    end
+
     #===============================================
     # Assignments
     #===============================================
@@ -20,7 +28,7 @@ module MnoEnterprise
     # Specs
     #===============================================
     describe 'GET #index' do
-      before { stub_api_v2(:get, "/user_access_requests", [user_access_request], [:requester], { filter: { user_id: user.id, status: 'requested' } }) }
+      before { stub_api_v2(:get, "/user_access_requests", [user_access_request], [:requester], { filter: { user_id: user.id, status: 'requested' , 'created_at.gt': MnoEnterprise::UserAccessRequest::EXPIRATION_TIMEOUT.ago} }) }
       subject { get :index }
       it_behaves_like 'jpi v1 protected action'
     end
