@@ -183,6 +183,16 @@ module MnoEnterprise
                     }
                   }
                 },
+                products: {
+                  type: "object",
+                  properties: {
+                    enabled: {
+                      type: "boolean",
+                      default: false,
+                      description: "Enable add products on the marketplace"
+                    }
+                  }
+                },
               }
             },
             onboarding_wizard: {
