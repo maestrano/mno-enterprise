@@ -16,7 +16,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   # GET /mnoe/jpi/v1/marketplace
   def index
     expires_in 0, public: true, must_revalidate: true
-    @last_modified = app_relation.order_by('updated_at.desc').limit(1).first.updated_at
+    @last_modified = app_relation.order_by('updated_at.desc').limit(1).first.try(:updated_at)
 
     if stale?(last_modified: @last_modified)
       @apps = Rails.cache.fetch("marketplace/index-apps-#{@last_modified}") do
