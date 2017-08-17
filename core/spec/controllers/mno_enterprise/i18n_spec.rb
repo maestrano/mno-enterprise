@@ -17,24 +17,39 @@ module MnoEnterprise
         I18n.default_locale = :en
       end
 
-      context 'when a valid locale is provided' do
-        it 'sets the provided locale' do
-          get :index, locale: :fr
-          expect(I18n.locale).to eq(:fr)
+      context 'when I18n is disabled' do
+        before { MnoEnterprise.i18n_enabled = false }
+
+        context 'when a valid locale is provided' do
+          it 'sets the default locale' do
+            get :index, locale: :fr
+            expect(I18n.locale).to eq(:en)
+          end
         end
       end
 
-      context 'when an invalid locale is provided' do
-        it 'sets the default locale' do
-          get :index, locale: :it
-          expect(I18n.locale).to eq(:en)
-        end
-      end
+      context 'when I18n is enabled' do
+       before { MnoEnterprise.i18n_enabled = true }
 
-      context 'when the locale is not provided' do
-        it 'sets the default locale' do
-          get :index
-          expect(I18n.locale).to eq(:en)
+        context 'when a valid locale is provided' do
+          it 'sets the provided locale' do
+            get :index, locale: :fr
+            expect(I18n.locale).to eq(:fr)
+          end
+        end
+
+        context 'when an invalid locale is provided' do
+          it 'sets the default locale' do
+            get :index, locale: :it
+            expect(I18n.locale).to eq(:en)
+          end
+        end
+
+        context 'when the locale is not provided' do
+          it 'sets the default locale' do
+            get :index
+            expect(I18n.locale).to eq(:en)
+          end
         end
       end
     end
