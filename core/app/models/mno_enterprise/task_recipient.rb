@@ -18,6 +18,6 @@ module MnoEnterprise
     #==============================================================
     # Associations
     #==============================================================
-    belongs_to :task
+    belongs_to :task, class_name: 'MnoEnterprise::Task'
   end
 end
