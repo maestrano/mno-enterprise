@@ -86,7 +86,7 @@ module MnoEnterprise
     end
 
     def task_params
-      permitted_params = params.require(:task).permit( :title, :message, :status, :due_date, :orga_relation_id, :send_at)
+      permitted_params = params.require(:task).permit( :title, :message, :status, :due_date, :orga_relation_id, :send_at, :read_at)
       # Update the param send_at the day the task is sent
       permitted_params.merge!(send_at: Time.new, completed_at: nil, completed_notified_at: nil) if task_sent
       # Update the task when is completed

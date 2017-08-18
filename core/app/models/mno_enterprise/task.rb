@@ -43,7 +43,7 @@ module MnoEnterprise
     #============================================
     # Associations
     #============================================
-    has_many :task_recipients
+    has_many :task_recipients, class_name: 'MnoEnterprise::TaskRecipient'
 
     #============================================
     # Instance Methods
