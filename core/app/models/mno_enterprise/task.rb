@@ -17,15 +17,56 @@
 module MnoEnterprise
   class Task < BaseResource
 
-    attributes :owner_id, :title, :message, :send_at, :status, :due_date, :completed_at, :completed_notified_at,
-               :created_at, :updated_at
+    attributes :owner_id, :title, :message, :send_at, :status, :due_date, :completed_at, :completed_notified_at, :created_at, :updated_at
+
+    # Constant enum of different notification types
+    module NOTIFICATION_TYPE
+      REMINDER = 'reminder'
+      DUE = 'due'
+      COMPLETED = 'completed'
+    end
+
+
+    #============================================
+    # Scopes
+    #============================================
+    scope :to_be_reminded, -> { where('completed_at' => '', 'task_recipients.reminder_date.ne' => '', 'task_recipients.reminder_notified_at' => '', 'task_recipients.reminder_date.lt' => Time.new) }
+    scope :due, -> { where( 'due_date.ne' => '', 'completed_at' => '', 'due_date.lt' => Time.new, 'task_recipients.notified_at' => '') }
+    scope :completed, -> { where('completed_at.ne' => '', 'completed_notified_at' => '') }
+    scope :recipient,  ->(orga_relation_id){ where('task_recipients.orga_relation_id'=> orga_relation_id)}
+    scope :owner,  ->(orga_relation_id){ where(owner_id: orga_relation_id)}
 
     #============================================
     # Associations
     #============================================
-    belongs_to :mnoe_tenant
-    has_one :orga_relation, as: :owner, dependent: :destroy
+    has_one :owner, class_name: 'MnoEnterprise::OrgaRelation'
     has_many :task_recipients
+
+    #============================================
+    # Instance Methods
+    #============================================
+
+    # the task was notified for the given orga_relation_id and notification_type
+    def notification_received(orga_relation_id, notification_type)
+      case notification_type
+      when NOTIFICATION_TYPE::COMPLETED
+        update(completed_notified_at: Time.new)
+      when NOTIFICATION_TYPE::REMINDER
+        task_recipient = task_recipient(orga_relation_id)
+        task_recipient.update(reminder_notified_at: Time.new)
+      when NOTIFICATION_TYPE::DUE
+        task_recipient = task_recipient(orga_relation_id)
+        task_recipient.update(notified_at: Time.new)
+      else
+        raise "Invalid notification type: #{notification_type} "
+      end
+    end
+
+    def task_recipient(orga_relation_id)
+      task_recipient = MnoEnterprise::TaskRecipient.where(task_id: id, orga_relation_id: orga_relation_id).first
+      raise ActiveRecord::RecordNotFound unless task_recipient
+      task_recipient
+    end
 
   end
 end

@@ -50,20 +50,20 @@ module MnoEnterpriseApiTestHelper
     @_stub_list = {}
     api_stub_configure(Her::API.new)
   end
-  
+
   # Example usage:
-  # 
+  #
   # Without opts, it yields a faraday stub object which you can configure
   # manually:
   #
   # You can also pass the response stub via opts
-  # api_stub_for(User, 
-  #   path: '/users/popular', 
+  # api_stub_for(User,
+  #   path: '/users/popular',
   #   response: [{ id: 1, name: "Tobias Fünke" }, { id: 2, name: "Lindsay Fünke" }]
   # )
   #
   # You can also specify the response code:
-  # api_stub_for(User, 
+  # api_stub_for(User,
   #   path: '/users/popular',
   #   code: 200,
   #   response: [{ id: 1, name: "Tobias Fünke" }, { id: 2, name: "Lindsay Fünke" }]
@@ -78,6 +78,10 @@ module MnoEnterpriseApiTestHelper
     set_api_stub
     api_stub_add(real_opts)
     api_stub_configure(@_api_stub)
+  end
+
+  def param_filter(param)
+    "#{{ filter: param }.to_param}"
   end
 
   # Remove an API stub added with `api_stub_for`
@@ -103,10 +107,10 @@ module MnoEnterpriseApiTestHelper
       allow(MnoEnterprise::BaseResource).to receive(:her_api).and_return(@_api_stub = Her::API.new)
       @_api_stub
     end
-  
+
     # Add a stub to the api
     # E.g.:
-    # { 
+    # {
     #   path: '/users/popular',
     #   code: 200,
     #   response: [{ id: 1, name: "Tobias Fünke" }, { id: 2, name: "Lindsay Fünke" }]
@@ -162,10 +166,10 @@ module MnoEnterpriseApiTestHelper
           @_stub_list.each do |key,stub|
             params = stub[:params] && stub[:params].any? ? "?#{stub[:params].to_param}" : ""
             path = "#{stub[:path]}#{params}"
-            
+
             receiver.send(stub[:method] || :get,path) { |env|
               body = Rack::Utils.parse_nested_query(env.body)
-              
+
               # respond_with takes a model in argument and automatically responds with
               # a json representation of the model
               # If the action is an update, it attempts to update the model
@@ -180,7 +184,7 @@ module MnoEnterpriseApiTestHelper
                   resp = stub[:response] || {}
                 end
               end
-              
+
               # Response code
               if stub[:code].is_a?(Proc)
                 args = stub[:code].arity > 0 ? [body] : []
