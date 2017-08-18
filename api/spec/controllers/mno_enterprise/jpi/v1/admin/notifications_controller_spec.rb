@@ -50,6 +50,7 @@ module MnoEnterprise
 
       before do
         to_be_reminded_task_params = {
+          'status' => 'sent',
           'completed_at' =>  '',
           'task_recipients.orga_relation_id' =>  orga_relation.id,
           'task_recipients.reminder_date.lt' =>  Time.now,
@@ -59,6 +60,7 @@ module MnoEnterprise
         api_stub_for(get: "/tasks?#{param_filter(to_be_reminded_task_params)}", response: from_api([to_be_reminded_task]))
 
         due_task_params = {
+          'status' => 'sent',
           'completed_at' => '',
           'due_date.lt' =>  Time.now,
           'due_date.ne' =>  '',
@@ -68,6 +70,7 @@ module MnoEnterprise
         api_stub_for(get: "/tasks?#{param_filter(due_task_params)}", response: from_api([due_task]))
 
         completed_task_params = {
+          'status' => 'done',
           'completed_at.ne' => '',
           'completed_notified_at' => '',
           'owner_id' => orga_relation.id,

@@ -30,6 +30,10 @@ module MnoEnterprise
     #============================================
     # Scopes
     #============================================
+    scope :draft , -> { where(status: 'draft')}
+    scope :sent , -> { where(status: 'sent')}
+    scope :done , -> { where(status: 'done')}
+
     scope :to_be_reminded, -> { where('completed_at' => '', 'task_recipients.reminder_date.ne' => '', 'task_recipients.reminder_notified_at' => '', 'task_recipients.reminder_date.lt' => Time.new) }
     scope :due, -> { where( 'due_date.ne' => '', 'completed_at' => '', 'due_date.lt' => Time.new, 'task_recipients.notified_at' => '') }
     scope :completed, -> { where('completed_at.ne' => '', 'completed_notified_at' => '') }
@@ -39,7 +43,6 @@ module MnoEnterprise
     #============================================
     # Associations
     #============================================
-    has_one :owner, class_name: 'MnoEnterprise::OrgaRelation'
     has_many :task_recipients
 
     #============================================
