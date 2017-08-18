@@ -28,6 +28,29 @@ namespace :mnoe do
       end
     end
 
+    # Override the frontend bower.json with the locked versions
+    def override_admin_dependencies
+      resolved_version = resolve_dependencies
+      unless resolved_version
+        puts "No impac-angular override. Skipping"
+        return
+      end
+
+      frontend_bower_file = File.join(ADMIN_PANEL_PKG_FOLDER, 'bower.json')
+      File.exist?(frontend_bower_file) || raise("Frontend bower file not found.")
+
+      # Override the bowerfile
+      bower_regexp = /"impac-angular": (".*")/
+
+      # TODO: refactor
+      IO.write(frontend_bower_file, File.open(frontend_bower_file) do |f|
+        f.read.gsub(bower_regexp) do |match|
+          match.gsub!(Regexp.last_match(1), resolved_version)
+        end
+      end
+      )
+    end
+
     desc 'Setup the Enterprise Express Admin Panel'
     task :install do
       Rake::Task['mnoe:admin:add_package'].invoke
@@ -145,6 +168,10 @@ namespace :mnoe do
     task :prepare_build_folder do
       # Ensure frontend is downloaded
       Rake::Task['mnoe:admin:install_frontend'].invoke unless File.directory?(ADMIN_PANEL_PKG_FOLDER)
+
+      # Override frontend dependencies
+      puts "Locking frontend dependencies"
+      override_admin_dependencies
 
       # Reset tmp folder from mnoe-admin-panel source
       rm_rf "#{admin_panel_tmp_folder}/src"
