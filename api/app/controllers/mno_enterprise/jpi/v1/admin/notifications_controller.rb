@@ -5,9 +5,9 @@ module MnoEnterprise
 
     # GET mnoe/jpi/v1/admin/notifications
     def index
-      @tasks_to_be_reminded = MnoEnterprise::Task.recipient(orga_relation_id).to_be_reminded
-      @due_tasks = MnoEnterprise::Task.recipient(orga_relation_id).due
-      @completed_tasks = MnoEnterprise::Task.owner(orga_relation_id).completed
+      @tasks_to_be_reminded = MnoEnterprise::Task.recipient(orga_relation_id).sent.to_be_reminded
+      @due_tasks = MnoEnterprise::Task.recipient(orga_relation_id).sent.due
+      @completed_tasks = MnoEnterprise::Task.owner(orga_relation_id).done.completed
     end
 
     # POST mnoe/jpi/v1/admin/notifications/notified
