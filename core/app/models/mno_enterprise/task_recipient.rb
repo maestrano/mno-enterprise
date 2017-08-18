@@ -14,12 +14,10 @@
 
 module MnoEnterprise
   class TaskRecipient < BaseResource
-    
+
     #==============================================================
     # Associations
     #==============================================================
-    belongs_to :mnoe_tenant
-    belongs_to :orga_relation
     belongs_to :task
   end
 end
