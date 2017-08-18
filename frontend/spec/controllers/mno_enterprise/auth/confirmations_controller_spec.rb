@@ -20,29 +20,46 @@ module MnoEnterprise
       before { api_stub_for(get: "/users", respond_with: [user]) }
       before { api_stub_for(get: "/org_invites", respond_with: []) }
       before { api_stub_for(get: "/users/#{user.id}/organizations", respond_with: []) }
-      
+
       before { api_stub_for(put: "/users/#{user.id}", respond_with: user) }
       
     
       describe 'GET #show' do
         subject { get :show, confirmation_token: user.confirmation_token }
-      
+
         describe 'confirmed user confirming new email address' do
           before { user.unconfirmed_email = new_email }
-          
+
           before { subject }
           it { expect(user.email).to eq(new_email) }
           it { expect(response).to redirect_to(root_path) }
         end
       
         describe 'unconfirmed user' do
+        
+          let(:tos_accepted_at) { nil }
+          before { user.meta_data[:tos_accepted_at] = tos_accepted_at }
+
           before { user.confirmed_at = nil }
           before { subject }
           it { expect(response.code).to eq('200') }
           it { expect(assigns(:confirmation_token)).to eq(user.confirmation_token) }
+
+          context 'when TOS accepted' do
+            let(:tos_accepted_at) { 1.days.ago }
+            it 'does not show the TOS checkbox' do
+              expect(response.body).not_to include('id="tos"')
+            end
+          end
+          
+          context 'when TOS not accepted' do
+            it 'shows the TOS checkbox' do
+              expect(response.body).to include('id="tos"')
+            end
+          end
         end
       end
-    
+      
       describe 'PATCH #finalize' do
         let(:previous_url) { nil }
         let(:user_params) {{ name: 'Robert', surname: 'Jack', password: 'somepassword', confirmation_token: user.confirmation_token }}
