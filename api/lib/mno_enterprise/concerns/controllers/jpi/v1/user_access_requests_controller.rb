@@ -18,28 +18,28 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::UserAccessRequestsControll
   # PUT /mnoe/jpi/v1/user_access_requests/:id/deny
   def deny
     return render_not_found('user_access_request') unless user_access_request
-    @user_access_request = user_access_request.deny.first
-    if @user_access_request.errors.empty?
+    result = user_access_request.deny
+    if result.errors.empty?
       @user_access_request = @user_access_request.load_required(:requester)
       MnoEnterprise::EventLogger.info('access_denied', current_user.id, 'Access denied', @user_access_request)
       MnoEnterprise::SystemNotificationMailer.access_denied(user_access_request.id).deliver_later
       render 'show'
     else
-      render_bad_request('deny', @user_access_request.errors)
+      render_bad_request('deny', result.errors.full_messages)
     end
   end
 
   # PUT /mnoe/jpi/v1/user_access_requests/:id/approve
   def approve
     return render_not_found('user_access_request') unless user_access_request
-    @user_access_request = user_access_request.approve.first
-    if @user_access_request.errors.empty?
+    result = user_access_request.approve
+    if result.empty?
       @user_access_request = @user_access_request.load_required(:requester)
       MnoEnterprise::EventLogger.info('access_approved', current_user.id, 'Access approved', @user_access_request)
       MnoEnterprise::SystemNotificationMailer.access_approved(user_access_request.id).deliver_later
       render 'show'
     else
-      render_bad_request('approve', @user_access_request.errors)
+      render_bad_request('approve', result.errors.full_messages)
     end
   end
 

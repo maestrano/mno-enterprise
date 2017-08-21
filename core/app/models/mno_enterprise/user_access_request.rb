@@ -22,18 +22,11 @@ module MnoEnterprise
     end
 
     def current_status
-      if status == 'approved'
-        if approved_at > EXPIRATION_TIMEOUT.ago
-          return 'approved'
-        else
-          return 'expired'
-        end
+      if (status == 'approved' && approved_at <= EXPIRATION_TIMEOUT.ago) || (status == 'requested' && created_at < EXPIRATION_TIMEOUT.ago)
+        'expired'
+      else
+        status
       end
-      if status == 'requested' && created_at < EXPIRATION_TIMEOUT.ago
-        return 'expired'
-      end
-      status
     end
-
   end
 end
