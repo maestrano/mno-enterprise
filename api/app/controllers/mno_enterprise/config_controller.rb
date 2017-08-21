@@ -18,18 +18,16 @@ module MnoEnterprise
 
     # Minify JS in non dev environments
     def minify(content)
-      # TODO: cache and purge cache when initializing settings
-      # Rails.cache.fetch(MnoEnterprise::Tenant.current) do
+      Rails.cache.fetch(MnoEnterprise::TenantConfig::CACHE_KEY) do
         if Rails.env.development? || Rails.env.test?
           content
         else
           Uglifier.new.compile(content)
         end
-      # end
+      end
     end
 
     def available_locales
-      # TODO: initializer and freeze?
       Array(Settings.system.i18n.available_locales).map do |locale|
         {
           id: locale.to_s,

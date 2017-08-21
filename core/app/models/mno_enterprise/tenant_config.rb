@@ -6,6 +6,7 @@ module MnoEnterprise
     # See core/config/initializers/00_tenant_config_schema.rb for the configuration
     # JSON schema.
     # This file *MUST* be updated any time a new feature flag is added
+    CACHE_KEY = 'mnoe/tenant-config/minified'
 
     # == Extensions ===========================================================
 
@@ -52,6 +53,8 @@ module MnoEnterprise
       # File.open(Rails.root.join('tmp', 'cache', 'settings.yml'), 'w') do |f|
       #   f.write(Settings.to_hash.deep_stringify_keys.to_yaml)
       # end
+
+      Rails.cache.delete(CACHE_KEY)
     end
 
     # Reconfigure Mnoe settings that were set during initialization
