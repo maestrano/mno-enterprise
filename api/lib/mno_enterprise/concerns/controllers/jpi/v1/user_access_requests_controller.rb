@@ -33,7 +33,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::UserAccessRequestsControll
   def approve
     return render_not_found('user_access_request') unless user_access_request
     result = user_access_request.approve
-    if result.empty?
+    if result.errors.empty?
       @user_access_request = @user_access_request.load_required(:requester)
       MnoEnterprise::EventLogger.info('access_approved', current_user.id, 'Access approved', @user_access_request)
       MnoEnterprise::SystemNotificationMailer.access_approved(user_access_request.id).deliver_later
