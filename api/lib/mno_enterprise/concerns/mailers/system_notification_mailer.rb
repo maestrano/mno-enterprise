@@ -175,7 +175,8 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
       user_vars(user).merge(
         requester_first_name: requester.name,
         requester_last_name: requester.surname,
-        dashboard_link: root_url
+        dashboard_link: root_url,
+        platform: Settings.system.app_name
       )
     )
   end
