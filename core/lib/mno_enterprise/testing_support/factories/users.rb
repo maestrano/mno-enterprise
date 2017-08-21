@@ -21,6 +21,7 @@ FactoryGirl.define do
     updated_at 2.days.ago
     sso_session "1fdd5sf5a73D7sd1as2a4sd541"
     admin_role nil
+    meta_data Hash[]
 
     confirmation_sent_at 2.days.ago
     confirmation_token "wky763pGjtzWR7dP44PD"

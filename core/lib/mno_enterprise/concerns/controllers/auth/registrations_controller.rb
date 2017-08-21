@@ -20,7 +20,8 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
           :surname,
           :company,
           :phone,
-          :phone_country_code
+          :phone_country_code,
+          {meta_data: [:tos_accepted_at]}
         )}
       end
   end
@@ -44,6 +45,11 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
 
   # POST /resource
   def create
+    #  Filling the time at which TOS were accepted
+    if params[:tos]
+      params[:user][:meta_data] = {tos_accepted_at: Time.current}
+    end
+
     build_resource(sign_up_params)
     resource.password ||= Devise.friendly_token
 
