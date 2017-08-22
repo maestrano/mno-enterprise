@@ -246,6 +246,39 @@ module MnoEnterprise
                 }
               }
             },
+            public_pages: {
+              type: "object",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  default: false,
+                  description: "Enable a public landing page (instead of being directed to the sign in page)"
+                },
+                display_pricing: {
+                  type: "boolean",
+                  default: false,
+                  description: "Display pricings in public product pages"
+                },
+                applications: {
+                  type: "array",
+                  description: "List of applications displayed on the public landing page as app cards",
+                  items: {
+                    type: "string",
+                    enum: App.all.map(&:name),
+                    default: []
+                  }
+                },
+                highlighted_applications: {
+                  type: "array",
+                  description: "List of applications that will be hightlighted in the landing page carousel",
+                  items: {
+                    type: "string",
+                    enum: App.all.map(&:name),
+                    default: []
+                  }
+                }
+              }
+            },
             registration: {
               type: "object",
               properties: {
