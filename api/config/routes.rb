@@ -117,10 +117,14 @@ MnoEnterprise::Engine.routes.draw do
         put :register_developer
       end
 
-      resources :user_access_requests, only: [:index] do
+      resources :user_access_requests, only: [:index, :create] do
+        collection do
+          get :last_access_request
+        end
         member do
           put :approve
           put :deny
+          put :revoke
         end
       end
 
