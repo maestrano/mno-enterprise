@@ -49,9 +49,6 @@ en:
           conceal: Conceal
           organizations: Organizations
 
-
-
-
         app_deletion:
           title: Confirm app deletion
           instructions: In order to delete your app, please enter the following statement in the box below.

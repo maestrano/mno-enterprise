@@ -11,6 +11,7 @@ module MnoEnterprise
     property :revoked_at, type: :time
     property :requester_id, type: :string
     property :user_id, type: :string
+    property :status
 
     custom_endpoint :approve, on: :member, request_method: :patch
     custom_endpoint :deny, on: :member, request_method: :patch
