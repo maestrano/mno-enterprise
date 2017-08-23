@@ -36,9 +36,14 @@ module MnoEnterprise
       end
     end
 
+    def self.find_one!(id, *included)
+      self.includes(included).find(id).first
+    end
+
     def self.find_one(id, *included)
-      array = self.includes(included).find(id)
-      array[0] if array.any?
+      find_one!(id, included)
+    rescue JsonApiClient::Errors::NotFound
+      nil
     end
 
     def self.exists?(query)
