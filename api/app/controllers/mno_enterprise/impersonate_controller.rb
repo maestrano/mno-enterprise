@@ -9,16 +9,18 @@ module MnoEnterprise
     # GET /impersonate/user/123
     def create
       session[:impersonator_redirect_path] = params[:redirect_path].presence
-      @user = MnoEnterprise::User.find_one(params[:user_id], :deletion_requests, :organizations, :orga_relations, :dashboards)
-      if @user.present?
-        impersonate(@user)
-      else
-        flash[:notice] = "User doesn't exist"
+      @user = MnoEnterprise::User.find_one(params[:user_id], :deletion_requests, :organizations, :orga_relations, :dashboards, :user_access_requests)
+      unless @user.present?
+        return redirect_with_error("User doesn't exist")
       end
-
+      if Settings&.admin_panel&.impersonation&.consent_required
+        unless @user.access_request_status(current_user) == 'approved'
+          return redirect_with_error('Access was not granted or was revoked.' )
+        end
+      end
+      impersonate(@user)
       path = mnoe_home_path
       path = add_param_to_fragment(path, 'dhbRefId', params[:dhbRefId]) if params[:dhbRefId].present?
-
       redirect_to path
     end
 
@@ -41,6 +43,12 @@ module MnoEnterprise
       end
     rescue ActionController::RedirectBackError
       redirect_to '/'
+    end
+
+    def redirect_with_error(msg)
+      path = session.delete(:impersonator_redirect_path).presence || '/admin/'
+      redirect_path = add_param_to_fragment(path, 'flash', [{msg: msg,  type: :error}.to_json])
+      redirect_to redirect_path
     end
   end
 end
