@@ -76,6 +76,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::UserAccessRequestsControll
   end
 
   def create_params
+    # Access request created by the user, and therefore pre-approved
     create_params = { status: 'approved' }
     access_duration = params.require(:access_duration)
     create_params[:expiration_date] = MnoEnterprise::UserAccessRequest::EXPIRATION_TIMEOUT.from_now unless access_duration == 'UNTIL_REVOKED'
