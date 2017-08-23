@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <%= stylesheet_link_tag('mno_enterprise/mail.css') %>
+  </head>
+  <body>
+    <p class="header">
+      <%= image_tag('mno_enterprise/main-logo.png') %>
+    </p>
+
+    <p>Hi <%= @info[:first_name] %>,</p>
+
+    <p>Platform Administrator <%= @info[:requester_first_name] %> <%= @info[:requester_last_name] %>, administrator of <%= @info[:platform] %>, has requested access to your account for the next 24 hours.</p>
+    <p>Please click the following link to access your dashboard and approve or deny this request.</p>
+    <a href="<%= @info[:dashboard_link] %>">Access Dashboard</a>
+
+    <p>
+      Regards,<br/>
+      The Marketplace team
+    </p>
+
+    <p class="footer">
+      <%= @info[:company] %>
+    </p>
+  </body>
+</html>

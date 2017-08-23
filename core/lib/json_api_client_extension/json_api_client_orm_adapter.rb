@@ -7,23 +7,24 @@ module JsonApiClient
   end
 
   class OrmAdapter < ::OrmAdapter::Base
+    INCLUDED_DEPENDENCIES = [:deletion_requests, :organizations, :orga_relations, :dashboards]
     # get a list of column names for a given class
     def column_names
-      @columns ||= klass.instance_methods.grep(/_will_change!$/).map { |e| e.to_s.gsub('_will_change!','') }
+      @columns ||= klass.instance_methods.grep(/_will_change!$/).map { |e| e.to_s.remove('_will_change!') }
     end
 
     # @see OrmAdapter::Base#get!
     def get!(id)
-      res = klass.includes(:deletion_requests, :organizations, :orga_relations, :dashboards).find(wrap_key(id)).first
+      res = klass.includes(*INCLUDED_DEPENDENCIES).find(wrap_key(id)).first
       raise JsonApiClient::Errors::ResourceNotFound, "resource not found" unless res
       res
     end
 
     # @see OrmAdapter::Base#get
     def get(id)
-      res = klass.includes(:deletion_requests, :organizations, :orga_relations, :dashboards).find(wrap_key(id))
+      res = klass.includes(*INCLUDED_DEPENDENCIES).find(wrap_key(id))
       error = res&.errors&.first
-      if(error && error.code != '404')
+      if (error && error.code != '404')
         raise error.detail
       end
       res.first

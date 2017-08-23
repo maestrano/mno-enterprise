@@ -10,6 +10,7 @@ if member.is_a?(MnoEnterprise::User)
            end
 
   user = member
+  access_request_status = user.access_request_status(current_user)
 
 elsif member.is_a?(MnoEnterprise::OrgaInvite)
   json.entity 'OrgaInvite'
@@ -22,7 +23,9 @@ elsif member.is_a?(MnoEnterprise::OrgaInvite)
            end
 
   user = member.user
+  access_request_status = nil
 end
 
 json.extract! user, :id, :created_at, :email, :name, :surname
 json.status status
+json.access_request_status access_request_status

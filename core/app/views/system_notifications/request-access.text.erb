@@ -1,0 +1,10 @@
+Hi <%= @info[:first_name] %>,
+=================================================================
+Platform Administrator <%= @info[:requester_first_name] %> <%= @info[:requester_last_name] %>, administrator of <%= @info[:company] %>, has requested access to your account for the next 24 hours.
+Please click the following link to access your dashboard and approve or deny this request
+
+<%= @info[:dashboard_link] %>
+
+
+Regards,
+The Marketplace team

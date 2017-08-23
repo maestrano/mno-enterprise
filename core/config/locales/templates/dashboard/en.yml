@@ -24,6 +24,22 @@ en:
           register: Register!
           api_key: API Key
           secret_key: Secret Key
+
+          admin_access_to_your_account: Admin access to your account
+          access_granted_until_expired: Authorization has been granted until
+          access_granted_until_revoked: Authorization has been granted until you decide to revoke access
+          revoke:
+            action: Revoke
+            success_toastr: The access has been revoked
+            error_toastr: An error occured the access could not be revoked
+          authorize_admin_access: Authorize admin access
+          twenty_four_hours: For 24 hours
+          until_revoke: Until you revoke the access
+          authorize:
+            action: Authorize
+            success_toastr: The access has been authorized
+            error_toastr: An error occured the access could not be authorized
+
           show: Show
           hide: Hide
           name: Name

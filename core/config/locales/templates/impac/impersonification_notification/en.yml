@@ -1,0 +1,16 @@
+en:
+  mno_enterprise:
+    templates:
+      impac:
+        impersonification_notification:
+          title: "Access Requests"
+          message: "{name} has requested access to your account for 24 hours."
+          accept: "Do you want to accept this request"
+          "yes": "Yes"
+          "no": "No"
+          deny:
+            success_toastr: "You denied {name} access request."
+            error_toastr: "You denied {name} access request."
+          approve:
+            success_toastr: "You approved {name} access request."
+            error_toastr: "An error occured while approving access."

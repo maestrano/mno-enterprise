@@ -325,7 +325,11 @@ module MnoEnterprise
                   type: "boolean",
                   default: true,
                   description: "Control the ability to impersonate users from the admin panel"
-
+                },
+                consent_required: {
+                  type: "boolean",
+                  default: false,
+                  description: "Is consent required to be able to impersonate"
                 }
               }
             },
