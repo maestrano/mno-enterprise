@@ -1,13 +1,10 @@
 <div>
 
-  <div class="spacer3 hidden-xs hidden-sm"></div>
-
-  <div class='align-center'>
-    <img ng-src="{{assetPath['mno_enterprise/main-logo.png']}}">
-    <div class="spacer2"></div>
+  <div class='text-center' style="margin-top: 45px">
+    <img ng-src="{{assetPath['mno_enterprise/main-logo-whitebg.png'] || assetPath['mno_enterprise/main-logo.png']}}">
 
     <!-- Status Details -->
-    <div ng-switch on="currentStatus()">
+    <div ng-switch on="currentStatus()" style="margin-top: 30px">
       <div ng-switch-when='online'>
         <h3 class='mgreen'>Redirecting to {{appInstance.name}}</h3>
         <h4 class='muted'>You will be automatically redirected in {{redirectionCounter}}s (or click the link below)</h4>
