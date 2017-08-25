@@ -224,6 +224,13 @@ MnoEnterprise::Engine.routes.draw do
           resources :users, only: [] do
             resource :invites, only: [:create]
           end
+          if Settings&.dashboard&.provisioning&.enabled
+            resources :subscriptions, only: [:index, :show, :create, :update] do
+              member do
+                post :cancel
+              end
+            end
+          end
         end
         resources :tenant_invoices, only: [:index, :show]
         resources :invoices, only: [:index, :show] do
@@ -246,6 +253,12 @@ MnoEnterprise::Engine.routes.draw do
           member do
             post :ssl_certificates, action: :add_certificates
             match :domain, action: :update_domain, via: [:put, :patch]
+          end
+        end
+
+        if Settings&.dashboard&.provisioning&.enabled
+          resources :products, only: [:index, :show] do
+            resources :pricings, only: :index
           end
         end
 
