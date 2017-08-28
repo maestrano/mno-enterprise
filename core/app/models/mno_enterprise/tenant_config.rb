@@ -318,6 +318,16 @@ module MnoEnterprise
                 }
               }
             },
+            provisioning: {
+              type: "object",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  default: true,
+                  description: "enable the provisioning workflow, orders widget on the organization page and orders view for all organizations"
+                }
+              }
+            },
             finance: {
               type: "object",
               properties: {
