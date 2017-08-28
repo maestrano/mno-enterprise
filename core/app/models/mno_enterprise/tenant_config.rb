@@ -236,6 +236,42 @@ module MnoEnterprise
                 }
               }
             },
+            public_pages: {
+              type: "object",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  default: false,
+                  description: "Enable a public landing page (instead of being directed to the sign in page)"
+                },
+                display_pricing: {
+                  type: "boolean",
+                  default: false,
+                  description: "Display pricings in public product pages"
+                },
+                # TODO: configure settings to use default value and then update enum with application nids from database
+                applications: {
+                  title: "Applications",
+                  type: "array",
+                  description: "List of applications displayed on the public landing page as app cards",
+                  items: {
+                    type: "string",
+                    enum: ["quickbooks", "xero", "hubspot"],
+                    default: []
+                  }
+                },
+                highlighted_applications: {
+                  title: "Highlighted Applications",
+                  type: "array",
+                  description: "List of applications that will be hightlighted in the landing page carousel",
+                  items: {
+                    type: "string",
+                    enum: ["quickbooks", "xero", "hubspot"],
+                    default: []
+                  }
+                }
+              }
+            },
             registration: {
               type: "object",
               properties: {

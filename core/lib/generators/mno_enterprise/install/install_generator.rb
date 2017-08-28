@@ -117,7 +117,7 @@ module MnoEnterprise
     mount MnoEnterprise::Engine, at: '/mnoe', as: :mno_enterprise
   end
 
-  root to: redirect('mnoe/auth/users/sign_in')
+  root to: redirect('dashboard/')
 }
           inject_into_file routes_file, mount, after: "Rails.application.routes.draw do\n"
         end
