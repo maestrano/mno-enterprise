@@ -196,7 +196,12 @@ MnoEnterprise::Engine.routes.draw do
             post :signup_email
           end
         end
-        resources :products, only: [:index, :show, :destroy, :update, :create]
+
+        resources :products, only: [:index, :show, :destroy, :update, :create] do
+          member do
+            post :upload_logo
+          end
+        end
 
         resources :organizations, only: [:index, :show, :update, :create] do
           collection do
