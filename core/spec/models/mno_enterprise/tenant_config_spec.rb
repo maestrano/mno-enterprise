@@ -78,8 +78,8 @@ describe MnoEnterprise::TenantConfig do
         'x-schema-form' => {
           'titleMap' => {
             'fr-FR' => 'fr-FR',
-            'en-GB' => 'en-GB',
-            'en-AU' => 'en-AU'
+            'en-GB' => 'English (United Kingdom)',
+            'en-AU' => 'English (Australia)'
           }
         }
       }
@@ -90,8 +90,8 @@ describe MnoEnterprise::TenantConfig do
         'x-schema-form' => {
           'titleMap' => {
             'fr-FR' => 'fr-FR',
-            'en-GB' => 'en-GB',
-            'en-AU' => 'en-AU'
+            'en-GB' => 'English (United Kingdom)',
+            'en-AU' => 'English (Australia)'
           }
         }
       }
