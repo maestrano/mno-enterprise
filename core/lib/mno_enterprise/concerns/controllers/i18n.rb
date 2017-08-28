@@ -3,7 +3,7 @@ module MnoEnterprise::Concerns::Controllers::I18n
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_locale
+    before_action :set_locale, if: "MnoEnterprise.i18n_enabled"
   end
 
   def set_locale

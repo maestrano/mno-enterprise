@@ -40,7 +40,7 @@ module MnoEnterprise
           subject
           # TODO: Test that the rendered json is the expected one
           # expect(assigns(:app_instances)).to eq([app_instance])
-          assert_requested(:get, api_v2_url('/app_instances', [:app], {filter: {owner_id: organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')}}))
+          assert_requested(:get, api_v2_url('/app_instances', [:app], {_locale: I18n.locale, filter: {owner_id: organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')}}))
         }
       end
 

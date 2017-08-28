@@ -7,29 +7,34 @@ module MnoEnterprise
     include ActiveModel::AttributeMethods
     include ActiveModel::Validations
 
+    # ids
     property :id
     property :uid, type: :string
-    property :created_at, type: :time
-    property :updated_at, type: :time
-    property :confirmed_at, type: :time
-    property :email, type: :string
-    property :unconfirmed_email
-    property :name, type: :string
-    property :surname, type: :string
-    property :company, type: :string
-    property :phone, type: :string
-    property :password
-    property :api_secret, type: :string
-    property :api_key, type: :string
-    property :phone_country_code, type: :string
-    property :geo_country_code, type: :string
-    property :website, type: :string
-    property :sso_session, type: :string
-    property :admin_role, type: :string
-    property :avatar_url, type: :string
 
+    # timestamps
+    property :confirmed_at, type: :time
+    property :created_at, type: :time
     property :locked_at, type: :time
+    property :updated_at, type: :time
+
+    # Other
+    property :admin_role, type: :string
+    property :api_key, type: :string
+    property :api_secret, type: :string
+    property :avatar_url, type: :string
+    property :company, type: :string
+    property :email, type: :string
+    property :geo_country_code, type: :string
     property :last_sign_in_ip
+    property :name, type: :string
+    property :password
+    property :phone, type: :string
+    property :phone_country_code, type: :string
+    property :unconfirmed_email
+    property :settings
+    property :sso_session, type: :string
+    property :surname, type: :string
+    property :website, type: :string
 
     define_model_callbacks :validation #required by Devise
     define_model_callbacks :update #required by Devise

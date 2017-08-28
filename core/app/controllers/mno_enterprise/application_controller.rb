@@ -8,11 +8,8 @@ module MnoEnterprise
     before_filter :store_location
     before_filter :perform_return_to
 
-
     # I18n
-    if MnoEnterprise.i18n_enabled
-      include MnoEnterprise::Concerns::Controllers::I18n
-    end
+    include MnoEnterprise::Concerns::Controllers::I18n
 
     # Angular CSRF
     if MnoEnterprise.include_angular_csrf

@@ -65,7 +65,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   end
   private
     def user_params
-      params.require(:user).permit(:name, :surname, :email, :company, :settings, :phone, :website, :phone_country_code, :current_password, :password, :password_confirmation)
+      params.require(:user).permit(
+        :name, :surname, :email, :company, :phone, :website, :phone_country_code, :current_password, :password, :password_confirmation,
+        settings: [:locale]
+      )
     end
 
     def password_params

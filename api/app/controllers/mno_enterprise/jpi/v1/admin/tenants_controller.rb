@@ -17,7 +17,7 @@ module MnoEnterprise
 
         render :show
       else
-        render_bad_request('update tenant', @tenant.errors)
+        render_bad_request('update tenant', @tenant.errors.full_messages)
       end
     end
 
@@ -26,7 +26,7 @@ module MnoEnterprise
       @tenant = MnoEnterprise::Tenant.show
       @tenant.update_attributes(tenant_params)
       if @tenant.errors.present?
-        return render_bad_request('update tenant domain', @tenant.errors)
+        return render_bad_request('update tenant domain', @tenant.errors.full_messages)
       end
 
       domain = MnoEnterprise::SystemManager.update_domain(tenant_params[:domain])

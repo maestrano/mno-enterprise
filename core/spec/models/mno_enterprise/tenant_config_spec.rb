@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe MnoEnterprise::TenantConfig do
 
-  it { expect(described_class).to  be_const_defined(:CONFIG_JSON_SCHEMA) }
+  it { expect(described_class).to  respond_to(:json_schema) }
 
   let(:tenant) { build(:tenant, frontend_config: {'foo' => 'bar'})}
 
@@ -66,6 +66,53 @@ describe MnoEnterprise::TenantConfig do
       }
       expect(Rails.application.config.action_mailer.smtp_settings).to eq(expected)
       expect(ActionMailer::Base.smtp_settings).to eq(expected)
+    end
+  end
+
+  describe '.refresh_json_schema!' do
+    subject { described_class.refresh_json_schema! }
+
+    let(:preferred_locale_hash) do
+      {
+        'enum' => %w(fr-FR en-GB en-AU),
+        'x-schema-form' => {
+          'titleMap' => {
+            'fr-FR' => 'fr-FR',
+            'en-GB' => 'English (United Kingdom)',
+            'en-AU' => 'English (Australia)'
+          }
+        }
+      }
+    end
+
+    let(:available_locales_hash) do
+      {
+        'x-schema-form' => {
+          'titleMap' => {
+            'fr-FR' => 'fr-FR',
+            'en-GB' => 'English (United Kingdom)',
+            'en-AU' => 'English (Australia)'
+          }
+        }
+      }
+    end
+
+    let(:available_locale_items_hash) do
+      {
+        'enum' => %w(fr-FR en-GB en-AU)
+      }
+    end
+
+    it 'is pending' do
+      I18n.available_locales = %w(fr-FR fr en en-GB en-AU)
+
+      subject
+
+      i18n_properties = described_class.json_schema['properties']['system']['properties']['i18n']['properties']
+
+      expect(i18n_properties['preferred_locale']).to include(preferred_locale_hash)
+      expect(i18n_properties['available_locales']).to include(available_locales_hash)
+      expect(i18n_properties['available_locales']['items']).to include(available_locale_items_hash)
     end
   end
 

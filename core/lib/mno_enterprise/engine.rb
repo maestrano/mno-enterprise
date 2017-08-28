@@ -13,6 +13,13 @@ module MnoEnterprise
 
       # Host app:
       app.config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**/*.yml').to_s]
+
+      app.config.i18n.default_locale = :en
+
+      # Add locales fallback
+      # fr_CH => fr => en (default)
+      require "i18n/backend/fallbacks"
+      I18n::Backend::Simple.send(:include, I18n::Backend::Fallbacks)
     end
 
     # Remove testing support when not in test
