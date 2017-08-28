@@ -17,6 +17,34 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           description: "Application Name",
           default: "My Company"
         },
+        intercom: {
+          # https://maestrano.atlassian.net/wiki/x/cRvrBQ
+          title: "Intercom Integration",
+          type: "object",
+          properties: {
+            enabled: {
+              type: "boolean",
+              description: "Enable Intercom integration",
+              default: false
+            },
+            app_id: {
+              type: "string",
+              description: "Intercom <a href='https://docs.intercom.com/faqs-and-troubleshooting/getting-set-up/where-can-i-find-my-app-id'>app ID</a>",
+              default: ENV['INTERCOM_APP_ID'],
+              'x-schema-form': {}
+            },
+            api_secret: {
+              type: "string",
+              description: "Secure mode secret",
+              default: ENV['INTERCOM_API_SECRET']
+            },
+            token: {
+              type: "string",
+              description: "OAuth or Personal Access token",
+              default: ENV['INTERCOM_TOKEN']
+            }
+          }
+        },
         smtp: {
           description: "SMTP Settings",
           type: "object",
