@@ -2,6 +2,12 @@ module MnoEnterprise
   class Jpi::V1::Admin::OrganizationsController < Jpi::V1::Admin::BaseResourceController
 
     DEPENDENCIES = [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user']
+    INCLUDED_FIELDS = [:uid, :name, :account_frozen,
+                       :soa_enabled, :mails, :logo, :latitude, :longitude,
+                       :geo_country_code, :geo_state_code, :geo_city,
+                       :geo_tz, :geo_currency, :metadata, :industry, :size,
+                       :financial_year_end_month, :credit_card,
+                       :financial_metrics, :created_at]
 
     # GET /mnoe/jpi/v1/admin/organizations
     def index
@@ -12,7 +18,11 @@ module MnoEnterprise
         response.headers['X-Total-Count'] = @organizations.count
       else
         # Index mode
-        query = MnoEnterprise::Organization.apply_query_params(params)
+        # Explicitly list fields to be retrieved to trigger financial_metrics calculation
+        query = MnoEnterprise::Organization
+                .apply_query_params(params)
+                .select(INCLUDED_FIELDS)
+
         @organizations = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
       end

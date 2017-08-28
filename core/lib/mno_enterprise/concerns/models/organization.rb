@@ -31,6 +31,7 @@ module MnoEnterprise::Concerns::Models::Organization
     property :size, type: :int
     property :financial_year_end_month, type: :string
     property :credit_card_id
+    property :financial_metrics
   end
 
   #==================================================================
