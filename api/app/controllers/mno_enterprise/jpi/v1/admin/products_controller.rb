@@ -75,6 +75,21 @@ module MnoEnterprise
       head :no_content
     end
 
+    def upload_logo
+      product = MnoEnterprise::Product.find_one(params[:id])
+      image = params[:image]
+      # get the logo's temporal path
+      image_temp_path = image.tempfile.path
+      # open the logo
+      image_bin = IO.binread(image_temp_path)
+      # encode the logo in base 64
+      image_encoded = Base64.encode64(image_bin)
+
+      logo = { data_base64: image_encoded, filename: image.original_filename, content_type: image.content_type }.to_json
+      product.update(logo: logo)
+      head :created
+    end
+
     private
 
     def pricing_params
