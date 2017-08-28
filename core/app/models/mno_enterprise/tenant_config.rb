@@ -81,10 +81,11 @@ module MnoEnterprise
       available_locales = I18n.available_locales.map(&:to_s).select {|x| x =~ /[[:alpha:]]{2}-[A-Z]{2}/}
       locale_map = Hash[available_locales.map {|l| [l, I18n.t('language', locale: l, fallback: false, default: nil) || l] }]
 
-      json_schema['properties']['system']['properties']['i18n']['properties']['available_locales']['items']['enum'] = available_locales
-      json_schema['properties']['system']['properties']['i18n']['properties']['preferred_locale']['enum'] = available_locales
-      json_schema['properties']['system']['properties']['i18n']['properties']['available_locales']['x-schema-form']['titleMap'] = locale_map
-      json_schema['properties']['system']['properties']['i18n']['properties']['preferred_locale']['x-schema-form']['titleMap'] = locale_map
+      i18n_properties = json_schema['properties']['system']['properties']['i18n']['properties']
+      i18n_properties['available_locales']['items']['enum'] = available_locales
+      i18n_properties['preferred_locale']['enum'] = available_locales
+      i18n_properties['available_locales']['x-schema-form']['titleMap'] = locale_map
+      i18n_properties['preferred_locale']['x-schema-form']['titleMap'] = locale_map
     end
 
     # Fetch the Tenant#frontend_config from MnoHub
