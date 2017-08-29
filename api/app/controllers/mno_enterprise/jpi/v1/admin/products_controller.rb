@@ -8,7 +8,7 @@ module MnoEnterprise
     DEPENDENCIES = [:values, :assets, :categories, :product_pricings, :product_contracts]
 
     ATTRIBUTES = [:name, :active, :logo, :external_id]
-    PRICING_ATTRIBUTES = [:name, :description, :position, :free, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, :prices, :external_id]
+    PRICING_ATTRIBUTES = [:name, :description, :position, :free, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, {:prices => [:currency, :price_cents] }, :external_id]
 
     def index
       query = MnoEnterprise::Product.apply_query_params(params).where(local: true)
@@ -73,6 +73,21 @@ module MnoEnterprise
       product = MnoEnterprise::Product.find_one(params[:id])
       product.destroy
       head :no_content
+    end
+
+    def upload_logo
+      product = MnoEnterprise::Product.find_one(params[:id])
+      image = params[:image]
+      # get the logo's temporal path
+      image_temp_path = image.tempfile.path
+      # open the logo
+      image_bin = IO.binread(image_temp_path)
+      # encode the logo in base 64
+      image_encoded = Base64.encode64(image_bin)
+
+      logo = { data_base64: image_encoded, filename: image.original_filename, content_type: image.content_type }.to_json
+      product.update(logo: logo)
+      head :created
     end
 
     private
