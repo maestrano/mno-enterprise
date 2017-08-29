@@ -109,6 +109,9 @@ MnoEnterprise::Engine.routes.draw do
           end
         end
       end
+
+      resources :products, only: [:index, :show]
+
       resource :current_user, only: [:show, :update] do
         put :update_password
         put :register_developer
@@ -203,6 +206,13 @@ MnoEnterprise::Engine.routes.draw do
           end
           resource :user_access_requests, only: [:create]
         end
+
+        resources :products, only: [:index, :show, :destroy, :update, :create] do
+          member do
+            post :upload_logo
+          end
+        end
+
         resources :organizations, only: [:index, :show, :update, :create] do
           collection do
             get :in_arrears
@@ -213,6 +223,13 @@ MnoEnterprise::Engine.routes.draw do
           end
           resources :users, only: [] do
             resource :invites, only: [:create]
+          end
+          if Settings&.dashboard&.provisioning&.enabled
+            resources :subscriptions, only: [:index, :show, :create, :update] do
+              member do
+                post :cancel
+              end
+            end
           end
         end
         resources :tenant_invoices, only: [:index, :show]
@@ -236,6 +253,12 @@ MnoEnterprise::Engine.routes.draw do
           member do
             post :ssl_certificates, action: :add_certificates
             match :domain, action: :update_domain, via: [:put, :patch]
+          end
+        end
+
+        if Settings&.dashboard&.provisioning&.enabled
+          resources :products, only: [:index, :show] do
+            resources :pricings, only: :index
           end
         end
 
