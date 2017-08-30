@@ -50,7 +50,8 @@ module MnoEnterprise
         'name' => user.name,
         'surname' => user.surname,
         'email' => user.email,
-        'created_at' => user.created_at
+        'created_at' => user.created_at,
+        'admin_role' => user.admin_role
       }
     end
 
