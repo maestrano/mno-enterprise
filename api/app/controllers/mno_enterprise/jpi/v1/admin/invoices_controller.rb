@@ -1,9 +1,12 @@
 module MnoEnterprise
   class Jpi::V1::Admin::InvoicesController < Jpi::V1::Admin::BaseResourceController
 
+    DEPENDENCIES = [:organization, :bills]
     # GET /mnoe/jpi/v1/admin/invoices
     def index
-      @invoices = MnoEnterprise::Invoice.all
+      query = MnoEnterprise::Invoice.apply_query_params(params).includes(DEPENDENCIES)
+      @invoices = query.to_a
+      response.headers['X-Total-Count'] = query.meta.record_count
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/1
