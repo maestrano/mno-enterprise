@@ -38,4 +38,10 @@ end
 json.product_instance_id subscription.product_instance&.id
 json.contract_id subscription.product_contract&.id
 json.organization_id subscription.organization&.id
+if subscription.organization
+  json.organization do
+    json.id subscription.organization.id
+    json.name subscription.organization.name
+  end
+end
 json.user_id subscription.user&.id

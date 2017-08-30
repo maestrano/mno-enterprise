@@ -207,10 +207,14 @@ MnoEnterprise::Engine.routes.draw do
           resource :user_access_requests, only: [:create]
         end
 
-        resources :products, only: [:index, :show, :destroy, :update, :create] do
-          member do
-            post :upload_logo
+        if Settings&.dashboard&.provisioning&.enabled
+          resources :products, only: [:index, :show, :destroy, :update, :create] do
+            member do
+              post :upload_logo
+            end
           end
+
+          resources :subscriptions, only: [:index]
         end
 
         resources :organizations, only: [:index, :show, :update, :create] do

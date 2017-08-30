@@ -6,9 +6,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   #==================================================================
   # Instance methods
   #==================================================================
+  # GET /mnoe/jpi/v1/admin/subscriptions
+  # or
   # GET /mnoe/jpi/v1/admin/organizations/1/subscriptions
   def index
-    @subscriptions = fetch_subscriptions(parent_organization.id)
+    query = parent_organization ? fetch_subscriptions(parent_organization.id) : fetch_all_subscriptions
+    @subscriptions = query.to_a
+    response.headers['X-Total-Count'] = query.meta.record_count
   end
 
   # GET /mnoe/jpi/v1/admin/organizations/1/subscriptions/id
@@ -74,8 +78,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     end
   end
 
+  def fetch_all_subscriptions
+    MnoEnterprise::Subscription.apply_query_params(params).includes(SUBSCRIPTION_INCLUDES)
+  end
+
   def fetch_subscriptions(organization_id)
-    MnoEnterprise::Subscription.fetch_all(MnoEnterprise::Subscription.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id))
+    MnoEnterprise::Subscription.apply_query_params(params).includes(SUBSCRIPTION_INCLUDES).where(organization_id: organization_id)
   end
 
   def fetch_subscription(organization_id, id)
