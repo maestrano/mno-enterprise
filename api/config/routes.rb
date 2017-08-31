@@ -190,6 +190,7 @@ MnoEnterprise::Engine.routes.draw do
       # Admin
       #============================================================
       namespace :admin, defaults: {format: 'json'} do
+        resources :assets, only: [:index, :show, :create, :destroy]
         resources :audit_events, only: [:index]
         resources :app_feedbacks, only: [:index]
         resources :app_questions, only: [:index]
@@ -210,6 +211,8 @@ MnoEnterprise::Engine.routes.draw do
             member do
               post :upload_logo
             end
+
+            resources :assets, only: [:index, :create]
           end
 
           resources :subscriptions, only: [:index]

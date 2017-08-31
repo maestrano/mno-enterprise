@@ -73,6 +73,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
     head :no_content
   end
 
+  # POST /mnoe/jpi/v1/admin/products/1/upload_logo
   def upload_logo
     product = MnoEnterprise::Product.find_one(params[:id])
     image = params[:image]
