@@ -71,10 +71,10 @@ MnoEnterprise.configure do |config|
   # Google Tag Manager
   config.google_tag_container = ENV['google_tag_container']
 
-  # Intercom (both API Keys and Personal token are supported)
-  config.intercom_token = ENV['INTERCOM_TOKEN']
-  config.intercom_app_id = ENV['INTERCOM_APP_ID']
-  config.intercom_api_secret = ENV['INTERCOM_API_SECRET']
+  # Intercom
+  config.intercom_token = Settings.system.intercom.token
+  config.intercom_app_id = Settings.system.intercom.app_id
+  config.intercom_api_secret =  Settings.system.intercom.api_secret
 
   #===============================================
   # API Configuration
