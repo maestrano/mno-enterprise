@@ -400,16 +400,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             }
           }
         },
-        invoices: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              default: true,
-              description: "Enable invoices management"
-            }
-          }
-        },
         settings: {
           type: "object",
           properties: {
