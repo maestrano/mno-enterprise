@@ -29,8 +29,12 @@ module MnoEnterprise
 
     # POST /mnoe/jpi/v1/admin/impac/dashboard_templates
     def create
-      @dashboard_template = dashboard_templates.create(dashboard_template_params.merge(dashboard_type: 'template'))
-      return render json: { errors: dashboard_template.errors }, status: :bad_request unless dashboard_template.valid?
+      @dashboard_template = MnoEnterprise::Impac::Dashboard.new(dashboard_template_params.merge(dashboard_type: 'template'))
+
+      # Abort on failure
+      unless @dashboard_template.save
+        return render json: { errors: dashboard_template.errors }, status: :bad_request
+      end
         
       MnoEnterprise::EventLogger.info('dashboard_template_create', current_user.id, 'Dashboard Template Creation', dashboard_template)
       render 'show'
@@ -40,8 +44,10 @@ module MnoEnterprise
     def update
       return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless dashboard_template
 
-      dashboard_template.update(dashboard_template_params)
-      return render json: { errors: dashboard_template.errors }, status: :bad_request unless dashboard_template.valid?
+      # Abort on failure
+      unless dashboard_template.update(dashboard_template_params)
+        return render json: { errors: dashboard_template.errors }, status: :bad_request
+      end
 
       MnoEnterprise::EventLogger.info('dashboard_template_update', current_user.id, 'Dashboard Template Update', dashboard_template)
       render 'show'
@@ -51,7 +57,10 @@ module MnoEnterprise
     def destroy
       return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless dashboard_template
 
-      return render json: { errors: 'Cannot destroy dashboard template' }, status: :bad_request unless dashboard_template.destroy
+      # Abort on failure
+      unless dashboard_template.destroy
+        return render json: { errors: 'Cannot destroy dashboard template' }, status: :bad_request
+      end
 
       MnoEnterprise::EventLogger.info('dashboard_template_delete', current_user.id, 'Dashboard Template Deletion', dashboard_template)
       head status: :ok
