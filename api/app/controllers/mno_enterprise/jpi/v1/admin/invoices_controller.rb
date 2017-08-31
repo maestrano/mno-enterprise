@@ -4,14 +4,22 @@ module MnoEnterprise
     DEPENDENCIES = [:organization, :bills]
     # GET /mnoe/jpi/v1/admin/invoices
     def index
-      query = MnoEnterprise::Invoice.apply_query_params(params).includes(DEPENDENCIES)
-      @invoices = query.to_a
-      response.headers['X-Total-Count'] = query.meta.record_count
+      if params[:terms]
+        # Search mode
+        @invoices = []
+        JSON.parse(params[:terms]).map { |t| @invoices = @invoices | MnoEnterprise::Invoice.includes(DEPENDENCIES).where(Hash[*t]) }
+        response.headers['X-Total-Count'] = @invoices.count
+      else
+        # Index mode
+        query = MnoEnterprise::Invoice.apply_query_params(params).includes(DEPENDENCIES)
+        @invoices = query.to_a
+        response.headers['X-Total-Count'] = query.meta.record_count
+      end
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/1
     def show
-      @invoice = MnoEnterprise::Invoice.find(params[:id])
+      @invoice = MnoEnterprise::Invoice.find_one(params[:id], *DEPENDENCIES)
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/current_billing_amount
