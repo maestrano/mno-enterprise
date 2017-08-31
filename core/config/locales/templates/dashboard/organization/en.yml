@@ -94,12 +94,15 @@ en:
               cancel: Cancel
               next: Next
               invite: Invite
+              roles_info:
+                member: "A <b>Member</b> can see other members and access the company apps"
+                admin: "An <b>Admin</b> can manage other members (except Super Admin users) and manage the company apps"
+                super_admin: "A <b>Super Admin</b> has all power within the company including access to billing management"
             edition_modal:
               cancel: Cancel
               change: Change
               roles:
                 member: A member can see other members and access the company apps
-                power_user: A Power User can see other members and start idle company apps (on per hour plan)
                 admin: An Admin can manage other members (except Super Admin users) and manage the company apps
                 super_admin: A Super Admin has all power within the company including access to billing management
             removal_modal:
