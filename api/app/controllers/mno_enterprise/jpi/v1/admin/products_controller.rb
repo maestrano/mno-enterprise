@@ -11,7 +11,7 @@ module MnoEnterprise
     #==================================================================
     # GET /mnoe/jpi/v1/admin/products
     def index
-      query = MnoEnterprise::Product.apply_query_params(params).where(local: true)
+      query = MnoEnterprise::Product.apply_query_params(params).includes(DEPENDENCIES)
       @products = query.to_a
       response.headers['X-Total-Count'] = query.meta.record_count
     end

@@ -110,8 +110,6 @@ MnoEnterprise::Engine.routes.draw do
         end
       end
 
-      resources :products, only: [:index, :show]
-
       resource :current_user, only: [:show, :update] do
         put :update_password
         put :register_developer
@@ -257,12 +255,6 @@ MnoEnterprise::Engine.routes.draw do
           member do
             post :ssl_certificates, action: :add_certificates
             match :domain, action: :update_domain, via: [:put, :patch]
-          end
-        end
-
-        if Settings&.dashboard&.provisioning&.enabled
-          resources :products, only: [:index, :show] do
-            resources :pricings, only: :index
           end
         end
 
