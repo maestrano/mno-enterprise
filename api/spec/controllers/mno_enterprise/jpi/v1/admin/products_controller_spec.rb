@@ -25,7 +25,7 @@ module MnoEnterprise
     describe 'GET #index' do
       let(:product) { build(:product) }
 
-      before { stub_api_v2(:get, '/products', [product], [:values, :assets, :categories, :product_pricings, :product_contracts], {}) }
+      before { stub_api_v2(:get, '/products', [product], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], {}) }
 
       subject { get :index }
 
@@ -35,7 +35,7 @@ module MnoEnterprise
     describe 'GET #show' do
       let(:product) { build(:product) }
 
-      before { stub_api_v2(:get, "/products/#{product.id}", product, [:values, :assets, :categories, :product_pricings, :product_contracts], {}) }
+      before { stub_api_v2(:get, "/products/#{product.id}", product, [:'values.field', :assets, :categories, :product_pricings, :product_contracts], {}) }
 
       subject { get :show, id: product.id }
 

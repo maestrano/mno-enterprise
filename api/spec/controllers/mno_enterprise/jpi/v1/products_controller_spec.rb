@@ -19,7 +19,7 @@ module MnoEnterprise
     describe 'GET #index' do
       let(:product) { build(:product) }
 
-      before { stub_api_v2(:get, "/products", [product], [:values, :assets, :categories, :product_pricings, :product_contracts], {}) }
+      before { stub_api_v2(:get, "/products", [product], [:values, :assets, :categories, :product_pricings, :product_contracts], { filter: { active: 1 } }) }
       before { sign_in user }
 
       subject { get :index }
