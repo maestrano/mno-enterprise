@@ -1,7 +1,8 @@
 module MnoEnterprise
   class Jpi::V1::Admin::InvoicesController < Jpi::V1::Admin::BaseResourceController
 
-    DEPENDENCIES = [:organization, :bills]
+    DEPENDENCIES = [:organization, :bills, :'bills.billable']
+
     # GET /mnoe/jpi/v1/admin/invoices
     def index
       if params[:terms]
