@@ -66,6 +66,7 @@ module MnoEnterprise
       # TODO: add all authorized fields (see TenantResource::TENANT_FIELDS in MnoHub)
       params.require(:tenant).permit(:domain).tap do |whitelisted|
         whitelisted[:frontend_config] = params[:tenant][:frontend_config] if params[:tenant].has_key?(:frontend_config)
+        whitelisted[:plugins_config] = params[:tenant][:plugins_config] if params[:tenant].has_key?(:plugins_config)
       end
     end
 
