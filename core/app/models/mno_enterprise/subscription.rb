@@ -10,7 +10,8 @@ module MnoEnterprise
     property :max_licenses, type: :integer
     property :available_licenses, type: :integer
     property :external_id, type: :string
-    property :custom_data, type: :string
+    property :custom_data
+    property :provisioning_data
 
     has_one :product_instance
     has_one :organization
