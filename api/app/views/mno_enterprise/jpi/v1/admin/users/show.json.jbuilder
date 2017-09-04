@@ -5,7 +5,7 @@ json.user do
     json.extract! org, :id, :uid, :name, :account_frozen, :created_at
   end
 
-  json.organizations @user_clients do |org|
+  json.clients @user_clients do |org|
     json.extract! org, :id, :uid, :name, :account_frozen, :created_at
   end
 
