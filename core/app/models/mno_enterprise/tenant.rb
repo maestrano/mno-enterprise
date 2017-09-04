@@ -46,7 +46,8 @@ module MnoEnterprise
     end
 
     def plugins_config
-      @plugins_config ||= {}
+      # TODO: dynamic config?
+      @plugins_config ||= MnoEnterprise::Plugins::PaymentGateway.new(self, {}).show_config
     end
 
     def plugins_config=(config)

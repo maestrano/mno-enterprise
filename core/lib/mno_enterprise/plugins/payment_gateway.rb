@@ -107,6 +107,24 @@ module MnoEnterprise
         tenant.attribute_will_change!(:keystore)
       end
 
+      # Display current config (opposite of #transform)
+      def show_config
+        gw_config = Hash(tenant.keystore).fetch('payment_gateways', {})
+
+        config = Array(gw_config['providers']).map do |name, config|
+          accounts = Hash(gw_config['accounts'] && gw_config['accounts'][name])
+          {
+            "name": name,
+            "provider": config,
+            "accounts": accounts.map do |curr, acc|
+              acc.merge(currency: curr)
+            end
+          }
+        end
+
+        { "payment_gateways": config }.with_indifferent_access
+      end
+
       # Transform the configuration hash coming from the schema to the format
       # expected in the backend
       def transform
