@@ -1,5 +1,6 @@
 module MnoEnterprise
   class Jpi::V1::Admin::TenantsController < Jpi::V1::Admin::BaseResourceController
+    before_action :fix_json_params, only: :update
 
     # GET /mnoe/jpi/v1/admin/tenant
     def show
@@ -65,11 +66,34 @@ module MnoEnterprise
       # TODO: add all authorized fields (see TenantResource::TENANT_FIELDS in MnoHub)
       params.require(:tenant).permit(:domain).tap do |whitelisted|
         whitelisted[:frontend_config] = params[:tenant][:frontend_config] if params[:tenant].has_key?(:frontend_config)
+        whitelisted[:plugins_config] = params[:tenant][:plugins_config] if params[:tenant].has_key?(:plugins_config)
       end
     end
 
     def tenant_cert_params
       params.require(:tenant).permit(:domain, :certificate, :private_key, :ca_bundle)
+    end
+
+    # Bypass Rails `deep_munge` which replace empty arrays by nil:
+    #   Value for params[:...][:available_locales] was set to nil, because it was one of [], [null] or [null, null, ...].
+    #
+    # See http://guides.rubyonrails.org/v4.2/security.html#unsafe-query-generation for more information.
+    #
+    # We can remove this once migrating to Rails 5 as the behavior has changed in Rails 5:
+    # +------------------+--------------------+-------------------+
+    # | JSON             | Params (Rails 4.2) | Params (Rails 5)  |
+    # +------------------+--------------------+-------------------+
+    # | { "person": [] } | { :person => nil } | { :person => [] } |
+    # +------------------+--------------------+-------------------+
+    def fix_json_params
+      if request.format.json?
+        body = request.body.read
+        request.body.rewind
+        unless body == ''
+          unmunged_body = ActiveSupport::JSON.decode(body)
+          params.merge!(unmunged_body)
+        end
+      end
     end
   end
 end

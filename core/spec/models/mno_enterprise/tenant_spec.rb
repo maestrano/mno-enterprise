@@ -27,5 +27,29 @@ module MnoEnterprise
       before { tenant.update_attributes(params) }
       it { expect(stub).to have_been_requested }
     end
+
+    describe '.plugins_config=' do
+      let(:config) do
+        {
+          payment_gateways: {
+            foo: 'bar'
+          }
+        }.with_indifferent_access
+      end
+      let(:plugin) { double('payment_gateway', valid?: true, save: nil) }
+      subject { tenant.plugins_config = config }
+
+      before { allow(MnoEnterprise::Plugins::PaymentGateway).to receive(:new).and_return(plugin) }
+
+      it 'instantiates the plugins' do
+        expect(MnoEnterprise::Plugins::PaymentGateway).to receive(:new).with(tenant, config).and_return(plugin)
+        subject
+      end
+
+      it 'save the config' do
+        expect(plugin).to receive(:save)
+        subject
+      end
+    end
   end
 end

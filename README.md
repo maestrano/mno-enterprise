@@ -236,31 +236,7 @@ SMTP_PASSWORD:
 
 ### Intercom
 
-Intercom is already integrated in mno-enterprise, you just need to enable it!
-
-Add the gem to your `Gemfile`
-
-```ruby
-gem 'intercom', '~> 3.5.4'
-```
-
-Expose the following environments variables (via `application.yml` or your preferred method)
-
-```
-INTERCOM_APP_ID
-INTERCOM_TOKEN
-```
-
-If you want to enable secure mode (recommended), expose `INTERCOM_API_SECRET`.
-
-If you built your app with an older version of mno-enterprise, double-check that `config/initializer/mno-enteprise.rb` contains the following lines:
-
-```ruby
-# Intercom
-config.intercom_app_id = ENV['INTERCOM_APP_ID']
-config.intercom_api_secret = ENV['INTERCOM_API_SECRET']
-config.intercom_token = ENV['INTERCOM_TOKEN']
-```
+Intercom is already integrated in `mno-enterprise`, you just need to enable and configure it in the Admin Panel.
 
 ### Active Job Backend
 

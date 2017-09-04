@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   # Lock sprocket version
   s.add_dependency 'sprockets-rails', '~> 2.3'
 
-  s.add_development_dependency 'intercom', '~> 3.5.4'
+  s.add_runtime_dependency 'intercom', '~> 3.5.17'
 
   # Omniauth authentication strategies
   s.add_development_dependency 'omniauth-openid', '~> 1.0'

@@ -34,7 +34,10 @@ module MnoEnterprise
         expected = {
           tenant: {
             domain: 'tenant.domain.test',
-            frontend_config: Settings.to_hash
+            frontend_config: Settings.to_hash,
+            plugins_config: {
+              payment_gateways: []
+            }
           }
         }
 
