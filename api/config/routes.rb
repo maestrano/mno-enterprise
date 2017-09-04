@@ -253,7 +253,7 @@ MnoEnterprise::Engine.routes.draw do
           end
         end
         resources :tenant_invoices, only: [:index, :show]
-        resources :invoices, only: [:index, :show] do
+        resources :invoices, only: [:index, :show, :update] do
           collection do
             get :current_billing_amount
             get :last_invoicing_amount
