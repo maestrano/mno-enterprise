@@ -428,6 +428,16 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             }
           }
         },
+        provisioning: {
+          type: "object",
+          properties: {
+            enabled: {
+              type: "boolean",
+              default: false,
+              description: "Enable the provisioning workflow, orders widget on the organization page and orders view for all organizations"
+            }
+          }
+        },
         staff: {
           type: "object",
           properties: {

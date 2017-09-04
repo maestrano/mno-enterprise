@@ -108,14 +108,14 @@ module MnoEnterprise
     # @param [Hash] schema JSON schema to parse
     def self.build_object(schema)
       case schema['type']
-      when 'string', 'integer', 'boolean', 'password'
-        schema['default']
-      when 'object'
-        h = {}
-        schema['properties'].each do |k, inner_schema|
-          h[k] = build_object(inner_schema)
-        end
-        h.compact
+        when 'string', 'integer', 'boolean', 'password'
+          schema['default']
+        when 'object'
+          h = {}
+          schema['properties'].each do |k, inner_schema|
+            h[k] = build_object(inner_schema)
+          end
+          h.compact
       end
     end
   end

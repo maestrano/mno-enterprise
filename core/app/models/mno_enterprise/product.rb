@@ -13,6 +13,7 @@ module MnoEnterprise
     property :external_id, type: :string
     property :externally_provisioned, type: :boolean
     property :parent_id, type: :string
+    property :local, type: :boolean
     property :free_trial_enabled, type: :boolean
     property :free_trial_duration, type: :integer
     property :free_trial_unit, type: :string

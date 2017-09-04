@@ -5,13 +5,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
   # Instance methods
   #==================================================================
   # GET /mnoe/jpi/v1/products
+  DEPENDENCIES = [:'values.field', :assets, :categories, :product_pricings, :product_contracts]
+
   def index
-    criteria = MnoEnterprise::Product.includes(:values, :assets, :categories, :product_pricings, :product_contracts)
-    @products = MnoEnterprise::Product.fetch_all(criteria)
+    query = MnoEnterprise::Product.apply_query_params(params).includes(DEPENDENCIES).where(active: true)
+    @products = query.to_a
+    response.headers['X-Total-Count'] = query.meta.record_count
   end
 
   # GET /mnoe/jpi/v1/products/id
   def show
-    @product = MnoEnterprise::Product.includes(:values, :assets, :categories, :product_pricings, :product_contracts).find(params[:id]).first
+    @product = MnoEnterprise::Product.find_one(params[:id], DEPENDENCIES)
   end
 end
