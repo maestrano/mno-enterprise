@@ -3,8 +3,6 @@ require 'rails_helper'
 module MnoEnterprise
   describe Jpi::V1::Admin::ProductMarkupsController, type: :controller do
     include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
-    # TODO: Fix Spec for Admin Controller
-    # before { skip }
 
     render_views
     routes { MnoEnterprise::Engine.routes }
@@ -31,26 +29,19 @@ module MnoEnterprise
     end
 
     describe 'GET #index' do
-
-
       subject { get :index }
-
       it_behaves_like 'a jpi v1 admin action'
     end
 
     describe 'GET #show' do
-
       subject { get :show, id: product_markup.id }
-
       it_behaves_like 'a jpi v1 admin action'
     end
 
     describe 'POST #create' do
+      subject { post :create, product_markup: params }
       let(:params) { FactoryGirl.attributes_for(:product_markup) }
       before { allow(MnoEnterprise::ProductMarkup).to receive(:create) { product_markup } }
-
-      subject { post :create, product_markup: params }
-
       it_behaves_like 'a jpi v1 admin action'
 
       it 'creates the product markup' do

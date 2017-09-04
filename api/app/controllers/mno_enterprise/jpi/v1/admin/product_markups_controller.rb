@@ -35,7 +35,6 @@ module MnoEnterprise
 
     # PATCH /mnoe/jpi/v1/admin/product_markups/:id
     def update
-      # TODO: replace with authorize/ability
         @product_markup = MnoEnterprise::ProductMarkup.find_one(params[:id])
         @product_markup.update(product_markups_params)
         render :show
