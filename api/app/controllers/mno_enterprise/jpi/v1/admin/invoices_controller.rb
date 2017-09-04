@@ -23,6 +23,13 @@ module MnoEnterprise
       @invoice = MnoEnterprise::Invoice.find_one(params[:id], *DEPENDENCIES)
     end
 
+    # PATCH /mnoe/jpi/v1/admin/invoices/1
+    def update
+      @invoice = MnoEnterprise::Invoice.find_one(params[:id])
+      @invoice.update(invoice_params)
+      render :show
+    end
+
     # GET /mnoe/jpi/v1/admin/invoices/current_billing_amount
     def current_billing_amount
       current_billing = tenant.current_billing_amount
@@ -65,6 +72,10 @@ module MnoEnterprise
       else
         {amount: 'N/A', currency: ''}
       end
+    end
+
+    def invoice_params
+      params.require(:invoice).permit(:paid_at)
     end
   end
 end
