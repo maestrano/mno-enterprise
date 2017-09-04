@@ -8,7 +8,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
   DEPENDENCIES = [:values, :assets, :categories, :product_pricings, :product_contracts]
 
   def index
-    criteria = MnoEnterprise::Product.includes(*DEPENDENCIES).where(active: 1)
+    criteria = MnoEnterprise::Product.includes(*DEPENDENCIES).where(active: true)
     @products = MnoEnterprise::Product.fetch_all(criteria)
   end
 
