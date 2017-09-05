@@ -28,12 +28,12 @@ module MnoEnterprise
     end
 
     def self.adapt_order_by(input)
-      field, order = input.split('.')
-      if (order == 'desc')
-        '-' + field
-      else
-        field
-      end
+      partition = input.rpartition('.')
+      field = partition.first
+      order = partition.last
+      return '-' + field if (order == 'desc')
+      return field if (order == 'asc')
+      input
     end
 
     def self.find_one!(id, *included)

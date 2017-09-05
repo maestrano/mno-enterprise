@@ -21,22 +21,16 @@ module MnoEnterprise
     end
 
     describe 'GET #index' do
-      let(:product) { build(:product) }
-
-      before { stub_api_v2(:get, '/products', [product], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], {}) }
-
       subject { get :index }
-
+      let(:product) { build(:product) }
+      before { stub_api_v2(:get, '/products', [product], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], {}) }
       it_behaves_like 'a jpi v1 admin action'
     end
 
     describe 'GET #show' do
-      let(:product) { build(:product) }
-
-      before { stub_api_v2(:get, "/products/#{product.id}", product, [:'values.field', :assets, :categories, :product_pricings, :product_contracts], {}) }
-
       subject { get :show, id: product.id }
-
+      let(:product) { build(:product) }
+      before { stub_api_v2(:get, "/products/#{product.id}", product, [:'values.field', :assets, :categories, :product_pricings, :product_contracts], {}) }
       it_behaves_like 'a jpi v1 admin action'
     end
   end

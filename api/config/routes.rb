@@ -264,6 +264,7 @@ MnoEnterprise::Engine.routes.draw do
         end
 
         resources :app_metrics, only: [:index, :show]
+        resources :product_markups, only: [:index, :show, :destroy, :update, :create]
 
         # Theme Previewer
         post 'theme/save'
