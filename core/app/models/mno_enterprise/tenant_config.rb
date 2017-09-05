@@ -45,6 +45,8 @@ module MnoEnterprise
       # Reconfigure mnoe
       reconfigure_mnoe!
 
+      update_application_list!
+
       # TODO: update JSON_SCHEMA with readonly fields
       refresh_json_schema!
 
@@ -117,6 +119,13 @@ module MnoEnterprise
           end
           h.compact
       end
+    end
+
+    def self.update_application_list!
+      available_app_nids = App.all.map(&:nid)
+      public_pages_properties = CONFIG_JSON_SCHEMA['properties']['dashboard']['properties']['public_pages']['properties']
+      public_pages_properties['applications']['items']['enum'] = available_app_nids
+      public_pages_properties['highlighted_applications']['items']['enum'] = available_app_nids
     end
   end
 end
