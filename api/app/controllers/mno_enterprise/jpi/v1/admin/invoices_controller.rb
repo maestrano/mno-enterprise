@@ -1,14 +1,33 @@
 module MnoEnterprise
   class Jpi::V1::Admin::InvoicesController < Jpi::V1::Admin::BaseResourceController
 
+    DEPENDENCIES = [:organization, :bills, :'bills.billable']
+
     # GET /mnoe/jpi/v1/admin/invoices
     def index
-      @invoices = MnoEnterprise::Invoice.all
+      if params[:terms]
+        # Search mode
+        @invoices = []
+        JSON.parse(params[:terms]).map { |t| @invoices = @invoices | MnoEnterprise::Invoice.includes(DEPENDENCIES).where(Hash[*t]) }
+        response.headers['X-Total-Count'] = @invoices.count
+      else
+        # Index mode
+        query = MnoEnterprise::Invoice.apply_query_params(params).includes(DEPENDENCIES)
+        @invoices = query.to_a
+        response.headers['X-Total-Count'] = query.meta.record_count
+      end
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/1
     def show
-      @invoice = MnoEnterprise::Invoice.find(params[:id])
+      @invoice = MnoEnterprise::Invoice.find_one(params[:id], *DEPENDENCIES)
+    end
+
+    # PATCH /mnoe/jpi/v1/admin/invoices/1
+    def update
+      @invoice = MnoEnterprise::Invoice.find_one(params[:id])
+      @invoice.update(invoice_params)
+      render :show
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/current_billing_amount
@@ -53,6 +72,10 @@ module MnoEnterprise
       else
         {amount: 'N/A', currency: ''}
       end
+    end
+
+    def invoice_params
+      params.require(:invoice).permit(:paid_at)
     end
   end
 end

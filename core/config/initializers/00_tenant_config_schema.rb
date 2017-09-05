@@ -409,7 +409,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              description: "enable the finance page, the financial kpis and the invoices"
+              description: "Enable the finance page, the financial kpis and the invoices"
             }
           }
         },
@@ -434,7 +434,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              description: "enable staff management"
+              description: "Enable staff management"
             }
           }
         },
@@ -444,7 +444,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              description: "enable frontend configuration from the Admin Panel"
+              description: "Enable frontend configuration from the Admin Panel"
             }
           }
         }
