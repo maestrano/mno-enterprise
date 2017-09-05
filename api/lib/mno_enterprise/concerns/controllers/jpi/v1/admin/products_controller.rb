@@ -10,9 +10,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
   #==================================================================
   # GET /mnoe/jpi/v1/admin/products
   def index
-    query = MnoEnterprise::Product.apply_query_params(params).includes(DEPENDENCIES)
-    @products = query.to_a
-    response.headers['X-Total-Count'] = query.meta.record_count
+    if params[:terms]
+      # Search mode
+      @products = []
+      JSON.parse(params[:terms]).map { |t| @products = @products | MnoEnterprise::ProductMarkup.includes(DEPENDENCIES).where(Hash[*t]) }
+      response.headers['X-Total-Count'] = @products.count
+    else
+      query = MnoEnterprise::Product.apply_query_params(params).includes(DEPENDENCIES)
+      @products = query.to_a
+      response.headers['X-Total-Count'] = query.meta.record_count
+    end
   end
 
   # GET /mnoe/jpi/v1/admin/products/id
