@@ -25,11 +25,15 @@ module MnoEnterprise
 
     # POST /mnoe/jpi/v1/admin/product_markups
     def create
-      @product_markup = MnoEnterprise::ProductMarkup.create(product_markups_create_params)
-      if @product_markup.errors.empty?
-        render :show
-      else
+      @product_markup = MnoEnterprise::ProductMarkup.new(product_markups_params)
+      @product_markup.relationships.product = MnoEnterprise::Product.new(id: product_markups_create_params[:product_id])
+      @product_markup.relationships.organization = MnoEnterprise::Organization.new(id: product_markups_create_params[:organization_id])
+      @product_markup.save
+
+      if @product_markup.errors.any?
         render json: @product_markup.errors, status: :bad_request
+      else
+        render :show
       end
     end
 
