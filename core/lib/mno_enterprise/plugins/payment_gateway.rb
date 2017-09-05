@@ -65,7 +65,7 @@ module MnoEnterprise
                     title: "account",
                     description: "Name of merchant account",
                   },
-                  fallback_order: {
+                  default: {
                     type: "integer",
                     description: "Fallback order"
                   },

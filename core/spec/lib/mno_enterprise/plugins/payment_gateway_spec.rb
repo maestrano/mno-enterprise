@@ -29,7 +29,8 @@ describe MnoEnterprise::Plugins::PaymentGateway do
                 "american_express": false,
                 "jcb": false,
                 "currency": "AED",
-                "acct": "name-of-AED-merchant-account"
+                "acct": "name-of-AED-merchant-account",
+                "default": 2
               }
             ]
           }
@@ -54,7 +55,8 @@ describe MnoEnterprise::Plugins::PaymentGateway do
             "AED": {
               "american_express": false,
               "jcb": false,
-              "acct": "name-of-AED-merchant-account"
+              "acct": "name-of-AED-merchant-account",
+              "default": 2
             }
           }
         }
