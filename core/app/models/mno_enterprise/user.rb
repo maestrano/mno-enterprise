@@ -37,7 +37,8 @@
 #  website                        :string(255)
 #  api_key                        :string(255)
 #  api_secret                     :string(255)
-#
+#  api_secret                     :string(255)
+#  mnoe_sub_tenant_id             :string
 
 module MnoEnterprise
   class User < BaseResource
@@ -51,7 +52,7 @@ module MnoEnterprise
       :last_sign_in_ip, :confirmation_token, :confirmed_at, :confirmation_sent_at, :unconfirmed_email,
       :failed_attempts, :unlock_token, :locked_at, :name, :surname, :company, :phone, :phone_country_code,
       :geo_country_code, :geo_state_code, :geo_city, :website, :orga_on_create, :sso_session, :current_password_required, :admin_role,
-      :api_key, :api_secret, :developer, :kpi_enabled, :external_id, :meta_data
+      :api_key, :api_secret, :developer, :kpi_enabled, :external_id, :meta_data, :mnoe_sub_tenant_id, :client_ids
 
     define_model_callbacks :validation #required by Devise
 
@@ -82,6 +83,8 @@ module MnoEnterprise
     # Impac
     has_many :dashboards, class_name: 'MnoEnterprise::Impac::Dashboard'
     has_many :alerts, class_name: 'MnoEnterprise::Impac::Alert'
+
+    has_many :clients, class_name: 'MnoEnterprise::Organization'
 
     #================================
     # Callbacks

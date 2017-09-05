@@ -10,12 +10,17 @@ module MnoEnterprise
         response.headers['X-Total-Count'] = @users.count
       else
         # Index mode
-        @users = MnoEnterprise::User
-        @users = @users.limit(params[:limit]) if params[:limit]
-        @users = @users.skip(params[:offset]) if params[:offset]
-        @users = @users.order_by(params[:order_by]) if params[:order_by]
-        @users = @users.where(params[:where]) if params[:where]
-        @users = @users.all.fetch
+        query = MnoEnterprise::User
+        query = query.limit(params[:limit]) if params[:limit]
+        query = query.skip(params[:offset]) if params[:offset]
+        query = query.order_by(params[:order_by]) if params[:order_by]
+        query = query.where(params[:where]) if params[:where]
+        all = query.all
+        all.params[:sub_tenant_id] = params[:sub_tenant_id]
+        all.params[:account_manager_id] = params[:account_manager_id]
+
+        @users = all.fetch
+
         response.headers['X-Total-Count'] = @users.metadata[:pagination][:count]
       end
     end
@@ -24,12 +29,12 @@ module MnoEnterprise
     def show
       @user = MnoEnterprise::User.find(params[:id])
       @user_organizations = @user.organizations
+      @user_clients = @user.clients
     end
 
     # POST /mnoe/jpi/v1/admin/users
     def create
       @user = MnoEnterprise::User.build(user_create_params)
-
       if @user.save
         render :show
       else
@@ -40,10 +45,11 @@ module MnoEnterprise
     # PATCH /mnoe/jpi/v1/admin/users/:id
     def update
       # TODO: replace with authorize/ability
-      if current_user.admin_role == "admin"
+      if current_user.admin_role.in? %w(admin sub_tenant_admin)
         @user = MnoEnterprise::User.find(params[:id])
-        @user.update(user_params)
 
+        @user.update(user_update_params)
+        @user_clients = @user.clients
         render :show
       else
         render :index, status: :unauthorized
@@ -74,21 +80,25 @@ module MnoEnterprise
 
     private
 
-    def user_params
-      params.require(:user).permit(:admin_role)
+    def user_update_params
+      attrs = [:name, :surname, :email, :phone, client_ids: []]
+      # TODO: replace with authorize/ability
+      if current_user.admin_role == 'admin'
+        attrs << :admin_role
+        attrs << :mnoe_sub_tenant_id
+      end
+      user_param = params.require(:user)
+      updated_params = user_param.permit(attrs)
+      updated_params[:client_ids] ||= [] if user_param.has_key?(:client_ids)
+      # if the user is updated to admin or division admin, his clients are cleared
+      if updated_params[:admin_role] && updated_params[:admin_role] != 'staff'
+        updated_params[:client_ids] = []
+      end
+      updated_params
     end
 
     def user_create_params
-      attrs = [:name, :surname, :email, :phone]
-
-      # TODO: replace with authorize/ability
-      if current_user.admin_role == "admin"
-        attrs << :admin_role
-      end
-
-      params.require(:user).permit(attrs).merge(
-        password: Devise.friendly_token.first(12)
-      )
+      user_update_params.merge(password: Devise.friendly_token.first(12))
     end
   end
 end
