@@ -4,9 +4,9 @@ module MnoEnterprise
   RSpec.describe Jpi::V1::Admin::ProductsController, type: :routing do
     routes { MnoEnterprise::Engine.routes }
 
-    context 'Product provisioning is enabled' do
+    context 'Local products are enabled' do
       before(:all) do
-        Settings.merge!(dashboard: {provisioning: {enabled: true}})
+        Settings.merge!(dashboard: {marketplace: {local_products: true}})
         Rails.application.reload_routes!
       end
 
@@ -19,9 +19,9 @@ module MnoEnterprise
       end
     end
 
-    context 'Product provisioning is disabled' do
+    context 'Local products are disabled' do
       before(:all) do
-        Settings.merge!(dashboard: {provisioning: {enabled: false}})
+        Settings.merge!(dashboard: {marketplace: {local_products: false}})
         Rails.application.reload_routes!
       end
 

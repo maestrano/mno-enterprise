@@ -8,7 +8,7 @@ module MnoEnterprise
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
     before(:all) do
-      Settings.merge!(dashboard: {provisioning: {enabled: true}})
+      Settings.merge!(dashboard: {marketplace: {local_products: true}})
       Rails.application.reload_routes!
     end
 

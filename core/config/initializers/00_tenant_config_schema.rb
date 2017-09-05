@@ -197,6 +197,16 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               default: true,
               description: "Enable the marketplace"
             },
+            provisioning: {
+              type: "boolean",
+              default: false,
+              description: "Enable the provisioning workflow"
+            },
+            local_products: {
+              type: "boolean",
+              default: false,
+              description: "Enable the local products"
+            },
             comparison: {
               type: "object",
               properties: {
@@ -282,16 +292,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               type: "boolean",
               default: true,
               description: "Enable payment section in the company settings"
-            }
-          }
-        },
-        provisioning: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              default: false,
-              description: "Enable external product provisioning"
             }
           }
         },
@@ -425,16 +425,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               type: "boolean",
               default: false,
               description: "Is consent required to be able to impersonate"
-            }
-          }
-        },
-        provisioning: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              default: false,
-              description: "Enable the provisioning workflow, orders widget on the organization page and orders view for all organizations"
             }
           }
         },
