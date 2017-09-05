@@ -17,14 +17,34 @@ module MnoEnterprise
     let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
 
     describe 'GET #index' do
-      let(:product) { build(:product) }
+      subject { get :index, params }
 
-      before { stub_api_v2(:get, "/products", [product], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true } }) }
+      let(:params) { {} }
+      let(:product) { build(:product) }
+      let(:organization) {
+        o = build(:organization, orga_relations: [])
+        o.orga_relations << build(:orga_relation, user_id: user.id, organization_id: o.id, role: 'Super Admin')
+        o
+      }
+
       before { sign_in user }
 
-      subject { get :index }
+      context 'without organization_id' do
+        before { stub_api_v2(:get, "/products", [product], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true } }) }
+        it_behaves_like 'jpi v1 protected action'
+      end
 
-      it_behaves_like 'jpi v1 protected action'
+      context 'with organization_id' do
+        let(:params) { { organization_id: organization.id } }
+
+        before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
+        before do
+          stub_api_v2(:get, "/products", [product],
+            [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true }, _metadata: { organization_id: organization.id } })
+        end
+
+        it_behaves_like 'jpi v1 protected action'
+      end
     end
 
     describe 'GET #show' do

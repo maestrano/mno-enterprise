@@ -9,6 +9,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
 
   def index
     query = MnoEnterprise::Product.apply_query_params(params).includes(DEPENDENCIES).where(active: true)
+
+    # Ensure prices include organization-specific markups/discounts
+    if params[:organization_id] && parent_organization
+      query = query.with_params(_metadata: { organization_id: parent_organization.id })
+    end
+
     @products = query.to_a
     response.headers['X-Total-Count'] = query.meta.record_count
   end
