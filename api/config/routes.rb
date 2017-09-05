@@ -149,7 +149,7 @@ MnoEnterprise::Engine.routes.draw do
 
         resources :audit_events, only: [:index]
 
-        if Settings&.dashboard&.provisioning&.enabled
+        if Settings&.dashboard&.marketplace&.provisioning
           resources :subscriptions, only: [:index, :show, :create, :update] do
             member do
               post :cancel
@@ -180,10 +180,8 @@ MnoEnterprise::Engine.routes.draw do
         end
       end
 
-      if Settings&.dashboard&.provisioning&.enabled
-        resources :products, only: [:index, :show] do
-          resources :pricings, only: :index
-        end
+      resources :products, only: [:index, :show] do
+        resources :pricings, only: :index
       end
 
       #============================================================
@@ -206,7 +204,9 @@ MnoEnterprise::Engine.routes.draw do
           resource :user_access_requests, only: [:create]
         end
 
-        if Settings&.dashboard&.provisioning&.enabled
+        resources :products, only: [:index, :show]
+
+        if Settings&.dashboard&.marketplace&.local_products
           resources :products, only: [:index, :show, :destroy, :update, :create] do
             member do
               post :upload_logo
@@ -214,7 +214,9 @@ MnoEnterprise::Engine.routes.draw do
 
             resources :assets, only: [:index, :create]
           end
+        end
 
+        if Settings&.dashboard&.marketplace&.provisioning
           resources :subscriptions, only: [:index]
         end
 
@@ -229,7 +231,7 @@ MnoEnterprise::Engine.routes.draw do
           resources :users, only: [] do
             resource :invites, only: [:create]
           end
-          if Settings&.dashboard&.provisioning&.enabled
+          if Settings&.dashboard&.marketplace&.provisioning
             resources :subscriptions, only: [:index, :show, :create, :update] do
               member do
                 post :cancel
