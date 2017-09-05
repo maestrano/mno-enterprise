@@ -4,6 +4,8 @@ en:
       dashboard:
         marketplace:
           index:
+            applications: "Applications"
+            reseller_products: "Resellers' products"
             title: "Marketplace"
             select_all: "All"
             search: "Search"
