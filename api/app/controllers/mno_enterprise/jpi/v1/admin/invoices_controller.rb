@@ -2,6 +2,7 @@ module MnoEnterprise
   class Jpi::V1::Admin::InvoicesController < Jpi::V1::Admin::BaseResourceController
 
     DEPENDENCIES = [:organization, :bills, :'bills.billable']
+    ADJUSTMENT_ATTRIBUTES = [:billable_description, :price_cents, :id]  
 
     # GET /mnoe/jpi/v1/admin/invoices
     def index
@@ -25,9 +26,10 @@ module MnoEnterprise
 
     # PATCH /mnoe/jpi/v1/admin/invoices/1
     def update
-      @invoice = MnoEnterprise::Invoice.find_one(params[:id])
+      @invoice = MnoEnterprise::Invoice.find_one(params[:id], *DEPENDENCIES)
+      invoice_adjustments if params[:invoice][:adjustments]
       @invoice.update(invoice_params)
-      render :show
+      render json: :ok
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/current_billing_amount
@@ -61,6 +63,45 @@ module MnoEnterprise
     end
 
     private
+
+    def invoice_adjustments
+      bills = @invoice.bills
+      params[:invoice][:adjustments].each do |adjustment|
+        attributes = adjustment.permit(*ADJUSTMENT_ATTRIBUTES).merge(bill_attributes)
+        # create a new bill only if the param adjustment has no :id
+        MnoEnterprise::Bill.create(attributes) unless adjustment.key?(:id)
+        # update the bill if fields have changed
+        update_bill(adjustment) if adjustment.key?(:id) && bills.any? { |b| b.id == adjustment[:id] && (b.billable != adjustment[:billable_description] || b.price_cents != adjustment[:price_cents])}
+      end
+      # delete the bill if does not exist in the params
+      params[:invoice][:adjustments].each do |adjustment|
+        bills.find { |a| if adjustment.key?(:id) then adjustment[:id] == a.id end }
+        delete_bill(adjustment)
+      end
+    end
+
+    def update_bill(adjustment)
+      bill = MnoEnterprise::Bill.find_one(adjustment[:id])
+      adjustment.delete(:id)
+      bill.update(adjustment)
+    end
+
+    def delete_bill(bill)
+      bill = MnoEnterprise::Bill.find_one(bill[:id])
+      bill.destroy
+    end
+
+    def bill_attributes
+      {
+        invoice_id: @invoice.id,
+        billable_type: 'Organization',
+        billable_id: params[:invoice][:organization][:id],
+        price_per_unit: "0",
+        billing_type: 'monthly',
+        units: "0",
+        currency: @invoice.price.currency
+      }
+    end
 
     def tenant
       @tenant ||= MnoEnterprise::TenantReporting.show
