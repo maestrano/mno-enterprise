@@ -15,6 +15,8 @@
 module MnoEnterprise
   class TaskRecipient < BaseResource
 
+    attributes :role, :orga_relation_id, :read_at, :notified_at, :reminder_date, :reminder_notified_at, :user, :organization
+
     #==============================================================
     # Associations
     #==============================================================
