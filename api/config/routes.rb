@@ -235,6 +235,8 @@ MnoEnterprise::Engine.routes.draw do
             resources :subscriptions, only: [:index, :show, :create, :update] do
               member do
                 post :cancel
+                post :approve
+                post :fulfill
               end
             end
           end

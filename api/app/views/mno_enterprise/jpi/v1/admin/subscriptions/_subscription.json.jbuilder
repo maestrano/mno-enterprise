@@ -45,3 +45,6 @@ if subscription.organization
   end
 end
 json.user_id subscription.user&.id
+json.billed_locally subscription.billed_locally
+json.externally_provisioned subscription.externally_provisioned
+json.local_product subscription.local_product

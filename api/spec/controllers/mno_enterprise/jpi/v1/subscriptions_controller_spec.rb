@@ -125,5 +125,47 @@ module MnoEnterprise
         assert_requested_api_v2(:post, "/subscriptions/#{subscription.id}/cancel")
       end
     end
+
+    describe 'POST #approve' do
+      let(:subscription) { build(:subscription) }
+      let(:product) { build(:product) }
+      let(:product_pricing) { build(:product_pricing, product: product) }
+
+      before { stub_audit_events }
+      before { stub_api_v2(:post, "/subscriptions/#{subscription.id}/approve", subscription, [], {}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
+      before { sign_in user }
+
+      subject { post :approve, organization_id: organization.id, id: subscription.id }
+
+      it_behaves_like 'jpi v1 protected action'
+
+      it 'forwards the correct request' do
+        expect(subject).to be_successful
+        assert_requested_api_v2(:post, "/subscriptions/#{subscription.id}/approve")
+      end
+    end
+
+    describe 'POST #fulfill' do
+      let(:subscription) { build(:subscription) }
+      let(:product) { build(:product) }
+      let(:product_pricing) { build(:product_pricing, product: product) }
+
+      before { stub_audit_events }
+      before { stub_api_v2(:post, "/subscriptions/#{subscription.id}/fulfill", subscription, [], {}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
+      before { sign_in user }
+
+      subject { post :fulfill, organization_id: organization.id, id: subscription.id }
+
+      it_behaves_like 'jpi v1 protected action'
+
+      it 'forwards the correct request' do
+        expect(subject).to be_successful
+        assert_requested_api_v2(:post, "/subscriptions/#{subscription.id}/fulfill")
+      end
+    end
   end
 end

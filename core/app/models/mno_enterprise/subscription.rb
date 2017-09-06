@@ -20,6 +20,8 @@ module MnoEnterprise
     has_one :product_pricing
 
     custom_endpoint :cancel, on: :member, request_method: :post
+    custom_endpoint :approve, on: :member, request_method: :post
+    custom_endpoint :fulfill, on: :member, request_method: :post
 
     def to_audit_event
       event = {id: id, status: status}
