@@ -117,6 +117,24 @@ module MnoEnterprise
         end
       end
 
+      # TODO: un-comment and test after global skip has been removed
+      # context 'with organization_id' do
+      #   subject { get :index, organization_id: organization.id }
+      #
+      #   let!(:user) { build(:user) }
+      #   let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+      #
+      #   before { sign_in user }
+      #   before { stub_api_v2(:get, "/organizations", [organization], [], { fields: 'id', filter: { 'users.id' => user.id }}) }
+      #   before { stub_api_v2(:get, '/apps', [app], [], { _metadata: { organization_id: organization.id } }) }
+      #   before do
+      #     stub_api_v2(:get, '/apps', [app], [],
+      #       { _metadata: { organization_id: organization.id }, fields: { apps: 'updated_at' }, page:{ number: 1, size: 1 }, sort: '-updated_at'})
+      #   end
+      #
+      #   it { is_expected.to be_success }
+      # end
+
       describe 'caching' do
         context 'on the first request' do
           it { is_expected.to have_http_status(:ok) }
