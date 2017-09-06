@@ -68,6 +68,36 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     end
   end
 
+  # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc/approve
+  def approve
+    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
+    return render_not_found('subscription') unless subscription
+    subscription.approve
+
+    if subscription.errors.any?
+      render json: subscription.errors, status: :bad_request
+    else
+      MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription approved', subscription)
+      @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      render :show
+    end
+  end
+
+  # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc/fulfill
+  def fulfill
+    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
+    return render_not_found('subscription') unless subscription
+    subscription.fulfill
+
+    if subscription.errors.any?
+      render json: subscription.errors, status: :bad_request
+    else
+      MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription fulfilled', subscription)
+      @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      render :show
+    end
+  end
+
   protected
 
   def subscription_update_params
