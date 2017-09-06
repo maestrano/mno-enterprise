@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module MnoEnterprise
-  RSpec.describe App, :type => :model do
+  RSpec.describe App, type: :model do
     describe '.categories' do
       let(:categories) { %w(Other CATEGORY category) }
       let(:app) { build(:app, categories: categories) }
@@ -64,6 +64,38 @@ module MnoEnterprise
         subject
         expect(app.api_key).to_not eq(old)
         expect(app.api_key).to eq(response.api_key)
+      end
+    end
+
+    describe '.enable' do
+      before { stub_api_v2(:patch, "/apps/enable", nil) }
+      subject { described_class.enable(ids: [1,2]) }
+
+      it 'enable the apps' do
+        subject
+        assert_requested_api_v2(:patch, "/apps/enable", body: {ids: [1,2]}.to_json)
+      end
+    end
+
+    describe '#enable' do
+      let(:app) { build(:app) }
+      before { stub_api_v2(:patch, "/apps/#{app.id}/enable", nil) }
+      subject { app.enable }
+
+      it 'enable the app' do
+        subject
+        assert_requested_api_v2(:patch, "/apps/#{app.id}/enable")
+      end
+    end
+
+    describe '#disable' do
+      let(:app) { build(:app) }
+      before { stub_api_v2(:patch, "/apps/#{app.id}/disable", nil) }
+      subject { app.disable }
+
+      it 'disable the app' do
+        subject
+        assert_requested_api_v2(:patch, "/apps/#{app.id}/disable")
       end
     end
   end

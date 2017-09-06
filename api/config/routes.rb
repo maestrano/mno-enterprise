@@ -196,6 +196,17 @@ MnoEnterprise::Engine.routes.draw do
         resources :app_reviews, only: [:index, :show,  :update]
         resources :app_comments, only: [:create]
         resources :app_answers, only: [:create]
+
+        resources :apps, only: [:index] do
+          collection do
+            patch :enable
+          end
+          member do
+            patch :enable
+            patch :disable
+          end
+        end
+
         resources :users, only: [:index, :show, :destroy, :update, :create] do
           collection do
             get :metrics
