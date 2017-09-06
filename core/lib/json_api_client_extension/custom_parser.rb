@@ -21,7 +21,7 @@ module JsonApiClientExtension
           end
         when String
           if res =~ /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/i
-            return Time.iso8601(res)
+            return Time.parse(res)
           end
       end
       res
