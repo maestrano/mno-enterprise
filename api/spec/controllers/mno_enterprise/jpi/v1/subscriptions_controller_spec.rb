@@ -89,7 +89,7 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/subscriptions", subscription, [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
       before { sign_in user }
 
-      subject { put :update, organization_id: organization.id, id: subscription.id, subscription: {custom_data: {foo: :bar}.to_json, pricing_id: product_pricing.id} }
+      subject { put :update, organization_id: organization.id, id: subscription.id, subscription: {custom_data: {foo: :bar}.to_json, product_pricing_id: product_pricing.id} }
 
       it_behaves_like 'jpi v1 protected action'
 
@@ -100,6 +100,9 @@ module MnoEnterprise
                                   "data" => {
                                     "id" => subscription.id,
                                     "type" => "subscriptions",
+                                    "relationships" => {
+                                      "product_pricing" => {"data" => {"type" => "product_pricings", "id" => product_pricing.id}}
+                                    },
                                     "attributes" => {"custom_data" => {"foo" => "bar"}.to_json}}
                                   }.to_json)
       end
