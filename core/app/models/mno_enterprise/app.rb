@@ -8,6 +8,10 @@ module MnoEnterprise
 
     custom_endpoint :regenerate_api_key, on: :member, request_method: :patch
 
+    custom_endpoint :enable, on: :member, request_method: :patch
+    custom_endpoint :enable, on: :collection, request_method: :patch
+    custom_endpoint :disable, on: :member, request_method: :patch
+
     # Return the list of available categories
     def self.categories(list = nil)
       app_list = list || self.all.to_a
