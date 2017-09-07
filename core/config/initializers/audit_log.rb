@@ -24,6 +24,8 @@ unless defined? AUDIT_LOG_CONFIG
         "team_apps_update" => "Team '%{name}' app list modified. New list: '%{apps}'",
         "app_connected" => "App '%{name}' connected",
         "app_disconnected" => "App '%{name}' disconnected",
+        "impersonate_created" => "Impersonated session created for user %{user_email}",
+        "impersonate_destroyed" => "Impersonated session destroyed",
       }
     }
   end
