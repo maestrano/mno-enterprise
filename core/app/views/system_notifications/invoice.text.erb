@@ -1,0 +1,16 @@
+Hi <%= @info[:first_name]%>,
+=================================================================
+
+Please find attached your invoice from
+<%= @info[:started_at] %> to <%= @info[:ended_at] %>.
+The amount due for this invoice is <%= @info[:currency]%> <%= @info[:price_cents]%>.
+Your designated credit card will be charged on the 2nd of next month.
+You can check your current spendings as well as your billing history in your <%= @info[:dashboard_link] %> dashboard.
+
+Note that this message is sent in regards to the organization and does not take into consideration your personal account. Any message related to your personal account will be sent to you directly in a separate email.
+If you need any help or have any question regarding your account situation please feel free to send us an email at <%= mail_to(MnoEnterprise.support_email) %>
+Our staff will be pleased to help you.
+
+Regards,
+The Marketplace team
+<%= @info[:company] %>
