@@ -447,6 +447,16 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               description: "enable frontend configuration from the Admin Panel"
             }
           }
+        },
+        sub_tenant: {
+          type: "object",
+          properties: {
+            enabled: {
+              type: "boolean",
+              default: false,
+              description: "enable sub tenant management from the Admin Panel"
+            }
+          }
         }
       }
     }

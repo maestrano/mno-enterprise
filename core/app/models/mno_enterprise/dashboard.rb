@@ -5,6 +5,23 @@ module MnoEnterprise
     property :updated_at, type: :time
     property :owner_id, type: :string
 
+	# TODO:
+	# default_scope -> { where(dashboard_type: 'dashboard') }
+
+    custom_endpoint :copy, on: :member, request_method: :post
+
+    #============================================
+    # Class methods
+    #============================================
+    # TODO: specs
+	def self.templates
+      where(dashboard_type: 'template')
+    end
+
+    def self.published_templates
+      where(dashboard_type: 'template', published: true)
+    end
+
     #============================================
     # Instance methods
     #============================================
@@ -24,6 +41,7 @@ module MnoEnterprise
       end
     end
 
+    # Filter widgets list based on config
     def filtered_widgets_templates
       if MnoEnterprise.widgets_templates_listing
         return self.widgets_templates.select do |t|
@@ -46,9 +64,21 @@ module MnoEnterprise
       {
         name: name,
         owner_id: owner_id,
-        owner_type: owner_type
+        owner_type: owner_type,
+        organization_id: (owner_type == 'Organization') ? owner_id : nil
       }
     end
 
+    def copy(owner, name, organization_ids)
+      owner_type = owner.class.name.demodulize
+      attrs = {
+        id: self.id,
+        name: name,
+        organization_ids: organization_ids,
+        owner_type: owner_type,
+        owner_id: owner.id
+      }
+      self.class.copy(attrs)
+    end
   end
 end

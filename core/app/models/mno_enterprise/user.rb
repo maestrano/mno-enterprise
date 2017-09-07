@@ -36,6 +36,9 @@ module MnoEnterprise
     property :surname, type: :string
     property :website, type: :string
 
+    property :sub_tenant_id, type: :string
+    property :client_ids
+
     define_model_callbacks :validation #required by Devise
     define_model_callbacks :update #required by Devise
     define_model_callbacks :create #required by Devise

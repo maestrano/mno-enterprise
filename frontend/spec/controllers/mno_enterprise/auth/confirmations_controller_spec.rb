@@ -40,11 +40,28 @@ module MnoEnterprise
         end
 
         describe 'unconfirmed user' do
-          before { user.confirmed_at = nil }
-          before{stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations organizations.orga_relations))}
+          let(:tos_accepted_at) { nil }
+          before do
+            user.metadata[:tos_accepted_at] = tos_accepted_at
+            user.confirmed_at = nil
+          end
+          before { stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations organizations.orga_relations)) }
           before { subject }
           it { expect(response.code).to eq('200') }
           it { expect(assigns(:confirmation_token)).to eq(user.confirmation_token) }
+
+          context 'when TOS accepted' do
+            let(:tos_accepted_at) { 1.days.ago }
+            it 'does not show the TOS checkbox' do
+              expect(response.body).not_to include('id="tos"')
+            end
+          end
+
+          context 'when TOS not accepted' do
+            it 'shows the TOS checkbox' do
+              expect(response.body).to include('id="tos"')
+            end
+          end
         end
       end
 
