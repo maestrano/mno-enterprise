@@ -13,6 +13,9 @@ FactoryGirl.define do
       paid_at nil
 
       price Money.new(7980,'AUD')
+      price_cents 7980
+      currency 'AUD'
+
       billing_address "205 Bla Street, Sydney"
       total_due Money.new(7980,'AUD')
       total_payable Money.new(7980,'AUD')
@@ -26,6 +29,9 @@ FactoryGirl.define do
       previous_total_paid Money.new(0,'AUD')
 
       tax_pips_applied 5000
+
+      organization { build(:organization) }
+      bills []
 
       billing_summary [
         {
