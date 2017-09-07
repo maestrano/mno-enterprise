@@ -67,13 +67,17 @@ module MnoEnterprise
       bill = MnoEnterprise::Bill.new(attributes)
       bill.relationships.billable = MnoEnterprise::Organization.new(id: invoice.organization.id)
       bill.relationships.invoice = invoice
-      bill.save
 
-      # Refetch invoice totals
-      invoice = MnoEnterprise::Invoice.select(:price, :total_due).find(params[:id]).first
+      if bill.save
+        # Refetch invoice totals
+        invoice = MnoEnterprise::Invoice.select(:price, :total_due).find(params[:id]).first
 
-      # Render invoice totals
-      render json: { invoice: { price: invoice.price, total_due: invoice.total_due } }
+        # Render invoice totals
+        render json: { id: bill.id, invoice: { price: invoice.price, total_due: invoice.total_due } }
+      else
+        # Render invoice totals
+        render json: { errors: bill.errors }
+      end
     end
 
     # NOTE: it would be preferable to use Invoice#price_cents
@@ -91,13 +95,15 @@ module MnoEnterprise
 
       # Delete adjustment. Note that adjustments are hard deleted
       # instead of cancelled.
-      bill.destroy
+      if bill.destroy
+        # Refetch invoice totals
+        invoice = MnoEnterprise::Invoice.select(:price, :total_due).find(params[:id]).first
 
-      # Refetch invoice totals
-      invoice = MnoEnterprise::Invoice.select(:price, :total_due).find(params[:id]).first
-
-      # Render invoice totals
-      render json: { invoice: { price: invoice.price, total_due: invoice.total_due } }
+        # Render invoice totals
+        render json: { invoice: { price: invoice.price, total_due: invoice.total_due } }
+      else
+        render json: { errors: bill.errors }
+      end
     end
 
     # GET /mnoe/jpi/v1/admin/invoices/current_billing_amount

@@ -69,6 +69,7 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], { fields: { invoices: 'price,total_due' } }) }
       before { subject }
 
+      it { expect(data['id']).to eq(bill.id) }
       it { expect(data['invoice']['total_due']['fractional']).to eq(invoice.total_due.cents.to_f.to_s) }
       it { expect(data['invoice']['price']['fractional']).to eq(invoice.price.cents.to_f.to_s) }
     end
