@@ -8,6 +8,6 @@ json.invoice do
 
   json.bills @invoice.bills.reject { |bill| bill.billable.type == 'organizations' } do |bill|
     json.extract! bill, :id, :end_user_price_cents, :currency, :description
-    json.billable_name bill.billable
+    json.billable_name bill.billable.name
   end
 end
