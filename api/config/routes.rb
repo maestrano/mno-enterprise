@@ -252,7 +252,9 @@ MnoEnterprise::Engine.routes.draw do
             end
           end
         end
+
         resources :tenant_invoices, only: [:index, :show]
+
         resources :invoices, only: [:index, :show, :update] do
           collection do
             get :current_billing_amount
@@ -261,7 +263,13 @@ MnoEnterprise::Engine.routes.draw do
             get :last_commission_amount
             get :last_portfolio_amount
           end
+
+          member do
+            post :adjustments, action: :create_adjustment
+            delete 'adjustments/:bill_id', action: :delete_adjustment
+          end
         end
+
         resources :cloud_apps, only: [:index, :update] do
           member do
             put :regenerate_api_key
