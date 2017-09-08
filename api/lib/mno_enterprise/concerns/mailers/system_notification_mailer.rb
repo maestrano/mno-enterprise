@@ -211,6 +211,29 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     )
   end
 
+  def send_invoice(recipient_id, invoice_id)
+    recipient = MnoEnterprise::User.find_one(recipient_id)
+    invoice = MnoEnterprise::Invoice.find_one(invoice_id)
+    MnoEnterprise::MailClient.deliver(
+      'invoice',
+      default_sender,
+      { email: recipient.email },
+      {
+        first_name: recipient.name,
+        started_at: invoice.started_at.to_date,
+        ended_at: invoice.ended_at.to_date,
+        currency: invoice.total_due.currency,
+        price_cents: invoice.total_due.fractional,
+        dashboard_link: root_url,
+        attachments: [
+          {
+            name: "invoice - #{invoice.slug}.pdf",
+            value: MnoEnterprise::InvoicePdf.new(invoice).render
+          }
+        ]
+      }
+    )
+  end
 
   protected
 

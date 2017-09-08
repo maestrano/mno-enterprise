@@ -7,6 +7,10 @@ module MnoEnterprise
     def deliver(template, from, to, vars={}, opts={})
       @info = vars
       @info[:company] = from[:name]
+  
+      for attachment in @info[:attachments]
+        attachments[attachment[:name]] = attachment[:value]
+      end if @info[:attachments]
 
       mail(
         from: format_sender(from),
