@@ -1,5 +1,5 @@
 json.invoice do
-  json.partial! 'invoice', invoice: @invoice
+  json.extract! @invoice, :id, :price, :started_at, :ended_at, :created_at, :updated_at, :paid_at, :slug, :tax_pips_applied
   json.organization @invoice.organization, :id, :name
 
   json.adjustments @invoice.bills.select { |bill| bill.billable.type == 'organizations' } do |bill|

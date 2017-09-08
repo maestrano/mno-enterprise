@@ -4,10 +4,6 @@ module MnoEnterprise
     DEPENDENCIES = [:organization, :bills, :'bills.billable']
     ADJUSTMENT_ATTRIBUTES = [:description, :price_cents]
 
-    # NOTE: we should reduce the number of fields being fetched
-    #
-    # NOTE: not sure that the dependencies are required here. It's only a listing.
-    #
     # NOTE: it would be preferable to use Invoice#price_cents
     # and Invoice#currency rather than Invoice#price
     #
@@ -16,11 +12,11 @@ module MnoEnterprise
       if params[:terms]
         # Search mode
         @invoices = []
-        JSON.parse(params[:terms]).map { |t| @invoices = @invoices | MnoEnterprise::Invoice.includes(DEPENDENCIES).where(Hash[*t]) }
+        JSON.parse(params[:terms]).map { |t| @invoices = @invoices | invoice_index_query.where(Hash[*t]) }
         response.headers['X-Total-Count'] = @invoices.count
       else
         # Index mode
-        query = MnoEnterprise::Invoice.apply_query_params(params).includes(DEPENDENCIES)
+        query = invoice_index_query(params)
         @invoices = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
       end
@@ -33,7 +29,12 @@ module MnoEnterprise
     #
     # GET /mnoe/jpi/v1/admin/invoices/1
     def show
-      @invoice = MnoEnterprise::Invoice.find_one(params[:id], *DEPENDENCIES)
+      @invoice = MnoEnterprise::Invoice
+        .select(:id, :price, :started_at, :ended_at, :created_at, :updated_at, :paid_at, :slug, :tax_pips_applied,
+          :organization, { organizations: [:id, :name] },
+          :bills, bills: [:id, :end_user_price_cents, :currency, :description, :billable])
+        .includes(:organization, :bills, :'bills.billable')
+        .find(params[:id]).first
     end
 
     # PATCH /mnoe/jpi/v1/admin/invoices/1
@@ -159,6 +160,14 @@ module MnoEnterprise
 
     def adjustment_params
       params.require(:adjustment).permit(*ADJUSTMENT_ATTRIBUTES)
+    end
+
+    def invoice_index_query(query_params = nil)
+      rel = MnoEnterprise::Invoice
+      rel = rel.apply_query_params(query_params) if query_params
+      rel.select(:id, :price, :started_at, :ended_at, :created_at, :updated_at, :paid_at, :slug,
+                 :organization, organizations: [:id, :name])
+         .includes(:organization)
     end
   end
 end
