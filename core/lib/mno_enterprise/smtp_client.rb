@@ -8,9 +8,9 @@ module MnoEnterprise
       @info = vars
       @info[:company] = from[:name]
   
-      for attachment in @info[:attachments]
+      (@info[:attachments] || []).each do |attachment|
         attachments[attachment[:name]] = attachment[:value]
-      end if @info[:attachments]
+      end
 
       mail(
         from: format_sender(from),
