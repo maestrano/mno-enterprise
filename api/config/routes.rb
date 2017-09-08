@@ -267,7 +267,7 @@ MnoEnterprise::Engine.routes.draw do
           member do
             post :adjustments, action: :create_adjustment
             delete 'adjustments/:bill_id', action: :delete_adjustment
-            post :send_to_customers
+            post :send_to_customer
           end
         end
 

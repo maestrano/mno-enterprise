@@ -107,8 +107,8 @@ module MnoEnterprise
       it { expect(data['invoice']['price']['fractional']).to eq(invoice.price.cents.to_f.to_s) }
     end
 
-    describe 'POST #send_to_customers' do
-      subject { post :send_to_customers, id: invoice.id }
+    describe 'POST #send_to_customer' do
+      subject { post :send_to_customer, id: invoice.id }
 
       let(:data) { JSON.parse(response.body) }
 
