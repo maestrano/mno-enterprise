@@ -1,7 +1,6 @@
 module MnoEnterprise
   class Jpi::V1::Admin::InvoicesController < Jpi::V1::Admin::BaseResourceController
 
-    DEPENDENCIES = [:organization, :bills, :'bills.billable']
     ADJUSTMENT_ATTRIBUTES = [:description, :price_cents]
 
     # NOTE: it would be preferable to use Invoice#price_cents
@@ -30,8 +29,8 @@ module MnoEnterprise
       @invoice = MnoEnterprise::Invoice
         .select(:id, :price, :started_at, :ended_at, :created_at, :updated_at, :paid_at, :slug, :tax_pips_applied,
           :organization, { organizations: [:id, :name] },
-          :bills, bills: [:id, :end_user_price_cents, :currency, :description, :billable])
-        .includes(:organization, :bills, :'bills.billable')
+          :bills, bills: [:id, :adjustment, :billing_group, :end_user_price_cents, :currency, :description])
+        .includes(:organization, :bills)
         .find(params[:id]).first
     end
 
@@ -86,7 +85,7 @@ module MnoEnterprise
     def delete_adjustment
       # Find adjustment bill
       bill = MnoEnterprise::Bill.select(:id).where(
-        'billable.type' => 'organizations',
+        'adjustment' => true,
         'invoice.id' => params[:id],
         'id' => params[:bill_id]
       ).first

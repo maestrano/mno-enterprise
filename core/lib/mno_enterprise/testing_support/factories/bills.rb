@@ -8,6 +8,7 @@ FactoryGirl.define do
       updated_at 1.hour.ago
       price_cents 2000
       end_user_price_cents 2400
+      billing_group 'Some App'
       currency 'AUD'
       billable { build(:app_instance) }
     end

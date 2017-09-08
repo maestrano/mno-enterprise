@@ -24,10 +24,16 @@ module MnoEnterprise
       subject { get :index }
 
       let(:data) { JSON.parse(response.body) }
+      let(:select_fields) do
+        {
+          invoices: 'id,price,started_at,ended_at,created_at,updated_at,paid_at,slug,organization',
+          organizations: 'id,name'
+        }
+      end
 
       before { allow(invoice).to receive(:bills).and_return([bill]) }
       before { allow(invoice).to receive(:organization).and_return(organization) }
-      before { stub_api_v2(:get, "/invoices", [invoice], %i(organization bills bills.billable)) }
+      before { stub_api_v2(:get, "/invoices", [invoice], %i(organization), { fields: select_fields }) }
       before { subject }
 
       it { expect(data['invoices'].first['id']).to eq(invoice.id) }
@@ -37,11 +43,17 @@ module MnoEnterprise
       subject { get :show, id: invoice.id }
 
       let(:data) { JSON.parse(response.body) }
+      let(:select_fields) do
+        {
+          bills: 'id,adjustment,billing_group,end_user_price_cents,currency,description',
+          invoices: 'id,price,started_at,ended_at,created_at,updated_at,paid_at,slug,tax_pips_applied,organization,bills',
+          organizations: 'id,name'
+        }
+      end
 
       before { allow(invoice).to receive(:bills).and_return([bill]) }
       before { allow(invoice).to receive(:organization).and_return(organization) }
-      before { allow_any_instance_of(MnoEnterprise::Bill).to receive(:billable).and_return(billable) }
-      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization bills bills.billable)) }
+      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization bills), { fields: select_fields }) }
       before { subject }
 
       it { expect(data['invoice']['id']).to eq(invoice.id) }
@@ -83,7 +95,7 @@ module MnoEnterprise
         stub_api_v2(:get, "/bills", bill, [],
           {
             fields: { bills: 'id' },
-            filter: { 'billable.type' => 'organizations', 'invoice.id' => invoice.id, 'id' => bill.id },
+            filter: { 'adjustment' => 'true', 'invoice.id' => invoice.id, 'id' => bill.id },
             page: { number: 1, size: 1}
           })
       end
