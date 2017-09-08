@@ -91,6 +91,8 @@ module MnoEnterprise
       i18n_properties['preferred_locale']['enum'] = available_locales
       i18n_properties['available_locales']['x-schema-form']['titleMap'] = locale_map
       i18n_properties['preferred_locale']['x-schema-form']['titleMap'] = locale_map
+
+      update_application_list!
     end
 
     # Fetch the Tenant#frontend_config from MnoHub
@@ -117,6 +119,16 @@ module MnoEnterprise
           end
           h.compact
       end
+    end
+
+    def self.update_application_list!
+      available_app_nids = App.all.map(&:nid)
+      available_app_map = Hash[App.all.map{|a| [a.nid, a.name]}]
+      public_pages_properties = json_schema['properties']['dashboard']['properties']['public_pages']['properties']
+      public_pages_properties['applications']['items']['enum'] = available_app_nids
+      public_pages_properties['applications']['x-schema-form']['titleMap'] = available_app_map
+      public_pages_properties['highlighted_applications']['items']['enum'] = available_app_nids
+      public_pages_properties['highlighted_applications']['x-schema-form']['titleMap'] = available_app_map
     end
   end
 end
