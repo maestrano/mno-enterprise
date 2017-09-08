@@ -32,8 +32,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
     false
   end
 
-  def render_not_found(resource)
-    render json: { errors: {message: "#{resource.titleize} not found (id=#{params[:id]})", code: 404, params: params} }, status: :not_found
+  def render_not_found(resource, id = params[:id])
+    render json: { errors: {message: "#{resource.titleize} not found (id=#{id})", code: 404, params: params} }, status: :not_found
   end
 
   def render_bad_request(attempted_action, issue)
