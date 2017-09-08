@@ -107,6 +107,19 @@ module MnoEnterprise
       it { expect(data['invoice']['price']['fractional']).to eq(invoice.price.cents.to_f.to_s) }
     end
 
+    describe 'POST #send_to_customers' do
+      subject { post :send_to_customers, id: invoice.id }
+
+      let(:data) { JSON.parse(response.body) }
+
+      before { allow(invoice).to receive(:organization).and_return(organization) }
+      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization), { fields: { invoices: 'organization', organizations: 'id' } }) }
+      before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations), { fields: { organizations: 'orga_relations',  orga_relations: 'id,user_id,role' } }) }
+      before { subject }
+
+      it { expect(data['status']).to eq('request_sent') }
+    end
+
   # TODO: re-spec reporting endpoints
   #   #===============================================
   #   # Specs

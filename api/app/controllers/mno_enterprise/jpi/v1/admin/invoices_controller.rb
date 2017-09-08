@@ -151,7 +151,7 @@ module MnoEnterprise
           MnoEnterprise::SystemNotificationMailer.send_invoice(user.id, params[:id])
         end
       end
-      render json: { status: 'Request sent'}
+      render json: { status: :request_sent}
     end
 
     #==================================================================
