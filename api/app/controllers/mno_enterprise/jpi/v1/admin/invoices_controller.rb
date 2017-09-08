@@ -22,8 +22,6 @@ module MnoEnterprise
       end
     end
 
-    # NOTE: we should reduce the number of fields being fetched
-    #
     # NOTE: it would be preferable to use Invoice#price_cents
     # and Invoice#currency rather than Invoice#price
     #
