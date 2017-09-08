@@ -23,7 +23,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     org_id = parent_organization_id
 
     # Compute cache key timestamp
-    app_last_modified = app_relation(org_id).order(updated_at: :desc).select(:updated_at).first&.updated_at
+    app_last_modified = app_relation(org_id).order(updated_at: :desc).select(:updated_at).first&.updated_at || Time.new(0)
     tenant_last_modified = MnoEnterprise::Tenant.show.updated_at
     @last_modified = [app_last_modified, tenant_last_modified].max
 
