@@ -41,6 +41,7 @@ module MnoEnterprise
       end
 
       def render_bad_request(attempted_action, issue)
+        issue = issue.full_messages if issue.respond_to?(:full_messages)
         render json: { errors: {message: "Error while trying to #{attempted_action}: #{issue}", code: 400, params: params} }, status: :bad_request
       end
 
