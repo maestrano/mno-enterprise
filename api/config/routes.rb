@@ -252,6 +252,7 @@ MnoEnterprise::Engine.routes.draw do
             end
           end
         end
+        resources :sub_tenants, only: [:index, :show, :destroy, :update, :create]
         resources :tenant_invoices, only: [:index, :show]
         resources :invoices, only: [:index, :show] do
           collection do
