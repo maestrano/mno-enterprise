@@ -19,7 +19,7 @@ module MnoEnterprise
                 adapter: {
                   type: "string",
                   description: "Payment Gateway provider",
-                  enum: ["braintree"],
+                  enum: ["braintree", "eway"],
                   default: "braintree"
                 },
                 config: {
@@ -42,9 +42,26 @@ module MnoEnterprise
                         type: 'textarea',
                         description: "Enter the private key provided by Braintree"
                       }
+                    },
+                    login: {
+                      type: "string",
+                      description: "Enter the eWay login"
+                    },
+                    username: {
+                      type: "string",
+                      'x-schema-form': {
+                        type: 'textarea',
+                        description: "Enter the eWay username"
+                      }
+                    },
+                    password: {
+                      type: "string",
+                      'x-schema-form': {
+                        type: 'textarea',
+                        description: "Enter the eWay password"
+                      }
                     }
-                  },
-                  required: ["merchant_id", "public_key", "private_key"]
+                  }
                 }
               },
             },
