@@ -17,6 +17,7 @@ json.cache! ['v2', @user.cache_key] do
     json.admin_role @user.admin_role
     json.avatar_url avatar_url(@user)
     json.settings @user.settings
+    json.mnoe_sub_tenant_id @user.sub_tenant_id
 
     if current_impersonator
       json.current_impersonator true
@@ -51,5 +52,3 @@ json.cache! ['v2', @user.cache_key] do
     end
   end
 end
-
-

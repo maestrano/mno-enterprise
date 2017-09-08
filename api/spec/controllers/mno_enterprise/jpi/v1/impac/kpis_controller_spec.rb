@@ -16,10 +16,10 @@ module MnoEnterprise
     let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
 
     before { sign_in user }
+    before { stub_audit_events }
 
     let(:dashboard) { build(:impac_dashboard) }
 
-    # TODO KPI DISABLED TEST CASES
     # TODO: Review the whole spec logic
     pending "Review test logic of #{__FILE__}"
 

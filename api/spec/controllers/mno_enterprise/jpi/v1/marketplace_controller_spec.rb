@@ -169,6 +169,37 @@ module MnoEnterprise
           end
         end
       end
+
+      context 'without apps' do
+        before do
+          MnoEnterprise.marketplace_listing = nil
+          api_stub_for(get: '/apps', response: from_api([]))
+        end
+
+        it { is_expected.to have_http_status(:ok) }
+
+        it 'does not set last modified header' do
+          subject
+          header = response.headers['Last-Modified']
+
+          expect(header).not_to be_present
+        end
+
+        context 'with a if-modified-since header' do
+          before do
+            request.env['HTTP_IF_MODIFIED_SINCE'] = Time.current.rfc2822
+          end
+
+          it { is_expected.to have_http_status(:ok) }
+
+          it 'does not set last modified header' do
+            subject
+            header = response.headers['Last-Modified']
+
+            expect(header).not_to be_present
+          end
+        end
+      end
     end
 
     describe 'GET #show' do

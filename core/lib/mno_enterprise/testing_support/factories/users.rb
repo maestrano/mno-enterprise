@@ -61,6 +61,10 @@ FactoryGirl.define do
       kpi_enabled true
     end
 
+    trait :with_clients do
+      clients { [build(:organization)] }
+    end
+
     # Make sure the object is not dirty
     initialize_with { new(attributes).tap { |e| e.clear_changes_information } }
   end
