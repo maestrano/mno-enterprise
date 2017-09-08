@@ -212,7 +212,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   end
 
   def send_invoice(recipient_id, invoice_id)
-    recipient = MnoEnterprise::User.find_one(recipient_id)
+    recipient = MnoEnterprise::User.select(:email, :name).find(recipient_id).first
     invoice = MnoEnterprise::Invoice.find_one(invoice_id)
     MnoEnterprise::MailClient.deliver(
       'invoice',

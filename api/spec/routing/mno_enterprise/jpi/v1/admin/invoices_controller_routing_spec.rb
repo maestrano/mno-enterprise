@@ -12,6 +12,14 @@ module MnoEnterprise
       expect(get('/jpi/v1/admin/invoices/1')).to route_to("mno_enterprise/jpi/v1/admin/invoices#show", format: "json", id: '1')
     end
 
+    it 'routes to #create_adjustment' do
+      expect(post('/jpi/v1/admin/invoices/1/adjustments')).to route_to("mno_enterprise/jpi/v1/admin/invoices#create_adjustment", format: "json", id: '1')
+    end
+
+    it 'routes to #delete_adjustment' do
+      expect(delete('/jpi/v1/admin/invoices/1/adjustments/2')).to route_to("mno_enterprise/jpi/v1/admin/invoices#delete_adjustment", format: "json", id: '1', bill_id: '2')
+    end
+
     it 'routes to #current_billing_amount' do
       expect(get('/jpi/v1/admin/invoices/current_billing_amount')).to route_to("mno_enterprise/jpi/v1/admin/invoices#current_billing_amount", format: "json")
     end
@@ -34,4 +42,3 @@ module MnoEnterprise
 
   end
 end
-
