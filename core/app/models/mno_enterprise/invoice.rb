@@ -8,6 +8,8 @@ module MnoEnterprise
     has_many :bills
     has_one :organization
 
+    custom_endpoint :send_to_customers, on: :member, request_method: :post
+
     # this invoice covers
     def period_label
       return '' unless self.started_at && self.ended_at

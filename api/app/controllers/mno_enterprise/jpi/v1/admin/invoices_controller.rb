@@ -134,6 +134,26 @@ module MnoEnterprise
       render json: { last_commission_amount: format_money(tenant_billing) }
     end
 
+    # POST /mnoe/jpi/v1/admin/invoices/1/send_to_customers
+    def send_to_customers
+      invoice = MnoEnterprise::Invoice
+                  .select(:organization, organizations: [:id])
+                  .includes(:organization)
+                  .find(params[:id]).first
+
+      organization = MnoEnterprise::Organization
+                       .select(:orga_relations, orga_relations: [:id, :user_id, :role])
+                       .includes(:orga_relations)
+                       .find(invoice.organization.id).first
+
+      organization.orga_relations.each do |user|
+        if user.role == 'Super Admin'
+          MnoEnterprise::SystemNotificationMailer.send_invoice(user.id, params[:id])
+        end
+      end
+      render json: { status: 'Request sent'}
+    end
+
     #==================================================================
     # Private
     #==================================================================
