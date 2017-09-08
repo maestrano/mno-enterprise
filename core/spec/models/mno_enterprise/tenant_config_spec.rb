@@ -8,6 +8,7 @@ describe MnoEnterprise::TenantConfig do
 
   describe '.load_config!' do
     before { stub_api_v2(:get, '/tenant', tenant) }
+    before { stub_api_v2(:get, '/apps', []) }
     subject { described_class.load_config! }
 
     it 'fetch the tenant config' do
