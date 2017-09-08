@@ -9,7 +9,7 @@ module MnoEnterprise
     def create
       return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless template.present?
 
-      @widget = template.widgets.create(widget_create_params)
+      @widget = MnoEnterprise::Widget.create(widget_create_params)
       return render json: { errors: (widget && widget.errors).to_a }, status: :bad_request unless widget.present? && widget.valid?
 
       MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Template Widget Creation', widget)
@@ -30,22 +30,26 @@ module MnoEnterprise
 
     # DELETE /mnoe/jpi/v1/admin/impac/widgets/:id
     def destroy
-      unless widget.present? && widget.destroy
-        return render json: { errors: 'Cannot delete widget' }, status: :bad_request
-      end
+      return render_not_found('widget') unless widget.present?
 
       MnoEnterprise::EventLogger.info('widget_delete', current_user.id, 'Template Widget Deletion', widget)
+
+      unless widget.destroy
+        msg = widget.errors.full_messages.join(', ') || 'unable to update Widget.'
+        return render_bad_request("delete widget (id=#{widget.id})", msg)
+      end
+
       head status: :ok
     end
 
     private
 
     def template
-      MnoEnterprise::Impac::Dashboard.templates.find(params[:dashboard_template_id].to_i)
+      MnoEnterprise::Dashboard.templates.find(params[:dashboard_template_id].to_i).first
     end
 
     def widget
-      @widget ||= MnoEnterprise::Impac::Widget.find(params[:id].to_i)
+      @widget ||= MnoEnterprise::Widget.find(params[:id].to_i).first
     end
 
     def widget_create_params
@@ -58,6 +62,7 @@ module MnoEnterprise
         whitelisted[:widget_category] = params[:widget][:endpoint]
       end
       .except(:metadata)
+      .merge(dashboard_id: template.id)
     end
 
     def widget_update_params

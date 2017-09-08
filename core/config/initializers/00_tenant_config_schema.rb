@@ -378,6 +378,16 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             }
           }
         },
+        dashboard_templates: {
+          type: "object",
+          properties: {
+            enabled: {
+              type: "boolean",
+              description: "Enable the dashboard designer",
+              default: false
+            }
+          }
+        },
         customer_management: {
           type: "object",
           properties: {

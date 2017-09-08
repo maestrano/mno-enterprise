@@ -82,8 +82,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     return render_not_found('template') unless template
 
     # Owner is the current user by default, can be overriden to something else (eg: current organization)
-    @dashboard = template.copy(current_user, dashboard_params[:name], dashboard_params[:organization_ids])
-    return render_bad_request('copy template', 'Unable to copy template') unless dashboard.present?
+    @dashboard = template.copy(current_user, dashboard_params[:name], dashboard_params[:organization_ids]).first
+
+    if @dashboard.present?
+      @dashboard = @dashboard.load_required(DASHBOARD_DEPENDENCIES)
+    else
+      return render_bad_request('copy template', 'Unable to copy template')
+    end
 
     render 'show'
   end
@@ -91,10 +96,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   private
 
     def dashboard(*included)
-      @dashboard ||= MnoEnterprise::Dashboard.find_one(params[:id].to_i, included)
+      # TODO: [APIv2] Improve filtering by owner (owner_type?)
+      @dashboard ||= MnoEnterprise::Dashboard.where(owner_id: current_user.id).includes(included).find(params[:id].to_i).first
     end
 
     def dashboards
+      # TODO: [APIv2] Improve filtering by owner (owner_type?)
       @dashboards ||= MnoEnterprise::Dashboard.includes(*DASHBOARD_DEPENDENCIES).find(owner_id: current_user.id)
     end
 
@@ -103,7 +110,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     end
 
     def template
-      @template ||= MnoEnterprise::Dashboard.templates.find(params[:id].to_i)
+      @template ||= MnoEnterprise::Dashboard.templates.find(params[:id].to_i).first
     end
 
     def whitelisted_params

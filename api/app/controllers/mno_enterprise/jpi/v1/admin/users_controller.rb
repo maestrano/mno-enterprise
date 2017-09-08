@@ -42,7 +42,6 @@ module MnoEnterprise
       if current_user.admin_role.in? %w(admin sub_tenant_admin)
         @user = MnoEnterprise::User.find_one(params[:id])
         @user.update(user_update_params)
-        render :show
         if @user.errors.empty?
           @user = @user.load_required(:clients)
           render :show

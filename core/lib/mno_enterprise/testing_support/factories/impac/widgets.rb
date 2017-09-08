@@ -4,12 +4,12 @@ FactoryGirl.define do
     factory :impac_widget, class: MnoEnterprise::Widget do
       sequence(:id, &:to_s)
       sequence(:name) { |n| "Random Widget #{n}" }
-      widget_category 'widget_endpoint'
+      widget_category 'endpoint'
       width 3
       endpoint 'endpoint'
-      dashboard { build(:impac_dashboard).attributes }
 
-      initialize_with { new(attributes) }
+      settings {}
+      kpis []
     end
   end
 end

@@ -29,13 +29,17 @@ module MnoEnterprise
         'metadata' => metadata.deep_stringify_keys,
         "endpoint" => widget.widget_category,
         "width" => widget.width,
-        "kpis" => [hash_for_kpi]
+        "kpis" => []
+        # TODO: APIv2
+        # "kpis" => [hash_for_kpi]
       }
     end
 
     before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
       sign_in user
+
+      stub_audit_events
     end
 
     describe '#create' do
@@ -50,29 +54,31 @@ module MnoEnterprise
       end
 
       subject { post :create, dashboard_template_id: template.id, widget: widget_params }
-      
+
       before do
-        api_stub_for(
-          get: "/dashboards/#{template.id}",
-          params: { filter: { 'dashboard_type' => 'template' } },
-          response: from_api(template)
-        )
-        api_stub_for(
-          post: "dashboards/#{template.id}/widgets",
-          response: from_api(widget)
-        )
-        # Why is Her doing a GET /widgets after doing a POST /widgets?
-        api_stub_for(
-          get: "dashboards/#{template.id}/widgets",
-          response: from_api([widget])
-        )
-        api_stub_for(
-          get: "/widgets/#{widget.id}/kpis",
-          response: from_api([kpi])
-        )
+        stub_api_v2(:get, "/dashboards/#{template.id}", [template], [], { filter: { 'dashboard_type' => 'template' } })
+        stub_api_v2(:post, "/widgets", [widget])
       end
 
       it_behaves_like "a jpi v1 admin action"
+
+      it 'creates a widget' do
+        subject
+        assert_requested_api_v2(:post, '/widgets',
+                                body: {
+                                  data: {
+                                    type: 'widgets',
+                                    attributes: widget_params
+                                                  .slice(:endpoint, :name)
+                                                  .merge(
+                                                    width: widget_params[:width].to_s,
+                                                    settings: metadata,
+                                                    widget_category: widget_params[:endpoint],
+                                                    dashboard_id: template.id.to_s
+                                                  )
+                                  }
+                                }.to_json)
+      end
 
       it 'returns a widget' do
         subject
@@ -89,30 +95,33 @@ module MnoEnterprise
       let(:widget_params) do
         {
           name: widget.name,
-          width: widget.width,
+          width: 42,
           metadata: metadata,
           forbidden: 'param'
         }
       end
 
       subject { put :update, id: widget.id, widget: widget_params }
-      
+
       before do
-        api_stub_for(
-          get: "widgets/#{widget.id}",
-          response: from_api(widget)
-        )
-        api_stub_for(
-          put: "/widgets/#{widget.id}",
-          response: from_api(widget)
-        )
-        api_stub_for(
-          get: "/widgets/#{widget.id}/kpis",
-          response: from_api([kpi])
-        )
+        stub_api_v2(:get, "/widgets/#{widget.id}", [widget])
+        stub_api_v2(:patch, "/widgets/#{widget.id}", [widget])
       end
 
       it_behaves_like "a jpi v1 admin action"
+
+      it 'updates the widget' do
+        subject
+        # Only send the changed attributes
+        assert_requested_api_v2(:patch, "/widgets/#{widget.id}",
+                                body: {
+                                  'data' => {
+                                    'id' => widget.id,
+                                    'type' => 'widgets',
+                                    'attributes' => {'width' => '42'}
+                                  }
+                                }.to_json)
+      end
 
       it 'returns a widget' do
         subject
@@ -127,19 +136,18 @@ module MnoEnterprise
 
     describe '#destroy' do
       subject { delete :destroy, id: widget.id }
-      
+
       before do
-        api_stub_for(
-          get: "widgets/#{widget.id}",
-          response: from_api(widget)
-        )
-        api_stub_for(
-          delete: "/widgets/#{widget.id}",
-          response: from_api(nil)
-        )
+        stub_api_v2(:get, "/widgets/#{widget.id}", [widget])
+        stub_api_v2(:delete, "/widgets/#{widget.id}")
       end
 
       it_behaves_like "a jpi v1 admin action"
+
+      it 'destroys the widget' do
+        subject
+        assert_requested_api_v2(:delete, "/widgets/#{widget.id}")
+      end
 
       # api_stub should be modified to allow this case to be stubbed
       context 'when the widget destruction is invalidunsuccessful' do

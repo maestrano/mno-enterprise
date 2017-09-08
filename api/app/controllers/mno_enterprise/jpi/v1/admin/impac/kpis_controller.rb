@@ -7,7 +7,7 @@ module MnoEnterprise
     def create
       return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless template.present?
 
-      @kpi = template.kpis.create(kpi_create_params)
+      @kpi = MnoEnterprise::Kpi.create(kpi_create_params)
       return render json: { errors: (@kpi && @kpi.errors).to_a }, status: :bad_request unless @kpi.present? && @kpi.valid?
 
       MnoEnterprise::EventLogger.info('kpi_create', current_user.id, 'Template KPI Creation', @kpi)
@@ -18,7 +18,8 @@ module MnoEnterprise
     # PUT /mnoe/jpi/v1/admin/impac/kpis/:id
     def update
       unless kpi.present? && kpi.update(kpi_update_params)
-        return render json: { errors: 'Cannot update kpi' }, status: :bad_request
+        msg = kpi.errors.full_messages.join(', ') || 'unable to update KPI.'
+        return render_bad_request("update kpi (id=#{kpi.id})", msg)
       end
 
       MnoEnterprise::EventLogger.info('kpi_update', current_user.id, 'Template KPI Update', kpi)
@@ -28,27 +29,35 @@ module MnoEnterprise
 
     # DELETE /mnoe/jpi/v1/admin/impac/kpis/:id
     def destroy
-      unless kpi.present? && kpi.destroy
-        return render json: { errors: 'Cannot delete kpi' }, status: :bad_request
-      end
+      return render_not_found('kpi') unless kpi.present?
 
       MnoEnterprise::EventLogger.info('kpi_delete', current_user.id, 'Template KPI Deletion', kpi)
+
+      unless kpi.destroy
+        msg = kpi.errors.full_messages.join(', ') || 'unable to update KPI.'
+        return render_bad_request("delete kpi (id=#{kpi.id})", msg)
+      end
       head status: :ok
     end
 
     private
 
     def template
-      MnoEnterprise::Impac::Dashboard.templates.find(params[:dashboard_template_id].to_i)
+      MnoEnterprise::Dashboard.templates.find(params[:dashboard_template_id].to_i).first
     end
 
     def kpi
-      @kpi ||= MnoEnterprise::Impac::Kpi.find(params[:id].to_i)
+      @kpi ||= MnoEnterprise::Kpi.find_one(params[:id].to_i)
     end
 
     def kpi_create_params
       whitelist = [:dashboard_id, :widget_id, :endpoint, :source, :element_watched, { extra_watchables: [] }]
-      extract_params(whitelist)
+      create_params = extract_params(whitelist)
+      if create_params[:widget_id]
+        create_params
+      else
+        create_params.merge(dashboard_id: template.id)
+      end
     end
 
     def kpi_update_params

@@ -33,7 +33,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     end
 
     # customise available kpis
-    kpis = (response['kpis'] || []).map do |kpi|
+    kpis = response['kpis'].to_a.map do |kpi|
       kpi = kpi.with_indifferent_access
       kpi[:watchables].map do |watchable|
         kpi.merge(
@@ -81,7 +81,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   # PUT /mnoe/jpi/v1/impac/kpis/:id
   #   -> PUT /api/mnoe/v1/kpis/:id
   def update
-    render_not_found('kpi') unless kpi.present?
+    return render_not_found('kpi') unless kpi.present?
 
     authorize! :manage_kpi, kpi
 
@@ -115,9 +115,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   # DELETE /mnoe/jpi/v1/impac/kpis/:id
   #   -> DELETE /api/mnoe/v1/kpis/:id
   def destroy
-    render_not_found('kpi') unless kpi.present?
+    return render_not_found('kpi') unless kpi.present?
 
     authorize! :manage_kpi, kpi
+
+    MnoEnterprise::EventLogger.info('kpi_delete', current_user.id, 'KPI Deletion', kpi)
+
     kpi.destroy
     head status: :ok
   end

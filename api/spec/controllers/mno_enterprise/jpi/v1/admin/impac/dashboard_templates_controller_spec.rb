@@ -8,40 +8,39 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
-    RSpec.shared_context "#{described_class}: dashboard dependencies stubs" do
-      before do
-        api_stub_for(
-          get: "/users/#{user.id}/organizations",
-          response: from_api([org])
-        )
-        api_stub_for(
-          get: "/dashboards/#{template.id}/widgets",
-          response: from_api([widget])
-        )
-        api_stub_for(
-          get: "/dashboards/#{template.id}/kpis",
-          response: from_api([d_kpi])
-        )
-        api_stub_for(
-          get: "/widgets/#{widget.id}/kpis",
-          response: from_api([w_kpi])
-        )
-      end
-    end
+    let(:dashboard_dependencies) { [:widgets, :kpis] }
 
     let(:user) { build(:user, :admin, :with_organizations) }
-    let(:org) { build(:organization, users: [user]) }
+    let(:org) { user.organizations.first || build(:organization, users: [user]) }
     let(:metadata) { { hist_parameters: { from: '2015-01-01', to: '2015-03-31', period: 'MONTHLY' } } }
-    let(:template) { build(:impac_dashboard, dashboard_type: 'template', organization_ids: [org.uid], currency: 'EUR', settings: metadata, owner_type: nil, owner_id: nil, published: true) }
-    let(:widget) { build(:impac_widget, dashboard: template) }
-    let(:d_kpi) { build(:impac_kpi, dashboard: template) }
-    let(:w_kpi) { build(:impac_kpi, widget: widget) }
+    let(:widget) { build(:impac_widget) }
+    let(:d_kpi) { build(:impac_kpi) }
+    # let(:w_kpi) { build(:impac_kpi, widget: widget) }
+    let(:template) do
+      build(:impac_dashboard,
+            dashboard_type: 'template',
+            organization_ids: [org.uid],
+            currency: 'EUR',
+            settings: metadata,
+            owner_type: nil,
+            owner_id: nil,
+            published: true,
+            widgets: [widget],
+            kpis: [d_kpi]
+      )
+    end
 
+    # TODO: extract to an helper shared across impac specs
     def hash_for_kpi(kpi)
       {
         "id" => kpi.id,
+        'settings' => kpi.settings,
         "element_watched" => kpi.element_watched,
-        "endpoint" => kpi.endpoint
+        "endpoint" => kpi.endpoint,
+        "extra_params" => kpi.extra_params,
+        "extra_watchables" => kpi.extra_watchables,
+        "source" => kpi.source,
+        "targets" => kpi.targets
       }
     end
     let(:hash_for_widget) do
@@ -50,7 +49,9 @@ module MnoEnterprise
         "name" => widget.name,
         "endpoint" => widget.widget_category,
         "width" => widget.width,
-        "kpis" => [hash_for_kpi(w_kpi)]
+        "kpis" => []
+        # TODO: APIv2
+        # "kpis" => [hash_for_kpi(w_kpi)]
       }
     end
     let(:hash_for_template) do
@@ -68,21 +69,18 @@ module MnoEnterprise
     end
 
     before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
       sign_in user
+
+      stub_audit_events
     end
-      
+
     describe '#index' do
       subject { get :index }
-      
+
       before do
-        api_stub_for(
-          get: '/dashboards',
-          params: { filter: { 'dashboard_type' => 'template' } },
-          response: from_api([template])
-        )
+        stub_api_v2(:get, "/dashboards", [template], dashboard_dependencies, filter: { 'dashboard_type' => 'template' })
       end
-      include_context "#{described_class}: dashboard dependencies stubs"
 
       it_behaves_like "a jpi v1 admin action"
 
@@ -94,15 +92,10 @@ module MnoEnterprise
 
     describe '#show' do
       subject { get :show, id: template.id }
-      
+
       before do
-        api_stub_for(
-          get: "/dashboards/#{template.id}",
-          params: { filter: { 'dashboard_type' => 'template' } },
-          response: from_api(template)
-        )
+        stub_api_v2(:get, "/dashboards/#{template.id}", [template], dashboard_dependencies, filter: { 'dashboard_type' => 'template' })
       end
-      include_context "#{described_class}: dashboard dependencies stubs"
 
       it_behaves_like "a jpi v1 admin action"
 
@@ -130,20 +123,22 @@ module MnoEnterprise
       end
 
       subject { post :create, dashboard: template_params }
-      
-      before do
-        api_stub_for(
-          post: "/dashboards",
-          response: from_api(template)
-        )
-      end
-      include_context "#{described_class}: dashboard dependencies stubs"
 
-      it_behaves_like "a jpi v1 admin action"
+      before do
+        stub_api_v2(:post, "/dashboards", [template])
+      end
+
+      # TODO: APIv2
+      # it_behaves_like "a jpi v1 admin action"
+
+      it 'creates a dashboard template'
 
       it 'returns a dashboard template' do
+        pending 'APIv2'
         subject
-        expect(JSON.parse(response.body)).to eq(hash_for_template)
+        # TODO: APIv2 => returns kpis and widgets when updating
+        resp = hash_for_template.merge("kpis" => [], "widgets" => [])
+        expect(JSON.parse(response.body)).to eq(resp)
       end
 
       # api_stub should be modified to allow this case to be stubbed
@@ -166,25 +161,23 @@ module MnoEnterprise
       end
 
       subject { put :update, id: template.id, dashboard: template_params }
-      
+
       before do
-        api_stub_for(
-          get: "/dashboards/#{template.id}",
-          params: { filter: { 'dashboard_type' => 'template' } },
-          response: from_api(template)
-        )
-        api_stub_for(
-          put: "/dashboards/#{template.id}",
-          response: from_api(template)
-        )
+        stub_api_v2(:get, "/dashboards/#{template.id}", [template], dashboard_dependencies, filter: { 'dashboard_type' => 'template' })
+        stub_api_v2(:patch, "/dashboards/#{template.id}", [template])
       end
-      include_context "#{described_class}: dashboard dependencies stubs"
-      
-      it_behaves_like "a jpi v1 admin action"
+
+      # TODO: APIv2
+      # it_behaves_like "a jpi v1 admin action"
+
+      it 'updates the dashboard template'
 
       it 'returns a dashboard template' do
+        pending 'APIv2'
         subject
-        expect(JSON.parse(response.body)).to eq(hash_for_template)
+        # TODO: APIv2 => returns kpis and widgets when updating
+        resp = hash_for_template.merge("kpis" => [], "widgets" => [])
+        expect(JSON.parse(response.body)).to eq(resp)
       end
 
       # api_stub should be modified to allow these cases to be stubbed
@@ -200,18 +193,16 @@ module MnoEnterprise
       subject { delete :destroy, id: template.id }
 
       before do
-        api_stub_for(
-          get: "/dashboards/#{template.id}",
-          params: { filter: { 'dashboard_type' => 'template' } },
-          response: from_api(template)
-        )
-        api_stub_for(
-          delete: "/dashboards/#{template.id}",
-          response: from_api(nil)
-        )
+        stub_api_v2(:get, "/dashboards/#{template.id}", [template], dashboard_dependencies, filter: { 'dashboard_type' => 'template' })
+        stub_api_v2(:delete, "/dashboards/#{template.id}")
       end
-      
+
       it_behaves_like "a jpi v1 admin action"
+
+      it 'deletes the template' do
+        subject
+        assert_requested_api_v2(:delete, "/dashboards/#{template.id}")
+      end
 
       # api_stub should be modified to allow these cases to be stubbed
       context 'when the template cannot be found' do

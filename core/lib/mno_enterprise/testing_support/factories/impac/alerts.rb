@@ -11,7 +11,6 @@ FactoryGirl.define do
       webhook 'webhook'
       sent false
       settings {}
-      initialize_with { new(attributes) }
     end
   end
 end

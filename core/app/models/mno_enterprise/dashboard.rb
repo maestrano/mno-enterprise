@@ -5,16 +5,15 @@ module MnoEnterprise
     property :updated_at, type: :time
     property :owner_id, type: :string
 
-	# TODO:
-	# default_scope -> { where(dashboard_type: 'dashboard') }
+	  # TODO: APIv2 - Is this needed?
+	  # default_scope -> { where(dashboard_type: 'dashboard') }
 
-    custom_endpoint :copy, on: :member, request_method: :post
+    custom_endpoint :copy, on: :collection, request_method: :post
 
     #============================================
     # Class methods
     #============================================
-    # TODO: specs
-	def self.templates
+    def self.templates
       where(dashboard_type: 'template')
     end
 
@@ -78,7 +77,7 @@ module MnoEnterprise
         owner_type: owner_type,
         owner_id: owner.id
       }
-      self.class.copy(attrs)
+      self.class.copy(id: id, data: { attributes: attrs })
     end
   end
 end

@@ -8,19 +8,36 @@ module MnoEnterprise
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
     before { Rails.cache.clear }
 
+    let(:dashboard_dependencies) { %w(widgets widgets.kpis kpis kpis.alerts) }
+
     let(:user) { build(:user, :with_organizations) }
-    let(:org) { build(:organization, users: [user]) }
+    let(:org) { user.organizations.first || build(:organization, users: [user]) }
     let(:metadata) { { hist_parameters: { from: '2015-01-01', to: '2015-03-31', period: 'MONTHLY' } } }
-    let(:template) { build(:impac_dashboard, dashboard_type: 'template', organization_ids: [org.uid], currency: 'EUR', settings: metadata) }
-    let(:widget) { build(:impac_widget, dashboard: template, owner: user) }
-    let(:d_kpi) { build(:impac_kpi, dashboard: template) }
+
+    let(:widget) { build(:impac_widget, owner: user) }
+    let(:d_kpi) { build(:impac_kpi) }
     let(:w_kpi) { build(:impac_kpi, widget: widget) }
+    let(:template) do
+      build(:impac_dashboard,
+            dashboard_type: 'template',
+            organization_ids: [org.uid],
+            currency: 'EUR',
+            settings: metadata,
+            widgets: [widget],
+            kpis: [d_kpi]
+      )
+    end
 
     def hash_for_kpi(kpi)
       {
         "id" => kpi.id,
+        'settings' => kpi.settings,
         "element_watched" => kpi.element_watched,
-        "endpoint" => kpi.endpoint
+        "endpoint" => kpi.endpoint,
+        "extra_params" => kpi.extra_params,
+        "extra_watchables" => kpi.extra_watchables,
+        "source" => kpi.source,
+        "targets" => kpi.targets
       }
     end
     let(:hash_for_widget) do
@@ -29,8 +46,10 @@ module MnoEnterprise
         "name" => widget.name,
         "endpoint" => widget.widget_category,
         "width" => widget.width,
-        "kpis" => [hash_for_kpi(w_kpi)],
-        'owner' => from_api(user)[:data]
+        # 'owner' => from_api(user)[:data],
+        "kpis" => []
+        # TODO: APIv2
+        # "kpis" => [hash_for_kpi(w_kpi)],
       }
     end
     let(:hash_for_template) do
@@ -46,44 +65,14 @@ module MnoEnterprise
       }
     end
 
-    before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      sign_in user
-    end
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    before { sign_in user }
 
     describe 'GET #index' do
       subject { get :index }
-      
+
       before do
-        api_stub_for(
-          get: '/dashboards',
-          params: { filter: { 'dashboard_type' => 'template', 'published' => true } },
-          response: from_api([template])
-        )
-        api_stub_for(
-          get: "/users/#{user.id}/organizations",
-          response: from_api([org])
-        )
-        api_stub_for(
-          get: "/dashboards/#{template.id}/widgets",
-          response: from_api([widget])
-        )
-        api_stub_for(
-          get: "/dashboards/#{template.id}/kpis",
-          response: from_api([d_kpi])
-        )
-        api_stub_for(
-          get: "/widgets/#{widget.id}/kpis",
-          response: from_api([w_kpi])
-        )
-        api_stub_for(
-          get: "/kpis/#{w_kpi.id}/alerts",
-          response: from_api([])
-        )
-        api_stub_for(
-          get: "/kpis/#{d_kpi.id}/alerts",
-          response: from_api([])
-        )
+        stub_api_v2(:get, "/dashboards", [template], dashboard_dependencies, filter: {dashboard_type: 'template', published: true})
       end
 
       it_behaves_like "jpi v1 protected action"

@@ -19,13 +19,19 @@ module MnoEnterprise
         "id" => kpi.id,
         'settings' => metadata.deep_stringify_keys,
         "element_watched" => kpi.element_watched,
-        "endpoint" => kpi.endpoint
+        "endpoint" => kpi.endpoint,
+        "extra_params" => kpi.extra_params,
+        "extra_watchables" => kpi.extra_watchables,
+        "source" => kpi.source,
+        "targets" => kpi.targets
       }
     end
 
     before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
       sign_in user
+
+      stub_audit_events
     end
 
     describe '#create' do
@@ -42,25 +48,26 @@ module MnoEnterprise
       end
 
       subject { post :create, dashboard_template_id: template.id, kpi: kpi_params }
-      
+
       before do
-        api_stub_for(
-          get: "/dashboards/#{template.id}",
-          params: { filter: { 'dashboard_type' => 'template' } },
-          response: from_api(template)
-        )
-        api_stub_for(
-          post: "dashboards/#{template.id}/kpis",
-          response: from_api(kpi)
-        )
-        # Why is Her doing a GET /kpis after doing a POST /kpis?
-        api_stub_for(
-          get: "dashboards/#{template.id}/kpis",
-          response: from_api([kpi])
-        )
+        stub_api_v2(:get, "/dashboards/#{template.id}", [template], [], { filter: { 'dashboard_type' => 'template' } })
+        stub_api_v2(:post,"/kpis", [kpi])
       end
 
       it_behaves_like "a jpi v1 admin action"
+
+      it 'creates a kpi' do
+        subject
+        assert_requested_api_v2(:post, '/kpis',
+                                body: {
+                                  data: {
+                                    type: 'kpis',
+                                    attributes: kpi_params
+                                                  .except(:forbidden, :extra_watchables, :metadata)
+                                                  .merge(settings: metadata)
+                                  }
+                                }.to_json)
+      end
 
       it 'returns a kpi' do
         subject
@@ -76,7 +83,7 @@ module MnoEnterprise
     describe '#update' do
       let(:kpi_params) do
         {
-          element_watched: kpi.element_watched,
+          element_watched: 'foobar',
           extra_watchables: kpi.extra_watchables,
           metadata: metadata,
           forbidden: 'param'
@@ -84,19 +91,26 @@ module MnoEnterprise
       end
 
       subject { put :update, id: kpi.id, kpi: kpi_params }
-      
+
       before do
-        api_stub_for(
-          get: "kpis/#{kpi.id}",
-          response: from_api(kpi)
-        )
-        api_stub_for(
-          put: "/kpis/#{kpi.id}",
-          response: from_api(kpi)
-        )
+        stub_api_v2(:get, "/kpis/#{kpi.id}", [kpi])
+        stub_api_v2(:patch, "/kpis/#{kpi.id}", [kpi])
       end
 
       it_behaves_like "a jpi v1 admin action"
+
+      it 'updates the kpi' do
+        subject
+        # Only send the changed attributes
+        assert_requested_api_v2(:patch, "/kpis/#{kpi.id}",
+                                body: {
+                                  'data' => {
+                                    'id' => kpi.id,
+                                    'type' => 'kpis',
+                                    'attributes' => {'element_watched' => 'foobar'}
+                                  }
+                                }.to_json)
+      end
 
       it 'returns a kpi' do
         subject
@@ -111,19 +125,18 @@ module MnoEnterprise
 
     describe '#destroy' do
       subject { delete :destroy, id: kpi.id }
-      
+
       before do
-        api_stub_for(
-          get: "kpis/#{kpi.id}",
-          response: from_api(kpi)
-        )
-        api_stub_for(
-          delete: "/kpis/#{kpi.id}",
-          response: from_api(nil)
-        )
+        stub_api_v2(:get, "/kpis/#{kpi.id}", [kpi])
+        stub_api_v2(:delete, "/kpis/#{kpi.id}")
       end
 
       it_behaves_like "a jpi v1 admin action"
+
+      it 'destroys the kpi' do
+        subject
+        assert_requested_api_v2(:delete, "/kpis/#{kpi.id}")
+      end
 
       # api_stub should be modified to allow this case to be stubbed
       context 'when the kpi destruction is unsuccessful' do
