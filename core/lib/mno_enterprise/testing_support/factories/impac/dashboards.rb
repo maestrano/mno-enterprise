@@ -5,7 +5,11 @@ FactoryGirl.define do
       sequence(:id, &:to_s)
       sequence(:name) { |n| "Random Dashboard #{n}" }
 
-      initialize_with { new(attributes) }
+      owner_type 'User'
+
+      widgets []
+      widgets_order []
+      kpis []
     end
   end
 end

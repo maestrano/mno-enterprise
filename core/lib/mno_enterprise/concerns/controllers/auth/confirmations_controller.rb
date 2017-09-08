@@ -93,6 +93,9 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
     end
 
     if resource.errors.empty?
+      if params[:tos] == "accept"
+        params[:user][:metadata] = resource.metadata.merge(tos_accepted_at: Time.current)
+      end
       resource.attributes = params[:user] unless resource.confirmed?
       resource.perform_confirmation(@confirmation_token)
       resource.save

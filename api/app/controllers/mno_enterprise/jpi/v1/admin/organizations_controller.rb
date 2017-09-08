@@ -22,6 +22,10 @@ module MnoEnterprise
         query = MnoEnterprise::Organization
                 .apply_query_params(params)
                 .select(INCLUDED_FIELDS)
+		
+		# TODO: Add these filter parameter directly in the where
+        query = query.where(sub_tenant_id: params[:sub_tenant_id]) if params[:sub_tenant_id]
+        query = query.where(account_manager_id: params[:account_manager_id]) if params[:account_manager_id]
 
         @organizations = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count

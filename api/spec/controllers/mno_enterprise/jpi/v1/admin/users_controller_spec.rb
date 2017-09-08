@@ -10,15 +10,25 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
-    def partial_hash_for_organization(user)
+    def partial_hash_for_organizations(user)
       user.organizations.map do |org|
-        {
-            'id' => org.id,
-            'uid' => org.uid,
-            'name' => org.name,
-            'created_at' => org.created_at,
-            'account_frozen' => org.account_frozen
-        }
+        hash_for_organization(org)
+      end
+    end
+
+    def hash_for_organization(org)
+      {
+        'id' => org.id,
+        'uid' => org.uid,
+        'name' => org.name,
+        'account_frozen' => org.account_frozen,
+        'created_at' => org.created_at
+      }
+    end
+
+    def partial_hash_for_clients(user)
+      user.clients.map do |org|
+        hash_for_organization(org)
       end
     end
 
@@ -32,9 +42,12 @@ module MnoEnterprise
           'surname' => user.surname,
           'admin_role' => user.admin_role,
           'created_at' => user.created_at,
+          'updated_at' => user.updated_at,
           'last_sign_in_at' => user.last_sign_in_at,
           'confirmed_at' => user.confirmed_at,
-          'sign_in_count' => user.sign_in_count
+          'sign_in_count' => user.sign_in_count,
+          'mnoe_sub_tenant_id' => user.mnoe_sub_tenant_id,
+          'client_ids' => user.client_ids
       }
     end
 
@@ -47,7 +60,7 @@ module MnoEnterprise
 
     def hash_for_user(user)
       hash = {
-          'user' => partial_hash_for_user(user).merge('organizations' => partial_hash_for_organization(user))
+          'user' => partial_hash_for_user(user).merge('organizations' => partial_hash_for_organizations(user), 'clients' => partial_hash_for_clients(user))
       }
 
       return hash
@@ -58,11 +71,15 @@ module MnoEnterprise
     # Assignments
     #===============================================
     # Stub user and user call
-    let(:user) { build(:user, :admin, :with_organizations) }
+    let(:user) { build(:user, :admin, :with_organizations, :with_clients) }
+
+    let(:organization) { build(:organization) }
+
     before do
       api_stub_for(get: "/users", response: from_api([user]))
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(get: "/users/#{user.id}/organizations", response: from_api(user))
+      api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization]))
+      api_stub_for(get: "/users/#{user.id}/clients", response: from_api([organization]))
       sign_in user
     end
 

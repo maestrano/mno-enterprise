@@ -87,3 +87,5 @@ admin_panel:
     disabled: false
   staff:
     enabled: true
+  sub_tenant:
+    enabled: false

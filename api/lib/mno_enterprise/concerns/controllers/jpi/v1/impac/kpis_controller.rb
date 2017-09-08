@@ -33,7 +33,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     end
 
     # customise available kpis
-    kpis = (response['kpis'] || []).map do |kpi|
+    kpis = response['kpis'].to_a.map do |kpi|
       kpi = kpi.with_indifferent_access
       kpi[:watchables].map do |watchable|
         kpi.merge(
@@ -52,11 +52,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   #   -> POST /api/mnoe/v1/dashboards/:id/kpis
   #   -> POST /api/mnoe/v1/users/:id/alerts
   def create
-    if widget.present?
+    if params[:kpi][:widget_id].present?
+      return render_not_found('widget') if widget.blank?
       authorize! :manage_widget, widget
     else
+      return render_not_found('dashboard') if dashboard.blank?
       authorize! :manage_dashboard, dashboard
     end
+
     # TODO: nest alert in as a param, with the current user as a recipient.
     @kpi = MnoEnterprise::Kpi.create(kpi_create_params)
     if @kpi.errors.empty?
@@ -78,6 +81,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   # PUT /mnoe/jpi/v1/impac/kpis/:id
   #   -> PUT /api/mnoe/v1/kpis/:id
   def update
+    return render_not_found('kpi') unless kpi.present?
+
     authorize! :manage_kpi, kpi
 
     params = kpi_update_params
@@ -110,7 +115,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   # DELETE /mnoe/jpi/v1/impac/kpis/:id
   #   -> DELETE /api/mnoe/v1/kpis/:id
   def destroy
+    return render_not_found('kpi') unless kpi.present?
+
     authorize! :manage_kpi, kpi
+
+    MnoEnterprise::EventLogger.info('kpi_delete', current_user.id, 'KPI Deletion', kpi)
+
     kpi.destroy
     head status: :ok
   end
@@ -122,23 +132,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
 
     def dashboard
       @dashboard ||= MnoEnterprise::Dashboard.find_one(params.require(:dashboard_id))
-      return render_not_found('dashboard') unless @dashboard
-      @dashboard
     end
 
     def widget
-      return nil if (id = params.require(:kpi)[:widget_id]).blank?
-      @widget ||= MnoEnterprise::Widget.find_one(id)
-      return render_not_found('widget') unless @widget
-      @widget
+      widget_id = params.require(:kpi)[:widget_id]
+      @widget ||= (widget_id.present? && MnoEnterprise::Widget.find_one(widget_id.to_i))
     end
 
     def kpi
       @kpi ||= MnoEnterprise::Kpi.find_one(params[:id], :dashboard, :widget, :alerts)
-      return @kpi || render_not_found('kpi')
     end
 
-    def kpi_create_params
+   def kpi_create_params
       whitelist = [:widget_id, :endpoint, :source, :element_watched, {extra_watchables: []}]
       create_params = extract_params(whitelist)
       #either it is a widget kpi or a dashboard kpi
