@@ -165,23 +165,28 @@ module MnoEnterpriseApiTestHelper
       "#{type(entity)}/#{entity.id}"
     end
 
-    def serialize_relation(r, included_entities)
-      included_entities[entity_key(r)] = r
-      {type: type(r), id: r.id}
+    def serialize_relation(r, included_entities, inclusions = [])
+      included_entities[entity_key(r)] = [r, inclusions]
+      { type: type(r), id: r.id }
     end
 
     def serialize_data(entity, included, included_entities)
-      relationships = included.map { |field|
-        next if field.to_s.include? '.'
-        relations = entity.send(field)
+      relationships = included.map do |field|
+        # Split multi-level fieds such as includes=app_instances.app
+        fields = field.to_s.split('.')
+
+        # Call first level of association
+        relations = entity.send(fields.shift)
         next unless relations
+
         data = if relations.kind_of?(Array)
-                 relations.map { |r| serialize_relation(r, included_entities) }
+                 relations.map { |r| serialize_relation(r, included_entities, fields) }
                else
-                 serialize_relation(relations, included_entities)
+                 serialize_relation(relations, included_entities, fields)
                end
-        [field, {data: data}]
-      }.compact.to_h
+        [field, { data: data }]
+      end.compact.to_h
+
       {
         id: entity.id,
         type: type(entity),
@@ -198,12 +203,16 @@ module MnoEnterpriseApiTestHelper
                serialize_data(entity, included, included_entities)
              end
 
+      # Generate first and second level inclusions. E.g. includes='app_instances.app'
+      # The second level entities get added to the included_entities hash
+      included_entities.values.each { |obj, inclusions| serialize_data(obj, inclusions, included_entities) }
+
       {
         data: data,
         meta: {
           record_count: entity_count(entity)
         },
-        included: included_entities.values.map{|e| serialize_data(e, [], {})}
+        included: included_entities.values.map { |obj, inclusions| serialize_data(obj, inclusions, included_entities) }
       }
     end
 
