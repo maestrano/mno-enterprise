@@ -3,185 +3,102 @@ require 'rails_helper'
 module MnoEnterprise
   describe Jpi::V1::Admin::UsersController, type: :controller do
     include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
-    #TODO: Fix Spec for Admin Controller
-    before { skip }
 
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
-    def partial_hash_for_organizations(user)
-      user.organizations.map do |org|
-        hash_for_organization(org)
-      end
-    end
-
-    def hash_for_organization(org)
-      {
-        'id' => org.id,
-        'uid' => org.uid,
-        'name' => org.name,
-        'account_frozen' => org.account_frozen,
-        'created_at' => org.created_at
-      }
-    end
-
-    def partial_hash_for_clients(user)
-      user.clients.map do |org|
-        hash_for_organization(org)
-      end
-    end
-
-    def partial_hash_for_user(user)
-      {
-          'id' => user.id,
-          'uid' => user.uid,
-          'email' => user.email,
-          'phone' => user.phone,
-          'name' => user.name,
-          'surname' => user.surname,
-          'admin_role' => user.admin_role,
-          'created_at' => user.created_at,
-          'updated_at' => user.updated_at,
-          'last_sign_in_at' => user.last_sign_in_at,
-          'confirmed_at' => user.confirmed_at,
-          'sign_in_count' => user.sign_in_count,
-          'mnoe_sub_tenant_id' => user.mnoe_sub_tenant_id,
-          'client_ids' => user.client_ids
-      }
-    end
-
-    def hash_for_users(users)
-      {
-          'users' => users.map { |o| partial_hash_for_user(o) },
-          'metadata' => {'pagination' => {'count' => users.count}}
-      }
-    end
-
-    def hash_for_user(user)
-      hash = {
-          'user' => partial_hash_for_user(user).merge('organizations' => partial_hash_for_organizations(user), 'clients' => partial_hash_for_clients(user))
-      }
-
-      return hash
-    end
-
-
     #===============================================
     # Assignments
     #===============================================
+    let(:current_user) { build(:user, :admin) }
+    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{current_user.id}", current_user, %i(deletion_requests organizations orga_relations dashboards)) }
+
     # Stub user and user call
-    let(:user) { build(:user, :admin, :with_organizations, :with_clients) }
+    let(:user) { build(:user) }
 
-    let(:organization) { build(:organization) }
-
-    before do
-      api_stub_for(get: "/users", response: from_api([user]))
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization]))
-      api_stub_for(get: "/users/#{user.id}/clients", response: from_api([organization]))
-      sign_in user
-    end
-
-    #==========================
-    # =====================
+    #===============================================
     # Specs
     #===============================================
-    describe '#index' do
+    before { sign_in current_user }
+
+    describe 'GET #index' do
       subject { get :index }
 
-      it_behaves_like "a jpi v1 admin action"
+      let(:data) { JSON.parse(response.body) }
 
-      context 'success' do
-        before { subject }
+      before { stub_api_v2(:get, "/users", [user], [:user_access_requests], { _metadata: { act_as_manager: current_user.id } }) }
+      before { subject }
 
-        it 'returns a list of users' do
-          expect(response).to be_success
-          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_users([user]).to_json))
-        end
-      end
+      it { expect(data['users'].first['id']).to eq(user.id) }
     end
 
     describe 'GET #show' do
       subject { get :show, id: user.id }
 
-      it_behaves_like "a jpi v1 admin action"
+      let(:data) { JSON.parse(response.body) }
+      let(:included) { [:orga_relations, :organizations, :user_access_requests, :clients] }
 
-      context 'success' do
-        before { subject }
+      before { allow(user).to receive(:clients).and_return([]) }
+      before { stub_api_v2(:get, "/users/#{user.id}", user, included, { _metadata: { act_as_manager: current_user.id } }) }
+      before { subject }
 
-        it 'returns a complete description of the user' do
-          expect(response).to be_success
-          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_user(user).to_json))
-        end
-      end
+      it { expect(data['user']['id']).to eq(user.id) }
+    end
+
+    describe 'POST #create' do
+      subject { post :create, user: params }
+
+      let(:data) { JSON.parse(response.body) }
+      let(:params) { { 'name' => 'Foo' } }
+      let(:expected_params) { params.merge('sub_tenant_id' => nil) }
+
+      before { allow(user).to receive(:clients).and_return([]) }
+      before { expect(MnoEnterprise::User).to receive(:create).with(hash_including(expected_params)).and_return(user) }
+      before { stub_api_v2(:get, "/users/#{user.id}", user, [:clients]) }
+      before { subject }
+
+      it { expect(data['user']['id']).to eq(user.id) }
     end
 
     describe 'PUT #update' do
-      subject { put :update, id: user.id, user: {admin_role: 'staff'} }
-      let(:current_user) { build(:user, :admin) }
+      subject { put :update, id: user.id, user: params }
 
-      before do
-        api_stub_for(get: "/users/#{current_user.id}", response: from_api(current_user))
-        sign_in current_user
+      let(:data) { JSON.parse(response.body) }
+      let(:params) { { 'name' => 'Foo' } }
+      let(:expected_params) { params.merge('sub_tenant_id' => nil) }
 
-        user.admin_role = nil
-        api_stub_for(put: "/users/#{user.id}", response: -> { user.admin_role = 'staff'; from_api(user) })
-      end
+      before { allow(user).to receive(:clients).and_return([]) }
+      before { expect_any_instance_of(MnoEnterprise::User).to receive(:update).with(expected_params) }
+      before { stub_api_v2(:get, "/users/#{user.id}", user, [], { _metadata: { act_as_manager: current_user.id } }) }
+      before { stub_api_v2(:get, "/users/#{user.id}", user, [:clients]) }
+      before { subject }
 
-      it_behaves_like "a jpi v1 admin action"
-
-      context 'success' do
-        before { subject }
-
-        context 'when admin' do
-          it { expect(response).to be_success }
-
-          # Test that the user is updated by testing the api endpoint was called
-          it { expect(user.admin_role).to eq('staff') }
-        end
-
-        context 'when staff' do
-          let(:current_user) { build(:user, :staff) }
-
-          it { expect(response).to have_http_status(:unauthorized) }
-
-          it { expect(user.admin_role).to be_nil }
-        end
-      end
+      it { expect(data['user']['id']).to eq(user.id) }
     end
 
     describe 'DELETE #destroy' do
-      let(:user_to_delete) { build(:user) }
-      subject { delete :destroy, id: user_to_delete.id }
+      subject { delete :destroy, id: user.id }
 
-      before do
-        api_stub_for(get: "/users/#{user_to_delete.id}", respond_with: user_to_delete)
-        api_stub_for(delete: "/users/#{user_to_delete.id}", response: ->{ user_to_delete.name = 'deleted'; from_api(user_to_delete) })
-      end
+      let(:data) { JSON.parse(response.body) }
 
-      it_behaves_like "a jpi v1 admin action"
+      before { allow(user).to receive(:clients).and_return([]) }
+      before { expect_any_instance_of(MnoEnterprise::User).to receive(:destroy) }
+      before { stub_api_v2(:get, "/users/#{user.id}", user, [], { _metadata: { act_as_manager: current_user.id } }) }
 
-      context 'success' do
-        before { subject }
-
-        # Test that the user is deleted by testing the api endpoint was called
-        it { expect(user_to_delete.name).to eq('deleted') }
-      end
+      it { is_expected.to be_success }
     end
 
     describe 'POST #signup_email' do
+      subject { post :signup_email, user: { email: email } }
+
       let(:email) { 'test@test.com' }
-      subject { post :signup_email, user: {email: email}}
+      let(:mailer) { double('mailer') }
 
-      it_behaves_like "a jpi v1 admin action"
+      before { expect(MnoEnterprise::SystemNotificationMailer).to receive(:registration_instructions).with(email).and_return(mailer) }
+      before { expect(mailer).to receive(:deliver_later) }
 
-      it 'sends the signup instructions' do
-        message_delivery = instance_double(ActionMailer::MessageDelivery)
-        expect(SystemNotificationMailer).to receive(:registration_instructions).with(email) { message_delivery }
-        expect(message_delivery).to receive(:deliver_later).with(no_args)
-        subject
-      end
+      it { is_expected.to be_success }
     end
   end
 end

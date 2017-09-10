@@ -14,18 +14,18 @@ module MnoEnterprise
       if params[:terms]
         # Search mode
         @organizations = []
-        JSON.parse(params[:terms]).map { |t| @organizations = @organizations | MnoEnterprise::Organization.where(Hash[*t]) }
+        JSON.parse(params[:terms]).map do |t|
+          @organizations = @organizations | MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
+                                                                       .where(Hash[*t])
+        end
         response.headers['X-Total-Count'] = @organizations.count
       else
         # Index mode
         # Explicitly list fields to be retrieved to trigger financial_metrics calculation
         query = MnoEnterprise::Organization
                 .apply_query_params(params)
+                .with_params(_metadata: { act_as_manager: current_user.id })
                 .select(INCLUDED_FIELDS)
-		
-		# TODO: Add these filter parameter directly in the where
-        query = query.where(sub_tenant_id: params[:sub_tenant_id]) if params[:sub_tenant_id]
-        query = query.where(account_manager_id: params[:account_manager_id]) if params[:account_manager_id]
 
         @organizations = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
@@ -34,10 +34,17 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/organizations/1
     def show
-      @organization = MnoEnterprise::Organization.find_one(params[:id], *DEPENDENCIES)
+      @organization = MnoEnterprise::Organization.apply_query_params(params)
+                                                 .with_params(_metadata: { act_as_manager: current_user.id })
+                                                 .includes(*DEPENDENCIES)
+                                                 .find(params[:id])
+                                                 .first
+
       @organization_active_apps = @organization.app_instances.select(&:active?)
     end
 
+    # TODO: sub-tenant scoping
+    #
     # GET /mnoe/jpi/v1/admin/organizations/in_arrears
     def in_arrears
       @arrears = MnoEnterprise::ArrearsSituation.all
@@ -45,8 +52,11 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/organizations/count
     def count
-      organizations_count = MnoEnterprise::TenantReporting.show.organizations_count
-      render json: {count: organizations_count }
+      organizations_count = MnoEnterprise::TenantReporting.with_params(_metadata: { act_as_manager: current_user.id })
+                                                          .find
+                                                          .first
+                                                          .organizations_count
+      render json: { count: organizations_count }
     end
 
     # POST /mnoe/jpi/v1/admin/organizations
@@ -65,7 +75,12 @@ module MnoEnterprise
     # PATCH /mnoe/jpi/v1/admin/organizations/1
     def update
       # get organization
-      @organization = MnoEnterprise::Organization.find_one(params[:id], *DEPENDENCIES)
+      @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
+                                                 .includes(*DEPENDENCIES)
+                                                 .find(params[:id])
+                                                 .first
+      return render_not_found('Organization') unless @organization
+
       update_app_list
       @organization = @organization.load_required(*DEPENDENCIES)
       @organization_active_apps = @organization.app_instances.select(&:active?)
@@ -77,7 +92,11 @@ module MnoEnterprise
     # Invite a user to the organization (and create it if needed)
     # This does not send any emails (emails are manually triggered later)
     def invite_member
-      @organization = MnoEnterprise::Organization.find_one(params[:id], :orga_relations)
+      @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
+                                                 .includes(:orga_relations)
+                                                 .find(params[:id])
+                                                 .first
+      return render_not_found('Organization') unless @organization
 
       # Find or create a new user - We create it in the frontend as MnoHub will send confirmation instructions for newly
       # created users

@@ -27,6 +27,7 @@ FactoryGirl.define do
     confirmed_at 1.days.ago.round(0)
     current_sign_in_at 1.days.ago
     current_sign_in_ip '184.95.86.77'
+    last_sign_in_at 1.day.ago
     last_sign_in_ip '184.42.42.42'
     sign_in_count 1
     deletion_requests []
