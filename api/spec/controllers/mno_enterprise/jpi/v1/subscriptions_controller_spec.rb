@@ -25,6 +25,9 @@ module MnoEnterprise
     let!(:orga_relation) { organization.orga_relations << build(:orga_relation, user_id: user.id, organization_id: organization.id, role: 'Super Admin') }
     let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
 
+    # Stub license_assignments association
+    before { allow_any_instance_of(MnoEnterprise::Subscription).to receive(:license_assignments).and_return([]) }
+
     describe 'GET #index' do
       let(:subscription) { build(:subscription) }
 
