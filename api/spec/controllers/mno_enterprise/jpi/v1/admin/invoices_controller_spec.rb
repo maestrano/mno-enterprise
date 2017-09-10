@@ -30,10 +30,11 @@ module MnoEnterprise
           organizations: 'id,name'
         }
       end
+      let(:expected_params) { { fields: select_fields, _metadata: { act_as_manager: user.id } } }
 
       before { allow(invoice).to receive(:bills).and_return([bill]) }
       before { allow(invoice).to receive(:organization).and_return(organization) }
-      before { stub_api_v2(:get, "/invoices", [invoice], %i(organization), { fields: select_fields }) }
+      before { stub_api_v2(:get, "/invoices", [invoice], %i(organization), expected_params) }
       before { subject }
 
       it { expect(data['invoices'].first['id']).to eq(invoice.id) }
@@ -50,10 +51,11 @@ module MnoEnterprise
           organizations: 'id,name'
         }
       end
+      let(:expected_params) { { fields: select_fields, _metadata: { act_as_manager: user.id } } }
 
       before { allow(invoice).to receive(:bills).and_return([bill]) }
       before { allow(invoice).to receive(:organization).and_return(organization) }
-      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization bills), { fields: select_fields }) }
+      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization bills), expected_params) }
       before { subject }
 
       it { expect(data['invoice']['id']).to eq(invoice.id) }
@@ -63,8 +65,9 @@ module MnoEnterprise
       subject { patch :update, id: invoice.id, invoice: { paid_at: paid_at } }
 
       let(:paid_at) { Time.current }
+      let(:expected_params) { { fields: { invoices: 'id' }, _metadata: { act_as_manager: user.id } } }
 
-      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], { fields: { invoices: 'id' } }) }
+      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], expected_params) }
       before { stub_api_v2(:patch, "/invoices/#{invoice.id}", invoice) }
 
       it { is_expected.to be_successful }
@@ -74,9 +77,10 @@ module MnoEnterprise
       subject { post :create_adjustment, id: invoice.id, adjustment: { description: 'foo', price_cents: 20000 } }
 
       let(:data) { JSON.parse(response.body) }
+      let(:expected_params) { { fields: { invoices: 'currency,organization', organizations: 'id' }, _metadata: { act_as_manager: user.id } } }
 
       before { allow(invoice).to receive(:organization).and_return(organization) }
-      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization), { fields: { invoices: 'currency,organization', organizations: 'id' } }) }
+      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization), expected_params) }
       before { stub_api_v2(:post, "/bills", bill) }
       before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], { fields: { invoices: 'price,total_due' } }) }
       before { subject }
@@ -90,7 +94,9 @@ module MnoEnterprise
       subject { delete :delete_adjustment, id: invoice.id, bill_id: bill.id }
 
       let(:data) { JSON.parse(response.body) }
+      let(:expected_params) { { fields: { invoices: 'id' }, _metadata: { act_as_manager: user.id } } }
 
+      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], expected_params) }
       before do
         stub_api_v2(:get, "/bills", bill, [],
           {
@@ -111,9 +117,10 @@ module MnoEnterprise
       subject { post :send_to_customer, id: invoice.id }
 
       let(:data) { JSON.parse(response.body) }
+      let(:expected_params) { { fields: { invoices: 'organization', organizations: 'id' }, _metadata: { act_as_manager: user.id } } }
 
       before { allow(invoice).to receive(:organization).and_return(organization) }
-      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization), { fields: { invoices: 'organization', organizations: 'id' } }) }
+      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization), expected_params) }
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations), { fields: { organizations: 'orga_relations',  orga_relations: 'id,user_id,role' } }) }
       before { subject }
 
