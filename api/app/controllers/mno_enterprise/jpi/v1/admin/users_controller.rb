@@ -64,6 +64,7 @@ module MnoEnterprise
 
       if @user.errors.empty?
         @user = @user.load_required(:clients)
+        @user_clients = @user.clients
         render :show
       else
         render json: @user.errors.full_messages, status: :bad_request
