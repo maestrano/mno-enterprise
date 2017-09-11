@@ -29,9 +29,14 @@ module MnoEnterprise
 
     def available_locales
       Array(Settings.system.i18n.available_locales).map do |locale|
+        name = begin
+          I18n.t('language', locale: locale)
+        rescue I18n::InvalidLocale
+          locale.to_s
+        end
         {
           id: locale.to_s,
-          name: I18n.t('language', locale: locale),
+          name: name,
           flag: ''
         }
       end
