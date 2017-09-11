@@ -3,6 +3,9 @@ module MnoEnterprise
     property :created_at, type: :time
     property :updated_at, type: :time
 
+    property :billed_locally, type: :boolean
+    property :externally_provisioned, type: :boolean
+    property :local_product, type: :boolean
     property :status, type: :string
     property :subscription_type, type: :string
     property :start_date, type: :date
