@@ -83,6 +83,16 @@ en:
             team_select: "-- Select Team --"
             edit: Edit
             remove: Remove
+            roles:
+              member: Member
+              power_user: Power User
+              admin: Admin
+              super_admin: Super Admin
+              invited:
+                member: Invited (Member)
+                power_user: Invited (Power User)
+                admin: Invited (Admin)
+                super_admin: Invited (Super Admin)
             invite_modal:
               title_name: "Edit Member: {name} {surname}"
               title_email: "Edit Member: {email}"

@@ -11,6 +11,8 @@ en:
             all: All
             no_apps_warning: It looks like you do not have any application at the moment.
             add_app: Add an App Now!
+            save: Save
+            cancel: Cancel
 
           member_add_modal:
             title: Add Team Members
