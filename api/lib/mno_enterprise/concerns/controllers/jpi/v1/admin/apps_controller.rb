@@ -31,6 +31,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::AppsController
     else
       return render_bad_request('enable apps', 'id or ids required')
     end
+    MnoEnterprise::TenantConfig.update_application_list!
 
     head :ok
   rescue JsonApiClient::Errors::NotFound
@@ -41,6 +42,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::AppsController
   def disable
     # Just proxy it to MnoHub as is
     MnoEnterprise::App.new(id: params.require(:id)).disable
+    MnoEnterprise::TenantConfig.update_application_list!
     head :ok
   rescue JsonApiClient::Errors::NotFound
     render_not_found('app')

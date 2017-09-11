@@ -27,6 +27,7 @@ module MnoEnterprise
     end
 
     describe 'PATCH #enable' do
+      before { allow(MnoEnterprise::TenantConfig).to receive(:update_application_list!) }
       let(:params) { {} }
 
       subject { patch :enable, params}
@@ -73,11 +74,17 @@ module MnoEnterprise
             subject
             assert_requested_api_v2(:patch, "/apps/enable", body: params.to_json)
           end
+
+          it 'refreshes the App list' do
+            expect(MnoEnterprise::TenantConfig).to receive(:update_application_list!)
+            subject
+          end
         end
       end
     end
 
     describe 'PATCH #disable' do
+      before { allow(MnoEnterprise::TenantConfig).to receive(:update_application_list!) }
       subject { patch :disable, id: app.id }
 
       context 'when the app is enabled' do
@@ -88,6 +95,11 @@ module MnoEnterprise
         it 'makes to correct request to MnoHub' do
           subject
           assert_requested_api_v2(:patch, "/apps/#{app.id}/disable")
+        end
+
+        it 'refreshes the App list' do
+          expect(MnoEnterprise::TenantConfig).to receive(:update_application_list!)
+          subject
         end
       end
 

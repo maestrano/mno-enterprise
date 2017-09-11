@@ -24,7 +24,6 @@ module MnoEnterprise
         expect(body).to include(".constant('ADMIN_PANEL_CONFIG'")
         expect(body).to include(".constant('DASHBOARD_CONFIG'")
         expect(body).to include(".constant('IMPAC_CONFIG'")
-        expect(body).to include(".constant('CONFIG_JSON_SCHEMA'")
       end
     end
   end
