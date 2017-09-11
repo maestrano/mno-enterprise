@@ -15,6 +15,7 @@ if subscription.product_pricing
     json.name subscription.product_pricing.name
     json.description subscription.product_pricing.description
     json.free subscription.product_pricing.free
+    json.free subscription.product_pricing.pricing_type
     json.free_trial_enabled subscription.product_pricing.free_trial_enabled
     json.free_trial_duration subscription.product_pricing.free_trial_duration
     json.free_trial_unit subscription.product_pricing.free_trial_unit
