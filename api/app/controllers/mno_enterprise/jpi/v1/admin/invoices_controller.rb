@@ -160,9 +160,9 @@ module MnoEnterprise
 
       render_not_found('organization') unless organization
 
-      organization.orga_relations.each do |user|
-        next unless (user.role == 'Super Admin')
-        MnoEnterprise::SystemNotificationMailer.send_invoice(user.id, params[:id])
+      organization.orga_relations.each do |orga_relation|
+        next unless (orga_relation.role == 'Super Admin')
+        MnoEnterprise::SystemNotificationMailer.send_invoice(orga_relation.user.id, params[:id]).deliver_now
       end
       render json: { status: :request_sent}
 
