@@ -10,9 +10,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   # or
   # GET /mnoe/jpi/v1/admin/organizations/1/subscriptions
   def index
-    query = parent_organization ? fetch_subscriptions(parent_organization.id) : fetch_all_subscriptions
-    @subscriptions = query.to_a
-    response.headers['X-Total-Count'] = query.meta.record_count
+    if params[:terms]
+      # Search mode
+      @subscriptions = []
+      JSON.parse(params[:terms]).map { |t| @subscriptions = @subscriptions | fetch_all_subscriptions.where(Hash[*t]) }
+      response.headers['X-Total-Count'] = @subscriptions.count
+    else
+      query = parent_organization ? fetch_subscriptions(parent_organization.id) : fetch_all_subscriptions
+      @subscriptions = query.to_a
+      response.headers['X-Total-Count'] = query.meta.record_count
+    end
   end
 
   # GET /mnoe/jpi/v1/admin/organizations/1/subscriptions/id
