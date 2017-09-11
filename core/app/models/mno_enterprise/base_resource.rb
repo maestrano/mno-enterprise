@@ -60,8 +60,9 @@ module MnoEnterprise
 
     # emulate active record call of callbacks
     def save(*args)
+      callback_kind = new_record? ? :create : :update
       run_callbacks :save do
-        run_callbacks :update do
+        run_callbacks callback_kind do
           super()
         end
       end
