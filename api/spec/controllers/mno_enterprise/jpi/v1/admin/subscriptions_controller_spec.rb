@@ -46,11 +46,16 @@ module MnoEnterprise
 
       let(:data) { JSON.parse(response.body) }
       let(:includes) { [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'] }
-      let(:expected_params) { { filter: { organization_id: organization.id }, _metadata: { act_as_manager: user.id } } }
+      let(:expected_params) do
+        {
+          filter: { id: subscription.id, organization_id: organization.id },
+          _metadata: { act_as_manager: user.id },
+          page: { number: 1, size: 1 } }
+      end
 
       before { allow(subscription).to receive(:license_assignments).and_return([]) }
       before { allow(subscription).to receive(:organization).and_return(organization) }
-      before { stub_api_v2(:get, "/subscriptions/#{subscription.id}", subscription, includes, expected_params) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, includes, expected_params) }
       before { subject }
 
       it { expect(data['subscription']['id']).to eq(subscription.id) }
