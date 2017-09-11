@@ -32,17 +32,18 @@ module MnoEnterprise
       it 'returns the tenant information' do
         subject
         expected = {
-          tenant: {
-            domain: 'tenant.domain.test',
-            frontend_config: Settings.to_hash,
-            plugins_config: {
-              payment_gateways: []
-            }
+          domain: 'tenant.domain.test',
+          frontend_config: Settings.to_hash,
+          plugins_config: {
+            payment_gateways: []
           }
         }
 
         # TODO: using JSON parse for better error
-        expect(JSON.parse(response.body)).to eq(JSON.parse(expected.to_json))
+        tenant_response = JSON.parse(response.body)['tenant']
+        expect(tenant_response.except('config_schema', 'plugins_config_schema')).to eq(JSON.parse(expected.to_json))
+
+        expect(tenant_response).to include('config_schema', 'plugins_config_schema')
       end
 
     end
