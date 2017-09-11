@@ -15,6 +15,6 @@ end
 
 json.product_pricings do
   json.array! product.product_pricings.each do |pricing|
-    json.extract! pricing, :id, :name, :description, :position, :free, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, :prices, :external_id
+    json.extract! pricing, :id, :name, :description, :position, :free, :pricing_type, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, :prices, :external_id
   end
 end

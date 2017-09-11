@@ -4,6 +4,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "Product #{n}" }
     description 'Basic pricing plan'
     free false
+    pricing_type 'recurring'
     free_trial_enabled true
     free_trial_duration 1
     free_trial_unit 'month'

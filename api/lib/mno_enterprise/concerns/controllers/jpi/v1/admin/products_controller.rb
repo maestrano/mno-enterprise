@@ -3,7 +3,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
 
   ATTRIBUTES = [:name, :active, :logo, :external_id, :free_trial_enabled, :free_trial_duration, :free_trial_unit]
   DEPENDENCIES = [:'values.field', :assets, :categories, :product_pricings, :product_contracts]
-  PRICING_ATTRIBUTES = [:name, :description, :position, :free, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, {:prices => [:currency, :price_cents] }, :external_id]
+  PRICING_ATTRIBUTES = [:name, :description, :position, :free, :pricing_type, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, {:prices => [:currency, :price_cents] }, :external_id]
 
   #==================================================================
   # Instance methods
