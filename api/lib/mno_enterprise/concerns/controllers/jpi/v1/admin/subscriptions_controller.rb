@@ -16,7 +16,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
       JSON.parse(params[:terms]).map { |t| @subscriptions = @subscriptions | fetch_all_subscriptions.where(Hash[*t]) }
       response.headers['X-Total-Count'] = @subscriptions.count
     else
-      query = parent_organization ? fetch_subscriptions(parent_organization.id) : fetch_all_subscriptions
+      query = params[:organization_id].present? ? fetch_subscriptions(params[:organization_id]) : fetch_all_subscriptions
       @subscriptions = query.to_a
       response.headers['X-Total-Count'] = query.meta.record_count
     end
@@ -24,13 +24,22 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
   # GET /mnoe/jpi/v1/admin/organizations/1/subscriptions/id
   def show
-    @subscription = fetch_subscription(parent_organization.id, params[:id])
+    @subscription = fetch_subscription(params[:organization_id], params[:id], SUBSCRIPTION_INCLUDES)
+    return render_not_found('Subscription') unless @subscription
   end
 
   # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions
   def create
+    # Abort if user does not have access to the organization
+    organization = MnoEnterprise::Organization
+      .with_params(_metadata: { act_as_manager: current_user.id })
+      .select(:id)
+      .find(params[:organization_id])
+      .first
+    return render_not_found('Organization') unless organization
+
     subscription = MnoEnterprise::Subscription.new(subscription_update_params)
-    subscription.relationships.organization = MnoEnterprise::Organization.new(id: parent_organization.id)
+    subscription.relationships.organization = organization
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
     subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
     subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
@@ -40,14 +49,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
       render json: subscription.errors, status: :bad_request
     else
       MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription)
-      @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
       render :show
     end
   end
 
   # PUT /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc
   def update
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
+    subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
     subscription.update_attributes(subscription_update_params)
 
@@ -55,14 +64,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
       render json: subscription.errors, status: :bad_request
     else
       MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
-      @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
       render :show
     end
   end
 
   # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc/cancel
   def cancel
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
+    subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
     subscription.cancel
 
@@ -70,14 +79,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
       render json: subscription.errors, status: :bad_request
     else
       MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription cancelled', subscription)
-      @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
       render :show
     end
   end
 
   # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc/approve
   def approve
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
+    subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
     subscription.approve
 
@@ -85,14 +94,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
       render json: subscription.errors, status: :bad_request
     else
       MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription approved', subscription)
-      @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
       render :show
     end
   end
 
   # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc/fulfill
   def fulfill
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
+    subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
     subscription.fulfill
 
@@ -100,7 +109,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
       render json: subscription.errors, status: :bad_request
     else
       MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription fulfilled', subscription)
-      @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
       render :show
     end
   end
@@ -116,14 +125,25 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   end
 
   def fetch_all_subscriptions
-    MnoEnterprise::Subscription.apply_query_params(params).includes(SUBSCRIPTION_INCLUDES)
+    MnoEnterprise::Subscription
+      .apply_query_params(params)
+      .with_params(_metadata: { act_as_manager: current_user.id })
+      .includes(SUBSCRIPTION_INCLUDES)
   end
 
   def fetch_subscriptions(organization_id)
-    MnoEnterprise::Subscription.apply_query_params(params).includes(SUBSCRIPTION_INCLUDES).where(organization_id: organization_id)
+    MnoEnterprise::Subscription
+      .apply_query_params(params)
+      .with_params(_metadata: { act_as_manager: current_user.id })
+      .includes(SUBSCRIPTION_INCLUDES)
+      .where(organization_id: organization_id)
   end
 
-  def fetch_subscription(organization_id, id)
-    MnoEnterprise::Subscription.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id, id: id).first
+  def fetch_subscription(organization_id, id, includes = nil)
+    rel = MnoEnterprise::Subscription
+            .with_params(_metadata: { act_as_manager: current_user.id })
+            .where(organization_id: organization_id, id: id)
+    rel = rel.includes(*includes) if includes.present?
+    rel.first
   end
 end
