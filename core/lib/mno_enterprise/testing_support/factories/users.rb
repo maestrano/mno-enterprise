@@ -66,6 +66,12 @@ FactoryGirl.define do
       clients { [build(:organization)] }
     end
 
+    trait :persisted do
+      initialize_with do
+        new(attributes).tap {|e| e.clear_changes_information}.tap {|u| u.mark_as_persisted!}
+      end
+    end
+
     # Make sure the object is not dirty
     initialize_with { new(attributes).tap { |e| e.clear_changes_information } }
   end

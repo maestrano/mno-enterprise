@@ -5,6 +5,7 @@ module MnoEnterprise
     self.site = URI.join(MnoEnterprise.api_host, MnoEnterprise.mno_api_v2_root_path).to_s
     self.parser = JsonApiClientExtension::CustomParser
 
+    define_callbacks :create
     define_callbacks :update
     define_callbacks :save
 

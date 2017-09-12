@@ -27,9 +27,12 @@ module MnoEnterprise
     property :geo_country_code, type: :string
     property :last_sign_in_ip
     property :name, type: :string
-    property :password
+    property :password, type: :string
+    property :current_password, type: :string
+    property :password_confirmation, type: :string
     property :phone, type: :string
     property :phone_country_code, type: :string
+    property :confirmation_token, type: :string
     property :unconfirmed_email
     property :settings
     property :sso_session, type: :string
@@ -85,27 +88,6 @@ module MnoEnterprise
       end
     rescue JsonApiClient::Errors::NotFound
 
-    end
-
-
-    # Fix issue that prevented email to be sent when signing up
-    # In devise there is a call to postpone_email_change_until_confirmation_and_regenerate_confirmation_token that reset
-    # the email to email_was which is nil when a user is being created the first time
-    # The call to postpone_email_change_until_confirmation_and_regenerate_confirmation_token depends on postpone_email_change
-    # in the current implementation, there is no apparent case for when tue email_was is nil.
-    # Found a workaround on https://github.com/plataformatec/devise/issues/1691
-    # Original Devise implementation
-    # def postpone_email_change?
-    #   postpone = self.class.reconfirmable && email_changed? && !@bypass_confirmation_postpone && self.email.present?
-    #   @bypass_confirmation_postpone = false
-    #   postpone
-    # end
-    def postpone_email_change?
-      if self.email_was.nil?
-        @reconfirmation_required = true
-        return false
-      end
-      super
     end
 
     def authenticatable_salt

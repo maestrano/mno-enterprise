@@ -16,6 +16,7 @@ module MnoEnterprise
       stub_api_v2(:get, '/orga_invites', [], [], {filter: {user_email: signup_attrs[:email]}})
 
       stub_api_v2(:get, '/users', email_uniq_resp, [], {filter: {email: signup_attrs[:email]}, page: {number: 1, size: 1}})
+      allow(Devise.token_generator).to receive(:generate).and_return(['ABCD1234', nil])
     }
 
     describe 'signup' do
