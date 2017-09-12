@@ -72,3 +72,7 @@ en:
 
         language_selectbox:
           language: 'Language'
+          cancel: 'Cancel'
+          change_language: 'Change language'
+          confirm_header: 'Change language to {name}?'
+          confirm: 'Are you sure you want to change language to {name}?'
