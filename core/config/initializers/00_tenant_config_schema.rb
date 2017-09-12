@@ -478,6 +478,16 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               description: "enable sub tenant management from the Admin Panel"
             }
           }
+        },
+        available_billing_currencies: {
+          title: "Available Billing Currencies",
+          type: "array",
+          description: "List of billing currencies available",
+          items: {
+            type: "string",
+            enum: %w(AED AUD CAD EUR GBP HKD JPY NZD SGD USD),
+            default: %w(AED AUD CAD EUR GBP HKD JPY NZD SGD USD)
+          }
         }
       }
     }
