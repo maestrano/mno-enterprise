@@ -466,6 +466,11 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
         },
         sub_tenant: {
           type: "object",
+          # Disable sub_tenant activation for now
+          'x-schema-form': {
+            type: 'hidden',
+            notitle: true
+          },
           properties: {
             enabled: {
               type: "boolean",
