@@ -256,6 +256,7 @@ module MnoEnterprise
         before do
           stub_api_v2(:get, '/users', [], [], {filter: {email: auth.info.email}, page: {number: 1, size: 1}})
           stub_api_v2(:post, '/users', created_user)
+          allow(Devise.token_generator).to receive(:generate).and_return(['ABCD1234', nil])
         end
 
         subject { described_class.create_from_omniauth(auth) }

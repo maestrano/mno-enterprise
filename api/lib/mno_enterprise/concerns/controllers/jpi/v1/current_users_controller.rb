@@ -54,6 +54,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   def update_password
     @user = current_user
     @user = @user.update_password(data: {attributes: password_params}).first
+    # TODO: [APIv2] This is not working!
+    # update_password returns an empty array in case of error
     if @user.errors.empty?
       MnoEnterprise::EventLogger.info('user_update_password', current_user.id, 'User password change', @user)
       @user = @user.load_required(:organizations, :orga_relations, :deletion_requests)

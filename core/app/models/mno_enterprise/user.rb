@@ -27,9 +27,12 @@ module MnoEnterprise
     property :geo_country_code, type: :string
     property :last_sign_in_ip
     property :name, type: :string
-    property :password
+    property :password, type: :string
+    property :current_password, type: :string
+    property :password_confirmation, type: :string
     property :phone, type: :string
     property :phone_country_code, type: :string
+    property :confirmation_token, type: :string
     property :unconfirmed_email
     property :settings
     property :sso_session, type: :string

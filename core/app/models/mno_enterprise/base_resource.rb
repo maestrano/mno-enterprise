@@ -5,6 +5,7 @@ module MnoEnterprise
     self.site = URI.join(MnoEnterprise.api_host, MnoEnterprise.mno_api_v2_root_path).to_s
     self.parser = JsonApiClientExtension::CustomParser
 
+    define_callbacks :create
     define_callbacks :update
     define_callbacks :save
 
@@ -65,8 +66,11 @@ module MnoEnterprise
 
     # emulate active record call of callbacks
     def save(*args)
+      callback_kind = new_record? ? :create : :update
       run_callbacks :save do
-        super()
+        run_callbacks callback_kind do
+          super()
+        end
       end
     end
 
@@ -78,9 +82,7 @@ module MnoEnterprise
     # emulate active record call of callbacks, a bit different as before_update is called before before_save
     def update_attributes(attrs = {})
       self.attributes = attrs
-      run_callbacks :update do
-        save
-      end
+      save
     end
 
     def cache_key(*timestamp_names)
