@@ -82,7 +82,7 @@ module MnoEnterprise
       before { allow(organization).to receive(:app_instances).and_return([app_instance]) }
       before { allow(organization).to receive(:invoices).and_return([]) }
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, includes) }
-      before { expect(MnoEnterprise::Organization).to receive(:create).with(params.slice(:name)).and_return(organization) }
+      before { expect(MnoEnterprise::Organization).to receive(:create).with(params.slice(:name, :billing_currency)).and_return(organization) }
 
       describe 'creation' do
         before { subject }
