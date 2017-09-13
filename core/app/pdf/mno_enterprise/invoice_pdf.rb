@@ -138,7 +138,7 @@ module MnoEnterprise
       @pdf.repeat :all do
         @pdf.bounding_box([0, @pdf.bounds.top+@format[:header_size]], width: 540, height: @format[:footer_size]) do
           @pdf.float do
-            @pdf.image image_path('mno_enterprise/main-logo.png'), scale: 0.5
+            @pdf.image image_path('mno_enterprise/main-logo.png'), scale: 0.25
           end
           @pdf.move_down 52
           @pdf.font_size(20) { @pdf.text "Monthly Invoice - #{@data[:period_month]}", style: :bold, align: :right }
