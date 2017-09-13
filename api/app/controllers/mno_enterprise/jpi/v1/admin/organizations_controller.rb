@@ -81,6 +81,9 @@ module MnoEnterprise
                                                  .first
       return render_not_found('Organization') unless @organization
 
+      # Update organization
+      @organization.update(organization_update_params)
+
       update_app_list
       @organization = @organization.load_required(*DEPENDENCIES)
       @organization_active_apps = @organization.app_instances.select(&:active?)
@@ -117,7 +120,7 @@ module MnoEnterprise
     protected
 
     def organization_permitted_update_params
-      [:name]
+      [:name, :billing_currency]
     end
 
     def organization_update_params
