@@ -247,7 +247,7 @@ module MnoEnterprise
       @pdf.move_down 10
       @pdf.indent(5) do
         @pdf.font_size(8) do
-          @pdf.text "<color rgb='999999'> The charges will appear as INV #{@data[:invoice_reference]} on your bank statement.</color>", inline_format: true
+          @pdf.text "<color rgb='999999'> This charge will appear as INV #{@data[:invoice_reference]} on your bank statement.</color>", inline_format: true
           @pdf.text "<color rgb='999999'> Charges are all displayed in #{@data[:invoice_currency_name]} (#{@data[:invoice_currency]})</color>", inline_format: true
           if @data[:invoice_fully_paid]
             @pdf.text "<color rgb='999999'>  No credit card payments required for this invoice</color>", inline_format: true
