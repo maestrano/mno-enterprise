@@ -61,7 +61,7 @@ module MnoEnterprise
         @tasks ||= MnoEnterprise::Task.where(owner_id: current_user.organizations.first.orga_relation_id)
       else
         # retrieve tasks inbox
-        @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> current_user.organizations.first.orga_relation_id)
+        @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> current_user.organizations.first.orga_relation_id, 'status.ne' => 'draft')
       end
     end
 
