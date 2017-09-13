@@ -17,12 +17,14 @@ module MnoEnterprise
         @tasks = @tasks.all.fetch
         response.headers['X-Total-Count'] = @tasks.metadata[:pagination][:count]
       end
+      render template: 'mno_enterprise/jpi/v1/tasks/index'
     end
 
     # GET /mnoe/jpi/v1/admin/tasks/1
     def show
       task
       render_not_found('task') unless @task
+      render template: 'mno_enterprise/jpi/v1/tasks/show'
     end
 
     # POST /mnoe/jpi/v1/admin/tasks
@@ -34,7 +36,7 @@ module MnoEnterprise
         @task.task_recipients.create(task_recipient_params)
         MnoEnterprise::EventLogger.info('task_create', current_user.id, 'Task Creation', @task)
         send_mail_notification(@task.task_recipients) if task_sent
-        render 'show'
+        render template: 'mno_enterprise/jpi/v1/tasks/show'
       else
         render_bad_request('create task', @task.errors)
       end
@@ -45,7 +47,7 @@ module MnoEnterprise
       return render_not_found('task') unless task
       if task.update(task_params)
         task.task_recipients.map! { |recipient| recipient.update(task_recipient_params) }
-        render 'show'
+        render template: 'mno_enterprise/jpi/v1/tasks/show'
       else
         render_bad_request('update task', task.errors)
       end
@@ -76,13 +78,11 @@ module MnoEnterprise
     end
 
     def send_mail_notification(recipients)
-      recipients.map { |recipient| MnoEnterprise::SystemNotificationMailer.task_notification(recipient.user, @task).deliver_now  }
+      recipients.map { |recipient| MnoEnterprise::SystemNotificationMailer.task_notification(recipient.user, @task).deliver_later  }
     end
 
     def task_recipient_params
-      permitted_params = params.require(:task).permit(:orga_relation_id, :reminder_date, :read_at)
-        .merge(task_id: @task.id)
-      permitted_params
+      params.require(:task).permit(:orga_relation_id, :reminder_date, :read_at).merge(task_id: @task.id)
     end
 
     def task_params

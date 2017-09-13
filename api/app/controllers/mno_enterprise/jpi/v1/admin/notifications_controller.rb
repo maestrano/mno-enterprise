@@ -8,6 +8,7 @@ module MnoEnterprise
       @tasks_to_be_reminded = MnoEnterprise::Task.recipient(orga_relation_id).sent.to_be_reminded
       @due_tasks = MnoEnterprise::Task.recipient(orga_relation_id).sent.due
       @completed_tasks = MnoEnterprise::Task.owner(orga_relation_id).done.completed
+      render template: 'mno_enterprise/jpi/v1/notifications/index'
     end
 
     # POST mnoe/jpi/v1/admin/notifications/notified
@@ -20,14 +21,6 @@ module MnoEnterprise
         return render_bad_request('notified', "Invalid object_type: #{params[:object_type]}")
       end
       head :ok
-    end
-
-    def format_notification_sender(task)
-      "#{task[:owner][:user][:name]} #{task[:owner][:user][:surname]} - #{task[:owner][:organization][:name]}"
-    end
-
-    def format_date(date)
-      date.today? ? 'today' : date.strftime('%a, %d %b %Y')
     end
 
     private

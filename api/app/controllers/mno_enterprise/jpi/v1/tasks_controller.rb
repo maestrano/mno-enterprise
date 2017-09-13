@@ -80,7 +80,7 @@ module MnoEnterprise
     end
 
     def send_mail_notification(recipients)
-      recipients.map { |recipient| MnoEnterprise::SystemNotificationMailer.task_notification(recipient.user, @task).deliver_now  }
+      recipients.map { |recipient| MnoEnterprise::SystemNotificationMailer.task_notification(recipient.user, @task).deliver_later  }
     end
 
     def task_recipient_params
