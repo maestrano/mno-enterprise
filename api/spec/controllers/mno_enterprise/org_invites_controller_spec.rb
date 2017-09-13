@@ -14,7 +14,7 @@ module MnoEnterprise
     let(:token) { invite.token }
 
     before do
-      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
+      stub_user(user)
       # Invite stubs
       stub_api_v2(:put, "/orga_invites/#{invite.id}", invite)
     end

@@ -29,7 +29,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     @user.save
     if @user.errors.empty?
       MnoEnterprise::EventLogger.info('user_update', current_user.id, 'User update', @user, changed_attributes)
-      @user = @user.load_required(:organizations, :orga_relations, :deletion_requests,)
+      @user = @user.load_required_dependencies
       render :show
     else
       render json: @user.errors, status: :bad_request
@@ -43,7 +43,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     @user = @user.create_api_credentials.first
     if @user.errors.empty?
       MnoEnterprise::EventLogger.info('register_developer', current_user.id, 'Developer registration', @user)
-      @user = @user.load_required(:organizations, :orga_relations, :deletion_requests)
+      @user = @user.load_required_dependencies
       render :show
     else
       render json: @user.errors, status: :bad_request
@@ -58,7 +58,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     # update_password returns an empty array in case of error
     if @user.errors.empty?
       MnoEnterprise::EventLogger.info('user_update_password', current_user.id, 'User password change', @user)
-      @user = @user.load_required(:organizations, :orga_relations, :deletion_requests)
+      @user = @user.load_required_dependencies
       sign_in @user, bypass: true
       render :show
     else

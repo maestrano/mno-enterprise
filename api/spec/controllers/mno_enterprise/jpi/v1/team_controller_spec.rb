@@ -59,7 +59,7 @@ module MnoEnterprise
     #===============================================
     describe 'PUT #add_users' do
 
-      let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+      let!(:current_user_stub) { stub_user(user) }
 
       before { stub_api_v2(:get, "/apps", [app]) }
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations)) }

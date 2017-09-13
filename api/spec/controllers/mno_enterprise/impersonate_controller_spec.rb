@@ -8,8 +8,8 @@ module MnoEnterprise
     let(:user) { build(:user, :admin) }
     let(:user2) { build(:user) }
     before do
-      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
-      stub_api_v2(:get, "/users/#{user2.id}", user2, %i(deletion_requests organizations orga_relations dashboards user_access_requests))
+      stub_user(user)
+      stub_api_v2(:get, "/users/#{user2.id}", user2, %i(deletion_requests organizations orga_relations dashboards teams user_access_requests))
 
       stub_api_v2(:patch, "/users/#{user.id}")
       stub_api_v2(:patch, "/users/#{user2.id}")
@@ -35,7 +35,7 @@ module MnoEnterprise
         end
 
         context 'when the user does not exist' do
-          before { stub_api_v2(:get, '/users/crappyId', [], %i(deletion_requests organizations orga_relations dashboards user_access_requests)) }
+          before { stub_api_v2(:get, '/users/crappyId', [], %i(deletion_requests organizations orga_relations dashboards teams user_access_requests)) }
           subject { get :create, user_id: 'crappyId', dhbRefId: 10 }
           it do
             subject

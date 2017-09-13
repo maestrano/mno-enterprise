@@ -81,7 +81,7 @@ module MnoEnterprise
 
     # Stub user retrieval
     let!(:user) { build(:user, :with_deletion_request, :with_organizations, :kpi_enabled) }
-    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let!(:current_user_stub) { stub_user(user) }
 
     describe 'GET #show' do
       subject { get :show }
@@ -121,7 +121,7 @@ module MnoEnterprise
         updated_user.attributes = attrs
         stub_api_v2(:patch,  "/users/#{user.id}", updated_user)
         # user reload
-        stub_api_v2(:get, "/users/#{user.id}", updated_user, %i(organizations orga_relations deletion_requests))
+        stub_user(updated_user)
       }
 
       subject { put :update, user: attrs }
@@ -143,7 +143,7 @@ module MnoEnterprise
     describe 'PUT #register_developer' do
       before { stub_api_v2(:patch, "/users/#{user.id}/create_api_credentials", user) }
       #user reload
-      before { stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations orga_relations deletion_requests)) }
+      before { stub_user(user) }
       before { sign_in user }
       subject { put :register_developer }
 
@@ -157,7 +157,7 @@ module MnoEnterprise
       let(:attrs) { {current_password: 'password', password: 'blablabla', password_confirmation: 'blablabla'} }
       let!(:update_password_stub) { stub_api_v2(:patch, "/users/#{user.id}/update_password", user) }
       #user reload
-      before { stub_api_v2(:get, "/users/#{user.id}", user, %i(organizations orga_relations deletion_requests)) }
+      before { stub_user(user) }
       subject { put :update_password, user: attrs }
 
       it_behaves_like 'a user management action'

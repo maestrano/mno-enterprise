@@ -5,7 +5,7 @@ module MnoEnterprise
 
     let(:user) { build(:user) }
     before {
-      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
+      stub_user(user)
       stub_api_v2(:patch, "/users/#{user.id}", user)
     }
     let!(:authentication_stub){ stub_api_v2(:post, "/users/authenticate", user)}

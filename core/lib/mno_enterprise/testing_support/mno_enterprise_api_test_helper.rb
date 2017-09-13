@@ -100,10 +100,9 @@ module MnoEnterpriseApiTestHelper
     stub_api_v2(:post, '/audit_events')
   end
 
-  def stub_current_user
-    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+  def stub_user(user)
+    stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards teams))
   end
-
 
   def api_v2_url(suffix, included = [], params = {})
     url = MnoEnterprise::BaseResource.site + suffix

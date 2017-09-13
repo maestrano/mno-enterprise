@@ -11,7 +11,7 @@ module MnoEnterprise
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
     let(:user) { build(:user, :admin, orga_relations: [orga_relation]) }
     let!(:orga_relation) { build(:orga_relation) }
-    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let!(:current_user_stub) { stub_user(user) }
     let(:review) { build(:review) }
     let!(:get_reviews_stub) { stub_api_v2(:get, '/reviews', [review], [], {filter: {reviewer_type: 'OrgaRelation', reviewable_type: 'App'}}) }
 

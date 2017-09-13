@@ -24,7 +24,7 @@ module MnoEnterprise
     }
     let(:audit_event) { build(:audit_event) }
 
-    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let!(:current_user_stub) { stub_user(user) }
     before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
     before { stub_api_v2(:get, "/organizations/#{organization.id}", organization) }
     before do

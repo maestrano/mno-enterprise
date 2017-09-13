@@ -31,6 +31,7 @@ FactoryGirl.define do
     last_sign_in_ip '184.42.42.42'
     sign_in_count 1
     deletion_requests []
+    teams []
     kpi_enabled true
     organizations []
     orga_relations []
