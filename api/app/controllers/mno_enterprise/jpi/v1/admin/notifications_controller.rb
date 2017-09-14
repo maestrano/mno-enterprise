@@ -26,7 +26,7 @@ module MnoEnterprise
     private
 
     def orga_relation_id
-      @orga_relation_id ||= current_user.organizations.first.orga_relation_id
+      @orga_relation_id ||= MnoEnterprise::OrgaRelation.where(user_id: current_user.id).first.id
     end
   end
 end
