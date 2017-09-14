@@ -12,12 +12,16 @@ module MnoEnterprise
     #===============================================
     # Stub user and user call
     let(:user) { build(:user, :admin, organizations: [organization]) }
-    let(:organization) { build(:organization) }
+    let(:orga_relation) { build(:orga_relation) }
+    let(:organization) { build(:organization, orga_relation_id: orga_relation.id) }
     let(:task) { build(:task, task_recipients: [build(:task_recipient)]) }
     before do
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
       api_stub_for(get: '/tasks', response: from_api([task]))
       api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization]))
+
+      user_id_param = { user_id: user.id }
+      api_stub_for(get: "/orga_relations?#{param_filter(user_id_param)}", response: from_api([orga_relation]))
       sign_in user
     end
 
@@ -48,6 +52,14 @@ module MnoEnterprise
           expect(response).to be_success
         end
       end
+    end
+
+    describe 'POST #create' do
+      xit 'action to be described'
+    end
+
+    describe 'PUT #update' do
+      xit 'action to be described'
     end
   end
 end

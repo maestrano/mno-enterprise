@@ -29,8 +29,6 @@ module MnoEnterprise
 
     # POST /mnoe/jpi/v1/admin/tasks
     def create
-      # For an admin, the owner_id isn't important, so we pass the first one
-      owner_id = current_user.organizations.first.orga_relation_id
       if @task = MnoEnterprise::Task.create(task_params.merge(owner_id: owner_id))
         return render_bad_request('create task', @task.errors) unless @task.id
         @task.task_recipients.create(task_recipient_params)
@@ -58,10 +56,10 @@ module MnoEnterprise
     def tasks
       if params[:outbox]
         # retrieve tasks outbox
-        @tasks ||= MnoEnterprise::Task.where(owner_id: current_user.organizations.first.orga_relation_id)
+        @tasks ||= MnoEnterprise::Task.where(owner_id: owner_id)
       else
         # retrieve tasks inbox
-        @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> current_user.organizations.first.orga_relation_id, 'status.ne' => 'draft')
+        @tasks ||= MnoEnterprise::Task.where('task_recipients.orga_relation_id'=> owner_id, 'status.ne' => 'draft')
       end
     end
 
@@ -92,6 +90,12 @@ module MnoEnterprise
       # Update the task when is completed
       permitted_params.merge!(completed_at: Time.new) if task_completed
       permitted_params
+    end
+
+    # For an admin, the owner_id isn't important, so we pass the first one
+    # TODO: owner should be a User
+    def owner_id
+      @owner_id ||= MnoEnterprise::OrgaRelation.where(user_id: current_user.id).first.id
     end
   end
 end

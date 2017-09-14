@@ -77,6 +77,9 @@ module MnoEnterprise
         }
         api_stub_for(get: "/tasks?#{param_filter(completed_task_params)}", response: from_api([completed_task]))
 
+        user_id_param = { user_id: user.id }
+        api_stub_for(get: "/orga_relations?#{param_filter(user_id_param)}", response: from_api([orga_relation]))
+
         sign_in user
       end
       it do
@@ -104,6 +107,9 @@ module MnoEnterprise
       before do
         api_stub_for(get: "/tasks/#{task.id}", response: from_api(task))
         sign_in user
+
+        user_id_param = { user_id: user.id }
+        api_stub_for(get: "/orga_relations?#{param_filter(user_id_param)}", response: from_api([orga_relation]))
       end
       context 'when notification_type is completed' do
         let(:notification_type) { 'completed' }
