@@ -102,3 +102,23 @@ en:
             get_tasks: 'An error occurred while retrieving your Messages'
             create_task: 'An error occurred while creating your Message'
             update_task: 'An error occurred while updating your Message'
+        notifications:
+          reminder:
+            title: 'Task Reminder'
+            message:
+              title: 'Title: {task_title}'
+              from: 'From: {user_name} {user_surname}'
+              due: 'Due date: {due_date}'
+              details: 'See your due tasks for more details'
+          due:
+            title: 'Task due {due_date}'
+            message:
+              title: 'Title: {task_title}'
+              from: 'From: {user_name} {user_surname}'
+              due: 'Due date: {due_date}'
+              details: 'See your due tasks for more details'
+          completed:
+            title: 'Task completed'
+            message:
+              has_completed: '{user_name} {user_surname} has completed the task: {task_title}.'
+              details: 'See your messages for more details'
