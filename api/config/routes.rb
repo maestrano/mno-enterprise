@@ -242,6 +242,8 @@ MnoEnterprise::Engine.routes.draw do
           end
           member do
             post :users, action: :invite_member
+            put :freeze
+            put :unfreeze
           end
           resources :users, only: [] do
             resource :invites, only: [:create]

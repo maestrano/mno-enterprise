@@ -117,6 +117,36 @@ module MnoEnterprise
       @user = user.confirmed? ? invite : user
     end
 
+    # PUT /mnoe/jpi/v1/admin/organizations/1/freeze
+    def freeze
+      @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
+                                                 .includes(*DEPENDENCIES)
+                                                 .find(params[:id])
+                                                 .first
+      return render_not_found('Organization') unless @organization
+
+      last_result_set = @organization.freeze
+      updated = last_result_set.first
+      @organization.attributes = updated.attributes
+
+      render 'show'
+    end
+
+    # PUT /mnoe/jpi/v1/admin/organizations/1/unfreeze
+    def unfreeze
+      @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
+                                                 .includes(*DEPENDENCIES)
+                                                 .find(params[:id])
+                                                 .first
+      return render_not_found('Organization') unless @organization
+
+      last_result_set = @organization.unfreeze
+      updated = last_result_set.first
+      @organization.attributes = updated.attributes
+
+      render 'show'
+    end
+
     protected
 
     def organization_permitted_update_params

@@ -133,5 +133,39 @@ module MnoEnterprise
         it { expect(data['user']['id']).to eq(invited_user.id) }
       end
     end
+
+    describe 'PUT #freeze' do
+      let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user'] }
+
+      subject { put :freeze, id: organization.id }
+
+      before { allow(app_instance).to receive(:app).and_return(app) }
+      before { allow(organization).to receive(:app_instances).and_return([app_instance]) }
+      before { allow(organization).to receive(:invoices).and_return([]) }
+
+      before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, includes, { _metadata: { act_as_manager: user.id } }) }
+      before { stub_api_v2(:patch, "/organizations/#{organization.id}/freeze", organization) }
+
+      before { subject }
+
+      it { expect(response).to be_success }
+    end
+
+    describe 'PUT #unfreeze' do
+      let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user'] }
+
+      subject { put :unfreeze, id: organization.id }
+
+      before { allow(app_instance).to receive(:app).and_return(app) }
+      before { allow(organization).to receive(:app_instances).and_return([app_instance]) }
+      before { allow(organization).to receive(:invoices).and_return([]) }
+
+      before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, includes, { _metadata: { act_as_manager: user.id } }) }
+      before { stub_api_v2(:patch, "/organizations/#{organization.id}/unfreeze", organization) }
+
+      before { subject }
+
+      it { expect(response).to be_success }
+    end
   end
 end
