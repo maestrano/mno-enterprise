@@ -26,7 +26,7 @@ module MnoEnterprise
         target.delete_if {|k,v| k != :mno_enterprise}
         base.delete_if {|k,v| k != :mno_enterprise}
 
-        prune_translation(base, target)
+        # prune_translation(base, target)
         dummy_translate(base)
 
         output = {zh: base}
