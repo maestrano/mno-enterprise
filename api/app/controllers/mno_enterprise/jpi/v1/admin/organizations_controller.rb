@@ -124,7 +124,11 @@ module MnoEnterprise
                                                  .find(params[:id])
                                                  .first
       return render_not_found('Organization') unless @organization
-      @organization.freeze
+
+      last_result_set = @organization.freeze
+      updated = last_result_set.first
+      @organization.attributes = updated.attributes
+
       render 'show'
     end
 
@@ -135,7 +139,11 @@ module MnoEnterprise
                                                  .find(params[:id])
                                                  .first
       return render_not_found('Organization') unless @organization
-      @organization.unfreeze
+
+      last_result_set = @organization.unfreeze
+      updated = last_result_set.first
+      @organization.attributes = updated.attributes
+
       render 'show'
     end
 
