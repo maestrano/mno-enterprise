@@ -55,7 +55,7 @@ module MnoEnterprise
           if value.is_a?(Hash)
             dummy_translate(value)
           elsif value.is_a?(String)
-            base[key] = '你好'
+            base[key] = [*"\u4E00".."\u9FFF"].sample(Random.rand(2..6)).join('')
           else
             puts value.class
           end

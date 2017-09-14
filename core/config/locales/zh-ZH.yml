@@ -1,0 +1,426 @@
+zh-ZH:
+  language: "Chinese (Random Sample)"
+  :mno_enterprise:
+    :templates:
+      :components:
+        :layout:
+          :your_dashboard_is_loading: 驂腔
+        :without_organisation:
+          :hello: 拪旪嫤捽
+          :text: 摼瑫
+          :text_if_can_create: 琧樒爕蚍噆諼
+          :button: 堑籇鈬嘒磸
+          :logout: 诱燂姀薿蠭剶
+        :app_install_btn:
+          :conflicting_app: 呏訛槉
+          :start_app: 萕耧宾貏鼊
+          :launch_app: 片檾炝紙
+          :create_account: 涣魑峚畒
+          :create_account_tooltip: 猍谲律麁舸
+          :connect_app: 爚癐養
+          :access_addon: 柛斆諄茲柉
+          :access_addon_tooltip: 髨咽膴
+          :insufficient_privilege: 蟫茎垽
+          :success_notification_title: 噾依湔涤
+          :success_launch_notification_body: 詑芝增郎
+          :success_connect_notification_body: 鯢琑嵣
+          :app_requires_no_set_up: 懬胬戍鈽
+          :app_connects_on_launch: 扯卭醀凘燢萔
+          :app_connected: 穄噟泥胏尫郅
+        :audit_events_list:
+          :loading_events: 嘀钾糪軿
+          :table:
+            :date: 黀嫺笤
+            :user: 譾憜淘骗雸
+            :action: 藟梂浮靑愞擱
+            :description: 麡瘗
+        :mno_pagination:
+          :items_per_page: 寨泟刁帻担樰
+        :mno_password:
+          :current_password: 撏盎釳踂
+          :new_password: 盦雌舥仸鷽刵
+          :confirm_password: 秕鸠
+          :eight_characters_minimum: 揧硨
+          :one_uppercase_character: 讫铴騭
+          :one_number: 燺蠾結
+          :one_lowercase_character: 琻稔蛂仡衿
+          :same_password: 麖烜籯剙笍
+          :save: 巬沅畲梓
+          :cancel: 癬妝
+        :language_selectbox:
+          :language: 膯艈炻閦侙
+          :cancel: 簟頩
+          :change_language: 茺涚糋鼬皼戙
+          :confirm_header: 鶊蘸佩
+          :confirm: 高禖
+      :dashboard:
+        :account:
+          :my_account: 噬恎憐葽軧媅
+          :settings: 苒蠜蘅炪
+          :developer: 躪展慭枸
+          :are_you_developer: 曑竈兽
+          :register: 磿藧
+          :api_key: 獻渒
+          :secret_key: 縄显觬陯攧
+          :admin_access_to_your_account: 隦艡簓
+          :access_granted_until_expired: 瀶誣獆
+          :access_granted_until_revoked: 賁埨瓞甍蠻
+          :revoke:
+            :action: 毜锧死窪阊
+            :success_toastr: 俦粰惸鑓菐窶
+            :error_toastr: 佀鎎簐殣荦鉸
+          :authorize_admin_access: 藒夓
+          :twenty_four_hours: 袨檟尋鎸泟
+          :until_revoke: 屏砏鎐烌慨瀷
+          :authorize:
+            :action: 椌焔
+            :success_toastr: 權緱餕麠使
+            :error_toastr: 緱災鲬磠鴯
+          :show: 婎湑
+          :hide: 缪坔崀蕢
+          :name: 泟噹厳
+          :uid: 囟捔俞莐
+          :view_developer_docs: 菓嶺怍
+          :here: 逰騁渰单悬
+          :conceal: 慟右鮃珏
+          :organizations: 軾饗
+        :apps_list:
+          :manual_data_sync_tooltip: 炱付帀
+          :disconnect_link_tooltip: 擻狥攮
+          :tutorial: 茪谓
+        :menu:
+          :access_admin_panel: 癖祿衟
+          :subscriptions: 哸潝予
+        :create_company:
+          :title: 骢釷壗峍
+          :enter_name: 棗灶鏳铄坨
+          :cancel: 轲蕳膬蟺
+          :create: 蓵拸
+        :marketplace:
+          :index:
+            :applications: 孹婰棱巗餢鶥
+            :reseller_products: 婚狦爿躯
+            :search: 爕萯鳞釼裆煥
+            :compare: 視醧阄籰謷闇
+            :select_apps: 颣翩勁贳旹苐
+            :toastr:
+              :error: 諚舄瓅鉩
+            :cancel: 嫊題
+            :compare_apps: 阇鴐
+          :show:
+            :launch_app: 筱嬐鏗驓猛贈
+            :connect_app: 脞搝髢済罘
+            :price: 失踘竦悮
+            :conflicting_app: 屉迓
+            :success_notification_title: 漓砾厚靶鉽顳
+            :success_launch_notification_body: 高戅鈒
+            :success_connect_notification_body: 喟雳廉絴
+            :no_reviews: 莕痞咯鰧
+            :write_review: 怖皀弜
+            :number_of_reviews: 霤頣駫鲧
+            :success_toastr: 獥烺泓毶梥
+            :error_toastr: 鵌搟胒粋艩
+            :from: 鞋凘
+            :on: 睕娛
+            :platform_admin: 槩粒鼏
+            :edited_by_user: 襭蔠齪鈶
+            :edited_by_user_tooltip: 雖讵睋扖蟻
+            :edited_by_admin: 袍蠯唦
+            :just_now: 簕奥蟦凱峌睗
+            :company_feedback: 驇厘
+            :review_title: 鞖掞謬餋粒
+            :reviews: 隟奤赨
+            :no_app_no_review: 燿塷縂
+            :tell_others: 汿擆簖祙笳矒
+            :cancel: 歫烾
+            :submit: 鎢嫛酧噜
+            :comment_title: 篮鄷
+            :comment_placeholder: 铣敂摲玌饨掿
+            :question_title: 鉬旎骀瘛
+            :questions: 篞觛縢
+            :question_search: 釚愃牶
+            :question_ask: 鹗钍艰鐷釣
+            :question_ask_placeholder: 攢嵒榙苦
+            :no_review: 谟玫猕廼笸
+            :answers: 探浢命膝拒礣
+            :answer_q: 婑攱巚笖賓膨
+            :answer_placeholder: 臲湂矯浳
+            :delete: 萈櫠
+            :delete_q: 薦额鳃藊筷调
+            :edit: 據桤顧汚斖
+            :edit_review: 戯褧尙驶
+            :edit_answer: 朸韜
+            :edit_question: 賏狵
+            :edit_comment: 誈镥杰
+            :edit_q: 跲巔
+            :filter: 脿哪
+            :filter_rating_desc: 嵴弫塨亂伓閗
+            :filter_rating_ask: 螏钲抣吽
+            :filter_date_desc: 鳆鵚梫
+            :filter_date_ask: 紝焁綱豥
+            :success_toastr_2: 卲爏龛偺瀶
+            :success_toastr_answer: 旘眒幋
+            :success_toastr_question: 洡咉勵
+            :error_toastr_answer: 糣彧
+            :error_toastr_question: 顿箘穌圊蕟餽
+            :review:
+              :delete_modal_header: 鎊憈褝矺調
+              :delete_modal_body: 禞愳鼃
+              :delete_modal_cancel: 姎惡躂倨
+              :delete_modal_delete: 鞇稅璙霢罂
+            :question:
+              :delete_modal_header: 髄豛帝棢鎶
+              :delete_modal_body: 怳虨艔驼鷏
+              :delete_modal_cancel: 鹼繑
+              :delete_modal_delete: 鯑转
+              :no_question: 窔痌汜曦
+            :comment:
+              :delete_modal_header: 皥勻肟
+              :delete_modal_body: 恶溬骠増碽
+              :delete_modal_cancel: 囹榅
+              :delete_modal_delete: 肘朗
+              :hide_comments: 旚畾亗燶磝
+              :feedback_list_links: 乸鑎
+            :answer:
+              :delete_modal_header: 閟为熪澂暼壊
+              :delete_modal_body: 頱沬嚰
+              :delete_modal_cancel: 銮錛輊谘蚞賸
+              :delete_modal_delete: 鎁偖嚱滙荱旿
+            :edited: 冾蔻
+            :edited_tooltip: 採栆
+            :modals:
+              :history:
+                :title: 苤鰔
+                :close: 嫽鹬沾怣轜矲
+            :provision: 逧墽焊蠥
+          :app_selection:
+            :next: 墴鸴枒廑釗靧
+            :cancel: 綸婹
+            :select_orga: 琣烄
+            :no_orga_authorized: 瞆茄毩墐
+            :unauthorized_to_add_app: 瀬疤
+          :compare:
+            :title: 渮蟇鞐貏寡
+            :application_provider: 趴漐霁伣忭
+            :category: 淑冻髇痙羍韰
+            :key_benefits: 曐堁埛
+            :short_description: 棍忢灢臦悑
+            :rating: 簼棘瘊
+            :companies_number: 竢摧謝
+            :pricing: 逄磾間
+            :pricing_not_available: 伴鲲坲賝餳
+        :organization:
+          :audit_log:
+            :export: 罐瑅搊溴佶
+          :credit_card:
+            :cc_form:
+              :placeholder_name: 豫塽
+              :placeholder_surname: 騆椐岗悂婣
+              :unaccepted_type: 瑗嗸鮻罜巈譮
+          :index:
+            :audit_log:
+              :title: 蠩澬蚛俒滥
+            :billing:
+              :account_statement: 峑接鸣
+          :members:
+            :roles:
+              :member: 悾睊枞
+              :power_user: 尙伨瞧庿
+              :admin: 願臖勔捭莟铮
+              :super_admin: 灎洌扳戀咥
+              :invited:
+                :member: 亚斑唲赚聝
+                :power_user: 銖矯鮅
+                :admin: 導镶井稴蕊
+                :super_admin: 铭舕耓岇彎
+            :invite_modal:
+              :title_name: 嵒釗
+              :title_email: 庸钲蝚拲鳡
+              :title_enter_emails: 葳蜽嚀躿餍掊
+              :title_select_roles: 伸昊嗍
+              :roles_info:
+                :member: 莻地
+                :admin: 紶漹瞀嚶锧恼
+                :super_admin: 見詋坽弿栛強
+            :removal_modal:
+              :body_name: 畸讪臫騂晦欣
+              :body_email: 鋌荇巇极
+        :provisioning:
+          :breadcrumb:
+            :order: 鐎邽嚲珔熮
+            :additional_details: 寏滯謨
+            :confirm: 帵也耡桶諣
+            :order_summary: 鏂另垅痕玭鸺
+          :order:
+            :title: 琀駮僲
+            :name: 氕顒賔豅衽飱
+            :description: 捂瀎鞗冰
+            :price: 悠萵瀽輔
+            :next: 赼独
+          :details:
+            :title: 桵覦輜
+            :next: 皽悞锰
+          :confirm:
+            :title: 苞遭蜖
+            :name: 晐燌牾杪
+            :description: 督枭渏绖韨噻
+            :edit_order: 繾賱
+            :validate: 藒薫庯顕園
+            :price: 浠淅酺唵
+          :summary:
+            :title: 曯芗紲銌妃鬬
+            :order_being_processed: 單揖
+            :manage_subscriptions: 倓籼嗒蹄
+            :subscriptions: 龚甯孬
+            :name: 屨骼
+            :description: 謉贈蕔
+            :price: 孺魇貲茘
+            :go_to_my_app: 荳鬸夺绕
+          :subscriptions:
+            :title: 礉堭廦樄
+            :name: 皳癕健违燆吊
+            :description: 栮騍
+            :price: 諳嗥緍溱瑄
+            :product: 魘痶
+            :subscription: 脔牣犍
+            :amount: 帋周蒂馜
+            :start_date: 輽軦倁亾拼
+            :end_date: 湢狏疮
+            :status: 噃叻阔
+            :modify: 髈鑯浏鏰
+            :empty_list: 临莴迂澟尀形
+            :cancel: 隌轹玡
+            :cancel_modal.title: 艔齔鼭
+            :cancel_modal.body: 鐘淦璚蟈
+            :cancel_modal.yes: 噝册戹齔
+            :cancel_modal.no: 襼遀瓶
+            :cancel_error: 僵梘攵钰
+        :teams:
+          :index:
+            :save: 盞諴赘鱽嚗腃
+            :cancel: 唔鸈
+      :impac:
+        :dock:
+          :launch: 賕豩剌肭鉍诬
+          :connect: 淊輖糔廍礅
+          :settings:
+            :settings: 蹎帧茫
+            :status: 巌榍寇癨豔
+            :app_name: 碐尤櫽
+            :access_add-on_settings: 惄戊揔敭肶煇
+            :manual_data_sharing: 谡窧
+            :manual_data_sync: 睆騚穒
+            :disconnect_link: 蒾戃猀氪泟艃
+            :delete: 痗相飨龋
+            :confirm_app_deletion: 猅煙瑁卐囕停
+            :please_note_this_app: 舨呣
+            :delete_instructions: 粌磹
+            :cancel: 慙嫾襀鞨鼂
+            :developer_details: 卝殹鄒庋牠
+            :linked_to: 啘鯈
+            :organization_id: 桌棴犆竕
+            :group_id: 埈讏橿
+          :add_more_apps: 浒砕韂膂驒襅
+          :cancel: 爋荅跮噝
+          :do_not_have_apps: 鑾蟲綸繉世櫑
+          :click_here: 紝漘礒蹪擶鹾
+        :impersonification_notification:
+          :title: 沯飻扜似刜
+          :message: 诚戤蟪誕
+          :accept: 墕囫
+          :yes: 遉樄嬂
+          :no: 崑滍狘麣卐
+          :deny:
+            :success_toastr: 潉牉輿
+            :error_toastr: 爭徹褓蔨
+          :approve:
+            :success_toastr: 盈煹鿃縖
+            :error_toastr: 掫桟颙愃
+        :modals:
+          :create:
+            :title: 膀怗怼拰踢齣
+            :label_name: 馬頀拆
+            :label_current_company: 褘逳
+            :label_multi_company: 鮚虺倀蟪輾
+            :unauthorized_to_access_company_reporting: 灮饪銷淃瑉
+            :please_select_multi_company: 洢瓺
+            :label_companies: 濢怘淸倍
+            :cancel: 媴掿
+            :add: 懁錮囦钅
+          :delete:
+            :title: 駉蜫飘黟豈灗
+            :are_you_sure: 喠仡梫搽
+            :cancel: 萟黎
+            :add: 酾贼
+          :formula_modal:
+            :title: 杫鼇踣赼豕氠
+            :calculation_explanation: 踟吤顤哛
+            :data_being_retrieved: 疏嬳鰖娓捖
+            :type_formula_below: 峭谰豴襉
+            :formula_result: 聓舆繌玜賌
+            :formula_legend: 藂周硥稲澷船
+            :cancel: 芥頂鶤阎豇
+            :save: 褮梨
+      :app_feature:
+        :single_sign_on: 撟滾踝缏
+        :single_billing: 蓠湹
+        :data_sharing: 卾逨
+      :onboarding:
+        :menu:
+          :logout: 鎎鬠担韚看僴
+        :breadcrumb:
+          :step1: 仐髾鏓
+          :step2: 鳉儭業虦
+          :step3: 斞誮蓹堐
+          :step4: 俴敭豕挥
+        :welcome:
+          :title: 收边膗蝽霅
+          :intro: 狃贊爺迩
+          :setup: 檉朥
+          :choose_my_apps: 犱憌兢崏囎
+          :connect_my_apps: 劊筱
+          :discover_your_account: 聡篝籤
+        :select_your_app:
+          :title: 棦斕鄓鷇筿传
+          :search: 蚾渾蟷鵦浏
+          :categories: 躌辪
+          :max_apps_selected: 鲭萓
+        :data_sync:
+          :what_data: 眕絲
+          :start: 黇亅廋輛妬
+          :learn_more: 窪鞬衤纥貝
+          :no_entity_shared: 汬伲搤
+        :app_infos_modal:
+          :what_is: 午阡揃躬陳
+          :how_is_app_integrated:
+            :title: 羂较旓蘱鹓
+            :connector: 廔軞
+            :cloud: 蝂嫉碛
+            :cube: 湯瀉槿踮檥俷
+          :what_is_shared: 藾泹
+          :free_trial: 哻更牭瑰徤
+        :connect_apps:
+          :connect_applications: 粄秂洂藤墎壃
+          :apps_to_connect_now: 韐鏕蝛孍郿
+          :apps_to_connect_later: 暾巡貹鼑
+          :go_to_dashboard: 卉鞸乩譄钨绕
+          :skip: 鐧詐箒
+    :auth:
+      :registrations:
+        :new:
+          :title: 罊趚蚺
+          :create: 痄蔊
+          :user_accept: 娉竀
+          :tos: 谓貯儁扝茻
+      :shared:
+        :links:
+          :or_sign_in_using: 凪娱媛鳬鏏
+    :webhook:
+      :o_auth:
+        :providers:
+          :cancel: 唫阝
+          :myob:
+            :connect_to: 酴綺巉鴙
+          :xero:
+            :payroll: 弋齱魠肯
+            :connect_to: 硦鱕墯郲
