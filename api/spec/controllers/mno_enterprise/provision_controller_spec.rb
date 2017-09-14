@@ -18,7 +18,7 @@ module MnoEnterprise
     before { stub_audit_events }
 
     before do
-      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
+      stub_user(user)
       allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return(organizations)
     end
 

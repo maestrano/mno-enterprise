@@ -17,7 +17,7 @@ module MnoEnterprise
     before { allow(message_delivery).to receive(:deliver_now).with(no_args) }
 
     before do
-      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
+      stub_user(user)
       stub_api_v2(:get, "/users/#{requested_user.id}", requested_user)
       sign_in user
       stub_audit_events

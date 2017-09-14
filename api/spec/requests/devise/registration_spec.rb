@@ -11,7 +11,7 @@ module MnoEnterprise
     # Stub user calls
     before {
       stub_api_v2(:post, '/users', user)
-      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
+      stub_user(user)
       stub_api_v2(:patch, "/users/#{user.id}", user)
       stub_api_v2(:get, '/orga_invites', [], [], {filter: {user_email: signup_attrs[:email]}})
 

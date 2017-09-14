@@ -7,6 +7,8 @@ module MnoEnterprise
     include ActiveModel::AttributeMethods
     include ActiveModel::Validations
 
+    INCLUDED_DEPENDENCIES = %i(deletion_requests organizations orga_relations dashboards teams)
+
     # ids
     property :id
     property :uid, type: :string
@@ -101,8 +103,12 @@ module MnoEnterprise
 
     def refresh_user_cache
       self.expire_view_cache
-      reloaded = self.load_required(:deletion_requests, :organizations, :orga_relations, :dashboards)
+      reloaded = self.load_required_dependencies
       Rails.cache.write(['user', reloaded.to_key], reloaded)
+    end
+
+    def load_required_dependencies
+      load_required(*INCLUDED_DEPENDENCIES)
     end
 
     def role(organization)

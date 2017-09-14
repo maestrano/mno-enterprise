@@ -16,7 +16,7 @@ module MnoEnterprise
     # Stub model calls
     let(:deletion_req) { build(:deletion_request) }
     let(:user) { build(:user, deletion_requests: [deletion_req]) }
-    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let!(:current_user_stub) { stub_user(user) }
 
 
     describe 'GET #show' do

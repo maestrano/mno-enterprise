@@ -13,7 +13,7 @@ module MnoEnterprise
     # Stub user and user call
     let(:org) { build(:organization, users: [], orga_relations: []) }
     let!(:user) { build(:user, organizations: [org]) }
-    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let!(:current_user_stub) { stub_user(user) }
 
     let(:metadata) { { hist_parameters: { from: '2015-01-01', to: '2015-03-31', period: 'MONTHLY' } } }
     let(:d_kpi) { build(:impac_kpi) } #, dashboard: dashboard

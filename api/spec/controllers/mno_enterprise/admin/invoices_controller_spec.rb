@@ -12,7 +12,7 @@ module MnoEnterprise
     #===============================================
     # Stub user and user call
     let(:user) { build(:user, :admin) }
-    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let!(:current_user_stub) { stub_user(user) }
     before { sign_in user }
 
     # Stub model calls

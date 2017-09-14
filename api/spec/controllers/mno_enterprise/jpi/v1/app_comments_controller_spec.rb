@@ -15,7 +15,7 @@ module MnoEnterprise
     let(:user) { build(:user) }
     let(:organization) { build(:organization) }
     let(:orga_relation) { build(:orga_relation, user: user, organization: organization) }
-    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let!(:current_user_stub) { stub_user(user) }
 
     before { sign_in user }
 

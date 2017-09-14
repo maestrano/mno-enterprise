@@ -69,7 +69,7 @@ module MnoEnterprise
     let(:account_manager) { build(:user) }
     let(:client) { build(:organization) }
     let(:sub_tenant) { build(:sub_tenant, account_managers: [account_manager], clients: [client]) }
-    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let!(:current_user_stub) { stub_user(user) }
 
     describe '#index' do
       subject { get :index }

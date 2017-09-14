@@ -28,7 +28,7 @@ module MnoEnterprise
     end
 
     before do
-      stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards))
+      stub_user(user)
       sign_in user
 
       stub_audit_events

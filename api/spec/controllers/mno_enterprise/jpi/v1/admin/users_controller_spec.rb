@@ -12,7 +12,7 @@ module MnoEnterprise
     # Assignments
     #===============================================
     let(:current_user) { build(:user, :admin) }
-    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{current_user.id}", current_user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let!(:current_user_stub) { stub_user(current_user) }
 
     # Stub user and user call
     let(:user) { build(:user) }

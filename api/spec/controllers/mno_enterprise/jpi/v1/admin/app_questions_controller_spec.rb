@@ -16,7 +16,7 @@ module MnoEnterprise
     let(:user) { build(:user, :admin) }
     let(:organization) { build(:organization) }
     let(:orga_relation) { build(:orga_relation, user: user, organization: organization) }
-    let!(:current_user_stub) { stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards)) }
+    let!(:current_user_stub) { stub_user(user) }
     let(:app) { build(:app) }
     let(:question_id) { '1' }
     let(:question_answer1) { build(:answer, parent_id: question_id) }
