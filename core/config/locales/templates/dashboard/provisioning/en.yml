@@ -35,6 +35,7 @@ en:
             go_to_my_app: "Go to my app"
           subscriptions:
             title: "Manage your subscriptions"
+            currency_warning: "Some prices are missing for your current currency. Please contact your administrator for more information."
             name: "Name"
             description: "Description"
             price: "Price"
