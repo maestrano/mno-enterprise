@@ -45,6 +45,14 @@ en:
             start_date: "Start date"
             end_date: "End date"
             status: "Status"
+            states:
+              requested: requested
+              approved: approved
+              fulfilled: fulfilled
+              expired: expired
+              suspended: suspended
+              cancelled: cancelled
+              aborted: aborted
             modify: "Modify subscription"
             empty_list: "You don't have any subscriptions"
             cancel: "Cancel subscription"
