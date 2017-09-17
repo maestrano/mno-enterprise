@@ -216,7 +216,7 @@ module MnoEnterprise
       summary_data_amount = @data[:invoice_total_payable_with_tax] if payment_enabled
 
       summary_data = []
-      summary_data << ['Period', 'Total Payable' + (@data[:invoice_tax_pips] > 0 ? "\n<font size='8'><i>(incl. GST)</i></font>" : '')]
+      summary_data << ['Period', 'Total Payable' + (@data[:invoice_tax_pips] > 0 ? "\n<font size='8'><i>(incl. Tax)</i></font>" : '')]
       summary_data << ["#{@data[:period_started_at].strftime("%B, %e %Y")} to #{@data[:period_ended_at].strftime("%B, %e %Y")}",money(summary_data_amount)]
 
       # Draw Table background
@@ -344,7 +344,7 @@ module MnoEnterprise
           @pdf.fill_color = original_color
           @pdf.move_down 21
           if @data[:invoice_tax_pips] > 0
-            @pdf.text_box 'Excl. GST', at: [12,@pdf.cursor]
+            @pdf.text_box 'Excl. Tax', at: [12,@pdf.cursor]
           else
             @pdf.text_box 'Details', at: [20,@pdf.cursor]
           end
@@ -381,7 +381,7 @@ module MnoEnterprise
         if @data[:invoice_tax_pips] > 0
 
           #-----------------
-          # GST row
+          # Tax row
           #-----------------
           @pdf.move_down 8
 
@@ -395,7 +395,7 @@ module MnoEnterprise
             '',
             '',
             '',
-            'GST',
+            'Tax',
             '+',
             money(@data[:invoice_tax_payable]),
           ]
@@ -438,7 +438,7 @@ module MnoEnterprise
 
 
           #-----------------
-          # Total (incl. GST)
+          # Total (incl. Tax)
           #-----------------
           @pdf.move_down 5
 
@@ -452,7 +452,7 @@ module MnoEnterprise
             '',
             '',
             '',
-            'Total (incl. GST)',
+            'Total (incl. Tax)',
             '=',
             money(@data[:invoice_total_payable_with_tax]),
           ]
@@ -505,7 +505,7 @@ module MnoEnterprise
       @pdf.move_down 10
 
       app_details_data = []
-      app_details_data << ['Product', 'Type', 'Usage', 'Price' + (@data[:invoice_tax_pips] > 0 ? "\n<font size='8'><i>(excl. GST)</i></font>" : '')]
+      app_details_data << ['Product', 'Type', 'Usage', 'Price' + (@data[:invoice_tax_pips] > 0 ? "\n<font size='8'><i>(excl. Tax)</i></font>" : '')]
       app_details_data += @data[:billing_report]
 
       @pdf.table(app_details_data) do |t|
