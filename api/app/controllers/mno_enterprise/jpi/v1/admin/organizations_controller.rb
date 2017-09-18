@@ -65,7 +65,7 @@ module MnoEnterprise
       @organization = MnoEnterprise::Organization.create(organization_update_params)
       @organization = @organization.load_required(*DEPENDENCIES)
       # OPTIMIZE: move this into a delayed job?
-      update_app_list
+      update_app_list(@organization)
       @organization = @organization.load_required(*DEPENDENCIES)
       @organization_active_apps = @organization.app_instances
 
@@ -80,11 +80,9 @@ module MnoEnterprise
                                                  .find(params[:id])
                                                  .first
       return render_not_found('Organization') unless @organization
-
+      update_app_list(@organization)
       # Update organization
       @organization.update(organization_update_params)
-
-      update_app_list
       @organization = @organization.load_required(*DEPENDENCIES)
       @organization_active_apps = @organization.app_instances.select(&:active?)
 
@@ -148,15 +146,15 @@ module MnoEnterprise
     end
 
     # Update App List to match the list passed in params
-    def update_app_list
+    def update_app_list(organization)
       # Differentiate between a null app_nids params and no app_nids params
       if params[:organization].key?(:app_nids) && (desired_nids = Array(params[:organization][:app_nids]))
-        existing_apps = @organization.app_instances.select(&:active?)
+        existing_apps = organization.app_instances.select(&:active?)
         existing_apps.each do |app_instance|
           desired_nids.delete(app_instance.app.nid) || app_instance.terminate
         end
         desired_nids.each do |nid|
-          @organization.provision_app_instance(nid)
+          organization.provision_app_instance(nid)
         end
       end
     end
