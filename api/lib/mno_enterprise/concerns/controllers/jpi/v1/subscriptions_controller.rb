@@ -84,10 +84,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   end
 
   def fetch_subscriptions(organization_id)
-    MnoEnterprise::Subscription.fetch_all(MnoEnterprise::Subscription.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id))
+    query = MnoEnterprise::Subscription.with_params(_metadata: { organization_id: organization_id })
+    MnoEnterprise::Subscription.fetch_all(query.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id))
   end
 
   def fetch_subscription(organization_id, id)
-    MnoEnterprise::Subscription.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id, id: id).first
+    query = MnoEnterprise::Subscription.with_params(_metadata: { organization_id: organization_id })
+    query.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id, id: id).first
   end
 end
