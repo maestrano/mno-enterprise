@@ -1,6 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   extend ActiveSupport::Concern
-
+  
+  DEPENDENCIES = [:users, :orga_invites, :orga_relations, :credit_card, :invoices]
   #==================================================================
   # Included methods
   #==================================================================
@@ -178,7 +179,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   end
 
   def organization
-    @organization ||= MnoEnterprise::Organization.find_one(params[:id], :users, :orga_invites, :orga_relations, :credit_card)
+    @organization ||= MnoEnterprise::Organization.find_one(params[:id], DEPENDENCIES)
   end
 
   def organization_permitted_update_params

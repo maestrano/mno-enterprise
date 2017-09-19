@@ -1,6 +1,9 @@
 json.invoices do
-  # TODO: Introduce pagination
-  json.array! []
-  # TODO [MIGRATION_V2] remove and replace by a call to /organizations/id/invoices
-
+  json.array! organization.invoices.sort_by(&:ended_at).reverse do |invoice|
+    json.started_at invoice.started_at
+    json.ended_at invoice.ended_at
+    json.amount AccountingjsSerializer.serialize(invoice.total_due)
+    json.paid invoice.paid?
+    json.link mno_enterprise.admin_invoice_path(invoice.slug)
+  end
 end
