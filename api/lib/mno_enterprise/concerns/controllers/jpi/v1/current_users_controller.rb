@@ -69,7 +69,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     def user_params
       params.require(:user).permit(
         :name, :surname, :email, :company, :phone, :website, :phone_country_code, :current_password, :password, :password_confirmation,
-        settings: [:locale]
+        settings: [:locale, :default_widget_currency, currencies: []]
       )
     end
 
