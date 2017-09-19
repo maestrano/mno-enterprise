@@ -30,7 +30,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     # Fetch application listings & pricings
     if stale?(last_modified: @last_modified)
       @apps = Rails.cache.fetch("marketplace/index-apps-#{@last_modified}-#{I18n.locale}-#{org_id}") do
-        apps = MnoEnterprise::App.fetch_all(app_relation(org_id).where)
+        apps = MnoEnterprise::App.fetch_all(app_relation(org_id).where(active: true))
         apps.sort_by! { |app| [app.rank ? 0 : 1, app.rank] } # the nil ranks will appear at the end
         apps
       end
