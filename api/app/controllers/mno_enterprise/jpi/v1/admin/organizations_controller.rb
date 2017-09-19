@@ -181,13 +181,9 @@ module MnoEnterprise
     def update_app_list
       # Differentiate between a null app_nids params and no app_nids params
       if params[:organization].key?(:app_nids) && (desired_nids = Array(params[:organization][:app_nids]))
-        existing_apps = @organization.app_instances.select(&:active?)
-        existing_apps.each do |app_instance|
-          desired_nids.delete(app_instance.app.nid) || app_instance.terminate
-        end
-        desired_nids.each do |nid|
-          @organization.provision_app_instance(nid)
-        end
+        existing_apps = @organization.app_instances&.select(&:active?) || []
+        existing_apps.each { |app_instance| desired_nids.delete(app_instance.app.nid) || app_instance.terminate }
+        desired_nids.each { |nid| @organization.provision_app_instance(nid) }
       end
     end
   end
