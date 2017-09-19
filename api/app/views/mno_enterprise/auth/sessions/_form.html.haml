@@ -1,9 +1,9 @@
 = form_for(resource, :as => resource_name, :url => "#{session_path(resource_name)}?ltype=#{@login_type}", :html => { 'name' => 'loginForm', :class => 'autofill-detect text-center' }) do |f|
   %div
-    = f.email_field :email, :placeholder => "Email", :required => true, 'ng-model' => 'email', :class => 'form-control'
+    = f.email_field :email, :placeholder => t('mno_enterprise.auth.sessions.new.email'), :required => true, 'ng-model' => 'email', :class => 'form-control'
   %br
   %div
-    = f.password_field :password, :placeholder => "Password", :required => true, 'ng-model' => 'password', :class => 'form-control', :autocomplete => "off"
+    = f.password_field :password, :placeholder => t('mno_enterprise.auth.sessions.new.password'), :required => true, 'ng-model' => 'password', :class => 'form-control', :autocomplete => "off"
 
   %br/
   %div
@@ -15,4 +15,4 @@
     %br/
     %div.form-inline.checkbox-section
       = f.check_box :remember_me, { checked: true }
-      = f.label :remember_me
+      = f.label t('mno_enterprise.auth.sessions.new.remember_me')

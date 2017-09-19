@@ -5,3 +5,6 @@ en:
         new:
           title: Sign In
           sign_in: Sign in
+          remember_me: Remember me
+          email: Email
+          password: Password

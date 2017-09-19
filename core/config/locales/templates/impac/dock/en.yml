@@ -22,9 +22,23 @@ en:
             confirm_app_deletion: Confirm app deletion
             please_note_this_app: Please note this app is on a monthly plan. Your billing for this app will be calculated pro rata.
             delete_instructions: In order to delete your app, please enter the following statement in the box below.
+            deletion_sentence: Please proceed to the deletion of my app and all data it contains
             cancel: Cancel
-            developer_details: developer details
+            developer_details:
+              show: Show developer details
+              hide: Hide developer details
             linked_to: Linked to
             organization_id: Organization id
             group_id: Group id (uid)
+            app_states:
+              starting: Starting
+              restarting: Restarting
+              running: Running
+              stopping: Stopping
+              stopped: Stopped
+              terminating: Terminating
+              terminated: Terminated
+              updating: Updating
+              upgrading: Upgrading
+              downgrading: Downgrading
 
