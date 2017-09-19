@@ -28,6 +28,9 @@
     main.toggle = !main.toggle
     $cookies.put('admin_platform_toggle', main.toggle)
 
+  main.exit = ->
+    MnoeCurrentUser.logout()
+
   window.onresize = () ->
     $scope.$apply()
 

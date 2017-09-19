@@ -49,9 +49,14 @@
               </select>
             </td>
             <td>
-              <a href="" ng-hide="$ctrl.staff.editmode[staffElem.id]" ng-click="$ctrl.staff.editmode[staffElem.id] = true"><i class="fa fa-pencil"></i></a></td>
+              <div ng-hide="$ctrl.staff.oneAdminLeft && staffElem.admin_role == 'admin'">
+                <a href="" ng-hide="$ctrl.staff.editmode[staffElem.id]" ng-click="$ctrl.staff.editmode[staffElem.id] = true"><i class="fa fa-pencil"></i></a>
+              </div>
+            </td>
             <td>
-              <a href="" ng-hide="$ctrl.staff.editmode[staffElem.id]" ng-click="$ctrl.staff.remove(staffElem)"><i class="fa fa-times"></i></a>
+              <div ng-hide="$ctrl.staff.oneAdminLeft && staffElem.admin_role == 'admin'">
+                <a href="" ng-hide="$ctrl.staff.editmode[staffElem.id]" ng-click="$ctrl.staff.remove(staffElem)"><i class="fa fa-times"></i></a>
+              </div>
               <a href="" ng-show="$ctrl.staff.editmode[staffElem.id]" ng-click="$ctrl.staff.update(staffElem)"><i class="fa fa-check"></i></a>
             </td>
           </tr>

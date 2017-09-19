@@ -14,7 +14,7 @@
       callback(object)
 
   @unsubscribe = (name, cb) ->
-    _.remove(observersCallbacks[name], cb) ->
-      delete observersCallbacks[name] if _.isEmpty(observersCallbacks[name])
+    _.pull(observersCallbacks[name], cb)
+    delete observersCallbacks[name] if _.isEmpty(observersCallbacks[name])
 
   return
