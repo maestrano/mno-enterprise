@@ -21,6 +21,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
     end
   end
 
+  # GET /mnoe/jpi/v1/organization/1/app_instances/11/setup_form
+  def setup_form
+    app_instance = MnoEnterprise::AppInstance.find(params[:instance_id]).first
+    return unless app_instance&.stack == 'cloud'
+    resp = ::HTTParty.get("#{app_instance.metadata['app']['host']}/setup_form")
+    render json: JSON.parse(resp.body)
+  rescue => e
+    render json: {error: "Unable to load schema form"}, status: :bad_request
+  end
+
   # POST /mnoe/jpi/v1/organization/1/app_instances
   def create
     authorize! :manage_app_instances, parent_organization
