@@ -136,6 +136,7 @@ MnoEnterprise::Engine.routes.draw do
 
         # AppInstances
         resources :app_instances, only: [:index, :create, :destroy], shallow: true
+        get 'app_instances/:instance_id/setup_form', to: 'app_instances#setup_form'
 
         # Teams
         resources :teams, only: [:index, :show, :create, :update, :destroy], shallow: true do
