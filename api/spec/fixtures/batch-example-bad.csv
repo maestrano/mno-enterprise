@@ -1,0 +1,5 @@
+external_id,company_name,billing_currency,name,surname,email,phone,password
+O1,Company Name 1,EUR,John,Doe,john.doe@example.com,0124578484,JohnPassword1
+O2,"Company,,,; Weird","EUR",Jane,Doe,jane.doe@example.com,0124578485,01
+O3,"Company,,,; Weird","EUR",Jane,Doe,notanemail,0124578485,01
+,,"EUR",Jane,Doe,jane.doe@example.com,0124578485,JohnPassword1

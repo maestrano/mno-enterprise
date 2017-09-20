@@ -1,3 +1,4 @@
+require 'csv'
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   extend ActiveSupport::Concern
 
@@ -211,4 +212,5 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   def organization_management_enabled?
     return head :forbidden unless Settings.dashboard.organization_management.enabled
   end
+
 end

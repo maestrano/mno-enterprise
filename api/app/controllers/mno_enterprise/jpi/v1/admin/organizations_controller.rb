@@ -8,6 +8,10 @@ module MnoEnterprise
                        :geo_tz, :geo_currency, :metadata, :industry, :size,
                        :financial_year_end_month, :credit_card,
                        :financial_metrics, :created_at]
+    # CSV IMPORT
+    REQUIRED_HEADERS = %w(external_id company_name billing_currency name surname phone email password)
+    MANDATORY_COLUMNS = %w(company_name name surname email)
+    CSV_OPTIONS = { headers: true, header_converters: lambda { |f| f.strip.parameterize.underscore }, converters: lambda { |f| f ? f.strip : nil } }
 
     # GET /mnoe/jpi/v1/admin/organizations
     def index
@@ -16,16 +20,16 @@ module MnoEnterprise
         @organizations = []
         JSON.parse(params[:terms]).map do |t|
           @organizations = @organizations | MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
-                                                                       .where(Hash[*t])
+                                              .where(Hash[*t])
         end
         response.headers['X-Total-Count'] = @organizations.count
       else
         # Index mode
         # Explicitly list fields to be retrieved to trigger financial_metrics calculation
         query = MnoEnterprise::Organization
-                .apply_query_params(params)
-                .with_params(_metadata: { act_as_manager: current_user.id })
-                .select(INCLUDED_FIELDS)
+                  .apply_query_params(params)
+                  .with_params(_metadata: { act_as_manager: current_user.id })
+                  .select(INCLUDED_FIELDS)
 
         @organizations = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
@@ -35,10 +39,10 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/admin/organizations/1
     def show
       @organization = MnoEnterprise::Organization.apply_query_params(params)
-                                                 .with_params(_metadata: { act_as_manager: current_user.id })
-                                                 .includes(*DEPENDENCIES)
-                                                 .find(params[:id])
-                                                 .first
+                        .with_params(_metadata: { act_as_manager: current_user.id })
+                        .includes(*DEPENDENCIES)
+                        .find(params[:id])
+                        .first
 
       @organization_active_apps = @organization.app_instances.select(&:active?)
     end
@@ -53,9 +57,9 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/admin/organizations/count
     def count
       organizations_count = MnoEnterprise::TenantReporting.with_params(_metadata: { act_as_manager: current_user.id })
-                                                          .find
-                                                          .first
-                                                          .organizations_count
+                              .find
+                              .first
+                              .organizations_count
       render json: { count: organizations_count }
     end
 
@@ -76,9 +80,9 @@ module MnoEnterprise
     def update
       # get organization
       @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
-                                                 .includes(*DEPENDENCIES)
-                                                 .find(params[:id])
-                                                 .first
+                        .includes(*DEPENDENCIES)
+                        .find(params[:id])
+                        .first
       return render_not_found('Organization') unless @organization
 
       # Update organization
@@ -96,9 +100,9 @@ module MnoEnterprise
     # This does not send any emails (emails are manually triggered later)
     def invite_member
       @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
-                                                 .includes(:orga_relations)
-                                                 .find(params[:id])
-                                                 .first
+                        .includes(:orga_relations)
+                        .find(params[:id])
+                        .first
       return render_not_found('Organization') unless @organization
 
       # Find or create a new user - We create it in the frontend as MnoHub will send confirmation instructions for newly
@@ -147,6 +151,70 @@ module MnoEnterprise
       render 'show'
     end
 
+    def download_batch_example
+      path = File.join(File.dirname(File.expand_path(__FILE__)), '../../../../../assets/batch-example.csv')
+      send_file(path, filename: 'batch-example.csv', type: 'application/csv')
+    end
+
+    # POST /mnoe/jpi/v1/admin/organization/batch_import
+    def batch_import
+      file = params[:file]
+      # get the file's temporal path
+      file_temp_path = file.tempfile.path
+
+      # validate File
+      begin
+        csv = CSV.read(file_temp_path, CSV_OPTIONS)
+      rescue CSV::MalformedCSVError => e
+        return render json: ["Could not Process CSV File: #{e.message}"], status: :bad_request
+      end
+      errors = validate_csv(csv)
+      if errors.any?
+        return render json: errors, status: :bad_request
+      end
+      @added_organizations = []
+      @updated_organizations = []
+      @added_users = []
+      @updated_users = []
+      # TODO Move to a Job
+      csv.each do |row|
+        if row['external_id'].present?
+          organization = MnoEnterprise::Organization.where(external_id: row['external_id']).first
+        end
+        if organization
+          @updated_organizations << organization
+        else
+          organization = MnoEnterprise::Organization.new
+          organization.external_id = row['external_id']
+          @added_organizations << organization
+        end
+
+        organization.name = row['name']
+        organization.billing_currency = row['billing_currency']
+        organization.save
+        user = MnoEnterprise::User.where(email: row['email']).first
+        if user
+          @updated_users << user
+        else
+          user = MnoEnterprise::User.new
+          @added_users << user
+        end
+        user.skip_confirmation_notification!
+        user.name = row['name']
+        user.surname = row['surname']
+        user.phone = row['phone']
+        user.email = row['email']
+        user.password = row['password'].presence || 'Password1'
+        user.save
+        orga_relation = MnoEnterprise::OrgaRelation.where(user_id: user.id, organization_id: organization.id).first
+        unless orga_relation
+          MnoEnterprise::OrgaRelation.create(user_id: user.id, organization_id: organization.id, role: 'Super Admin')
+        end
+      end
+
+      render 'batch_import'
+    end
+
     protected
 
     def organization_permitted_update_params
@@ -172,7 +240,7 @@ module MnoEnterprise
       # Reset the confirmation field so we can track when the invite is send - #confirmation_sent_at is when the confirmation_token was generated (not sent)
       # Not ideal as we do 2 saves, and the previous save trigger a call to the backend to validate the token uniqueness
       # TODO: See if we can tell Devise to not set the timestamps
-      user.attributes = {confirmation_sent_at: nil, confirmation_token: nil}
+      user.attributes = { confirmation_sent_at: nil, confirmation_token: nil }
       user.save!
       user.load_required(:orga_relations)
     end
@@ -186,5 +254,36 @@ module MnoEnterprise
         desired_nids.each { |nid| @organization.provision_app_instance(nid) }
       end
     end
+
+    # TODO: Move to OrganizationCsvValidator
+    def validate_csv(csv)
+      errors = []
+      missing_headers = REQUIRED_HEADERS - csv.headers
+      if (missing_headers.any?)
+        errors.<< "Headers are missing: #{missing_headers.to_sentence}"
+        return errors
+      end
+      index = 1
+      csv.each do |row|
+        MANDATORY_COLUMNS.each do |c|
+          errors << "Row: #{index}, Missing value for column: ''#{c}''." if row[c].blank?
+        end
+        email = row['email']
+        if email.present? && Devise.email_regexp
+          errors << "Row: #{index}, Invalid email: ''#{email}''" unless email =~ Devise.email_regexp
+        end
+        password = row['password']
+        if password.present?
+          if Devise.password_regex && password !~ Devise.password_regex
+            password << "Row: #{index}, Invalid password'"
+          end
+          errors << "Row: #{index}, Invalid password, It's too short, minimum length is 6." if password.length < 6
+          errors << "Row: #{index}, Invalid password, It's too long, maximum length is 128." if password.length > 128
+        end
+        index += 1
+      end
+      errors
+    end
   end
 end
+

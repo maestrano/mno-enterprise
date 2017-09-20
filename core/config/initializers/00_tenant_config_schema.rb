@@ -384,6 +384,16 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             }
           }
         },
+        customer_batch_import: {
+          type: "object",
+          properties: {
+            enabled: {
+              type: "boolean",
+              description: "Enable the Customer Batch Import via CSV",
+              default: false
+            }
+          }
+        },
         dashboard_templates: {
           type: "object",
           properties: {

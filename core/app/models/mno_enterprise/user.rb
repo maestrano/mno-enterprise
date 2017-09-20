@@ -18,7 +18,7 @@ module MnoEnterprise
     property :created_at, type: :time
     property :locked_at, type: :time
     property :updated_at, type: :time
-
+    property :last_sign_in_at, type: :time
     # Other
     property :admin_role, type: :string
     property :api_key, type: :string

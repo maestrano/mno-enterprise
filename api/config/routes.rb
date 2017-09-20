@@ -192,6 +192,7 @@ MnoEnterprise::Engine.routes.draw do
       # Admin
       #============================================================
       namespace :admin, defaults: {format: 'json'} do
+
         resources :assets, only: [:index, :show, :create, :destroy]
         resources :audit_events, only: [:index]
         resources :app_feedbacks, only: [:index]
@@ -239,6 +240,8 @@ MnoEnterprise::Engine.routes.draw do
           collection do
             get :in_arrears
             get :count
+            get :download_batch_example
+            post :batch_import
           end
           member do
             post :users, action: :invite_member
