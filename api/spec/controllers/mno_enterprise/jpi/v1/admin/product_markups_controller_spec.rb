@@ -21,6 +21,7 @@ module MnoEnterprise
       stub_api_v2(:get, "/product_markups", [product_markup], [:product, :organization], {})
       stub_api_v2(:get, "/product_markups/#{product_markup.id}", product_markup, [:product, :organization], {})
       stub_api_v2(:post, "/product_markups", product_markup, [], {})
+      stub_api_v2(:get, "/product_markups", product_markup, [], {})
     end
 
     # Stub user and user call
@@ -31,6 +32,20 @@ module MnoEnterprise
     describe 'GET #index' do
       subject { get :index }
       it_behaves_like 'a jpi v1 admin action'
+
+      context 'with terms' do
+        subject { get :index, terms: params }
+        let(:params)  { { "product.id" => product_markup.id }.to_json }
+        let(:data) { JSON.parse(response.body) }
+
+        before { stub_api_v2(:get, "/product_markups", [product_markup], [:product, :organization], { filter: { 'product.id' => product_markup.id } }) }
+
+        it 'finds a markup' do
+          expect(subject).to be_successful
+          expect(data['product_markups'].length).to eq(1)
+          expect(data['product_markups'][0]['id']).to eq(product_markup.id)
+        end
+      end
     end
 
     describe 'GET #show' do
@@ -42,13 +57,9 @@ module MnoEnterprise
       subject { post :create, product_markup: params }
       let(:params) { { percentage: 0.11, product_id: product.id, organization_id: organization.id } }
       before { stub_audit_events }
-      # before { allow(MnoEnterprise::ProductMarkup).to receive(:create) { product_markup } }
+
       it_behaves_like 'a jpi v1 admin action'
 
-      # it 'creates the product markup' do
-      #   expect(MnoEnterprise::ProductMarkup).to receive(:create) { product_markup }
-      #   subject
-      # end
       it 'passes the correct parameters' do
         expect(subject).to be_successful
         assert_requested_api_v2(:post, '/product_markups',
@@ -56,10 +67,10 @@ module MnoEnterprise
                                   "data" => {
                                     "type" => "product_markups",
                                     "relationships" => {
-                                      "product" => {"data" => {"type" => "products", "id" => product.id}},
-                                      "organization" => {"data" => {"type" => "organizations", "id" => organization.id}}
+                                      "product" => {"data" => {"type" => "products", "id" => product.id } },
+                                      "organization" => {"data" => {"type" => "organizations", "id" => organization.id } }
                                     },
-                                    "attributes" => {"percentage" => "0.11"}}
+                                    "attributes" => {"percentage" => "0.11" } }
                                 }.to_json)
       end
 
