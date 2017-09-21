@@ -8,7 +8,9 @@ module MnoEnterprise
       if params[:terms]
         # Search mode
         @product_markups = []
-        JSON.parse(params[:terms]).map { |t| @product_markups = @product_markups | MnoEnterprise::ProductMarkup.includes(DEPENDENCIES).where(Hash[*t]) }
+
+        # Don't separate terms to build an AND close, and not a OR
+        @product_markups = MnoEnterprise::ProductMarkup.includes(DEPENDENCIES).where(JSON.parse(params[:terms]))
         response.headers['X-Total-Count'] = @product_markups.count
       else
         # Index mode
