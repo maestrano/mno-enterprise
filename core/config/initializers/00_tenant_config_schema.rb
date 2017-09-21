@@ -357,7 +357,16 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             }
           }
         },
-
+        impac: {
+          type: "object",
+          properties: {
+            currencies: {
+              type: "string",
+              default: "AED, AUD, CAD, CNY, EUR, GBP, HKD, IDR, JPY, MMK, NZD, PHP, SGD, USD",
+              description: "Currencies available for the user's dashboard"
+            }
+          }
+        }
       }
     },
     admin_panel: {
