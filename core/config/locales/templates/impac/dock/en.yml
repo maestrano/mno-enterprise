@@ -27,6 +27,7 @@ en:
             developer_details:
               show: Show developer details
               hide: Hide developer details
+              title: Developer Details
             linked_to: Linked to
             organization_id: Organization id
             group_id: Group id (uid)
