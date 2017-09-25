@@ -8,11 +8,6 @@ module MnoEnterprise
                        :geo_tz, :geo_currency, :metadata, :industry, :size,
                        :financial_year_end_month, :credit_card,
                        :financial_metrics, :created_at]
-    # CSV IMPORT
-    REQUIRED_HEADERS = %w(external_id company_name billing_currency name surname phone email password)
-    MANDATORY_COLUMNS = %w(company_name name surname email)
-    CSV_OPTIONS = { headers: true, header_converters: lambda { |f| f.strip.parameterize.underscore }, converters: lambda { |f| f ? f.strip : nil } }
-
     # GET /mnoe/jpi/v1/admin/organizations
     def index
       if params[:terms]
@@ -160,59 +155,10 @@ module MnoEnterprise
     def batch_import
       file = params[:file]
       # get the file's temporal path
-      file_temp_path = file.tempfile.path
-
-      # validate File
-      begin
-        csv = CSV.read(file_temp_path, CSV_OPTIONS)
-      rescue CSV::MalformedCSVError => e
-        return render json: ["Could not Process CSV File: #{e.message}"], status: :bad_request
-      end
-      errors = validate_csv(csv)
-      if errors.any?
-        return render json: errors, status: :bad_request
-      end
-      @added_organizations = []
-      @updated_organizations = []
-      @added_users = []
-      @updated_users = []
-      # TODO Move to a Job
-      csv.each do |row|
-        if row['external_id'].present?
-          organization = MnoEnterprise::Organization.where(external_id: row['external_id']).first
-        end
-        if organization
-          @updated_organizations << organization
-        else
-          organization = MnoEnterprise::Organization.new
-          organization.external_id = row['external_id']
-          @added_organizations << organization
-        end
-
-        organization.name = row['name']
-        organization.billing_currency = row['billing_currency']
-        organization.save
-        user = MnoEnterprise::User.where(email: row['email']).first
-        if user
-          @updated_users << user
-        else
-          user = MnoEnterprise::User.new
-          @added_users << user
-        end
-        user.skip_confirmation_notification!
-        user.name = row['name']
-        user.surname = row['surname']
-        user.phone = row['phone']
-        user.email = row['email']
-        user.password = row['password'].presence || 'Password1'
-        user.save
-        orga_relation = MnoEnterprise::OrgaRelation.where(user_id: user.id, organization_id: organization.id).first
-        unless orga_relation
-          MnoEnterprise::OrgaRelation.create(user_id: user.id, organization_id: organization.id, role: 'Super Admin')
-        end
-      end
-
+      @import_report = MnoEnterprise::CSVImporter.process(file.tempfile.path)
       render 'batch_import'
+    rescue MnoEnterprise::CSVImporter => e
+      render json: e.errors, status: :bad_request
     end
 
     protected
@@ -253,36 +199,6 @@ module MnoEnterprise
         existing_apps.each { |app_instance| desired_nids.delete(app_instance.app.nid) || app_instance.terminate }
         desired_nids.each { |nid| @organization.provision_app_instance(nid) }
       end
-    end
-
-    # TODO: Move to OrganizationCsvValidator
-    def validate_csv(csv)
-      errors = []
-      missing_headers = REQUIRED_HEADERS - csv.headers
-      if (missing_headers.any?)
-        errors.<< "Headers are missing: #{missing_headers.to_sentence}"
-        return errors
-      end
-      index = 1
-      csv.each do |row|
-        MANDATORY_COLUMNS.each do |c|
-          errors << "Row: #{index}, Missing value for column: ''#{c}''." if row[c].blank?
-        end
-        email = row['email']
-        if email.present? && Devise.email_regexp
-          errors << "Row: #{index}, Invalid email: ''#{email}''" unless email =~ Devise.email_regexp
-        end
-        password = row['password']
-        if password.present?
-          if Devise.password_regex && password !~ Devise.password_regex
-            password << "Row: #{index}, Invalid password'"
-          end
-          errors << "Row: #{index}, Invalid password, It's too short, minimum length is 6." if password.length < 6
-          errors << "Row: #{index}, Invalid password, It's too long, maximum length is 128." if password.length > 128
-        end
-        index += 1
-      end
-      errors
     end
   end
 end

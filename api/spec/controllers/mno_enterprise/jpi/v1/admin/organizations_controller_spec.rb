@@ -196,18 +196,25 @@ module MnoEnterprise
             stub_api_v2(:get, '/orga_relations', [], [], { filter: { user_id: user1.id, organization_id: organization1.id }, page: { number: 1, size: 1 } }),
             stub_api_v2(:get, '/orga_relations', [orga_relation1], [], { filter: { user_id: user2.id, organization_id: organization2.id }, page: { number: 1, size: 1 } }),
 
-            stub_api_v2(:post, '/orga_relations', orga_relation2),
-            stub_api_v2(:patch, "/orga_relations/#{orga_relation1.id}", orga_relation1)
-
+            stub_api_v2(:post, '/orga_relations', orga_relation2)
           ]
         }
+
+        before{
+          confirmation_token = '1e243fa1180e32f3ec66a648835d1fbca7912223a487eac36be22b095a01b5a5'
+          Devise.token_generator
+          stub_api_v2(:get, '/users', user, [], {filter: {confirmation_token: confirmation_token}})
+          allow_any_instance_of(Devise::TokenGenerator).to receive(:digest).and_return(confirmation_token)
+          allow_any_instance_of(Devise::TokenGenerator).to receive(:generate).and_return(confirmation_token)
+        }
+
         let(:file) { file = fixture_file_upload(File.join(File.dirname(File.expand_path(__FILE__)), '../../../../../fixtures/batch-example.csv'), 'text/csv') }
         subject { post :batch_import, file: file }
         before { sign_in user }
         before { subject }
         it { expect(response).to be_success }
         it 'does the requests' do
-          stubs.each { |stub| expect(stub).to have_been_requested }
+          stubs.each { |stub| expect(stub).to have_been_requested.at_least_once }
         end
       end
     end
