@@ -2,6 +2,7 @@ module MnoEnterprise
 
   class CSVImportError < StandardError
     attr_reader :errors
+
     def initialize(errors)
       super(errors.first)
       @errors = errors
@@ -10,8 +11,8 @@ module MnoEnterprise
 
   class CSVImporter
     # CSV IMPORT
-    REQUIRED_HEADERS = %w(external_id company_name billing_currency name surname phone email)
-    MANDATORY_COLUMNS = %w(company_name name surname email)
+    REQUIRED_HEADERS = %w(external_id company_name billing_currency name surname phone email address1 address2 state_province city postal_code)
+    MANDATORY_COLUMNS = %w(company_name name surname email  address1 state_province city)
     CSV_OPTIONS = { headers: true, header_converters: lambda { |f| f.strip.parameterize.underscore }, converters: lambda { |f| f&.strip } }
 
     def self.process(file_path)
@@ -38,7 +39,9 @@ module MnoEnterprise
           organization.external_id = row['external_id']
           report[:organizations][:added] << organization
         end
-
+        organization.metadata ||= {}
+        #metadata needs to be set to mark it as dirty and be properly saved
+        organization.metadata = organization.metadata.merge(row.to_hash.slice(*%w(address1 address2 state_province, city postal_code)))
         organization.name = row['name']
         organization.billing_currency = row['billing_currency']
         organization.save
@@ -79,14 +82,6 @@ module MnoEnterprise
         email = row['email']
         if email.present? && Devise.email_regexp
           errors << "Row: #{index}, Invalid email: ''#{email}''" unless email =~ Devise.email_regexp
-        end
-        password = row['password']
-        if password.present?
-          if Devise.password_regex && password !~ Devise.password_regex
-            password << "Row: #{index}, Invalid password'"
-          end
-          errors << "Row: #{index}, Invalid password, It's too short, minimum length is 6." if password.length < 6
-          errors << "Row: #{index}, Invalid password, It's too long, maximum length is 128." if password.length > 128
         end
         index += 1
       end

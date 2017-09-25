@@ -169,6 +169,23 @@ module MnoEnterprise
     end
 
     describe 'POST #batch_upload' do
+      subject { post :batch_import, file: file }
+
+      context 'invalid file' do
+        let(:file) { file = fixture_file_upload(File.join(File.dirname(File.expand_path(__FILE__)), '../../../../../fixtures/batch-example-bad.csv'), 'text/csv') }
+        before { subject }
+        it { expect(response.status).to eq 400 }
+
+        let(:expected_errors) {
+          [
+            "Row: 1, Invalid email: ''notanemail''",
+            "Row: 2, Missing value for column: ''company_name''."
+          ]
+        }
+        it { expect(response.status).to eq 400 }
+        it { expect(JSON.parse(response.body)).to eq expected_errors }
+      end
+
       context 'valid file' do
         let(:organization1) { build(:organization) }
         let(:organization2) { build(:organization) }
@@ -200,16 +217,16 @@ module MnoEnterprise
           ]
         }
 
-        before{
+        before {
           confirmation_token = '1e243fa1180e32f3ec66a648835d1fbca7912223a487eac36be22b095a01b5a5'
           Devise.token_generator
-          stub_api_v2(:get, '/users', user, [], {filter: {confirmation_token: confirmation_token}})
+          stub_api_v2(:get, '/users', user, [], { filter: { confirmation_token: confirmation_token } })
           allow_any_instance_of(Devise::TokenGenerator).to receive(:digest).and_return(confirmation_token)
           allow_any_instance_of(Devise::TokenGenerator).to receive(:generate).and_return(confirmation_token)
         }
 
         let(:file) { file = fixture_file_upload(File.join(File.dirname(File.expand_path(__FILE__)), '../../../../../fixtures/batch-example.csv'), 'text/csv') }
-        subject { post :batch_import, file: file }
+
         before { sign_in user }
         before { subject }
         it { expect(response).to be_success }

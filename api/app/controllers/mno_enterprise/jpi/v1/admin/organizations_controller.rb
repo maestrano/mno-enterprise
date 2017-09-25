@@ -157,12 +157,11 @@ module MnoEnterprise
       # get the file's temporal path
       @import_report = MnoEnterprise::CSVImporter.process(file.tempfile.path)
       render 'batch_import'
-    rescue MnoEnterprise::CSVImporter => e
+    rescue MnoEnterprise::CSVImportError => e
       render json: e.errors, status: :bad_request
     end
 
     protected
-
     def organization_permitted_update_params
       [:name, :billing_currency]
     end
