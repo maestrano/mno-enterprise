@@ -1,6 +1,5 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   extend ActiveSupport::Concern
-  
   DEPENDENCIES = [:users, :orga_invites, :orga_relations, :credit_card, :invoices]
   #==================================================================
   # Included methods

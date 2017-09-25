@@ -18,6 +18,7 @@ FactoryGirl.define do
       users []
       credit_card_id nil
       credit_card nil
+      invoices []
       trait :with_org_invites do
         org_invites { [build(:org_invite)] }
       end

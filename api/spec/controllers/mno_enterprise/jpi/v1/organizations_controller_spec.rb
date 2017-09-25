@@ -72,11 +72,32 @@ module MnoEnterprise
       it_behaves_like 'jpi v1 protected action'
 
       context 'success' do
-        before { subject }
+        before { subject}
 
         it 'returns a complete description of the organization' do
           expect(response).to be_success
           expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_organization(organization, user).to_json))
+        end
+      end
+
+      context 'contains invoices' do
+        subject { get :show, id: organization.id }
+        
+        let(:money) { Money.new(0, 'AUD') }
+        let(:role) { 'Super Admin' }
+        let(:member_role) { role }
+        let(:member) { build(:user, id: user.id, email: user.email) }
+        
+        before {
+          allow_any_instance_of(MnoEnterprise::Organization).to receive(:current_billing).and_return(money)
+          allow_any_instance_of(MnoEnterprise::Organization).to receive(:current_credit).and_return(money)
+          organization.invoices << invoice
+          stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices)) 
+        }
+      
+        it 'renders the list of invoices' do
+          subject
+          expect(JSON.parse(response.body)['invoices']).to eq(partial_hash_for_invoices(organization))
         end
       end
     end
