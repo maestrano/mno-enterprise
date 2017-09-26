@@ -23,6 +23,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::UserAccessRequestsControll
 
   # POST /mnoe/jpi/v1/user_access_requests
   def create
+    access_duration = params.require(:access_duration)
+    user = current_user.load_required(:user_access_requests, :'user_access_requests.requester')
+    user.user_access_requests.each do |request|
+      # Notify the admin that the access is now granted for the user and delete the request
+      if request.status == 'requested'
+        if request.requester
+          MnoEnterprise::SystemNotificationMailer.access_approved_all(user.id, request.requester.id, access_duration).deliver_later
+        end
+        request.destroy
+      end
+    end
+
     @user_access_request = MnoEnterprise::UserAccessRequest.new(create_params)
     @user_access_request.relationships.user = current_user
     @user_access_request.save

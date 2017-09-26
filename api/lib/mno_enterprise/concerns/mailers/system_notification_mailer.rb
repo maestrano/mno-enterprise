@@ -211,6 +211,21 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     )
   end
 
+  def access_approved_all(user_id, requester_id, access_duration)
+    user = MnoEnterprise::User.find_one(user_id)
+    requester = MnoEnterprise::User.find_one(requester_id)
+    MnoEnterprise::MailClient.deliver(
+      'access-approved-all',
+      default_sender,
+      recipient(requester),
+      user_vars(requester).merge(
+        requested_first_name: user.name,
+        requested_last_name: user.surname,
+        access_duration: access_duration
+      )
+    )
+  end
+
   def send_invoice(recipient_id, invoice_id)
     recipient = MnoEnterprise::User.select(:email, :name).find(recipient_id).first
     invoice = MnoEnterprise::Invoice.find_one(invoice_id)
