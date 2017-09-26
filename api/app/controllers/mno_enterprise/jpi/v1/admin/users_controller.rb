@@ -11,6 +11,11 @@ module MnoEnterprise
                                                .includes(:user_access_requests)
                                                .where(Hash[*t])
         end
+
+        # Ensure that no duplicates are returned as a result of multiple terms being applied to search query
+        # ex. user.name = "John" and user.email = "john.doe@example.com" would return a duplicate when searching for "john"
+        @users.uniq!{ |u| u.id }
+
         response.headers['X-Total-Count'] = @users.count
       else
         # Index mode
