@@ -15,7 +15,7 @@ module MnoEnterprise
     # Add the user to the organization and update the status of the invite
     # Add team
     def accept!(user = self.user)
-      self.accept(data: { user_id: user.id})
+      self.accept(data: { attributes: { user_id: user.id } } )
     end
 
     # TODO: specs
