@@ -12,7 +12,7 @@ module MnoEnterprise
   class CSVImporter
     # CSV IMPORT
     REQUIRED_HEADERS = %w(external_id company_name billing_currency name surname phone email address1 address2 city state_province country postal_code)
-    MANDATORY_COLUMNS = %w(company_name name surname email  address1 city state_province country)
+    MANDATORY_COLUMNS = %w(company_name name surname email address1 city state_province country)
     CSV_OPTIONS = { headers: true, header_converters: lambda { |f| f.strip.parameterize.underscore }, converters: lambda { |f| f&.strip } }
 
     def self.process(file_path)
@@ -29,6 +29,7 @@ module MnoEnterprise
       report = { organizations: { added: [], updated: [] }, users: { added: [], updated: [] } }
       # TODO Move to a Job
       csv.each do |row|
+        # Create or Update Organization
         if row['external_id'].present?
           organization = MnoEnterprise::Organization.where(external_id: row['external_id']).first
         end
@@ -54,8 +55,9 @@ module MnoEnterprise
           address.relationships.owner = organization
           address.save
         end
-
         report[:organizations][event_type] << organization
+
+        # Create or Update User
         user = MnoEnterprise::User.where(email: row['email']).first
         if user
           report[:users][:updated] << user
@@ -71,6 +73,7 @@ module MnoEnterprise
 
         user.save
         orga_relation = MnoEnterprise::OrgaRelation.where(user_id: user.id, organization_id: organization.id).first
+        # Add User as Super Admin to Organization if he is not already in it
         unless orga_relation
           MnoEnterprise::OrgaRelation.create(user_id: user.id, organization_id: organization.id, role: 'Super Admin')
         end
@@ -101,4 +104,3 @@ module MnoEnterprise
     end
   end
 end
-
