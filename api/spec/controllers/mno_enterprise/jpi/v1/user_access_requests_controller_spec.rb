@@ -22,7 +22,7 @@ module MnoEnterprise
     let!(:current_user_stub) { stub_user(user) }
     let(:user_access_request) { build(:user_access_request) }
     let(:message_delivery) { instance_double(ActionMailer::MessageDelivery) }
-    let!(:user) { build(:user) }
+    let!(:user) { build(:user, user_access_requests: []) }
     before { sign_in user }
     #===============================================
     # Specs
@@ -30,6 +30,19 @@ module MnoEnterprise
     describe 'GET #index' do
       before { stub_api_v2(:get, "/user_access_requests", [user_access_request], [:requester], { filter: { user_id: user.id, status: 'requested' , 'created_at.gt': MnoEnterprise::UserAccessRequest::EXPIRATION_TIMEOUT.ago} }) }
       subject { get :index }
+      it_behaves_like 'jpi v1 protected action'
+    end
+
+    describe 'POST #create' do
+      before { stub_audit_events }
+      let!(:stubs) {
+        [
+          stub_api_v2(:post, "/user_access_requests", user_access_request),
+          stub_api_v2(:get, "/users/#{user.id}", user, [:user_access_requests, :'user_access_requests.requester']),
+          stub_api_v2(:get, "/user_access_requests/#{user_access_request.id}", user_access_request, [:requester])
+        ]
+      }
+      subject { post :create, access_duration: 'UNTIL_REVOKED'}
       it_behaves_like 'jpi v1 protected action'
     end
 
