@@ -67,7 +67,7 @@ module MnoEnterprise
       let(:app) { build(:app) }
       before {
         stub_api_v2(:get, '/apps', [app], [], {fields: {apps: 'updated_at'}, page: {number: 1, size: 1}, sort: '-updated_at'})
-        stub_api_v2(:get, '/apps', [app], [], {sort: 'name'})
+        stub_api_v2(:get, '/apps', [app], [])
       }
 
       subject { get :terms }
