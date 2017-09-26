@@ -178,8 +178,10 @@ module MnoEnterprise
 
         let(:expected_errors) {
           [
-            "Row: 1, Invalid email: ''notanemail''",
-            "Row: 2, Missing value for column: ''company_name''."
+            "Row: 1, Invalid Country code 'AnyCountry'. It must follow ISO 3166 Standard two-letter country codes.",
+            "Row: 1, Invalid email: 'notanemail'",
+            "Row: 2, Missing value for column: 'company_name'.",
+            "Row: 2, Invalid Country code 'UK'. It must follow ISO 3166 Standard two-letter country codes."
           ]
         }
         it { expect(response.status).to eq 400 }
@@ -202,6 +204,7 @@ module MnoEnterprise
             stub_api_v2(:get, '/organizations', [organization1], [], { filter: { external_id: 'O2' }, page: { number: 1, size: 1 } }),
 
             stub_api_v2(:post, '/organizations', organization2),
+            stub_api_v2(:post, '/addresses'),
             stub_api_v2(:patch, "/organizations/#{organization1.id}", organization1),
 
             stub_api_v2(:get, '/users', [], [], { filter: { email: 'john.doe@example.com' }, page: { number: 1, size: 1 } }),

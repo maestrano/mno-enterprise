@@ -1,3 +1,3 @@
 external_id,company_name,billing_currency,name,surname,address1,address2,city,state_province,country,postal_code,phone,email
-O1,Company Name 1,EUR,John,Doe,123 Main Street,Anytown,AnyCity,AnyState,AnyCountry,1225-5848,10987654321,john.doe@example.com
-O2,Company Name 2,EUR,Jane,Doe,123 Main Street,Anytown,AnyCity,AnyState,AnyCountry,1225-5848,10987654321,jane.doe@example.com
+O1,Company Name 1,EUR,John,Doe,123 Main Street,Anytown,AnyCity,AnyState,GB,1225-5848,10987654321,john.doe@example.com
+O2,Company Name 2,EUR,Jane,Doe,123 Main Street,Anytown,AnyCity,AnyState,US,1225-5848,10987654321,jane.doe@example.com

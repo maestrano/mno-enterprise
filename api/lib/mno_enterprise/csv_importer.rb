@@ -11,8 +11,8 @@ module MnoEnterprise
 
   class CSVImporter
     # CSV IMPORT
-    REQUIRED_HEADERS = %w(external_id company_name billing_currency name surname phone email address1 address2 state_province city postal_code)
-    MANDATORY_COLUMNS = %w(company_name name surname email  address1 state_province city)
+    REQUIRED_HEADERS = %w(external_id company_name billing_currency name surname phone email address1 address2 city state_province country postal_code)
+    MANDATORY_COLUMNS = %w(company_name name surname email  address1 city state_province country)
     CSV_OPTIONS = { headers: true, header_converters: lambda { |f| f.strip.parameterize.underscore }, converters: lambda { |f| f&.strip } }
 
     def self.process(file_path)
@@ -33,18 +33,29 @@ module MnoEnterprise
           organization = MnoEnterprise::Organization.where(external_id: row['external_id']).first
         end
         if organization
-          report[:organizations][:updated] << organization
+          event_type = :updated
         else
           organization = MnoEnterprise::Organization.new
           organization.external_id = row['external_id']
-          report[:organizations][:added] << organization
+          event_type = :added
         end
-        organization.metadata ||= {}
-        #metadata needs to be set to mark it as dirty and be properly saved
-        organization.metadata = organization.metadata.merge(row.to_hash.slice(*%w(address1 address2 state_province, city postal_code)))
-        organization.name = row['name']
+        organization.name = row['company_name']
         organization.billing_currency = row['billing_currency']
         organization.save
+
+        if event_type == :added
+          address = MnoEnterprise::Address.new(
+            city:         row['city'],
+            country_code: row['country'],
+            street: [row['address1'], row['address2']].reject(&:empty?).join(' '),
+            state_code: row['state_province'],
+            postal_code: row['postal_code']
+          )
+          address.relationships.owner = organization
+          address.save
+        end
+
+        report[:organizations][event_type] << organization
         user = MnoEnterprise::User.where(email: row['email']).first
         if user
           report[:users][:updated] << user
@@ -77,11 +88,12 @@ module MnoEnterprise
       index = 1
       csv.each do |row|
         MANDATORY_COLUMNS.each do |c|
-          errors << "Row: #{index}, Missing value for column: ''#{c}''." if row[c].blank?
+          errors << "Row: #{index}, Missing value for column: '#{c}'." if row[c].blank?
         end
+        errors << "Row: #{index}, Invalid Country code '#{row['country']}'. It must follow ISO 3166 Standard two-letter country codes." unless ISO3166::Country.codes.include?(row['country'])
         email = row['email']
         if email.present? && Devise.email_regexp
-          errors << "Row: #{index}, Invalid email: ''#{email}''" unless email =~ Devise.email_regexp
+          errors << "Row: #{index}, Invalid email: '#{email}'" unless email =~ Devise.email_regexp
         end
         index += 1
       end

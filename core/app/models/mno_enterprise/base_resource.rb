@@ -76,7 +76,7 @@ module MnoEnterprise
 
     def save!
       save
-      raise "Could not save: Attributes #{self.attributes}, Errors: #{self.full_messages}" unless self.errors.empty?
+      raise "Could not save: Attributes #{self.attributes}, Errors: #{self.errors.full_messages}" unless self.errors.empty?
     end
 
     # emulate active record call of callbacks, a bit different as before_update is called before before_save
