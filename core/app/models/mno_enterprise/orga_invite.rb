@@ -11,19 +11,16 @@ module MnoEnterprise
       self.attributes.slice(:team_id, :user_role, :user_email, :user_id, :referrer_id, :organization_id)
     end
 
-    # TODO: specs
     # Add the user to the organization and update the status of the invite
     # Add team
     def accept!(user = self.user)
-      self.accept(data: { user_id: user.id})
+      self.accept(data: { attributes: { user_id: user.id } } )
     end
 
-    # TODO: specs
     def cancel!
       self.decline
     end
 
-    # TODO: specs
     # Check whether the invite is expired or not
     def expired?
       self.status != 'pending' || self.created_at < 3.days.ago

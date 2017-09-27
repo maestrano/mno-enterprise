@@ -34,6 +34,7 @@ module MnoEnterprise::Concerns::Controllers::OrgInvitesController
         # TODO: Add i18n
         message = { notice: "You are now part of #{@org_invite.organization.name}" }
         yield(:success, @org_invite) if block_given?
+        @current_user.refresh_user_cache
       elsif @org_invite && @org_invite.expired?
         # TODO: Add i18n
         message = { alert: "It looks like this invite has expired. Please ask your company administrator to resend the invite." }
