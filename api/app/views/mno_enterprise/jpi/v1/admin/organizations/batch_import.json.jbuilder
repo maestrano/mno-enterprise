@@ -25,11 +25,3 @@ json.users do
   end
 end
 
-
-
-
-
-
-
-
-

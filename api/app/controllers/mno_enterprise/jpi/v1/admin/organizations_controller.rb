@@ -154,8 +154,9 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/admin/organization/batch_import
     def batch_import
       file = params[:file]
-      # get the file's temporal path
-      @import_report = MnoEnterprise::CSVImporter.process(file.tempfile.path)
+      # get the file's temporary path
+      path = file.tempfile.path
+      @import_report = MnoEnterprise::CSVImporter.process(path)
       render 'batch_import'
     rescue MnoEnterprise::CSVImportError => e
       render json: e.errors, status: :bad_request
