@@ -32,19 +32,19 @@ module MnoEnterprise
       context 'invitation is cancelled' do
         let(:orga_invite) { FactoryGirl.build(:orga_invite, status: 'cancelled') }
 
-        it { is_expected.to be true }
+        it { is_expected.to be_truthy }
       end
 
       context 'invitation is 1 week old' do
         let(:orga_invite) { FactoryGirl.build(:orga_invite, status: 'pending', created_at: 1.week.ago) }
 
-        it { is_expected.to be true }
+        it { is_expected.to be_truthy }
       end
 
       context 'invitation is valid' do
         let(:orga_invite) { FactoryGirl.build(:orga_invite, status: 'pending', created_at: 1.day.ago) }
 
-        it { is_expected.to be false }
+        it { is_expected.to be_falsy }
       end
     end
   end
