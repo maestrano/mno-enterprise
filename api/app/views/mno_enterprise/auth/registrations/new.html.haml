@@ -5,7 +5,7 @@
         .login-box-title
           %h2= t('mno_enterprise.auth.registrations.new.title')
         .login-box
-          .brand-logo
+          %img.brand-logo{src: asset_path('mno_enterprise/main-logo.png')}
           = render "mno_enterprise/auth/registrations/form"
           = render "mno_enterprise/auth/shared/omniauth"
           %hr

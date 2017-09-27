@@ -38,6 +38,7 @@ module MnoEnterprise
       [
         'frontend/src/images/main-logo.png',
         'public/dashboard/images/main-logo.png',
+        'public/admin/images/main-logo.png',
         'app/assets/images/mno_enterprise/main-logo.png'
       ].each do |filepath|
         FileUtils.mkdir_p(File.dirname(Rails.root.join(filepath)))

@@ -6,5 +6,5 @@
         .login-box-title
           %h2= t('mno_enterprise.auth.confirmations.show.title')
         .login-box
-          .brand-logo
+          %img.brand-logo{src: asset_path('mno_enterprise/main-logo.png')}
           = render "mno_enterprise/auth/confirmations/form"

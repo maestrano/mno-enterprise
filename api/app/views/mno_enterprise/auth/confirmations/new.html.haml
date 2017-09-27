@@ -7,7 +7,7 @@
         .login-box-title
           %h2= t('.title')
         .login-box
-          .brand-logo
+          %img.brand-logo{src: asset_path('mno_enterprise/main-logo.png')}
           = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, name: 'form', class: 'form-horizontal autofill-detect' }) do |f|
 
             - unless devise_error_messages!.empty?

@@ -5,7 +5,7 @@
         .login-box-title
           %h2 You password has expired. Please renew it.
         .login-box
-          .brand-logo
+          %img.brand-logo{src: asset_path('mno_enterprise/main-logo.png')}
 
             = form_for(resource, as: resource_name, url: mno_enterprise.user_password_expired_path, :html => { method: :put, class: 'form-horizontal' }) do |f|
               = devise_error_messages!
