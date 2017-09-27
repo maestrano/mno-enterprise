@@ -62,11 +62,7 @@
     border-radius: @login-box-corners;
   }
 
-  .login-box-wrapper .login-box .brand-logo when (isstring(@login-box-brand-logo-img)){
-    min-height: 80px;
-    background-repeat: no-repeat;
-    background-image: asset-url(@login-box-brand-logo-img);
-    background-size: 100%;
+  .login-box-wrapper .login-box .brand-logo {
     @login-box-brand-logo();
   }
 

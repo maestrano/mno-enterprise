@@ -5,7 +5,7 @@
         .login-box-title
           %h2= t('.title')
         .login-box
-          .brand-logo
+          %img.brand-logo{src: asset_path('mno_enterprise/main-logo.png')}
           = render "mno_enterprise/auth/unlocks/form"
           %hr
           = render "mno_enterprise/auth/shared/links"
