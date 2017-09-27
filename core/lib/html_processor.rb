@@ -50,6 +50,7 @@ class HtmlProcessor
   SANITIZER_OPTS = Sanitize::Config::RELAXED.merge(
     attributes: Sanitize::Config::RELAXED[:attributes].merge(
       'a' => %w[href hreflang name rel target],
+      'img' => %w[src ta-insert-video allowfullscreen frameborder style contenteditable]
     ),
     transformers: YOUTUBE_TRANSFORMER
   )
