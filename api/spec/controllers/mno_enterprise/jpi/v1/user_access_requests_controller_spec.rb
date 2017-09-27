@@ -28,7 +28,7 @@ module MnoEnterprise
     # Specs
     #===============================================
     describe 'GET #index' do
-      before { stub_api_v2(:get, "/user_access_requests", [user_access_request], [:requester], { filter: { user_id: user.id, status: 'requested' , 'created_at.gt': MnoEnterprise::UserAccessRequest::EXPIRATION_TIMEOUT.ago} }) }
+      before { stub_api_v2(:get, "/user_access_requests", [user_access_request], [:requester], { filter: { user_id: user.id, status: 'requested', 'created_at.gt': MnoEnterprise::UserAccessRequest::EXPIRATION_TIMEOUT.ago } }) }
       subject { get :index }
       it_behaves_like 'jpi v1 protected action'
     end
@@ -42,8 +42,22 @@ module MnoEnterprise
           stub_api_v2(:get, "/user_access_requests/#{user_access_request.id}", user_access_request, [:requester])
         ]
       }
-      subject { post :create, access_duration: 'UNTIL_REVOKED'}
+      subject { post :create, access_duration: 'UNTIL_REVOKED' }
       it_behaves_like 'jpi v1 protected action'
+
+      context 'with existing pending requests' do
+        let(:requester){build(:user)}
+        let(:existing_user_access_request) { build(:user_access_request, requester: requester) }
+        let!(:user) { build(:user, user_access_requests: [existing_user_access_request]) }
+        before do
+          stub_api_v2(:get, "/users/#{user.id}", user)
+          stub_api_v2(:get, "/users/#{requester.id}", requester)
+          expect(SystemNotificationMailer).to receive(:access_approved_all).with(user.id, requester.id, 'UNTIL_REVOKED' ) { message_delivery }
+          expect(message_delivery).to receive(:deliver_later).with(no_args)
+        end
+        let!(:stub) { stub_api_v2(:delete, "/user_access_requests/#{existing_user_access_request.id}") }
+        it {subject; expect(stub).to have_been_requested }
+      end
     end
 
     describe 'PUT #deny' do
