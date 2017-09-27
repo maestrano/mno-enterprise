@@ -1,12 +1,12 @@
 Hi <%= @info[:first_name] %>
 ==================================================================
-     
+
 Here are the details of this new task.
 
 Title: <%= @info[:title] %>
 Content: <%= @info[:content] %>
 <% if @info[:due_date] %>
-Due date: <%= @info[:due_date] %>
+Due date: <%= @info[:due_date].to_date %>
 <% else %>
 Due date: No due date specified
 <% end %>

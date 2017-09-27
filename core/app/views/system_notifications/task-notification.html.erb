@@ -10,16 +10,16 @@
     </p>
 
     <p>Hi <%= @info[:first_name] %></p>
-     
+
     <p>Here are the details of this new task.</p>
     <p>Title: <%= @info[:title] %></p>
     <p>Content: <%= @info[:content] %></p>
     <% if @info[:due_date]  %>
-    <p>Due date: <%= @info[:due_date] %></p>
+    <p>Due date: <%= @info[:due_date].to_date %></p>
     <% else %>
     <p>Due date: No due date specified </p>
     <% end %>
- 
+
     <p>
       Thank you,<br/>
     </p>
