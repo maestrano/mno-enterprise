@@ -84,17 +84,17 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
   end
 
   def partial_hash_for_invoices(organization)
-    hash = {'invoices' => []}
-    organization.invoices.order("ended_at DESC").each do |invoice|
-      hash['invoices'].push({
-                                'period' => invoice.period_label,
-                                'amount' => invoice.total_due,
-                                'paid' => invoice.paid?,
-                                'link' => mnoe_enterprise.invoice_path(invoice.slug),
-                            })
+    orga_invoices = []
+    organization.invoices.each do |invoice|
+      orga_invoices.push({
+                          'started_at' => invoice.started_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                          'ended_at' => invoice.ended_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                          'amount' => AccountingjsSerializer.serialize(invoice.total_due),
+                          'paid' => invoice.paid?,
+                          'link' => "/mnoe/admin/invoices/#{invoice.slug}"
+                        })
     end
-
-    return hash
+    orga_invoices
   end
 
   def hash_for_organizations(organizations, admin = false)
