@@ -254,16 +254,17 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             },
           }
         },
-        onboarding_wizard: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              default: false,
-              description: "Enable the onboarding wizard"
-            }
-          }
-        },
+        # commented until products are properly handled
+        # onboarding_wizard: {
+        #   type: "object",
+        #   properties: {
+        #     enabled: {
+        #       type: "boolean",
+        #       default: false,
+        #       description: "Enable the onboarding wizard"
+        #     }
+        #   }
+        # },
         organization_management: {
           type: "object",
           properties: {
