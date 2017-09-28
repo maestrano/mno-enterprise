@@ -50,6 +50,7 @@ class HtmlProcessor
   SANITIZER_OPTS = Sanitize::Config::RELAXED.merge(
     attributes: Sanitize::Config::RELAXED[:attributes].merge(
       'a' => %w[href hreflang name rel target],
+      'img' => %w[src ta-insert-video allowfullscreen frameborder style contenteditable]
     ),
     transformers: YOUTUBE_TRANSFORMER
   )
@@ -62,8 +63,8 @@ class HtmlProcessor
 
     # Process markdown or leave original
     if options[:format].to_s == 'markdown' && text
-      html_options = { :safe_links_only => true, :hard_wrap => true, :filter_html => false }
-      renderer_options = { :autolink => true, :no_intraemphasis => true, :fenced_code_blocks => true, :superscript => true }
+      html_options = { safe_links_only: true, hard_wrap: true, filter_html: false }
+      renderer_options = { autolink: true, no_intraemphasis: true, fenced_code_blocks: true, superscript: true }
 
       renderer = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(html_options), renderer_options)
       raw_html = renderer.render(text)
