@@ -90,7 +90,7 @@ namespace :mnoe do
     # Build the previewer less stylesheet
     # Return the relative path of the compiled less stylesheet
     def build_theme_previewer_src_less(frontend_tmp_folder)
-      # This file containers the bower (wiredep) and injector tags (see less_injector)
+      # This file contains the bower (wiredep) and injector tags (see less_injector)
       src_file = "src/app/index.less"
 
       # The destination file is built under src so as to obtain relative
@@ -101,12 +101,17 @@ namespace :mnoe do
 
       Dir.chdir(frontend_tmp_folder) do
         cp src_file, dst_file
+
+        # Wiredep replaces the bower:less tag in the file
+        # by less @imports to the actual dependencies (e.g. bootstrap)
         sh "#{WIREDEP_CMD} --src #{dst_file}"
 
         # Do not inject these files as they are either
         # used as template or are the destination file
         excluded = [src_file, dst_file]
 
+        # List of files to be concatenated and injected in
+        # the final less file. Order matters.
         included = [
           'src/app/stylesheets/theme.less',
           'src/app/stylesheets/variables-default.less',
@@ -119,6 +124,8 @@ namespace :mnoe do
           'src/images/**/*.less'
         ]
 
+        # The 'injector' tag in the file gets replaced by the
+        # content of the files above
         less_injector(dst_file, included, excluded)
       end
 
