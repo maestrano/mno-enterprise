@@ -111,7 +111,7 @@ module MnoEnterprise
         let(:orga_invite) { build(:orga_invite) }
 
         before { allow(orga_invite).to receive(:user).and_return(invited_user) }
-        before { stub_api_v2(:get, "/users", invited_user, [:orga_relations], { filter: { email: params[:email] }, page: { number: 1, size: 1 } }) }
+        before { stub_api_v2(:get, '/users', invited_user, [:orga_relations], { filter: { email: params[:email] }, page: { number: 1, size: 1 } }) }
         before { stub_api_v2(:get, "/orga_invites/#{orga_invite.id}", orga_invite, [:user]) }
         before { expect(MnoEnterprise::OrgaInvite).to receive(:create).and_return(orga_invite) }
         before { subject }
@@ -126,7 +126,7 @@ module MnoEnterprise
         before { allow(invited_user).to receive(:confirmed?).and_return(false) }
         before { allow(controller).to receive(:create_unconfirmed_user).and_return(invited_user) }
         before { allow(orga_invite).to receive(:user).and_return(invited_user) }
-        before { stub_api_v2(:get, "/users", nil, [:orga_relations], { filter: { email: params[:email] }, page: { number: 1, size: 1 } }) }
+        before { stub_api_v2(:get, '/users', nil, [:orga_relations], { filter: { email: params[:email] }, page: { number: 1, size: 1 } }) }
         before { stub_api_v2(:get, "/orga_invites/#{orga_invite.id}", orga_invite, [:user]) }
         before { expect(MnoEnterprise::OrgaInvite).to receive(:create).and_return(orga_invite) }
         before { subject }
@@ -166,6 +166,77 @@ module MnoEnterprise
       before { subject }
 
       it { expect(response).to be_success }
+    end
+
+    describe 'POST #batch_upload' do
+      subject { post :batch_import, file: file }
+
+      context 'invalid file' do
+        let(:file) { file = fixture_file_upload(File.join(File.dirname(File.expand_path(__FILE__)), '../../../../../fixtures/batch-example-bad.csv'), 'text/csv') }
+        before { subject }
+        it { expect(response.status).to eq 400 }
+
+        let(:expected_errors) {
+          [
+            "Row: 1, Invalid Country code 'AnyCountry'. It must follow ISO 3166 Standard two-letter country codes.",
+            "Row: 1, Invalid email: 'notanemail'",
+            "Row: 2, Missing value for column: 'company_name'.",
+            "Row: 2, Invalid Country code 'UK'. It must follow ISO 3166 Standard two-letter country codes."
+          ]
+        }
+        it { expect(response.status).to eq 400 }
+        it { expect(JSON.parse(response.body)).to eq expected_errors }
+      end
+
+      context 'valid file' do
+        let(:organization1) { build(:organization) }
+        let(:organization2) { build(:organization) }
+
+        let(:user1) { build(:user) }
+        let(:user2) { build(:user) }
+
+        let(:orga_relation1) { build(:orga_relation) }
+        let(:orga_relation2) { build(:orga_relation) }
+
+        let!(:stubs) {
+          [
+            stub_api_v2(:get, '/organizations', [], [], { filter: { external_id: 'O1' }, page: { number: 1, size: 1 } }),
+            stub_api_v2(:get, '/organizations', [organization1], [], { filter: { external_id: 'O2' }, page: { number: 1, size: 1 } }),
+
+            stub_api_v2(:post, '/organizations', organization2),
+            stub_api_v2(:post, '/addresses'),
+            stub_api_v2(:patch, "/organizations/#{organization1.id}", organization1),
+
+            stub_api_v2(:get, '/users', [], [], { filter: { email: 'john.doe@example.com' }, page: { number: 1, size: 1 } }),
+            stub_api_v2(:get, '/users', [user1], [], { filter: { email: 'jane.doe@example.com' }, page: { number: 1, size: 1 } }),
+
+            stub_api_v2(:post, '/users', user2),
+            stub_api_v2(:patch, "/users/#{user1.id}", user1),
+
+            stub_api_v2(:get, '/orga_relations', [], [], { filter: { user_id: user1.id, organization_id: organization1.id }, page: { number: 1, size: 1 } }),
+            stub_api_v2(:get, '/orga_relations', [orga_relation1], [], { filter: { user_id: user2.id, organization_id: organization2.id }, page: { number: 1, size: 1 } }),
+
+            stub_api_v2(:post, '/orga_relations', orga_relation2)
+          ]
+        }
+
+        before {
+          confirmation_token = '1e243fa1180e32f3ec66a648835d1fbca7912223a487eac36be22b095a01b5a5'
+          Devise.token_generator
+          stub_api_v2(:get, '/users', user, [], { filter: { confirmation_token: confirmation_token } })
+          allow_any_instance_of(Devise::TokenGenerator).to receive(:digest).and_return(confirmation_token)
+          allow_any_instance_of(Devise::TokenGenerator).to receive(:generate).and_return(confirmation_token)
+        }
+
+        let(:file) { file = fixture_file_upload(File.join(File.dirname(File.expand_path(__FILE__)), '../../../../../fixtures/batch-example.csv'), 'text/csv') }
+
+        before { sign_in user }
+        before { subject }
+        it { expect(response).to be_success }
+        it 'does the requests' do
+          stubs.each { |stub| expect(stub).to have_been_requested.at_least_once }
+        end
+      end
     end
   end
 end

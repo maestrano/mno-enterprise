@@ -8,7 +8,6 @@ module MnoEnterprise
                        :geo_tz, :geo_currency, :metadata, :industry, :size,
                        :financial_year_end_month, :credit_card,
                        :financial_metrics, :created_at]
-
     # GET /mnoe/jpi/v1/admin/organizations
     def index
       if params[:terms]
@@ -16,16 +15,16 @@ module MnoEnterprise
         @organizations = []
         JSON.parse(params[:terms]).map do |t|
           @organizations = @organizations | MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
-                                                                       .where(Hash[*t])
+                                              .where(Hash[*t])
         end
         response.headers['X-Total-Count'] = @organizations.count
       else
         # Index mode
         # Explicitly list fields to be retrieved to trigger financial_metrics calculation
         query = MnoEnterprise::Organization
-                .apply_query_params(params)
-                .with_params(_metadata: { act_as_manager: current_user.id })
-                .select(INCLUDED_FIELDS)
+                  .apply_query_params(params)
+                  .with_params(_metadata: { act_as_manager: current_user.id })
+                  .select(INCLUDED_FIELDS)
 
         @organizations = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
@@ -35,10 +34,10 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/admin/organizations/1
     def show
       @organization = MnoEnterprise::Organization.apply_query_params(params)
-                                                 .with_params(_metadata: { act_as_manager: current_user.id })
-                                                 .includes(*DEPENDENCIES)
-                                                 .find(params[:id])
-                                                 .first
+                        .with_params(_metadata: { act_as_manager: current_user.id })
+                        .includes(*DEPENDENCIES)
+                        .find(params[:id])
+                        .first
 
       @organization_active_apps = @organization.app_instances.select(&:active?)
     end
@@ -53,9 +52,9 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/admin/organizations/count
     def count
       organizations_count = MnoEnterprise::TenantReporting.with_params(_metadata: { act_as_manager: current_user.id })
-                                                          .find
-                                                          .first
-                                                          .organizations_count
+                              .find
+                              .first
+                              .organizations_count
       render json: { count: organizations_count }
     end
 
@@ -76,9 +75,9 @@ module MnoEnterprise
     def update
       # get organization
       @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
-                                                 .includes(*DEPENDENCIES)
-                                                 .find(params[:id])
-                                                 .first
+                        .includes(*DEPENDENCIES)
+                        .find(params[:id])
+                        .first
       return render_not_found('Organization') unless @organization
 
       # Update organization
@@ -96,9 +95,9 @@ module MnoEnterprise
     # This does not send any emails (emails are manually triggered later)
     def invite_member
       @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
-                                                 .includes(:orga_relations)
-                                                 .find(params[:id])
-                                                 .first
+                        .includes(:orga_relations)
+                        .find(params[:id])
+                        .first
       return render_not_found('Organization') unless @organization
 
       # Find or create a new user - We create it in the frontend as MnoHub will send confirmation instructions for newly
@@ -147,8 +146,23 @@ module MnoEnterprise
       render 'show'
     end
 
-    protected
+    def download_batch_example
+      path = File.join(File.dirname(File.expand_path(__FILE__)), '../../../../../assets/batch-example.csv')
+      send_file(path, filename: 'batch-example.csv', type: 'application/csv')
+    end
 
+    # POST /mnoe/jpi/v1/admin/organization/batch_import
+    def batch_import
+      file = params[:file]
+      # get the file's temporary path
+      path = file.tempfile.path
+      @import_report = MnoEnterprise::CSVImporter.process(path)
+      render 'batch_import'
+    rescue MnoEnterprise::CSVImportError => e
+      render json: e.errors, status: :bad_request
+    end
+
+    protected
     def organization_permitted_update_params
       [:name, :billing_currency]
     end
@@ -172,7 +186,7 @@ module MnoEnterprise
       # Reset the confirmation field so we can track when the invite is send - #confirmation_sent_at is when the confirmation_token was generated (not sent)
       # Not ideal as we do 2 saves, and the previous save trigger a call to the backend to validate the token uniqueness
       # TODO: See if we can tell Devise to not set the timestamps
-      user.attributes = {confirmation_sent_at: nil, confirmation_token: nil}
+      user.attributes = { confirmation_sent_at: nil, confirmation_token: nil }
       user.save!
       user.load_required(:orga_relations)
     end
@@ -188,3 +202,4 @@ module MnoEnterprise
     end
   end
 end
+
