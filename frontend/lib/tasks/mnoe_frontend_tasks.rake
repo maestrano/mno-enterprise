@@ -23,6 +23,8 @@ namespace :mnoe do
     PKG_FILE = 'package.json'
     # Use bundled gulp
     gulp_cmd = "./node_modules/.bin/gulp"
+    WIREDEP_CMD = "./node_modules/wiredep-cli/wiredep-cli.js"
+    LESSC_CMD = "./node_modules/less/bin/lessc"
 
     ## Helper methods
 
@@ -66,6 +68,61 @@ namespace :mnoe do
       )
     end
 
+    # Equivalent of gulp injector for less files
+    def less_injector(less_file, included = [], excluded = [])
+      main_content = File.read(less_file)
+
+      src_content = Dir.glob(included)
+                .uniq
+                .reject { |e| excluded.include?(e) }
+                .map { |e| File.read(e) }
+
+      main_content = main_content.gsub("// injector\n// endinjector", src_content.join("\n"))
+
+      File.write(less_file, main_content)
+    end
+
+    # Build the previewer stylesheet
+    def build_theme_previewer_src_less(frontend_tmp_folder)
+      src_file = "src/app/index.less"
+      dst_file = "src/theme-previewer.less"
+
+      Dir.chdir(frontend_tmp_folder) do
+        cp src_file, dst_file
+        sh "#{WIREDEP_CMD} --src #{dst_file}"
+
+        # Do not inject these files as they are either
+        # used as template or are the destination file
+        excluded = [src_file, dst_file]
+
+        included = [
+          'src/app/stylesheets/theme.less',
+          'src/app/stylesheets/variables-default.less',
+          'src/app/stylesheets/variables.less',
+          'src/app/stylesheets/theme-previewer-published.less',
+          'src/app/stylesheets/theme-previewer-tmp.less',
+          'src/app/stylesheets/*.less',
+          'src/app/**/*.less',
+          'src/fonts/**/*.less',
+          'src/images/**/*.less'
+        ]
+
+        less_injector(dst_file, included, excluded)
+      end
+    end
+
+    def build_theme_previewer_css(frontend_tmp_folder)
+      src_file = "src/theme-previewer.less"
+      dst_file = "src/theme-previewer.css"
+
+      build_theme_previewer_src_less(frontend_tmp_folder)
+
+      Dir.chdir(frontend_tmp_folder) do
+        sh "#{LESSC_CMD} #{src_file} #{dst_file}"
+        rm_f(src_file)
+      end
+    end
+
     # TODO: refactor this
     # Task optimised for theme previewer environment (skip some steps)
     namespace :previewer do
@@ -80,9 +137,10 @@ namespace :mnoe do
 
         # Reset tmp folder from mno-enterprise-angular source
         rm_rf "#{frontend_tmp_folder}/src"
+        # rm_rf "#{frontend_tmp_folder}/node_modules"
         # rm_rf "#{frontend_tmp_folder}/e2e"
         mkdir_p frontend_tmp_folder
-        cp_r("#{FRONTEND_PKG_FOLDER}/.", "#{frontend_tmp_folder}/")
+        cp_r("#{FRONTEND_PKG_FOLDER}/src", "#{frontend_tmp_folder}/")
 
         # Default variables to avoid breaking the build if there are new variables in the frontend
         mv("#{frontend_tmp_folder}/src/app/stylesheets/variables.less", "#{frontend_tmp_folder}/src/app/stylesheets/variables-default.less")
@@ -96,14 +154,11 @@ namespace :mnoe do
         # Prepare the build folder
         Rake::Task['mnoe:frontend:previewer:prepare_build_folder'].execute
 
-        # Build the previewer stylesheet
-        Dir.chdir(frontend_tmp_folder) do
-          # sh 'yarn install'
-          sh "#{gulp_cmd} theme-previewer"
-        end
+        # Build <frontend_tmp_folder>/src/theme-previewer.less
+        build_theme_previewer_src_less(frontend_tmp_folder)
 
-        # Copy stylesheet to public
-        cp("#{frontend_tmp_folder}/dist/styles/theme-previewer.less","#{frontend_dist_folder}/styles/")
+        # Copy stylesheets to public
+        mv("#{frontend_tmp_folder}/src/theme-previewer.less", "#{frontend_dist_folder}/styles/")
 
         # Copy bower_components to public (used by live previewer)
         # cp_r("#{frontend_tmp_folder}/bower_components", "#{frontend_dist_folder}/")
@@ -122,22 +177,33 @@ namespace :mnoe do
         Rake::Task['mnoe:frontend:previewer:prepare_build_folder'].execute
 
         # Build frontend using Gulp
-        Dir.chdir(frontend_tmp_folder) do
-          # sh 'yarn install'
-          sh gulp_cmd
-          sh "#{gulp_cmd} theme-previewer"
-        end
+        # Dir.chdir(frontend_tmp_folder) do
+        #   # sh 'yarn install'
+        #   sh gulp_cmd
+        #   sh "#{gulp_cmd} theme-previewer"
+        # end
+        # Create <frontend_tmp_folder>/src/theme-previewer.css
+        build_theme_previewer_css(frontend_tmp_folder)
+
+        # Compute file checksum and generate unique name
+        digest = Digest::SHA1.hexdigest(File.read("#{frontend_tmp_folder}/src/theme-previewer.css"))
+        css_file = "app-#{digest}.css"
 
         # Ensure distribution folder exists
         mkdir_p frontend_dist_folder
 
         # Cleanup previously compiled files
-        Dir.glob("#{frontend_dist_folder}/{styles,scripts}/*.{css,js}").each do |f|
+        Dir.glob("#{frontend_dist_folder}/styles/app-*.css").each do |f|
           rm_f f
         end
 
-        # Copy assets to public
-        cp_r("#{frontend_tmp_folder}/dist/.","#{frontend_dist_folder}/")
+        # Copy new stylesheet to public
+        mv("#{frontend_tmp_folder}/src/theme-previewer.css", "#{frontend_dist_folder}/styles/#{css_file}")
+
+        # Update reference in index.html
+        index_html_file = "#{frontend_dist_folder}/index.html"
+        index_content = File.read(index_html_file).gsub(/styles\/app-\w+.css/, "styles/#{css_file}")
+        File.write(index_html_file, index_content)
 
         # Copy bower_components to public (used by live previewer)
         # cp_r("#{frontend_tmp_folder}/bower_components","#{frontend_dist_folder}/")
@@ -161,7 +227,8 @@ namespace :mnoe do
     file PKG_FILE do
       # Binding values for the templates
       app_name = Rails.root.basename
-      mnoe_angular_pkg = "git+https://git@github.com/maestrano/mno-enterprise-angular.git##{MNOE_ANGULAR_VERSION}"
+      #mnoe_angular_pkg = "git+https://git@github.com/maestrano/mno-enterprise-angular.git##{MNOE_ANGULAR_VERSION}"
+      mnoe_angular_pkg = '../mno-enterprise-angular'
       impac_angular_pkg = "git+https://git@github.com/maestrano/impac-angular.git##{IMPAC_ANGULAR_VERSION}"
 
       render_template(
@@ -306,7 +373,7 @@ namespace :mnoe do
       cp("#{frontend_tmp_folder}/dist/styles/theme-previewer.less","#{frontend_dist_folder}/styles/")
 
       # Copy bower_components to public (used by live previewer)
-      cp_r("#{frontend_tmp_folder}/bower_components", "#{frontend_dist_folder}/")
+      cp_r("#{frontend_tmp_folder}/bower_components","#{frontend_dist_folder}/")
 
       # Generates locales
       Rake::Task['mnoe:locales:generate'].invoke
