@@ -7,9 +7,9 @@ Title: <%= @info[:title] %>
 Content: <%= @info[:content] %>
 <% if @info[:due_date] %>
 Due date: <%= @info[:due_date].to_date %>
-<% else %>
-Due date: No due date specified
 <% end %>
+
+You can access this message in your inbox: @info[:inbox_link]
 
 Thank you,
 

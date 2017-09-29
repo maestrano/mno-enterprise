@@ -188,11 +188,16 @@ module MnoEnterprise
               first_name: user.name,
               title: task.title,
               content: task.message,
-              due_date: task.due_date
+              due_date: task.due_date,
+              organization_name: 'organization_name',
+              inbox_link: 'inbox_link'
+            },
+            {
+              subject: "Task: #{task[:title]}"
             }
         )
 
-        subject.task_notification(user, task).deliver_now
+        subject.task_notification(user, task, 'inbox_link', 'organization_name').deliver_now
       end
     end
   end
