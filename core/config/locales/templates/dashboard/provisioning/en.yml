@@ -43,7 +43,7 @@ en:
             date: "Date"
             end_date: "End date"
             status: "Status"
-            mount: "Amount"
+            amount: "Amount"
             provisioning_data: "Provisioning data"
             custom_data: "Custom data"
           subscriptions:
