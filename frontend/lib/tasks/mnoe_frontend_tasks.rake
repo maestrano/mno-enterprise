@@ -127,6 +127,10 @@ namespace :mnoe do
         # The 'injector' tag in the file gets replaced by the
         # content of the files above
         less_injector(dst_file, included, excluded)
+
+        # Adjust path to bower_components
+        content = File.read(dst_file).gsub('../../bower_components', '../bower_components')
+        File.write(dst_file, content)
       end
 
       return dst_file
