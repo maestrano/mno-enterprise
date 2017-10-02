@@ -13,3 +13,9 @@ angular.module('mnoEnterprise.configuration', [])
   .constant('INTERCOM_ID', <%= MnoEnterprise.intercom_app_id.to_json.html_safe %>)
   .constant('APP_NAME', <%= MnoEnterprise.app_name.to_json.html_safe %>)
   .constant('URL_CONFIG', <%= Hash(Settings.url_config).to_json.html_safe %>)
+  .constant('DEVISE_CONFIG', {
+    registerable: <%= @devise_mapping.registerable? %>,
+    recoverable: <%= @devise_mapping.recoverable? && MnoEnterprise.style.devise.forgot_password_link_shown %>,
+    confirmable: <%= @devise_mapping.confirmable? && MnoEnterprise.style.devise.confirmation_link_shown %>,
+    lockable: <%= @devise_mapping.lockable? && MnoEnterprise.style.devise.unlock_link_shown %>
+  })
