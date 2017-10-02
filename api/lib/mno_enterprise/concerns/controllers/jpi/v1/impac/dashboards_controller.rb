@@ -102,7 +102,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
 
     def dashboards
       # TODO: [APIv2] Improve filtering by owner (owner_type?)
-      @dashboards ||= MnoEnterprise::Dashboard.includes(*DASHBOARD_DEPENDENCIES).find(owner_id: current_user.id)
+      @dashboards ||= MnoEnterprise::Dashboard.select(:name, :organization_ids, :currency).find(owner_id: current_user.id)
     end
 
     def templates

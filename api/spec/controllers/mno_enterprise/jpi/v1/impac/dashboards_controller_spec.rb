@@ -88,14 +88,15 @@ module MnoEnterprise
       subject { get :index }
 
       before do
-        stub_api_v2(:get, "/dashboards", [dashboard], dashboard_dependencies, {filter: {owner_id: user.id}})
+        stub_api_v2(:get, "/dashboards", [dashboard],[], {filter: {owner_id: user.id}, fields: {dashboards: 'name,organization_ids,currency'}})
       end
 
       it_behaves_like "jpi v1 protected action"
 
+
       it 'returns a list of dashboards' do
         subject
-        expect(JSON.parse(response.body)).to eq([hash_for_dashboard])
+        expect(JSON.parse(response.body)).to eq([{"id"=>dashboard.id, "name"=>dashboard.name, "full_name"=>dashboard.full_name, "currency"=>dashboard.currency, "data_sources"=>[{ "id" => org.id, "uid" => org.uid, "label" => org.name}]}])
       end
     end
 
