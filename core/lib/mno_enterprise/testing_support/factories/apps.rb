@@ -23,7 +23,9 @@ FactoryGirl.define do
     stack 'cube'
     terms_url "http://opensource.org/licenses/MIT"
     support_url "http://example.com/su  pport"
+    metadata_url nil
     getting_started "Let's get started"
+    details nil
     appinfo { {} }
     average_rating { rand(1..5) }
     sequence(:rank) { |n| n }
