@@ -33,7 +33,7 @@ FactoryGirl.define do
     pricing_plans { {
       'default' => [{name: 'Monthly Plan', price: '20.0', currency: 'AUD', factor: '/month'}]
     } }
-    shared_entities { [] }
+    app_shared_entities { [] }
     pictures []
     subcategories []
     trait :cloud do

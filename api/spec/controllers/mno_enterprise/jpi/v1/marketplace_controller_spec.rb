@@ -2,15 +2,15 @@ require 'rails_helper'
 
 module MnoEnterprise
   describe MnoEnterprise::Jpi::V1::MarketplaceController, type: :controller do
-    # TODO: Re-enable Specs
-    before { skip }
-
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
     before { Rails.cache.clear }
 
+    DEPENDENCIES = [:app_shared_entities, :'app_shared_entities.shared_entity']
+
     let!(:app) { build(:app) }
+    let(:tenant) { build(:tenant) }
 
     def markdown(text)
       return text unless text.present?
@@ -41,7 +41,7 @@ module MnoEnterprise
         'pricing_plans' => app.pricing_plans,
         'rank' => app.rank,
         'support_url' => app.support_url,
-        'key_workflows'  => app.key_workflows,
+        'key_workflows' => app.key_workflows,
         'key_features' => app.key_features,
         'multi_instantiable' => app.multi_instantiable,
         'subcategories' => app.subcategories,
@@ -75,8 +75,9 @@ module MnoEnterprise
       subject { get :index }
 
       before do
-        stub_api_v2(:get, '/apps', [app], [])
-        stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page:{number: 1, size: 1}, sort: '-updated_at'})
+        stub_api_v2(:get, '/tenant', tenant)
+        stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { filter: { active: true } })
+        stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
       end
 
       it { is_expected.to be_success }
@@ -87,12 +88,12 @@ module MnoEnterprise
       end
 
       context 'with multiple apps' do
-        let(:app1) { build(:app, rank: 5 ) }
-        let(:app2) { build(:app, rank: 0 ) }
+        let(:app1) { build(:app, rank: 5) }
+        let(:app2) { build(:app, rank: 0) }
 
         before do
-          stub_api_v2(:get, '/apps', [app1, app2], [])
-          stub_api_v2(:get, '/apps', [app], [:app_shared_entities, {app_shared_entities: :shared_entity}], { fields: { apps: 'updated_at' }, page:{number: 1, size: 1}, sort: '-updated_at'})
+          stub_api_v2(:get, '/apps', [app1, app2], DEPENDENCIES, { filter: { active: true } })
+          stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
         end
 
         it 'returns the apps in the correct order' do
@@ -102,13 +103,18 @@ module MnoEnterprise
       end
 
       context 'when multiples apps and a nil rank' do
-        let(:app1) { build(:app, rank: 5 ) }
-        let(:app2) { build(:app, rank: 0 ) }
-        let(:app3) { build(:app, rank: nil ) }
+        let(:app1) { build(:app, rank: 5) }
+        let(:app2) { build(:app, rank: 0) }
+        let(:app3) { build(:app, rank: nil) }
 
         before do
-          stub_api_v2(:get, '/apps', [app1, app3, app2])
-          stub_api_v2(:get, '/apps', [app1], [:app_shared_entities, {app_shared_entities: :shared_entity}], { fields: { apps: 'updated_at' }, page:{number: 1, size: 1}, sort: '-updated_at'})
+          stub_api_v2(:get, '/apps', [app1, app3, app2], DEPENDENCIES, { filter: { active: true } })
+          stub_api_v2(:get, '/apps', [app1], [],
+                      {
+                        fields: { apps: 'updated_at' },
+                        page: { number: 1, size: 1 },
+                        sort: '-updated_at'
+                      })
         end
 
         it 'returns the apps in the correct order' do
@@ -117,86 +123,52 @@ module MnoEnterprise
         end
       end
 
-      # TODO: un-comment and test after global skip has been removed
-      # context 'with organization_id' do
-      #   subject { get :index, organization_id: organization.id }
-      #
-      #   let!(:user) { build(:user) }
-      #   let!(:current_user_stub) { stub_user(user) }
-      #
-      #   before { sign_in user }
-      #   before { stub_api_v2(:get, "/organizations", [organization], [], { fields: 'id', filter: { 'users.id' => user.id }}) }
-      #   before { stub_api_v2(:get, '/apps', [app], [], { _metadata: { organization_id: organization.id } }) }
-      #   before do
-      #     stub_api_v2(:get, '/apps', [app], [],
-      #       { _metadata: { organization_id: organization.id }, fields: { apps: 'updated_at' }, page:{ number: 1, size: 1 }, sort: '-updated_at'})
-      #   end
-      #
-      #   it { is_expected.to be_success }
-      # end
+      context 'with organization_id' do
+        subject { get :index, organization_id: organization.id }
+        let!(:organization) { build(:organization) }
+        let!(:user) { build(:user) }
+        let!(:current_user_stub) { stub_user(user) }
+
+        before { sign_in user }
+        before { stub_api_v2(:get, "/organizations", [organization], [], { fields: { organizations: 'id' }, filter: { id: organization.id, 'users.id' => user.id }, page: { number: 1, size: 1 } }) }
+        before { stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true } }) }
+        before do
+          stub_api_v2(:get, '/apps', [app], [],
+                      {
+                        _metadata: { organization_id: organization.id },
+                        fields: { apps: 'updated_at' },
+                        page: { number: 1, size: 1 },
+                        sort: '-updated_at'
+                      }
+          )
+        end
+
+        it { is_expected.to be_success }
+      end
 
       describe 'caching' do
         context 'on the first request' do
           it { is_expected.to have_http_status(:ok) }
-
           it 'sets the correct cache headers' do
             subject
             header = response.headers['Last-Modified']
-
             expect(header).to be_present
-
             # Parse and serialise to get correct format and avoid ms difference
             expect(Time.rfc822(header).in_time_zone.to_s).to eq(app.updated_at.to_s)
-
           end
         end
-
-        context 'on a subsequent request'  do
-
+        context 'on a subsequent request' do
           before do
             request.env['HTTP_IF_MODIFIED_SINCE'] = last_modified.rfc2822
           end
-
           context 'if it is not stale' do
             # Can't be based on the previous request due to parsing and rounding issues with ms
             let(:last_modified) { app.updated_at + 10.minutes }
             it { is_expected.to have_http_status(:not_modified) }
           end
-
           context 'if it is stale' do
             let(:last_modified) { app.updated_at - 10.minutes }
             it { is_expected.to have_http_status(:ok) }
-          end
-        end
-      end
-
-      context 'without apps' do
-        before do
-          MnoEnterprise.marketplace_listing = nil
-          api_stub_for(get: '/apps', response: from_api([]))
-        end
-
-        it { is_expected.to have_http_status(:ok) }
-
-        it 'does not set last modified header' do
-          subject
-          header = response.headers['Last-Modified']
-
-          expect(header).not_to be_present
-        end
-
-        context 'with a if-modified-since header' do
-          before do
-            request.env['HTTP_IF_MODIFIED_SINCE'] = Time.current.rfc2822
-          end
-
-          it { is_expected.to have_http_status(:ok) }
-
-          it 'does not set last modified header' do
-            subject
-            header = response.headers['Last-Modified']
-
-            expect(header).not_to be_present
           end
         end
       end
