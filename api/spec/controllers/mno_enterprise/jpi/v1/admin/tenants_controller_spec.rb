@@ -10,7 +10,7 @@ module MnoEnterprise
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
     let(:tenant) { build(:tenant,  domain: 'tenant.domain.test')}
-    let(:user) { FactoryGirl.build(:user, :admin) }
+    let(:user) { build(:user, :admin) }
 
     before do
       stub_user(user)
