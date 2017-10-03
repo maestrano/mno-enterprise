@@ -23,6 +23,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::UserAccessRequestsControll
 
   # POST /mnoe/jpi/v1/user_access_requests
   def create
+    MnoEnterprise::UserAccessRequest.notify_pending_requests(current_user, params.require(:access_duration))
     @user_access_request = MnoEnterprise::UserAccessRequest.new(create_params)
     @user_access_request.relationships.user = current_user
     @user_access_request.save

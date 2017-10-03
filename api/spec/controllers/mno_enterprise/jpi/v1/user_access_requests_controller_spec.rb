@@ -22,15 +22,42 @@ module MnoEnterprise
     let!(:current_user_stub) { stub_user(user) }
     let(:user_access_request) { build(:user_access_request) }
     let(:message_delivery) { instance_double(ActionMailer::MessageDelivery) }
-    let!(:user) { build(:user) }
+    let!(:user) { build(:user, user_access_requests: []) }
     before { sign_in user }
     #===============================================
     # Specs
     #===============================================
     describe 'GET #index' do
-      before { stub_api_v2(:get, "/user_access_requests", [user_access_request], [:requester], { filter: { user_id: user.id, status: 'requested' , 'created_at.gt': MnoEnterprise::UserAccessRequest::EXPIRATION_TIMEOUT.ago} }) }
+      before { stub_api_v2(:get, "/user_access_requests", [user_access_request], [:requester], { filter: { user_id: user.id, status: 'requested', 'created_at.gt': MnoEnterprise::UserAccessRequest::EXPIRATION_TIMEOUT.ago } }) }
       subject { get :index }
       it_behaves_like 'jpi v1 protected action'
+    end
+
+    describe 'POST #create' do
+      before { stub_audit_events }
+      let!(:stubs) {
+        [
+          stub_api_v2(:post, "/user_access_requests", user_access_request),
+          stub_api_v2(:get, "/users/#{user.id}", user, [:user_access_requests, :'user_access_requests.requester']),
+          stub_api_v2(:get, "/user_access_requests/#{user_access_request.id}", user_access_request, [:requester])
+        ]
+      }
+      subject { post :create, access_duration: 'UNTIL_REVOKED' }
+      it_behaves_like 'jpi v1 protected action'
+
+      context 'with existing pending requests' do
+        let(:requester){build(:user)}
+        let(:existing_user_access_request) { build(:user_access_request, requester: requester) }
+        let!(:user) { build(:user, user_access_requests: [existing_user_access_request]) }
+        before do
+          stub_api_v2(:get, "/users/#{user.id}", user)
+          stub_api_v2(:get, "/users/#{requester.id}", requester)
+          expect(SystemNotificationMailer).to receive(:access_approved_all).with(user.id, requester.id, 'UNTIL_REVOKED' ) { message_delivery }
+          expect(message_delivery).to receive(:deliver_later).with(no_args)
+        end
+        let!(:stub) { stub_api_v2(:delete, "/user_access_requests/#{existing_user_access_request.id}") }
+        it {subject; expect(stub).to have_been_requested }
+      end
     end
 
     describe 'PUT #deny' do

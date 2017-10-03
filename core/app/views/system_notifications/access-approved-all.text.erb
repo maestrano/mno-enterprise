@@ -1,0 +1,13 @@
+Hi <%= @info[:first_name] %>,
+=================================================================
+<%= @info[:requested_first_name] %> <%= @info[:requested_last_name] %> have changed their setting to allow access to their account.
+
+<% if @info[:access_duration] == 'UNTIL_REVOKED' %>
+    You will have access to their account until they revoke the access.
+<% else %>
+    You will have access to their account for the next 24 hours. If after that period, you need further access, a second access request will need to be generated.
+<% end %>
+
+
+Regards
+The Marketplace team

@@ -30,6 +30,20 @@ module MnoEnterprise
       includes(:requester).where('requester_id.none' => true, user_id: user_id, status: 'approved').order(created_at: :desc).first
     end
 
+    def self.notify_pending_requests(user, access_duration)
+      user = user.load_required(:user_access_requests, :'user_access_requests.requester')
+      user.user_access_requests.each do |request|
+        # Notify the admin that the access is now granted for the user and delete the request
+        if request.status == 'requested'
+          if request.requester
+            MnoEnterprise::SystemNotificationMailer.access_approved_all(user.id, request.requester.id, access_duration).deliver_later
+          end
+          request.destroy
+        end
+      end
+    end
+
+
     def to_audit_event
       { id: id, user_id: user_id, requester_id: requester_id , status: status}
     end

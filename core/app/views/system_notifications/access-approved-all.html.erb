@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>
+  <%= stylesheet_link_tag('mno_enterprise/mail.css') %>
+</head>
+<body>
+<p class="header">
+  <%= image_tag('mno_enterprise/main-logo.png') %>
+</p>
+
+<p>Hi <%= @info[:first_name] %>,</p>
+
+<p><%= @info[:requested_first_name] %> <%= @info[:requested_last_name] %> have changed their setting to allow access to
+  their account.</p>
+
+
+<% if @info[:access_duration] == 'UNTIL_REVOKED' %>
+    <p>You will have access to their account until they revoke the access.</p>
+<% else %>
+    <p>You will have access to their account for the next 24 hours. If after that period, you need further access, a
+      second access request will need to be generated.</p>
+<% end %>
+
+
+<p>
+  Regards,<br/>
+  The Marketplace team
+</p>
+
+<p class="footer">
+  <%= @info[:company] %>
+</p>
+</body>
+</html>
