@@ -163,9 +163,9 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     )
   end
 
-  def task_notification(recipient, task, inbox_link, organization_name = nil)
-    subject = %Q(Task notification: "#{task[:title]}")
-    subject += " from #{organization_name}" if organization_name
+  def task_notification(from, recipient, task, inbox_link, organization_name = nil)
+    subject = %Q(Task notification: "#{task[:title]}" from #{from.name} #{from.surname})
+    subject += " (#{organization_name})" if organization_name
     MnoEnterprise::MailClient.deliver(
       'task-notification',
       default_sender,
