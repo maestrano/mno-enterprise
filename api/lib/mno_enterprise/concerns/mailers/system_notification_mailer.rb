@@ -164,6 +164,8 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   end
 
   def task_notification(recipient, task, inbox_link, organization_name = nil)
+    subject = %Q(Task notification: "#{task[:title]}")
+    subject += " from #{organization_name}" if organization_name
     MnoEnterprise::MailClient.deliver(
       'task-notification',
       default_sender,
@@ -177,7 +179,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
         inbox_link: inbox_link
       },
       {
-        subject: "Task: #{task[:title]}"
+        subject: subject
       }
     )
   end

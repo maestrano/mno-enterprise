@@ -193,7 +193,7 @@ module MnoEnterprise
               inbox_link: 'inbox_link'
             },
             {
-              subject: "Task: #{task[:title]}"
+              subject: "Task notification: \"#{task[:title]}\" from organization_name"
             }
         )
 
