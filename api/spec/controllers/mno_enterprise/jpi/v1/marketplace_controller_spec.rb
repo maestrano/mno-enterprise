@@ -10,7 +10,7 @@ module MnoEnterprise
     DEPENDENCIES = [:app_shared_entities, :'app_shared_entities.shared_entity']
 
     let!(:app) { build(:app) }
-    let(:tenant) { build(:tenant) }
+    let(:tenant) { build(:tenant, updated_at: 2.days.ago) }
 
     def markdown(text)
       return text unless text.present?

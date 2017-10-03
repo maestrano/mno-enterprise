@@ -4,7 +4,5 @@ FactoryGirl.define do
     sequence(:name) { |n| "Tenant#{n}" }
     domain 'tenant.domain.test'
     frontend_config { {} }
-    created_at 2.days.ago
-    updated_at 2.days.ago
   end
 end
