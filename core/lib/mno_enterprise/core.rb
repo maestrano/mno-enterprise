@@ -8,19 +8,7 @@ require 'cancancan'
 require 'devise'
 require 'devise/strategies/remote_authenticatable'
 require 'devise_extension'
-require "her"
-require "her_extension/her_orm_adapter"
-require "her_extension/model/orm"
-require "her_extension/model/relation"
-require "her_extension/model/attributes"
-require "her_extension/model/parse"
-require "her_extension/model/associations/association"
-require "her_extension/model/associations/association_proxy"
-require "her_extension/model/associations/has_many_association"
-require "her_extension/model/associations/belongs_to_association"
-require "her_extension/middleware/mnoe_api_v1_parse_json"
-require "her_extension/middleware/mnoe_raise_error"
-require "faraday_middleware"
+require "active_model"
 require "httparty"
 require "json_api_client"
 require "json_api_client_extension/json_api_client_orm_adapter"
@@ -255,7 +243,7 @@ module MnoEnterprise
   def self.configure
     yield self
     self.configure_styleguide
-    self.configure_api
+    # self.configure_api
 
     # Mail config
     # We can't use the setter before MailClient is loaded
@@ -298,33 +286,10 @@ module MnoEnterprise
       @@styleguide.is_a?(Hash) && hash.deep_merge!(@@styleguide)
       @@style = DeepStruct.wrap(hash)
     end
-
-    # Configure the Her for Maestrano Enterprise API V1
-    def self.configure_api
-      # Configure HER for Maestrano Enterprise Endpoints
-      @@mnoe_api_v1 = Her::API.new
-      @@mnoe_api_v1.setup self.api_options  do |c|
-        # Request
-        c.use Faraday::Request::BasicAuthentication, @@tenant_id, @@tenant_key
-        # c.use Faraday::Request::UrlEncoded
-        c.request :json
-
-        # Instrumentation in development
-        c.use :instrumentation if Rails.env.development?
-
-        # Response
-        c.use Her::Middleware::MnoeApiV1ParseJson
-
-        # Adapter
-        c.use Faraday::Adapter::NetHttpNoProxy
-
-        # Error Handling
-        c.use Her::Middleware::MnoeRaiseError
-      end
-    end
 end
 
 # Instrumentation in development
+# TODO: remove and implement similar for APIv2
 ActiveSupport::Notifications.subscribe('request.faraday') do |name, starts, ends, _, env|
   url = env[:url]
   http_method = env[:method].to_s.upcase

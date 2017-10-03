@@ -46,9 +46,11 @@ module MnoEnterpriseApiTestHelper
   # Reset all API stubs.
   # Called before each test (see spec_helper)
   def api_stub_reset
+    ActiveSupport::Deprecation.warn('HER#api_stub_reset is now deprecated!', caller)
     @_api_stub = nil
     @_stub_list = {}
-    api_stub_configure(Her::API.new)
+    #
+    # api_stub_configure(Her::API.new)
   end
 
   # Example usage:
@@ -218,10 +220,12 @@ module MnoEnterpriseApiTestHelper
 
     # Set a stub api on the provider class
     def set_api_stub
-      return @_api_stub if @_api_stub
-      @_api_stub = Her::API.new
-      allow(MnoEnterprise::BaseResource).to receive(:her_api).and_return(@_api_stub = Her::API.new)
-      @_api_stub
+      ActiveSupport::Deprecation.warn('HER#set_api_stub is now deprecated!', caller)
+      nil
+      # return @_api_stub if @_api_stub
+      # @_api_stub = Her::API.new
+      # allow(MnoEnterprise::BaseResource).to receive(:her_api).and_return(@_api_stub = Her::API.new)
+      # @_api_stub
     end
 
     # Add a stub to the api
@@ -270,53 +274,6 @@ module MnoEnterpriseApiTestHelper
 
     # Configure the api and apply a list of stubs
     def api_stub_configure(api)
-      # This block should match the her.rb initializer
-      api.setup MnoEnterprise.send(:api_options).merge(url: "http://localhost:65000") do |c|
-        # Request
-        c.use Faraday::Request::BasicAuthentication, MnoEnterprise.tenant_id, MnoEnterprise.tenant_key
-        c.use Faraday::Request::UrlEncoded
-
-        # Response
-        c.use Her::Middleware::MnoeApiV1ParseJson
-        c.use Her::Middleware::MnoeRaiseError
-
-        # Add stubs on the test adapter
-        c.use MnoeFaradayTestAdapter do |receiver|
-          @_stub_list.each do |key,stub|
-            params = stub[:params] && stub[:params].any? ? "?#{stub[:params].to_param}" : ""
-            path = "#{stub[:path]}#{params}"
-
-            receiver.send(stub[:method] || :get,path) { |env|
-              body = Rack::Utils.parse_nested_query(env.body)
-
-              # respond_with takes a model in argument and automatically responds with
-              # a json representation of the model
-              # If the action is an update, it attempts to update the model
-              if model = stub[:respond_with]
-                model.assign_attributes(body['data']) if stub[:method] == :put && model.respond_to?(:assign_attributes) && body['data']
-                resp = from_api(model)
-              else
-                if stub[:response].is_a?(Proc)
-                  args = stub[:response].arity > 0 ? [body] : []
-                  resp = stub[:response].call(*args)
-                else
-                  resp = stub[:response] || {}
-                end
-              end
-
-              # Response code
-              if stub[:code].is_a?(Proc)
-                args = stub[:code].arity > 0 ? [body] : []
-                resp_code = stub[:code].call(*args)
-              else
-                resp_code = stub[:code] || 200
-              end
-
-
-              [resp_code, {}, resp.to_json]
-            }
-          end
-        end
-      end
+      ActiveSupport::Deprecation.warn('HER#api_stub_configure is now deprecated!', caller)
     end
 end

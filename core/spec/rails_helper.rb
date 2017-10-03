@@ -6,7 +6,6 @@ require 'fakeweb'
 require 'webmock/rspec'
 
 require 'spec_helper'
-require 'her'
 require 'factory_girl_rails'
 require 'shoulda/matchers'
 
@@ -57,11 +56,6 @@ RSpec.configure do |config|
 
   # Include devise tests
   config.include Devise::TestHelpers, type: :controller
-
-  # Reset API stubs before each step
-  config.before :each do
-    api_stub_reset
-  end
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and

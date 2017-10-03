@@ -1,8 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
-require 'her'
 require 'factory_girl_rails'
+# TODO: choose between fakeweb or webmock!!!
 require 'fakeweb'
 require 'webmock/rspec'
 require 'mno_enterprise/testing_support/user_action_shared'
@@ -60,11 +60,6 @@ RSpec.configure do |config|
 
   # Include devise tests
   config.include Devise::TestHelpers, type: :controller
-
-  # Reset API stubs before each step
-  config.before :each do
-    api_stub_reset
-  end
 
   config.before(:suite) do
     FakeWeb.allow_net_connect = false
