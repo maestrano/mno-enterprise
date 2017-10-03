@@ -13,3 +13,9 @@ You can access this message in your inbox: @info[:inbox_link]
 
 Thank you,
 
+<% if @info[:organization_name]  %>
+    <%= @info[:organization_name] %>
+<% else %>
+    <%= @info[:company] %>
+<% end %>
+
