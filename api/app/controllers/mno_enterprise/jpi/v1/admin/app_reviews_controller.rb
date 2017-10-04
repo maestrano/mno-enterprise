@@ -16,7 +16,7 @@ module MnoEnterprise
     # PATCH /mnoe/jpi/v1/admin/app_reviews/1
     def update
       @app_review = MnoEnterprise::Review.find_one(params[:id])
-      @app_review.update(app_review_params)
+      @app_review.update!(app_review_params)
       render :show
     end
 

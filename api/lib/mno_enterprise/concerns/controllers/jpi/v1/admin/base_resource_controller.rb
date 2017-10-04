@@ -32,7 +32,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
     false
   end
 
-  def render_not_found(resource, id = params[:id])
+  def render_not_found(resource = controller_name.singularize, id = params[:id])
     render json: { errors: {message: "#{resource.titleize} not found (id=#{id})", code: 404, params: params} }, status: :not_found
   end
 

@@ -20,32 +20,24 @@ module MnoEnterprise
 
     # POST /mnoe/jpi/v1/admin/sub_tenants
     def create
-      @sub_tenant = MnoEnterprise::SubTenant.create(sub_tenant_params)
-      if @sub_tenant.errors.empty?
-        render :show
-      else
-        render json: @sub_tenant.errors.full_messages, status: :bad_request
-      end
+      @sub_tenant = MnoEnterprise::SubTenant.create!(sub_tenant_params)
+      render :show
     end
 
     # PATCH /mnoe/jpi/v1/admin/sub_tenant/:id
     def update
       @sub_tenant = MnoEnterprise::SubTenant.find_one(params[:id])
-      @sub_tenant.update(sub_tenant_params)
-      if @sub_tenant.errors.empty?
-        @sub_tenant = @sub_tenant.load_required(:clients, :account_managers)
-        @sub_tenant_clients = @sub_tenant.clients
-        @sub_tenant_account_managers = @sub_tenant.account_managers
-        render :show
-      else
-        render json: @sub_tenant.errors.full_messages, status: :bad_request
-      end
+      @sub_tenant.update!(sub_tenant_params)
+      @sub_tenant = @sub_tenant.load_required(:clients, :account_managers)
+      @sub_tenant_clients = @sub_tenant.clients
+      @sub_tenant_account_managers = @sub_tenant.account_managers
+      render :show
     end
 
     # DELETE /mnoe/jpi/v1/admin/sub_tenant/1
     def destroy
       @sub_tenant = MnoEnterprise::SubTenant.find_one(params[:id])
-      @sub_tenant.destroy
+      @sub_tenant.destroy!
       head :no_content
     end
 

@@ -14,9 +14,9 @@ module MnoEnterprise
       end
     end
 
-    describe '#cancel!' do
+    describe '#decline!' do
       let(:orga_invite) { FactoryGirl.build(:orga_invite) }
-      subject { orga_invite.cancel! }
+      subject { orga_invite.decline! }
 
       before { stub_api_v2(:patch, "/orga_invites/#{orga_invite.id}/decline", orga_invite) }
 

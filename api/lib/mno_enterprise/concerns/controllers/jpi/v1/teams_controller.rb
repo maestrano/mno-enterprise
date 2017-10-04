@@ -29,9 +29,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   def create
     authorize! :manage_teams, parent_organization
     @team = MnoEnterprise::Team.create(create_params)
-
     MnoEnterprise::EventLogger.info('team_add', current_user.id, 'Team created', @team) if @team
-
     render 'show'
   end
 
@@ -40,7 +38,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
     @team = MnoEnterprise::Team.find_one(params[:id], :organization)
     @parent_organization = MnoEnterprise::Organization.find_one(@team.organization.id, :orga_relations)
     authorize! :manage_teams, @parent_organization
-    @team.update_attributes(update_params)
+    @team.update_attributes!(update_params)
     # # Update permissions
     if params[:team] && params[:team][:app_instances]
       list = params[:team][:app_instances].select { |e| e != {} }
@@ -65,7 +63,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
     @team = MnoEnterprise::Team.find_one(params[:id], :organization)
     authorize! :manage_teams, @team.organization
     MnoEnterprise::EventLogger.info('team_delete', current_user.id, 'Team deleted', @team) if @team
-    @team.destroy
+    @team.destroy!
     head :no_content
   end
 
@@ -85,11 +83,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
                    when :remove_user
                      @team.user_ids - id_list
                  end
-      @team.update_attributes(user_ids: user_ids)
+      @team.update_attributes!(user_ids: user_ids)
       MnoEnterprise::EventLogger.info('team_update', current_user.id, 'Team composition updated', @team,
                                       {action: action.to_s, user_ids: user_ids})
     end
-    @team = MnoEnterprise::Team.find_one(params[:id], :organization, :users, :app_instances)
+    @team = @team.load_required(:organization, :users, :app_instances)
     @parent_organization = MnoEnterprise::Organization.find_one(@team.organization.id, :orga_relations)
     render 'show'
   end

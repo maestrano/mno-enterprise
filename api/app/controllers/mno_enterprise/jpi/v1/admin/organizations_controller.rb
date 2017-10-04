@@ -61,7 +61,7 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/admin/organizations
     def create
       # Create new organization
-      @organization = MnoEnterprise::Organization.create(organization_update_params)
+      @organization = MnoEnterprise::Organization.create!(organization_update_params)
       @organization = @organization.load_required(*DEPENDENCIES)
       # OPTIMIZE: move this into a delayed job?
       update_app_list
@@ -81,7 +81,7 @@ module MnoEnterprise
       return render_not_found('Organization') unless @organization
 
       # Update organization
-      @organization.update(organization_update_params)
+      @organization.update!(organization_update_params)
 
       update_app_list
       @organization = @organization.load_required(*DEPENDENCIES)
@@ -105,7 +105,7 @@ module MnoEnterprise
       user = MnoEnterprise::User.includes(:orga_relations).where(email: user_params[:email]).first || create_unconfirmed_user(user_params)
 
       # Create the invitation
-      invite = MnoEnterprise::OrgaInvite.create(
+      invite = MnoEnterprise::OrgaInvite.create!(
         organization_id: @organization.id,
         user_email: user.email,
         user_role: params[:user][:role],
@@ -124,10 +124,7 @@ module MnoEnterprise
                                                  .first
       return render_not_found('Organization') unless @organization
 
-      last_result_set = @organization.freeze
-      updated = last_result_set.first
-      @organization.attributes = updated.attributes
-
+      @organization.freeze!
       render 'show'
     end
 
@@ -139,9 +136,7 @@ module MnoEnterprise
                                                  .first
       return render_not_found('Organization') unless @organization
 
-      last_result_set = @organization.unfreeze
-      updated = last_result_set.first
-      @organization.attributes = updated.attributes
+      @organization.unfreeze!
 
       render 'show'
     end

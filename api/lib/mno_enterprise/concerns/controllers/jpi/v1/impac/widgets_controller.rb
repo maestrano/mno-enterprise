@@ -23,28 +23,21 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   # POST /mnoe/jpi/v1/impac/dashboards/:id/widgets
   #  -> POST /api/mnoe/v1/dashboards/:id/widgets
   def create
-    @widget = MnoEnterprise::Widget.create(widget_create_params)
-    if @widget.errors.empty?
-      MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Widget Creation', @widget)
-      @nocontent = true # no data fetch from Connec!
-      render 'show'
-    else
-      render_bad_request('create widget', @widget.errors)
-    end
+    @widget = MnoEnterprise::Widget.create!(widget_create_params)
+    MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Widget Creation', @widget)
+    @nocontent = true # no data fetch from Connec!
+    render 'show'
   end
 
   # PUT /mnoe/jpi/v1/impac/widgets/:id
   #   -> PUT /api/mnoe/v1/widgets/:id
   def update
     return render_not_found('widget') unless widget
-    widget.update(widget_update_params)
-    if widget.errors.empty?
-      MnoEnterprise::EventLogger.info('widget_update', current_user.id, 'Widget Update', widget, {widget_action: params[:widget]})
-      @nocontent = !params['metadata']
-      render 'show'
-    else
-      render_bad_request('update widget', widget.errors)
-    end
+    widget.update_attributes!(widget_update_params)
+    MnoEnterprise::EventLogger.info('widget_update', current_user.id, 'Widget Update', widget, {widget_action: params[:widget]})
+    @nocontent = !params['metadata']
+    render 'show'
+
   end
 
   # DELETE /mnoe/jpi/v1/impac/widgets/:id
@@ -52,12 +45,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   def destroy
     return render_not_found('widget') unless widget
     MnoEnterprise::EventLogger.info('widget_delete', current_user.id, 'Widget Deletion', widget)
-    widget.destroy
-    if widget.errors.empty?
-      head status: :ok
-    else
-      render_bad_request('destroy widget', widget.errors)
-    end
+    widget.destroy!
+    head status: :ok
   end
 
 

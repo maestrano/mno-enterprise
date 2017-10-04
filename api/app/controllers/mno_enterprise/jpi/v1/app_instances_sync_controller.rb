@@ -13,7 +13,7 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/organizations/org-fbba/app_instances_sync
     def create
       authorize! :sync_apps, @parent_organization
-      connectors = parent_organization.trigger_app_instances_sync.first.connectors
+      connectors = parent_organization.trigger_app_instances_sync!
       render json: results(connectors)
     end
 

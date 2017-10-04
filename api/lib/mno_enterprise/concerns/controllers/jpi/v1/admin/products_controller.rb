@@ -30,17 +30,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
   # POST /mnoe/jpi/v1/admin/products
   def create
     @product = MnoEnterprise::Product.create(product_create_params)
-    @product.save
-    unless @product.errors.empty?
-      render json: @product.errors, status: :bad_request
-    end
+    @product.save!
     if pricing_params
       pricing_params.each do |p|
         attributes = p.permit(*PRICING_ATTRIBUTES).merge(product_id: @product.id)
-        pricing = MnoEnterprise::ProductPricing.create(attributes)
-        unless pricing.errors.empty?
-          render json: pricing.errors, status: :bad_request
-        end
+        MnoEnterprise::ProductPricing.create!(attributes)
       end
     end
 
@@ -51,8 +45,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
   # PATCH /mnoe/jpi/v1/admin/products/:id
   def update
     @product = MnoEnterprise::Product.find_one(params[:id])
-    @product.update(product_update_params)
-    return render json: @product.errors, status: :bad_request if @product.errors.any?
+    @product.update!(product_update_params)
     if pricing_params
       @product = @product.load_required(:product_pricings)
       id_to_pricing = @product.product_pricings.map { |p| [p.id, p] }.to_h
@@ -60,11 +53,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
         attributes = p.permit(*PRICING_ATTRIBUTES)
         pricing = id_to_pricing.delete(p[:id])
         if pricing
-          pricing.update(attributes)
+          pricing.update!(attributes)
         else
-          pricing = MnoEnterprise::ProductPricing.create(attributes.merge(product_id: @product.id))
+          MnoEnterprise::ProductPricing.create!(attributes.merge(product_id: @product.id))
         end
-        return render json: pricing.errors, status: :bad_request if pricing.errors.any?
       end
       id_to_pricing.each_value { |p| p.destroy }
     end
@@ -76,7 +68,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
   # DELETE /mnoe/jpi/v1/admin/products/1
   def destroy
     product = MnoEnterprise::Product.find_one(params[:id])
-    product.destroy
+    product.destroy!
     head :no_content
   end
 
@@ -92,7 +84,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
     image_encoded = Base64.encode64(image_bin)
 
     logo = { data_base64: image_encoded, filename: image.original_filename, content_type: image.content_type }.to_json
-    product.update(logo: logo)
+    product.update!(logo: logo)
     head :created
   end
 

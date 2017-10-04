@@ -77,23 +77,25 @@ module MnoEnterprise::Concerns::Models::Organization
   end
 
   def orga_relation(user)
-    self.orga_relations.find {|r|
+    self.orga_relations.find { |r|
       r.user_id == user.id
     }
   end
 
-  def remove_user(user)
+  def remove_user!(user)
     relation = self.orga_relation(user)
-    relation.destroy if relation
+    relation.destroy! if relation
   end
 
-  def add_user(user,role = 'Member')
-    MnoEnterprise::OrgaRelation.create(organization_id: self.id, user_id: user.id, role: role)
+  def add_user!(user, role = 'Member')
+    MnoEnterprise::OrgaRelation.create!(organization_id: self.id, user_id: user.id, role: role)
   end
 
-  def provision_app_instance(app_nid)
-    input = {data: {attributes: {app_nid: app_nid, owner_id: id, owner_type: 'Organization'}}}
-    MnoEnterprise::AppInstance.provision(input)
+  def provision_app_instance!(app_nid)
+    input = { data: { attributes: { app_nid: app_nid, owner_id: id, owner_type: 'Organization' } } }
+    result = MnoEnterprise::AppInstance.provision(input)
+    self.class.raise_if_errors(result.errors)
+    result.first
   end
 
   def new_credit_card
@@ -102,6 +104,24 @@ module MnoEnterprise::Concerns::Models::Organization
 
   def has_credit_card_details?
     credit_card_id.present?
+  end
+
+  def freeze!
+    result = freeze
+    self.class.raise_if_errors(result.errors)
+    self.attributes = result.first.attributes
+  end
+
+  def unfreeze!
+    result = unfreeze
+    self.class.raise_if_errors(result.errors)
+    self.attributes = result.first.attributes
+  end
+
+  def trigger_app_instances_sync!
+    result = trigger_app_instances_sync
+    self.class.raise_if_errors(result.errors)
+    result.first.connectors
   end
 
   def to_audit_event

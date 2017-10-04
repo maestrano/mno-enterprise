@@ -1,13 +1,17 @@
 require 'json_api_client'
 module MnoEnterprise
+
   class BaseResource < ::JsonApiClient::Resource
     include ActiveModel::Callbacks
     self.site = URI.join(MnoEnterprise.api_host, MnoEnterprise.mno_api_v2_root_path).to_s
     self.parser = JsonApiClientExtension::CustomParser
 
+    # == Callbacks ========================================================
     define_callbacks :create
     define_callbacks :update
     define_callbacks :save
+
+    # == Class Methods ========================================================
 
     # retrieve all the elements
     def self.fetch_all(list = self.where)
@@ -59,13 +63,25 @@ module MnoEnterprise
       where(attributes).first || create(attributes)
     end
 
-    #add missing method
+    def self.create!(attributes)
+      resource = create(attributes)
+      resource.raise_if_errors
+      resource
+    end
+
+    def self.raise_if_errors(errors)
+      raise ResourceError.new(errors) unless errors.empty?
+    end
+
+    # == Instance Methods ========================================================
+
+    # add missing method
     def update_attribute(name, value)
       self.update_attributes(Hash[name, value])
     end
 
     # emulate active record call of callbacks
-    def save(*args)
+    def save(*_args)
       callback_kind = new_record? ? :create : :update
       run_callbacks :save do
         run_callbacks callback_kind do
@@ -76,7 +92,26 @@ module MnoEnterprise
 
     def save!
       save
-      raise "Could not save: Attributes #{self.attributes}, Errors: #{self.errors.full_messages}" unless self.errors.empty?
+      raise_if_errors
+    end
+
+    def update!(attrs = {})
+      update(attrs)
+      raise_if_errors
+    end
+
+    def destroy!
+      destroy
+      raise_if_errors
+    end
+
+    def update_attributes!(attrs = {})
+      update_attributes(attrs)
+      raise_if_errors
+    end
+
+    def raise_if_errors
+      self.class.raise_if_errors(self.errors)
     end
 
     # emulate active record call of callbacks, a bit different as before_update is called before before_save

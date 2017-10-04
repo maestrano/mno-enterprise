@@ -4,12 +4,8 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/admin/app_answers
     def create
       @app_review = MnoEnterprise::Answer.new(app_answer_params)
-
-      if @app_review.save
-        render :show
-      else
-        render json: @app_review.errors, status: :bad_request
-      end
+      @app_review.save!
+      render :show
     end
 
     def app_answer_params

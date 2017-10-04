@@ -7,7 +7,7 @@ module MnoEnterprise
 
       if app_instance
         MnoEnterprise::EventLogger.info('app_destroy', current_user.id, 'App destroyed', app_instance)
-        app_instance.terminate
+        app_instance.terminate!
       end
 
       head :accepted

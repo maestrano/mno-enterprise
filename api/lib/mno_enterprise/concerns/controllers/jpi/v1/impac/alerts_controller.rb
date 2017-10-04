@@ -24,12 +24,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
     # TODO: Manage authorization
     #authorize! :manage_alert, kpi_alert
 
-    @alert = MnoEnterprise::Alert.create(alert_params.merge(recipient_ids: [current_user.id]))
-    if @alert.errors.empty?
-      render 'show'
-    else
-      render_bad_request('attach alert to kpi', @alert.errors)
-    end
+    @alert = MnoEnterprise::Alert.create!(alert_params.merge(recipient_ids: [current_user.id]))
+    render 'show'
   end
 
   # PUT /jpi/v1/impac/alerts/:id
@@ -41,12 +37,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
 
     # TODO: Manage authorization
     # authorize! :manage_alert, alert
-
-    if alert.update_attributes(attributes)
-      render 'show'
-    else
-      render_bad_request('update alert', alert.errors)
-    end
+    alert.update_attributes!(attributes)
+    render 'show'
   end
 
   # DELETE /jpi/v1/impac/alerts/:id
@@ -55,15 +47,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
 
     # TODO: Manage authorization
     # authorize! :manage_alert, alert
-
     service = alert.service
-    if alert.destroy
-      render json: { deleted: { service: service } }
-    else
-      render_bad_request('destroy alert', "impossible to destroy record: #{alert.errors}")
-    end
+    alert.destroy!
+    render json: { deleted: { service: service } }
   end
-
 
   private
 

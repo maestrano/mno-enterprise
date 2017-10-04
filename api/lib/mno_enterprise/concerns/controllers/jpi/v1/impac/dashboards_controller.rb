@@ -35,14 +35,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     # TODO: enable authorization
     # authorize! :manage_dashboard, @dashboard
     # if @dashboard.save
-    @dashboard = MnoEnterprise::Dashboard.create(dashboard_create_params)
-    if @dashboard.errors.empty?
-      MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', @dashboard)
-      @dashboard = dashboard.load_required(*DASHBOARD_DEPENDENCIES)
-      render 'show'
-    else
-      render_bad_request('create dashboard', @dashboard.errors)
-    end
+    @dashboard = MnoEnterprise::Dashboard.create!(dashboard_create_params)
+    MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', @dashboard)
+    @dashboard = dashboard.load_required(*DASHBOARD_DEPENDENCIES)
+    render 'show'
   end
 
   # PUT /mnoe/jpi/v1/impac/dashboards/1
@@ -52,14 +48,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
 
     # TODO: enable authorization
     # authorize! :manage_dashboard, dashboard
-    dashboard.update_attributes(dashboard_update_params)
-    if dashboard.errors.empty?
-      # Reload Dashboard
-      @dashboard = dashboard.load_required(DASHBOARD_DEPENDENCIES)
-      render 'show'
-    else
-      render_bad_request('update dashboard', dashboard.errors)
-    end
+    dashboard.update_attributes!(dashboard_update_params)
+
+    # Reload Dashboard
+    @dashboard = dashboard.load_required(DASHBOARD_DEPENDENCIES)
+    render 'show'
   end
 
   # DELETE /mnoe/jpi/v1/impac/dashboards/1
@@ -69,7 +62,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', dashboard)
     # TODO: enable authorization
     # authorize! :manage_dashboard, dashboard
-    dashboard.destroy
+    dashboard.destroy!
     head status: :ok
   end
 
@@ -80,16 +73,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   # POST mnoe/jpi/v1/impac/dashboards/1/copy
   def copy
     return render_not_found('template') unless template
-
     # Owner is the current user by default, can be overriden to something else (eg: current organization)
-    @dashboard = template.copy(current_user, dashboard_params[:name], dashboard_params[:organization_ids]).first
-
-    if @dashboard.present?
-      @dashboard = @dashboard.load_required(DASHBOARD_DEPENDENCIES)
-    else
-      return render_bad_request('copy template', 'Unable to copy template')
-    end
-
+    @dashboard = template.copy!(current_user, dashboard_params[:name], dashboard_params[:organization_ids])
+    @dashboard = @dashboard.load_required(DASHBOARD_DEPENDENCIES)
     render 'show'
   end
 

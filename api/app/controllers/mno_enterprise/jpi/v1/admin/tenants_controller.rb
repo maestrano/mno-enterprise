@@ -11,25 +11,16 @@ module MnoEnterprise
     # PATCH /mnoe/jpi/v1/admin/tenant
     def update
       @tenant = MnoEnterprise::Tenant.show
-      @tenant.update_attributes(tenant_params)
+      @tenant.update_attributes!(tenant_params)
 
-      if @tenant.errors.empty?
-        MnoEnterprise::SystemManager.restart
-
-        render :show
-      else
-        render_bad_request('update tenant', @tenant.errors.full_messages)
-      end
+      MnoEnterprise::SystemManager.restart
+      render :show
     end
 
     # PATCH /mnoe/jpi/v1/admin/tenant/domain
     def update_domain
       @tenant = MnoEnterprise::Tenant.show
-      @tenant.update_attributes(tenant_params)
-      if @tenant.errors.present?
-        return render_bad_request('update tenant domain', @tenant.errors.full_messages)
-      end
-
+      @tenant.update_attributes!(tenant_params)
       domain = MnoEnterprise::SystemManager.update_domain(tenant_params[:domain])
       if domain
         # Need to restart to reconfigure the app

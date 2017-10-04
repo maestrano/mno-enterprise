@@ -48,4 +48,11 @@ module MnoEnterprise::Concerns::Models::AppInstance
       organization_id: owner_id
     }
   end
+
+  def terminate!
+    result = terminate
+    self.class.raise_if_errors(result.errors)
+    result.first
+  end
+
 end

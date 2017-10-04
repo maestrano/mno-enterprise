@@ -17,8 +17,9 @@ module MnoEnterprise
       self.accept(data: { attributes: { user_id: user.id } } )
     end
 
-    def cancel!
-      self.decline
+    def decline!
+      result = decline
+      self.class.raise_if_errors(result.errors)
     end
 
     # Check whether the invite is expired or not

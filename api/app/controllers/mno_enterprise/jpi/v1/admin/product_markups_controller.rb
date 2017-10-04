@@ -30,26 +30,22 @@ module MnoEnterprise
       @product_markup = MnoEnterprise::ProductMarkup.new(product_markups_params)
       @product_markup.relationships.product = MnoEnterprise::Product.new(id: product_markups_create_params[:product_id])
       @product_markup.relationships.organization = MnoEnterprise::Organization.new(id: product_markups_create_params[:organization_id])
-      @product_markup.save
+      @product_markup.save!
 
-      if @product_markup.errors.any?
-        render json: @product_markup.errors, status: :bad_request
-      else
-        render :show
-      end
+      render :show
     end
 
     # PATCH /mnoe/jpi/v1/admin/product_markups/:id
     def update
         @product_markup = MnoEnterprise::ProductMarkup.find_one(params[:id])
-        @product_markup.update(product_markups_params)
+        @product_markup.update!(product_markups_params)
         render :show
     end
 
     # DELETE /mnoe/jpi/v1/admin/product_markups/1
     def destroy
       product_markups = MnoEnterprise::ProductMarkup.find_one(params[:id])
-      product_markups.destroy
+      product_markups.destroy!
       head :no_content
     end
 

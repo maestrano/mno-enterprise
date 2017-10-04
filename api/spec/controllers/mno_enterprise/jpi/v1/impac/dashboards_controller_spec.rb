@@ -115,8 +115,10 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
+
+      let!(:stub) { stub_api_v2(:post, "/dashboards", dashboard) }
+
       before do
-        stub_api_v2(:post, "/dashboards", [dashboard])
         stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], dashboard_dependencies)
       end
 
@@ -125,13 +127,22 @@ module MnoEnterprise
       it_behaves_like "jpi v1 protected action"
 
       it '[APIv2] creates a dashboard' do
-        pending 'assert_requested'
-        fail
+        subject
+        expect(stub).to have_been_requested
       end
 
       it 'returns a dashboard' do
         subject
         expect(JSON.parse(response.body)).to eq(hash_for_dashboard)
+      end
+
+      context 'with a validation error' do
+        let(:stub) { stub_api_v2_error(:post, "/dashboards", 422, 'validation error') }
+        it 'returns an error' do
+          subject
+          expect(subject).to_not be_successful
+          expect(subject.code).to eq('400')
+        end
       end
     end
 
