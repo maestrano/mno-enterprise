@@ -28,6 +28,7 @@ require "json_api_client_extension/validations/remote_uniqueness_validation"
 require "json_api_client_extension/custom_parser"
 require "mno_enterprise/engine"
 require 'mno_enterprise/database_extendable'
+require 'mno_enterprise/mno_enterprise_version'
 
 # Settings
 require 'config'
