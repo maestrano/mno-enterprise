@@ -3,6 +3,9 @@ module MnoEnterprise
     property :created_at, type: :time
     property :updated_at, type: :time
 
+    property :organization_id
+    property :user_id
+
     def formatted_details
       case metadata
         when String

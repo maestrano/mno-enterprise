@@ -23,7 +23,9 @@ FactoryGirl.define do
     stack 'cube'
     terms_url "http://opensource.org/licenses/MIT"
     support_url "http://example.com/su  pport"
+    metadata_url nil
     getting_started "Let's get started"
+    details nil
     appinfo { {} }
     average_rating { rand(1..5) }
     sequence(:rank) { |n| n }
@@ -33,7 +35,7 @@ FactoryGirl.define do
     pricing_plans { {
       'default' => [{name: 'Monthly Plan', price: '20.0', currency: 'AUD', factor: '/month'}]
     } }
-    shared_entities { [] }
+    app_shared_entities { [] }
     pictures []
     subcategories []
     trait :cloud do

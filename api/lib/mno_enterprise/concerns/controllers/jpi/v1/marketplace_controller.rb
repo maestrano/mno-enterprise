@@ -30,7 +30,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     # Fetch application listings & pricings
     if stale?(last_modified: @last_modified)
       @apps = Rails.cache.fetch("marketplace/index-apps-#{@last_modified}-#{I18n.locale}-#{org_id}") do
-        apps = MnoEnterprise::App.fetch_all(app_relation(org_id).where(active: true))
+        apps = MnoEnterprise::App.fetch_all(app_relation(org_id).includes(:app_shared_entities, { app_shared_entities: :shared_entity }).where(active: true))
         apps.sort_by! { |app| [app.rank ? 0 : 1, app.rank] } # the nil ranks will appear at the end
         apps
       end
@@ -54,7 +54,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   private
   # Return the default relation to use for index and show queries
   def app_relation(org_id = nil)
-    rel = MnoEnterprise::App.includes(:app_shared_entities, { app_shared_entities: :shared_entity })
+    rel = MnoEnterprise::App
     rel = rel.with_params(_metadata: { organization_id: org_id }) if org_id.present?
     rel
   end
@@ -63,9 +63,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   # has access to it
   def parent_organization_id
     return nil unless current_user && params[:organization_id].presence
-
     MnoEnterprise::Organization
       .select(:id)
-      .where('id' => params[:organization_id], 'users.id' => current_user.id).first&.id
+      .where('id' => params[:organization_id], 'users.id' => current_user.id)
+      .first&.id
   end
 end

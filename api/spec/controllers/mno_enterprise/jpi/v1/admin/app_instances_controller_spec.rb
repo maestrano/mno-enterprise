@@ -4,30 +4,35 @@ require 'rails_helper'
 module MnoEnterprise
   describe Jpi::V1::Admin::AppInstancesController, type: :controller do
     include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
-    #TODO: Fix Spec for Admin Controller
-    before { skip }
 
     render_views
     routes { MnoEnterprise::Engine.routes }
-    before { request.env["HTTP_ACCEPT"] = 'application/json' }
+    before { request.env['HTTP_ACCEPT'] = 'application/json' }
+    before { stub_audit_events }
 
     let(:user) { build(:user, :admin, :with_organizations) }
+    let!(:current_user_stub) { stub_user(user) }
+
     before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
       sign_in user
     end
 
     describe 'DELETE #destroy' do
       # Stub AppInstance
       let(:app_instance) { build(:app_instance) }
-      before { api_stub_for(get: "/app_instances/#{app_instance.id}", respond_with: app_instance)}
-      before { api_stub_for(delete: "/app_instances/#{app_instance.id}", response: ->{ app_instance.status = 'terminated'; from_api(app_instance) }) }
+
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance) }
+      let!(:stub) { stub_api_v2(:delete, "/app_instances/#{app_instance.id}/terminate") }
 
       subject { delete :destroy, id: app_instance.id }
 
-      it_behaves_like "a jpi v1 admin action"
+      it_behaves_like 'a jpi v1 admin action'
 
-      it { subject; expect(app_instance.status).to eq('terminated') }
+      context 'success' do
+        before { subject }
+        it { expect(response).to be_success }
+        it { expect(stub).to have_been_requested }
+      end
     end
   end
 end

@@ -8,7 +8,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/tenant_invoices/1
     def show
-      @tenant_invoice = MnoEnterprise::TenantInvoice.find(params[:id])
+      @tenant_invoice = MnoEnterprise::TenantInvoice.find_one(params[:id])
     end
   end
 end
