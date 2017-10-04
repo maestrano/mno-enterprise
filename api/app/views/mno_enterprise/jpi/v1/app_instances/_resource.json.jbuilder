@@ -6,8 +6,7 @@ json.status app_instance.status
 json.oauth_keys_valid app_instance.oauth_keys_valid
 json.created_at app_instance.created_at
 json.per_user_licence app_instance.per_user_licence
-json.is_linked app_instance.is_linked
-json.account_creation_link app_instance.account_creation_link
+json.organization app_instance.organization
 
 if app_instance.oauth_company
   json.oauth_company_name app_instance.oauth_company
