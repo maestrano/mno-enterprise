@@ -16,6 +16,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
     # delete <api_root>/app_instances/:id/terminate
     custom_endpoint :terminate, on: :member, request_method: :delete
     custom_endpoint :provision, on: :collection, request_method: :post
+    custom_endpoint :sync_history, on: :member, request_method: :get
 
     #==============================================================
     # Constants
