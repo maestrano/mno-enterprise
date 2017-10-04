@@ -64,7 +64,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
     ts = MnoEnterprise::App.order(updated_at: :desc).select(:updated_at).first.updated_at
     @apps = if ts
               Rails.cache.fetch(['pages/terms/app-list', ts]) do
-                MnoEnterprise::App.order(name: :asc).reject { |i| i.terms_url.blank? }
+                MnoEnterprise::App.fetch_all.reject { |i| i.terms_url.blank? }
               end
             else
               []
