@@ -144,7 +144,7 @@ module MnoEnterprise::Concerns::Models::Ability
 
   # Abilities for admin user
   def admin_abilities(user)
-    if user.admin_role.to_s.casecmp('admin').zero?
+    if user.admin_role.to_s.casecmp('admin').zero? || user.admin_role.to_s.casecmp('staff').zero?
       can :manage_app_instances, MnoEnterprise::Organization
     end
   end
