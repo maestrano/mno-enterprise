@@ -15,7 +15,6 @@ module MnoEnterprise
     before do
       stub_user(user)
       stub_api_v2(:get, "/apps/#{app.id}", app)
-      stub_api_v2(:patch, "/apps/#{app.id}", app)
       sign_in user
     end
 
@@ -37,10 +36,14 @@ module MnoEnterprise
       describe '#update' do
         let(:params) { { name: 'CloudApp', terms_url: 'terms.com' } }
         before { stub_api_v2(:get, "/apps/#{app.id}", app) }
-        let!(:stub) { stub_api_v2(:patch, "/apps/#{app.id}", app) }
+        let!(:stub) do
+          stub_api_v2(:patch, "/apps/#{app.id}", app)
+            .with(body: { data: { id: app.id, type: 'apps', attributes: { terms_url: 'terms.com' } } }.to_json)
+        end
+
         subject { put :update, id: app.id, cloud_app: params }
         it_behaves_like 'a jpi v1 admin action'
-        it do
+        it 'does the request with the right parameters' do
           subject
           expect(stub).to have_been_requested
           expect(response).to be_success
