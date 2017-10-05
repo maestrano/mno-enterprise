@@ -72,7 +72,7 @@ describe MnoEnterprise::TenantConfig do
 
   describe '.refresh_json_schema!' do
     before { stub_api_v2(:get, '/apps', [build(:app, name: 'My App', nid: 'my-app')]) }
-    subject { described_class.refresh_json_schema! }
+    subject { described_class.refresh_json_schema!({}) }
 
     let(:preferred_locale_hash) do
       {
@@ -182,5 +182,79 @@ describe MnoEnterprise::TenantConfig do
       let(:output) { {'foo' => 'Hello World', 'bar' => {'enabled' => true} } }
       it { is_expected.to eq(output)}
     end
+  end
+
+  describe '.update_readonly_fields' do
+    subject { described_class.update_readonly_fields(schema.with_indifferent_access, config) }
+
+    let(:schema) {
+      {
+        type: "object",
+        properties: {
+          admin_panel: {
+            type: "object",
+            properties: {
+              audit_log: {
+                type: "object",
+                properties: {
+                  enabled: {
+                    type: "boolean",
+                    default: true
+                  }
+                }
+              },
+              impersonation: {
+                type: "object",
+                properties: {
+                  enabled: {
+                    type: "boolean",
+                    default: true
+                  }
+                }
+              }
+            }
+
+          }
+        }
+      }
+    }
+
+    let(:config) {
+      {'admin_panel' => {'audit_log' => {'enabled' => true, 'enabled_readonly' => true}} }
+    }
+
+    let(:output) {
+      {
+        type: "object",
+        properties: {
+          admin_panel: {
+            type: "object",
+            properties: {
+              audit_log: {
+                type: "object",
+                properties: {
+                  enabled: {
+                    type: "boolean",
+                    default: true,
+                    readonly: true
+                  }
+                }
+              },
+              impersonation: {
+                type: "object",
+                properties: {
+                  enabled: {
+                    type: "boolean",
+                    default: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    it { is_expected.to eq(output.with_indifferent_access) }
   end
 end
