@@ -68,8 +68,7 @@ module MnoEnterprise
       before do
         allow(MnoEnterprise::User).to receive(:find_for_confirmation) { user }
         stub_api_v2(:get, '/orga_invites', [], [], {filter: {user_email: user.email}})
-
-        api_stub_for(put: "/users/#{user.id}", response: from_api(user))
+        stub_api_v2(:put, "/users/#{user.id}", user)
         stub_audit_events
       end
 
