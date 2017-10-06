@@ -2,7 +2,6 @@
 ENV["RAILS_ENV"] ||= 'test'
 
 # Library for stubbing and setting expectations on HTTP requests in Ruby.
-require 'fakeweb'
 require 'webmock/rspec'
 
 require 'spec_helper'

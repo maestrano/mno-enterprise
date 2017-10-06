@@ -14,19 +14,10 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-require "fakeweb"
 # Library for stubbing and setting expectations on HTTP requests in Ruby.
 require 'webmock/rspec'
 
 RSpec.configure do |config|
-  config.before(:suite) do
-    FakeWeb.allow_net_connect = false
-    FakeWeb.register_uri(:post, "https://my_tenant_id:my_tenant_access_key@api-enterprise.maestrano.test/api/mnoe/v1/audit_events", status: 200)
-  end
-
-  config.after(:suite) do
-    FakeWeb.allow_net_connect = true
-  end
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
 =begin
