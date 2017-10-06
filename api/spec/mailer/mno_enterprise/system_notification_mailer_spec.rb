@@ -178,21 +178,26 @@ module MnoEnterprise
 
     describe 'task_notification' do
       let(:task) { build(:task) }
-
+      let(:recipient) { build(:user) }
       it 'sends the correct email' do
         expect(MnoEnterprise::MailClient).to receive(:deliver).with(
             'task-notification',
             SystemNotificationMailer::DEFAULT_SENDER,
-            { email: user.email},
+            { email: recipient.email},
             {
-              first_name: user.name,
+              first_name: recipient.name,
               title: task.title,
               content: task.message,
-              due_date: task.due_date
+              due_date: task.due_date,
+              organization_name: 'organization_name',
+              inbox_link: 'inbox_link'
+            },
+            {
+              subject: "Task notification: \"#{task[:title]}\" from #{user.name} #{user.surname} (organization_name)"
             }
         )
 
-        subject.task_notification(user, task).deliver_now
+        subject.task_notification(user, recipient, task, 'inbox_link', 'organization_name').deliver_now
       end
     end
   end

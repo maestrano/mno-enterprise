@@ -16,15 +16,17 @@
     <p>Content: <%= @info[:content] %></p>
     <% if @info[:due_date]  %>
     <p>Due date: <%= @info[:due_date].to_date %></p>
-    <% else %>
-    <p>Due date: No due date specified </p>
     <% end %>
-
+    <p>You can access this message in <a href="<%= @info[:inbox_link] %>">your inbox</a>.</p>
     <p>
       Thank you,<br/>
     </p>
     <p class="footer">
-      <%= @info[:company] %>
+      <% if @info[:organization_name]  %>
+          <%= @info[:organization_name] %>
+      <% else %>
+          <%= @info[:company] %>
+      <% end %>
     </p>
   </body>
 </html>

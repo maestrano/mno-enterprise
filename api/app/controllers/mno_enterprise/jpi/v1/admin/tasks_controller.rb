@@ -76,7 +76,8 @@ module MnoEnterprise
     end
 
     def send_mail_notification(recipients)
-      recipients.map { |recipient| MnoEnterprise::SystemNotificationMailer.task_notification(recipient.user, @task).deliver_later  }
+      inbox_link = "#{Rails.application.config.action_mailer.asset_host}/dashboard/#!/messages"
+      recipients.map { |recipient| MnoEnterprise::SystemNotificationMailer.task_notification(current_user, recipient.user, @task, inbox_link).deliver_later  }
     end
 
     def task_recipient_params
