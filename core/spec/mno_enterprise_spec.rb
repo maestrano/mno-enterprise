@@ -8,22 +8,6 @@ describe MnoEnterprise do
     end
   end
 
-  # TODO: adapt for to v2
-  xdescribe 'mnoe_api_v1' do
-    let(:private_host) { nil }
-    subject { MnoEnterprise.mnoe_api_v1.base_uri }
-    before { MnoEnterprise.configure { |c| c.mno_api_private_host = private_host } }
-
-    describe 'without private host' do
-      it { expect(subject).to eq('https://api-enterprise.maestrano.test/api/mnoe/v1') }
-    end
-
-    describe 'with private host' do
-      let(:private_host) { 'https://api-hub.account.test' }
-      it { expect(subject).to eq("#{private_host}/api/mnoe/v1") }
-    end
-  end
-
   describe 'jwt' do
     before { MnoEnterprise.configure { |c| c.tenant_id = "12345789"; c.tenant_key = "abcdefg"} }
     let(:secret) { "#{MnoEnterprise.tenant_id}:#{MnoEnterprise.tenant_key}" }

@@ -14,6 +14,7 @@ require "json_api_client"
 require "json_api_client_extension/json_api_client_orm_adapter"
 require "json_api_client_extension/validations/remote_uniqueness_validation"
 require "json_api_client_extension/custom_parser"
+require 'faraday/locale_middleware'
 require "mno_enterprise/engine"
 require 'mno_enterprise/database_extendable'
 require 'mno_enterprise/mno_enterprise_version'
@@ -139,14 +140,7 @@ module MnoEnterprise
 
   # The Maestrano Enterprise API base path
   mattr_accessor :mno_api_root_path
-  @@mno_api_root_path = "/api/mnoe/v1"
-
-  # Hold the Her API configuration (see configure_api method)
-  mattr_reader :mnoe_api_v1
-  @@mnoe_api_v1 = nil
-
-  mattr_accessor :mno_api_v2_root_path
-  @@mno_api_v2_root_path = "/api/mnoe/v2"
+  @@mno_api_root_path = "/api/mnoe/v2"
 
   # Hold the Maestrano enterprise router (redirection to central enterprise platform)
   mattr_reader :router
@@ -243,7 +237,7 @@ module MnoEnterprise
   def self.configure
     yield self
     self.configure_styleguide
-    # self.configure_api
+    self.configure_api
 
     # Mail config
     # We can't use the setter before MailClient is loaded
@@ -264,14 +258,6 @@ module MnoEnterprise
   end
 
   private
-    # Return the options to use in the setup of the API
-    def self.api_options
-      {
-          url: "#{URI.join(api_host,@@mno_api_root_path).to_s}",
-          send_only_modified_attributes: true
-      }
-    end
-
     # Load the provided styleguide hash into nested structure or load a default one
     def self.configure_styleguide
       # Load default gem configuration
@@ -286,10 +272,31 @@ module MnoEnterprise
       @@styleguide.is_a?(Hash) && hash.deep_merge!(@@styleguide)
       @@style = DeepStruct.wrap(hash)
     end
+
+    # Configure JsonApiClient for Maestrano Enterprise API V2
+    def self.configure_api
+      if @@mno_api_root_path == '/api/mnoe/v1'
+        raise "MNOE API root path is pointing to '/api/mnoe/v1'. Please upgrade your settings."
+      end
+      MnoEnterprise::BaseResource.site = URI.join(api_host, @@mno_api_root_path).to_s
+
+      MnoEnterprise::BaseResource.connection do |connection|
+        connection.use Faraday::Request::BasicAuthentication, @@tenant_id, @@tenant_key
+
+        connection.use Faraday::LocaleMiddleware
+
+        if Rails.env.development?
+          # log responses
+          connection.use Faraday::Response::Logger
+
+          # Instrumentation (see below for the subscription)
+          connection.use FaradayMiddleware::Instrumentation if Rails.env.development?
+        end
+      end
+    end
 end
 
 # Instrumentation in development
-# TODO: remove and implement similar for APIv2
 ActiveSupport::Notifications.subscribe('request.faraday') do |name, starts, ends, _, env|
   url = env[:url]
   http_method = env[:method].to_s.upcase

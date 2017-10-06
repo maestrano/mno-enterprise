@@ -2,8 +2,26 @@ require 'rails_helper'
 
 module MnoEnterprise
   RSpec.describe BaseResource, type: :model do
-
     pending "add specs for MnoEnterprise::BaseResource: #{__FILE__}"
+
+    describe '.site' do
+      let(:private_host) { nil }
+      subject { described_class.site }
+      around do |example|
+        MnoEnterprise.configure { |c| c.mno_api_private_host = private_host }
+        example.run
+        MnoEnterprise.configure { |c| c.mno_api_private_host = nil }
+      end
+
+      describe 'without private host' do
+        it { is_expected.to eq('https://api-enterprise.maestrano.test/api/mnoe/v2') }
+      end
+
+      describe 'with private host' do
+        let(:private_host) { 'https://api-hub.account.test' }
+        it { is_expected.to eq("#{private_host}/api/mnoe/v2") }
+      end
+    end
 
     describe JsonApiClientExtension::CustomParser do
       describe 'time parsing' do
@@ -31,7 +49,7 @@ module MnoEnterprise
       end
     end
 
-    describe LocaleMiddleware do
+    describe 'LocaleMiddleware' do
       before do
         I18n.available_locales = [:'en-AU', :en]
         I18n.locale = 'en-AU'
