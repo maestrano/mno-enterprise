@@ -18,5 +18,5 @@ end
 
 group :test, :development do
   gem 'figaro'
-  # gem 'rubocop', require: false
+  gem 'rubocop', '~> 0.50.0', require: false
 end
