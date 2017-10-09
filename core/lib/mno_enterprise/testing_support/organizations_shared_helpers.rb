@@ -35,7 +35,6 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
       list.push(u)
     end
 
-
     organization.orga_invites.each do |invite|
       list.push({
                     'id' => invite.id,

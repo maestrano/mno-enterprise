@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe MnoEnterprise::TenantConfig do
 
-  it { expect(described_class).to  respond_to(:json_schema) }
+  it { expect(described_class).to respond_to(:json_schema) }
 
   let(:tenant) { build(:tenant, frontend_config: {'foo' => 'bar'})}
 
@@ -109,7 +109,7 @@ describe MnoEnterprise::TenantConfig do
       }
     end
 
-    let(:available_app_hash)  do
+    let(:available_app_hash) do
       {
         'x-schema-form' => {
           'titleMap' => {

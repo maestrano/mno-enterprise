@@ -31,7 +31,6 @@ module Devise
         # Flag to enable password change notification
         Devise::Models.config(self, :send_password_change_notification)
 
-
         # This method is called from:
         # Warden::SessionSerializer in devise
         #

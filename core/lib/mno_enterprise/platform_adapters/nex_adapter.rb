@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 gem 'nex_client', '~> 0.16.0'
 require 'nex_client'
 require 'rake'

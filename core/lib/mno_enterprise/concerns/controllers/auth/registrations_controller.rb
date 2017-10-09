@@ -11,6 +11,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
     # before_filter :configure_account_update_params, only: [:update]
 
     protected
+
       def configure_sign_up_params
         devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(
           :email,

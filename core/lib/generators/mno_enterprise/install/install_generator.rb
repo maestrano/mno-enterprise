@@ -161,6 +161,7 @@ module MnoEnterprise
       end
 
       private
+
         # Helper method to quickly convert destination_root to a Pathname for easy file path manipulation
         def destination_path
           @destination_path ||= Pathname.new(self.destination_root)

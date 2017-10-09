@@ -121,7 +121,7 @@ module MnoEnterprise
 
       before { allow(invoice).to receive(:organization).and_return(organization) }
       before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization), expected_params) }
-      before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations), { fields: { organizations: 'orga_relations',  orga_relations: 'id,user_id,role' } }) }
+      before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations), { fields: { organizations: 'orga_relations', orga_relations: 'id,user_id,role' } }) }
       before { subject }
 
       it { expect(data['status']).to eq('request_sent') }

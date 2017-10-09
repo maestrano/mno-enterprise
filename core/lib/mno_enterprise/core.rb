@@ -68,6 +68,7 @@ module MnoEnterprise
     end
 
     private
+
       def base_path
         MnoEnterprise.mno_api_root_path
       end

@@ -10,6 +10,7 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     before_filter :authenticate_user_or_signup!
 
     protected
+
     # The path used after purchased apps have been provisionned
     def after_provision_path
       MnoEnterprise.router.dashboard_path || main_app.root_path
@@ -40,7 +41,7 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     if @organization && cannot?(:manage_app_instances, @organization)
       msg = 'Unfortunately you do not have permission to purchase products for this organization'
       if @organizations.one?
-        redirect_path = add_param_to_fragment(after_provision_path.to_s, 'flash', [{msg: msg,  type: :error}.to_json])
+        redirect_path = add_param_to_fragment(after_provision_path.to_s, 'flash', [{msg: msg, type: :error}.to_json])
         redirect_to redirect_path
       else
         @organization = nil

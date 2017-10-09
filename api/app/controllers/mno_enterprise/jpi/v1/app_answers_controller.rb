@@ -2,6 +2,7 @@ module MnoEnterprise
   class Jpi::V1::AppAnswersController < Jpi::V1::AppReviewsController
 
     private
+
     def after_save
       #do nothing because answers doesn't affect on app rating
     end

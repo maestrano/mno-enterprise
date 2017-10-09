@@ -66,7 +66,6 @@ module MnoEnterprise
       hash
     end
 
-
     before { stub_audit_events }
 
     shared_examples 'a user management action' do
@@ -119,7 +118,7 @@ module MnoEnterprise
       before {
         updated_user = build(:user, id: user.id)
         updated_user.attributes = attrs
-        stub_api_v2(:patch,  "/users/#{user.id}", updated_user)
+        stub_api_v2(:patch, "/users/#{user.id}", updated_user)
         # user reload
         stub_user(updated_user)
       }

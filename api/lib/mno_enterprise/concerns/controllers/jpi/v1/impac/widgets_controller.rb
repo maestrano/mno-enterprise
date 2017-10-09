@@ -49,7 +49,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
     head status: :ok
   end
 
-
   #=================================================
   # Private methods
   #=================================================

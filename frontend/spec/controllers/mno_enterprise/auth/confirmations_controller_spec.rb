@@ -24,7 +24,6 @@ module MnoEnterprise
         stub_api_v2(:get, '/users', [], [], {filter: {email: new_email}, page:{number: 1, size: 1}})
       }
 
-
       describe 'GET #show' do
         subject { get :show, confirmation_token: user.confirmation_token }
 

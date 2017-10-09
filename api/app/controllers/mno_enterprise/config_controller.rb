@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module MnoEnterprise
   class ConfigController < ApplicationController
     protect_from_forgery except: :show

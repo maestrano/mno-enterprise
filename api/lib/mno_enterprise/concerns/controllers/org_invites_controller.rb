@@ -45,7 +45,7 @@ module MnoEnterprise::Concerns::Controllers::OrgInvitesController
     # Add flash msg in url fragment for the new frontend
     type, msg = message.first
     type = (type == :alert ? :error : :success)
-    redirect_path = add_param_to_fragment(redirect_path.to_s, 'flash', [{msg: msg,  type: type}.to_json])
+    redirect_path = add_param_to_fragment(redirect_path.to_s, 'flash', [{msg: msg, type: type}.to_json])
 
     redirect_to redirect_path, message
   end

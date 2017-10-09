@@ -243,7 +243,6 @@ namespace :mnoe do
       end
     end
 
-
     ## Tasks
     # TODO: replace with yarn install commands to get latest version
     desc "Yarn package file"

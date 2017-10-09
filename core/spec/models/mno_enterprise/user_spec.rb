@@ -111,7 +111,6 @@ module MnoEnterprise
         }
       ) }
 
-
       describe '.find_for_oauth' do
         it { expect(described_class).to respond_to(:find_for_oauth) }
 

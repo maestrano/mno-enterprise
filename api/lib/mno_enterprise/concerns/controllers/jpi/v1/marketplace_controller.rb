@@ -50,7 +50,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   #==================================================================
   # Private
   #==================================================================
+
   private
+
   # Return the default relation to use for index and show queries
   def app_relation(org_id = nil)
     rel = MnoEnterprise::App

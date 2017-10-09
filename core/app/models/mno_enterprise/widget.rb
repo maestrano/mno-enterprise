@@ -1,6 +1,6 @@
 module MnoEnterprise
   class Widget < BaseResource
-    property  :dashboard_owner_uid, type: :string
+    property :dashboard_owner_uid, type: :string
 
     property :created_at, type: :time
     property :updated_at, type: :time

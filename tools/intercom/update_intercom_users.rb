@@ -22,7 +22,7 @@ class UpdateIntercomUsers
 
   def run
     assert_runnable
-    skip =  0
+    skip = 0
     total_count = 0
     loop do
       users = MnoEnterprise::User.limit(self.batch_size).skip(skip).all.fetch

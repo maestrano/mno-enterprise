@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 require 'mno_enterprise/testing_support/be_same_files_as'
 

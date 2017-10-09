@@ -259,7 +259,7 @@ module MnoEnterprise
 
     def access_request_status(user)
       if user_access_requests
-        request = user_access_requests.select { |r| !r.requester_id  || r.requester_id == user.id}.sort_by(&:created_at).last
+        request = user_access_requests.select { |r| !r.requester_id || r.requester_id == user.id}.sort_by(&:created_at).last
         return request.current_status if request
       end
       'never_requested'

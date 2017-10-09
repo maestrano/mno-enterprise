@@ -37,7 +37,6 @@ module MnoEnterprise
       context 'when I18n is enabled' do
        before { MnoEnterprise.i18n_enabled = true }
 
-
         context 'when a valid locale is provided' do
           before { get :index, locale: :fr }
           it { is_expected.to eq(:fr) }

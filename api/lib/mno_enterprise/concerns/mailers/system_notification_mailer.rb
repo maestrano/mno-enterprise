@@ -163,7 +163,6 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     )
   end
 
-
   def request_access(user_access_request_id)
     user_access_request = MnoEnterprise::UserAccessRequest.find_one(user_access_request_id, :user, :requester)
     user = user_access_request.user

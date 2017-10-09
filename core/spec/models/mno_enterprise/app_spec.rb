@@ -18,7 +18,7 @@ module MnoEnterprise
 
       context 'with a list' do
         let(:app2) { build(:app, categories: ['Other Category', 'One']) }
-        let(:list)  { [app2] }
+        let(:list) { [app2] }
         it 'scopes the categories to the list of app' do
           expect(subject).to eq(['One', 'Other Category'])
         end

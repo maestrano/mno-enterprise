@@ -9,7 +9,7 @@ module MnoEnterprise
     before { stub_audit_events }
     before { Timecop.freeze(Date.parse('2015-02-15')) }
 
-    let(:tenant) { build(:tenant,  domain: 'tenant.domain.test')}
+    let(:tenant) { build(:tenant, domain: 'tenant.domain.test')}
     let(:user) { build(:user, :admin, mnoe_tenant: tenant) }
 
     before do

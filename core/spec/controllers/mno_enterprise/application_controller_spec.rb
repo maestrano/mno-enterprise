@@ -7,6 +7,7 @@ module MnoEnterprise
       def after_sign_in_path_for(resource)
         super
       end
+
       def add_param_to_fragment(url, param_name, param_value)
         super
       end

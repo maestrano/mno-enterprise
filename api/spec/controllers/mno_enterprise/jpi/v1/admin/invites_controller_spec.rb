@@ -58,7 +58,7 @@ module MnoEnterprise
         end
       end
 
-      context 'new user'  do
+      context 'new user' do
         let(:invitee) { build(:user, confirmed_at: nil) }
 
         it 'sends the confirmation instructions' do

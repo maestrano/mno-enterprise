@@ -9,7 +9,6 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
-
     #===============================================
     # Assignments
     #===============================================
@@ -29,7 +28,6 @@ module MnoEnterprise
     end
 
     let(:data) { JSON.parse(subject.body) }
-
 
     describe 'GET #index' do
 

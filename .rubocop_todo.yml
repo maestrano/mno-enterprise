@@ -90,45 +90,6 @@ Layout/ElseAlignment:
     - 'core/app/controllers/mno_enterprise/application_controller.rb'
     - 'core/lib/mno_enterprise/concerns/controllers/i18n.rb'
 
-# Offense count: 14
-# Cop supports --auto-correct.
-Layout/EmptyLineAfterMagicComment:
-  Exclude:
-    - 'api/app/controllers/mno_enterprise/config_controller.rb'
-    - 'api/app/controllers/mno_enterprise/jpi/v1/admin/apps_controller.rb'
-    - 'api/spec/controllers/mno_enterprise/jpi/v1/admin/theme_controller_spec.rb'
-    - 'core/app/models/mno_enterprise/tenant_config.rb'
-    - 'core/lib/mno_enterprise/platform_adapters/adapter.rb'
-    - 'core/lib/mno_enterprise/platform_adapters/local_adapter.rb'
-    - 'core/lib/mno_enterprise/platform_adapters/nex_adapter.rb'
-    - 'core/lib/mno_enterprise/platform_adapters/test_adapter.rb'
-    - 'core/lib/mno_enterprise/testing_support/climate_control.rb'
-    - 'core/spec/config/initializers/audit_log_spec.rb'
-    - 'core/spec/config/initializers/config_spec.rb'
-    - 'core/spec/lib/mno_enterprise/platform_adapters/local_adapter_spec.rb'
-    - 'core/spec/lib/mno_enterprise/platform_adapters/nex_adapter_spec.rb'
-    - 'core/spec/lib/mno_enterprise/plugins/payment_gateway_spec.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: AllowAdjacentOneLineDefs, NumberOfEmptyLines.
-Layout/EmptyLineBetweenDefs:
-  Exclude:
-    - 'api/app/controllers/mno_enterprise/jpi/v1/app_instances_sync_controller.rb'
-    - 'api/lib/mno_enterprise/concerns/mailers/system_notification_mailer.rb'
-    - 'core/app/models/mno_enterprise/user_access_request.rb'
-    - 'core/spec/controllers/mno_enterprise/application_controller_spec.rb'
-
-# Offense count: 44
-# Cop supports --auto-correct.
-Layout/EmptyLines:
-  Enabled: false
-
-# Offense count: 18
-# Cop supports --auto-correct.
-Layout/EmptyLinesAroundAccessModifier:
-  Enabled: false
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Layout/EmptyLinesAroundBeginBody:
@@ -169,12 +130,6 @@ Layout/EmptyLinesAroundMethodBody:
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines
 Layout/EmptyLinesAroundModuleBody:
-  Enabled: false
-
-# Offense count: 51
-# Cop supports --auto-correct.
-# Configuration parameters: AllowForAlignment, ForceEqualSignAlignment.
-Layout/ExtraSpacing:
   Enabled: false
 
 # Offense count: 8

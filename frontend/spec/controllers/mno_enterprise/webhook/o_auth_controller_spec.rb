@@ -27,7 +27,6 @@ module MnoEnterprise
       stub_api_v2(:get, "/organizations/#{organization.id}", organization)
     end
 
-
     describe 'GET #authorize' do
       let(:redir_params) { extra_params.reject { |k, v| k.to_sym == :perform } }
       let(:redirect_url) { MnoEnterprise.router.authorize_oauth_url(app_instance.uid, redir_params.merge(wtk: MnoEnterprise.jwt(user_id: user.uid))) }

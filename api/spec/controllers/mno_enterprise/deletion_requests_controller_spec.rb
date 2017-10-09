@@ -18,7 +18,6 @@ module MnoEnterprise
     let(:user) { build(:user, deletion_requests: [deletion_req]) }
     let!(:current_user_stub) { stub_user(user) }
 
-
     describe 'GET #show' do
       before { sign_in user }
       subject { get :show, id: deletion_req.token }

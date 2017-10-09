@@ -72,6 +72,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
   end
 
   private
+
     def app_instance_hash(app_instance)
       return {} unless app_instance
       {

@@ -19,7 +19,7 @@ module MnoEnterprise
     end
 
     def active?
-      self.status != 'cancelled' && self.created_at >=  EXPIRATION_TIME.minutes.ago
+      self.status != 'cancelled' && self.created_at >= EXPIRATION_TIME.minutes.ago
     end
 
     def freeze_account!
