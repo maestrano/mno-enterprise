@@ -10,4 +10,9 @@ spec/dummy/.sass-cache
 
 # Ignore dummy apps
 **/spec/dummy
+
+# Code coverage report
+coverage
+
+# IDEs
 .idea/

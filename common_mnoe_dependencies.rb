@@ -12,8 +12,8 @@ group :test do
   gem 'webmock', '~> 3.1.1'
   gem 'timecop'
   gem 'climate_control'
-  # gem 'simplecov'
   gem 'fakefs', require: 'fakefs/safe'
+  gem 'simplecov'
 end
 
 group :test, :development do
