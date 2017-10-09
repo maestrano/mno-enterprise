@@ -11,8 +11,8 @@ describe MnoEnterprise::SmtpClient do
         {name: 'Joe', email: 'joe.blogg@example.com'},
         attachments: [
           {
-            name: "some-file.pdf",
-            value: "the file"
+            name: 'some-file.pdf',
+            content: 'the file'
           }
         ]
       )
@@ -26,10 +26,21 @@ describe MnoEnterprise::SmtpClient do
         template_path: 'system_notifications',
         template_name: 'reset-password-instructions'
       }
-      attachments = [ { name: "some-file.pdf", value: "the file" }]
+
       expect(client).to receive(:mail).with(expected_params)
-      expect(client).to receive(:attach_file).with(attachments)
+
       subject
+    end
+
+    it 'sends the attachments' do
+      allow(client).to receive(:mail)
+
+      attachments = {}
+      expect(client).to receive(:attachments).and_return(attachments)
+
+      subject
+
+      expect(attachments).to eq('some-file.pdf' => 'the file')
     end
   end
 

@@ -47,7 +47,6 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   # config.use_transactional_fixtures = true
-  config.include Rails.application.routes.url_helpers
 
   config.filter_run_excluding ignore: true
 
@@ -65,7 +64,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
 
   # Include Rails route helpers
-  config.include Rails.application.routes.url_helpers, type: :controller
+  config.include Rails.application.routes.url_helpers, type: [:controller, :mailer]
 
   # Reset API stubs before each step
   config.before :each do

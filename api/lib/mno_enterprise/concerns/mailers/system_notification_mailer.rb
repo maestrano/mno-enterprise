@@ -243,7 +243,8 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
         attachments: [
           {
             name: "invoice - #{invoice.slug}.pdf",
-            value: MnoEnterprise::InvoicePdf.new(invoice).render
+            type: 'application/pdf',
+            content: MnoEnterprise::InvoicePdf.new(invoice).render
           }
         ]
       }

@@ -7,8 +7,8 @@ module MnoEnterprise
     def deliver(template, from, to, vars={}, opts={})
       @info = vars
       @info[:company] = from[:name]
-  
-      attach_file(@info[:attachments])
+
+      attach_files(@info[:attachments])
 
       mail(
         from: format_sender(from),
@@ -17,23 +17,23 @@ module MnoEnterprise
         template_path: 'system_notifications',
         template_name: template
       )
-    end 
+    end
 
     # Returns Actionmailer-compliant :from string
     # @Format : "Sender name <sender@email.com>"
     def format_sender(from)
       "#{from[:name]} <#{from[:email]}>"
     end
-    
+
     # Returns humanized template subject
     # @i.e. "reset-password-instructions" to "Reset password instructions"
     def humanize(template_slug)
       template_slug.tr("-", "_").humanize
     end
 
-    def attach_file(files)
+    def attach_files(files)
       (files || []).each do |attachment|
-        attachments[attachment[:name]] = attachment[:value]
+        attachments[attachment[:name]] = attachment[:content]
       end
     end
   end
