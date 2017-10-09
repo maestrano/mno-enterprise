@@ -112,6 +112,7 @@ en:
               details: 'See your due tasks for more details'
           due:
             title: 'Task due {due_date}'
+            title_today: 'Task is due today'
             message:
               title: 'Title: {task_title}'
               from: 'From: {user_name} {user_surname}'
