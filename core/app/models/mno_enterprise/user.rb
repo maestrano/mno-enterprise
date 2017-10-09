@@ -197,7 +197,7 @@ module MnoEnterprise
       # to prevent the identity being locked with accidentally created accounts.
       # Note that this may leave zombie accounts (with no associated identity) which
       # can be cleaned up at a later date.
-      user = signed_in_resource ? signed_in_resource : (User.find_one(identity.user_id) if identity && identity.user_id)
+      user = signed_in_resource ? signed_in_resource : (User.find_one(identity.user_id) if identity&.user_id)
 
       # Create the user if needed
       unless user # WTF is wrong with user.nil?
@@ -212,7 +212,7 @@ module MnoEnterprise
           unless opts[:authorized_link_to_email] == user.email
             # Intuit email is NOT a confirmed email. Therefore we need to ask the user to
             # login the old fashion to make sure it is the right user!
-            fail(SecurityError, 'reconfirm credentials')
+            raise(SecurityError, 'reconfirm credentials')
           end
         end
       end

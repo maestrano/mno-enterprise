@@ -158,7 +158,7 @@ namespace :mnoe do
       # Create custom fonts files so we can safely include them in main.less
       admin_panel_font_folder = File.join(admin_panel_project_folder, 'src/fonts')
       unless File.exist?(File.join(admin_panel_font_folder, 'font-faces.less'))
-        font_src = File.join(File.expand_path(File.dirname(__FILE__)),'templates','font-faces.less')
+        font_src = File.join(__dir__,'templates','font-faces.less')
 
         mkdir_p(admin_panel_font_folder)
         cp(font_src, admin_panel_font_folder)

@@ -65,7 +65,7 @@ module MnoEnterprise
         name: name,
         owner_id: owner_id,
         owner_type: owner_type,
-        organization_id: (owner_type == 'Organization') ? owner_id : nil
+        organization_id: owner_type == 'Organization' ? owner_id : nil
       }
     end
 

@@ -271,7 +271,7 @@ module MnoEnterprise
       # ---
       # Only if greater than zero
       #===============================
-      if @data[:customer_current_credit] && @data[:customer_current_credit].positive?
+      if @data[:customer_current_credit]&.positive?
         @pdf.move_up 23
 
         @pdf.float do
@@ -398,7 +398,7 @@ module MnoEnterprise
             '',
             t('tax'),
             '+',
-            money(@data[:invoice_tax_payable]),
+            money(@data[:invoice_tax_payable])
           ]
 
           # Draw table background
@@ -454,7 +454,7 @@ module MnoEnterprise
             '',
             t('total_including_tax'),
             '=',
-            money(@data[:invoice_total_payable_with_tax]),
+            money(@data[:invoice_total_payable_with_tax])
           ]
 
           # Draw table background

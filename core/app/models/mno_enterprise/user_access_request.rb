@@ -28,13 +28,12 @@ module MnoEnterprise
     def self.notify_pending_requests(user, access_duration)
       user = user.load_required(:user_access_requests, :'user_access_requests.requester')
       user.user_access_requests.each do |request|
+        next unless request.status == 'requested'
         # Notify the admin that the access is now granted for the user and delete the request
-        if request.status == 'requested'
-          if request.requester
-            MnoEnterprise::SystemNotificationMailer.access_approved_all(user.id, request.requester.id, access_duration).deliver_later
-          end
-          request.destroy
+        if request.requester
+          MnoEnterprise::SystemNotificationMailer.access_approved_all(user.id, request.requester.id, access_duration).deliver_later
         end
+        request.destroy
       end
     end
 

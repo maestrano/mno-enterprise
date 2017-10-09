@@ -99,7 +99,7 @@ class HtmlProcessor
       if match && match.captures.any?
         @description = match.captures.compact.join('')
       end
-      break if !@description.empty?
+      break unless @description.empty?
     end
 
     return @description

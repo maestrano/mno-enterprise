@@ -113,7 +113,7 @@ def current_directory
 
         File.join(tempdir, 'rails-template')
       else
-        File.expand_path(File.dirname(__FILE__))
+        __dir__
       end
 end
 
@@ -200,7 +200,7 @@ def assert_valid_options
     next unless options.key?(key)
     actual = options[key]
     unless actual == expected
-      fail Rails::Generators::Error, "Unsupported option: #{key}=#{actual}"
+      raise Rails::Generators::Error, "Unsupported option: #{key}=#{actual}"
     end
   end
 end

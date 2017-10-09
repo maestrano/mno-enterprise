@@ -176,7 +176,7 @@ module MnoEnterprise
           if ENV['MINIO_URL'] && ENV['MINIO_BUCKET']
             args = [src, dst, options].compact.join(' ')
             %x(#{"#{aws_cli} s3 sync #{args}"})
-            $?.exitstatus == 0
+            $CHILD_STATUS.exitstatus == 0
           end
         end
 
@@ -185,7 +185,7 @@ module MnoEnterprise
           if ENV['MINIO_URL'] && ENV['MINIO_BUCKET']
             args = [src, dst, options].compact.join(' ')
             %x(#{"#{aws_cli} s3 cp #{args}"})
-            $?.exitstatus == 0
+            $CHILD_STATUS.exitstatus == 0
           end
         end
       end

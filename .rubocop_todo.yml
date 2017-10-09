@@ -802,21 +802,6 @@ Style/AsciiComments:
     - 'core/lib/mno_enterprise/platform_adapters/nex_adapter.rb'
     - 'core/spec/lib/mno_enterprise/platform_adapters/nex_adapter_spec.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/Attr:
-  Exclude:
-    - 'core/lib/generators/mno_enterprise/dummy/dummy_generator.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: percent_q, bare_percent
-Style/BarePercentLiterals:
-  Exclude:
-    - 'core/lib/generators/mno_enterprise/install/install_generator.rb'
-    - 'core/lib/mno_enterprise/concerns/controllers/auth/omniauth_callbacks_controller.rb'
-
 # Offense count: 4
 # Cop supports --auto-correct.
 Style/BlockComments:
@@ -843,25 +828,11 @@ Style/BlockDelimiters:
 Style/BracesAroundHashParameters:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/CharacterLiteral:
-  Exclude:
-    - 'core/lib/generators/mno_enterprise/install/install_generator.rb'
-
 # Offense count: 111
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: nested, compact
 Style/ClassAndModuleChildren:
   Enabled: false
-
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: is_a?, kind_of?
-Style/ClassCheck:
-  Exclude:
-    - 'core/lib/mno_enterprise/testing_support/mno_enterprise_api_test_helper.rb'
 
 # Offense count: 32
 Style/ClassVars:
@@ -872,12 +843,6 @@ Style/ClassVars:
     - 'core/lib/mno_enterprise/mail_client.rb'
     - 'core/lib/mno_enterprise/system_manager.rb'
     - 'frontend/lib/mno_enterprise/frontend/assets_util.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/ColonMethodCall:
-  Exclude:
-    - 'api/config/initializers/devise.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -900,22 +865,6 @@ Style/CommentAnnotation:
     - 'api/mno-enterprise-api.gemspec'
     - 'frontend/lib/mno_enterprise/frontend/locales_generator.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, SingleLineConditionsOnly, IncludeTernaryExpressions.
-# SupportedStyles: assign_to_condition, assign_inside_condition
-Style/ConditionalAssignment:
-  Exclude:
-    - 'api/app/controllers/mno_enterprise/jpi/v1/admin/invites_controller.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/Dir:
-  Exclude:
-    - 'frontend/lib/tasks/mnoe_admin_tasks.rake'
-    - 'frontend/lib/tasks/mnoe_frontend_tasks.rake'
-    - 'rails-template/mnoe-app-template.rb'
-
 # Offense count: 348
 Style/Documentation:
   Enabled: false
@@ -935,22 +884,6 @@ Style/EmptyCaseCondition:
     - 'api/app/views/mno_enterprise/jpi/v1/admin/base_resource/_member.json.jbuilder'
     - 'core/app/models/mno_enterprise/base_resource.rb'
     - 'core/lib/mno_enterprise/testing_support/mno_enterprise_api_test_helper.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: empty, nil, both
-Style/EmptyElse:
-  Exclude:
-    - 'core/app/models/mno_enterprise/audit_event.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: compact, expanded
-Style/EmptyMethod:
-  Exclude:
-    - 'core/lib/mno_enterprise/platform_adapters/test_adapter.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -996,35 +929,6 @@ Style/IfInsideElse:
 Style/IfUnlessModifier:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: InverseMethods, InverseBlocks.
-Style/InverseMethods:
-  Exclude:
-    - 'api/lib/mno_enterprise/concerns/controllers/jpi/v1/teams_controller.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: line_count_dependent, lambda, literal
-Style/Lambda:
-  Exclude:
-    - 'api/lib/mno_enterprise/csv_importer.rb'
-    - 'core/lib/mno_enterprise/engine.rb'
-
-# Offense count: 10
-# Cop supports --auto-correct.
-Style/LineEndConcatenation:
-  Exclude:
-    - 'core/lib/generators/mno_enterprise/install/install_generator.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/MethodCallWithoutArgsParentheses:
-  Exclude:
-    - 'api/lib/mno_enterprise/concerns/controllers/jpi/v1/user_access_requests_controller.rb'
-    - 'core/spec/controllers/mno_enterprise/application_controller_spec.rb'
-
 # Offense count: 5
 # Cop supports --auto-correct.
 Style/MultilineIfModifier:
@@ -1044,30 +948,6 @@ Style/MultilineIfThen:
 Style/MutableConstant:
   Enabled: false
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: both, prefix, postfix
-Style/NegatedIf:
-  Exclude:
-    - 'core/lib/html_processor.rb'
-    - 'frontend/lib/mno_enterprise/frontend/locales_generator.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, MinBodyLength, SupportedStyles.
-# SupportedStyles: skip_modifier_ifs, always
-Style/Next:
-  Exclude:
-    - 'core/app/models/mno_enterprise/user_access_request.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/Not:
-  Exclude:
-    - 'core/lib/devise/controllers/extension_helpers.rb'
-    - 'frontend/lib/mno_enterprise/frontend/locales_generator.rb'
-
 # Offense count: 10
 # Cop supports --auto-correct.
 # Configuration parameters: Strict.
@@ -1084,12 +964,6 @@ Style/NumericPredicate:
     - 'core/app/pdf/mno_enterprise/invoice_pdf.rb'
     - 'core/lib/mno_enterprise/platform_adapters/nex_adapter.rb'
     - 'core/lib/tasks/mno_enterprise_tasks.rake'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/OrAssignment:
-  Exclude:
-    - 'api/lib/mno_enterprise/concerns/controllers/provision_controller.rb'
 
 # Offense count: 8
 # Cop supports --auto-correct.
@@ -1109,12 +983,6 @@ Style/ParenthesesAroundCondition:
 # Configuration parameters: PreferredDelimiters.
 Style/PercentLiteralDelimiters:
   Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/PerlBackrefs:
-  Exclude:
-    - 'Rakefile'
 
 # Offense count: 12
 # Cop supports --auto-correct.
@@ -1140,13 +1008,6 @@ Style/RaiseArgs:
   Exclude:
     - 'api/lib/mno_enterprise/csv_importer.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/RedundantParentheses:
-  Exclude:
-    - 'api/lib/mno_enterprise/api/engine.rb'
-    - 'api/lib/mno_enterprise/csv_importer.rb'
-
 # Offense count: 27
 # Cop supports --auto-correct.
 # Configuration parameters: AllowMultipleReturnValues.
@@ -1170,18 +1031,6 @@ Style/RedundantReturn:
 # Cop supports --auto-correct.
 Style/RedundantSelf:
   Enabled: false
-
-# Offense count: 5
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, AllowInnerSlashes.
-# SupportedStyles: slashes, percent_r, mixed
-Style/RegexpLiteral:
-  Exclude:
-    - 'core/app/controllers/mno_enterprise/application_controller.rb'
-    - 'core/lib/generators/mno_enterprise/install/install_generator.rb'
-    - 'core/lib/mno_enterprise/concerns/controllers/auth/confirmations_controller.rb'
-    - 'core/lib/mno_enterprise/concerns/controllers/auth/omniauth_callbacks_controller.rb'
-    - 'core/lib/mno_enterprise/concerns/controllers/auth/registrations_controller.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -1223,23 +1072,6 @@ Style/Semicolon:
     - 'frontend/spec/controllers/mno_enterprise/invoices_controller_spec.rb'
     - 'frontend/spec/controllers/mno_enterprise/webhook/o_auth_controller_spec.rb'
 
-# Offense count: 5
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: only_raise, only_fail, semantic
-Style/SignalException:
-  Exclude:
-    - 'api/spec/controllers/mno_enterprise/jpi/v1/impac/dashboards_controller_spec.rb'
-    - 'core/app/models/mno_enterprise/user.rb'
-    - 'rails-template/mnoe-app-template.rb'
-
-# Offense count: 9
-# Cop supports --auto-correct.
-# Configuration parameters: SupportedStyles.
-# SupportedStyles: use_perl_names, use_english_names
-Style/SpecialGlobalVars:
-  EnforcedStyle: use_perl_names
-
 # Offense count: 1338
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, ConsistentQuotesInMultiline.
@@ -1277,52 +1109,6 @@ Style/SymbolProc:
     - 'core/app/models/mno_enterprise/app.rb'
     - 'core/lib/mno_enterprise/testing_support/factories/tenant_invoice.rb'
     - 'core/lib/mno_enterprise/testing_support/factories/users.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, AllowSafeAssignment.
-# SupportedStyles: require_parentheses, require_no_parentheses, require_parentheses_when_complex
-Style/TernaryParentheses:
-  Exclude:
-    - 'core/app/models/mno_enterprise/dashboard.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStylesForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, no_comma
-Style/TrailingCommaInArguments:
-  Exclude:
-    - 'api/lib/mno_enterprise/concerns/controllers/jpi/v1/impac/kpis_controller.rb'
-    - 'core/spec/lib/mno_enterprise/smtp_client_spec.rb'
-
-# Offense count: 15
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStylesForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, no_comma
-Style/TrailingCommaInLiteral:
-  Exclude:
-    - 'api/lib/mno_enterprise/audit_events_listener.rb'
-    - 'api/lib/mno_enterprise/concerns/mailers/system_notification_mailer.rb'
-    - 'api/spec/controllers/mno_enterprise/jpi/v1/admin/sub_tenants_controller_spec.rb'
-    - 'api/spec/controllers/mno_enterprise/jpi/v1/impac/alerts_controller_spec.rb'
-    - 'api/spec/controllers/mno_enterprise/jpi/v1/impac/kpis_controller_spec.rb'
-    - 'api/spec/mailer/mno_enterprise/system_notification_mailer_spec.rb'
-    - 'core/app/pdf/mno_enterprise/invoice_pdf.rb'
-    - 'core/config/initializers/00_tenant_config_schema.rb'
-    - 'core/config/initializers/audit_log.rb'
-    - 'core/lib/mno_enterprise/plugins/payment_gateway.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/UnneededCapitalW:
-  Exclude:
-    - 'core/spec/models/mno_enterprise/app_spec.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/UnneededInterpolation:
-  Exclude:
-    - 'core/lib/mno_enterprise/testing_support/common_rake.rb'
 
 # Offense count: 17
 # Cop supports --auto-correct.

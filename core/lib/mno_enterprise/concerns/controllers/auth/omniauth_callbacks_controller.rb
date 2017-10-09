@@ -50,7 +50,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
   #==================================================================
   module ClassMethods
     def provides_callback_for(provider)
-      class_eval %Q{
+      class_eval %{
         def #{provider}
           auth = env["omniauth.auth"]
           opts = { orga_on_create: create_orga_on_user_creation(auth.info.email) }
@@ -147,13 +147,14 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
     end
 
     # Whether to create an orga on user creation
+    # TODO: Extact duplicated in other controllers
     def create_orga_on_user_creation(user_email = nil)
       return false if user_email.blank?
       return false if MnoEnterprise::User.exists?(email: user_email)
 
       # First check previous url to see if the user
       # was trying to accept an orga
-      if !session[:previous_url].blank? && (r = session[:previous_url].match(/\/orga_invites\/(\d+)\?token=(\w+)/))
+      if !session[:previous_url].blank? && (r = session[:previous_url].match(%r{/orga_invites/(\d+)\?token=(\w+)}))
         invite_params = { id: r.captures[0].to_i, token: r.captures[1] }
         return false if MnoEnterprise::OrgaInvite.where(invite_params).any?
       end

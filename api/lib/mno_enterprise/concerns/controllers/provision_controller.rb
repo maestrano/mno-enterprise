@@ -36,9 +36,7 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
     @apps = params[:apps]
     @organizations = current_user.organizations.to_a
     @organization = @organizations.find { |o| o.id && o.id.to_s == params[:organization_id].to_s }
-    unless @organization
-      @organization = @organizations.one? ? @organizations.first : nil
-    end
+    @organization ||= @organizations.one? ? @organizations.first : nil
     if @organization && cannot?(:manage_app_instances, @organization)
       msg = 'Unfortunately you do not have permission to purchase products for this organization'
       if @organizations.one?

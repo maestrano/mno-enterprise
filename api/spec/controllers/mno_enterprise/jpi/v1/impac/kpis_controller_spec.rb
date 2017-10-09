@@ -48,7 +48,7 @@ module MnoEnterprise
           "kpis" => [
             {"name" => "Debtor Due Days Max", "endpoint" => "invoicing/due_days/debtor", "watchables" => ["max"], "attachables" => nil, "target_placeholders" => {"max" => {"mode" => "max", "value" => 90, "unit" => "days"}}},
             {"name" => "Debtor Due Days Average", "endpoint" => "invoicing/due_days/debtor", "watchables" => ["average"], "attachables" => nil, "target_placeholders" => {"average" => {"mode" => "max", "value" => 30, "unit" => "days"}}},
-            {"name" => "Account Balance", "endpoint" => "accounting/balance", "watchables" => ["balance"], "attachables" => ["accounts/balance"], "target_placeholders" => {"balance" => {"mode" => "min", "value" => 15000, "unit" => "currency"}}},
+            {"name" => "Account Balance", "endpoint" => "accounting/balance", "watchables" => ["balance"], "attachables" => ["accounts/balance"], "target_placeholders" => {"balance" => {"mode" => "min", "value" => 15000, "unit" => "currency"}}}
           ]
         }
       end

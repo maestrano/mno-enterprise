@@ -87,7 +87,7 @@ module MnoEnterprise
     end
 
     def capture_previous_url
-      if request.format == 'text/html' && request.fullpath =~ /\/(myspace|deletion_requests|org_invites|provision)/
+      if request.format == 'text/html' && request.fullpath =~ %r{/(myspace|deletion_requests|org_invites|provision)}
         session[:previous_url] = request.original_url
       end
     end

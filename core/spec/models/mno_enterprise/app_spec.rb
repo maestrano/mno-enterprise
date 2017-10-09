@@ -12,7 +12,7 @@ module MnoEnterprise
         before { allow(described_class).to receive(:all).and_return([app]) }
 
         it 'returns a unique (case insensitive) sorted list' do
-          expect(subject).to eq(%W(CATEGORY Other))
+          expect(subject).to eq(%w(CATEGORY Other))
         end
       end
 

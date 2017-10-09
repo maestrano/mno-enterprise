@@ -13,7 +13,7 @@ module MnoEnterprise
     # CSV IMPORT
     REQUIRED_HEADERS = %w(external_id company_name billing_currency name surname phone email address1 address2 city state_province country postal_code)
     MANDATORY_COLUMNS = %w(company_name name surname email address1 city state_province country)
-    CSV_OPTIONS = { encoding: "ISO8859-1:utf-8", headers: true, header_converters: lambda { |f| f.strip.parameterize.underscore }, converters: lambda { |f| f&.strip } }
+    CSV_OPTIONS = { encoding: "ISO8859-1:utf-8", headers: true, header_converters: ->(f) { f.strip.parameterize.underscore }, converters: ->(f) { f&.strip } }
 
     def self.process(file_path)
       # validate File
@@ -93,7 +93,7 @@ module MnoEnterprise
     def self.validate_csv(csv)
       errors = []
       missing_headers = REQUIRED_HEADERS - csv.headers
-      if (missing_headers.any?)
+      if missing_headers.any?
         errors << "Headers are missing: #{missing_headers.to_sentence}"
         return errors
       end

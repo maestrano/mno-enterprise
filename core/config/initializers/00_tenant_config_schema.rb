@@ -70,7 +70,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               items: {
                 type: "string",
                 # TODO: double check # Proc?
-                enum: I18n.available_locales,
+                enum: I18n.available_locales
               },
               'x-schema-form': {
                 titleMap: {'en-AU': 'English (Australia)'}
@@ -274,7 +274,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                   description: "Display and allow products reviews on the marketplace"
                 }
               }
-            },
+            }
           }
         },
         # commented until products are properly handled
@@ -295,7 +295,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              description: "Allow your customer to create companies and enable the 'Company' menu",
+              description: "Allow your customer to create companies and enable the 'Company' menu"
             },
             billing: {
               type: "object",
@@ -489,7 +489,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               default: false
             }
           }
-        },
+        }
       }
     },
     admin_panel: {
@@ -663,7 +663,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               enum: %w(AED AUD CAD EUR GBP HKD JPY NZD SGD USD)
             }
           }
-        },
+        }
       }
     }
   }

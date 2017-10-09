@@ -97,7 +97,7 @@ module MnoEnterprise
       #  => locale = {'foo.bar' => 'baz'}
       def flatten_translations(prefix, x, locale)
         if x.is_a? Hash
-          if (not prefix.empty?)
+          unless prefix.empty?
             prefix += "."
           end
           x.each {|key, value|

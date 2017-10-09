@@ -164,7 +164,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
         # invites
         # Get invites from previous_url (user was accepting invite but didn't have an account)
         org_invites = []
-        if !session[:previous_url].blank? && (r = session[:previous_url].match(/\/org_invites\/(\d+)\?token=(\w+)/))
+        if !session[:previous_url].blank? && (r = session[:previous_url].match(%r{/org_invites/(\d+)\?token=(\w+)}))
           invite_params = { id: r.captures[0].to_i, token: r.captures[1] }
           org_invites << MnoEnterprise::OrgaInvite.where(invite_params).first
         end

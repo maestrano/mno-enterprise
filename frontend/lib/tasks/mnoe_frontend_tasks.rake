@@ -254,7 +254,7 @@ namespace :mnoe do
       impac_angular_pkg = "git+https://git@github.com/maestrano/impac-angular.git##{IMPAC_ANGULAR_VERSION}"
 
       render_template(
-        File.join(File.expand_path(File.dirname(__FILE__)),'templates','package.json'),
+        File.join(__dir__,'templates','package.json'),
         PKG_FILE,
         binding
       )
@@ -368,7 +368,7 @@ namespace :mnoe do
       # Create custom fonts files so we can safely include them in main.less
       frontend_font_folder = File.join(frontend_project_folder, 'src/fonts')
       unless File.exist?(File.join(frontend_font_folder, 'font-faces.less'))
-        font_src = File.join(File.expand_path(File.dirname(__FILE__)), 'templates', 'font-faces.less')
+        font_src = File.join(__dir__, 'templates', 'font-faces.less')
 
         mkdir_p(frontend_font_folder)
         cp(font_src, frontend_font_folder)

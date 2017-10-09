@@ -51,7 +51,7 @@ module MnoEnterprise
         stub_api_v2(:get, "/alerts/#{alert.id}", alert, [:recipients])
       end
 
-      let(:update_alert_hash) { { title: 'test', webhook: 'test', sent: true, forbidden: 'test', } }
+      let(:update_alert_hash) { { title: 'test', webhook: 'test', sent: true, forbidden: 'test' } }
       let(:updated_alert) { build(:impac_alert, id: alert.id, kpi_id: kpi.id, title: 'test', webhook: 'test', sent: true) }
 
       subject { put :update, id: alert.id, alert: update_alert_hash }
