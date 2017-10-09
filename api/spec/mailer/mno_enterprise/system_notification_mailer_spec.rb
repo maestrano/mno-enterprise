@@ -3,9 +3,18 @@ require 'rails_helper'
 module MnoEnterprise
   RSpec.describe SystemNotificationMailer do
     subject { SystemNotificationMailer }
-    before { MnoEnterprise::Engine.routes.default_url_options = {host: 'http://localhost:3000'} }
+    before { 
+      MnoEnterprise::Engine.routes.default_url_options = {host: 'http://localhost:3000'}
+      Rails.application.routes.default_url_options = {host: 'http://localhost:3000'}
+      stub_api_v2(:get, "/users/#{user.id}", user, [], {fields: {users:'email,name'}})
+      stub_api_v2(:get, "/invoices/#{invoice.id}", invoice)
+     }
+
+    let(:organization) { build(:organization) }
+    let!(:invoice) { build(:invoice, organization: organization) }
+    let!(:invoice_rendered) { MnoEnterprise::InvoicePdf.new(invoice).render }
+    let!(:user) { build(:user) }
     let(:routes) { MnoEnterprise::Engine.routes.url_helpers }
-    let(:user) { build(:user) }
     let(:token) { "1sd5f323S1D5AS" }
     let(:deletion_request) { build(:deletion_request) }
 
@@ -173,6 +182,31 @@ module MnoEnterprise
         )
 
         subject.registration_instructions('test@example.com').deliver_now
+      end
+    end
+
+    describe 'send_invoice' do
+      it 'sends the correct email' do
+        expect(MnoEnterprise::MailClient).to receive(:deliver).with(
+            'invoice',
+            SystemNotificationMailer::DEFAULT_SENDER,
+            { email: user.email },
+            { 
+              first_name: user.name,
+              started_at: invoice.started_at.to_date,
+              ended_at: invoice.ended_at.to_date,
+              currency: invoice.total_due.currency,
+              price_cents: invoice.total_due.fractional,
+              dashboard_link: root_url,
+              attachments: [
+                {
+                  name: "invoice - #{invoice.slug}.pdf",
+                  value: invoice_rendered
+                }
+              ]
+            }
+        )
+        subject.send_invoice(user.id, invoice.id).deliver_now
       end
     end
   end

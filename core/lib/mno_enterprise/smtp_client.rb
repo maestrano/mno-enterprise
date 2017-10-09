@@ -8,9 +8,7 @@ module MnoEnterprise
       @info = vars
       @info[:company] = from[:name]
   
-      (@info[:attachments] || []).each do |attachment|
-        attachments[attachment[:name]] = attachment[:value]
-      end
+      attach_file(@info[:attachments])
 
       mail(
         from: format_sender(from),
@@ -31,6 +29,12 @@ module MnoEnterprise
     # @i.e. "reset-password-instructions" to "Reset password instructions"
     def humanize(template_slug)
       template_slug.tr("-", "_").humanize
+    end
+
+    def attach_file(files)
+      (files || []).each do |attachment|
+        attachments[attachment[:name]] = attachment[:value]
+      end
     end
   end
 end

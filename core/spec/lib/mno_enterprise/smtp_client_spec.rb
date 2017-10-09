@@ -9,6 +9,12 @@ describe MnoEnterprise::SmtpClient do
         'reset-password-instructions',
         {name: 'John', email: 'john.doe@example.com'},
         {name: 'Joe', email: 'joe.blogg@example.com'},
+        attachments: [
+          {
+            name: "some-file.pdf",
+            value: "the file"
+          }
+        ]
       )
     end
 
@@ -20,7 +26,9 @@ describe MnoEnterprise::SmtpClient do
         template_path: 'system_notifications',
         template_name: 'reset-password-instructions'
       }
+      attachments = [ { name: "some-file.pdf", value: "the file" }]
       expect(client).to receive(:mail).with(expected_params)
+      expect(client).to receive(:attach_file).with(attachments)
       subject
     end
   end
