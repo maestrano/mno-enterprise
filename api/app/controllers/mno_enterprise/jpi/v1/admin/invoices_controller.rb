@@ -162,7 +162,7 @@ module MnoEnterprise
 
       organization.orga_relations.each do |orga_relation|
         next unless (orga_relation.role == 'Super Admin')
-        MnoEnterprise::SystemNotificationMailer.send_invoice(orga_relation.user.id, params[:id]).deliver_now
+        MnoEnterprise::SystemNotificationMailer.send_invoice(orga_relation.user_id, params[:id]).deliver_later
       end
       render json: { status: :request_sent}
 
