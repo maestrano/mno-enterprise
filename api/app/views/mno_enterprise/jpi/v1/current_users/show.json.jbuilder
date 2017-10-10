@@ -31,10 +31,11 @@ json.cache! ['v2', @user.cache_key] do
     # Embed association if user is persisted
     if @user.id
       json.organizations do
-        json.array! (@user.organizations.select(&:active?) || []) do |o|
+        json.array! @organizations do |o|
           json.id o.id
           json.uid o.uid
           json.name o.name
+          json.active o.active?
           json.currency o.billing_currency
           json.current_user_role @user.role(o)
           json.has_myob_essentials_only o.has_myob_essentials_only

@@ -18,6 +18,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # GET /mnoe/jpi/v1/current_user
   def show
     @user = current_user || MnoEnterprise::User.new(id: nil)
+    if @user.id
+      @organizations = @user.organizations.select{ |org| org.visible?(@user) }
+    end
   end
 
   # PUT /mnoe/jpi/v1/current_user
