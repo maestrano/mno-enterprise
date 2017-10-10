@@ -25,6 +25,9 @@ module MnoEnterprise
     custom_endpoint :cancel, on: :member, request_method: :post
     custom_endpoint :approve, on: :member, request_method: :post
     custom_endpoint :fulfill, on: :member, request_method: :post
+    custom_endpoint :modify, on: :member, request_method: :post
+    custom_endpoint :enable, on: :member, request_method: :post
+    custom_endpoint :suspend, on: :member, request_method: :post
 
     def to_audit_event
       event = {id: id, status: status}

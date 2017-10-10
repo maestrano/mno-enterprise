@@ -87,7 +87,7 @@ module MnoEnterprise
       let(:product_pricing) { build(:product_pricing, product: product) }
 
       before { stub_audit_events }
-      before { stub_api_v2(:patch, "/subscriptions/#{subscription.id}", subscription, [], {}) }
+      before { stub_api_v2(:post, "/subscriptions/#{subscription.id}/modify", subscription, [], {}) }
       before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
       before { stub_api_v2(:get, "/subscriptions", subscription, [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
       before { sign_in user }
@@ -98,7 +98,7 @@ module MnoEnterprise
 
       it 'passes the correct parameters' do
         expect(subject).to be_successful
-        assert_requested_api_v2(:patch, "/subscriptions/#{subscription.id}",
+        assert_requested_api_v2(:post, "/subscriptions/#{subscription.id}/modify",
                                  body: {
                                   "data" => {
                                     "id" => subscription.id,
