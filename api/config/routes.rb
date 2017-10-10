@@ -134,6 +134,7 @@ MnoEnterprise::Engine.routes.draw do
           put :invite_members
           put :update_member
           put :remove_member
+          post :freeze, to: 'organizations#freeze_org'
         end
 
         # AppInstances
