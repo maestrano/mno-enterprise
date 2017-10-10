@@ -58,7 +58,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   def update
     subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
-    subscription.update_attributes(subscription_update_params)
+    subscription.attributes = subscription_update_params
+    subscription.modify(data: subscription.as_json_api)
 
     if subscription.errors.any?
       render json: subscription.errors, status: :bad_request

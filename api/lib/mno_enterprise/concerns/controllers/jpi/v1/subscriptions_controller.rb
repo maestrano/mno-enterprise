@@ -45,7 +45,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
     subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
-    subscription.update_attributes(subscription_update_params)
+    subscription.attributes = subscription_update_params
+    subscription.modify(data: subscription.as_json_api)
 
     if subscription.errors.any?
       render json: subscription.errors, status: :bad_request
