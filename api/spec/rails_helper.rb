@@ -63,7 +63,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
 
   # Include Rails route helpers
-  config.include Rails.application.routes.url_helpers, type: :controller
+  config.include Rails.application.routes.url_helpers, type: [:controller, :mailer]
 
   # Fix time rounding issues
   ActiveSupport::JSON::Encoding.time_precision = 0

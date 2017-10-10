@@ -239,11 +239,12 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
         ended_at: invoice.ended_at.to_date,
         currency: invoice.total_due.currency,
         price_cents: invoice.total_due.fractional,
-        dashboard_link: root_url,
+        dashboard_link: main_app.root_url,
         attachments: [
           {
             name: "invoice - #{invoice.slug}.pdf",
-            value: MnoEnterprise::InvoicePdf.new(invoice).render
+            type: 'application/pdf',
+            content: MnoEnterprise::InvoicePdf.new(invoice).render
           }
         ]
       }

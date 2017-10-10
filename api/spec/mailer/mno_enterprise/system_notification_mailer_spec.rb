@@ -1,9 +1,12 @@
 require 'rails_helper'
 
 module MnoEnterprise
-  RSpec.describe SystemNotificationMailer do
+  RSpec.describe SystemNotificationMailer, type: :mailer do
     subject { SystemNotificationMailer }
-    before { MnoEnterprise::Engine.routes.default_url_options = {host: 'http://localhost:3000'} }
+    before do
+      MnoEnterprise::Engine.routes.default_url_options = {host: 'http://localhost:3000'}
+      Rails.application.routes.default_url_options = {host: 'http://localhost:3000'}
+    end
     let(:routes) { MnoEnterprise::Engine.routes.url_helpers }
     let(:user) { build(:user) }
     let(:token) { "1sd5f323S1D5AS" }
@@ -136,7 +139,7 @@ module MnoEnterprise
         end
       end
 
-      context 'when inviteee is an unconfirmed user' do
+      context 'when invitee is an unconfirmed user' do
         let(:invitee) { build(:user, :unconfirmed) }
 
         it 'sends the right email' do
@@ -173,6 +176,38 @@ module MnoEnterprise
         )
 
         subject.registration_instructions('test@example.com').deliver_now
+      end
+    end
+
+    describe 'send_invoice' do
+      before do
+        stub_api_v2(:get, "/users/#{user.id}", user, [], {fields: {users: 'email,name'}})
+        stub_api_v2(:get, "/invoices/#{invoice.id}", invoice)
+      end
+      let(:invoice) { build(:invoice) }
+      let(:rendered_invoice) { MnoEnterprise::InvoicePdf.new(invoice).render }
+      it 'sends the correct email' do
+        expect(MnoEnterprise::MailClient).to receive(:deliver).with(
+            'invoice',
+            SystemNotificationMailer::DEFAULT_SENDER,
+            { email: user.email },
+            {
+              first_name: user.name,
+              started_at: invoice.started_at.to_date,
+              ended_at: invoice.ended_at.to_date,
+              currency: invoice.total_due.currency,
+              price_cents: invoice.total_due.fractional,
+              dashboard_link: root_url,
+              attachments: [
+                {
+                  name: "invoice - #{invoice.slug}.pdf",
+                  type: 'application/pdf',
+                  content: rendered_invoice
+                }
+              ]
+            }
+        )
+        subject.send_invoice(user.id, invoice.id).deliver_now
       end
     end
   end

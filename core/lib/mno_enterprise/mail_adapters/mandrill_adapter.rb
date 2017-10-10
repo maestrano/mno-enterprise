@@ -17,9 +17,22 @@ module MnoEnterprise
           message = { from_name: from[:name], from_email: from[:email]}
           message[:to] = [to].flatten.map { |t| {name: t[:name], email: t[:email], type: (t[:type] || :to) } }
 
+          # Prepare message from args
+
+          # Add attachments
+          if (attachments = vars.delete(:attachments))
+            message[:attachments] = attachments.map do |a|
+              {
+                name: a[:name],
+                type: a[:type],
+                content: Base64.encode64(a[:content])
+              }
+            end
+          end
+
           # Sanitize merge vars
           full_sanitizer = Rails::Html::FullSanitizer.new
-          message[:global_merge_vars] = vars.map { |k,v| {name: k.to_s, content: full_sanitizer.sanitize(v)} }
+          message[:global_merge_vars] = vars.map { |k,v| {name: k.to_s, content: full_sanitizer.sanitize(v.to_s)} }
 
           # Merge additional mandrill options
           message.merge!(opts)
