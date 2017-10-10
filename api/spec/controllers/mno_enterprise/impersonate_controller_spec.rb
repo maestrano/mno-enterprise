@@ -23,13 +23,15 @@ module MnoEnterprise
       end
 
       describe '#create' do
+        subject { get :create, user_id: user2.id }
         it do
           expect(controller.current_user.id).to eq(user.id)
-          get :create, user_id: user2.id
+          subject
           expect(controller.current_user.id).to eq(user2.id)
         end
+
         context 'with an organisation id in parameters' do
-          before { get :create, user_id: user2.id, dhbRefId: 10 }
+          subject { get :create, user_id: user2.id, dhbRefId: 10 }
 
           it { is_expected.to redirect_to('/dashboard/#!?dhbRefId=10') }
         end
@@ -38,27 +40,32 @@ module MnoEnterprise
           before { stub_api_v2(:get, '/users/crappyId', [], %i(deletion_requests organizations orga_relations dashboards teams user_access_requests)) }
           subject { get :create, user_id: 'crappyId', dhbRefId: 10 }
           it do
-            subject
-            is_expected.to redirect_to('/admin/#!?flash=%7B%22msg%22%3A%22User+doesn%27t+exist%22%2C%22type%22%3A%22error%22%7D')
+            is_expected.to redirect_to('/admin/#!?flash=%7B%22msg%22%3A%22User+does+not+exist%22%2C%22type%22%3A%22error%22%7D')
           end
         end
+
+        context 'when the user is a staff member' do
+          let(:user2) { build(:user, admin_role: 'staff') }
+          it do
+            is_expected.to redirect_to('/admin/#!?flash=%7B%22msg%22%3A%22User+is+a+staff+member%22%2C%22type%22%3A%22error%22%7D')
+          end
+        end
+
         context 'when impersonation consent is required' do
           before { Settings.merge!(admin_panel: { impersonation: { consent_required: true } }) }
           after { Settings.merge!(admin_panel: { impersonation: { consent_required: false } }) }
           let(:user2) { build(:user, user_access_requests: [user_access_request]) }
           let(:user_access_request) { build(:user_access_request, requester_id: nil, status: status) }
           subject { get :create, user_id: user2.id }
+
           context 'when the impersonification is allowed' do
             let(:status) { 'approved' }
-            it do
-              subject
-              is_expected.to redirect_to('/dashboard/')
-            end
+            it { is_expected.to redirect_to('/dashboard/') }
           end
+
           context 'when the impersonification is not allowed' do
             let(:status) { 'revoked' }
             it do
-              subject
               is_expected.to redirect_to('/admin/#!?flash=%7B%22msg%22%3A%22Access+was+not+granted+or+was+revoked.%22%2C%22type%22%3A%22error%22%7D')
             end
           end
