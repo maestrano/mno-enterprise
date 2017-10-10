@@ -140,12 +140,14 @@ module MnoEnterprise
 
   # The Maestrano Enterprise API base path
   mattr_accessor :mno_api_root_path
-  @@mno_api_root_path = "/api/mnoe/v2"
+  @@mno_api_root_path = "/api/mnoe/v1"
+
+  mattr_accessor :mno_api_v2_root_path
+  @@mno_api_v2_root_path = "/api/mnoe/v2"
 
   # Hold the Maestrano enterprise router (redirection to central enterprise platform)
   mattr_reader :router
   @@router = Router.new
-
 
   #====================================
   # Emailing
@@ -275,10 +277,7 @@ module MnoEnterprise
 
     # Configure JsonApiClient for Maestrano Enterprise API V2
     def self.configure_api
-      if @@mno_api_root_path == '/api/mnoe/v1'
-        raise "MNOE API root path is pointing to '/api/mnoe/v1'. Please upgrade your settings."
-      end
-      MnoEnterprise::BaseResource.site = URI.join(api_host, @@mno_api_root_path).to_s
+      MnoEnterprise::BaseResource.site = URI.join(api_host, @@mno_api_v2_root_path).to_s
 
       MnoEnterprise::BaseResource.connection do |connection|
         connection.use Faraday::Request::BasicAuthentication, @@tenant_id, @@tenant_key

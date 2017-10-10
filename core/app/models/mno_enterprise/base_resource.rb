@@ -2,7 +2,7 @@ require 'json_api_client'
 module MnoEnterprise
   class BaseResource < ::JsonApiClient::Resource
     include ActiveModel::Callbacks
-    self.site = URI.join(MnoEnterprise.api_host, MnoEnterprise.mno_api_root_path).to_s
+    self.site = URI.join(MnoEnterprise.api_host, MnoEnterprise.mno_api_v2_root_path).to_s
     self.parser = JsonApiClientExtension::CustomParser
 
     define_callbacks :create
