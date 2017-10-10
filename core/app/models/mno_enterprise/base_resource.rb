@@ -101,8 +101,17 @@ module MnoEnterprise
     end
 
     def destroy!
-      destroy
-      raise_if_errors
+      unless destroy
+        # HotFix waiting for #https://github.com/chingor13/json_api_client/pull/275 to be merged
+        last_result_set.errors.each do |error|
+          if error.source_parameter
+            errors.add(self.class.key_formatter.unformat(error.source_parameter), error.title || error.detail)
+          else
+            errors.add(:base, error.title || error.detail)
+          end
+        end
+        raise_if_errors
+      end
     end
 
     def update_attributes!(attrs = {})

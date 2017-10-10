@@ -7,12 +7,7 @@ module MnoEnterprise
     end
 
     def message
-      errors.map { |e|
-        s = StringIO.new
-        s << e.source_parameter + ': ' if e.respond_to?(:source_parameter)
-        s << e.title + ': ' if e.respond_to?(:title)
-        s.string
-      }.join(', ')
+      errors.full_messages.join(', ')
     end
   end
 end

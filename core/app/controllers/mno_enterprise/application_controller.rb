@@ -18,7 +18,7 @@ module MnoEnterprise
 
     rescue_from MnoEnterprise::ResourceError do |exception|
       resource_name = controller_name.singularize
-      message = "#{params[:action]} #{resource_name}, resource error: #{exception.message}"
+      message = "[#{params[:action]} #{resource_name}] error: #{exception.message}"
       render json: { errors: {message: message, code: 400, params: params} }, status: :bad_request
     end
 

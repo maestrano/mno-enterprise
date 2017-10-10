@@ -54,6 +54,7 @@ module MnoEnterprise
         "extra_params" => kpi.extra_params
       }
     end
+
     let(:hash_for_widget) do
       {
         "id" => widget.id,
@@ -73,7 +74,7 @@ module MnoEnterprise
         "full_name" => dashboard.full_name,
         "currency" => 'EUR',
         "metadata" => metadata.deep_stringify_keys,
-        "data_sources" => [{ "id" => org.id, "uid" => org.uid, "label" => org.name}],
+        "data_sources" => [{ "id" => org.id, "uid" => org.uid, "label" => org.name }],
         "kpis" => [hash_for_kpi(d_kpi)],
         "widgets" => [hash_for_widget]
       }
@@ -88,7 +89,7 @@ module MnoEnterprise
       subject { get :index }
 
       before do
-        stub_api_v2(:get, "/dashboards", [dashboard], dashboard_dependencies, {filter: {owner_id: user.id}})
+        stub_api_v2(:get, "/dashboards", [dashboard], dashboard_dependencies, { filter: { owner_id: user.id } })
       end
 
       it_behaves_like "jpi v1 protected action"
@@ -101,7 +102,7 @@ module MnoEnterprise
 
     describe 'GET #show' do
       before do
-        stub_api_v2(:get, "/dashboards/#{dashboard.id}", dashboard, [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts'], {filter: {owner_id: user.id}})
+        stub_api_v2(:get, "/dashboards/#{dashboard.id}", dashboard, [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts'], { filter: { owner_id: user.id } })
       end
 
       subject { get :show, id: dashboard.id }
@@ -115,9 +116,7 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
-
       let!(:stub) { stub_api_v2(:post, "/dashboards", dashboard) }
-
       before do
         stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], dashboard_dependencies)
       end
@@ -135,78 +134,108 @@ module MnoEnterprise
         subject
         expect(JSON.parse(response.body)).to eq(hash_for_dashboard)
       end
-
-      context 'with a validation error' do
-        let(:stub) { stub_api_v2_error(:post, "/dashboards", 422, 'validation error') }
+      context 'with a resource error' do
+        let!(:stub) { stub_api_v2_error(:post, '/dashboards', 422, 'validation error') }
+        let(:errors) { parse_errors(response) }
         it 'returns an error' do
           subject
           expect(subject).to_not be_successful
           expect(subject.code).to eq('400')
+          expect(errors[:message]).to eq('[create dashboard] error: validation error')
         end
       end
     end
 
     describe 'PUT #update' do
+      subject { put :update, id: dashboard.id, dashboard: dashboard_params }
+
+      let!(:stub) { stub_api_v2(:patch, "/dashboards/#{dashboard.id}", [dashboard]) }
       before do
         # TODO: APIv2 Improve contrroller code to do less requests?
         stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], dashboard_dependencies)
-        stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], [], filter: {owner_id: user.id})
-        stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], dashboard_dependencies, filter: {owner_id: user.id})
-        stub_api_v2(:patch, "/dashboards/#{dashboard.id}", [dashboard])
+        stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], [], filter: { owner_id: user.id })
+        stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], dashboard_dependencies, filter: { owner_id: user.id })
       end
-
-      subject { put :update, id: dashboard.id, dashboard: dashboard_params }
-
-      it_behaves_like "jpi v1 protected action"
+      it_behaves_like 'jpi v1 protected action'
 
       it '[APIv2] updates the dashboard' do
-        pending 'assert_requested'
-        fail
+        subject
+        expect(stub).to have_been_requested
       end
 
       it 'returns a dashboard' do
         subject
         expect(JSON.parse(response.body)).to eq(hash_for_dashboard)
       end
+
+      context 'with a resource error' do
+        let!(:stub) { stub_api_v2_error(:patch, "/dashboards/#{dashboard.id}", 422, 'this is wrong') }
+        let(:errors) { parse_errors(response) }
+        it 'returns an error' do
+          subject
+          expect(subject).to_not be_successful
+          expect(subject.code).to eq('400')
+          expect(errors[:message]).to eq('[update dashboard] error: this is wrong')
+        end
+      end
     end
 
-    describe "DELETE destroy" do
-      before do
-        stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], [], filter: {owner_id: user.id})
-        stub_api_v2(:delete, "/dashboards/#{dashboard.id}")
-      end
-
+    describe 'DELETE destroy' do
       subject { delete :destroy, id: dashboard.id }
-
-      it_behaves_like "jpi v1 protected action"
+      let!(:stub) { stub_api_v2(:delete, "/dashboards/#{dashboard.id}") }
+      before do
+        stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], [], filter: { owner_id: user.id })
+      end
+      it_behaves_like 'jpi v1 protected action'
 
       it 'deletes the dashboard' do
         subject
-        assert_requested_api_v2(:delete, "/dashboards/#{dashboard.id}")
+        expect(stub).to have_been_requested
+      end
+
+      context 'with a resource error' do
+        let!(:stub) { stub_api_v2_error(:delete, "/dashboards/#{dashboard.id}", 422, 'could not delete') }
+        let(:errors) { parse_errors(response) }
+        it 'returns an error' do
+          subject
+          expect(subject).to_not be_successful
+          expect(subject.code).to eq('400')
+          expect(errors[:message]).to eq('[destroy dashboard] error: could not delete')
+        end
       end
     end
 
     describe 'POST copy' do
+      subject { post :copy, id: template.id, dashboard: dashboard_params }
+      let!(:stub) { stub_api_v2(:post, "/dashboards/#{template.id}/copy", [dashboard]) }
       let(:template) { build(:impac_dashboard, dashboard_type: 'template') }
 
       before do
         stub_api_v2(:get, "/dashboards/#{template.id}", [template], [], filter: { 'dashboard_type' => 'template' })
-        stub_api_v2(:post, "/dashboards/#{template.id}/copy", [dashboard])
         stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], dashboard_dependencies)
       end
 
-      subject { post :copy, id: template.id, dashboard: dashboard_params }
-
-      it_behaves_like "jpi v1 protected action"
+      it_behaves_like 'jpi v1 protected action'
 
       it '[APIv2] copy the dashboard' do
-        pending 'assert_requested'
-        fail
+        subject
+        expect(stub).to have_been_requested
       end
 
       it 'returns a dashboard' do
         subject
         expect(JSON.parse(response.body)).to eq(hash_for_dashboard)
+      end
+
+      context 'with a resource error' do
+        let!(:stub) { stub_api_v2_error(:post, "/dashboards/#{template.id}/copy", 422, 'could not copy') }
+        let(:errors) { parse_errors(response) }
+        it 'returns an error' do
+          subject
+          expect(subject).to_not be_successful
+          expect(subject.code).to eq('400')
+          expect(errors[:message]).to eq('[copy dashboard] error: could not copy')
+        end
       end
     end
   end

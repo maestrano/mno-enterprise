@@ -70,7 +70,7 @@ module MnoEnterpriseApiTestHelper
     stub
   end
 
-  def stub_api_v2_error(method, suffix, error_code, error)
+  def stub_api_v2_error(method, suffix, error_code = 400, error = 'error on the field')
     url = api_v2_url(suffix, [], _locale: I18n.locale)
     stub = stub_request(method, url).with(MOCK_OPTIONS)
     body = {
@@ -84,6 +84,10 @@ module MnoEnterpriseApiTestHelper
     }.to_json
     stub.to_return(status: error_code, body: body, headers: RESULT_HEADERS)
     stub
+  end
+
+  def parse_errors(response)
+    JSON.parse(response.body, symbolize_names: true)[:errors]
   end
 
   def assert_requested_api_v2(method, suffix, options = {})
