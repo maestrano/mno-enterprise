@@ -18,6 +18,30 @@ describe MnoEnterprise::MailAdapters::MandrillAdapter do
       })
       subject.deliver(template, from, to, vars)
     end
+
+    context 'with attachments' do
+      let(:vars) do
+        {
+          some: 'var',
+          attachments: [{
+            name: 'some-file.pdf', content: 'the file', type: 'application/pdf'
+          }]
+        }
+      end
+
+      it 'send the correct template with the correct parameters' do
+        expect(subject).to receive(:send_template).with(template,[],{
+          from_name: from[:name],
+          from_email: from[:email],
+          to: [{email: to[:email], type: :to, name: to[:name]}],
+          attachments: [
+            {name: 'some-file.pdf', content: Base64.encode64('the file'), type: 'application/pdf'}
+          ],
+          global_merge_vars: [{name: vars.keys.first.to_s, content: vars.values.first}]
+        })
+        subject.deliver(template, from, to, vars)
+      end
+    end
   end
 
   describe '.send_template' do
