@@ -136,25 +136,3 @@ module MnoEnterprise
 
   end
 end
-
-LocaleMiddleware = Struct.new(:app) do
-  def call(env)
-    env.url.query = add_query_param(env.url.query, "_locale", I18n.locale)
-    app.call env
-  end
-
-  def add_query_param(query, key, value)
-    query = query.to_s
-    query << "&" unless query.empty?
-    query << "#{Faraday::Utils.escape key}=#{Faraday::Utils.escape value}"
-  end
-end
-
-MnoEnterprise::BaseResource.connection do |connection|
-  connection.use Faraday::Request::BasicAuthentication, MnoEnterprise.tenant_id, MnoEnterprise.tenant_key
-
-  connection.use LocaleMiddleware
-
-  # log responses
-  connection.use Faraday::Response::Logger if Rails.env.development?
-end

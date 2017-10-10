@@ -8,24 +8,13 @@ require 'cancancan'
 require 'devise'
 require 'devise/strategies/remote_authenticatable'
 require 'devise_extension'
-require "her"
-require "her_extension/her_orm_adapter"
-require "her_extension/model/orm"
-require "her_extension/model/relation"
-require "her_extension/model/attributes"
-require "her_extension/model/parse"
-require "her_extension/model/associations/association"
-require "her_extension/model/associations/association_proxy"
-require "her_extension/model/associations/has_many_association"
-require "her_extension/model/associations/belongs_to_association"
-require "her_extension/middleware/mnoe_api_v1_parse_json"
-require "her_extension/middleware/mnoe_raise_error"
-require "faraday_middleware"
+require "active_model"
 require "httparty"
 require "json_api_client"
 require "json_api_client_extension/json_api_client_orm_adapter"
 require "json_api_client_extension/validations/remote_uniqueness_validation"
 require "json_api_client_extension/custom_parser"
+require 'faraday/locale_middleware'
 require "mno_enterprise/engine"
 require 'mno_enterprise/database_extendable'
 require 'mno_enterprise/mno_enterprise_version'
@@ -153,17 +142,12 @@ module MnoEnterprise
   mattr_accessor :mno_api_root_path
   @@mno_api_root_path = "/api/mnoe/v1"
 
-  # Hold the Her API configuration (see configure_api method)
-  mattr_reader :mnoe_api_v1
-  @@mnoe_api_v1 = nil
-
   mattr_accessor :mno_api_v2_root_path
   @@mno_api_v2_root_path = "/api/mnoe/v2"
 
   # Hold the Maestrano enterprise router (redirection to central enterprise platform)
   mattr_reader :router
   @@router = Router.new
-
 
   #====================================
   # Emailing
@@ -276,14 +260,6 @@ module MnoEnterprise
   end
 
   private
-    # Return the options to use in the setup of the API
-    def self.api_options
-      {
-          url: "#{URI.join(api_host,@@mno_api_root_path).to_s}",
-          send_only_modified_attributes: true
-      }
-    end
-
     # Load the provided styleguide hash into nested structure or load a default one
     def self.configure_styleguide
       # Load default gem configuration
@@ -299,27 +275,22 @@ module MnoEnterprise
       @@style = DeepStruct.wrap(hash)
     end
 
-    # Configure the Her for Maestrano Enterprise API V1
+    # Configure JsonApiClient for Maestrano Enterprise API V2
     def self.configure_api
-      # Configure HER for Maestrano Enterprise Endpoints
-      @@mnoe_api_v1 = Her::API.new
-      @@mnoe_api_v1.setup self.api_options  do |c|
-        # Request
-        c.use Faraday::Request::BasicAuthentication, @@tenant_id, @@tenant_key
-        # c.use Faraday::Request::UrlEncoded
-        c.request :json
+      MnoEnterprise::BaseResource.site = URI.join(api_host, @@mno_api_v2_root_path).to_s
 
-        # Instrumentation in development
-        c.use :instrumentation if Rails.env.development?
+      MnoEnterprise::BaseResource.connection do |connection|
+        connection.use Faraday::Request::BasicAuthentication, @@tenant_id, @@tenant_key
 
-        # Response
-        c.use Her::Middleware::MnoeApiV1ParseJson
+        connection.use Faraday::LocaleMiddleware
 
-        # Adapter
-        c.use Faraday::Adapter::NetHttpNoProxy
+        if Rails.env.development?
+          # log responses
+          connection.use Faraday::Response::Logger
 
-        # Error Handling
-        c.use Her::Middleware::MnoeRaiseError
+          # Instrumentation (see below for the subscription)
+          connection.use FaradayMiddleware::Instrumentation if Rails.env.development?
+        end
       end
     end
 end

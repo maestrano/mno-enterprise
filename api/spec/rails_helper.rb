@@ -1,7 +1,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
-require 'her'
 require 'factory_girl_rails'
 
 require 'mno_enterprise/testing_support/user_action_shared'
@@ -66,11 +65,7 @@ RSpec.configure do |config|
   # Include Rails route helpers
   config.include Rails.application.routes.url_helpers, type: :controller
 
-  # Reset API stubs before each step
-  config.before :each do
-    api_stub_reset
-  end
-  #Fix time rounding issues
+  # Fix time rounding issues
   ActiveSupport::JSON::Encoding.time_precision = 0
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and

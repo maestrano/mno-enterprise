@@ -1,3 +1,8 @@
+#===============================================
+# This file should not be modified manually
+# All configuration is overwriten by MnoHub
+#===============================================
+
 impac:
   protocol: https
   host: api-impac.maestrano.com
@@ -25,67 +30,6 @@ system:
 #===============================================
 # Feature Flags
 #===============================================
-# Do not display Audit Log in Organization Panel
-audit_log:
-  enabled: false
-# Display App Pricing on Marketplace
-pricing:
-  enabled: false
-# Enable the App Dock
-dock:
-  enabled: true
-# Display the Developer section on "My Account"
-developer:
-  enabled: false
-# Display the onboarding wizard
-onboarding_wizard:
-  enabled: false
-# Enable Reviews in the marketplace
-reviews:
-  enabled: false
-# Enable Questions in the marketplace
-questions:
-  enabled: false
-# Disable payment
-payment:
-  disabled: false
-# Marketplace config
-marketplace:
-  # Enable the marketplace
-  enabled: true
-  # Enable comparison of apps
-  comparison:
-    enabled: false
-# Allow user to create and manage Organizations
-organization_management:
-  enabled: true
-  # Display the billing tab
-  billing:
-    enabled: true
-# Allow user to edit their information and password
-user_management:
-  enabled: true
-# Disable user registration
-devise:
-  registration:
-    disabled: false
-
-# Admin Panel Config
-admin_panel:
-  apps_management:
-    enabled: true
-  audit_log:
-    enabled: true
-  customer_management:
-    organization:
-      enabled: true
-    user:
-      enabled: true
-  finance:
-    enabled: true
-  impersonation:
-    disabled: false
-  staff:
-    enabled: true
-  sub_tenant:
-    enabled: false
+# DEPRECATED
+# See: https://github.com/maestrano/mno-enterprise/tree/4.0#general-configuration-feature-flags
+# You can still use this file to provide defaults which are different from the framework

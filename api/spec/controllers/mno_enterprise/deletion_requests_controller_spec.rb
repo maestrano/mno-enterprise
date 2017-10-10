@@ -98,7 +98,7 @@ module MnoEnterprise
     end
 
     describe 'PUT #checkout' do
-      before { api_stub_for(put: "/deletion_requests/#{deletion_req.id}", response: from_api(deletion_req)) }
+      before { stub_api_v2(:put, "/deletion_requests/#{deletion_req.id}", deletion_req) }
 
       before { sign_in user }
       subject { put :checkout, id: deletion_req.token }

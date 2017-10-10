@@ -12,7 +12,7 @@ module MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
     context "with a non admin signed in user" do
       let(:user) { FactoryGirl.build(:user) }
       before do
-        api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+        stub_api_v2(:get, "/users/#{user.id}", user)
         sign_in user
       end
 
@@ -25,7 +25,7 @@ module MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
     context "with a signed in admin" do
       let(:user) { FactoryGirl.build(:user, :admin, :with_organizations) }
       before do
-        api_stub_for(get: "/users/#{user.id}", response: from_api(user))
+        stub_api_v2(:get, "/users/#{user.id}", user)
         sign_in user
       end
 

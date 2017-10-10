@@ -9,7 +9,6 @@ group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'shoulda-matchers'
-  gem 'fakeweb', '~> 1.3'
   gem 'webmock', '~> 3.0.1'
   gem 'timecop'
   gem 'climate_control'
