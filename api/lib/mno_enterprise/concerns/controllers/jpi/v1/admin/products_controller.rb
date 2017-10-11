@@ -17,7 +17,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
       response.headers['X-Total-Count'] = @products.count
     else
       query = MnoEnterprise::Product.apply_query_params(params).includes(DEPENDENCIES)
-      @products = query.to_a
+      @products = MnoEnterprise::Product.fetch_all(query)
       response.headers['X-Total-Count'] = query.meta.record_count
     end
   end

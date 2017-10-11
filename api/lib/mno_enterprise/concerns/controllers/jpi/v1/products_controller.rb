@@ -15,7 +15,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
       query = query.with_params(_metadata: { organization_id: parent_organization.id })
     end
 
-    @products = query.to_a
+    @products = MnoEnterprise::Product.fetch_all(query)
     response.headers['X-Total-Count'] = query.meta.record_count
   end
 
