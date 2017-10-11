@@ -38,20 +38,20 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               default: false
             },
             app_id: {
-              type: ["string", "null"],
+              type: "string",
               description: "Intercom <a href='https://docs.intercom.com/faqs-and-troubleshooting/getting-set-up/where-can-i-find-my-app-id'>app ID</a>",
-              default: ENV['INTERCOM_APP_ID'],
+              default: ENV['INTERCOM_APP_ID'].presence || '',
               'x-schema-form': {}
             },
             api_secret: {
               type: ["string", "null"],
               description: "Secure mode secret",
-              default: ENV['INTERCOM_API_SECRET']
+              default: ENV['INTERCOM_API_SECRET'].presence || ''
             },
             token: {
               type: ["string", "null"],
               description: "OAuth or Personal Access token",
-              default: ENV['INTERCOM_TOKEN']
+              default: ENV['INTERCOM_TOKEN'].presence || ''
             }
           }
         },
