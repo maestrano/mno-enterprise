@@ -27,7 +27,7 @@ module MnoEnterprise
 
       let(:data) { JSON.parse(response.body) }
 
-      before { stub_api_v2(:get, "/users", [user], [:user_access_requests], { _metadata: { act_as_manager: current_user.id } }) }
+      before { stub_api_v2(:get, "/users", [user], [:user_access_requests, :sub_tenant], { _metadata: { act_as_manager: current_user.id } }) }
       before { subject }
 
       it { expect(data['users'].first['id']).to eq(user.id) }
@@ -37,9 +37,8 @@ module MnoEnterprise
       subject { get :show, id: user.id }
 
       let(:data) { JSON.parse(response.body) }
-      let(:included) { [:orga_relations, :organizations, :user_access_requests, :clients] }
+      let(:included) { [:orga_relations, :organizations, :user_access_requests, :sub_tenant] }
 
-      before { allow(user).to receive(:clients).and_return([]) }
       before { stub_api_v2(:get, "/users/#{user.id}", user, included, { _metadata: { act_as_manager: current_user.id } }) }
       before { subject }
 
@@ -47,18 +46,27 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
+      let(:confirmation_token) { '1e243fa1180e32f3ec66a648835d1fbca7912223a487eac36be22b095a01b5a5' }
+      before {
+        Devise.token_generator
+        stub_api_v2(:get, '/users', [], [], { filter: { email: 'test@toto.com' }, page: { number: 1, size: 1 } })
+        stub_api_v2(:get, '/users', [], [], { filter: { confirmation_token: confirmation_token } })
+        stub_api_v2(:get, "/users/#{user.id}", user, [:sub_tenant])
+        stub_api_v2(:patch, "/users/#{user.id}", user)
+        allow_any_instance_of(Devise::TokenGenerator).to receive(:digest).and_return(confirmation_token)
+        allow_any_instance_of(Devise::TokenGenerator).to receive(:generate).and_return(confirmation_token)
+      }
       subject { post :create, user: params }
 
       let(:data) { JSON.parse(response.body) }
-      let(:params) { { 'name' => 'Foo' } }
+      let(:params) { { 'name' => 'Foo', 'email' => 'test@toto.com' } }
       let(:expected_params) { params.merge('sub_tenant_id' => nil) }
+      let!(:stub) { stub_api_v2(:post, '/users', user) }
 
-      before { allow(user).to receive(:clients).and_return([]) }
-      before { expect(MnoEnterprise::User).to receive(:create).with(hash_including(expected_params)).and_return(user) }
-      before { stub_api_v2(:get, "/users/#{user.id}", user, [:clients]) }
       before { subject }
 
       it { expect(data['user']['id']).to eq(user.id) }
+      it { expect(stub).to have_been_requested }
     end
 
     describe 'PUT #update' do
@@ -68,13 +76,26 @@ module MnoEnterprise
       let(:params) { { 'name' => 'Foo' } }
       let(:expected_params) { params.merge('sub_tenant_id' => nil) }
 
-      before { allow(user).to receive(:clients).and_return([]) }
-      before { expect_any_instance_of(MnoEnterprise::User).to receive(:update).with(expected_params) }
+      before { expect_any_instance_of(MnoEnterprise::User).to receive(:save) }
       before { stub_api_v2(:get, "/users/#{user.id}", user, [], { _metadata: { act_as_manager: current_user.id } }) }
-      before { stub_api_v2(:get, "/users/#{user.id}", user, [:clients]) }
+      before { stub_api_v2(:get, "/users/#{user.id}", user, [:sub_tenant]) }
       before { subject }
 
       it { expect(data['user']['id']).to eq(user.id) }
+    end
+
+    describe 'PATCH #update_clients' do
+      subject { put :update_clients, id: user.id, user: params }
+
+      let(:data) { JSON.parse(response.body) }
+      let(:params) { { add: ['id'] } }
+
+      before { stub_api_v2(:get, "/users/#{user.id}", user, [], { _metadata: { act_as_manager: current_user.id } }) }
+      before { stub_api_v2(:get, "/users/#{user.id}", user, [:sub_tenant]) }
+      let!(:stub) { stub_api_v2(:patch, "/users/#{user.id}/update_clients", user) }
+      before { subject }
+      it { expect(data['user']['id']).to eq(user.id) }
+      it { expect(stub).to have_been_requested }
     end
 
     describe 'DELETE #destroy' do
@@ -82,7 +103,6 @@ module MnoEnterprise
 
       let(:data) { JSON.parse(response.body) }
 
-      before { allow(user).to receive(:clients).and_return([]) }
       before { expect_any_instance_of(MnoEnterprise::User).to receive(:destroy) }
       before { stub_api_v2(:get, "/users/#{user.id}", user, [], { _metadata: { act_as_manager: current_user.id } }) }
 

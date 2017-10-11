@@ -35,7 +35,7 @@ module MnoEnterprise
         'admin_role' => res.admin_role,
         'avatar_url' => avatar_url(res),
         'settings' => res.settings,
-        'mnoe_sub_tenant_id' => res.sub_tenant_id,
+        'sub_tenant_id' => res.sub_tenant&.id,
         'user_hash' => res.intercom_user_hash
       }
 
@@ -108,7 +108,7 @@ module MnoEnterprise
 
         it 'returns the right response' do
           subject
-          expect(response.body).to eq(json_for(user))
+          expect(JSON.parse(response.body)).to eq(json_hash_for(user))
         end
       end
     end

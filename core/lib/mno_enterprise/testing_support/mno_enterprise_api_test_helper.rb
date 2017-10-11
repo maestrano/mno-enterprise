@@ -51,7 +51,7 @@ module MnoEnterpriseApiTestHelper
   end
 
   def stub_user(user)
-    stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards teams))
+    stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards teams sub_tenant))
   end
 
   def api_v2_url(suffix, included = [], params = {})

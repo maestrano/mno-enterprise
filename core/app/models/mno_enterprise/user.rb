@@ -7,7 +7,7 @@ module MnoEnterprise
     include ActiveModel::AttributeMethods
     include ActiveModel::Validations
 
-    INCLUDED_DEPENDENCIES = %i(deletion_requests organizations orga_relations dashboards teams)
+    INCLUDED_DEPENDENCIES = %i(deletion_requests organizations orga_relations dashboards teams sub_tenant)
 
     # ids
     property :id
@@ -41,8 +41,7 @@ module MnoEnterprise
     property :surname, type: :string
     property :website, type: :string
 
-    property :sub_tenant_id, type: :string
-    property :client_ids
+    has_one :sub_tenant
 
     define_model_callbacks :validation #required by Devise
     define_model_callbacks :update #required by Devise
@@ -77,6 +76,7 @@ module MnoEnterprise
     custom_endpoint :create_api_credentials, on: :member, request_method: :patch
     custom_endpoint :authenticate, on: :collection, request_method: :post
     custom_endpoint :update_password, on: :member, request_method: :patch
+    custom_endpoint :update_clients, on: :member, request_method: :patch
 
     #================================
     # Class Methods
@@ -147,6 +147,11 @@ module MnoEnterprise
 
     def create_api_credentials!
       result = create_api_credentials
+      process_custom_result(result)
+    end
+
+    def update_clients!(input)
+      result = update_clients(input)
       process_custom_result(result)
     end
 

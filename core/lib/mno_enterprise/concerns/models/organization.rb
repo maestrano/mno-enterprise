@@ -35,6 +35,8 @@ module MnoEnterprise::Concerns::Models::Organization
     property :financial_metrics
     property :billing_currency
     property :external_id, type: :string
+    property :belong_to_sub_tenant, type: :boolean
+    property :belong_to_account_manager, type: :boolean
   end
 
   #==================================================================
