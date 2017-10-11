@@ -139,6 +139,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               title: "Available Locales",
               type: "array",
               description: "List of locales available to the end user",
+              default: ['en-AU'],
               items: {
                 type: "string",
                 # TODO: double check # Proc?
@@ -313,10 +314,10 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               title: "Applications",
               type: "array",
               description: "List of applications displayed on the public landing page as app cards",
+              default: [],
               items: {
                 type: "string",
-                enum: [],
-                default: []
+                enum: []
               },
               'x-schema-form': {
                 titleMap: {}
@@ -326,11 +327,10 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               title: "Highlighted Applications",
               type: "array",
               description: "List of applications that will be hightlighted in the landing page carousel",
+              default: [],
               items: {
                 type: "string",
-                enum: [],
-                default: [],
-
+                enum: []
               },
               'x-schema-form': {
                 titleMap: {}
@@ -494,10 +494,10 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           title: "Available Billing Currencies",
           type: "array",
           description: "List of billing currencies available",
+          default: %w(AED AUD CAD EUR GBP HKD JPY NZD SGD USD),
           items: {
             type: "string",
-            enum: %w(AED AUD CAD EUR GBP HKD JPY NZD SGD USD),
-            default: %w(AED AUD CAD EUR GBP HKD JPY NZD SGD USD)
+            enum: %w(AED AUD CAD EUR GBP HKD JPY NZD SGD USD)
           }
         }
       }

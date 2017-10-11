@@ -182,5 +182,21 @@ describe MnoEnterprise::TenantConfig do
       let(:output) { {'foo' => 'Hello World', 'bar' => {'enabled' => true} } }
       it { is_expected.to eq(output)}
     end
+
+    context 'array' do
+      let(:schema) {
+        {
+          type: "array",
+          items: {
+            type: 'string',
+            enum: %w(A B C D),
+          },
+          default: ['A']
+        }
+      }
+
+      let(:output) { ['A'] }
+      it { is_expected.to eq(output)}
+    end
   end
 end

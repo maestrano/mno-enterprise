@@ -110,7 +110,7 @@ module MnoEnterprise
     # @param [Hash] schema JSON schema to parse
     def self.build_object(schema)
       case schema['type']
-        when 'string', 'integer', 'boolean', 'password'
+        when 'string', 'integer', 'boolean', 'password', 'array'
           schema['default']
         when 'object'
           h = {}
