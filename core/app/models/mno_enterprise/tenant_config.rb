@@ -71,9 +71,9 @@ module MnoEnterprise
         config.i18n_enabled = Settings.system.i18n.enabled
 
         # Intercom
-        config.intercom_app_id = Settings.system.intercom.app_id
-        config.intercom_api_secret =  Settings.system.intercom.api_secret
-        config.intercom_token = Settings.system.intercom.token
+        config.intercom_app_id = Settings.system.intercom.app_id.presence
+        config.intercom_api_secret = Settings.system.intercom.api_secret.presence
+        config.intercom_token = Settings.system.intercom.token.presence
       end
       Rails.application.config.action_mailer.smtp_settings = Settings.system.smtp.to_hash
       ActionMailer::Base.smtp_settings = Settings.system.smtp.to_hash
@@ -110,7 +110,7 @@ module MnoEnterprise
     # @param [Hash] schema JSON schema to parse
     def self.build_object(schema)
       case schema['type']
-        when 'string', 'integer', 'boolean', 'password'
+        when 'string', 'integer', 'boolean', 'password', 'array'
           schema['default']
         when 'object'
           h = {}

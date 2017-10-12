@@ -200,7 +200,7 @@ module MnoEnterprise
 
   # Define if Intercom is enabled. Only if the gem intercom is present
   def self.intercom_enabled?
-    defined?(::Intercom) && intercom_app_id && intercom_token
+    defined?(::Intercom) && intercom_app_id.present? && intercom_token.present?
   end
 
   #====================================
