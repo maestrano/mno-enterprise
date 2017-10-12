@@ -80,11 +80,10 @@ module MnoEnterprise
     end
 
     # Update the JSON schema with values available after initialization
-    # TODO: Refactor to use Proc in the JSON Schema and call them
     def self.refresh_json_schema!(frontend_config)
       update_locales_list!
       update_application_list!
-      update_readonly_fields(json_schema, frontend_config)
+      flag_readonly_fields(json_schema, frontend_config)
     end
 
     # Fetch the Tenant#frontend_config from MnoHub
@@ -115,14 +114,14 @@ module MnoEnterprise
 
     # Flag field as readonly in the config schema
     # A field is readonly if the `<field>_readonly` key is `true` in the `frontend_config`
-    def self.update_readonly_fields(schema, frontend_config)
+    def self.flag_readonly_fields(schema, frontend_config)
       frontend_config.each do |current_key, value|
-        if current_key =~ /_readonly$/
+        if field_label = current_key[/(.*)_readonly$/, 1]
           # Flag field as RO
-          schema['properties'][current_key.gsub('_readonly', '')].merge!('readonly' => true)
+          schema['properties'][field_label]['readonly'] = true
         elsif value.is_a?(Hash)
           if (inner_schema = schema['properties'][current_key])
-            update_readonly_fields(inner_schema, value)
+            flag_readonly_fields(inner_schema, value)
           else
             warn "Warn: Ignoring config for #{current_key}"
           end

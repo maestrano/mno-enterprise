@@ -184,8 +184,8 @@ describe MnoEnterprise::TenantConfig do
     end
   end
 
-  describe '.update_readonly_fields' do
-    subject { described_class.update_readonly_fields(schema.with_indifferent_access, config) }
+  describe '.flag_readonly_fields' do
+    subject { described_class.flag_readonly_fields(schema.with_indifferent_access, config) }
 
     let(:schema) {
       {
