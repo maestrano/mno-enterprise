@@ -11,7 +11,10 @@ module MnoEnterprise
       session[:impersonator_redirect_path] = params[:redirect_path].presence
       @user = MnoEnterprise::User.find_one(params[:user_id], :deletion_requests, :organizations, :orga_relations, :dashboards, :teams, :user_access_requests)
       unless @user.present?
-        return redirect_with_error("User doesn't exist")
+        return redirect_with_error('User does not exist')
+      end
+      if @user.admin_role.present?
+        return redirect_with_error('User is a staff member')
       end
       if Settings&.admin_panel&.impersonation&.consent_required
         unless @user.access_request_status(current_user) == 'approved'
