@@ -45,8 +45,8 @@ module MnoEnterprise
       # Reconfigure mnoe
       reconfigure_mnoe!
 
-      # TODO: update JSON_SCHEMA with readonly fields
-      refresh_json_schema!
+      # Update JSON_SCHEMA with readonly flags (`<field>_readonly`)
+      refresh_json_schema!(frontend_config)
 
       # # Save settings in YAML format for easy debugging
       # Rails.logger.debug "Settings loaded -> Saving..."
@@ -80,19 +80,10 @@ module MnoEnterprise
     end
 
     # Update the JSON schema with values available after initialization
-    # TODO: Refactor to use Proc in the JSON Schema and call them
-    def self.refresh_json_schema!
-      # Re-evaluate the availables locales as the list is only populated after initialization
-      available_locales = I18n.available_locales.map(&:to_s).select {|x| x =~ /[[:alpha:]]{2}-[A-Z]{2}/}
-      locale_map = Hash[available_locales.map {|l| [l, I18n.t('language', locale: l, fallback: false, default: nil) || l] }]
-
-      i18n_properties = json_schema['properties']['system']['properties']['i18n']['properties']
-      i18n_properties['available_locales']['items']['enum'] = available_locales
-      i18n_properties['preferred_locale']['enum'] = available_locales
-      i18n_properties['available_locales']['x-schema-form']['titleMap'] = locale_map
-      i18n_properties['preferred_locale']['x-schema-form']['titleMap'] = locale_map
-
+    def self.refresh_json_schema!(frontend_config)
+      update_locales_list!
       update_application_list!
+      flag_readonly_fields(json_schema, frontend_config)
     end
 
     # Fetch the Tenant#frontend_config from MnoHub
@@ -121,6 +112,39 @@ module MnoEnterprise
       end
     end
 
+    # Flag field as readonly in the config schema
+    # A field is readonly if the `<field>_readonly` key is `true` in the `frontend_config`
+    def self.flag_readonly_fields(schema, frontend_config)
+      frontend_config.each do |current_key, value|
+        if field_label = current_key[/(.*)_readonly$/, 1]
+          # Flag field as RO
+          schema['properties'][field_label]['readonly'] = true
+        elsif value.is_a?(Hash)
+          if (inner_schema = schema['properties'][current_key])
+            flag_readonly_fields(inner_schema, value)
+          else
+            warn "Warn: Ignoring config for #{current_key}"
+          end
+        end
+      end
+      schema
+    end
+
+    # Re-evaluate the availables locales as the list is only populated after initialization
+    # TODO: replace with a Proc.call
+    def self.update_locales_list!
+      available_locales = I18n.available_locales.map(&:to_s).select {|x| x =~ /[[:alpha:]]{2}-[A-Z]{2}/}
+      locale_map = Hash[available_locales.map {|l| [l, I18n.t('language', locale: l, fallback: false, default: nil) || l]}]
+
+      i18n_properties = json_schema['properties']['system']['properties']['i18n']['properties']
+      i18n_properties['available_locales']['items']['enum'] = available_locales
+      i18n_properties['preferred_locale']['enum'] = available_locales
+      i18n_properties['available_locales']['x-schema-form']['titleMap'] = locale_map
+      i18n_properties['preferred_locale']['x-schema-form']['titleMap'] = locale_map
+    end
+
+    # Populate the app list after fetching it from MnoHub
+    # TODO: replace with a Proc.call
     def self.update_application_list!
       available_app_nids = App.all.map(&:nid)
       available_app_map = Hash[App.all.map{|a| [a.nid, a.name]}]
