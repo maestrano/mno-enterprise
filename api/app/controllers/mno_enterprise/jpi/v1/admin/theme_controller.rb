@@ -26,7 +26,12 @@ module MnoEnterprise
 
     # POST /mnoe/jpi/v1/admin/theme/reset
     def reset
-      reset_previewer_style
+      if params[:default] == true
+        reset_default_style
+        publish_style
+      else
+        reset_previewer_style
+      end
       rebuild_previewer_style
       SystemManager.publish_assets
       render json: {status:  'Ok'}
@@ -70,9 +75,17 @@ module MnoEnterprise
         reset_previewer_style
       end
 
+      # Reset previewer style to the published style (ie: delete saved style)
       def reset_previewer_style
         target = Rails.root.join('frontend', 'src','app','stylesheets','theme-previewer-tmp.less')
         File.exist?(target) && File.delete(target)
+      end
+
+      # Reset to default style: delete saved and published style
+      def reset_default_style
+        reset_previewer_style
+        target = Rails.root.join('frontend', 'src','app','stylesheets','theme-previewer-published.less')
+        File.exist?(target) && File.truncate(target, 0)
       end
 
       def rebuild_previewer_style
