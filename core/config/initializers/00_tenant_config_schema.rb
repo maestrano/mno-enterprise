@@ -46,7 +46,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             },
             enabled: {
               type: "boolean",
-              title: "Enabled",
               description: "Allow user to change the webstore languqge",
               default: false
             },
@@ -59,7 +58,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 type: "string",
                 # TODO: double check # Proc?
                 enum: I18n.available_locales,
-                default: ['en-AU']
               },
               'x-schema-form': {
                 titleMap: {'en-AU': 'English (Australia)'}
@@ -80,7 +78,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           properties: {
             enabled: {
               type: "boolean",
-              title: "Enabled",
               description: "Enable Intercom integration",
               default: false
             },
@@ -141,7 +138,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             },
             password: {
               type: "string",
-              title: "Password",
               description: "Mail password"
             }
           }
@@ -190,7 +186,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               title: "Enable the marketplace",
-              title: "Enable the marketplace",
               default: true,
               description: "Enables the marketplace, ie. the ability for the customer to add apps and products"
             },
@@ -213,7 +208,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 enabled: {
                   type: "boolean",
                   default: false,
-                  title: "Enabled",
                   description: "Enable comparison of products in the marketplace"
                 }
               }
@@ -223,7 +217,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               properties: {
                 enabled: {
                   type: "boolean",
-                  title: "Enabled",
                   description: "Display Product pricing information on the Marketplace",
                   default: true
                 },
@@ -241,7 +234,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 enabled: {
                   type: "boolean",
                   default: false,
-                  title: "Enabled",
                   description: "Display questions on products on the marketplace"
                 }
               }
@@ -253,7 +245,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 enabled: {
                   type: "boolean",
                   default: false,
-                  title: "Enabled",
                   description: "Display and allow products reviews on the marketplace"
                 }
               }
@@ -278,8 +269,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              title: "Enabled",
-              description: "Allow your customer to create and manage multiple companies",
+              description: "Allow your customer to create companies and enable the 'Company' menu",
             },
             billing: {
               type: "object",
@@ -287,7 +277,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 enabled: {
                   type: "boolean",
                   default: true,
-                  title: "Enabled",
                   description: "Display information about billing (invoices...)"
                 }
               }
@@ -301,7 +290,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              title: "Enabled",
               description: "Allow your customer to add a credit card"
             }
           }
@@ -356,7 +344,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           properties: {
             enabled:  {
               type: "boolean",
-              title: "Enabled",
               description: "Enable your customer to create an account themselves",
               default: true
             }
@@ -369,7 +356,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              title: "Enabled",
               description: "Allow customer to edit their information and password"
             }
           }
@@ -380,7 +366,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           properties: {
             enabled: {
               type: "boolean",
-              title: "Enabled",
               description: "Displays the list of apps and products at the top of the customer homepage",
               default: true
             }
@@ -392,7 +377,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           properties: {
             enabled: {
               type: "boolean",
-              title: "Enabled",
               description: "Display Audit Log (list of actions took by the customer) in the Organization Panel",
               default: false,
               readonly: true
@@ -404,7 +388,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           properties: {
             enabled: {
               type: "boolean",
-              title: "Enabled",
               description: "Display the Developer section on \"My Account\"",
               default: false
             }
@@ -423,7 +406,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           properties: {
             enabled: {
               type: "boolean",
-              title: "Enabled",
               description: "Enables you to import existing customers via a file upload",
               default: false
             }
@@ -436,8 +418,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              title: "Enabled",
-              description: "Let you filter apps which are available in the marketplace and in the admin panel"
+              description: "Allow you to manage your customer's app (add apps / remove apps)"
             }
           }
         },
@@ -453,7 +434,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 enabled: {
                   type: "boolean",
                   default: true,
-                  title: "Enabled",
                   description: "Control the ability to create companies from the admin panel"
                 }
               }
@@ -464,7 +444,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 enabled: {
                   type: "boolean",
                   default: true,
-                  title: "Enabled",
                   description: "Control the ability to add users to companies from the admin panel"
                 }
               }
@@ -477,7 +456,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              title: "Enabled",
               description: "Enable the finance page, the financial kpis and the display of invoices"
             }
           }
@@ -488,7 +466,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              title: "Enabled",
               description: "Control the ability to impersonate users (login to the webstore with their identity) from the admin panel"
             },
             consent_required: {
@@ -505,8 +482,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              title: "Enabled",
-              description: "Enable staff management, ie. the possibility to add admin users with limited rights"
+              description: "Enable staff management, ie. the possibility to add admin users and staff users with limited rights"
             }
           }
         },
@@ -521,7 +497,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              title: "Enabled",
               description: "Enable settings in Admin Panel"
             }
           }
@@ -537,7 +512,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: false,
-              title: "Enabled",
               description: "enable sub tenant management from the Admin Panel"
             }
           }
@@ -563,7 +537,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           properties: {
             enabled: {
               type: "boolean",
-              title: "Enabled",
               description: "Enable the dashboard designer",
               default: false
             }
@@ -575,7 +548,6 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           properties: {
             enabled: {
               type: "boolean",
-              title: "Enabled",
               description: "Enable the audit log",
               default: true
             }
