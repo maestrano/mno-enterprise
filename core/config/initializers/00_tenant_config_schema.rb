@@ -20,12 +20,58 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
   properties: {
     system: {
       type: "object",
-      description: "System Settings",
+      title: "General settings",
+      description: "This section enables you to set general settings for you webstore",
       properties: {
         app_name: {
           type: "string",
-          description: "Application Name",
-          default: "My Company"
+          title: "Webstore name",
+          description: "Name displayed in the browser title bar and in the public pages",
+          default: "My Webstore"
+        },
+        i18n: {
+          type: "object",
+          title: "Internationalization",
+          description: "Internationalization settings",
+          properties: {
+            preferred_locale: {
+              title: "Webstore Language",
+              type: "string",
+              description: "Default language of the webstore",
+              default: 'en-AU',
+              enum: ['en-AU'],
+              'x-schema-form': {
+                titleMap: {'en-AU': 'English (Australia)'}
+              }
+            },
+            enabled: {
+              type: "boolean",
+              title: "Enabled",
+              description: "Allow user to change the webstore languqge",
+              default: false
+            },
+            available_locales: {
+              title: "Available languages",
+              type: "array",
+              description: "List of languages available to the end user",
+              default: ['en-AU'],
+              items: {
+                type: "string",
+                # TODO: double check # Proc?
+                enum: I18n.available_locales,
+                default: ['en-AU']
+              },
+              'x-schema-form': {
+                titleMap: {'en-AU': 'English (Australia)'}
+              }
+            }
+          }
+        },
+        advanced_config: {
+          type: "object",
+          title: "Advanced settings",
+          description: "The following settings are optional and should be managed by someone with technical abilities",
+          properties: {}
         },
         intercom: {
           # https://maestrano.atlassian.net/wiki/x/cRvrBQ
@@ -34,73 +80,87 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           properties: {
             enabled: {
               type: "boolean",
+              title: "Enabled",
               description: "Enable Intercom integration",
               default: false
             },
             app_id: {
               type: "string",
-              description: "Intercom <a href='https://docs.intercom.com/faqs-and-troubleshooting/getting-set-up/where-can-i-find-my-app-id'>app ID</a>",
+              title: "Intercom app ID",
+              description: "To find your Intercom app ID, <a href='https://docs.intercom.com/faqs-and-troubleshooting/getting-set-up/where-can-i-find-my-app-id'>click here</a>",
               default: ENV['INTERCOM_APP_ID'].presence || '',
               'x-schema-form': {}
             },
             api_secret: {
               type: ["string", "null"],
+              title: "Intercom API secret",
               description: "Secure mode secret",
               default: ENV['INTERCOM_API_SECRET'].presence || ''
             },
             token: {
               type: ["string", "null"],
+              title: "Intercom token",
               description: "OAuth or Personal Access token",
               default: ENV['INTERCOM_TOKEN'].presence || ''
             }
           }
         },
         smtp: {
-          description: "SMTP Settings",
+          title: "Email server settings",
+          description: "SMTP settings",
           type: "object",
           properties: {
             authentication: {
               type: "string",
+              title: "Authentication type",
               description: "Mail server authentication type",
               default: "plain",
               enum: ["plain", "login", "cram_md5"]
             },
             address: {
               type: "string",
+              title: "Server address",
               description: "Mail server address",
               default: "localhost"
             },
             port: {
               type: "integer",
+              title: "Server port",
               description: "Mail server port",
               default: 25
             },
             domain: {
               type: "string",
+              title: "Server address",
               description: "HELO domain"
             },
             user_name: {
               type: "string",
+              title: "Username",
               description: "Mail username"
             },
             password: {
               type: "string",
+              title: "Password",
               description: "Mail password"
             }
           }
         },
         email: {
           type: "object",
+          title: "Email address",
           description: "System email settings",
           properties: {
             support_email: {
               type: "string",
-              description: "Support email address. Displayed in the frontend",
+              title: "Support email address",
+              description: "Support email address. displayed in the webstore",
               default: "support@example.com"
             },
             default_sender: {
               type: "object",
-              description: "Default sender for system generated emails",
+              title: "Default sender email address",
+              description: "Default sender for emails sent from your webstore",
               properties: {
                 email: {
                   type: "string",
@@ -115,106 +175,46 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               }
             }
           }
-        },
-        i18n: {
-          type: "object",
-          description: "Internationalization settings",
-          properties: {
-            preferred_locale: {
-              title: "Platform Language",
-              type: "string",
-              description: "Default locale used when no locale has been specified by the user",
-              default: 'en-AU',
-              enum: ['en-AU'],
-              'x-schema-form': {
-                titleMap: {'en-AU': 'English (Australia)'}
-              }
-            },
-            enabled: {
-              type: "boolean",
-              description: "Enable internationalization",
-              default: false
-            },
-            available_locales: {
-              title: "Available Locales",
-              type: "array",
-              description: "List of locales available to the end user",
-              default: ['en-AU'],
-              items: {
-                type: "string",
-                # TODO: double check # Proc?
-                enum: I18n.available_locales,
-                default: ['en-AU']
-              },
-              'x-schema-form': {
-                titleMap: {'en-AU': 'English (Australia)'}
-              }
-            }
-          }
         }
       }
     },
     dashboard: {
       type: "object",
-      description: "Dashboard settings",
+      title: "Customer features",
+      description: "This section lets you decide which functionalities are visible to your customer",
       properties: {
-        audit_log: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              description: "Display Audit Log in Organization Panel",
-              default: false,
-              readonly: true
-            }
-          }
-        },
-        developer: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              description: "Display the Developer section on \"My Account\"",
-              default: false
-            }
-          }
-        },
-        dock: {
-          type: "object",
-          properties: {
-            enabled: {
-              type: "boolean",
-              description: "Enable the App Dock",
-              default: true
-            }
-          }
-        },
         marketplace: {
           type: "object",
           description: "Marketplace configuration",
           properties: {
             enabled: {
               type: "boolean",
+              title: "Enable the marketplace",
+              title: "Enable the marketplace",
               default: true,
-              description: "Enable the marketplace"
+              description: "Enables the marketplace, ie. the ability for the customer to add apps and products"
             },
             provisioning: {
               type: "boolean",
               default: false,
-              description: "Enable the provisioning workflow"
+              title: "Product ordering",
+              description: "Enable the ordering of products"
             },
             local_products: {
               type: "boolean",
               default: false,
-              description: "Enable the local products"
+              title: "Your product catalog",
+              description: "Display your specific product catalog"
             },
             comparison: {
               type: "object",
+              title: "Product comparison",
               properties: {
                 enabled: {
                   type: "boolean",
                   default: false,
-                  description: "Enable comparison of apps"
+                  title: "Enabled",
+                  description: "Enable comparison of products in the marketplace"
                 }
               }
             },
@@ -223,7 +223,8 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               properties: {
                 enabled: {
                   type: "boolean",
-                  description: "Display App Pricing on Marketplace",
+                  title: "Enabled",
+                  description: "Display Product pricing information on the Marketplace",
                   default: true
                 },
                 # currency: {
@@ -235,21 +236,25 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             },
             questions: {
               type: "object",
+              title: "Product questions",
               properties: {
                 enabled: {
                   type: "boolean",
                   default: false,
-                  description: "Enable app questions on the marketplace"
+                  title: "Enabled",
+                  description: "Display questions on products on the marketplace"
                 }
               }
             },
             reviews: {
               type: "object",
+              title: "Product reviews",
               properties: {
                 enabled: {
                   type: "boolean",
                   default: false,
-                  description: "Enable app reviews on the marketplace"
+                  title: "Enabled",
+                  description: "Display and allow products reviews on the marketplace"
                 }
               }
             },
@@ -268,11 +273,13 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
         # },
         organization_management: {
           type: "object",
+          title: "Organization management",
           properties: {
             enabled: {
               type: "boolean",
               default: true,
-              description: "Allow user to create and manage Organizations",
+              title: "Enabled",
+              description: "Allow your customer to create and manage multiple companies",
             },
             billing: {
               type: "object",
@@ -280,7 +287,8 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 enabled: {
                   type: "boolean",
                   default: true,
-                  description: "Display the billing tab"
+                  title: "Enabled",
+                  description: "Display information about billing (invoices...)"
                 }
               }
             }
@@ -293,27 +301,31 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              description: "Enable payment section in the company settings"
+              title: "Enabled",
+              description: "Allow your customer to add a credit card"
             }
           }
         },
         public_pages: {
           type: "object",
+          title: "Public pages",
           properties: {
             enabled: {
               type: "boolean",
               default: false,
-              description: "Enable a public landing page (instead of being directed to the sign in page)"
+              title: "Enable public pages",
+              description: "Enable a public landing page displaying general information on your webstore, before the sign in page"
             },
             display_pricing: {
               type: "boolean",
               default: false,
-              description: "Display pricings in public product pages"
+              title: "Display pricing",
+              description: "Display product pricings in public pages"
             },
             applications: {
               title: "Applications",
               type: "array",
-              description: "List of applications displayed on the public landing page as app cards",
+              description: "List of applications featured on the public landing page",
               default: [],
               items: {
                 type: "string",
@@ -340,81 +352,109 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
         },
         registration: {
           type: "object",
+          title: "Customer registration",
           properties: {
             enabled:  {
               type: "boolean",
-              description: "Enable user registration",
+              title: "Enabled",
+              description: "Enable your customer to create an account themselves",
               default: true
             }
           }
         },
         user_management: {
           type: "object",
+          title: "Customer user information management",
           properties: {
             enabled: {
               type: "boolean",
               default: true,
-              description: "Allow user to edit their information and password"
+              title: "Enabled",
+              description: "Allow customer to edit their information and password"
             }
           }
         },
-
-      }
-    },
-    admin_panel: {
-      description: "Settings controlling the behavior of the Admin Panel",
-      type: "object",
-      properties: {
-        apps_management: {
+        dock: {
           type: "object",
+          title: "Application dock",
           properties: {
             enabled: {
               type: "boolean",
-              default: true,
-              description: "Enable adding/removing apps (connection of existing apps is still possible) from the admin panel"
+              title: "Enabled",
+              description: "Displays the list of apps and products at the top of the customer homepage",
+              default: true
             }
           }
         },
         audit_log: {
           type: "object",
+          title: "Audit log",
           properties: {
             enabled: {
               type: "boolean",
-              description: "Enable the audit log",
-              default: true
+              title: "Enabled",
+              description: "Display Audit Log (list of actions took by the customer) in the Organization Panel",
+              default: false,
+              readonly: true
             }
           }
         },
+        developer: {
+          type: "object",
+          properties: {
+            enabled: {
+              type: "boolean",
+              title: "Enabled",
+              description: "Display the Developer section on \"My Account\"",
+              default: false
+            }
+          }
+        },
+      }
+    },
+    admin_panel: {
+      title: "Admin feature",
+      description: "This section lets you customize which functionalities you want to see in the Admin Panel",
+      type: "object",
+      properties: {
         customer_batch_import: {
           type: "object",
+          title: "Mass import of customers ",
           properties: {
             enabled: {
               type: "boolean",
-              description: "Enable the Customer Batch Import via CSV",
+              title: "Enabled",
+              description: "Enables you to import existing customers via a file upload",
               default: false
             }
           }
         },
-        dashboard_templates: {
+        apps_management: {
           type: "object",
+          title: "Apps management",
           properties: {
             enabled: {
               type: "boolean",
-              description: "Enable the dashboard designer",
-              default: false
+              default: true,
+              title: "Enabled",
+              description: "Let you filter apps which are available in the marketplace and in the admin panel"
             }
           }
         },
         customer_management: {
           type: "object",
+          title: "Customer management",
+          description: "Control the ability to manage companies and users",
           properties: {
             organization: {
               type: "object",
+              title: "Company",
               properties: {
                 enabled: {
                   type: "boolean",
                   default: true,
-                  description: "Control the ability to create or invite customers from the admin panel"
+                  title: "Enabled",
+                  description: "Control the ability to create companies from the admin panel"
                 }
               }
             },
@@ -424,7 +464,8 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 enabled: {
                   type: "boolean",
                   default: true,
-                  description: "Control the ability to add users to organizations from the admin panel"
+                  title: "Enabled",
+                  description: "Control the ability to add users to companies from the admin panel"
                 }
               }
             }
@@ -436,7 +477,8 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              description: "Enable the finance page, the financial kpis and the invoices"
+              title: "Enabled",
+              description: "Enable the finance page, the financial kpis and the display of invoices"
             }
           }
         },
@@ -446,12 +488,14 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              description: "Control the ability to impersonate users from the admin panel"
+              title: "Enabled",
+              description: "Control the ability to impersonate users (login to the webstore with their identity) from the admin panel"
             },
             consent_required: {
               type: "boolean",
               default: false,
-              description: "Is consent required to be able to impersonate"
+              title: "Consent required",
+              description: "Is consent from the user required to be able to impersonate him"
             }
           }
         },
@@ -461,17 +505,24 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              description: "Enable staff management"
+              title: "Enabled",
+              description: "Enable staff management, ie. the possibility to add admin users with limited rights"
             }
           }
         },
         settings: {
           type: "object",
+          # Don't let user lock itself out of settings
+          'x-schema-form': {
+            type: 'hidden',
+            notitle: true
+          },
           properties: {
             enabled: {
               type: "boolean",
               default: true,
-              description: "Enable frontend configuration from the Admin Panel"
+              title: "Enabled",
+              description: "Enable settings in Admin Panel"
             }
           }
         },
@@ -486,9 +537,15 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: false,
+              title: "Enabled",
               description: "enable sub tenant management from the Admin Panel"
             }
           }
+        },
+        billing_section: {
+          type: "object",
+          title: "Billing",
+          properties: {}
         },
         available_billing_currencies: {
           title: "Available Billing Currencies",
@@ -499,7 +556,31 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             type: "string",
             enum: %w(AED AUD CAD EUR GBP HKD JPY NZD SGD USD)
           }
-        }
+        },
+        dashboard_templates: {
+          type: "object",
+          title: "Dashboard templates",
+          properties: {
+            enabled: {
+              type: "boolean",
+              title: "Enabled",
+              description: "Enable the dashboard designer",
+              default: false
+            }
+          }
+        },
+        audit_log: {
+          type: "object",
+          title: "Audit log",
+          properties: {
+            enabled: {
+              type: "boolean",
+              title: "Enabled",
+              description: "Enable the audit log",
+              default: true
+            }
+          }
+        },
       }
     }
   }
