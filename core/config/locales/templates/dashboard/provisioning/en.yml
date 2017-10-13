@@ -45,7 +45,9 @@ en:
             status: "Status"
             amount: "Amount"
             provisioning_data: "Provisioning data"
-            custom_data: "Custom data"
+            no_provisioning_data: "No provisioning data"
+            custom_data: "Information provided by the customer"
+            no_custom_data: "No information provided by the customer"
           subscriptions:
             title: "Manage your subscriptions"
             currency_warning: "Some prices are missing for your current currency. Please contact your administrator for more information."
