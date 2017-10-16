@@ -191,7 +191,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             },
             provisioning: {
               type: "boolean",
-              default: false,
+              default: true,
               title: "Product ordering",
               description: "Enable the ordering of products"
             },
