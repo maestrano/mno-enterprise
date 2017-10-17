@@ -12,8 +12,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
 
   # GET /jpi/v1/impac/alerts
   def index
-    u = current_user.load_required(:alerts)
-    @alerts = u.alerts
+    @alerts = MnoEnterprise::Alert.includes(:recipients).where('recipient.id' => current_user.id)
   end
 
   # POST /jpi/v1/impac/kpis/:kpi_id/alerts
@@ -23,8 +22,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
 
     # TODO: Manage authorization
     #authorize! :manage_alert, kpi_alert
-
-    @alert = MnoEnterprise::Alert.create!(alert_params.merge(recipient_ids: [current_user.id]))
+    @alert = MnoEnterprise::Alert.create!(alert_params)
+    @alert.update_recipients!([current_user.id])
+    @alert = @alert.load_required(:recipients)
     render 'show'
   end
 

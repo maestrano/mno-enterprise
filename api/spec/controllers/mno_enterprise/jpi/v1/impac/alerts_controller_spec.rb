@@ -12,40 +12,47 @@ module MnoEnterprise
     before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
 
     # Stub user and user call
-    let!(:user) { build(:user, alerts: [alert]) }
+    let!(:user) { build(:user) }
     let!(:current_user_stub) { stub_user(user) }
-
 
     before { sign_in user }
 
     let(:kpi) { build(:impac_kpi) }
-    let(:alert) { build(:impac_alert, kpi: kpi) }
+    let(:alert) { build(:impac_alert, kpi: kpi, recipients: [build(:user)]) }
     let(:alert_hash) { serialize_type(alert).except(:kpi) }
 
     describe 'GET #index' do
-      before { stub_api_v2(:get, "/users/#{user.id}", user, %i(alerts)) }
+      before { stub_api_v2(:get, "/alerts", alert, [:recipients], { filter: { 'recipient.id': user.id } }) }
       subject { get :index }
-      # TODO: Add and test authorization
+      it { is_expected.to be_success }
     end
 
     describe 'POST #create' do
 
-      before { stub_api_v2(:post, '/alerts', alert) }
-      before { stub_api_v2(:get, "/kpis/#{kpi.id}", kpi) }
+      before do
+        stub_api_v2(:post, '/alerts', alert)
+        stub_api_v2(:get, "/kpis/#{kpi.id}", kpi)
+        stub_api_v2(:patch, "/alerts/#{alert.id}/update_recipients", alert)
+        stub_api_v2(:get, "/alerts/#{alert.id}", alert, [:recipients])
+      end
+
       subject { post :create, kpi_id: kpi.id, alert: alert_hash }
 
       # TODO: Add authorization
       # it_behaves_like 'jpi v1 authorizable action'
 
-      it { subject; expect(response.code).to eq('200') }
+      it { is_expected.to be_success }
     end
 
     describe 'PUT #update' do
-      let(:update_alert_hash) { {title: 'test', webhook: 'test', sent: true, forbidden: 'test', } }
-      let(:updated_alert) { build(:impac_alert, kpi_id: kpi.id, title: 'test', webhook: 'test', sent: true) }
+      before do
+        stub_api_v2(:get, "/alerts/#{alert.id}", alert)
+        stub_api_v2(:patch, "/alerts/#{alert.id}", updated_alert)
+        stub_api_v2(:get, "/alerts/#{alert.id}", alert, [:recipients])
+      end
 
-      before { stub_api_v2(:get, "/alerts/#{alert.id}", alert) }
-      before { stub_api_v2(:patch, "/alerts/#{alert.id}", updated_alert) }
+      let(:update_alert_hash) { { title: 'test', webhook: 'test', sent: true, forbidden: 'test', } }
+      let(:updated_alert) { build(:impac_alert, id: alert.id, kpi_id: kpi.id, title: 'test', webhook: 'test', sent: true) }
 
       subject { put :update, id: alert.id, alert: update_alert_hash }
 
@@ -53,8 +60,7 @@ module MnoEnterprise
       # it_behaves_like "jpi v1 authorizable action"
 
       # TODO: Test that rendering is equal to update_alert_hash
-
-      it { subject; expect(response.code).to eq('200') }
+      it { is_expected.to be_success }
     end
 
     describe 'DELETE #destroy' do
@@ -65,8 +71,8 @@ module MnoEnterprise
       # TODO: Add and test authorization
       # it_behaves_like "jpi v1 authorizable action"
 
-      it { subject; expect(response.code).to eq('200') }
-      it { subject; expect(JSON.parse(response.body)).to eq({'deleted' => {'service' => alert.service}}) }
+      it { is_expected.to be_success }
+      it { subject; expect(JSON.parse(response.body)).to eq({ 'deleted' => { 'service' => alert.service } }) }
     end
   end
 end

@@ -148,14 +148,15 @@ module MnoEnterpriseApiTestHelper
 
     # Generate first and second level inclusions. E.g. includes='app_instances.app'
     # The second level entities get added to the included_entities hash
-    included_entities.values.each { |obj, inclusions| serialize_data(obj, inclusions, included_entities) }
+    # only taking the first level of inclusions
+    included_entities.values.each { |obj, inclusions| serialize_data(obj, inclusions[0,1], included_entities) }
 
     {
       data: data,
       meta: {
         record_count: entity_count(entity)
       },
-      included: included_entities.values.map { |obj, inclusions| serialize_data(obj, inclusions, included_entities) }
+      included: included_entities.values.map { |obj, inclusions| serialize_data(obj, inclusions[0,1], included_entities) }
     }
   end
 end

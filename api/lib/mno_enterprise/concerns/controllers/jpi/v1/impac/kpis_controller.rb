@@ -26,8 +26,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
 
     begin
       response = MnoEnterprise::ImpacClient.send_get('/api/v2/kpis', attrs, basic_auth: auth)
-      # TODO check there was no error, something like
-      # return render json: { message: "Unable to retrieve kpis from Impac API | Error #{response.code}" } unless response.success?
+        # TODO check there was no error, something like
+        # return render json: { message: "Unable to retrieve kpis from Impac API | Error #{response.code}" } unless response.success?
     rescue => e
       return render json: { message: "Unable to retrieve kpis from Impac API | Error #{e}" }
     end
@@ -39,11 +39,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
         kpi.merge(
           name: "#{kpi[:name]} #{watchable.capitalize unless kpi[:name].downcase.index(watchable)}".strip,
           watchables: [watchable],
-          target_placeholders: {watchable => kpi[:target_placeholders][watchable]},
+          target_placeholders: { watchable => kpi[:target_placeholders][watchable] },
         )
       end
     end
-    .flatten
+             .flatten
 
     render json: { kpis: kpis }
   end
@@ -59,16 +59,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
       return render_not_found('dashboard') if dashboard.blank?
       authorize! :manage_dashboard, dashboard
     end
-    # TODO: nest alert in as a param, with the current user as a recipient.
     @kpi = MnoEnterprise::Kpi.create!(kpi_create_params)
     # Creates a default alert for kpis created with targets defined.
     if kpi.targets.present?
-      MnoEnterprise::Alert.create({service: 'inapp', kpi_id: kpi.id, recipient_ids: [current_user.id]})
+      MnoEnterprise::Alert.create_with_recipients!({ service: 'inapp', kpi_id: kpi.id }, [current_user.id])
       # TODO: should widget KPIs create an email alert automatically?
-      MnoEnterprise::Alert.create({service: 'email', kpi_id: kpi.id, recipient_ids: [current_user.id]}) if widget.present?
+      MnoEnterprise::Alert.create_with_recipients!({ service: 'email', kpi_id: kpi.id }, [current_user.id]) if widget.present?
       # TODO: reload is adding the recipients to the kpi alerts (making another request).
     end
-    @kpi = kpi.load_required(:alerts)
+    @kpi = kpi.load_required(:alerts, :'alerts.recipients')
     render 'show'
   end
 
@@ -85,17 +84,17 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     # --
     # Creates an in-app alert if target is set for the first time (in-app alerts should be activated by default)
     if kpi.targets.blank? && params[:targets].present?
-      MnoEnterprise::Alert.create!(service: 'inapp', kpi_id: kpi.id, recipient_ids: [current_user.id])
+      MnoEnterprise::Alert.create_with_recipients!({ service: 'inapp', kpi_id: kpi.id }, [current_user.id])
     # If targets have changed, reset all the alerts 'sent' status to false.
     elsif kpi.targets && params[:targets].present? && params[:targets] != kpi.targets
-      kpi.alerts.each { |alert| alert.update_attributes!(sent: false) }
-    # Removes all the alerts if the targets are removed (kpi has no targets set,
-    # and params contains no targets to be set)
+      kpi.alerts.each { |alert| alert.update_attributes(sent: false) }
+      # Removes all the alerts if the targets are removed (kpi has no targets set,
+      # and params contains no targets to be set)
     elsif params[:targets].blank? && kpi.targets.blank?
       kpi.alerts.each(&:destroy!)
     end
     kpi.update_attributes!(kpi_update_params)
-    @kpi = kpi.load_required(:dashboard, :alerts)
+    @kpi = kpi.load_required(:dashboard, :alerts, :'alerts.recipients')
     render 'show'
   end
 
@@ -114,45 +113,44 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   #=================================================
   private
 
-    def dashboard
-      @dashboard ||= MnoEnterprise::Dashboard.find_one(params.require(:dashboard_id))
-    end
+  def dashboard
+    @dashboard ||= MnoEnterprise::Dashboard.find_one(params.require(:dashboard_id))
+  end
 
-    def widget
-      widget_id = params.require(:kpi)[:widget_id]
-      @widget ||= (widget_id.present? && MnoEnterprise::Widget.find_one(widget_id.to_i))
-    end
+  def widget
+    widget_id = params.require(:kpi)[:widget_id]
+    @widget ||= (widget_id.present? && MnoEnterprise::Widget.find_one(widget_id.to_i))
+  end
 
-    def kpi
-      @kpi ||= MnoEnterprise::Kpi.find_one(params[:id], :dashboard, :widget, :alerts)
-    end
+  def kpi
+    @kpi ||= MnoEnterprise::Kpi.find_one(params[:id], :dashboard, :widget, :alerts, :'alerts.recipients')
+  end
 
-   def kpi_create_params
-      whitelist = [:widget_id, :endpoint, :source, :element_watched, {extra_watchables: []}]
-      create_params = extract_params(whitelist)
-      #either it is a widget kpi or a dashboard kpi
-      if create_params[:widget_id]
-        create_params
-      else
-        create_params.merge(dashboard_id: params[:dashboard_id])
-      end
+  def kpi_create_params
+    whitelist = [:widget_id, :endpoint, :source, :element_watched, { extra_watchables: [] }]
+    create_params = extract_params(whitelist)
+    #either it is a widget kpi or a dashboard kpi
+    if create_params[:widget_id]
+      create_params
+    else
+      create_params.merge(dashboard_id: params[:dashboard_id])
     end
+  end
 
-    def kpi_update_params
-      whitelist = [:name, :element_watched, {extra_watchables: []}]
-      extract_params(whitelist)
-    end
+  def kpi_update_params
+    whitelist = [:name, :element_watched, { extra_watchables: [] }]
+    extract_params(whitelist)
+  end
 
-    def extract_params(whitelist)
-      (p = params).require(:kpi).permit(*whitelist).tap do |whitelisted|
-        whitelisted[:settings] = p[:kpi][:metadata] || {}
-        # TODO: strong params for targets & extra_params attributes (keys will depend on the kpi).
-        whitelisted[:targets] = p[:kpi][:targets] unless p[:kpi][:targets].blank?
-        whitelisted[:extra_params] = p[:kpi][:extra_params] unless p[:kpi][:extra_params].blank?
-      end
-      .except(:metadata)
-    end
+  def extract_params(whitelist)
+    (p = params).require(:kpi).permit(*whitelist).tap do |whitelisted|
+      whitelisted[:settings] = p[:kpi][:metadata] || {}
+      # TODO: strong params for targets & extra_params attributes (keys will depend on the kpi).
+      whitelisted[:targets] = p[:kpi][:targets] unless p[:kpi][:targets].blank?
+      whitelisted[:extra_params] = p[:kpi][:extra_params] unless p[:kpi][:extra_params].blank?
+    end.except(:metadata)
+  end
 
-    alias :find_valid_kpi  :kpi
+  alias :find_valid_kpi :kpi
 
 end
