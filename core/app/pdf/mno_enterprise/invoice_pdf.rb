@@ -253,12 +253,20 @@ module MnoEnterprise
       @pdf.indent(5) do
         @pdf.font_size(8) do
           @pdf.text "<color rgb='999999'> #{t('charging_details.bank_statement', invoice_reference: @data[:invoice_reference])}</color>", inline_format: true
+
           @pdf.text "<color rgb='999999'> #{t('charging_details.currency', currency_name: @data[:invoice_currency_name], currency: @data[:invoice_currency])}</color>", inline_format: true
           if @data[:invoice_fully_paid]
             @pdf.text "<color rgb='999999'>  #{t('charging_details.no_payments')}</color>", inline_format: true
           else
             @pdf.text "<color rgb='999999'>  #{t('charging_details.with_payment', charge_date: @data[:period_charge_date].strftime("%B,%e %Y"), platform_name: MnoEnterprise.app_name)}</color>", inline_format: true
           end
+        end
+      end
+
+      if @invoice.will_org_be_deleted?
+        @pdf.move_down 60
+        @pdf.font_size(20) do
+          @pdf.text "<color rgb='#f21414'> This is the final invoice before account deletion</color>", inline_format: true, style: :bold, align: :center
         end
       end
 
