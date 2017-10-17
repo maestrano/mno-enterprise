@@ -54,14 +54,17 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
 
   # GET /mnoe/jpi/v1/organization/1/app_instances/11/sync_history
   def sync_history
-    render json: MnoEnterprise::AppInstance.find(params[:id]).first.sync_history.as_json
+    syncs = MnoEnterprise::AppInstance.find(params[:id]).first.sync_history(page_number: params[:page], page_size: params[:size], sort: params[:sort])
+    response.headers['x-total-count'] = syncs.meta[:record_count]
+    render json: syncs.as_json
   end
 
   # POST /mnoe/jpi/v1/organization/1/app_instances/11/disconnect
   def disconnect
     app_instance = MnoEnterprise::AppInstance.includes(:app).find(params[:id]).first
+    organization = MnoEnterprise::Organization.find_one(app_instance.owner_id)
     app_meta = app_instance.metadata['app']
-    body = {group_id: app_instance.uid}
+    body = {org_uid: organization.uid}
     auth = {username: app_instance.app.uid, password: app_instance.app.api_key}
     resp = ::HTTParty.post("#{app_meta['host']}/disconnect", body: body, basic_auth: auth)
     render json: JSON.parse(resp.body), status: resp.code
