@@ -95,3 +95,9 @@ en:
           enter_name: Enter a name for your new company
           cancel: Cancel
           create: Create
+
+        link_account:
+          title: Link your account
+          entities: Select your entities
+          synchronize: Start synchronizing
+          link: Link your {appname} account to Maestrano to get your business in sync.
