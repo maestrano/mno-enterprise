@@ -2,7 +2,7 @@
 ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
 require 'factory_girl_rails'
-
+require 'fakefs/spec_helpers'
 require 'mno_enterprise/testing_support/user_action_shared'
 
 # Load the Dummy application
@@ -64,6 +64,10 @@ RSpec.configure do |config|
 
   # Include Rails route helpers
   config.include Rails.application.routes.url_helpers, type: [:controller, :mailer]
+
+  # Automatically activate and deactivate fakefs whenever a test
+  # is tagged with fakefs: true
+  config.include FakeFS::SpecHelpers, fakefs: true
 
   # Fix time rounding issues
   ActiveSupport::JSON::Encoding.time_precision = 0

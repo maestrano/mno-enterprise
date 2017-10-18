@@ -13,6 +13,7 @@ group :test do
   gem 'timecop'
   gem 'climate_control'
   # gem 'simplecov'
+  gem 'fakefs', require: 'fakefs/safe'
 end
 
 group :test, :development do
