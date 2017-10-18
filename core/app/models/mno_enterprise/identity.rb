@@ -5,7 +5,7 @@ module MnoEnterprise
     property :user_id
 
     def self.find_for_oauth(auth)
-        find_by_or_create(uid: auth.uid, provider: auth.provider)
+      find_by_or_create(uid: auth.uid, provider: auth.provider)
     end
   end
 end

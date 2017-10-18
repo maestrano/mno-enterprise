@@ -14,12 +14,12 @@ module MnoEnterprise
     # Add the user to the organization and update the status of the invite
     # Add team
     def accept!(user = self.user)
-      self.accept(data: { attributes: { user_id: user.id } } )
+      result = self.accept(data: { attributes: { user_id: user.id } } )
+      process_custom_result(result)
     end
 
     def decline!
-      result = decline
-      self.class.raise_if_errors(result.errors)
+      process_custom_result(decline)
     end
 
     # Check whether the invite is expired or not

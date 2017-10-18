@@ -41,8 +41,7 @@ module MnoEnterprise
 
     def regenerate_api_key!
       result = self.regenerate_api_key
-      self.class.raise_if_errors(result.errors)
-      self.api_key = result.first.api_key
+      self.api_key = process_custom_result(result).api_key
     end
 
     def to_audit_event

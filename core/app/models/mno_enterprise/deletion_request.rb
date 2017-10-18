@@ -23,7 +23,8 @@ module MnoEnterprise
     end
 
     def freeze_account!
-      self.freeze
+      result = self.freeze
+      process_custom_result(result)
     end
 
   end

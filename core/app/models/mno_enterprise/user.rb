@@ -142,14 +142,12 @@ module MnoEnterprise
 
     def update_password!(input)
       result = update_password(input)
-      self.class.raise_if_errors(result.errors)
-      result.first
+      process_custom_result(result)
     end
 
     def create_api_credentials!
       result = create_api_credentials
-      self.class.raise_if_errors(result.errors)
-      result.first
+      process_custom_result(result)
     end
 
     # Find a user using a confirmation token

@@ -5,7 +5,7 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/organization/org-fbba/app_instances_sync
     def index
       authorize! :check_apps_sync, @parent_organization
-      connectors = parent_organization.app_instances_sync.first.connectors
+      connectors = parent_organization.app_instances_sync!
       render json: results(connectors)
     end
 

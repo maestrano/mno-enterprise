@@ -53,17 +53,15 @@ module MnoEnterprise
     def approve!
       input = { data: { attributes: { expiration_date: EXPIRATION_TIMEOUT.from_now} } }
       result = approve(input)
-      self.class.raise_if_errors(result.errors)
+      process_custom_result(result)
     end
 
     def revoke!
-      result = revoke
-      self.class.raise_if_errors(result.errors)
+      process_custom_result(revoke)
     end
 
     def deny!
-      result = deny
-      self.class.raise_if_errors(result.errors)
+      process_custom_result(deny)
     end
   end
 end

@@ -20,6 +20,8 @@ module MnoEnterprise
     let(:w_kpi) { build(:impac_kpi) }
     let(:widget) { build(:impac_widget, owner: user) }
 
+    let(:errors) { JSON.parse(response.body, symbolize_names: true) }
+
     let(:dashboard) do
       build(:impac_dashboard,
             dashboard_type: 'dashboard',
@@ -136,12 +138,11 @@ module MnoEnterprise
       end
       context 'with a resource error' do
         let!(:stub) { stub_api_v2_error(:post, '/dashboards', 422, 'validation error') }
-        let(:errors) { parse_errors(response) }
         it 'returns an error' do
           subject
           expect(subject).to_not be_successful
           expect(subject.code).to eq('400')
-          expect(errors[:message]).to eq('[create dashboard] error: validation error')
+          expect(errors[:base]).to eq(['validation error'])
         end
       end
     end
@@ -170,12 +171,11 @@ module MnoEnterprise
 
       context 'with a resource error' do
         let!(:stub) { stub_api_v2_error(:patch, "/dashboards/#{dashboard.id}", 422, 'this is wrong') }
-        let(:errors) { parse_errors(response) }
         it 'returns an error' do
           subject
           expect(subject).to_not be_successful
           expect(subject.code).to eq('400')
-          expect(errors[:message]).to eq('[update dashboard] error: this is wrong')
+          expect(errors[:base]).to eq(['this is wrong'])
         end
       end
     end
@@ -195,12 +195,11 @@ module MnoEnterprise
 
       context 'with a resource error' do
         let!(:stub) { stub_api_v2_error(:delete, "/dashboards/#{dashboard.id}", 422, 'could not delete') }
-        let(:errors) { parse_errors(response) }
         it 'returns an error' do
           subject
           expect(subject).to_not be_successful
           expect(subject.code).to eq('400')
-          expect(errors[:message]).to eq('[destroy dashboard] error: could not delete')
+          expect(errors[:base]).to eq(['could not delete'])
         end
       end
     end
@@ -229,12 +228,11 @@ module MnoEnterprise
 
       context 'with a resource error' do
         let!(:stub) { stub_api_v2_error(:post, "/dashboards/#{template.id}/copy", 422, 'could not copy') }
-        let(:errors) { parse_errors(response) }
         it 'returns an error' do
           subject
           expect(subject).to_not be_successful
           expect(subject.code).to eq('400')
-          expect(errors[:message]).to eq('[copy dashboard] error: could not copy')
+          expect(errors).to eq({ base: ['could not copy'] })
         end
       end
     end

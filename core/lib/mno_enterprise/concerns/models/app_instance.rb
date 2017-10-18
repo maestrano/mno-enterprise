@@ -39,6 +39,11 @@ module MnoEnterprise::Concerns::Models::AppInstance
   # Instance methods
   #==================================================================
 
+  def provision!(input)
+    result = provision(input)
+    process_custom_result(result)
+  end
+
   def to_audit_event
     {
       id: id,
@@ -51,7 +56,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
 
   def terminate!
     result = terminate
-    self.class.raise_if_errors(result.errors)
+    process_custom_result(result)
     result.first
   end
 

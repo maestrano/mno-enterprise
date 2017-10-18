@@ -78,8 +78,7 @@ module MnoEnterprise
         owner_id: owner.id
       }
       result = self.class.copy(id: id, data: { attributes: attrs })
-      self.class.raise_if_errors(result.errors)
-      result.first
+      process_custom_result(result)
     end
   end
 end

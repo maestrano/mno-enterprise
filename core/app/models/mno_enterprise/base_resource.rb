@@ -69,11 +69,18 @@ module MnoEnterprise
       resource
     end
 
-    def self.raise_if_errors(errors)
-      raise ResourceError.new(errors) unless errors.empty?
+    def self.process_custom_result(result)
+      instance = new
+      instance.process_custom_result(result)
     end
 
     # == Instance Methods ========================================================
+
+    def process_custom_result(result)
+      collect_errors(result.errors)
+      raise_if_errors
+      result.first
+    end
 
     # add missing method
     def update_attribute(name, value)
@@ -103,14 +110,18 @@ module MnoEnterprise
     def destroy!
       unless destroy
         # HotFix waiting for #https://github.com/chingor13/json_api_client/pull/275 to be merged
-        last_result_set.errors.each do |error|
-          if error.source_parameter
-            errors.add(self.class.key_formatter.unformat(error.source_parameter), error.title || error.detail)
-          else
-            errors.add(:base, error.title || error.detail)
-          end
-        end
+        collect_errors(last_result_set.errors)
         raise_if_errors
+      end
+    end
+
+    def collect_errors(external_errors)
+      external_errors.each do |error|
+        if error.source_parameter
+          errors.add(self.class.key_formatter.unformat(error.source_parameter), error.title || error.detail)
+        else
+          errors.add(:base, error.title || error.detail)
+        end
       end
     end
 
@@ -120,7 +131,7 @@ module MnoEnterprise
     end
 
     def raise_if_errors
-      self.class.raise_if_errors(self.errors)
+      raise ResourceError.new(errors) unless errors.empty?
     end
 
     # emulate active record call of callbacks, a bit different as before_update is called before before_save

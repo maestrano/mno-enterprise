@@ -93,9 +93,7 @@ module MnoEnterprise::Concerns::Models::Organization
 
   def provision_app_instance!(app_nid)
     input = { data: { attributes: { app_nid: app_nid, owner_id: id, owner_type: 'Organization' } } }
-    result = MnoEnterprise::AppInstance.provision(input)
-    self.class.raise_if_errors(result.errors)
-    result.first
+    MnoEnterprise::AppInstance.provision!(input)
   end
 
   def new_credit_card
@@ -108,20 +106,22 @@ module MnoEnterprise::Concerns::Models::Organization
 
   def freeze!
     result = freeze
-    self.class.raise_if_errors(result.errors)
-    self.attributes = result.first.attributes
+    self.attributes = process_custom_result(result).attributes
   end
 
   def unfreeze!
     result = unfreeze
-    self.class.raise_if_errors(result.errors)
-    self.attributes = result.first.attributes
+    self.attributes = process_custom_result(result).attributes
+  end
+
+  def app_instances_sync!
+    result = app_instances_sync
+    process_custom_result(result).connectors
   end
 
   def trigger_app_instances_sync!
     result = trigger_app_instances_sync
-    self.class.raise_if_errors(result.errors)
-    result.first.connectors
+    process_custom_result(result).connectors
   end
 
   def to_audit_event

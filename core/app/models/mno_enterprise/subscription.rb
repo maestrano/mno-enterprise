@@ -37,23 +37,19 @@ module MnoEnterprise
     end
 
     def fulfill!
-      result = fulfill
-      self.class.raise_if_errors(result.errors)
+      process_custom_result(fulfill)
     end
 
     def modify!(args)
-      result = modify(args)
-      self.class.raise_if_errors(result.errors)
+      process_custom_result(modify(args))
     end
 
     def approve!
-      result = approve
-      self.class.raise_if_errors(result.errors)
+      process_custom_result(approve)
     end
 
     def cancel!
-      result = cancel
-      self.class.raise_if_errors(result.errors)
+      process_custom_result(cancel)
     end
   end
 end

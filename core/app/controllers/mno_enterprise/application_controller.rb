@@ -18,11 +18,12 @@ module MnoEnterprise
 
     rescue_from MnoEnterprise::ResourceError do |exception|
       resource_name = controller_name.singularize
-      message = "[#{params[:action]} #{resource_name}] error: #{exception.message}"
-      render json: { errors: {message: message, code: 400, params: params} }, status: :bad_request
+      logger.debug "User: #{current_user.id} [#{params[:action]} #{resource_name}] Errors: #{exception.message}, Params: #{params}"
+      render json: exception.errors, status: :bad_request
     end
 
-    rescue_from JsonApiClient::Errors::ServerError do |_exception|
+    rescue_from JsonApiClient::Errors::ServerError do |exception|
+      logger.error "User: #{current_user.id} [#{params[:action]} #{resource_name}] ServerError: #{exception.message}, Params: #{params}"
       render json: { errors: { message: 'Internal server error', code: 500, params: params} }, status: :internal_server_error
     end
 

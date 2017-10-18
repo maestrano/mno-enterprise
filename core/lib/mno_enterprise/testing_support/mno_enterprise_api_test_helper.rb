@@ -86,10 +86,6 @@ module MnoEnterpriseApiTestHelper
     stub
   end
 
-  def parse_errors(response)
-    JSON.parse(response.body, symbolize_names: true)[:errors]
-  end
-
   def assert_requested_api_v2(method, suffix, options = {})
     options[:query] = (options[:query] || {}).reverse_merge(_locale: I18n.locale)
     assert_requested(method, MnoEnterprise::BaseResource.site + suffix, options)
