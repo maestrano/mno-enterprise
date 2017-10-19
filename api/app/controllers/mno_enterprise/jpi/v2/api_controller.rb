@@ -7,42 +7,49 @@ module MnoEnterprise
 
 
     def index
-      resp = mnohub_client.get(endpoint, params)
+      resp = MnoHubClient.get(endpoint, filter_params(params))
       render_results(resp)
     end
 
     def show
-      resp = mnohub_client.get(File.join(endpoint, params.require(:id)), params)
+      resp = MnoHubClient.get(File.join(endpoint, params.require(:id)), filter_params(params))
       render_results(resp)
     end
 
     def create
-      resp = mnohub_client.post(endpoint, {body: request.raw_post})
+      resp = MnoHubClient.post(endpoint, {body: request.raw_post})
       render_results(resp)
     end
 
     def update
-      resp = mnohub_client.patch(File.join(endpoint, params.require(:id)), {body: request.raw_post})
+      resp = MnoHubClient.patch(File.join(endpoint, params.require(:id)), {body: request.raw_post})
       render_results(resp)
     end
 
     def destroy
-      resp = mnohub_client.delete(File.join(endpoint, params.require(:id)))
+      resp = MnoHubClient.delete(File.join(endpoint, params.require(:id)))
       render_results(resp)
     end
 
     private
+    # Filter params to only forward the params we need
+    # TODO: move in controller?
+    def filter_params(params)
+      # options[:query] = options[:query].inject({}) { |h, q| h[q[0].to_s.camelize] = q[1]; h }
+      {
+        query: params.permit(
+          :include,
+          page: [:number, :size]
+        )
+      }
+    end
 
     def render_results(response)
       render body: response.body, content_type: 'application/vnd.api+json', status: response.code
     end
 
-    def mnohub_client
-      @mnohub_client ||= MnoHubClient.new
-    end
-
     def endpoint
-      @endpoint ||= self.class.name.demodulize.underscore.sub(/_controller$/, '')
+      @endpoint ||= "/#{self.class.name.demodulize.underscore.sub(/_controller$/, '')}"
     end
   end
 end
