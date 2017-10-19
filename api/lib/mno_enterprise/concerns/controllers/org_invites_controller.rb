@@ -29,7 +29,8 @@ module MnoEnterprise::Concerns::Controllers::OrgInvitesController
     message = { alert: 'Unfortunately, this invite does not seem to be valid.'}
     if params[:token]
       @org_invite = MnoEnterprise::OrgaInvite.includes(:user, :organization).where(id: params[:id], token: params[:token], status: 'pending').first
-      if @org_invite && !@org_invite.expired? && @org_invite.accept!(current_user)
+      if @org_invite && !@org_invite.expired?
+        @org_invite.accept!(current_user)
         redirect_path = add_param_to_fragment(redirect_path.to_s, 'dhbRefId', @org_invite.organization.id)
         # TODO: Add i18n
         message = { notice: "You are now part of #{@org_invite.organization.name}" }
