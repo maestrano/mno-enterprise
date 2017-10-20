@@ -72,6 +72,8 @@ module MnoEnterprise
     config.to_prepare do
       MnoEnterprise::MailClient.adapter ||= MnoEnterprise.mail_adapter
       MnoEnterprise::SystemManager.adapter ||= MnoEnterprise.platform_adapter
+
+      MnoEnterprise.configure_api
     end
 
     config.after_initialize do
