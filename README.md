@@ -88,6 +88,8 @@ bin/rake mnoe:frontend:install_dependencies
 
 ## Upgrade
 
+To quickly upgrade all the components in your project you can run `bin/rake mnoe:update_all`.
+
 We follow [Semantic Versioning](https://semver.org/) so upgrading to a compatible version should be straightforward.
 
 For major upgrade between versions see [UPGRADING](UPGRADING.md).
