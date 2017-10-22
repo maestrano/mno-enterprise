@@ -15,6 +15,7 @@ module MnoEnterprise
         @organizations = []
         JSON.parse(params[:terms]).map do |t|
           @organizations = @organizations | MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
+                                              .select(INCLUDED_FIELDS)
                                               .where(Hash[*t])
         end
         response.headers['X-Total-Count'] = @organizations.count
