@@ -172,7 +172,7 @@ module MnoEnterprise
       subject { post :batch_import, file: file }
 
       context 'invalid file' do
-        let(:file) { file = fixture_file_upload(File.join(File.dirname(File.expand_path(__FILE__)), '../../../../../fixtures/batch-example-bad.csv'), 'text/csv') }
+        let(:file) { file = fixture_file_upload('batch-example-bad.csv', 'text/csv') }
         before { subject }
         it { expect(response.status).to eq 400 }
 
@@ -228,7 +228,7 @@ module MnoEnterprise
           allow_any_instance_of(Devise::TokenGenerator).to receive(:generate).and_return(confirmation_token)
         }
 
-        let(:file) { file = fixture_file_upload(File.join(File.dirname(File.expand_path(__FILE__)), '../../../../../fixtures/batch-example.csv'), 'text/csv') }
+        let(:file) { file = fixture_file_upload('batch-example.csv', 'text/csv') }
 
         before { sign_in user }
         before { subject }
