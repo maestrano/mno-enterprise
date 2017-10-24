@@ -6,6 +6,8 @@ module MnoEnterprise::TestingSupport::SharedExamples::JpiV2ApiController
     let(:resource_name) { endpoint.singularize }
     let(:resource_klass) { nil }
 
+    let(:user) { build(:user) }
+
     # Format the JSON API data Hash for a delete request
     def destroy_attributes(record, resource_name, _)
       {
@@ -33,7 +35,7 @@ module MnoEnterprise::TestingSupport::SharedExamples::JpiV2ApiController
     # Stub MnoHub request
     # TODO: use before all instead of let to speed things up?
     let(:base_url) { URI.join(MnoEnterprise.api_host, MnoEnterprise.mno_api_v2_root_path).to_s }
-    let(:basic_auth) { ActionController::HttpAuthentication::Basic.encode_credentials(MnoEnterprise.tenant_id, MnoEnterprise.tenant_key) }
+    let(:basic_auth) { ActionController::HttpAuthentication::Basic.encode_credentials(user.sso_session, '') }
     let(:headers) do
       {
         'Accept' => 'application/vnd.api+json',
@@ -50,6 +52,8 @@ module MnoEnterprise::TestingSupport::SharedExamples::JpiV2ApiController
 
       before do
         stub
+        stub_user(user)
+        sign_in(user)
         subject
       end
 
