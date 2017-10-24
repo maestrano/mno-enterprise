@@ -322,6 +322,7 @@ MnoEnterprise::Engine.routes.draw do
       # TODO: dynamic routes?
       resources :organizations, only: [:index, :show, :create, :update, :destroy]
       resources :users, only: [:index, :show]
+      resources :dashboards, only: [:index, :show, :create, :update, :destroy]
 
       # scope ':entity' do
       #   resources '', as: :resource, controller: 'resources', only: [:index, :show, :create, :update, :destroy]
