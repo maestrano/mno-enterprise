@@ -145,6 +145,16 @@ module MnoEnterprise
           expect(errors[:base]).to eq(['validation error'])
         end
       end
+      context 'with a system error' do
+        let!(:stub) { stub_api_v2_error(:post, '/dashboards', 500) }
+        it 'returns an error' do
+          subject
+          expect(subject).to_not be_successful
+          expect(subject.code).to eq('500')
+          expect(errors[:errors][:message]).to eq('Internal server error')
+        end
+      end
+
     end
 
     describe 'PUT #update' do
