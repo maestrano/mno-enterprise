@@ -24,13 +24,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
   # POST /mnoe/jpi/v1/organization/1/app_instances
   def create
     authorize! :manage_app_instances, parent_organization
-    app_instance = parent_organization.provision_app_instance(params[:nid])
-    if app_instance.errors.any?
-      render json: app_instance.errors, status: :bad_request
-    else
-      MnoEnterprise::EventLogger.info('app_add', current_user.id, 'App added', app_instance.first)
-      head :created
-    end
+    app_instance = parent_organization.provision_app_instance!(params[:nid])
+    MnoEnterprise::EventLogger.info('app_add', current_user.id, 'App added', app_instance)
+    head :created
   end
 
   # DELETE /mnoe/jpi/v1/app_instances/1
@@ -40,7 +36,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
       organization = MnoEnterprise::Organization.find_one(@app_instance.owner_id)
       authorize! :manage_app_instances, organization
       MnoEnterprise::EventLogger.info('app_destroy', current_user.id, 'App destroyed', @app_instance)
-      @app_instance = @app_instance.terminate.first
+      @app_instance = @app_instance.terminate!
     end
 
     head :accepted

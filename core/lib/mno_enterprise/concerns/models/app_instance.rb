@@ -27,9 +27,10 @@ module MnoEnterprise::Concerns::Models::AppInstance
   # Class methods
   #==================================================================
   module ClassMethods
-    # def some_class_method
-    #   'some text'
-    # end
+    def provision!(input)
+      result = provision(input)
+      process_custom_result(result)
+    end
   end
 
   def active?
@@ -38,6 +39,8 @@ module MnoEnterprise::Concerns::Models::AppInstance
   #==================================================================
   # Instance methods
   #==================================================================
+
+
 
   def to_audit_event
     {
@@ -48,4 +51,11 @@ module MnoEnterprise::Concerns::Models::AppInstance
       organization_id: owner_id
     }
   end
+
+  def terminate!
+    result = terminate
+    process_custom_result(result)
+    result.first
+  end
+
 end

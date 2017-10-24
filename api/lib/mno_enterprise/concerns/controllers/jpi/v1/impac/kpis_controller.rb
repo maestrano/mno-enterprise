@@ -59,23 +59,17 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
       return render_not_found('dashboard') if dashboard.blank?
       authorize! :manage_dashboard, dashboard
     end
-
     # TODO: nest alert in as a param, with the current user as a recipient.
-    @kpi = MnoEnterprise::Kpi.create(kpi_create_params)
-    if @kpi.errors.empty?
-      # Creates a default alert for kpis created with targets defined.
-      if kpi.targets.present?
-        MnoEnterprise::Alert.create({service: 'inapp', kpi_id: kpi.id, recipient_ids: [current_user.id]})
-        # TODO: should widget KPIs create an email alert automatically?
-        MnoEnterprise::Alert.create({service: 'email', kpi_id: kpi.id, recipient_ids: [current_user.id]}) if widget.present?
-        # TODO: reload is adding the recipients to the kpi alerts (making another request).
-      end
-      @kpi = kpi.load_required(:alerts)
-      render 'show'
-    else
-      msg = kpi.errors.full_messages.join(', ') || 'unable to create KPI.'
-      render_bad_request("create kpi (id=#{kpi.id})", msg)
+    @kpi = MnoEnterprise::Kpi.create!(kpi_create_params)
+    # Creates a default alert for kpis created with targets defined.
+    if kpi.targets.present?
+      MnoEnterprise::Alert.create({service: 'inapp', kpi_id: kpi.id, recipient_ids: [current_user.id]})
+      # TODO: should widget KPIs create an email alert automatically?
+      MnoEnterprise::Alert.create({service: 'email', kpi_id: kpi.id, recipient_ids: [current_user.id]}) if widget.present?
+      # TODO: reload is adding the recipients to the kpi alerts (making another request).
     end
+    @kpi = kpi.load_required(:alerts)
+    render 'show'
   end
 
   # PUT /mnoe/jpi/v1/impac/kpis/:id
@@ -91,37 +85,27 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     # --
     # Creates an in-app alert if target is set for the first time (in-app alerts should be activated by default)
     if kpi.targets.blank? && params[:targets].present?
-      MnoEnterprise::Alert.create(service: 'inapp', kpi_id: kpi.id, recipient_ids: [current_user.id])
-
+      MnoEnterprise::Alert.create!(service: 'inapp', kpi_id: kpi.id, recipient_ids: [current_user.id])
     # If targets have changed, reset all the alerts 'sent' status to false.
     elsif kpi.targets && params[:targets].present? && params[:targets] != kpi.targets
-      kpi.alerts.each { |alert| alert.update_attributes(sent: false) }
-
+      kpi.alerts.each { |alert| alert.update_attributes!(sent: false) }
     # Removes all the alerts if the targets are removed (kpi has no targets set,
     # and params contains no targets to be set)
     elsif params[:targets].blank? && kpi.targets.blank?
-      kpi.alerts.each(&:destroy)
+      kpi.alerts.each(&:destroy!)
     end
-    kpi.update_attributes(kpi_update_params)
+    kpi.update_attributes!(kpi_update_params)
     @kpi = kpi.load_required(:dashboard, :alerts)
-    if kpi.errors.empty?
-      render 'show'
-    else
-      msg = kpi.errors.full_messages.join(', ') || 'unable to update KPI.'
-      render_bad_request("update kpi (id=#{kpi.id})", msg)
-    end
+    render 'show'
   end
 
   # DELETE /mnoe/jpi/v1/impac/kpis/:id
   #   -> DELETE /api/mnoe/v1/kpis/:id
   def destroy
     return render_not_found('kpi') unless kpi.present?
-
     authorize! :manage_kpi, kpi
-
     MnoEnterprise::EventLogger.info('kpi_delete', current_user.id, 'KPI Deletion', kpi)
-
-    kpi.destroy
+    kpi.destroy!
     head status: :ok
   end
 

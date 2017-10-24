@@ -49,11 +49,8 @@ module MnoEnterprise
       # Add product relationship data
       asset.relationships.attributes = { product: { data: { type: 'products', id: product_id } } }
 
-      if asset.save
-        render json: { id: asset.id, url: asset.url, field_name: asset.field_name }
-      else
-        render json: asset.errors, status: :bad_request
-      end
+      asset.save!
+      render json: { id: asset.id, url: asset.url, field_name: asset.field_name }
     end
 
     # DELETE /mnoe/jpi/v1/admin/assets/1
@@ -61,7 +58,7 @@ module MnoEnterprise
       asset = MnoEnterprise::Asset.find_one(params[:id])
       return render_not_found('asset') unless asset
 
-      asset.destroy
+      asset.destroy!
       head :no_content
     end
   end

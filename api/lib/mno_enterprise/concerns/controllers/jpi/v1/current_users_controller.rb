@@ -12,7 +12,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     respond_to :json
   end
 
-
   #==================================================================
   # Instance methods
   #==================================================================
@@ -26,48 +25,35 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     @user = current_user
     @user.attributes = user_params
     changed_attributes = @user.changed_attributes
-    @user.save
-    if @user.errors.empty?
-      MnoEnterprise::EventLogger.info('user_update', current_user.id, 'User update', @user, changed_attributes)
-      @user = @user.load_required_dependencies
-      render :show
-    else
-      render json: @user.errors, status: :bad_request
-    end
+    @user.save!
+    MnoEnterprise::EventLogger.info('user_update', current_user.id, 'User update', @user, changed_attributes)
+    @user = @user.load_required_dependencies
+    render :show
     current_user.refresh_user_cache
   end
 
   # PUT /mnoe/jpi/v1/current_user/register_developer
   def register_developer
     @user = current_user
-    @user = @user.create_api_credentials.first
-    if @user.errors.empty?
-      MnoEnterprise::EventLogger.info('register_developer', current_user.id, 'Developer registration', @user)
-      @user = @user.load_required_dependencies
-      render :show
-    else
-      render json: @user.errors, status: :bad_request
-    end
+    @user = @user.create_api_credentials!
+    MnoEnterprise::EventLogger.info('register_developer', current_user.id, 'Developer registration', @user)
+    @user = @user.load_required_dependencies
+    render :show
+
   end
 
   # PUT /mnoe/jpi/v1/current_user/update_password
   def update_password
     @user = current_user
-    @user = @user.update_password(data: {attributes: password_params}).first
-    # TODO: [APIv2] This is not working!
-    # update_password returns an empty array in case of error
-    if @user.errors.empty?
-      MnoEnterprise::EventLogger.info('user_update_password', current_user.id, 'User password change', @user)
-      @user = @user.load_required_dependencies
-      sign_in @user, bypass: true
-      render :show
-    else
-      render json: @user.errors, status: :bad_request
-    end
+    @user = @user.update_password!(data: {attributes: password_params})
+    MnoEnterprise::EventLogger.info('user_update_password', current_user.id, 'User password change', @user)
+    @user = @user.load_required_dependencies
+    sign_in @user, bypass: true
+    render :show
   end
 
   private
-  
+
     def user_params
       params.require(:user).permit(
         :name, :surname, :email, :company, :phone, :website, :phone_country_code, :current_password, :password, :password_confirmation,

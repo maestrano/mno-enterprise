@@ -17,11 +17,6 @@ module MnoEnterprise
     custom_endpoint :deny, on: :member, request_method: :patch
     custom_endpoint :revoke, on: :member, request_method: :patch
 
-    def approve!
-      input = { data: { attributes: { expiration_date: EXPIRATION_TIMEOUT.from_now} } }
-      approve(input)
-    end
-
     def self.active_requested(user_id)
       includes(:requester).where(user_id: user_id, status: 'requested', 'created_at.gt': EXPIRATION_TIMEOUT.ago)
     end
@@ -43,7 +38,6 @@ module MnoEnterprise
       end
     end
 
-
     def to_audit_event
       { id: id, user_id: user_id, requester_id: requester_id , status: status}
     end
@@ -54,6 +48,20 @@ module MnoEnterprise
       else
         status
       end
+    end
+
+    def approve!
+      input = { data: { attributes: { expiration_date: EXPIRATION_TIMEOUT.from_now} } }
+      result = approve(input)
+      process_custom_result(result)
+    end
+
+    def revoke!
+      process_custom_result(revoke)
+    end
+
+    def deny!
+      process_custom_result(deny)
     end
   end
 end

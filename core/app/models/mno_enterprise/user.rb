@@ -128,8 +128,8 @@ module MnoEnterprise
       self.orga_relations.find { |r| r.organization_id == organization_id }
     end
 
-    def create_deletion_request
-      MnoEnterprise::DeletionRequest.create(deletable_id: self.id, deletable_type: 'User')
+    def create_deletion_request!
+      MnoEnterprise::DeletionRequest.create!(deletable_id: self.id, deletable_type: 'User')
     end
 
     def current_deletion_request
@@ -138,6 +138,16 @@ module MnoEnterprise
                                     else
                                       self.deletion_requests.select(&:active?).sort_by(&:created_at).first
                                     end
+    end
+
+    def update_password!(input)
+      result = update_password(input)
+      process_custom_result(result)
+    end
+
+    def create_api_credentials!
+      result = create_api_credentials
+      process_custom_result(result)
     end
 
     # Find a user using a confirmation token

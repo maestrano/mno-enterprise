@@ -26,12 +26,15 @@ module MnoEnterprise::Jpi::V1::Admin
 
     # Invite for unconfirmed users are automatically accepted
     def find_org_invite(organization, user)
-      if user.confirmed?
-        status_scope = { 'status.in': 'staged,pending' }
-      else
-        status_scope = { status: 'accepted' }
-      end
-      MnoEnterprise::OrgaInvite.includes(:user, :organization, :team, :referrer).where(status_scope.merge(user_id: user.id, organization_id: organization.id)).first
+      status_scope = if user.confirmed?
+                       { 'status.in': 'staged,pending' }
+                     else
+                       { status: 'accepted' }
+                     end
+      MnoEnterprise::OrgaInvite
+        .includes(:user, :organization, :team, :referrer)
+        .where(status_scope.merge(user_id: user.id, organization_id: organization.id))
+        .first
     end
 
     # Send the org invite and update the status

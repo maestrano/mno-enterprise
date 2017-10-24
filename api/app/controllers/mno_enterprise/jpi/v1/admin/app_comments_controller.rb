@@ -5,11 +5,8 @@ module MnoEnterprise
     def create
       @app_review = MnoEnterprise::Comment.new(app_comment_params)
 
-      if @app_review.save
-        render :show
-      else
-        render json: @app_review.errors, status: :bad_request
-      end
+      @app_review.save!
+      render :show
     end
 
     private
