@@ -23,6 +23,7 @@ module MnoEnterprise
     end
 
     rescue_from JsonApiClient::Errors::ServerError do |exception|
+      resource_name = controller_name.singularize
       logger.error "User: #{current_user.id} [#{params[:action]} #{resource_name}] ServerError: #{exception.message}, Params: #{params}"
       render json: { errors: { message: 'Internal server error', code: 500, params: params} }, status: :internal_server_error
     end
