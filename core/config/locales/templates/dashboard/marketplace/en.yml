@@ -107,6 +107,8 @@ en:
                 title: "Edit History"
                 close: "Close"
             provision: "Provision"
+            pricing:
+              payg: "Usage Based"
 
           app_selection:
             next: "Next"
