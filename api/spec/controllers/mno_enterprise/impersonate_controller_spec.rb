@@ -21,16 +21,25 @@ module MnoEnterprise
       end
 
       describe "#create" do
+        subject { get :create, user_id: user2.id }
         it do
           expect(controller.current_user.id).to eq(user.id)
-          get :create, user_id: user2.id
+          subject
           expect(controller.current_user.id).to eq(user2.id)
         end
 
         context 'with an organisation id in parameters' do
-          before { get :create, user_id: user.id, dhbRefId: 10 }
+          subject { get :create, user_id: user.id, dhbRefId: 10 }
 
           it { is_expected.to redirect_to('/dashboard/#!?dhbRefId=10') }
+        end
+
+        context 'when the user is a staff member' do
+          let(:user2) { build(:user, admin_role: 'staff') }
+          it do
+            subject
+            expect(controller).to set_flash[:notice].to('User is a staff member')
+          end
         end
       end
 

@@ -11,7 +11,11 @@ module MnoEnterprise
       session[:impersonator_redirect_path] = params[:redirect_path].presence
       @user = MnoEnterprise::User.find(params[:user_id])
       if @user.present?
-        impersonate(@user)
+        if @user.admin_role.present?
+          flash[:notice] = 'User is a staff member'
+        else
+          impersonate(@user)
+        end
       else
         flash[:notice] = "User doesn't exist"
       end
