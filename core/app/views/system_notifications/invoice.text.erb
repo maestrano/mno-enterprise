@@ -3,7 +3,7 @@ Hi <%= @info[:first_name]%>,
 
 Please find attached your invoice from
 <%= @info[:started_at] %> to <%= @info[:ended_at] %>.
-The amount due for this invoice is <%= @info[:currency]%> <%= @info[:price_cents]%>.
+The amount due for this invoice is <%= @info[:currency]%> <%= "#{ Money.new(@info[:price_cents], @info[:currency]).format(symbol: false) }" %>.
 Your designated credit card will be charged on the 2nd of next month.
 You can check your current spendings as well as your billing history in your <%= @info[:dashboard_link] %> dashboard.
 
