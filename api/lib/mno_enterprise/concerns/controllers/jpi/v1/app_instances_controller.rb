@@ -59,12 +59,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
     render json: syncs.as_json
   end
 
+  # GET /mnoe/jpi/v1/organization/1/app_instances/11/id_maps
+  def id_maps
+    id_maps = MnoEnterprise::AppInstance.find(params[:id]).first.id_maps(page_number: params[:page], page_size: params[:size], sort: params[:sort], entity: params[:entity])
+    response.headers['x-total-count'] = id_maps.meta[:record_count]
+    render json: id_maps.as_json
+  end
+
   # POST /mnoe/jpi/v1/organization/1/app_instances/11/disconnect
   def disconnect
     app_instance = MnoEnterprise::AppInstance.includes(:app).find(params[:id]).first
-    organization = MnoEnterprise::Organization.find_one(app_instance.owner_id)
     app_meta = app_instance.metadata['app']
-    body = {org_uid: organization.uid}
+    body = {uid: app_instance.uid}
     auth = {username: app_instance.app.uid, password: app_instance.app.api_key}
     resp = ::HTTParty.post("#{app_meta['host']}/disconnect", body: body, basic_auth: auth)
     render json: JSON.parse(resp.body), status: resp.code

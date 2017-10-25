@@ -141,6 +141,7 @@ MnoEnterprise::Engine.routes.draw do
             post :create_omniauth
             post :sync
             get :sync_history
+            get :id_maps
             post :disconnect
           end
         end

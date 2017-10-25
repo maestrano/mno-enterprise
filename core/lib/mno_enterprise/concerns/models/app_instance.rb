@@ -16,6 +16,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
     custom_endpoint :terminate, on: :member, request_method: :delete
     custom_endpoint :provision, on: :collection, request_method: :post
     custom_endpoint :sync_history, on: :member, request_method: :get
+    custom_endpoint :id_maps, on: :member, request_method: :get
 
     #==============================================================
     # Constants
