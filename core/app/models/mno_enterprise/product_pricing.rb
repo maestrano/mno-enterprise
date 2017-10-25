@@ -8,6 +8,7 @@ module MnoEnterprise
     property :position
     property :free
     property :pricing_type
+    property :license_based
     property :free_trial_enabled
     property :free_trial_duration
     property :free_trial_unit
