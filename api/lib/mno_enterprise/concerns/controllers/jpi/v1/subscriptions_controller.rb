@@ -25,8 +25,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     subscription = MnoEnterprise::Subscription.new(subscription_update_params)
     subscription.relationships.organization = MnoEnterprise::Organization.new(id: parent_organization.id)
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
-    subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
-    subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
+    if params[:subscription][:product_pricing_id]
+      subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
+    end
+    if params[:subscription][:product_contract_id]
+      subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
+    end
     subscription.save!
 
     MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription)
@@ -40,8 +44,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
 
     subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
-    subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
-    subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
+    if params[:subscription][:product_pricing_id]
+      subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
+    end
+    if params[:subscription][:product_contract_id]
+      subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
+    end
 
     subscription.attributes = subscription_update_params
     subscription.modify!(data: subscription.as_json_api)
