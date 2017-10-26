@@ -41,6 +41,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
     subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
+    subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
 
     subscription.attributes = subscription_update_params
     subscription.modify!(data: subscription.as_json_api)
@@ -68,7 +69,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   def subscription_update_params
     # custom_data is an arbitrary hash
     # On Rails 5.1 use `permit(custom_data: {})`
-    params.require(:subscription).permit(:start_date, :max_licenses, :custom_data).tap do |whitelisted|
+    params.require(:subscription).permit(:start_date, :max_licenses, :product_pricing_id, :product_contract_id, :custom_data).tap do |whitelisted|
       whitelisted[:custom_data] = params[:subscription][:custom_data] if params[:subscription].has_key?(:custom_data) && params[:subscription][:custom_data].is_a?(Hash)
     end
   end
