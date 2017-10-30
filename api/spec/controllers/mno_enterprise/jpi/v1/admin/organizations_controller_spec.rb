@@ -32,7 +32,7 @@ module MnoEnterprise
         {
           organizations: [
             :uid, :name, :account_frozen, :soa_enabled, :mails, :logo, :latitude, :longitude, :geo_country_code, :geo_state_code,
-            :geo_city, :geo_tz, :geo_currency, :metadata, :industry, :size, :financial_year_end_month, :credit_card, :financial_metrics, :created_at
+            :geo_city, :geo_tz, :geo_currency, :metadata, :industry, :size, :financial_year_end_month, :credit_card, :financial_metrics, :created_at, :external_id
           ].join(',')
         }
       end
