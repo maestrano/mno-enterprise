@@ -33,13 +33,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     # Save
     organization.attributes = organization_update_params
     changed_attributes = organization.changed_attributes
-    if organization.save
-      MnoEnterprise::EventLogger.info('organization_update', current_user.id, 'Organization update', organization, changed_attributes)
-      render 'show_reduced'
-    else
-      render json: organization.errors, status: :bad_request
-    end
+    organization.save!
+    MnoEnterprise::EventLogger.info('organization_update', current_user.id, 'Organization update', organization, changed_attributes)
     current_user.refresh_user_cache
+    render 'show_reduced'
   end
 
   # DELETE /mnoe/jpi/v1/organizations/1
@@ -47,7 +44,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     if organization
       authorize! :destroy, organization
       MnoEnterprise::EventLogger.info('organization_destroy', current_user.id, 'Organization deleted', organization)
-      organization.destroy
+      organization.destroy!
     end
 
     head :no_content
@@ -56,9 +53,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   # POST /mnoe/jpi/v1/organizations
   def create
     # Create new organization
-    @organization = MnoEnterprise::Organization.create(organization_update_params)
+    @organization = MnoEnterprise::Organization.create!(organization_update_params)
     # Add the current user as Super Admin
-    @organization.add_user(current_user, 'Super Admin')
+    @organization.add_user!(current_user, 'Super Admin')
     # Bust cache
     current_user.refresh_user_cache
     # Reload organization with new changes
@@ -91,12 +88,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     params[:invites].each do |invite|
       attributes << invite.slice(*whitelist)
     end
-
     # Authorize and create
     authorize! :invite_member, organization
     attributes.each do |invite|
-
-      @org_invite = MnoEnterprise::OrgaInvite.create(
+      @org_invite = MnoEnterprise::OrgaInvite.create!(
         organization_id: organization.id,
         user_email: invite['email'],
         user_role: invite['role'],
@@ -140,10 +135,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     case member
     when MnoEnterprise::User
       orga_relation = MnoEnterprise::OrgaRelation.where(user_id: member.id, organization_id: organization.id).first
-      orga_relation.update_attributes(role: attributes[:role])
+      orga_relation.update_attributes!(role: attributes[:role])
       MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in org', organization, {email: attributes[:email], role: attributes[:role]})
     when MnoEnterprise::OrgaInvite
-      member.update_attributes(user_role: attributes[:role])
+      member.update_attributes!(user_role: attributes[:role])
       MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in invitation', organization, {email: attributes[:email], role: attributes[:role]})
     end
     # Reload organization
@@ -157,10 +152,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     authorize! :invite_member, organization
 
     if member.is_a?(MnoEnterprise::User)
-      organization.remove_user(member)
+      organization.remove_user!(member)
       MnoEnterprise::EventLogger.info('user_role_delete', current_user.id, 'User removed from org', organization, {email: member.email})
     elsif member.is_a?(MnoEnterprise::OrgaInvite)
-      member.decline
+      member.decline!
       MnoEnterprise::EventLogger.info('user_role_delete', current_user.id, 'User removed from invitation', organization, {email: member.user_email})
     end
     # Reload organization

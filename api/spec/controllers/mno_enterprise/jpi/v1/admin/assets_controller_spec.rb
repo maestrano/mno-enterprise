@@ -52,7 +52,7 @@ module MnoEnterprise
     describe 'POST #create' do
       subject { post :create, asset: params }
 
-      let(:params) { { content: fixture_file_upload(__FILE__, 'image/png'), product_id: product_id } }
+      let(:params) { { content: fixture_file_upload('files/main-logo.png', 'image/png'), product_id: product_id } }
       let(:product_id) { 5 }
 
       before { stub_api_v2(:post, '/assets', build(:asset)) }
@@ -63,7 +63,7 @@ module MnoEnterprise
     describe 'POST product#create' do
       subject { post :create, asset: params, product_id: product_id }
 
-      let(:params) { { content: fixture_file_upload(__FILE__, 'image/png') } }
+      let(:params) { { content: fixture_file_upload('files/main-logo.png', 'image/png') } }
       let(:product_id) { 5 }
 
       before { stub_api_v2(:post, '/assets', build(:asset)) }

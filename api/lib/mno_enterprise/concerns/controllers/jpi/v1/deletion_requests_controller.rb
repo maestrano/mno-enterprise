@@ -24,15 +24,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::DeletionRequestsController
   #==================================================================
   # POST /deletion_request.json
   def create
-    @deletion_request = current_user.create_deletion_request
-
-    if @deletion_request.errors.empty?
-      # TODO: deliver_later => need to use user#id and deletion_request#id
-      MnoEnterprise::SystemNotificationMailer.deletion_request_instructions(current_user, @deletion_request).deliver_now
-      render json: @deletion_request, status: :created
-    else
-      render json: @deletion_request.errors, status: :unprocessable_entity
-    end
+    @deletion_request = current_user.create_deletion_request!
+    # TODO: deliver_later => need to use user#id and deletion_request#id
+    MnoEnterprise::SystemNotificationMailer.deletion_request_instructions(current_user, @deletion_request).deliver_now
+    render json: @deletion_request, status: :created
   end
 
   # PUT /deletion_request/1/resend.json
@@ -58,7 +53,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::DeletionRequestsController
     # and that the token provided (params[:id]) matches the
     # deletion_request token
     if @deletion_request.present? && @deletion_request.token == params[:id]
-      @deletion_request.destroy
+      @deletion_request.destroy!
       head :no_content
     else
       head :bad_request

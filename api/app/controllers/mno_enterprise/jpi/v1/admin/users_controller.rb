@@ -41,14 +41,9 @@ module MnoEnterprise
 
     # POST /mnoe/jpi/v1/admin/users
     def create
-      @user = MnoEnterprise::User.create(user_create_params)
-
-      if @user.errors.empty?
-        @user = @user.load_required(:clients)
-        render :show
-      else
-        render json: @user.errors.full_messages, status: :bad_request
-      end
+      @user = MnoEnterprise::User.create!(user_create_params)
+      @user = @user.load_required(:clients)
+      render :show
     end
 
     # PATCH /mnoe/jpi/v1/admin/users/:id
@@ -65,15 +60,11 @@ module MnoEnterprise
       return render_not_found('User') unless @user
 
       # Update user
-      @user.update(user_update_params)
+      @user.update!(user_update_params)
 
-      if @user.errors.empty?
-        @user = @user.load_required(:clients)
-        @user_clients = @user.clients
-        render :show
-      else
-        render json: @user.errors.full_messages, status: :bad_request
-      end
+      @user = @user.load_required(:clients)
+      @user_clients = @user.clients
+      render :show
     end
 
     # DELETE /mnoe/jpi/v1/admin/users/1
@@ -81,24 +72,20 @@ module MnoEnterprise
       # Fetch user or abort if user does not exist
       # (the current_user may not have access to this record)
       user = MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id }).find(params[:id]).first
-
       # Destroy user
-      user.destroy
-
+      user.destroy!
       head :no_content
     end
 
     # GET /mnoe/jpi/v1/admin/users/count
     def count
       users_count = tenant_reporting.users_count
-
       render json: { count: users_count }
     end
 
     # GET /mnoe/jpi/v1/admin/users/kpi
     def metrics
       user_metrics = tenant_reporting.user_metrics
-
       render json: { metrics: user_metrics }
     end
 
@@ -106,7 +93,6 @@ module MnoEnterprise
     # Send an email to a user with the link to the registration page
     def signup_email
       MnoEnterprise::SystemNotificationMailer.registration_instructions(params.require(:user).require(:email)).deliver_later
-
       head :no_content
     end
 

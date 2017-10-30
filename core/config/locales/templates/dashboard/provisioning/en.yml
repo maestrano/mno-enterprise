@@ -14,6 +14,10 @@ en:
             description: "Description"
             price: "Price"
             next: "Next"
+            pricing_type:
+              payg: "Usage Based"
+            licenses: "Number of licenses"
+            total: "Total price"
           details:
             title: "Enter details"
             next: "Next"
@@ -24,6 +28,7 @@ en:
             edit_order: "Edit Order"
             validate: "Validate"
             price: "Price"
+            licenses: "Licenses"
           summary:
             title: "Order summary"
             order_being_processed: "Your order is being processed by the provider."
@@ -48,6 +53,7 @@ en:
             no_provisioning_data: "No provisioning data"
             custom_data: "Information provided by the customer"
             no_custom_data: "No information provided by the customer"
+            licenses: "Licenses"
           subscriptions:
             title: "Manage your subscriptions"
             currency_warning: "Some prices are missing for your current currency. Please contact your administrator for more information."
@@ -57,12 +63,14 @@ en:
             product: "Product"
             subscription: "Subscription"
             amount: "Amount"
-            start_date: "Start date"
-            end_date: "End date"
+            start_date: "Start"
+            end_date: "End"
+            licenses: "Licenses"
             status: "Status"
             states:
               requested: requested
               approved: approved
+              provisoining: provisoining
               fulfilled: fulfilled
               expired: expired
               suspended: suspended

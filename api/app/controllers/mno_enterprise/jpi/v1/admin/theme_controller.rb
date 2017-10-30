@@ -10,14 +10,15 @@ module MnoEnterprise
 
     # POST /mnoe/jpi/v1/admin/theme/save
     def save
+      theme = params.require(:theme)
       if params[:publish]
         # Recompile style for production use
-        apply_previewer_style(params[:theme])
+        apply_previewer_style(theme)
         publish_style
       else
         # Save and rebuild previewer style only
         # (so it is kept across page reloads)
-        save_previewer_style(params[:theme])
+        save_previewer_style(theme)
         rebuild_previewer_style
       end
       SystemManager.publish_assets

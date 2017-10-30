@@ -68,7 +68,7 @@ module MnoEnterprise
       }
     end
 
-    def copy(owner, name, organization_ids)
+    def copy!(owner, name, organization_ids)
       owner_type = owner.class.name.demodulize
       attrs = {
         id: self.id,
@@ -77,7 +77,8 @@ module MnoEnterprise
         owner_type: owner_type,
         owner_id: owner.id
       }
-      self.class.copy(id: id, data: { attributes: attrs })
+      result = self.class.copy(id: id, data: { attributes: attrs })
+      process_custom_result(result)
     end
   end
 end

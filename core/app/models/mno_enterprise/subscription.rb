@@ -35,5 +35,21 @@ module MnoEnterprise
       event[:user_id] = relationships.user&.dig('data', 'id') if relationships.respond_to?(:user)
       event
     end
+
+    def fulfill!
+      process_custom_result(fulfill)
+    end
+
+    def modify!(args)
+      process_custom_result(modify(args))
+    end
+
+    def approve!
+      process_custom_result(approve)
+    end
+
+    def cancel!
+      process_custom_result(cancel)
+    end
   end
 end

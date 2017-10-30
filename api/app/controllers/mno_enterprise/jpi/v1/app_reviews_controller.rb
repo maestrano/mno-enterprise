@@ -22,25 +22,19 @@ module MnoEnterprise
     def create
       # TODO: use the has_many associations -> @app.reviews.build
       @app_review = review_klass.new(review_params)
-      if @app_review.save
-        after_save
-        render :show
-      else
-        render json: @app_review.errors, status: :bad_request
-      end
+      @app_review.save!
+      after_save
+      render :show
     end
 
     def update
-      if @app_review.update(permitted_params)
-        after_save
-        render :show
-      else
-        render json: @app_review.errors, status: :bad_request
-      end
+      @app_review.update!(permitted_params)
+      after_save
+      render :show
     end
 
     def destroy
-      @app_review.destroy
+      @app_review.destroy!
       after_save
       @app_review = nil
       render :show

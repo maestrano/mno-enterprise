@@ -16,6 +16,24 @@ module MnoEnterprise
       include MnoEnterprise::Concerns::Controllers::AngularCSRF
     end
 
+    rescue_from MnoEnterprise::ResourceError do |exception|
+      resource_name = controller_name.singularize
+      logger.debug "User: #{current_user.id} [#{params[:action]} #{resource_name}] Errors: #{exception.message}, Params: #{params}"
+      render json: exception.errors, status: :bad_request
+    end
+
+    rescue_from JsonApiClient::Errors::ServerError do |exception|
+      resource_name = controller_name.singularize
+      logger.error "User: #{current_user.id} [#{params[:action]} #{resource_name}] ServerError: #{exception.message}, Params: #{params}"
+      render json: { errors: { message: 'Internal server error', code: 500, params: params} }, status: :internal_server_error
+    end
+
+    rescue_from JsonApiClient::Errors::NotFound do |_exception|
+      resource_name = controller_name.singularize.titleize
+      id = params[:id]
+      render json: { errors: {message: "#{resource_name} not found (id=#{id})", code: 404, params: params} }, status: :not_found
+    end
+
     #============================================
     # CanCan Authorization Rescue
     #============================================

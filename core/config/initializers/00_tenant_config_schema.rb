@@ -89,13 +89,13 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               'x-schema-form': {}
             },
             api_secret: {
-              type: ["string", "null"],
+              type: "string",
               title: "Intercom API secret",
               description: "Secure mode secret",
               default: ENV['INTERCOM_API_SECRET'].presence || ''
             },
             token: {
-              type: ["string", "null"],
+              type: "string",
               title: "Intercom token",
               description: "OAuth or Personal Access token",
               default: ENV['INTERCOM_TOKEN'].presence || ''
@@ -191,7 +191,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             },
             provisioning: {
               type: "boolean",
-              default: false,
+              default: true,
               title: "Product ordering",
               description: "Enable the ordering of products"
             },

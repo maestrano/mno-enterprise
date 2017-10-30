@@ -28,7 +28,12 @@ module MnoEnterprise
     end
 
     def available_locales
-      Array(Settings.system.i18n.available_locales).map do |locale|
+      available_locales = if Settings.system.i18n.enabled
+        Settings.system.i18n.available_locales
+      else
+        Settings.system.i18n.preferred_locale
+      end
+      Array(available_locales).map do |locale|
         name = begin
           I18n.t('language', locale: locale)
         rescue I18n::InvalidLocale

@@ -9,12 +9,8 @@ module MnoEnterprise
     # PUT /mnoe/jpi/v1/admin/cloud_apps/:id
     def update
       @cloud_app = MnoEnterprise::App.find_one params[:id]
-
-      if @cloud_app.update(cloud_app_params)
-        render :show, status: :ok
-      else
-        render json: @cloud_app.errors, status: :unprocessable_entity
-      end
+      @cloud_app.update!(cloud_app_params)
+      render :show, status: :ok
     end
 
     # PUT /mnoe/jpi/v1/admin/cloud_apps/:id/regenerate_api_key

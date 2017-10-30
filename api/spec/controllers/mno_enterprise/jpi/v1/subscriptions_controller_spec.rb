@@ -73,10 +73,12 @@ module MnoEnterprise
                                     "relationships" => {
                                       "organization" => {"data" => {"type" => "organizations", "id" => organization.id}},
                                       "user" => {"data" => {"type" => "users", "id" => user.id}},
-                                      "product_pricing" => {"data" => {"type" => "product_pricings", "id" => product_pricing.id}},
-                                      "product_contract" => {"data" => {"type" => "product_contracts", "id" => nil}}
+                                      "product_pricing" => {"data" => {"type" => "product_pricings", "id" => product_pricing.id}}
                                     },
-                                    "attributes" => {"custom_data" => {"foo" => "bar"}.to_json}}
+                                    "attributes" => {
+                                      "product_pricing_id" => product_pricing.id,
+                                      "custom_data" => {"foo" => "bar"}.to_json}
+                                    }
                                   }.to_json)
       end
     end
@@ -106,7 +108,10 @@ module MnoEnterprise
                                     "relationships" => {
                                       "product_pricing" => {"data" => {"type" => "product_pricings", "id" => product_pricing.id}}
                                     },
-                                    "attributes" => {"custom_data" => {"foo" => "bar"}.to_json}}
+                                    "attributes" => {
+                                      "product_pricing_id" => product_pricing.id,
+                                      "custom_data" => {"foo" => "bar"}.to_json}
+                                    }
                                   }.to_json)
       end
     end

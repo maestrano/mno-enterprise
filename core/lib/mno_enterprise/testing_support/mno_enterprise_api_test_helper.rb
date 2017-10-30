@@ -8,6 +8,8 @@ module MnoEnterpriseApiTestHelper
     basic_auth: [MnoEnterprise.tenant_id, MnoEnterprise.tenant_key]
   }
 
+  JSON_API_RESULT_HEADERS = {content_type: 'application/vnd.api+json'}
+
   def serialize_type(res)
     case
     when res.kind_of?(Array)
@@ -64,11 +66,11 @@ module MnoEnterpriseApiTestHelper
     params.reverse_merge!(_locale: I18n.locale)
     url = api_v2_url(suffix, included, params)
     stub = stub_request(method, url).with(MOCK_OPTIONS)
-    stub.to_return(status: 200, body: from_apiv2(entity, included).to_json, headers: {content_type: 'application/vnd.api+json'}) if entity
+    stub.to_return(status: 200, body: from_apiv2(entity, included).to_json, headers: JSON_API_RESULT_HEADERS) if entity
     stub
   end
 
-  def stub_api_v2_error(method, suffix, error_code, error)
+  def stub_api_v2_error(method, suffix, error_code = 400, error = 'error on the field')
     url = api_v2_url(suffix, [], _locale: I18n.locale)
     stub = stub_request(method, url).with(MOCK_OPTIONS)
     body = {
@@ -80,7 +82,7 @@ module MnoEnterpriseApiTestHelper
         }
       ]
     }.to_json
-    stub.to_return(status: error_code, body: body, headers: {content_type: 'application/vnd.api+json'})
+    stub.to_return(status: error_code, body: body, headers: JSON_API_RESULT_HEADERS)
     stub
   end
 
