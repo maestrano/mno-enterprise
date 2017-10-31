@@ -174,7 +174,7 @@ MnoEnterprise::Engine.routes.draw do
           end
         end
 
-        resources :tenant_dashboards, only: [:index]
+        resources :tenant_dashboards, only: [:index, :create, :update, :destroy]
 
         resources :kpis, only: :index
         resources :alerts, only: :index
