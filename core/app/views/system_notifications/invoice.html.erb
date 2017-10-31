@@ -14,7 +14,7 @@
       <b><%= @info[:started_at] %></b> to <b><%= @info[:ended_at] %></b>.
     </p>
     <p>
-      The amount due for this invoice is <b><%= @info[:currency]%> <%= @info[:price_cents]%></b>.
+      The amount due for this invoice is <b><%= @info[:currency]%> <%= "#{ Money.new(@info[:price_cents], @info[:currency]).format(symbol: false) }" %></b>.
       Your designated credit card will be charged on the 2nd of next month.
     </p>
     <p>
