@@ -1,4 +1,4 @@
-module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::TenantDashboardsController
+module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::Impac::TenantDashboardsController
   extend ActiveSupport::Concern
 
   #==================================================================
@@ -15,13 +15,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::TenantDashboardsCon
   #==================================================================
   # Instance methods
   #==================================================================
-  # GET /mnoe/jpi/v1/impac/tenant_dashboards
+  # GET /mnoe/jpi/v1/admin/impac/tenant_dashboards
   def index
     dashboards
     render template: 'mno_enterprise/jpi/v1/impac/dashboards/index'
   end
 
-  # POST /mnoe/jpi/v1/impac/tenant_dashboards
+  # POST /mnoe/jpi/v1/admin/impac/tenant_dashboards
   #   -> POST /api/mnoe/v1/users/1/dashboards
   def create
     @dashboard = MnoEnterprise::Dashboard.create!(dashboard_create_params)
@@ -31,7 +31,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::TenantDashboardsCon
     render_show
   end
 
-  # PUT /mnoe/jpi/v1/impac/tenant_dashboards/1
+  # PUT /mnoe/jpi/v1/admin/impac/tenant_dashboards/1
   #   -> PUT /api/mnoe/v1/dashboards/1
   def update
     return render_not_found('dashboard') unless dashboard
@@ -42,7 +42,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::TenantDashboardsCon
     render_show
   end
 
-  # DELETE /mnoe/jpi/v1/impac/tenant_dashboards/1
+  # DELETE /mnoe/jpi/v1/admin/impac/tenant_dashboards/1
   #   -> DELETE /api/mnoe/v1/dashboards/1
   def destroy
     return render_not_found('dashboard') unless dashboard
