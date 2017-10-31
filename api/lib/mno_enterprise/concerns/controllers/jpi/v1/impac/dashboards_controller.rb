@@ -18,12 +18,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   # GET /mnoe/jpi/v1/impac/dashboards
   def index
     dashboards
+
+    # Fully qualify template path to allow concern to be included in different modules
+    render template: 'mno_enterprise/jpi/v1/impac/dashboards/index'
   end
 
   # GET /mnoe/jpi/v1/impac/dashboards/1
   #   -> GET /api/mnoe/v1/users/1/dashboards
   def show
     render_not_found('dashboard') unless dashboard(*DASHBOARD_DEPENDENCIES)
+
+    # Fully qualify template path to allow concern to be included in different modules
+    render template: 'mno_enterprise/jpi/v1/impac/dashboards/show'
   end
 
   # POST /mnoe/jpi/v1/impac/dashboards
@@ -36,7 +42,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     dashboard.save!
     MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', dashboard)
     @dashboard = dashboard.load_required(*DASHBOARD_DEPENDENCIES)
-    render 'show'
+
+    # Fully qualify template path to allow concern to be included in different modules
+    render template: 'mno_enterprise/jpi/v1/impac/dashboards/show'
   end
 
   # PUT /mnoe/jpi/v1/impac/dashboards/1
@@ -50,7 +58,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
 
     # Reload Dashboard
     @dashboard = dashboard.load_required(DASHBOARD_DEPENDENCIES)
-    render 'show'
+
+    # Fully qualify template path to allow concern to be included in different modules
+    render template: 'mno_enterprise/jpi/v1/impac/dashboards/show'
   end
 
   # DELETE /mnoe/jpi/v1/impac/dashboards/1
