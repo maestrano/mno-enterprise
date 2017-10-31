@@ -174,8 +174,6 @@ MnoEnterprise::Engine.routes.draw do
           end
         end
 
-        resources :tenant_dashboards, only: [:index]
-
         resources :kpis, only: :index
         resources :alerts, only: :index
 
@@ -306,8 +304,9 @@ MnoEnterprise::Engine.routes.draw do
         post 'theme/reset'
         put 'theme/logo'
 
-        # Dashboard templates designer
         namespace :impac do
+          resources :tenant_dashboards, only: [:index, :create, :update, :destroy]
+          # Dashboard templates designer
           resources :dashboard_templates, only: [:index, :show, :destroy, :update, :create] do
             resources :widgets, shallow: true, only: [:create, :update, :destroy]
             resources :kpis, shallow: true, only: [:create, :update, :destroy]
