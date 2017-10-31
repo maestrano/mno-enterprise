@@ -21,6 +21,13 @@ module MnoEnterprise
           FileUtils.touch('tmp/restart.txt')
         end
 
+        # @see MnoEnterprise::PlatformAdapters::Adapter#clear_assets
+        def clear_assets
+          # Clear the whole bucket
+          %x(#{aws_cli} s3 rm s3://${MINIO_BUCKET} --recursive)
+          $?.exitstatus == 0
+        end
+
         # @see MnoEnterprise::PlatformAdapters::Adapter#publish_assets
         def publish_assets
           sync_assets(public_folder, 's3://${MINIO_BUCKET}/public/', '--delete')

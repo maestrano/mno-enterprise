@@ -10,6 +10,11 @@ module MnoEnterprise
           raise NotImplementedError
         end
 
+        # Delete frontend assets from the persistence layer
+        def clear_assets
+          raise NotImplementedError
+        end
+
         # Publish frontend assets to the persistence layer
         # Used by the ThemeController
         def publish_assets

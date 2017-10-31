@@ -19,6 +19,9 @@ module MnoEnterprise
       # @see MnoEnterprise::PlatformAdapters::Adapter#restart
       delegate :restart, to: :adapter
 
+      # @see MnoEnterprise::PlatformAdapters::Adapter#clear_assets
+      delegate :clear_assets, to: :adapter
+
       # @see MnoEnterprise::PlatformAdapters::Adapter#fetch_assets
       delegate :fetch_assets, to: :adapter
 
