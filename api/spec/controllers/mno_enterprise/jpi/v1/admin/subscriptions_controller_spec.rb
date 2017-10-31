@@ -31,7 +31,7 @@ module MnoEnterprise
       subject { get :index }
 
       let(:data) { JSON.parse(response.body) }
-      let(:includes) { [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'] }
+      let(:includes) { [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'] }
       let(:expected_params) { { _metadata: { act_as_manager: user.id } } }
 
       before { allow(subscription).to receive(:license_assignments).and_return([]) }
@@ -45,7 +45,7 @@ module MnoEnterprise
       subject { get :show, id: subscription.id, organization_id: organization.id }
 
       let(:data) { JSON.parse(response.body) }
-      let(:includes) { [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'] }
+      let(:includes) { [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'] }
       let(:expected_params) do
         {
           filter: { id: subscription.id, organization_id: organization.id },

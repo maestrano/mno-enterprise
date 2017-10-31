@@ -4,6 +4,7 @@ FactoryGirl.define do
     status 'requested'
     start_date Date.today
     end_date Date.today + 1.year
+    currency 'USD'
     max_licenses 10
     available_licenses 10
 

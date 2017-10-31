@@ -3,6 +3,7 @@ json.status subscription.status
 json.subscription_type subscription.subscription_type
 json.start_date subscription.start_date
 json.end_date subscription.end_date
+json.currency subscription.currency
 json.max_licenses subscription.max_licenses
 json.available_licenses subscription.available_licenses
 json.external_id subscription.external_id

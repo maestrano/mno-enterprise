@@ -1,7 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_INCLUDES ||= [:product_instance, :'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
+  SUBSCRIPTION_INCLUDES ||= [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
 
   #==================================================================
   # Instance methods

@@ -70,7 +70,7 @@ en:
             states:
               requested: requested
               approved: approved
-              provisoining: provisoining
+              provisioning: provisioning
               fulfilled: fulfilled
               expired: expired
               suspended: suspended
