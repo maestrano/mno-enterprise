@@ -34,6 +34,7 @@ module MnoEnterprise::Concerns::Models::Organization
     property :credit_card_id
     property :financial_metrics
     property :billing_currency
+    property :external_id, type: :string
   end
 
   #==================================================================
