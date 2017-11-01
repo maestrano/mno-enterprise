@@ -129,7 +129,7 @@ module MnoEnterprise
     end
 
     def orga_relation_from_id(organization_id)
-      self.orga_relations.find { |r| r.organization_id == organization_id }
+      MnoEnterprise::OrgaRelation.where('user.id': id, 'organization.id': organization_id).first
     end
 
     def create_deletion_request!

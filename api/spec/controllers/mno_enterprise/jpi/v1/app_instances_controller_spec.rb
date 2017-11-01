@@ -14,69 +14,62 @@ module MnoEnterprise
 
     # Stub user and user call
     let(:user) { build(:user) }
+    let(:organization) { build(:organization) }
+    let(:orga_relation) { build(:orga_relation) }
     let!(:current_user_stub) { stub_user(user) }
 
-    # Stub organization and association
-    let!(:organization) {
-      o = build(:organization, orga_relations: [])
-      o.orga_relations << build(:orga_relation, user_id: user.id, organization_id: o.id, role: 'Super Admin')
-      o
-    }
-    before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
+    before { stub_api_v2(:get, '/orga_relations', orga_relation, [], { filter: { 'user.id': user.id, 'organization.id': organization.id }, page: { number: 1, size: 1 } }) }
 
     describe 'GET #index' do
-
-      let(:app_instance) { build(:app_instance, status: 'running' , under_free_trial: false) }
-
-      before { stub_api_v2(:get, '/app_instances', [app_instance], [:app], {filter: {owner_id: organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(','), 'fulfilled_only': true }}) }
-
+      let(:app_instance) { build(:app_instance, status: 'running', under_free_trial: false) }
+      let!(:stub) { stub_api_v2(:get, '/app_instances', [app_instance], [:app], { filter: { 'owner.id': organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(','), fulfilled_only: true } }) }
       before { sign_in user }
       subject { get :index, organization_id: organization.id }
 
       it_behaves_like 'jpi v1 protected action'
 
       describe 'all' do
-        it {
+        it do
           subject
-          # TODO: Test that the rendered json is the expected one
-          # expect(assigns(:app_instances)).to eq([app_instance])
-          assert_requested(:get, api_v2_url('/app_instances', [:app], {_locale: I18n.locale, filter: {owner_id: organization.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(','), 'fulfilled_only': true }}))
-        }
+          expect(subject).to be_successful
+          expect(stub).to have_been_requested
+        end
       end
 
       context 'without access to the app_instance' do
         before { allow(ability).to receive(:can?).with(any_args).and_return(false) }
-        it {
+        it do
           subject
           expect(assigns(:app_instances)).to be_empty
-        }
+        end
       end
     end
 
     describe 'POST #create' do
       before { stub_audit_events }
       let(:app) { build(:app, nid: 'my-app') }
-      let(:app_instance) { build(:app_instance, app: app, owner: organization, owner_id: organization.id) }
+      let(:app_instance) { build(:app_instance, app: app, owner: organization) }
       subject { post :create, organization_id: organization.id, nid: 'my-app' }
       it_behaves_like 'jpi v1 protected action'
+      let!(:stub) { stub_api_v2(:post, '/app_instances/provision', app_instance) }
       before do
-        stub_api_v2(:post, '/app_instances/provision', app_instance)
         sign_in user
       end
 
-      it {
+      it do
         expect(subject).to be_successful
-        assert_requested_api_v2(:post, '/app_instances/provision')
-      }
+        expect(stub).to have_been_requested
+      end
     end
 
     describe 'DELETE #destroy' do
       before { stub_audit_events }
-      let(:app_instance) { build(:app_instance) }
+      let(:app_instance) { build(:app_instance, owner: organization) }
       let(:terminated_app_instance) { build(:app_instance, id: app_instance.id, status: 'terminated') }
-      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance)}
-      before { stub_api_v2(:delete, "/app_instances/#{app_instance.id}/terminate", terminated_app_instance)}
-      before { stub_api_v2(:get, "/organizations/#{app_instance.owner_id}")}
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:owner]) }
+      let!(:stub) { stub_api_v2(:delete, "/app_instances/#{app_instance.id}/terminate", terminated_app_instance) }
+
+
       before { sign_in user }
       subject { delete :destroy, id: app_instance.id }
 
@@ -84,7 +77,7 @@ module MnoEnterprise
 
       it {
         subject
-        assert_requested_api_v2(:delete, "/app_instances/#{app_instance.id}/terminate")
+        expect(stub).to have_been_requested
         expect(assigns(:app_instance).status).to eq('terminated')
       }
     end

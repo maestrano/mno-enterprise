@@ -11,8 +11,6 @@ module MnoEnterprise::Concerns::Models::AppInstance
     property :updated_at, type: :time
     property :app_id, type: :string
 
-    property :owner_id, type: :string
-
     # delete <api_root>/app_instances/:id/terminate
     custom_endpoint :terminate, on: :member, request_method: :delete
     custom_endpoint :provision, on: :collection, request_method: :post
@@ -22,6 +20,8 @@ module MnoEnterprise::Concerns::Models::AppInstance
     #==============================================================
     ACTIVE_STATUSES = [:running, :stopped, :staged, :provisioning, :starting, :stopping, :updating]
     TERMINATION_STATUSES = [:terminating, :terminated]
+
+    has_one :owner
   end
 
   #==================================================================

@@ -43,20 +43,20 @@ module MnoEnterprise::Concerns::Models::Ability
          :invite_member,
          :administrate,
          :manage_app_instances,
-         :manage_teams], MnoEnterprise::Organization do |organization|
-      ['Super Admin','Admin'].include? user.role(organization)
+         :manage_teams], MnoEnterprise::OrgaRelation do |orga_relation|
+      ['Super Admin','Admin'].include? orga_relation.role
     end
 
     # To be updated
     # TODO: replace by organization_id, no need to load a full organization
-    can :sync_apps, MnoEnterprise::Organization do |organization|
-      user.role(organization)
+    can :sync_apps, MnoEnterprise::OrgaRelation |orga_relation|
+      !!orga_relation
     end
 
     # To be updated
     # TODO: replace by organization_id, no need to load a full organization
-    can :check_apps_sync, MnoEnterprise::Organization do |organization|
-      user.role(organization)
+    can :check_apps_sync, MnoEnterprise::OrgaRelation do |orga_relation|
+      !!orga_relation
     end
 
     #===================================================
@@ -151,7 +151,7 @@ module MnoEnterprise::Concerns::Models::Ability
   # Abilities for admin user
   def admin_abilities(user)
     if user.admin_role.to_s.casecmp('admin').zero? || user.admin_role.to_s.casecmp('staff').zero?
-      can :manage_app_instances, MnoEnterprise::Organization
+      can :manage_app_instances, MnoEnterprise::OrgaRelation
       can :manage_sub_tenant, MnoEnterprise::SubTenant
     end
   end

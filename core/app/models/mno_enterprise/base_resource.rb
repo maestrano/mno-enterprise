@@ -3,6 +3,7 @@ module MnoEnterprise
 
   class BaseResource < ::JsonApiClient::Resource
     include ActiveModel::Callbacks
+    include JsonApiClientExtension::HasOneExtension
     self.site = URI.join(MnoEnterprise.api_host, MnoEnterprise.mno_api_v2_root_path).to_s
     self.parser = JsonApiClientExtension::CustomParser
 
@@ -75,6 +76,10 @@ module MnoEnterprise
     end
 
     # == Instance Methods ========================================================
+    # cache of the loaded relations, used in JsonApiClientExtension::HasOneExtension
+    def relations
+      @relations ||= ActiveSupport::HashWithIndifferentAccess.new
+    end
 
     def process_custom_result(result)
       collect_errors(result.errors)

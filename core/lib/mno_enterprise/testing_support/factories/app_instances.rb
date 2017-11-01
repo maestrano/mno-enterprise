@@ -25,7 +25,6 @@ FactoryGirl.define do
       per_user_licence 1
       app { build(:app, nid: app_nid) }
       sequence(:owner) { |n| build(:organization, id: n.to_s) }
-      sequence(:owner_id, &:to_s)
     end
   end
 end
