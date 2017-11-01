@@ -18,27 +18,33 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   # GET /mnoe/jpi/v1/impac/dashboards
   def index
     dashboards
+
+    # Fully qualify template path to allow concern to be included in different modules
+    render template: 'mno_enterprise/jpi/v1/impac/dashboards/index'
   end
 
   # GET /mnoe/jpi/v1/impac/dashboards/1
   #   -> GET /api/mnoe/v1/users/1/dashboards
   def show
     render_not_found('dashboard') unless dashboard(*DASHBOARD_DEPENDENCIES)
+
+    # Fully qualify template path to allow concern to be included in different modules
+    render template: 'mno_enterprise/jpi/v1/impac/dashboards/show'
   end
 
   # POST /mnoe/jpi/v1/impac/dashboards
   #   -> POST /api/mnoe/v1/users/1/dashboards
   def create
-    # TODO: dashboards.build breaks as dashboard.organization_ids returns nil, instead of an
-    #       empty array. (see MnoEnterprise::Impac::Dashboard #organizations)
-    # @dashboard = dashboards.build(dashboard_create_params)
     # TODO: enable authorization
     # authorize! :manage_dashboard, @dashboard
-    # if @dashboard.save
-    @dashboard = MnoEnterprise::Dashboard.create!(dashboard_create_params)
-    MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', @dashboard)
+    dashboard = MnoEnterprise::Dashboard.new(dashboard_params)
+    dashboard.relationships.owner = current_user
+    dashboard.save!
+    MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', dashboard)
     @dashboard = dashboard.load_required(*DASHBOARD_DEPENDENCIES)
-    render 'show'
+
+    # Fully qualify template path to allow concern to be included in different modules
+    render template: 'mno_enterprise/jpi/v1/impac/dashboards/show'
   end
 
   # PUT /mnoe/jpi/v1/impac/dashboards/1
@@ -48,11 +54,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
 
     # TODO: enable authorization
     # authorize! :manage_dashboard, dashboard
-    dashboard.update_attributes!(dashboard_update_params)
+    dashboard.update_attributes!(dashboard_params)
 
     # Reload Dashboard
     @dashboard = dashboard.load_required(DASHBOARD_DEPENDENCIES)
-    render 'show'
+
+    # Fully qualify template path to allow concern to be included in different modules
+    render template: 'mno_enterprise/jpi/v1/impac/dashboards/show'
   end
 
   # DELETE /mnoe/jpi/v1/impac/dashboards/1
@@ -82,13 +90,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   private
 
     def dashboard(*included)
-      # TODO: [APIv2] Improve filtering by owner (owner_type?)
-      @dashboard ||= MnoEnterprise::Dashboard.where(owner_id: current_user.id).includes(included).find(params[:id].to_i).first
+      @dashboard ||= MnoEnterprise::Dashboard.where(id: params[:id])
+                                             .includes(included)
+                                             .first
     end
 
     def dashboards
-      # TODO: [APIv2] Improve filtering by owner (owner_type?)
-      @dashboards ||= MnoEnterprise::Dashboard.includes(*DASHBOARD_DEPENDENCIES).find(owner_id: current_user.id)
+      @dashboards ||= MnoEnterprise::Dashboard.where(owner_id: current_user.id)
+                                              .includes(*DASHBOARD_DEPENDENCIES)
     end
 
     def templates
@@ -96,7 +105,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     end
 
     def template
-      @template ||= MnoEnterprise::Dashboard.templates.find(params[:id].to_i).first
+      @template ||= MnoEnterprise::Dashboard.templates.find(params[:id]).first
     end
 
     def whitelisted_params
@@ -110,9 +119,5 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
         whitelisted[:settings] = params[:dashboard][:metadata] || {}
       end
       .except(:metadata)
-      .merge(owner_type: "User", owner_id: current_user.id)
     end
-    alias :dashboard_update_params  :dashboard_params
-    alias :dashboard_create_params  :dashboard_params
-
 end
