@@ -70,11 +70,11 @@ en:
             status: "Status"
             states:
               requested: requested
-              approved: approved
               provisioning: provisioning
               fulfilled: fulfilled
               expired: expired
               suspended: suspended
+              cancelling: cancelling
               cancelled: cancelled
               aborted: aborted
             modify: "Modify subscription"
