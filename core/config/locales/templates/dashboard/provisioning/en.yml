@@ -54,6 +54,7 @@ en:
             custom_data: "Information provided by the customer"
             no_custom_data: "No information provided by the customer"
             licenses: "Licenses"
+            events: "Provisioning events"
           subscriptions:
             title: "Manage your subscriptions"
             currency_warning: "Some prices are missing for your current currency. Please contact your administrator for more information."
@@ -70,7 +71,7 @@ en:
             states:
               requested: requested
               approved: approved
-              provisoining: provisoining
+              provisioning: provisioning
               fulfilled: fulfilled
               expired: expired
               suspended: suspended
