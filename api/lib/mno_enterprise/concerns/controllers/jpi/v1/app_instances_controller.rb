@@ -54,14 +54,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
 
   # GET /mnoe/jpi/v1/organization/1/app_instances/11/sync_history
   def sync_history
-    syncs = MnoEnterprise::AppInstance.find(params[:id]).first.sync_history(page_number: params[:page], page_size: params[:size], sort: params[:sort])
+    syncs = MnoEnterprise::AppInstance.find(params[:id]).first.sync_history(params.except(:id, :organization_id, :action, :controller))
     response.headers['x-total-count'] = syncs.meta[:record_count]
     render json: syncs.as_json
   end
 
   # GET /mnoe/jpi/v1/organization/1/app_instances/11/id_maps
   def id_maps
-    id_maps = MnoEnterprise::AppInstance.find(params[:id]).first.id_maps(page_number: params[:page], page_size: params[:size], sort: params[:sort], entity: params[:entity])
+    id_maps = MnoEnterprise::AppInstance.find(params[:id]).first.id_maps(params.except(:id, :organization_id, :action, :controller))
     response.headers['x-total-count'] = id_maps.meta[:record_count]
     render json: id_maps.as_json
   end
