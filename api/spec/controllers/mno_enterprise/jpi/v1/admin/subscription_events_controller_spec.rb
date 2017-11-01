@@ -36,9 +36,13 @@ module MnoEnterprise
       let(:expected_params) { { filter: { 'subscription.id': subscription.id }, _metadata: { act_as_manager: user.id, organization_id: organization.id } } }
 
       before { stub_api_v2(:get, "/subscription_events", [subscription_event], includes, expected_params) }
-      before { subject }
 
-      it { expect(data['subscription_events'].first['id']).to eq(subscription_event.id) }
+      it_behaves_like 'a jpi v1 admin action'
+
+      it 'returns the subscription events' do
+        subject
+        expect(data['subscription_events'].first['id']).to eq(subscription_event.id)
+      end
     end
 
     describe 'GET #show' do
@@ -56,9 +60,13 @@ module MnoEnterprise
       before { allow(subscription_event).to receive(:license_assignments).and_return([]) }
       before { allow(subscription_event).to receive(:organization).and_return(organization) }
       before { stub_api_v2(:get, "/subscription_events", subscription_event, includes, expected_params) }
-      before { subject }
 
-      it { expect(data['subscription_event']['id']).to eq(subscription_event.id) }
+      it_behaves_like 'a jpi v1 admin action'
+
+      it 'returns the subscription event' do
+        subject
+        expect(data['subscription_event']['id']).to eq(subscription_event.id)
+      end
     end
   end
 end

@@ -21,7 +21,7 @@ module MnoEnterprise
         Rails.application.reload_routes!
       end
 
-      it 'routes to #index' do
+      it 'does not route to #index' do
         expect(get('/jpi/v1/admin/organizations/1/subscription_events')).not_to be_routable
       end
     end

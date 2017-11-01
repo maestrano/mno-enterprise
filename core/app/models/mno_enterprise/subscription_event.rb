@@ -13,7 +13,11 @@ module MnoEnterprise
 
     def to_audit_event
       event = {id: id, status: status}
-      event[:subscription_id] = relationships.subscription&.dig('data', 'id') if relationships.respond_to?(:subscription)
+      if relationships.respond_to?(:subscription)
+        subscription = relationships.subscription
+        event[:subscription_id] = subscription&.dig('data', 'id')
+        event[:organization_id] = subscription.relationships.organization&.dig('data', 'id') if subscription.relationships.respond_to?(:subscription)
+      end
       event
     end
   end
