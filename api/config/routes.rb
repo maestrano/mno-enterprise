@@ -135,7 +135,16 @@ MnoEnterprise::Engine.routes.draw do
         end
 
         # AppInstances
-        resources :app_instances, only: [:index, :create, :destroy], shallow: true
+        resources :app_instances, only: [:index, :create, :destroy], shallow: true do
+          member do
+            get :setup_form
+            post :create_omniauth
+            post :sync
+            get :sync_history
+            get :id_maps
+            post :disconnect
+          end
+        end
 
         # Teams
         resources :teams, only: [:index, :show, :create, :update, :destroy], shallow: true do
