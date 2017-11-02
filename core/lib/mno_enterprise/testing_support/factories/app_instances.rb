@@ -29,6 +29,7 @@ FactoryGirl.define do
       sequence(:owner_id, &:to_s)
       addon_organization nil
       channel_id nil
+      metadata nil
     end
   end
 end

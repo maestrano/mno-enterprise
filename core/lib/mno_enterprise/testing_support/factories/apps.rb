@@ -5,6 +5,7 @@ FactoryGirl.define do
     sequence(:id, &:to_s)
     sequence(:name) { |n| "TestApp#{n}" }
     nid { name.parameterize }
+    sequence(:uid) { |n| "app-#{n}" }
     description "This is a description"
     created_at 1.day.ago
     updated_at 2.hours.ago
@@ -22,7 +23,7 @@ FactoryGirl.define do
     tiny_description "A great app"
     stack 'cube'
     terms_url "http://opensource.org/licenses/MIT"
-    support_url "http://example.com/su  pport"
+    support_url "http://example.com/support"
     metadata_url nil
     getting_started "Let's get started"
     details nil

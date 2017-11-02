@@ -70,6 +70,21 @@ module MnoEnterpriseApiTestHelper
     stub
   end
 
+  def stub_add_on(instance, method, path, status, response  = {})
+    url = instance.metadata['app']['host'] + path
+    stub_options = {
+      headers: {
+        'Accept' => '*/*',
+        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        'User-Agent'=>'Ruby'
+      }
+    }
+    stub_options.merge!(basic_auth: [instance.app.uid, instance.app.api_key]) if instance.app
+    stub = stub_request(method, url).with(stub_options)
+    stub.to_return(status: status, body: response.to_json)
+    stub
+  end
+
   def stub_api_v2_error(method, suffix, error_code = 400, error = 'error on the field')
     url = api_v2_url(suffix, [], _locale: I18n.locale)
     stub = stub_request(method, url).with(MOCK_OPTIONS)
@@ -128,7 +143,7 @@ module MnoEnterpriseApiTestHelper
     end.compact.to_h
 
     {
-      id: entity.id,
+      id: entity.is_a?(Hash) ? entity['id'] : entity.id,
       type: type(entity),
       attributes: serialize_type(entity),
       relationships: relationships

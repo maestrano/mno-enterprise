@@ -88,5 +88,121 @@ module MnoEnterprise
         expect(assigns(:app_instance).status).to eq('terminated')
       }
     end
+
+    describe 'GET #setup_form' do
+      before { stub_audit_events }
+      let(:app_instance) { build(:app_instance, metadata: { app: { host: 'http://www.addon-url.com'} }) }
+      let(:form) { { form: {} } }
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:app])}
+      before { stub_add_on(app_instance, :get, '/setup_form', 200, form) }
+      before { sign_in user }
+      subject { get :setup_form, id: app_instance.id }
+
+      it_behaves_like 'jpi v1 protected action'
+
+      it {
+        subject
+        expect(JSON.parse(response.body)).to eq(form.with_indifferent_access)
+      }
+    end
+
+    describe 'POST #create_omniauth' do
+      before { stub_audit_events }
+      let(:app_instance) { build(:app_instance, metadata: { app: { host: 'http://www.addon-url.com' } }) }
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:app])}
+      before { stub_add_on(app_instance, :post, "/auth/#{app_instance.name.downcase}/request", 202) }
+      before { sign_in user }
+      subject { post :create_omniauth, id: app_instance.id, app_instance: {} }
+
+      it_behaves_like 'jpi v1 protected action'
+
+      it {
+        subject
+        expect(subject).to be_successful
+      }
+    end
+
+    describe 'POST #sync' do
+      before { stub_audit_events }
+      let(:app_instance) { build(:app_instance, metadata: { app: { host: 'http://www.addon-url.com', synchronization_start_path: '/sync' } }) }
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:app])}
+      before { stub_add_on(app_instance, :post, '/sync', 202) }
+      before { sign_in user }
+      subject { post :sync, id: app_instance.id }
+
+      it_behaves_like 'jpi v1 protected action'
+
+      it {
+        subject
+        expect(subject).to be_successful
+      }
+    end
+
+    describe 'POST #disconnect' do
+      before { stub_audit_events }
+      let(:app_instance) { build(:app_instance, metadata: { app: { host: 'http://www.addon-url.com' } }) }
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:app])}
+      before { stub_add_on(app_instance, :post, '/disconnect', 202) }
+      before { sign_in user }
+      subject { post :disconnect, id: app_instance.id }
+
+      it_behaves_like 'jpi v1 protected action'
+
+      it {
+        subject
+        expect(subject).to be_successful
+      }
+    end
+
+    describe 'GET #sync_history' do
+      before { stub_audit_events }
+      let(:app_instance) { build(:app_instance) }
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance)}
+      let(:sync) {
+        {
+          status: "SUCCESS",
+          message: nil,
+          updated_at: "2017-10-03T23:16:25Z",
+          created_at:"2017-10-03T23:16:08Z"
+        }
+      }
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}/sync_history", sync)}
+      before { sign_in user }
+      subject { get :sync_history, id: app_instance.id }
+
+      it_behaves_like 'jpi v1 protected action'
+
+      it {
+        subject
+        assert_requested_api_v2(:get, "/app_instances/#{app_instance.id}/sync_history")
+        expect(JSON.parse(response.body).first['attributes']).to eq(sync.with_indifferent_access)
+      }
+    end
+
+    describe 'GET #id_maps' do
+      before { stub_audit_events }
+      let(:app_instance) { build(:app_instance) }
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance)}
+      let(:id_map) {
+        {
+          connec_id: "8d8781c0-94b7-0135-43e8-245e60e5955b",
+          external_entity: "product",
+          external_id: '1',
+          name: "Product1",
+          message: "An error ocurred"
+        }
+      }
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}/id_maps", id_map)}
+      before { sign_in user }
+      subject { get :id_maps, id: app_instance.id }
+
+      it_behaves_like 'jpi v1 protected action'
+
+      it {
+        subject
+        assert_requested_api_v2(:get, "/app_instances/#{app_instance.id}/id_maps")
+        expect(JSON.parse(response.body).first['attributes']).to eq(id_map.with_indifferent_access)
+      }
+    end
   end
 end
