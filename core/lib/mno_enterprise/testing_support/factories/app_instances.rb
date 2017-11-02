@@ -27,6 +27,8 @@ FactoryGirl.define do
       app { build(:app, nid: app_nid) }
       sequence(:owner) { |n| build(:organization, id: n.to_s) }
       sequence(:owner_id, &:to_s)
+      addon_organization nil
+      channel_id nil
     end
   end
 end
