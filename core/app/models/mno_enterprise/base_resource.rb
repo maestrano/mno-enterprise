@@ -81,6 +81,11 @@ module MnoEnterprise
       @relations ||= ActiveSupport::HashWithIndifferentAccess.new
     end
 
+    # define if the relationship has been loaded (for example by calling include)
+    def relation_loaded?(relation)
+      relationships && relationships.has_attribute?(relation) && relationships[relation].key?('data')
+    end
+
     def process_custom_result(result)
       collect_errors(result.errors)
       raise_if_errors

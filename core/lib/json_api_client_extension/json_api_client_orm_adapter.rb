@@ -15,14 +15,14 @@ module JsonApiClient
 
     # @see OrmAdapter::Base#get!
     def get!(id)
-      res = klass.includes(*klass::INCLUDED_DEPENDENCIES).find(wrap_key(id)).first
+      res = klass.find(wrap_key(id)).first
       raise JsonApiClient::Errors::ResourceNotFound, "resource not found" unless res
       res
     end
 
     # @see OrmAdapter::Base#get
     def get(id)
-      res = klass.includes(*klass::INCLUDED_DEPENDENCIES).find(wrap_key(id))
+      res = klass.find(wrap_key(id))
       error = res&.errors&.first
       if (error && error.code != '404')
         raise error.detail

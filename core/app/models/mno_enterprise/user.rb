@@ -7,8 +7,6 @@ module MnoEnterprise
     include ActiveModel::AttributeMethods
     include ActiveModel::Validations
 
-    INCLUDED_DEPENDENCIES = %i(deletion_requests organizations orga_relations dashboards teams sub_tenant)
-
     # ids
     property :id
     property :uid, type: :string
@@ -129,7 +127,11 @@ module MnoEnterprise
     end
 
     def orga_relation_from_id(organization_id)
-      MnoEnterprise::OrgaRelation.where('user.id': id, 'organization.id': organization_id).first
+      if relation_loaded?(:orga_relations)
+        self.orga_relations.find { |r| r.organization.id == organization_id }
+      else
+        MnoEnterprise::OrgaRelation.where('user.id': id, 'organization.id': organization_id).first
+      end
     end
 
     def create_deletion_request!
