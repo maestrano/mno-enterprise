@@ -55,6 +55,8 @@ en:
             no_custom_data: "No information provided by the customer"
             licenses: "Licenses"
             events: "Provisioning events"
+            provisioning_data:
+              root_name: "Provisioning Data"
           subscriptions:
             title: "Manage your subscriptions"
             currency_warning: "Some prices are missing for your current currency. Please contact your administrator for more information."
