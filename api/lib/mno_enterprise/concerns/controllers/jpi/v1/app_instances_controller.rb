@@ -57,7 +57,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
     body = params[:app_instance].merge!(org_uid: app_instance.channel_id)
     response = MnoEnterprise::AddOnHelper.send_request(app_instance, :post, "/auth/#{app_instance.name.downcase}/request", body: body)
     MnoEnterprise::EventLogger.info('addon_create_omniauth', current_user.id, 'Link account to add_on', app_instance)
-    head :accepted
+    render json: JSON.parse(response.body)
   end
 
   # POST /mnoe/jpi/v1/organization/1/app_instances/11/sync
