@@ -42,4 +42,7 @@ en:
               updating: Updating
               upgrading: Upgrading
               downgrading: Downgrading
+            sync_started: "The sync with {appname} has started"
+            sync_list: "List of previous synchronizations:"
+            disconnect_app: Disconnect
 
