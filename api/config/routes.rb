@@ -135,7 +135,7 @@ MnoEnterprise::Engine.routes.draw do
         end
 
         # AppInstances
-        resources :app_instances, only: [:index, :create, :destroy] do
+        resources :app_instances, only: [:index, :create, :destroy], shallow: true do
           member do
             get :setup_form
             post :create_omniauth

@@ -21,61 +21,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
     end
   end
 
-  # GET /mnoe/jpi/v1/organization/1/app_instances/11/setup_form
-  def setup_form
-    app_instance = MnoEnterprise::AppInstance.find(params[:id]).first
-    return render json: {error: "App is not an add_on"} unless app_instance&.stack == 'cloud'
-
-    resp = ::HTTParty.get("#{app_instance.metadata['app']['host']}/setup_form")
-    render json: JSON.parse(resp.body)
-  rescue => e
-    render json: {error: "Unable to load schema form"}, status: :bad_request
-  end
-
-  # POST /mnoe/jpi/v1/organization/1/app_instances/11/create_omniauth
-  def create_omniauth
-    app_instance = MnoEnterprise::AppInstance.find(params[:id]).first
-    return render json: {error: "App is not an add_on"} unless app_instance&.stack == 'cloud'
-
-    body = params[:app_instance].merge!(org_uid: MnoEnterprise::Organization.find(params[:organization_id]).first.uid)
-    resp = ::HTTParty.post("#{app_instance.metadata['app']['host']}/auth/#{app_instance.name.downcase}/request", body: body)
-    render json: JSON.parse(resp.body), status: resp.code
-  end
-
-  # POST /mnoe/jpi/v1/organization/1/app_instances/11/sync
-  def sync
-    app_instance = MnoEnterprise::AppInstance.includes(:app).find(params[:id]).first
-    app_meta = app_instance.metadata['app']
-    body = {group_id: app_instance.uid, opts: {full_sync: params[:full_sync]}}
-    auth = {username: app_instance.app.uid, password: app_instance.app.api_key}
-    resp = ::HTTParty.post("#{app_meta['host']}#{app_meta['synchronization_start_path']}", body: body, basic_auth: auth)
-    render json: JSON.parse(resp.body), status: resp.code
-  end
-
-  # GET /mnoe/jpi/v1/organization/1/app_instances/11/sync_history
-  def sync_history
-    syncs = MnoEnterprise::AppInstance.find(params[:id]).first.sync_history(params.except(:id, :organization_id, :action, :controller))
-    response.headers['x-total-count'] = syncs.meta[:record_count]
-    render json: syncs.as_json
-  end
-
-  # GET /mnoe/jpi/v1/organization/1/app_instances/11/id_maps
-  def id_maps
-    id_maps = MnoEnterprise::AppInstance.find(params[:id]).first.id_maps(params.except(:id, :organization_id, :action, :controller))
-    response.headers['x-total-count'] = id_maps.meta[:record_count]
-    render json: id_maps.as_json
-  end
-
-  # POST /mnoe/jpi/v1/organization/1/app_instances/11/disconnect
-  def disconnect
-    app_instance = MnoEnterprise::AppInstance.includes(:app).find(params[:id]).first
-    app_meta = app_instance.metadata['app']
-    body = {uid: app_instance.uid}
-    auth = {username: app_instance.app.uid, password: app_instance.app.api_key}
-    resp = ::HTTParty.post("#{app_meta['host']}/disconnect", body: body, basic_auth: auth)
-    render json: JSON.parse(resp.body), status: resp.code
-  end
-
   # POST /mnoe/jpi/v1/organization/1/app_instances
   def create
     authorize! :manage_app_instances, parent_organization
@@ -99,5 +44,60 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
     end
 
     head :accepted
+  end
+
+  # GET /mnoe/jpi/v1/organization/1/app_instances/11/setup_form
+  def setup_form
+    app_instance = MnoEnterprise::AppInstance.find_one(params[:id])
+    response = AddOnHelper.send_request(app_instance, :get, '/setup_form')
+    MnoEnterprise::EventLogger.info('addon_form_request', current_user.id, 'Request add_on form', app_instance)
+    render json: JSON.parse(resp.body)
+  end
+
+  # POST /mnoe/jpi/v1/organization/1/app_instances/11/create_omniauth
+  # params[:app_instance] contains the fields values from the setup form
+  def create_omniauth
+    app_instance = MnoEnterprise::AppInstance.find_one(params[:id])
+    body = params[:app_instance].merge!(org_uid: instance.channel_id)
+    response = AddOnHelper.send_request(app_instance, :post, "/auth/#{app_instance.name.downcase}/request", body: body)
+    MnoEnterprise::EventLogger.info('addon_create_omniauth', current_user.id, 'Link account to add_on', app_instance)
+    head :accepted
+  end
+
+  # POST /mnoe/jpi/v1/organization/1/app_instances/11/sync
+  def sync
+    app_instance = MnoEnterprise::AppInstance.find_one(params[:id], :app)
+    body = { group_id: app_instance.uid, opts: { full_sync: params[:full_sync] } }
+    response = AddOnHelper.send_request(app_instance, :post, app_instance.metadata['app']['synchronization_start_path'], body: body)
+    MnoEnterprise::EventLogger.info('addon_syn', current_user.id, 'Launch sync on add_on', app_instance)
+    head :accepted
+  end
+
+  # POST /mnoe/jpi/v1/organization/1/app_instances/11/disconnect
+  def disconnect
+    app_instance = MnoEnterprise::AppInstance.find_one(params[:id], :app)
+    body = {uid: app_instance.uid}
+    response = AddOnHelper.send_request(app_instance, :post, '/disconnect', body: body)
+    MnoEnterprise::EventLogger.info('addon_disconnect', current_user.id, 'Unlink account from add_on', app_instance)
+    head :accepted
+  end
+
+  # GET /mnoe/jpi/v1/organization/1/app_instances/11/sync_history
+  # params should respect JSON Api specification
+  def sync_history
+    app_instance = MnoEnterprise::AppInstance.find_one(params[:id])
+    syncs = app_instance.sync_history(params.except(:id, :organization_id, :action, :controller))
+    response.headers['x-total-count'] = syncs.meta[:record_count]
+    MnoEnterprise::EventLogger.info('addon_sync_history', current_user.id, 'Get list of add_on syncs', app_instance)
+    render json: syncs.as_json
+  end
+
+  # GET /mnoe/jpi/v1/organization/1/app_instances/11/id_maps
+  # params should respect JSON Api specification
+  def id_maps
+    app_instance = MnoEnterprise::AppInstance.find_one(params[:id])
+    id_maps = app_instance.id_maps(params.except(:id, :organization_id, :action, :controller))
+    response.headers['x-total-count'] = id_maps.meta[:record_count]
+    render json: id_maps.as_json
   end
 end
