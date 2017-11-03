@@ -154,6 +154,8 @@ MnoEnterprise::Engine.routes.draw do
             member do
               post :cancel
             end
+
+            resources :subscription_events, only: [:index, :show]
           end
         end
       end
@@ -258,6 +260,8 @@ MnoEnterprise::Engine.routes.draw do
                 post :approve
                 post :fulfill
               end
+
+              resources :subscription_events, only: [:index, :show]
             end
           end
         end

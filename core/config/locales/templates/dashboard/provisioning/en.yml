@@ -50,10 +50,12 @@ en:
             status: "Status"
             amount: "Amount"
             provisioning_data: "Provisioning data"
+            provisioning_data_root_name: "Provisioning Data"
             no_provisioning_data: "No provisioning data"
             custom_data: "Information provided by the customer"
             no_custom_data: "No information provided by the customer"
             licenses: "Licenses"
+            events: "Provisioning events"
           subscriptions:
             title: "Manage your subscriptions"
             currency_warning: "Some prices are missing for your current currency. Please contact your administrator for more information."
@@ -69,11 +71,11 @@ en:
             status: "Status"
             states:
               requested: requested
-              approved: approved
-              provisoining: provisoining
+              provisioning: provisioning
               fulfilled: fulfilled
               expired: expired
               suspended: suspended
+              cancelling: cancelling
               cancelled: cancelled
               aborted: aborted
             modify: "Modify subscription"

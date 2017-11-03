@@ -48,7 +48,7 @@ module MnoEnterprise
           address = MnoEnterprise::Address.new(
             city:         row['city'],
             country_code: row['country'],
-            street: [row['address1'], row['address2']].reject(&:empty?).join(' '),
+            street: [row['address1'], row['address2']].reject(&:blank?).join(' '),
             state_code: row['state_province'],
             postal_code: row['postal_code']
           )
