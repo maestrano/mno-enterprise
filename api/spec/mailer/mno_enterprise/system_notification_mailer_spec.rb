@@ -9,7 +9,7 @@ module MnoEnterprise
     end
     let(:routes) { MnoEnterprise::Engine.routes.url_helpers }
     let(:user) { build(:user) }
-    let(:token) { "1sd5f323S1D5AS" }
+    let(:token) { '1sd5f323S1D5AS' }
     let(:deletion_request) { build(:deletion_request) }
 
     # Commonly used mandrill variables
@@ -183,7 +183,7 @@ module MnoEnterprise
       before do
         Timecop.freeze
         stub_api_v2(:get, "/users/#{user.id}", user, [], {fields: {users: 'email,name'}})
-        stub_api_v2(:get, "/invoices/#{invoice.id}", invoice)
+        stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [:organization])
       end
       after { Timecop.return }
       let(:invoice) { build(:invoice) }

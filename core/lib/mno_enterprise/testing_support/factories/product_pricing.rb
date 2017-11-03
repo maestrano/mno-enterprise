@@ -14,6 +14,6 @@ FactoryGirl.define do
     per_unit "per unit"
     prices {[]}
     external_id "external id"
-    product_id 1
+    product { build(:product) }
   end
 end

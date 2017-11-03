@@ -10,7 +10,8 @@ module MnoEnterprise
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
     before { stub_audit_events }
 
-    let(:user) { build(:user, :admin, :with_organizations) }
+    let(:user) { build(:user, :admin) }
+    let(:organization) { build(:organization) }
     let!(:current_user_stub) { stub_user(user) }
 
     before do
@@ -19,9 +20,9 @@ module MnoEnterprise
 
     describe 'DELETE #destroy' do
       # Stub AppInstance
-      let(:app_instance) { build(:app_instance) }
+      let(:app_instance) { build(:app_instance, owner: organization) }
 
-      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance) }
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:owner]) }
       let!(:stub) { stub_api_v2(:delete, "/app_instances/#{app_instance.id}/terminate") }
 
       subject { delete :destroy, id: app_instance.id }

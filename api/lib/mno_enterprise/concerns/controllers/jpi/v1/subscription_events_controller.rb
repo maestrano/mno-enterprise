@@ -8,14 +8,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionEventsControll
   #==================================================================
   # GET /mnoe/jpi/v1/organizations/1/subscriptions/xyz/subscription_events
   def index
-    authorize! :manage_app_instances, parent_organization
-    @subscription_events = fetch_subscription_events(parent_organization.id, params[:subscription_id])
+    authorize! :manage_app_instances, orga_relation
+    @subscription_events = fetch_subscription_events(parent_organization_id, params[:subscription_id])
   end
 
   # GET /mnoe/jpi/v1/organizations/1/subscriptions/xyz/subscription_events/id
   def show
-    authorize! :manage_app_instances, parent_organization
-    @subscription_event = fetch_subscription_event(parent_organization.id, params[:subscription_id], params[:id])
+    authorize! :manage_app_instances, orga_relation
+    @subscription_event = fetch_subscription_event(parent_organization_id, params[:subscription_id], params[:id])
   end
 
   protected

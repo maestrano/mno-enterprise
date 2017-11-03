@@ -28,7 +28,8 @@ module MnoEnterprise::Concerns::Models::AppInstance
   # Class methods
   #==================================================================
   module ClassMethods
-    def provision!(input)
+    def provision!(app_nid, owner_id, owner_type)
+      input = { data: { attributes: { app_nid: app_nid, owner_id: owner_id, owner_type: owner_type} } }
       result = provision(input)
       process_custom_result(result)
     end
@@ -49,7 +50,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
       uid: uid,
       name: name,
       app_nid: app_nid,
-      organization_id: owner_id
+      organization_id: owner.id
     }
   end
 

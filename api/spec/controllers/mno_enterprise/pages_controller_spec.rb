@@ -16,7 +16,7 @@ module MnoEnterprise
 
     before do
       stub_user(user)
-      stub_api_v2(:get, '/app_instances', [app_instance], [], {filter:{uid: app_instance.uid}, page:{number: 1, size: 1}})
+      stub_api_v2(:get, '/app_instances', [app_instance], [:owner], { filter: { uid: app_instance.uid }, page: one_page })
     end
 
     describe 'GET #launch' do
@@ -28,7 +28,7 @@ module MnoEnterprise
 
       it 'redirect to the mno enterprise launch page with a web token' do
         subject
-        expect(response).to redirect_to(MnoEnterprise.router.launch_url(app_instance.uid, wtk: MnoEnterprise.jwt({user_id: user.uid})))
+        expect(response).to redirect_to(MnoEnterprise.router.launch_url(app_instance.uid, wtk: MnoEnterprise.jwt({ user_id: user.uid })))
       end
     end
 
@@ -41,7 +41,7 @@ module MnoEnterprise
 
       it 'redirects to the mno enterprise launch page with a web token and extra params' do
         subject
-        expect(response).to redirect_to(MnoEnterprise.router.launch_url(app_instance.uid, wtk: MnoEnterprise.jwt({user_id: user.uid}), specific_parameters: 'specific_parameters_value'))
+        expect(response).to redirect_to(MnoEnterprise.router.launch_url(app_instance.uid, wtk: MnoEnterprise.jwt({ user_id: user.uid }), specific_parameters: 'specific_parameters_value'))
       end
     end
 

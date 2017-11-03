@@ -50,7 +50,7 @@ module MnoEnterprise
       let(:params) { {organization_id: organization.id, description: 'A Review', foo: 'bar', feedback_id: 'fid'} }
 
       before do
-        stub_api_v2(:get, '/orga_relations', [orga_relation], [], {filter: {organization_id: organization.id, user_id: user.id}, page: {number: 1, size: 1}})
+        stub_orga_relation(user, organization, orga_relation)
         stub_api_v2(:post, '/comments', comment1)
       end
 

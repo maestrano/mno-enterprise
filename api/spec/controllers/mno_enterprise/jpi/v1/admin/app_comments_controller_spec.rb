@@ -11,7 +11,7 @@ module MnoEnterprise
     #===============================================
     # Assignments
     #===============================================
-    let(:user) { build(:user, :admin, orga_relations: [orga_relation]) }
+    let(:user) { build(:user, :admin) }
     let!(:orga_relation) { build(:orga_relation) }
     let!(:current_user_stub) { stub_user(user) }
     let(:feedback) { build(:feedback) }
@@ -31,6 +31,7 @@ module MnoEnterprise
       before do
         stub_api_v2(:get, "/feedbacks/#{feedback.id}", feedback)
         stub_api_v2(:post, '/comments', comment)
+        stub_api_v2(:get, '/orga_relations', [orga_relation], [], {filter: {'user.id': user.id}, page: one_page})
       end
 
       subject { post :create, app_comment: params, feedback_id: feedback.id }

@@ -9,6 +9,5 @@ module MnoEnterprise
 
     has_one :organization
     has_one :user
-
   end
 end

@@ -18,7 +18,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   #==================================================================
   # GET /mnoe/jpi/v1/organizations
   def index
-    @organizations ||= current_user.organizations
+    @organizations ||= MnoEnterprise::Organization.where('users.id': current_user.id)
   end
 
   # GET /mnoe/jpi/v1/organizations/1

@@ -18,7 +18,7 @@ module MnoEnterprise
     let(:orga_relation) { build(:orga_relation) }
     let!(:current_user_stub) { stub_user(user) }
 
-    before { stub_api_v2(:get, '/orga_relations', orga_relation, [], { filter: { 'user.id': user.id, 'organization.id': organization.id }, page: { number: 1, size: 1 } }) }
+    before { stub_orga_relation(user, organization, orga_relation) }
 
     describe 'GET #index' do
       let(:app_instance) { build(:app_instance, status: 'running', under_free_trial: false) }
@@ -54,6 +54,7 @@ module MnoEnterprise
       let!(:stub) { stub_api_v2(:post, '/app_instances/provision', app_instance) }
       before do
         sign_in user
+        stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:owner])
       end
 
       it do

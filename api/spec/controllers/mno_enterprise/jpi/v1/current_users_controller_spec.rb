@@ -8,12 +8,21 @@ module MnoEnterprise
 
     include MnoEnterprise::ApplicationHelper # For #avatar_url
 
+    # Times need to be frozen to deal with deletion requests
+    before do
+      Timecop.freeze(Time.local(1985, 9, 17))
+    end
+
+    after do
+      Timecop.return
+    end
+
     def json_for(res)
       json_hash_for(res).to_json
     end
 
     def json_hash_for(res)
-      {'current_user' => hash_for(res)}
+      { 'current_user' => hash_for(res) }
     end
 
     def hash_for(res)
@@ -62,16 +71,14 @@ module MnoEnterprise
 
         hash['kpi_enabled'] = !!res.kpi_enabled
       end
-
       hash
     end
-
 
     before { stub_audit_events }
 
     shared_examples 'a user management action' do
       context 'when Organization management is disabled' do
-        before { Settings.merge!(dashboard: {user_management: {enabled: false}}) }
+        before { Settings.merge!(dashboard: { user_management: { enabled: false } }) }
         before { sign_in user }
         after { Settings.reload! }
 
@@ -80,11 +87,24 @@ module MnoEnterprise
     end
 
     # Stub user retrieval
-    let!(:user) { build(:user, :with_deletion_request, :with_organizations, :kpi_enabled) }
+    let(:organization) { build(:organization) }
+    let!(:user) { build(:user, :kpi_enabled, organizations: [organization], orga_relations: [orga_relation]) }
+
+    let!(:orga_relation) { build(:orga_relation, organization: organization) }
+
     let!(:current_user_stub) { stub_user(user) }
+
+    before do
+      stub_orga_relation(user, organization, orga_relation)
+      stub_deletion_requests(user, [])
+    end
 
     describe 'GET #show' do
       subject { get :show }
+
+      before do
+        stub_user(user, MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController::INCLUDED_DEPENDENCIES)
+      end
 
       describe 'guest' do
         it 'is successful' do
@@ -114,14 +134,14 @@ module MnoEnterprise
     end
 
     describe 'PUT #update' do
-      let(:attrs) { {name: user.name + 'aaa'} }
+      let(:attrs) { { name: user.name + 'aaa' } }
 
       before {
         updated_user = build(:user, id: user.id)
         updated_user.attributes = attrs
-        stub_api_v2(:patch,  "/users/#{user.id}", updated_user)
+        stub_api_v2(:patch, "/users/#{user.id}", updated_user)
         # user reload
-        stub_user(updated_user)
+        stub_user(updated_user, MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController::INCLUDED_DEPENDENCIES)
       }
 
       subject { put :update, user: attrs }
@@ -141,24 +161,26 @@ module MnoEnterprise
     end
 
     describe 'PUT #register_developer' do
-      before { stub_api_v2(:patch, "/users/#{user.id}/create_api_credentials", user) }
-      #user reload
-      before { stub_user(user) }
-      before { sign_in user }
       subject { put :register_developer }
-
+      before do
+        sign_in user
+        stub_api_v2(:patch, "/users/#{user.id}/create_api_credentials", user)
+        #user reload
+        stub_user(user, MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController::INCLUDED_DEPENDENCIES)
+        subject
+      end
       describe 'logged in' do
-        before { subject }
         it { expect(response).to be_success }
       end
     end
 
     describe 'PUT #update_password' do
-      let(:attrs) { {current_password: 'password', password: 'blablabla', password_confirmation: 'blablabla'} }
+      subject { put :update_password, user: attrs }
+
+      let(:attrs) { { current_password: 'password', password: 'blablabla', password_confirmation: 'blablabla' } }
       let!(:update_password_stub) { stub_api_v2(:patch, "/users/#{user.id}/update_password", user) }
       #user reload
-      before { stub_user(user) }
-      subject { put :update_password, user: attrs }
+      before { stub_user(user, MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController::INCLUDED_DEPENDENCIES) }
 
       it_behaves_like 'a user management action'
 

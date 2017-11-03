@@ -5,6 +5,15 @@ module MnoEnterprise
     render_views
     routes { MnoEnterprise::Engine.routes }
 
+    # Time needs to be frozen for DeletionRequest
+    before do
+      Timecop.freeze(Time.local(1985, 9, 17))
+    end
+
+    after do
+      Timecop.return
+    end
+
     def main_app
       Rails.application.class.routes.url_helpers
     end
@@ -15,9 +24,9 @@ module MnoEnterprise
 
     # Stub model calls
     let(:deletion_req) { build(:deletion_request) }
-    let(:user) { build(:user, deletion_requests: [deletion_req]) }
+    let(:user) { build(:user) }
     let!(:current_user_stub) { stub_user(user) }
-
+    let!(:stub) { stub_deletion_requests(user, [deletion_req]) }
 
     describe 'GET #show' do
       before { sign_in user }
@@ -27,8 +36,7 @@ module MnoEnterprise
       it_behaves_like 'a navigatable protected user action'
 
       context 'when no current_request' do
-        let(:user) { build(:user, deletion_request: nil) }
-
+        let!(:stub) { stub_deletion_requests(user, []) }
         it 'redirects to the root_path' do
           subject
           expect(response).to redirect_to(main_app.root_path)
@@ -37,7 +45,7 @@ module MnoEnterprise
 
       context 'when not the current request' do
         let(:new_deletion_req) { build(:deletion_request) }
-        let(:user) { build(:user, deletion_request: new_deletion_req) }
+        let!(:stub) { stub_deletion_requests(user, [new_deletion_req]) }
 
         it 'redirects to the root_path' do
           subject
@@ -47,6 +55,7 @@ module MnoEnterprise
     end
 
     describe 'PUT #freeze_account' do
+
       before { stub_api_v2(:patch, "/deletion_requests/#{deletion_req.id}/freeze", deletion_req) }
       before { stub_api_v2(:put, "/deletion_requests/#{deletion_req.id}", deletion_req) }
 
@@ -88,7 +97,7 @@ module MnoEnterprise
       end
 
       context 'when no valid request' do
-        let(:user) { build(:user, deletion_request: nil) }
+        let!(:stub) { stub_deletion_requests(user, []) }
         it 'redirects to the root_path' do
           subject
           expect(response).to redirect_to(main_app.root_path)
@@ -121,7 +130,7 @@ module MnoEnterprise
       end
 
       context 'when no valid request' do
-        let(:user) { build(:user, deletion_request: nil) }
+        let!(:stub) { stub_deletion_requests(user, []) }
         it 'redirects to the root_path' do
           subject
           expect(response).to redirect_to(main_app.root_path)

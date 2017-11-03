@@ -17,18 +17,15 @@ module MnoEnterprise
 
     # Stub user and mnoe API calls
     let(:user) { build(:user) }
-    let!(:organization) {
-      o = build(:organization, orga_relations: [])
-      o.orga_relations << build(:orga_relation, user_id: user.id, organization_id: o.id, role: "Super Admin")
-      o
-    }
+    let(:organization) { build(:organization) }
+    let(:orga_relation) { build(:orga_relation) }
     let(:audit_event) { build(:audit_event) }
 
     let!(:current_user_stub) { stub_user(user) }
-    before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
     before { stub_api_v2(:get, "/organizations/#{organization.id}", organization) }
     before do
-      stub_api_v2(:get, '/audit_events', [audit_event], [], {filter: {organization_id: organization.id}})
+      stub_orga_relation(user, organization, orga_relation)
+      stub_api_v2(:get, '/audit_events', [audit_event], [], { filter: { organization_id: organization.id } })
       sign_in user
     end
 

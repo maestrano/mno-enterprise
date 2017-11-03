@@ -8,7 +8,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardTemplatesC
   # context where it is included rather than being executed in the module's context
   included do
     DASHBOARD_DEPENDENCIES = [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts']
-
     respond_to :json
   end
 
@@ -18,5 +17,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardTemplatesC
   # GET /mnoe/jpi/v1/impac/dashboard_templates
   def index
     @templates = MnoEnterprise::Dashboard.published_templates.includes(*DASHBOARD_DEPENDENCIES)
+    @organizations = MnoEnterprise::Organization.where('user.ids': current_user.id)
   end
 end

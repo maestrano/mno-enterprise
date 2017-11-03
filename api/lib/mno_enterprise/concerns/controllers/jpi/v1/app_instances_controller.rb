@@ -16,7 +16,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
   # GET /mnoe/jpi/v1/organization/1/app_instances
   def index
     statuses = MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')
-    @app_instances = MnoEnterprise::AppInstance.includes(:app).where('owner.id': parent_organization.id, 'status.in': statuses, 'fulfilled_only': true).to_a.select do |i|
+    @app_instances = MnoEnterprise::AppInstance.includes(:app).where('owner.id': parent_organization_id, 'status.in': statuses, 'fulfilled_only': true).to_a.select do |i|
       can?(:access,i)
     end
   end
@@ -24,8 +24,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
   # POST /mnoe/jpi/v1/organization/1/app_instances
   def create
     authorize! :manage_app_instances, orga_relation
-    input = { data: { attributes: { app_nid: params[:nid], owner_id: parent_organization_id, owner_type: 'Organization' } } }
-    app_instance = MnoEnterprise::AppInstance.provision!(input)
+    app_instance = MnoEnterprise::AppInstance.provision!(params[:nid], parent_organization_id, 'Organization' )
+    app_instance = app_instance.load_required(:owner)
     MnoEnterprise::EventLogger.info('app_add', current_user.id, 'App added', app_instance)
     head :created
   end

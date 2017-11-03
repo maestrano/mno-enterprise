@@ -1,7 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   extend ActiveSupport::Concern
 
-  INCLUDED_DEPENDENCIES = %i(deletion_requests organizations orga_relations dashboards teams orga_relations.user orga_relations.organization sub_tenant)
+  INCLUDED_DEPENDENCIES = %i(organizations orga_relations dashboards teams orga_relations.user orga_relations.organization sub_tenant)
 
   #==================================================================
   # Included methods
@@ -25,10 +25,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # PUT /mnoe/jpi/v1/current_user
   def update
     current_user.attributes = user_params
-    changed_attributes = @user.changed_attributes
+    changed_attributes = current_user.changed_attributes
     current_user.save!
     current_user.refresh_user_cache
-    MnoEnterprise::EventLogger.info('user_update', current_user.id, 'User update', @user, changed_attributes)
+    MnoEnterprise::EventLogger.info('user_update', current_user.id, 'User update', current_user, changed_attributes)
     @user = current_user.load_required(*INCLUDED_DEPENDENCIES)
     render :show
   end
@@ -36,16 +36,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # PUT /mnoe/jpi/v1/current_user/register_developer
   def register_developer
     current_user.create_api_credentials!
-    MnoEnterprise::EventLogger.info('register_developer', current_user.id, 'Developer registration', @user)
+    MnoEnterprise::EventLogger.info('register_developer', current_user.id, 'Developer registration', current_user)
     @user = current_user.load_required(*INCLUDED_DEPENDENCIES)
     render :show
-
   end
 
   # PUT /mnoe/jpi/v1/current_user/update_password
   def update_password
     current_user.update_password!(data: { attributes: password_params })
-    MnoEnterprise::EventLogger.info('user_update_password', current_user.id, 'User password change', @user)
+    MnoEnterprise::EventLogger.info('user_update_password', current_user.id, 'User password change', current_user)
     @user = current_user.load_required(*INCLUDED_DEPENDENCIES)
     sign_in @user, bypass: true
     render :show

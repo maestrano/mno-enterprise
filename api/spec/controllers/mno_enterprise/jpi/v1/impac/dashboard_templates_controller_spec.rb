@@ -10,8 +10,8 @@ module MnoEnterprise
 
     let(:dashboard_dependencies) { %w(widgets widgets.kpis kpis kpis.alerts) }
 
-    let(:user) { build(:user, :with_organizations) }
-    let(:org) { user.organizations.first || build(:organization, users: [user]) }
+    let(:user) { build(:user) }
+    let(:organization) { build(:organization)}
     let(:metadata) { { hist_parameters: { from: '2015-01-01', to: '2015-03-31', period: 'MONTHLY' } } }
 
     let(:widget) { build(:impac_widget, owner: user) }
@@ -20,7 +20,7 @@ module MnoEnterprise
     let(:template) do
       build(:impac_dashboard,
             dashboard_type: 'template',
-            organization_ids: [org.uid],
+            organization_ids: [organization.uid],
             currency: 'EUR',
             settings: metadata,
             widgets: [widget],
@@ -59,7 +59,7 @@ module MnoEnterprise
         "full_name" => template.full_name,
         "currency" => 'EUR',
         "metadata" => metadata.deep_stringify_keys,
-        "data_sources" => [{ "id" => org.id, "uid" => org.uid, "label" => org.name}],
+        "data_sources" => [{ "id" => organization.id, "uid" => organization.uid, "label" => organization.name}],
         "kpis" => [hash_for_kpi(d_kpi)],
         "widgets" => [hash_for_widget]
       }
@@ -72,7 +72,8 @@ module MnoEnterprise
       subject { get :index }
 
       before do
-        stub_api_v2(:get, "/dashboards", [template], dashboard_dependencies, filter: {dashboard_type: 'template', published: true})
+        stub_api_v2(:get, '/organizations', [organization], [], filter: { 'user.ids': user.id})
+        stub_api_v2(:get, '/dashboards', [template], dashboard_dependencies, filter: { dashboard_type: 'template', published: true})
       end
 
       it_behaves_like "jpi v1 protected action"

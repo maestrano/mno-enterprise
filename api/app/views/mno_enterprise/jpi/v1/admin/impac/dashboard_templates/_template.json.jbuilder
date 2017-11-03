@@ -2,7 +2,7 @@ json.extract! template, :id, :name, :full_name, :currency
 
 json.metadata template.settings
 
-json.data_sources template.organizations(current_user.organizations).compact.map do |org|
+json.data_sources template.organizations(@organizations).compact.map do |org|
   json.id org.id
   json.uid org.uid
   json.label org.name

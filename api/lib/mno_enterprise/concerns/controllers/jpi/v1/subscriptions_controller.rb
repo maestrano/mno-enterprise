@@ -8,22 +8,22 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   #==================================================================
   # GET /mnoe/jpi/v1/organizations/1/subscriptions
   def index
-    authorize! :manage_app_instances, parent_organization
-    @subscriptions = fetch_subscriptions(parent_organization.id)
+    authorize! :manage_app_instances, orga_relation
+    @subscriptions = fetch_subscriptions(parent_organization_id)
   end
 
   # GET /mnoe/jpi/v1/organizations/1/subscriptions/id
   def show
-    authorize! :manage_app_instances, parent_organization
-    @subscription = fetch_subscription(parent_organization.id, params[:id])
+    authorize! :manage_app_instances, orga_relation
+    @subscription = fetch_subscription(parent_organization_id, params[:id])
   end
 
   # POST /mnoe/jpi/v1/organizations/1/subscriptions
   def create
-    authorize! :manage_app_instances, parent_organization
+    authorize! :manage_app_instances, orga_relation
 
     subscription = MnoEnterprise::Subscription.new(subscription_update_params)
-    subscription.relationships.organization = MnoEnterprise::Organization.new(id: parent_organization.id)
+    subscription.relationships.organization = MnoEnterprise::Organization.new(id: parent_organization_id)
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
     if params[:subscription][:product_pricing_id]
       subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
@@ -34,15 +34,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     subscription.save!
 
     MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription)
-    @subscription = fetch_subscription(parent_organization.id, subscription.id)
+    @subscription = fetch_subscription(parent_organization_id, subscription.id)
     render :show
   end
 
   # PUT /mnoe/jpi/v1/organizations/1/subscriptions/abc
   def update
-    authorize! :manage_app_instances, parent_organization
+    authorize! :manage_app_instances, orga_relation
 
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
+    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization_id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
     if params[:subscription][:product_pricing_id]
       subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
@@ -55,20 +55,20 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     subscription.modify!(data: subscription.as_json_api)
 
     MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
-    @subscription = fetch_subscription(parent_organization.id, subscription.id)
+    @subscription = fetch_subscription(parent_organization_id, subscription.id)
     render :show
   end
 
   # POST /mnoe/jpi/v1/organizations/1/subscriptions/abc/cancel
   def cancel
-    authorize! :manage_app_instances, parent_organization
+    authorize! :manage_app_instances, orga_relation
 
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
+    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization_id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
     subscription.cancel!
 
     MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription cancelled', subscription)
-    @subscription = fetch_subscription(parent_organization.id, subscription.id)
+    @subscription = fetch_subscription(parent_organization_id, subscription.id)
     render :show
   end
 

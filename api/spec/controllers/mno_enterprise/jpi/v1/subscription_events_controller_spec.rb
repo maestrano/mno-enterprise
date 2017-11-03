@@ -21,9 +21,11 @@ module MnoEnterprise
     let!(:current_user_stub) { stub_user(user) }
 
     # Stub organization and association
-    let!(:organization) { build(:organization, orga_relations: []) }
-    let!(:orga_relation) { organization.orga_relations << build(:orga_relation, user_id: user.id, organization_id: organization.id, role: 'Super Admin') }
-    let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
+    let!(:organization) { build(:organization) }
+    let!(:orga_relation) { build(:orga_relation, role: 'Super Admin') }
+    before do
+      stub_orga_relation(user, organization, orga_relation)
+    end
 
     describe 'GET #index' do
       let(:subscription) { build(:subscription) }

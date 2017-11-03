@@ -228,7 +228,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
 
   def send_invoice(recipient_id, invoice_id)
     recipient = MnoEnterprise::User.select(:email, :name).find(recipient_id).first
-    invoice = MnoEnterprise::Invoice.find_one(invoice_id)
+    invoice = MnoEnterprise::Invoice.find_one(invoice_id, :organization)
     MnoEnterprise::MailClient.deliver(
       'invoice',
       default_sender,

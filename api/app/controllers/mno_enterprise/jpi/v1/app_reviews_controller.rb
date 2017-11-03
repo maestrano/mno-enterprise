@@ -53,7 +53,7 @@ module MnoEnterprise
     end
 
     def orga_relation
-      @orga_relation ||= MnoEnterprise::OrgaRelation.where(organization_id: organization_id, user_id: current_user.id).first
+      @orga_relation ||= MnoEnterprise::OrgaRelation.where('organization.id': organization_id, 'user.id': current_user.id).first
     end
 
     def ensure_app_exists

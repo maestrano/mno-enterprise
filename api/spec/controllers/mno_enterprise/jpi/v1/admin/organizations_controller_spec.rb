@@ -232,10 +232,9 @@ module MnoEnterprise
             stub_api_v2(:post, '/users', user2),
             stub_api_v2(:patch, "/users/#{user1.id}", user1),
 
-            stub_api_v2(:get, '/orga_relations', [], [], { filter: { user_id: user1.id, organization_id: organization1.id }, page: { number: 1, size: 1 } }),
-            stub_api_v2(:get, '/orga_relations', [orga_relation1], [], { filter: { user_id: user2.id, organization_id: organization2.id }, page: { number: 1, size: 1 } }),
-
-            stub_api_v2(:post, '/orga_relations', orga_relation2)
+            stub_orga_relation(user1, organization1, nil),
+            stub_orga_relation(user2, organization2, orga_relation2),
+            stub_api_v2(:post, '/orga_relations', orga_relation1)
           ]
         }
 

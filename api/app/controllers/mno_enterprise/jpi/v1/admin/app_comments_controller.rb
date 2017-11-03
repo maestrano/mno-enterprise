@@ -13,7 +13,7 @@ module MnoEnterprise
 
     def app_comment_params
       # for an admin, the organization does not matter
-      orga_relation = current_user.orga_relations.first
+      orga_relation = MnoEnterprise::OrgaRelation.where('user.id': current_user.id).first
       params.require(:app_comment).permit(:description)
         .merge(reviewer_id: orga_relation.id, reviewer_type: 'OrgaRelation',
                parent_id: parent.id, reviewable_id: parent.reviewable_id, reviewable_type: 'App')
