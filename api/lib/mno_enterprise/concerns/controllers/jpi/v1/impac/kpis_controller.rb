@@ -25,9 +25,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     auth = { username: MnoEnterprise.tenant_id, password: MnoEnterprise.tenant_key }
 
     begin
+      # TODO check there was no error, something like
+      # return render json: { message: "Unable to retrieve kpis from Impac API | Error #{response.code}" } unless response.success?
       response = MnoEnterprise::ImpacClient.send_get('/api/v2/kpis', attrs, basic_auth: auth)
-        # TODO check there was no error, something like
-        # return render json: { message: "Unable to retrieve kpis from Impac API | Error #{response.code}" } unless response.success?
     rescue => e
       return render json: { message: "Unable to retrieve kpis from Impac API | Error #{e}" }
     end
@@ -42,8 +42,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
           target_placeholders: { watchable => kpi[:target_placeholders][watchable] },
         )
       end
-    end
-             .flatten
+    end.flatten
 
     render json: { kpis: kpis }
   end
@@ -85,7 +84,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     # Creates an in-app alert if target is set for the first time (in-app alerts should be activated by default)
     if kpi.targets.blank? && params[:targets].present?
       MnoEnterprise::Alert.create_with_recipients!({ service: 'inapp', kpi_id: kpi.id }, [current_user.id])
-    # If targets have changed, reset all the alerts 'sent' status to false.
+      # If targets have changed, reset all the alerts 'sent' status to false.
     elsif kpi.targets && params[:targets].present? && params[:targets] != kpi.targets
       kpi.alerts.each { |alert| alert.update_attributes(sent: false) }
       # Removes all the alerts if the targets are removed (kpi has no targets set,
