@@ -17,7 +17,7 @@
     .row
       .col-sm-12
         .phone
-          = f.select :phone_country_code, options_for_select(Country.all.map { |country,code| c = Country.new(code); ["#{c.alpha2} +#{c.country_code}", code]}, MnoEnterprise.app_country), {}, class: 'form-control unstyled'
+          = f.select :phone_country_code, options_for_select(ISO3166::Country.codes.map { |code| c = ISO3166::Country[code]; ["#{c.alpha2} +#{c.country_code}", code]}, MnoEnterprise.app_country), {}, class: 'form-control unstyled'
           = f.text_field :phone, placeholder: "*Phone", required: true, 'ng-model' => 'user.phone', class: 'form-control'
 
   %br
