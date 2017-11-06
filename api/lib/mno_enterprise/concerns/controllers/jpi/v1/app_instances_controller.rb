@@ -16,7 +16,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
   # GET /mnoe/jpi/v1/organization/1/app_instances
   def index
     statuses = MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')
-    @app_instances = MnoEnterprise::AppInstance.includes(:app).where(owner_id: parent_organization.id, 'status.in': statuses, 'fulfilled_only': true).to_a.select do |i|
+    required_instances_fields = %w(uid stack name status oauth_keys_valid created_at per_user_licence addon_organization channel_id oauth_company app)
+    @app_instances = MnoEnterprise::AppInstance.select(required_instances_fields).includes(:app).where(owner_id: parent_organization.id, 'status.in': statuses, 'fulfilled_only': true).to_a.select do |i|
       can?(:access,i)
     end
   end
