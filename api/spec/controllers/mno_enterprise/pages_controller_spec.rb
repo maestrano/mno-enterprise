@@ -63,12 +63,23 @@ module MnoEnterprise
     end
 
     describe 'GET #terms' do
-      before { api_stub_for(get: "/apps", response: from_api([build(:app)])) }
+      let!(:app1) { build(:app, name: 'b') }
+      let!(:app2) { build(:app, name:'a') }
+      let!(:app3) { build(:app, name: 'c') }
+
+      before do
+        Rails.cache.clear
+        api_stub_for(get: '/apps', response: from_api([app1, app2, app3]))
+      end
 
       subject { get :terms }
       before { subject }
-      it { expect(response).to be_success }
-    end
 
+      it { expect(response).to be_success }
+      
+      it 'returns the apps in the correct alphabetical order' do
+        expect(assigns(:apps)).to eq([app2, app1, app3])
+      end
+    end
   end
 end

@@ -67,7 +67,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
       Rails.cache.fetch(['pages/terms/app-list', ts]) do
         # Temp solution as translated fields can not be filtered or sorted
         # MnoEnterprise::App.order_by("name.ac").reject{|i| i.terms_url.blank?}
-        MnoEnterprise::App.all.reject { |i| i.terms_url.blank? }
+        MnoEnterprise::App.all.reject { |i| i.terms_url.blank? }.sort! { |a,b| a.name.downcase <=> b.name.downcase }
       end
     else
       []
