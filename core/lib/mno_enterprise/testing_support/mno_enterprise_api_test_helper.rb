@@ -72,15 +72,9 @@ module MnoEnterpriseApiTestHelper
 
   def stub_add_on(instance, method, path, status, response  = {})
     url = instance.metadata['app']['host'] + path
-    stub_options = {
-      headers: {
-        'Accept' => '*/*',
-        'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'User-Agent'=>'Ruby'
-      }
-    }
-    stub_options.merge!(basic_auth: [instance.app.uid, instance.app.api_key]) if instance.app
-    stub = stub_request(method, url).with(stub_options)
+    headers = {}
+    headers[:basic_auth] = [instance.app.uid, instance.app.api_key] if instance.app
+    stub = stub_request(method, url).with(headers)
     stub.to_return(status: status, body: response.to_json)
     stub
   end
