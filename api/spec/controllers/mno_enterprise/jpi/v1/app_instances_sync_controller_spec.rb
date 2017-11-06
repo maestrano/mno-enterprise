@@ -38,7 +38,7 @@ module MnoEnterprise
       HashWithIndifferentAccess.new(name: 'a_name', status: 'FAILED', date: nil)
     ] }
 
-    let!(:organization_with_connectors) { build(:organization, connectors: connectors) }
+    let!(:organization_with_connectors) { build(:organization, connectors: connectors, has_running_cube: false) }
 
     #===============================================
     # Specs
