@@ -1,13 +1,17 @@
 module MnoEnterprise
   class Jpi::V1::Admin::OrganizationsController < Jpi::V1::Admin::BaseResourceController
 
-    DEPENDENCIES = [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user']
-    INCLUDED_FIELDS = [:uid, :name, :account_frozen,
+    DEPENDENCIES = [:app_instances, :'app_instances.app', :users, :'users.user_access_requests',
+                    :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user']
+    INCLUDED_FIELDS_INDEX = [:uid, :name, :account_frozen,
                        :soa_enabled, :mails, :logo, :latitude, :longitude,
                        :geo_country_code, :geo_state_code, :geo_city,
                        :geo_tz, :geo_currency, :metadata, :industry, :size,
                        :financial_year_end_month, :credit_card,
                        :financial_metrics, :created_at, :external_id, :belong_to_sub_tenant, :belong_to_account_manager]
+    INCLUDED_FIELDS_SHOW = [:name, :uid, :soa_enabled, :created_at, :account_frozen, :financial_metrics,
+                            :billing_currency, :external_id, :app_instances, :orga_invites, :users,
+                            :orga_relations, :invoices, :credit_card]
 
     # GET /mnoe/jpi/v1/admin/organizations
     def index
@@ -18,7 +22,7 @@ module MnoEnterprise
 
           query = MnoEnterprise::Organization
                     .apply_query_params(params.except(:terms))
-                    .select(INCLUDED_FIELDS)
+                    .select(INCLUDED_FIELDS_INDEX)
                     .with_params(_metadata: { act_as_manager: current_user.id })
                     .where(Hash[*t])
           query = query.with_params(sub_tenant_id: params[:sub_tenant_id]) if params[:sub_tenant_id]
@@ -32,7 +36,7 @@ module MnoEnterprise
         query = MnoEnterprise::Organization
                   .apply_query_params(params)
                   .with_params(_metadata: { act_as_manager: current_user.id })
-                  .select(INCLUDED_FIELDS)
+                  .select(INCLUDED_FIELDS_INDEX)
         query = query.with_params(sub_tenant_id: params[:sub_tenant_id]) if params[:sub_tenant_id]
         query = query.with_params(account_manager_id: params[:account_manager_id]) if params[:account_manager_id]
         @organizations = query.to_a
@@ -44,11 +48,16 @@ module MnoEnterprise
     def show
       @organization = MnoEnterprise::Organization.apply_query_params(params)
                         .with_params(_metadata: { act_as_manager: current_user.id })
+                        .select(INCLUDED_FIELDS_SHOW)
                         .includes(*DEPENDENCIES)
                         .find(params[:id])
                         .first
 
-      @organization_active_apps = @organization.app_instances.select(&:active?)
+      statuses = MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')
+      @organization_active_apps = MnoEnterprise::AppInstance.includes(:app)
+                        .where('owner.id': params[:id], 'status.in': statuses, 'fulfilled_only': true)
+                        .select(&:active?)
+
     end
 
     # TODO: sub-tenant scoping
