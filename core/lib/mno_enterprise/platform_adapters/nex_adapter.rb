@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 gem 'nex_client', '~> 0.16.0'
 require 'nex_client'
+require 'rake'
+
+Rake::Task.clear # necessary to avoid tasks being loaded several times in dev mode
+Rails.application.load_tasks # load application tasks
 
 module MnoEnterprise
   module PlatformAdapters
@@ -8,6 +12,25 @@ module MnoEnterprise
     # The Nex!™ docker image provide `awscli` and a Minio storage addon
     class NexAdapter < Adapter
       class << self
+        ASSETS = [
+          {
+            local: :public_folder,
+            remote: 's3://${MINIO_BUCKET}/public/',
+            files: [
+              'dashboard/styles/theme-previewer.less',
+              'dashboard/styles/app-*.css',
+              '*/main-logo.png'
+            ]
+          },
+          {
+            local: :frontend_folder,
+            remote: 's3://${MINIO_BUCKET}/frontend/',
+            files: [
+              'app/stylesheets/theme-previewer-*.less',
+              'images/main-logo.png'
+            ]
+          }
+        ]
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#restart
         def restart
@@ -21,19 +44,34 @@ module MnoEnterprise
           FileUtils.touch('tmp/restart.txt')
         end
 
+        # @see MnoEnterprise::PlatformAdapters::Adapter#clear_assets
+        def clear_assets
+          # Clear the whole bucket
+          %x(#{aws_cli} s3 rm s3://${MINIO_BUCKET} --recursive)
+          $?.exitstatus == 0
+        end
+
         # @see MnoEnterprise::PlatformAdapters::Adapter#publish_assets
         def publish_assets
-          sync_assets(public_folder, 's3://${MINIO_BUCKET}/public/', '--delete')
-          sync_assets(frontend_folder, 's3://${MINIO_BUCKET}/frontend/', '--delete')
+          ASSETS.each do |conf|
+            opts = generate_opts(conf[:files])
+            sync_assets(send(conf[:local]), conf[:remote], opts)
+          end
+
           copy_asset(logo_file, 's3://${MINIO_BUCKET}/assets/main-logo.png')
         end
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#fetch_assets
         # Using `--exact-timestamps` to sync assets from S3 when they have the same size
         def fetch_assets
-          sync_assets('s3://${MINIO_BUCKET}/public/', public_folder, '--exact-timestamps')
+          sync_assets('s3://${MINIO_BUCKET}/public/', public_folder, "--exact-timestamps --exclude 'public/dashboard/index.html'")
           sync_assets('s3://${MINIO_BUCKET}/frontend/', frontend_folder, '--exact-timestamps')
           copy_asset('s3://${MINIO_BUCKET}/assets/main-logo.png', logo_file)
+
+          # We don't want to override dashboard/index.html in case of upgrade, we just need to rebuild the new style
+          # with our custom variables
+          Rake::Task['mnoe:frontend:previewer:build'].reenable
+          Rake::Task['mnoe:frontend:previewer:build'].invoke
         end
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#update_domain
@@ -111,6 +149,14 @@ module MnoEnterprise
           @aws_cli ||= "#{aws_auth} aws --endpoint-url ${MINIO_URL}"
         end
 
+        # Generate cli sync options to only include the specified list of files
+        # Note: exclude *needs* to be before the include
+        # @param [Array<String>] files the list of files to include
+        # @return [String] the cli option String
+        def generate_opts(files)
+          files.map{|f| "--include '#{f}'"}.unshift("--exclude '*' --delete").join(' ')
+        end
+
         # Syncs directories and S3 prefixes.
         # Recursively copies new and updated files from the source directory to the destination.
         #
@@ -121,7 +167,7 @@ module MnoEnterprise
         def sync_assets(src, dst, options=nil)
           if ENV['MINIO_URL'] && ENV['MINIO_BUCKET']
             args = [src, dst, options].compact.join(' ')
-            %x(#{aws_cli} s3 sync #{args})
+            %x(#{"#{aws_cli} s3 sync #{args}"})
             $?.exitstatus == 0
           end
         end
@@ -130,7 +176,7 @@ module MnoEnterprise
         def copy_asset(src, dst, options=nil)
           if ENV['MINIO_URL'] && ENV['MINIO_BUCKET']
             args = [src, dst, options].compact.join(' ')
-            %x(#{aws_cli} s3 cp #{args})
+            %x(#{"#{aws_cli} s3 cp #{args}"})
             $?.exitstatus == 0
           end
         end

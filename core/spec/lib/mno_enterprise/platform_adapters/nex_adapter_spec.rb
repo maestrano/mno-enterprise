@@ -25,32 +25,60 @@ describe MnoEnterprise::PlatformAdapters::NexAdapter do
     end
   end
 
-  let(:aws_cmd) { "AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY} aws --endpoint-url ${MINIO_URL}" }
-  let(:logo_file) { Rails.root.join('app', 'assets', 'images', 'mno_enterprise', 'main-logo.png') }
-
   describe '.restart' do
     it 'restarts the app'
   end
 
-  describe '.publish_assets' do
-    subject { described_class.publish_assets }
+  context 'Assets Operation' do
+    let(:aws_cmd) { "AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY} aws --endpoint-url ${MINIO_URL}" }
+    let(:logo_file) { Rails.root.join('app', 'assets', 'images', 'mno_enterprise', 'main-logo.png') }
 
-    it 'save the assets to the S3 bucket' do
-      expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync #{Rails.root.join('public')} s3://${MINIO_BUCKET}/public/ --delete")
-      expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync #{Rails.root.join('frontend', 'src')} s3://${MINIO_BUCKET}/frontend/ --delete")
-      expect(described_class).to receive(:`).with("#{aws_cmd} s3 cp #{logo_file} s3://${MINIO_BUCKET}/assets/main-logo.png")
-      subject
+    # Stub system calls
+    before { allow(described_class).to receive(:`) }
+
+    # Stub Rake tasks
+    # We have to manually redefine all used tasks
+    let(:rake) { Rake::Application.new }
+    before do
+      Rake.application = rake
+      Rake::Task.define_task('mnoe:frontend:previewer:build')
     end
-  end
 
-  describe '.fetch_assets' do
-    subject { described_class.fetch_assets }
+    describe '.publish_assets' do
+      subject { described_class.publish_assets }
 
-    it 'fetch the assets from the S3 bucket' do
-      expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync s3://${MINIO_BUCKET}/public/ #{Rails.root.join('public')} --exact-timestamps")
-      expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync s3://${MINIO_BUCKET}/frontend/ #{Rails.root.join('frontend', 'src')} --exact-timestamps")
-      expect(described_class).to receive(:`).with("#{aws_cmd} s3 cp s3://${MINIO_BUCKET}/assets/main-logo.png #{logo_file}")
-      subject
+      it 'save the assets to the S3 bucket' do
+        default_opts = "--exclude '*' --delete"
+
+        # Public
+        opts = "#{default_opts} --include 'dashboard/styles/theme-previewer.less' --include 'dashboard/styles/app-*.css' --include '*/main-logo.png'"
+        expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync #{Rails.root.join('public')} s3://${MINIO_BUCKET}/public/ #{opts}")
+
+        # Frontend
+        opts = "#{default_opts} --include 'app/stylesheets/theme-previewer-*.less' --include 'images/main-logo.png'"
+        expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync #{Rails.root.join('frontend', 'src')} s3://${MINIO_BUCKET}/frontend/ #{opts}")
+
+        # Logo
+        expect(described_class).to receive(:`).with("#{aws_cmd} s3 cp #{logo_file} s3://${MINIO_BUCKET}/assets/main-logo.png")
+
+        subject
+      end
+    end
+
+    describe '.fetch_assets' do
+      subject { described_class.fetch_assets }
+
+      it 'fetch the assets from the S3 bucket' do
+        expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync s3://${MINIO_BUCKET}/public/ #{Rails.root.join('public')} --exact-timestamps --exclude 'public/dashboard/index.html'")
+        expect(described_class).to receive(:`).with("#{aws_cmd} s3 sync s3://${MINIO_BUCKET}/frontend/ #{Rails.root.join('frontend', 'src')} --exact-timestamps")
+        expect(described_class).to receive(:`).with("#{aws_cmd} s3 cp s3://${MINIO_BUCKET}/assets/main-logo.png #{logo_file}")
+        subject
+      end
+
+      it 'rebuild the theme' do
+        expect(rake['mnoe:frontend:previewer:build']).to receive(:invoke)
+        subject
+      end
     end
   end
 
