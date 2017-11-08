@@ -54,7 +54,8 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
         'name' => organization.name,
         'soa_enabled' => organization.soa_enabled,
         'account_frozen' => organization.account_frozen,
-        'payment_restriction' => organization.payment_restriction
+        'payment_restriction' => organization.payment_restriction,
+        'billing_currency' => organization.billing_currency
     }
 
     if admin
