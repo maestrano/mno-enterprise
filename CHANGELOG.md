@@ -36,7 +36,7 @@ See [UPGRADING](UPGRADING.md#migrating-from-v32-to-v33)
 **Summary:**
 
 * Onboarding wizard
-* Audit Log in the dashboard and admin panel 
+* Audit Log in the dashboard and admin panel
 * Better app generation
 * Extracted Admin Panel to a separate project (feature flags & style customisation)
 * Improved design of static pages
@@ -122,6 +122,12 @@ See [UPGRADING](UPGRADING.md#migrating-from-v32-to-v33)
 - Fix locale [\#296](https://github.com/maestrano/mno-enterprise/pull/296) ([hedudelgado](https://github.com/hedudelgado))
 - Add URL\_CONFIG [\#290](https://github.com/maestrano/mno-enterprise/pull/290) ([fgourichon](https://github.com/fgourichon))
 
+## [v3.2.1](https://github.com/maestrano/mno-enterprise/tree/v3.2.1) (2017-11-09)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.2.0...v3.2.1)
+
+**Fixed bugs:**
+
+- \[MNOE-600\] Fix size logo on invoice [\#477](https://github.com/maestrano/mno-enterprise/pull/477) ([hedudelgado](https://github.com/hedudelgado))
 
 ## [v3.2.0](https://github.com/maestrano/mno-enterprise/tree/v3.2.0) (2017-06-14)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.4...v3.2.0)
