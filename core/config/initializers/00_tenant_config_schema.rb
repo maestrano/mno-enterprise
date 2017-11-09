@@ -90,8 +90,8 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             },
             api_secret: {
               type: "string",
-              title: "Intercom API secret",
-              description: "Secure mode secret",
+              title: "Intercom identity verification secret",
+              description: "<a href='https://docs.intercom.com/configure-intercom-for-your-product-or-site/staying-secure/enable-identity-verification-on-your-web-product'>Learn more about web identity verification</a>",
               default: ENV['INTERCOM_API_SECRET'].presence || ''
             },
             token: {
