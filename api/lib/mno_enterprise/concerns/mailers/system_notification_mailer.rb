@@ -25,7 +25,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   # Description:
   #   New user: Email asking users to confirm their email
   #     OR
-  #   Existing user: 
+  #   Existing user:
   #    - Email asking users (on their new email) to confirm their email change
   #    - Email notifying users (on their old email) of an email change
   #
@@ -160,6 +160,27 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
       default_sender,
       {email: email},
       {registration_link: new_user_registration_url}
+    )
+  end
+
+  def task_notification(from, recipient, task, inbox_link, organization_name = nil)
+    subject = %Q(Task notification: "#{task[:title]}" from #{from.name} #{from.surname})
+    subject += " (#{organization_name})" if organization_name
+    MnoEnterprise::MailClient.deliver(
+      'task-notification',
+      default_sender,
+      {email: recipient[:email]},
+      {
+        first_name: recipient[:name],
+        title: task[:title],
+        content: task[:message],
+        due_date: task[:due_date],
+        organization_name: organization_name,
+        inbox_link: inbox_link
+      },
+      {
+        subject: subject
+      }
     )
   end
 

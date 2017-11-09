@@ -72,6 +72,7 @@ en:
           logout: Logout
           new_company: New Company
           access_admin_panel: Access Admin Panel
+          messages: Messages
 
         create_company:
           title: Create New Company

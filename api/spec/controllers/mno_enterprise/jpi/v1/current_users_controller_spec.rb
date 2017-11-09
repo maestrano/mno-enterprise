@@ -42,6 +42,7 @@ module MnoEnterprise
           {
               'id' => o.id,
               'uid' => o.uid,
+              'orga_relation_id' => o.orga_relation_id,
               'name' => o.name,
               'currency' => 'AUD',
               'current_user_role' => o.role,

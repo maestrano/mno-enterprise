@@ -1,4 +1,4 @@
-json.extract! organization, :id, :name, :soa_enabled, :payment_restriction, :account_frozen #, :current_support_plan
+json.extract! organization, :id, :name, :soa_enabled, :payment_restriction, :account_frozen, :orga_relation_id #, :current_support_plan
 # json.show_new_db_features !!organization.get_meta_data(:show_new_db_features)
 # if organization.support_plan
 #   json.custom_training_credits organization.support_plan.custom_training_credits
