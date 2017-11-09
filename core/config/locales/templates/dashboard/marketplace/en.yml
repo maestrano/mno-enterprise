@@ -122,3 +122,4 @@ en:
             companies_number: "Number of companies using the application"
             pricing: "Pricing"
             pricing_not_available: "pricing information not available"
+            no_review: "Rating not yet available"

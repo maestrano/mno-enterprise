@@ -65,7 +65,9 @@ module MnoEnterprise::Concerns::Controllers::PagesController
     ts = MnoEnterprise::App.order_by("updated_at.desc").first.try(:updated_at)
     @apps = if ts
       Rails.cache.fetch(['pages/terms/app-list', ts]) do
-        MnoEnterprise::App.order_by("name.ac").reject{|i| i.terms_url.blank?}
+        # Temp solution as translated fields can not be filtered or sorted
+        # MnoEnterprise::App.order_by("name.ac").reject{|i| i.terms_url.blank?}
+        MnoEnterprise::App.all.reject{ |i| i.terms_url.blank? }.sort_by{ |a| a.name.downcase }
       end
     else
       []

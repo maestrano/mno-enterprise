@@ -128,7 +128,7 @@ module MnoEnterprise
       @pdf.repeat :all do
         @pdf.bounding_box([0, @pdf.bounds.top+@format[:header_size]], width: 540, height: @format[:footer_size]) do
           @pdf.float do
-            @pdf.image main_logo_white_bg_path(true), scale: 0.5
+            @pdf.image main_logo_white_bg_path(true), fit: [135, (@format[:footer_size])]
           end
           @pdf.move_down 52
           @pdf.font_size(20) { @pdf.text "#{title} #{@data[:period_month]}", style: :bold, align: :right }
@@ -247,6 +247,7 @@ module MnoEnterprise
       @pdf.move_down 10
       @pdf.indent(5) do
         @pdf.font_size(8) do
+          @pdf.text "<color rgb='999999'> This charge will appear as INV #{@data[:invoice_reference]} on your bank statement.</color>", inline_format: true
           @pdf.text "<color rgb='999999'> Charges are all displayed in #{@data[:invoice_currency_name]} (#{@data[:invoice_currency]})</color>", inline_format: true
           if @data[:invoice_fully_paid]
             @pdf.text "<color rgb='999999'>  No credit card payments required for this invoice</color>", inline_format: true
