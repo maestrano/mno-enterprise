@@ -2,7 +2,14 @@
 
 ## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/master)
 
-[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.2.0...HEAD)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.2.1...HEAD)
+
+## [v3.2.1](https://github.com/maestrano/mno-enterprise/tree/v3.2.1) (2017-11-09)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.2.0...v3.2.1)
+
+**Fixed bugs:**
+
+- \[MNOE-600\] Fix size logo on invoice [\#477](https://github.com/maestrano/mno-enterprise/pull/477) ([hedudelgado](https://github.com/hedudelgado))
 
 ## [v3.2.0](https://github.com/maestrano/mno-enterprise/tree/v3.2.0) (2017-06-14)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.4...v3.2.0)
