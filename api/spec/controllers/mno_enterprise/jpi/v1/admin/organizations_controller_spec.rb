@@ -32,8 +32,8 @@ module MnoEnterprise
         {
           organizations: [
             :uid, :name, :account_frozen, :soa_enabled, :mails, :logo, :latitude, :longitude, :geo_country_code, :geo_state_code,
-            :geo_city, :geo_tz, :geo_currency, :metadata, :industry, :size, :financial_year_end_month, :credit_card, :financial_metrics, :created_at, :external_id,
-            :belong_to_sub_tenant, :belong_to_account_manager
+            :geo_city, :geo_tz, :geo_currency, :metadata, :industry, :size, :financial_year_end_month, :credit_card,
+            :financial_metrics, :created_at, :external_id, :belong_to_sub_tenant, :belong_to_account_manager
           ].join(',')
         }
       end
@@ -50,12 +50,30 @@ module MnoEnterprise
 
       let(:data) { JSON.parse(response.body) }
       let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user'] }
-      let(:expected_params) { { _metadata: { act_as_manager: user.id } } }
+      let(:app_instance_includes) { [:app] }
+      let(:app_instance_filter) do
+        {
+          fulfilled_only: true,
+          'owner.id': organization.id,
+          'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')
+        }
+      end
+
+      let(:selected_fields) do
+        {
+          organizations: [:name, :uid, :soa_enabled, :created_at, :account_frozen, :financial_metrics,
+                          :billing_currency, :external_id, :app_instances, :orga_invites, :users,
+                          :orga_relations, :invoices, :credit_card].join(',')
+        }
+      end
+
+      let(:expected_params) { { _metadata: { act_as_manager: user.id }, fields: selected_fields } }
 
       before { allow(app_instance).to receive(:app).and_return(app) }
       before { allow(organization).to receive(:app_instances).and_return([app_instance]) }
       before { allow(organization).to receive(:invoices).and_return([]) }
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, includes, expected_params) }
+      before { stub_api_v2(:get, "/app_instances", app_instance, app_instance_includes, { filter: app_instance_filter }) }
       before { subject }
 
       it { expect(data['organization']['id']).to eq(organization.id) }
