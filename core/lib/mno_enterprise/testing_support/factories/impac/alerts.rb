@@ -7,9 +7,9 @@ FactoryGirl.define do
       kpi_id '1'
       service 'inapp'
       title 'Test Alert'
-      recipients [{id: 1, email: 'test@maestrano.com'}]
       webhook 'webhook'
       sent false
+      recipients []
       settings {}
     end
   end

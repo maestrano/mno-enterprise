@@ -1,7 +1,6 @@
 json.ignore_nil!
-json.extract! alert, :id, :title, :webhook, :service, :sent
+json.extract! alert, :id, :title, :webhook, :service, :sent, :kpi_id
 json.metadata alert.settings
-json.kpi_id alert.kpi_id
 json.recipients alert.recipients.map do |recipient|
   json.extract! recipient, :id, :email
 end

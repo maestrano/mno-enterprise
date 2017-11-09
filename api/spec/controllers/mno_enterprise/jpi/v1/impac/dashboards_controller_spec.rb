@@ -8,7 +8,7 @@ module MnoEnterprise
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
     before { Rails.cache.clear }
 
-    let(:dashboard_dependencies) { [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts'] }
+    let(:dashboard_dependencies) { [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts', :'kpis.alerts.recipients'] }
 
     # Stub user and user call
     let(:org) { build(:organization, users: [], orga_relations: []) }
@@ -104,7 +104,7 @@ module MnoEnterprise
 
     describe 'GET #show' do
       before do
-        stub_api_v2(:get, "/dashboards/#{dashboard.id}", dashboard, [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts'], { filter: { owner_id: user.id } })
+        stub_api_v2(:get, "/dashboards/#{dashboard.id}", dashboard, dashboard_dependencies, {filter: {owner_id: user.id}})
       end
 
       subject { get :show, id: dashboard.id }

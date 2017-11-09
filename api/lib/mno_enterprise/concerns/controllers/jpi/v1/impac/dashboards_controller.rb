@@ -10,7 +10,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     respond_to :json
   end
 
-  DASHBOARD_DEPENDENCIES = [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts']
+  DASHBOARD_DEPENDENCIES = [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts', :'kpis.alerts.recipients']
 
   #==================================================================
   # Instance methods
@@ -29,9 +29,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   # POST /mnoe/jpi/v1/impac/dashboards
   #   -> POST /api/mnoe/v1/users/1/dashboards
   def create
-    # TODO: dashboards.build breaks as dashboard.organization_ids returns nil, instead of an
-    #       empty array. (see MnoEnterprise::Impac::Dashboard #organizations)
-    # @dashboard = dashboards.build(dashboard_create_params)
     # TODO: enable authorization
     # authorize! :manage_dashboard, @dashboard
     # if @dashboard.save

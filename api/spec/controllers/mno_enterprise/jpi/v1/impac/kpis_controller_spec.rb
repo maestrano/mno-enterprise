@@ -93,12 +93,16 @@ module MnoEnterprise
       context "a dashboard KPI" do
         subject { post :create, dashboard_id: dashboard.id, kpi: kpi_hash }
         let(:created_kpi) { build(:impac_kpi) }
+        let(:alert) { build(:impac_alert, kpi: created_kpi, recipients: [build(:user)]) }
+
         before do
           stub_api_v2(:get, "/dashboards/#{dashboard.id}", dashboard)
           stub_api_v2(:post, "/kpis", created_kpi)
-          stub_api_v2(:post, "/alerts")
+          stub_api_v2(:post, "/alerts", alert)
+          stub_api_v2(:patch, "/alerts/#{alert.id}/update_recipients")
+
           # kpi reload
-          stub_api_v2(:get, "/kpis/#{created_kpi.id}", [created_kpi], [:alerts])
+          stub_api_v2(:get, "/kpis/#{created_kpi.id}", [created_kpi], [:alerts, :'alerts.recipients'])
         end
 
         it_behaves_like 'jpi v1 authorizable action'
@@ -113,7 +117,7 @@ module MnoEnterprise
           let(:kpi_targets) { {evolution: [{max: "20"}]} }
 
           it "creates a kpi inapp alert" do
-            expect(MnoEnterprise::Alert).to receive(:create).once.with(hash_including(service: 'inapp'))
+            expect(MnoEnterprise::Alert).to receive(:create_with_recipients!).once.with(hash_including(service: 'inapp'), array_including(user.id))
             subject
             expect(response).to have_http_status(:ok)
           end
@@ -123,14 +127,17 @@ module MnoEnterprise
       context "a widget KPI" do
         let(:widget) { build(:impac_widget) }
         let(:created_kpi) { build(:impac_kpi) }
+        let(:alert) { build(:impac_alert, kpi: created_kpi, recipients: [build(:user)]) }
+
         subject { post :create, dashboard_id: dashboard.id, kpi: kpi_hash.merge(widget_id: widget.id) }
 
         before do
           stub_api_v2(:get, "/widgets/#{widget.id}", widget)
           stub_api_v2(:post, "/kpis", created_kpi)
-          stub_api_v2(:post, "/alerts")
+          stub_api_v2(:post, "/alerts", alert)
+          stub_api_v2(:patch, "/alerts/#{alert.id}/update_recipients")
           # kpi reload
-          stub_api_v2(:get, "/kpis/#{created_kpi.id}", [created_kpi], [:alerts])
+          stub_api_v2(:get, "/kpis/#{created_kpi.id}", [created_kpi], [:alerts, :'alerts.recipients'])
         end
 
         it_behaves_like 'jpi v1 authorizable action'
@@ -147,8 +154,8 @@ module MnoEnterprise
           let(:kpi_targets) { { evolution: [{max: "20"}] } }
 
           it "creates kpi alerts" do
-            expect(MnoEnterprise::Alert).to receive(:create).once.with(hash_including(service: 'inapp'))
-            expect(MnoEnterprise::Alert).to receive(:create).once.with(hash_including(service: 'email'))
+            expect(MnoEnterprise::Alert).to receive(:create_with_recipients!).once.with(hash_including(service: 'inapp'), array_including(user.id))
+            expect(MnoEnterprise::Alert).to receive(:create_with_recipients!).once.with(hash_including(service: 'email'), array_including(user.id))
 
             subject
             expect(response).to have_http_status(:ok)
@@ -168,9 +175,11 @@ module MnoEnterprise
         context 'target set for the first time' do
           let(:kpi_targets) { nil }
           let(:params) { {targets: {evolution: [{max: '20'}]}} }
+          let(:alert) { build(:impac_alert) }
 
           before do
-            stub_api_v2(:post, '/alerts')
+            stub_api_v2(:post, '/alerts', alert)
+            stub_api_v2(:patch, "/alerts/#{alert.id}/update_recipients", alert)
           end
 
           it 'creates an alert' do
@@ -236,9 +245,9 @@ module MnoEnterprise
       before {
         kpi.alerts << alert
         updated_kpi.alerts << alert
-        stub_api_v2(:get, "/kpis/#{kpi.id}", kpi, %i(dashboard widget alerts))
+        stub_api_v2(:get, "/kpis/#{kpi.id}", kpi, %i(dashboard widget alerts alerts.recipients))
         # reload of the kpi
-        stub_api_v2(:get, "/kpis/#{kpi.id}", updated_kpi, %i(dashboard alerts))
+        stub_api_v2(:get, "/kpis/#{kpi.id}", updated_kpi, %i(dashboard alerts alerts.recipients))
         stub_api_v2(:patch, "/kpis/#{kpi.id}", updated_kpi)
         stub_api_v2(:patch, "/alerts/#{alert.id}", alert)
       }
@@ -261,7 +270,7 @@ module MnoEnterprise
       subject { delete :destroy, id: kpi.id }
 
       before {
-        stub_api_v2(:get, "/kpis/#{kpi.id}", kpi, %i(dashboard widget alerts))
+        stub_api_v2(:get, "/kpis/#{kpi.id}", kpi, %i(dashboard widget alerts alerts.recipients))
         stub_api_v2(:delete, "/kpis/#{kpi.id}")
       }
 
