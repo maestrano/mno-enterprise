@@ -7,16 +7,23 @@ module MnoEnterprise
                        :geo_country_code, :geo_state_code, :geo_city,
                        :geo_tz, :geo_currency, :metadata, :industry, :size,
                        :financial_year_end_month, :credit_card,
-                       :financial_metrics, :created_at, :external_id]
+                       :financial_metrics, :created_at, :external_id, :belong_to_sub_tenant, :belong_to_account_manager]
+
     # GET /mnoe/jpi/v1/admin/organizations
     def index
       if params[:terms]
         # Search mode
         @organizations = []
         JSON.parse(params[:terms]).map do |t|
-          @organizations = @organizations | MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
-                                              .select(INCLUDED_FIELDS)
-                                              .where(Hash[*t])
+
+          query = MnoEnterprise::Organization
+                    .apply_query_params(params.except(:terms))
+                    .select(INCLUDED_FIELDS)
+                    .with_params(_metadata: { act_as_manager: current_user.id })
+                    .where(Hash[*t])
+          query = query.with_params(sub_tenant_id: params[:sub_tenant_id]) if params[:sub_tenant_id]
+          query = query.with_params(account_manager_id: params[:account_manager_id]) if params[:account_manager_id]
+          @organizations = @organizations | query
         end
         response.headers['X-Total-Count'] = @organizations.count
       else
@@ -26,7 +33,8 @@ module MnoEnterprise
                   .apply_query_params(params)
                   .with_params(_metadata: { act_as_manager: current_user.id })
                   .select(INCLUDED_FIELDS)
-
+        query = query.with_params(sub_tenant_id: params[:sub_tenant_id]) if params[:sub_tenant_id]
+        query = query.with_params(account_manager_id: params[:account_manager_id]) if params[:account_manager_id]
         @organizations = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
       end
@@ -82,9 +90,9 @@ module MnoEnterprise
       return render_not_found('Organization') unless @organization
 
       # Update organization
+      update_app_list
       @organization.update!(organization_update_params)
 
-      update_app_list
       @organization = @organization.load_required(*DEPENDENCIES)
       @organization_active_apps = @organization.app_instances.select(&:active?)
 

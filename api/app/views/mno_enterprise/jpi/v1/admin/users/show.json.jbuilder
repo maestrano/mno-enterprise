@@ -4,8 +4,4 @@ json.user do
   json.organizations @user_organizations do |org|
     json.extract! org, :id, :uid, :name, :account_frozen, :created_at
   end
-
-  json.clients @user_clients do |org|
-    json.extract! org, :id, :uid, :name, :account_frozen, :created_at
-  end
 end

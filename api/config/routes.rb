@@ -220,6 +220,9 @@ MnoEnterprise::Engine.routes.draw do
             post :signup_email
           end
           resource :user_access_requests, only: [:create]
+          member do
+            patch :update_clients
+          end
         end
 
         resources :products, only: [:index, :show]
@@ -266,7 +269,12 @@ MnoEnterprise::Engine.routes.draw do
           end
         end
 
-        resources :sub_tenants, only: [:index, :show, :destroy, :update, :create]
+        resources :sub_tenants, only: [:index, :show, :destroy, :update, :create] do
+          member do
+            patch :update_clients
+            patch :update_account_managers
+          end
+        end
 
         resources :tenant_invoices, only: [:index, :show]
 

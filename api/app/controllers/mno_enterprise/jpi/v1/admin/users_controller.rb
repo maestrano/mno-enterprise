@@ -7,9 +7,11 @@ module MnoEnterprise
         # Search mode
         @users = []
         JSON.parse(params[:terms]).map do |t|
-          @users = @users | MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id })
-                                               .includes(:user_access_requests)
-                                               .where(Hash[*t])
+          @users = @users | MnoEnterprise::User
+                              .apply_query_params(params.except(:terms))
+                              .with_params(_metadata: { act_as_manager: current_user.id })
+                              .includes(:user_access_requests, :sub_tenant)
+                              .where(Hash[*t])
         end
 
         # Ensure that no duplicates are returned as a result of multiple terms being applied to search query
@@ -22,7 +24,7 @@ module MnoEnterprise
         query = MnoEnterprise::User
           .apply_query_params(params)
           .with_params(_metadata: { act_as_manager: current_user.id })
-          .includes(:user_access_requests)
+          .includes(:user_access_requests, :sub_tenant)
         @users = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
       end
@@ -31,18 +33,19 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/admin/users/1
     def show
       @user = MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id })
-                                 .includes(:orga_relations, :organizations, :user_access_requests, :clients)
+                                 .includes(:orga_relations, :organizations, :user_access_requests, :sub_tenant)
                                  .find(params[:id])
                                  .first
 
       @user_organizations = @user.organizations
-      @user_clients = @user.clients
     end
 
     # POST /mnoe/jpi/v1/admin/users
     def create
-      @user = MnoEnterprise::User.create!(user_create_params)
-      @user = @user.load_required(:clients)
+      @user = MnoEnterprise::User.new(user_create_params)
+      update_sub_tenant(@user)
+      @user.save!
+      @user = @user.load_required(:sub_tenant)
       render :show
     end
 
@@ -58,12 +61,20 @@ module MnoEnterprise
       # (the current_user may not have access to this record)
       @user = MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id }).find(params[:id]).first
       return render_not_found('User') unless @user
+      @user.attributes = user_update_params
+      update_sub_tenant(@user)
+      @user.save!
+      @user = @user.load_required(:sub_tenant)
+      render :show
+    end
 
-      # Update user
-      @user.update!(user_update_params)
-
-      @user = @user.load_required(:clients)
-      @user_clients = @user.clients
+    # PATCH /mnoe/jpi/v1/admin/organizations/1/update_clients
+    def update_clients
+      @user = MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id }).find(params[:id]).first
+      return render_not_found('User') unless @user
+      attributes = params.require(:user).permit(add: [], remove: [])
+      @user.update_clients!({data: {attributes: attributes}})
+      @user = @user.load_required(:sub_tenant)
       render :show
     end
 
@@ -107,25 +118,26 @@ module MnoEnterprise
     end
 
     def user_update_params
-      attrs = [:name, :surname, :email, :phone, client_ids: []]
+      attrs = [:name, :surname, :email, :phone]
       # TODO: replace with authorize/ability
       if current_user.admin_role == 'admin'
         attrs << :admin_role
-        attrs << :mnoe_sub_tenant_id
       end
-      user_param = params.require(:user)
-      updated_params = user_param.permit(attrs)
-      updated_params[:sub_tenant_id] = updated_params.delete(:mnoe_sub_tenant_id)
-      updated_params[:client_ids] ||= [] if user_param.has_key?(:client_ids)
-      # if the user is updated to admin or division admin, his clients are cleared
-      if updated_params[:admin_role] && updated_params[:admin_role] != 'staff'
-        updated_params[:client_ids] = []
-      end
-      updated_params
+      params.require(:user).permit(attrs)
     end
 
     def user_create_params
       user_update_params.merge(password: Devise.friendly_token.first(12))
+    end
+
+    def update_sub_tenant(user)
+      if current_user.admin_role == 'admin' && params.require(:user).has_key?(:sub_tenant_id)
+        if params.require(:user)[:sub_tenant_id]
+          user.relationships.sub_tenant = MnoEnterprise::SubTenant.new(id: params.require(:user)[:sub_tenant_id])
+        else
+          user.relationships.sub_tenant = nil
+        end
+      end
     end
   end
 end
