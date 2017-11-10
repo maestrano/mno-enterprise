@@ -28,5 +28,9 @@ module MnoEnterprise
     def engine_image_path(file_name)
       "#{MnoEnterprise::Engine.root}#{IMAGES_LOCATION}#{file_name}"
     end
+
+    def fit_image
+      'max-width: 150px; max-height: 150px;'
+    end
   end
 end

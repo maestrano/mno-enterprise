@@ -6,6 +6,7 @@ FactoryGirl.define do
       sequence(:name) { |n| "Random Dashboard #{n}" }
 
       owner_type 'User'
+      dashboard_type 'dashboard'
 
       widgets []
       widgets_order []

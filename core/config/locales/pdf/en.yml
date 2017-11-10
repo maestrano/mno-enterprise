@@ -5,6 +5,7 @@ en:
         account_situation: 'Account Situation'
         account_statement: 'Account Statement'
         charging_details:
+          bank_statement: 'This charge will appear as INV %{invoice_reference} on your bank statement.'
           currency: 'Charges are all displayed in %{currency_name} (%{currency})'
           no_payments: 'No credit card payments required for this invoice'
           with_payment: 'Your designated credit card will be charged on %{charge_date} at midnight UTC by Maestrano Pty Ltd as service provider to the %{platform_name} platform.'

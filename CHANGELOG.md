@@ -1,7 +1,7 @@
 # Change Log
 
 ## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/4.0)
-[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.1...4.0)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.2...4.0)
 
 - Drop support for Ruby < 2.3
 - Remove deprecated marketplace_listing
@@ -17,6 +17,34 @@ The settings have been refactored in v4 to make them more consistent.
 * `payment.disabled` is now `payment.enabled`
 * `pricing` and `review` configuration are now nested under `marketplace`
 * `devise.registration` is now `devise.registration`
+
+## [v3.3.2](https://github.com/maestrano/mno-enterprise/tree/v3.3.2) (2017-11-09)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.1...v3.3.2)
+
+**Implemented enhancements:**
+
+- \[MNOE-682\] Add Intercom to Admin Panel [\#513](https://github.com/maestrano/mno-enterprise/pull/513) ([ouranos](https://github.com/ouranos))
+- \[PF-183\] Invoice template: add bank statement mention [\#474](https://github.com/maestrano/mno-enterprise/pull/474) ([enizor](https://github.com/enizor))
+- Admin build: inject impac-angular dependency [\#412](https://github.com/maestrano/mno-enterprise/pull/412) ([ouranos](https://github.com/ouranos))
+- \[MNOE-570\] Storing the time of agreement to TOS [\#407](https://github.com/maestrano/mno-enterprise/pull/407) ([enizor](https://github.com/enizor))
+- Invoice PDF - Clarify payment processor [\#403](https://github.com/maestrano/mno-enterprise/pull/403) ([alachaum](https://github.com/alachaum))
+- \[PF-164\] Explain roles in invite modal [\#398](https://github.com/maestrano/mno-enterprise/pull/398) ([alexnoox](https://github.com/alexnoox))
+- Expose devise config in the frontend [\#384](https://github.com/maestrano/mno-enterprise/pull/384) ([ouranos](https://github.com/ouranos))
+- Expose impersonator admin\_role [\#383](https://github.com/maestrano/mno-enterprise/pull/383) ([ouranos](https://github.com/ouranos))
+- \[MNOE-447\] Dashboard templates management [\#312](https://github.com/maestrano/mno-enterprise/pull/312) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- \[MNOE-699\]\[MNOE-658\] Disallow Staff impersonation [\#545](https://github.com/maestrano/mno-enterprise/pull/545) ([ouranos](https://github.com/ouranos))
+- Fix terms of use not being displayed [\#542](https://github.com/maestrano/mno-enterprise/pull/542) ([hedudelgado](https://github.com/hedudelgado))
+- \[MNOE-563\]\[MNOE-677\] Add main\_logo\_white\_bg on notifications and fix size [\#536](https://github.com/maestrano/mno-enterprise/pull/536) ([hedudelgado](https://github.com/hedudelgado))
+- Authorize staff to manage app instances [\#514](https://github.com/maestrano/mno-enterprise/pull/514) ([fgourichon](https://github.com/fgourichon))
+- Fixes - Dashboard templates [\#475](https://github.com/maestrano/mno-enterprise/pull/475) ([cesar-tonnoir](https://github.com/cesar-tonnoir))
+- \[MNOE-587\]\[Bug\] Nan average rating [\#451](https://github.com/maestrano/mno-enterprise/pull/451) ([adamaziz15](https://github.com/adamaziz15))
+- Fix intermittent 500 errors on dashboard templates controller [\#427](https://github.com/maestrano/mno-enterprise/pull/427) ([cesar-tonnoir](https://github.com/cesar-tonnoir))
+- \[MNOE-643\] Add white logo on App loading page [\#419](https://github.com/maestrano/mno-enterprise/pull/419) ([ouranos](https://github.com/ouranos))
+- Fix marketplace cache when no apps [\#406](https://github.com/maestrano/mno-enterprise/pull/406) ([ouranos](https://github.com/ouranos))
+- \[MNOE-558\] Filter out rejected comments from feedbacks [\#385](https://github.com/maestrano/mno-enterprise/pull/385) ([adamaziz15](https://github.com/adamaziz15))
 
 ## [v3.3.1](https://github.com/maestrano/mno-enterprise/tree/v3.3.1) (2017-07-24)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.0...v3.3.1)
@@ -51,7 +79,7 @@ See [UPGRADING](UPGRADING.md#migrating-from-v32-to-v33)
 **Summary:**
 
 * Onboarding wizard
-* Audit Log in the dashboard and admin panel 
+* Audit Log in the dashboard and admin panel
 * Better app generation
 * Extracted Admin Panel to a separate project (feature flags & style customisation)
 * Improved design of static pages
@@ -137,6 +165,12 @@ See [UPGRADING](UPGRADING.md#migrating-from-v32-to-v33)
 - Fix locale [\#296](https://github.com/maestrano/mno-enterprise/pull/296) ([hedudelgado](https://github.com/hedudelgado))
 - Add URL\_CONFIG [\#290](https://github.com/maestrano/mno-enterprise/pull/290) ([fgourichon](https://github.com/fgourichon))
 
+## [v3.2.1](https://github.com/maestrano/mno-enterprise/tree/v3.2.1) (2017-11-09)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.2.0...v3.2.1)
+
+**Fixed bugs:**
+
+- \[MNOE-600\] Fix size logo on invoice [\#477](https://github.com/maestrano/mno-enterprise/pull/477) ([hedudelgado](https://github.com/hedudelgado))
 
 ## [v3.2.0](https://github.com/maestrano/mno-enterprise/tree/v3.2.0) (2017-06-14)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.1.4...v3.2.0)

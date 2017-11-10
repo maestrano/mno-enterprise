@@ -30,10 +30,11 @@ module MnoEnterprise
       self.name
     end
 
-    # Return all the organizations linked to this dashboard and to which
-    # the user has access
+    # Return all the organizations linked to this dashboard and to which the user has access
+    # If the dashboard is a template, return all the current user's organization
     def organizations(org_list = nil)
       if org_list
+        return org_list if dashboard_type == 'template'
         org_list.to_a.select { |e| self.organization_ids.include?(e.uid) }
       else
         MnoEnterprise::Organization.where(uid: self.organization_ids).to_a

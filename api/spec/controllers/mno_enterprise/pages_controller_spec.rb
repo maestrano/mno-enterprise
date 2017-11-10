@@ -64,16 +64,24 @@ module MnoEnterprise
     end
 
     describe 'GET #terms' do
-      let(:app) { build(:app) }
-      before {
-        stub_api_v2(:get, '/apps', [app], [], {fields: {apps: 'updated_at'}, page: {number: 1, size: 1}, sort: '-updated_at'})
-        stub_api_v2(:get, '/apps', [app], [])
-      }
+      let(:app1) { build(:app, name: 'b') }
+      let(:app2) { build(:app, name:'a') }
+      let(:app3) { build(:app, name: 'c') }
+
+      before do
+        Rails.cache.clear
+        stub_api_v2(:get, '/apps', [app1], [], {fields: {apps: 'updated_at'}, page: {number: 1, size: 1}, sort: '-updated_at'})
+        stub_api_v2(:get, '/apps', [app1, app2, app3], [])
+      end
 
       subject { get :terms }
       before { subject }
-      it { expect(response).to be_success }
-    end
 
+      it { expect(response).to be_success }
+
+      it 'returns the apps in the correct alphabetical order' do
+        expect(assigns(:apps).map(&:name)).to eq(%w(a b c))
+      end
+    end
   end
 end

@@ -3,6 +3,8 @@ require 'action_mailer/railtie'
 module MnoEnterprise
   # Base class (instantiable) for SMTP adapter
   class SmtpClient < ActionMailer::Base
+    helper MnoEnterprise::ImageHelper
+    
     # Send SMTP template - terminal mailing part
     def deliver(template, from, to, vars={}, opts={})
       @info = vars
