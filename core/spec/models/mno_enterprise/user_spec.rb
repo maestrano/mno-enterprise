@@ -322,31 +322,8 @@ module MnoEnterprise
     describe 'Devise' do
       subject { MnoEnterprise::User.new }
       describe 'registerable?' do
-        context 'default' do
-          before { reload_user }
-          it 'is registerable' do
+        it 'is registerable' do
             expect(MnoEnterprise::User.ancestors).to include(Devise::Models::Registerable)
-          end
-        end
-
-        context 'enabled' do
-          before do
-            Settings.merge!(dashboard: { registration: { disabled: true } })
-            reload_user
-          end
-          it 'is registerable' do
-            expect(MnoEnterprise::User.ancestors).to include(Devise::Models::Registerable)
-          end
-        end
-
-        context 'disabled' do
-          before do
-            Settings.merge!(dashboard: { registration: { enabled: false } })
-            reload_user
-          end
-          it 'is not registerable' do
-            expect(MnoEnterprise::User.ancestors).not_to include(Devise::Models::Registerable)
-          end
         end
       end
     end
