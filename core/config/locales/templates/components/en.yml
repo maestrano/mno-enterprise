@@ -72,3 +72,54 @@ en:
 
         language_selectbox:
           language: 'Language'
+
+        mnoe-tasks:
+          compose_button_text: 'Compose'
+          menus:
+            inbox: 'Inbox'
+            sent: 'Sent'
+            draft: 'Draft'
+          tasks_filters:
+            all_tasks_and_msgs: 'All tasks & messages'
+            all_tasks: 'All tasks'
+            all_messages: 'All messages'
+            due_tasks: 'Due tasks'
+            completed_tasks: 'Completed tasks'
+          tasks:
+            column_label:
+              user:
+                name: 'Name'
+                surname: 'Surname'
+              title: 'Title'
+              message: 'Message'
+              received: 'Received'
+              sent: 'Sent'
+              read: 'Read'
+              updated_at: 'Updated At'
+              due_date: 'Due date'
+              done: 'Done'
+          toastr_error:
+            get_tasks: 'An error occurred while retrieving your Messages'
+            create_task: 'An error occurred while creating your Message'
+            update_task: 'An error occurred while updating your Message'
+        notifications:
+          reminder:
+            title: 'Task Reminder'
+            message:
+              title: 'Title: {task_title}'
+              from: 'From: {user_name} {user_surname}'
+              due: 'Due date: {due_date}'
+              details: 'See your due tasks for more details'
+          due:
+            title: 'Task due {due_date}'
+            title_today: 'Task is due today'
+            message:
+              title: 'Title: {task_title}'
+              from: 'From: {user_name} {user_surname}'
+              due: 'Due date: {due_date}'
+              details: 'See your due tasks for more details'
+          completed:
+            title: 'Task completed'
+            message:
+              has_completed: '{user_name} {user_surname} has completed the task: {task_title}.'
+              details: 'See your messages for more details'

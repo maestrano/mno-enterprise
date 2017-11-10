@@ -57,6 +57,9 @@ user_management:
 devise:
   registration:
     disabled: false
+# Enable Tasks feature
+tasks:
+  enabled: false
 
 # Admin Panel Config
 admin_panel:
@@ -81,4 +84,5 @@ admin_panel:
     enabled: true
   sub_tenant:
     enabled: false
-
+  tasks:
+    enabled: false
