@@ -8,7 +8,12 @@ module MnoEnterprise
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
     before { Rails.cache.clear }
 
-    let(:dashboard_dependencies) { [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts', :'kpis.alerts.recipients'] }
+    let(:dashboard_dependencies) { [:owner, :widgets, :'widgets.kpis', :kpis, :'kpis.alerts', :'kpis.alerts.recipients'] }
+
+    # Stub ability
+    # TODO: Unstub ability, will be fixed in https://github.com/maestrano/mno-enterprise/pull/560
+    let!(:ability) { stub_ability }
+    before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
 
     # Stub user and user call
     let(:org) { build(:organization, users: [], orga_relations: []) }
@@ -29,7 +34,8 @@ module MnoEnterprise
             currency: 'EUR',
             settings: metadata,
             widgets: [widget],
-            kpis: [d_kpi]
+            kpis: [d_kpi],
+            owner: user
       )
     end
 
@@ -91,7 +97,7 @@ module MnoEnterprise
       subject { get :index }
 
       before do
-        stub_api_v2(:get, "/dashboards", [dashboard], dashboard_dependencies, { filter: { owner_id: user.id } })
+        stub_api_v2(:get, "/dashboards", [dashboard], dashboard_dependencies, { filter: { 'owner.id': user.id, 'owner.type': 'User' } })
       end
 
       it_behaves_like "jpi v1 protected action"
@@ -104,7 +110,7 @@ module MnoEnterprise
 
     describe 'GET #show' do
       before do
-        stub_api_v2(:get, "/dashboards/#{dashboard.id}", dashboard, dashboard_dependencies, {filter: {owner_id: user.id}})
+        stub_api_v2(:get, "/dashboards/#{dashboard.id}", dashboard, dashboard_dependencies)
       end
 
       subject { get :show, id: dashboard.id }
@@ -154,7 +160,6 @@ module MnoEnterprise
           expect(errors[:errors][:message]).to eq('Internal server error')
         end
       end
-
     end
 
     describe 'PUT #update' do
@@ -162,10 +167,8 @@ module MnoEnterprise
 
       let!(:stub) { stub_api_v2(:patch, "/dashboards/#{dashboard.id}", [dashboard]) }
       before do
-        # TODO: APIv2 Improve contrroller code to do less requests?
+        stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], [:owner])
         stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], dashboard_dependencies)
-        stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], [], filter: { owner_id: user.id })
-        stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], dashboard_dependencies, filter: { owner_id: user.id })
       end
       it_behaves_like 'jpi v1 protected action'
 
@@ -194,7 +197,7 @@ module MnoEnterprise
       subject { delete :destroy, id: dashboard.id }
       let!(:stub) { stub_api_v2(:delete, "/dashboards/#{dashboard.id}") }
       before do
-        stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], [], filter: { owner_id: user.id })
+        stub_api_v2(:get, "/dashboards/#{dashboard.id}", [dashboard], [:owner])
       end
       it_behaves_like 'jpi v1 protected action'
 

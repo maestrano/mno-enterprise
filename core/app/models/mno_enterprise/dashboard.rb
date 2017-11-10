@@ -5,6 +5,8 @@ module MnoEnterprise
     property :updated_at, type: :time
     property :owner_id, type: :string
 
+    has_one :owner
+
 	  # TODO: APIv2 - Is this needed?
 	  # default_scope -> { where(dashboard_type: 'dashboard') }
 
