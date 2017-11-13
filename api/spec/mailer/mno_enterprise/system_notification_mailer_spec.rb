@@ -181,9 +181,11 @@ module MnoEnterprise
 
     describe 'send_invoice' do
       before do
+        Timecop.freeze
         stub_api_v2(:get, "/users/#{user.id}", user, [], {fields: {users: 'email,name'}})
         stub_api_v2(:get, "/invoices/#{invoice.id}", invoice)
       end
+      after { Timecop.return }
       let(:invoice) { build(:invoice) }
       let(:rendered_invoice) { MnoEnterprise::InvoicePdf.new(invoice).render }
       it 'sends the correct email' do
