@@ -15,7 +15,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::AppsController
   #==================================================================
   # GET /mnoe/jpi/v1/admin/apps
   def index
-    query = MnoEnterprise::App.apply_query_params(params).where(scope: 'all').select(*FIELDS)
+    query = MnoEnterprise::App.apply_query_params(params).where(scope: 'all', active: true).select(*FIELDS)
     @apps = MnoEnterprise::App.fetch_all(query)
     response.headers['X-Total-Count'] = query.meta.record_count
   end
