@@ -31,7 +31,7 @@ module DeviseExtension
 
       # redirect for password update with alert message
       def redirect_for_password_change(scope)
-        redirect_to change_password_required_path_for(scope), :alert => 'Your password is expired. Please renew your password.'
+        redirect_to change_password_required_path_for(scope), alert: 'Your password has expired. Please renew your password.'
       end
 
       # path for change password

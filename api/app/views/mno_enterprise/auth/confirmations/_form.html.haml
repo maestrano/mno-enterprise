@@ -30,7 +30,7 @@
 
       - else
         .input-group
-          = f.password_field :password, :placeholder => "*Choose Password", 'ng-model' => 'user.password', class: 'form-control', 'ng-minlength' => 6, 'mno-password-strength' => true, "password-score" => 'user.$pwdScore', :required => true
+          = f.password_field :password, :placeholder => '*Choose Password', :class => 'form-control', :required => true, 'ng-model' => 'user.password', 'ng-minlength' => Devise.password_length.min, 'mno-password-strength' => true, 'password-score' => 'user.$pwdScore'
           %span.input-group-addon.classic.pw-strength-indicator{'ng-class' => 'user.$pwdScore.class' }
             {{ user.$pwdScore.value }}
 
