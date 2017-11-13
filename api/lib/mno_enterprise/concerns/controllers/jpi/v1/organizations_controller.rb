@@ -165,6 +165,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
   protected
   def member
+    @member ||= organization.users.find { |u| u.id == params.require(:member).permit(:id) }
     @member ||= begin
       email = params.require(:member).require(:email)
       # Organizations are already loaded with all users
