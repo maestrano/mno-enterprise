@@ -52,12 +52,17 @@ module MnoEnterprise
       validates_with JsonApiClientExtension::Validations::RemoteUniquenessValidator, _merge_attributes(attr_names)
     end
 
-    devise_modules = [
-      :remote_authenticatable, :recoverable, :rememberable, :registerable,
-      :trackable, :validatable, :lockable, :confirmable, :timeoutable, :password_expirable,
-      :omniauthable
-    ]
-    devise(*devise_modules, omniauth_providers: Devise.omniauth_providers)
+    # Configure devise in a method so it can be done one the settings have loaded
+    def self.configure_devise
+      devise_modules = [
+        :remote_authenticatable, :recoverable, :rememberable,
+        :trackable, :validatable, :lockable, :confirmable, :timeoutable, :password_expirable,
+        :omniauthable
+      ]
+      devise_modules << :registerable if Settings&.dashboard&.registration&.enabled
+      devise(*devise_modules, omniauth_providers: Devise.omniauth_providers)
+    end
+    configure_devise
 
     #================================
     # Validation
