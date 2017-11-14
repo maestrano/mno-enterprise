@@ -14,7 +14,7 @@ module Devise
 
 
         # mapping.to is a wrapper over the resource model
-        resource = mapping.to.authenticate(auth_params)
+        resource = mapping.to.new.remote_authentication(auth_params)
 
         return fail! unless resource
 
@@ -25,10 +25,9 @@ module Devise
         #
         # If the block returns true the resource will be loged in
         # If the block returns false the authentication will fail!
-        if  validate(resource){ resource.password_valid }
+        if validate(resource) { resource.password_valid }
           success!(resource)
         end
-
       end
     end
   end
@@ -37,10 +36,10 @@ end
 Warden::Strategies.add :remote_authenticatable, Devise::Strategies::RemoteAuthenticatable
 Devise.add_module :remote_authenticatable, strategy: true, controller: :sessions, route: :session
 
-Warden::Manager.after_authentication do |user,auth,opts|
+Warden::Manager.after_authentication do |user, auth, opts|
   Rails.cache.delete(['user', user.to_key]) if user
 end
 
-Warden::Manager.before_logout do |user,auth,opts|
+Warden::Manager.before_logout do |user, auth, opts|
   Rails.cache.delete(['user', user.to_key]) if user
 end
