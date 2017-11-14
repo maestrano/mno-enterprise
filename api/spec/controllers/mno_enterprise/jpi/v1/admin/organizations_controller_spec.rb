@@ -2,7 +2,9 @@ require 'rails_helper'
 
 module MnoEnterprise
   describe Jpi::V1::Admin::OrganizationsController, type: :controller do
+    include MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
+    include MnoEnterprise::TestingSupport::SharedExamples::OrganizationSharedExamples
 
     render_views
     routes { MnoEnterprise::Engine.routes }
@@ -11,10 +13,18 @@ module MnoEnterprise
     #===============================================
     # Assignments
     #===============================================
-    let(:user) { build(:user, :admin) }
+    let!(:organization) { build(:organization, orga_invites: [], users: [], orga_relations: []) }
+    let(:role) { 'Admin' }
+    let!(:user) {
+      u = build(:user, :admin, organizations: [organization], orga_relations: [orga_relation], dashboards: [])
+      orga_relation.user_id = u.id
+      u
+    }
+    let!(:orga_relation) { build(:orga_relation, organization_id: organization.id, role: role) }
+    let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices)) }
+    # Stub user and user call
     let!(:current_user_stub) { stub_user(user) }
 
-    let(:organization) { build(:organization) }
     let(:arrears_situation) { build(:arrears_situation) }
     let(:app) { build(:app) }
     let(:app_instance) { build(:app_instance, organization: organization) }
@@ -151,6 +161,10 @@ module MnoEnterprise
         before { subject }
         it { expect(data['user']['id']).to eq(invited_user.id) }
       end
+    end
+
+    describe 'update and remove member' do
+      it_behaves_like 'organization update and remove'
     end
 
     describe 'PUT #freeze' do

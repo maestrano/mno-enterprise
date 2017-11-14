@@ -134,6 +134,29 @@ module MnoEnterprise
       @user = user.confirmed? ? invite : user
     end
 
+    # PUT /mnoe/jpi/v1/admin/organizations/:id/update_member
+    def update_member
+      role = params.require(:member).require(:role)
+      @organization = MnoEnterprise::Organization.find_one(params[:id], :users, :orga_invites, :orga_relations)
+      user = requested_user_in_org(@organization)
+      @organization.update_user_role(current_user, user, role)
+
+      render 'members'
+    end
+
+    # PUT /mnoe/jpi/v1/admin/organizations/:id/remove_user
+    def remove_member
+      @organization = MnoEnterprise::Organization.find_one(params[:id], :users, :orga_invites, :orga_relations)
+      user = requested_user_in_org(@organization)
+      if user.is_a?(MnoEnterprise::User)
+        @organization.remove_user!(user)
+      elsif user.is_a?(MnoEnterprise::OrgaInvite)
+        user.decline!
+      end
+
+      render 'members'
+    end
+
     # PUT /mnoe/jpi/v1/admin/organizations/1/freeze
     def freeze
       @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
@@ -186,6 +209,15 @@ module MnoEnterprise
 
     def user_params
       params.require(:user).permit(:email, :name, :surname, :phone)
+    end
+
+    def requested_user_in_org(organization)
+      user = organization.users.find { |u| u.id == params.require(:member)[:id] }
+      user ||= begin
+        email = params.require(:member).require(:email)
+        organization.users.find { |u| u.email == email } ||
+          organization.orga_invites.find { |u| u.status == 'pending' && u.user_email == email }
+      end
     end
 
     # Create an unconfirmed user and skip the confirmation notification
