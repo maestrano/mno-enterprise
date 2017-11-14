@@ -6,6 +6,9 @@ module MnoEnterprise
     # See core/config/initializers/00_tenant_config_schema.rb for the configuration
     # JSON schema.
     # This file *MUST* be updated any time a new feature flag is added
+
+    # Cache key for the minified configuration
+    # See ConfigController
     CACHE_KEY = 'mnoe/tenant-config/minified'
 
     # == Extensions ===========================================================
@@ -54,6 +57,11 @@ module MnoEnterprise
       #   f.write(Settings.to_hash.deep_stringify_keys.to_yaml)
       # end
 
+      clear_cache
+    end
+
+    # Clear the cached config
+    def self.clear_cache
       Rails.cache.delete(CACHE_KEY)
     end
 
@@ -77,6 +85,8 @@ module MnoEnterprise
       end
       Rails.application.config.action_mailer.smtp_settings = Settings.system.smtp.to_hash
       ActionMailer::Base.smtp_settings = Settings.system.smtp.to_hash
+
+      MnoEnterprise::User.configure_devise
     end
 
     # Update the JSON schema with values available after initialization

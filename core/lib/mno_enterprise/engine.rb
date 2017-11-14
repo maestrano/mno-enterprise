@@ -74,12 +74,18 @@ module MnoEnterprise
       MnoEnterprise::SystemManager.adapter ||= MnoEnterprise.platform_adapter
 
       MnoEnterprise.configure_api
+
+      unless Rails.env.test? || File.basename($0) == "rake"
+        Rails.logger.debug "Settings loaded -> Fetching Tenant Config"
+        MnoEnterprise::TenantConfig.load_config!
+      end
     end
 
     config.after_initialize do
       unless Rails.env.test? || File.basename($0) == "rake"
-        Rails.logger.debug "Settings loaded -> Fetching Tenant Config"
-        MnoEnterprise::TenantConfig.load_config!
+        Rails.logger.debug "Initialized -> Updating locales"
+        MnoEnterprise::TenantConfig.update_locales_list!
+        MnoEnterprise::TenantConfig.clear_cache
       end
     end
   end
