@@ -1,0 +1,20 @@
+@all_apps ||= MnoEnterprise::App.all.to_a
+
+json.id team.id
+json.name team.name
+
+json.users do
+  json.array! team.users do |user|
+    json.extract! user, :id, :name, :surname, :email
+    json.role @parent_organization.role(user)
+  end
+end
+
+json.app_instances do
+  json.array! team.app_instances do |app_instance|
+    json.extract! app_instance, :id, :name
+    if app = @all_apps.find { |e| e.id == app_instance.app_id }
+      json.logo app.logo.to_s
+    end
+  end
+end
