@@ -3,6 +3,18 @@
 ## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/master)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.2...HEAD)
 
+**Dependencies:**
+
+Requires MnoHub containing [maestrano/maestrano-hub#269](https://github.com/maestrano/maestrano-hub/pull/269) (eg: v2.0.0-rc7+)
+
+**Implemented enhancements:**
+
+- \[MNOE-209\]\[MNOE-788\] Improve Devise configuration [\#578](https://github.com/maestrano/mno-enterprise/pull/578) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- \[MNOE-209\] Unlimited failed attempts of login [\#162](https://github.com/maestrano/mno-enterprise/pull/162) ([x4d3](https://github.com/x4d3))
+
 ## [v3.3.2](https://github.com/maestrano/mno-enterprise/tree/v3.3.2) (2017-11-09)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.1...v3.3.2)
 

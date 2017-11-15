@@ -3,30 +3,32 @@
     .row
       .login-box-wrapper
         .login-box-title
-          %h2 You password has expired. Please renew it.
+          %h2 Password Expired
         .login-box
           .brand-logo
 
-            = form_for(resource, as: resource_name, url: mno_enterprise.user_password_expired_path, :html => { method: :put, class: 'form-horizontal' }) do |f|
-              = devise_error_messages!
+          = form_for(resource, as: resource_name, url: mno_enterprise.user_password_expired_path, :html => { method: :put, class: 'form-horizontal' }) do |f|
+            = devise_error_messages!
 
-              .row
-                .col-sm-6
-                  = f.label :current_password, "Current password"
-                  = f.password_field :current_password, :class => 'form-control'
+            .row
+              .col-sm-12
+                = f.password_field :current_password, placeholder: "*Current password", required: true, :class => 'form-control'
 
-              .row
-                .col-sm-6
-                  = f.label :password, "New password"
-                  = f.password_field :password, :class => 'form-control'
+            %br
 
-                .col-sm-6
-                  = f.label :password_confirmation, "Confirm new password"
-                  = f.password_field :password_confirmation, :class => 'form-control'
+            .row
+              .col-sm-12
+                = f.password_field :password, placeholder: "*New password", required: true, autocomplete: "off", :class => 'form-control'
 
-              %br
+            %br
 
-              .row
-                .col-sm-12
-                  .text-center
-                    = f.submit "Change my password", class: "btn btn-warning"
+            .row
+              .col-sm-12
+                = f.password_field :password_confirmation, placeholder: "*Confirm new password", required: true, autocomplete: "off", :class => 'form-control'
+
+            %br
+
+            .row
+              .col-sm-12
+                .text-center
+                  = f.submit "Change my password", class: "btn btn-warning"
