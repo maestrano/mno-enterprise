@@ -17,6 +17,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardTemplatesC
   # GET /mnoe/jpi/v1/impac/dashboard_templates
   def index
     @templates = MnoEnterprise::Dashboard.published_templates.includes(*DASHBOARD_DEPENDENCIES)
-    @organizations = MnoEnterprise::Organization.where('user.ids': current_user.id)
+    @organizations = MnoEnterprise::Organization.where('users.id': current_user.id)
   end
 end

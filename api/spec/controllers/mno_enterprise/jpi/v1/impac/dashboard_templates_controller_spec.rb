@@ -72,7 +72,7 @@ module MnoEnterprise
       subject { get :index }
 
       before do
-        stub_api_v2(:get, '/organizations', [organization], [], filter: { 'user.ids': user.id})
+        stub_api_v2(:get, '/organizations', [organization], [], filter: { 'users.id': user.id})
         stub_api_v2(:get, '/dashboards', [template], dashboard_dependencies, filter: { dashboard_type: 'template', published: true})
       end
 

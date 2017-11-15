@@ -59,7 +59,7 @@ module MnoEnterprise
     private
 
     def load_organizations
-      @organizations = MnoEnterprise::Organization.where('user.ids': current_user.id)
+      @organizations = MnoEnterprise::Organization.where('users.id': current_user.id)
     end
 
     def whitelisted_params

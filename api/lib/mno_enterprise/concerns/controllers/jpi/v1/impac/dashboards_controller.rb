@@ -18,13 +18,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   # GET /mnoe/jpi/v1/impac/dashboards
   def index
     dashboards
-    @organizations = MnoEnterprise::Organization.where('user.ids': current_user.id)
+    @organizations = MnoEnterprise::Organization.where('users.id': current_user.id)
   end
 
   # GET /mnoe/jpi/v1/impac/dashboards/1
   #   -> GET /api/mnoe/v1/users/1/dashboards
   def show
-    @organizations = MnoEnterprise::Organization.where('user.ids': current_user.id)
+    @organizations = MnoEnterprise::Organization.where('users.id': current_user.id)
     render_not_found('dashboard') unless dashboard(*DASHBOARD_DEPENDENCIES)
   end
 
@@ -37,7 +37,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     @dashboard = MnoEnterprise::Dashboard.create!(dashboard_create_params)
     MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', @dashboard)
     @dashboard = dashboard.load_required(*DASHBOARD_DEPENDENCIES)
-    @organizations = MnoEnterprise::Organization.where('user.ids': current_user.id)
+    @organizations = MnoEnterprise::Organization.where('users.id': current_user.id)
     render 'show'
   end
 
@@ -49,7 +49,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     # TODO: enable authorization
     # authorize! :manage_dashboard, dashboard
     dashboard.update_attributes!(dashboard_update_params)
-    @organizations = MnoEnterprise::Organization.where('user.ids': current_user.id)
+    @organizations = MnoEnterprise::Organization.where('users.id': current_user.id)
     # Reload Dashboard
     @dashboard = dashboard.load_required(DASHBOARD_DEPENDENCIES)
     render 'show'
@@ -76,7 +76,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     # Owner is the current user by default, can be overriden to something else (eg: current organization)
     @dashboard = template.copy!(current_user, dashboard_params[:name], dashboard_params[:organization_ids])
     @dashboard = @dashboard.load_required(DASHBOARD_DEPENDENCIES)
-    @organizations = MnoEnterprise::Organization.where('user.ids': current_user.id)
+    @organizations = MnoEnterprise::Organization.where('users.id': current_user.id)
     render 'show'
   end
 

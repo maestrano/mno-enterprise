@@ -85,7 +85,7 @@ module MnoEnterprise
     before do
       sign_in user
       stub_audit_events
-      stub_api_v2(:get, '/organizations', [organization], [], filter: { 'user.ids': user.id})
+      stub_api_v2(:get, '/organizations', [organization], [], filter: { 'users.id': user.id})
     end
 
     describe 'GET #index' do

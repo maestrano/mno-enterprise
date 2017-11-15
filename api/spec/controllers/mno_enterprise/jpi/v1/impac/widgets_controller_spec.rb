@@ -27,7 +27,7 @@ module MnoEnterprise
       subject { get :index, organization_id: organization.uid }
 
       before { stub_api_v2(:get, '/organizations', [organization], [], { filter: { uid: organization.uid } }) }
-      before { stub_api_v2(:get, '/widgets', [widget], [], { filter: { organization_id: organization.id } }) }
+      before { stub_api_v2(:get, '/widgets', [widget], [], { filter: { 'organization.id': organization.id } }) }
       it 'returns the widgets' do
         subject
         expect(JSON.parse(response.body)).to eq({ 'widgets' => [

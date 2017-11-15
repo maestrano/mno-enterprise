@@ -42,7 +42,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   def update
     authorize! :manage_app_instances, orga_relation
 
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization_id, id: params[:id]).first
+    subscription = MnoEnterprise::Subscription.where('organization.id': parent_organization_id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
     if params[:subscription][:product_pricing_id]
       subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
@@ -63,7 +63,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   def cancel
     authorize! :manage_app_instances, orga_relation
 
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization_id, id: params[:id]).first
+    subscription = MnoEnterprise::Subscription.where('organization.id': parent_organization_id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
     subscription.cancel!
 
@@ -84,11 +84,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
 
   def fetch_subscriptions(organization_id)
     query = MnoEnterprise::Subscription.with_params(_metadata: { organization_id: organization_id })
-    MnoEnterprise::Subscription.fetch_all(query.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id))
+    MnoEnterprise::Subscription.fetch_all(query.includes(*SUBSCRIPTION_INCLUDES).where('organization.id': organization_id))
   end
 
   def fetch_subscription(organization_id, id)
     query = MnoEnterprise::Subscription.with_params(_metadata: { organization_id: organization_id })
-    query.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id, id: id).first
+    query.includes(*SUBSCRIPTION_INCLUDES).where('organization.id': organization_id, id: id).first
   end
 end
