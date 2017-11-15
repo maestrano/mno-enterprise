@@ -371,6 +371,17 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             }
           }
         },
+        impac: {
+          type: "object",
+          title: "Impac Dashboard",
+          properties: {
+            enabled: {
+              type: "boolean",
+              description: "Displays the Impac! analytics dashboard",
+              default: true
+            }
+          }
+        },
         audit_log: {
           type: "object",
           title: "Audit log",
