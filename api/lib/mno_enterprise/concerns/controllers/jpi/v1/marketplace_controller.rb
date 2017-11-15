@@ -63,4 +63,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   def app_instance_organization_id
     return params[:organization_id] if current_user && params[:organization_id].presence && orga_relation
   end
+
+  def orga_relation
+    MnoEnterprise::OrgaRelation.where('user.id' => current_user.id, 'organization.id': params[:organization_id]).first
+  end
+
 end

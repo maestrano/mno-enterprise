@@ -12,7 +12,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
   end
 
   protected
-  
   # Check current user is logged in
   # Check organization is valid if specified
   def check_authorization
