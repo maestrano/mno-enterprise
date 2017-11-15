@@ -55,7 +55,7 @@ module MnoEnterprise
 
     before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
     before { sign_in user }
-    
+
     #===============================================
     # Specs
     #===============================================
