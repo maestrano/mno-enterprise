@@ -4,13 +4,9 @@ class Devise::PasswordExpiredController < DeviseController
   prepend_before_filter :authenticate_scope!, :only => [:show, :update]
 
   def show
-    if defined?(MnoEnterprise::Frontend)
-      respond_with(resource)
-    else
-      respond_with resource do |format|
-        format.html
-        format.json {render json: {error: 'Your password is expired. Please renew your password.'}, status: :forbidden}
-      end
+    respond_with resource do |format|
+      format.html
+      format.json {render json: {error: 'Your password is expired. Please renew your password.'}, status: :forbidden}
     end
   end
 

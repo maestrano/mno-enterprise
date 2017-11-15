@@ -62,7 +62,7 @@ en:
           current_password: 'Current Password'
           new_password: 'New Password'
           confirm_password: 'Confirm Password'
-          eight_characters_minimum: 'Eight characters minimum'
+          minimum_length: '{length} characters minimum'
           one_uppercase_character: 'One uppercase character'
           one_number: 'One number'
           one_lowercase_character: 'One lowercase character'

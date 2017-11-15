@@ -24,6 +24,8 @@ angular.module('mnoEnterprise.configuration', [])
   .constant('INTERCOM_ID', <%= MnoEnterprise.intercom_app_id.to_json %>)
   .constant('APP_NAME', <%= MnoEnterprise.app_name.to_json %>)
   .constant('URL_CONFIG', <%= Hash(Settings.url_config).to_json %>)
-  .constant('DEVISE_CONFIG', <%= Hash(Settings.devise).to_json %>)
+  .constant('DEVISE_CONFIG', <%=
+      Hash(Settings.devise).merge(min_password_length: Devise.password_length.min).to_json
+    %>)
   .constant('TASKS_CONFIG', <%= Hash(Settings.tasks).to_json %>)
   .constant('NOTIFICATIONS_CONFIG', <%= Hash(Settings.notifications).to_json %>)

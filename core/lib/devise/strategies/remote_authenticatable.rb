@@ -1,19 +1,20 @@
 module Devise
   module Strategies
     class RemoteAuthenticatable < Authenticatable
-      
+
       # def valid?
       #   true || params[scope]
       # end
-      
+
       # For an example check : https://github.com/plataformatec/devise/blob/master/lib/devise/strategies/database_authenticatable.rb
       # Method called by warden to authenticate a resource.
       def authenticate!
         # authentication_hash doesn't include the password
         auth_params = params[scope]
-        
+
+
         # mapping.to is a wrapper over the resource model
-        resource = mapping.to.new
+        resource = mapping.to.new.remote_authentication(auth_params)
 
         return fail! unless resource
 
@@ -24,7 +25,7 @@ module Devise
         #
         # If the block returns true the resource will be loged in
         # If the block returns false the authentication will fail!
-        if validate(resource){ resource = resource.remote_authentication(auth_params) }
+        if validate(resource) { resource.password_valid }
           success!(resource)
         end
       end
@@ -35,10 +36,10 @@ end
 Warden::Strategies.add :remote_authenticatable, Devise::Strategies::RemoteAuthenticatable
 Devise.add_module :remote_authenticatable, strategy: true, controller: :sessions, route: :session
 
-Warden::Manager.after_authentication do |user,auth,opts|
+Warden::Manager.after_authentication do |user, auth, opts|
   Rails.cache.delete(['user', user.to_key]) if user
 end
 
-Warden::Manager.before_logout do |user,auth,opts|
+Warden::Manager.before_logout do |user, auth, opts|
   Rails.cache.delete(['user', user.to_key]) if user
 end
