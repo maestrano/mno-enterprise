@@ -1,6 +1,8 @@
 module MnoEnterprise
   class Jpi::V1::Admin::UsersController < Jpi::V1::Admin::BaseResourceController
 
+    INCLUDED_FIELDS = [:id, :uid, :email, :phone, :name, :surname, :admin_role, :created_at, :updated_at, :confirmed_at, :last_sign_in_at, :sign_in_count, :user_access_requests, :organizations, :sub_tenant]
+
     # GET /mnoe/jpi/v1/admin/users
     def index
       if params[:terms]
@@ -10,21 +12,24 @@ module MnoEnterprise
           @users = @users | MnoEnterprise::User
                               .apply_query_params(params.except(:terms))
                               .with_params(_metadata: { act_as_manager: current_user.id })
+                              .select(INCLUDED_FIELDS)
                               .includes(:user_access_requests, :sub_tenant)
                               .where(Hash[*t])
         end
 
         # Ensure that no duplicates are returned as a result of multiple terms being applied to search query
         # ex. user.name = "John" and user.email = "john.doe@example.com" would return a duplicate when searching for "john"
-        @users.uniq!{ |u| u.id }
+        @users.uniq! { |u| u.id }
 
         response.headers['X-Total-Count'] = @users.count
       else
         # Index mode
         query = MnoEnterprise::User
-          .apply_query_params(params)
-          .with_params(_metadata: { act_as_manager: current_user.id })
-          .includes(:user_access_requests, :sub_tenant)
+                  .apply_query_params(params)
+                  .with_params(_metadata: { act_as_manager: current_user.id })
+                  .select(INCLUDED_FIELDS)
+                  .includes(:user_access_requests, :sub_tenant)
+
         @users = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
       end
@@ -33,9 +38,10 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/admin/users/1
     def show
       @user = MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id })
-                                 .includes(:orga_relations, :organizations, :user_access_requests, :sub_tenant)
-                                 .find(params[:id])
-                                 .first
+                .includes(:orga_relations, :organizations, :user_access_requests, :sub_tenant)
+                .select(INCLUDED_FIELDS)
+                .find(params[:id])
+                .first
 
       @user_organizations = @user.organizations
     end
@@ -73,7 +79,7 @@ module MnoEnterprise
       @user = MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id }).find(params[:id]).first
       return render_not_found('User') unless @user
       attributes = params.require(:user).permit(add: [], remove: [])
-      @user.update_clients!({data: {attributes: attributes}})
+      @user.update_clients!({ data: { attributes: attributes } })
       @user = @user.load_required(:sub_tenant)
       render :show
     end

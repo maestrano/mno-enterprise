@@ -14,6 +14,13 @@ module MnoEnterprise
     let(:current_user) { build(:user, :admin) }
     let!(:current_user_stub) { stub_user(current_user) }
 
+    let(:select_fields) do
+      {
+        users: Jpi::V1::Admin::UsersController::INCLUDED_FIELDS.join(',')
+      }
+    end
+
+
     # Stub user and user call
     let(:user) { build(:user) }
 
@@ -27,7 +34,7 @@ module MnoEnterprise
 
       let(:data) { JSON.parse(response.body) }
 
-      before { stub_api_v2(:get, "/users", [user], [:user_access_requests, :sub_tenant], { _metadata: { act_as_manager: current_user.id } }) }
+      before { stub_api_v2(:get, "/users", [user], [:user_access_requests, :sub_tenant], {fields: select_fields, _metadata: { act_as_manager: current_user.id } }) }
       before { subject }
 
       it { expect(data['users'].first['id']).to eq(user.id) }
@@ -39,7 +46,7 @@ module MnoEnterprise
       let(:data) { JSON.parse(response.body) }
       let(:included) { [:orga_relations, :organizations, :user_access_requests, :sub_tenant] }
 
-      before { stub_api_v2(:get, "/users/#{user.id}", user, included, { _metadata: { act_as_manager: current_user.id } }) }
+      before { stub_api_v2(:get, "/users/#{user.id}", user, included, {fields: select_fields, _metadata: { act_as_manager: current_user.id } }) }
       before { subject }
 
       it { expect(data['user']['id']).to eq(user.id) }
