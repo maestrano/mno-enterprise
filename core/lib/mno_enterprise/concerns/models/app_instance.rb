@@ -9,6 +9,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
   included do
     property :created_at, type: :time
     property :updated_at, type: :time
+    property :app_id, type: :string
 
     property :owner_id, type: :string
 
