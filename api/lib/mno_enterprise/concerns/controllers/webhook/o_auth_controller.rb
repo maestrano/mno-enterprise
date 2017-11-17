@@ -68,6 +68,7 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
     end
 
     @redirect_to = MnoEnterprise.router.authorize_oauth_url(params[:id], extra_params.merge(wtk: wtk))
+    redirect_to MnoEnterprise.router.dashboard_path + '#!/authorize' + "?redirect_path=#{@redirect_to}"
   end
 
   # GET /mnoe/webhook/oauth/:id/callback

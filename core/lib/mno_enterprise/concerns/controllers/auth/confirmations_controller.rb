@@ -51,7 +51,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
     # Exit if no resources
     unless resource.errors.empty?
       yield(:error, resource) if block_given?
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+      respond_with resource.errors, status: :unprocessable_entity
       return
     end
 
@@ -65,9 +65,11 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
         sign_in(resource)
         set_flash_message(:notice, :confirmed) if is_flashing_format?
         yield(:reconfirmation_success, resource) if block_given?
-        respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
+        resource.attributes['new_email_confirmed'] = true
+        resource.refresh_user_cache
+        respond_with resource
       else
-        respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+        respond_with resource
       end
       return
     end
@@ -77,9 +79,11 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
     resource_with_organizations = resource.load_required(:organizations, :'organizations.orga_relations')
     @phone_required = resource_with_organizations.organizations.map(&:orga_relations).flatten.count == 1
     yield(:success, resource) if block_given?
+    resource_with_organizations.attributes['no_phone_required'] = true
+    respond_with resource_with_organizations
   end
 
-  # POST /resource/confirmation/finalize
+  # PATCH /resource/confirmation/finalize
   # Confirm a new user and update
   def finalize
     @confirmation_token = params[:user].delete(:confirmation_token)
@@ -103,10 +107,10 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
       set_flash_message(:notice, :confirmed) if is_flashing_format?
       yield(:success,resource) if block_given?
       MnoEnterprise::EventLogger.info('user_confirm', resource.id, 'User confirmed', resource)
-      respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource, new_user: true) }
+      respond_with resource
     else
       yield(:error,resource) if block_given?
-      respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
+      respond_with resource.errors, status: :unprocessable_entity
     end
   end
 

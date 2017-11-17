@@ -8,6 +8,7 @@ module MnoEnterprise
       expires_in 0, public: true, must_revalidate: true
 
       @available_locales = available_locales
+      @devise_mapping ||= Devise.mappings[:user]
 
       respond_to do |format|
         format.js { self.response_body = minify(render_to_string) }
