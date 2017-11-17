@@ -64,11 +64,13 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   #   :reset_password_link
   #
   def reset_password_instructions(record, token, opts={})
-    MnoEnterprise::MailClient.deliver('reset-password-instructions',
-      default_sender,
-      recipient(record),
-      user_vars(record).merge(reset_password_link: edit_user_password_url(reset_password_token: token))
-    )
+    if record.confirmed?
+      MnoEnterprise::MailClient.deliver('reset-password-instructions',
+        default_sender,
+        recipient(record),
+        user_vars(record).merge(reset_password_link: edit_user_password_url(reset_password_token: token))
+      )
+    end
   end
 
   # ==> Devise Email
