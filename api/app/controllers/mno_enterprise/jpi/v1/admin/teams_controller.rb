@@ -12,7 +12,7 @@ module MnoEnterprise
       if params[:terms]
         # Search mode
         @teams = []
-        JSON.parse(params[:terms]).map { |t| @teams = @teams | fetch_all_teams.where(Hash[*t]) }
+        JSON.parse(params[:terms]).map { |t| @teams = @teams | fetch_all_teams(params[:organization_id]).where(Hash[*t]) }
         response.headers['X-Total-Count'] = @teams.count
       else
         query = fetch_teams(params[:organization_id])
@@ -23,10 +23,11 @@ module MnoEnterprise
 
     protected
 
-    def fetch_all_teams
+    def fetch_all_teams(organization_id)
       MnoEnterprise::Team
         .apply_query_params(params)
         .includes(RELATIONSHIPS)
+        .where(organization_id: organization_id)
     end
 
     def fetch_teams(organization_id)
