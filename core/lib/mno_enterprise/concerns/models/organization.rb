@@ -85,37 +85,37 @@ module MnoEnterprise::Concerns::Models::Organization
     }
   end
 
-  # Update a user role within self on behalf on user_updating
+  # Update a user role within self
   #
-  # user_updating - A MnoEnterprise::User who performed the action
-  # user_to_update - The user to update. ∈ [MnoEnterprise::User, MnoEnterprise::OrgaInvite]
-  # new_role - The role to assign to user_to_update
+  # user - A MnoEnterprise::User who performed the action
+  # updated_user - The user to update. ∈ [MnoEnterprise::User, MnoEnterprise::OrgaInvite]
+  # new_role - The role to assign to updated_user
   #
-  def update_user_role(user_updating, user_to_update, new_role)
-    if user_updating.role(self) == 'Admin'
+  def update_user_role(user, updated_user, new_role)
+    if user.role(self) == 'Admin'
       # Admin cannot assign Super Admin role
       raise CanCan::AccessDenied if new_role == 'Super Admin'
-      current_role = if user_to_update.is_a?(MnoEnterprise::User)
-                          role(user_to_update)
-                        elsif user_to_update.is_a?(MnoEnterprise::OrgaInvite)
-                          user_to_update.user_role
+      current_role = if updated_user.is_a?(MnoEnterprise::User)
+                          role(updated_user)
+                        elsif updated_user.is_a?(MnoEnterprise::OrgaInvite)
+                          updated_user.user_role
                         end
       # Admin cannot edit Super Admin
       if current_role == 'Super Admin'
         raise CanCan::AccessDenied
       end
-    elsif user_to_update.id == user_updating.id && new_role != 'Super Admin' && orga_relations.count { |u| u.role == 'Super Admin' } <= 1
+    elsif updated_user.id == user.id && new_role != 'Super Admin' && orga_relations.count { |u| u.role == 'Super Admin' } <= 1
       # A super admin cannot modify his role if he's the last super admin
       raise CanCan::AccessDenied
     end
 
     # Happy Path
-    case user_to_update
+    case updated_user
     when MnoEnterprise::User
-      orga_relation = orga_relations.find { |rel| rel.user_id == user_to_update.id }
+      orga_relation = orga_relations.find { |rel| rel.user_id == updated_user.id }
       orga_relation.update_attributes!(role: new_role)
     when MnoEnterprise::OrgaInvite
-      user_to_update.update_attributes!(user_role: new_role)
+      updated_user.update_attributes!(user_role: new_role)
     end
   end
 

@@ -212,6 +212,8 @@ module MnoEnterprise
     end
 
     def requested_user_in_org(organization)
+      # If a user has updated their email address, but has not clicked on the confirmation link yet,
+      # we won't find them from their email, so we look from their id first.
       user = organization.users.find { |u| u.id == params.require(:member)[:id] }
       user ||= begin
         email = params.require(:member).require(:email)
