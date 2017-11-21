@@ -19,7 +19,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
   end
 
   def parent_organization
-    @parent_organization ||= MnoEnterprise::Organization.includes(:orga_relations).find(params[:organization_id]).first
+    @parent_organization ||= MnoEnterprise::Organization.find_one(params[:organization_id], :orga_relations)
   end
 
   # Check current user is logged in
