@@ -111,7 +111,7 @@ module MnoEnterprise
       describe 'app provisioning' do
         let(:params) { attributes_for(:organization).merge(app_nids: ['xero', app_instance.app.nid]) }
 
-        before { expect_any_instance_of(Organization).to receive(:provision_app_instance) }
+        before { expect_any_instance_of(Organization).to receive(:provision_app_instance!) }
         before { subject }
         it { expect(data['organization']['id']).to eq(organization.id) }
       end

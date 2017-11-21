@@ -186,7 +186,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
           results << app_instance
         else
           # Provision instance and add to results
-          app_instance = org.provision_app_instance(app.nid)
+          app_instance = org.provision_app_instance!(app.nid)
           results << app_instance
           MnoEnterprise::EventLogger.info('app_add', user.id, 'App added', app_instance)
         end
