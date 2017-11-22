@@ -3,15 +3,15 @@ module JsonApiClientExtension::HasOneExtension
 
   class_methods do
     def has_one(attr_name, options = {})
+      setter_log_warning = (Rails.env.test? || Rails.env.development?) ?  "ActiveSupport::Deprecation.warn('#{self.name}.#{attr_name}_id= Use relationships instead')" : ''
+      getter_log_warning = (Rails.env.test? || Rails.env.development?) ?  "ActiveSupport::Deprecation.warn('#{self.name}.#{attr_name}_id Use relationships instead')" : ''
       class_eval <<-CODE
         def #{attr_name}_id=(id)
-          # Uncomment when doing refactoring
-          # ActiveSupport::Deprecation.warn(self.class.name + ".#{attr_name}_id= Use relationships instead")
+          #{setter_log_warning}
           super
         end
         def #{attr_name}_id
-          # Uncomment when doing refactoringgit 
-          # ActiveSupport::Deprecation.warn(self.class.name + ".#{attr_name}_id Use relationships instead")
+          #{getter_log_warning}
           super
         end
         def #{attr_name}=(relation)
@@ -21,7 +21,6 @@ module JsonApiClientExtension::HasOneExtension
         def #{attr_name}
           relations[:#{attr_name}] ||= super
         end
-
       CODE
       super
     end

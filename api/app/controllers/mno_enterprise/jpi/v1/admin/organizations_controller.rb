@@ -210,7 +210,9 @@ module MnoEnterprise
       if params[:organization].key?(:app_nids) && (desired_nids = Array(params[:organization][:app_nids]))
         existing_apps = @organization.app_instances&.select(&:active?) || []
         existing_apps.each { |app_instance| desired_nids.delete(app_instance.app.nid) || app_instance.terminate }
-        desired_nids.each { |nid| @organization.provision_app_instance!(nid) }
+        desired_nids.each do |nid|
+          MnoEnterprise::AppInstance.provision!(nid, @organization.id, 'Organization' )
+        end
       end
     end
   end

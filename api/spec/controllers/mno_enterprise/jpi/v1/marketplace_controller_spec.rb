@@ -133,7 +133,8 @@ module MnoEnterprise
         before do
           sign_in(user)
           stub_api_v2(:get, "/organizations", [organization], [], { fields: { organizations: 'id' }, filter: { id: organization.id, 'users.id' => user.id }, page: one_page })
-          stub_orga_relation(user, organization, orga_relation)
+          stub_api_v2(:get, '/orga_relations', [orga_relation], [], { fields: { orga_relations: 'id' }, filter: { 'user.id': user.id, 'organization.id': organization.id }, page: one_page })
+
           stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true } })
           stub_api_v2(:get, '/apps', [app], [],
                       {

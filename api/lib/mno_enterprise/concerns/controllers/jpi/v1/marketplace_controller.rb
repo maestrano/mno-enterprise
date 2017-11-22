@@ -61,11 +61,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
 
   # Return the organization_id  passed as query parameters if the current_user has access to it
   def app_instance_organization_id
-    return params[:organization_id] if current_user && params[:organization_id].presence && orga_relation
+    return params[:organization_id] if current_user && params[:organization_id].presence && orga_relation_id
   end
 
-  def orga_relation
-    MnoEnterprise::OrgaRelation.where('user.id' => current_user.id, 'organization.id': params[:organization_id]).first
+  def orga_relation_id
+    MnoEnterprise::OrgaRelation.where('user.id': current_user.id, 'organization.id': params[:organization_id]).select(:id).first&.id
   end
-
 end

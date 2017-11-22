@@ -26,6 +26,7 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/admin/impac/dashboard_templates/1
     def show
       @dashboard_template = MnoEnterprise::Dashboard.find_one!(params[:id], *DASHBOARD_DEPENDENCIES)
+      load_organizations
     end
 
     # POST /mnoe/jpi/v1/admin/impac/dashboard_templates
