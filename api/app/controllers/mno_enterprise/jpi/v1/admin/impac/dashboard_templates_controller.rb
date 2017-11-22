@@ -1,8 +1,6 @@
 module MnoEnterprise
   class Jpi::V1::Admin::Impac::DashboardTemplatesController < Jpi::V1::Admin::BaseResourceController
 
-    before_action :load_organizations, except: [:destroy]
-
     # TODO [APIV2]: [:'widgets.kpis', :'kpis.alerts']
     DASHBOARD_DEPENDENCIES = [:widgets, :kpis]
 
@@ -36,6 +34,7 @@ module MnoEnterprise
       @dashboard_template.save!
       MnoEnterprise::EventLogger.info('dashboard_template_create', current_user.id, 'Dashboard Template Creation', @dashboard_template)
       @dashboard_template = @dashboard_template.load_required(*DASHBOARD_DEPENDENCIES)
+      load_organizations
       render 'show'
     end
 
@@ -45,6 +44,7 @@ module MnoEnterprise
       dashboard_template.update!(dashboard_template_params)
       @dashboard_template = @dashboard_template.load_required(*DASHBOARD_DEPENDENCIES)
       MnoEnterprise::EventLogger.info('dashboard_template_update', current_user.id, 'Dashboard Template Update', @dashboard_template)
+      load_organizations
       render 'show'
     end
 
