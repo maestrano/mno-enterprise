@@ -28,7 +28,7 @@ json.cache! ['v2', @user.cache_key] do
     # Embed association if user is persisted
     if @user.id
       json.organizations do
-        json.array! (@user.organizations.active.include_acl || []) do |o|
+        json.array! (@user.organizations.active.include_acl(session[:impersonator_user_id]) || []) do |o|
           json.id o.id
           json.uid o.uid
           json.name o.name

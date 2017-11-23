@@ -41,7 +41,7 @@ module MnoEnterprise::Concerns::Models::Organization
 
     scope :in_arrears, -> { where(in_arrears?: true) }
     scope :active, -> { where(account_frozen: false) }
-    scope :include_acl, -> { tap { |x| x.params[:include_acl?] = true } }
+    scope :include_acl, ->(imp_id) { tap { |x| x.params.merge!(include_acl?: true, account_manager_id: imp_id) } }
     default_scope lambda { where(account_frozen: false) }
 
     #================================
