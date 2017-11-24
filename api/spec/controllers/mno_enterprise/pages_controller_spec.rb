@@ -64,14 +64,14 @@ module MnoEnterprise
     end
 
     describe 'GET #terms' do
-      let(:app1) { build(:app, name: 'b') }
-      let(:app2) { build(:app, name:'a') }
+      let(:app1) { build(:app, name: 'b', terms_url: nil) }
+      let(:app2) { build(:app, name: 'a') }
       let(:app3) { build(:app, name: 'c') }
 
       before do
         Rails.cache.clear
         stub_api_v2(:get, '/apps', [app1], [], {fields: {apps: 'updated_at'}, page: {number: 1, size: 1}, sort: '-updated_at'})
-        stub_api_v2(:get, '/apps', [app1, app2, app3], [])
+        stub_api_v2(:get, '/apps', [app1, app2, app3], [], {fields: {apps: [:name, :terms_url].join(',')}, sort: 'name'})
       end
 
       subject { get :terms }
@@ -79,8 +79,8 @@ module MnoEnterprise
 
       it { expect(response).to be_success }
 
-      it 'returns the apps in the correct alphabetical order' do
-        expect(assigns(:apps).map(&:name)).to eq(%w(a b c))
+      it 'rejects the apps with not terms_url' do
+        expect(assigns(:apps).map(&:id)).to include(app2.id, app3.id)
       end
     end
   end
