@@ -203,5 +203,21 @@ module MnoEnterprise
         expect(JSON.parse(response.body).first['attributes']).to eq(id_map.with_indifferent_access)
       }
     end
+
+    describe 'PUT #update_addon_synchronized_entities' do
+      let(:app_instance) { build(:app_instance, metadata: { app: { host: 'http://www.addon-url.com' } }) }
+      let(:org_id) { 1 }
+      before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:app, :owner]) }
+      before { stub_add_on(app_instance, :put, "/maestrano/api/organizations/#{org_id}", 202) }
+      before { sign_in user }
+      subject { put :update_addon_synchronized_entities, id: app_instance.id, org_id: org_id }
+
+      it_behaves_like 'jpi v1 protected action'
+
+      it {
+        subject
+        expect(subject).to be_successful
+      }
+    end
   end
 end
