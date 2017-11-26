@@ -93,7 +93,7 @@ module MnoEnterprise
       let(:app_instance) { build(:app_instance, metadata: { app: { host: 'http://www.addon-url.com'} }) }
       let(:form) { { form: {} } }
       before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:app, :owner])}
-      before { stub_add_on(app_instance, :get, '/setup_form', 200, form) }
+      before { stub_add_on(app_instance, :get, '/maestrano/api/account/setup_form', 200, form) }
       before { sign_in user }
       subject { get :setup_form, id: app_instance.id }
 
@@ -109,7 +109,7 @@ module MnoEnterprise
       before { stub_audit_events }
       let(:app_instance) { build(:app_instance, metadata: { app: { host: 'http://www.addon-url.com' } }) }
       before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:app, :owner])}
-      before { stub_add_on(app_instance, :post, "/auth/#{app_instance.name.downcase}/request", 202) }
+      before { stub_add_on(app_instance, :post, "/maestrano/api/account/link_account", 202) }
       before { sign_in user }
       subject { post :create_omniauth, id: app_instance.id, app_instance: {} }
 
@@ -141,7 +141,7 @@ module MnoEnterprise
       before { stub_audit_events }
       let(:app_instance) { build(:app_instance, metadata: { app: { host: 'http://www.addon-url.com' } }) }
       before { stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:app, :owner])}
-      before { stub_add_on(app_instance, :post, '/disconnect', 202) }
+      before { stub_add_on(app_instance, :post, '/maestrano/api/account/unlink_account', 202) }
       before { sign_in user }
       subject { post :disconnect, id: app_instance.id }
 

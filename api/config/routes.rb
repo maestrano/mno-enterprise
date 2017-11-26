@@ -146,6 +146,7 @@ MnoEnterprise::Engine.routes.draw do
             get :sync_history
             get :id_maps
             post :disconnect
+            put :update_addon_synchronized_entities
           end
         end
         # ProductInstances

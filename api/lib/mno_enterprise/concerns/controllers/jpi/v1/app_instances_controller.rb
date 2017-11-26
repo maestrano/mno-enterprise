@@ -45,7 +45,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
   def setup_form
     app_instance = MnoEnterprise::AppInstance.find_one(params[:id], :app, :owner)
     authorize! :manage_app_instances, app_instance.owner
-    response = MnoEnterprise::AddOnHelper.send_request(app_instance, :get, '/setup_form')
+    response = MnoEnterprise::AddOnHelper.send_request(app_instance, :get, '/maestrano/api/account/setup_form')
     render json: JSON.parse(response.body)
   end
 
@@ -55,7 +55,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
     app_instance = MnoEnterprise::AppInstance.find_one(params[:id], :app, :owner)
     authorize! :manage_app_instances, app_instance.owner
     body = params[:app_instance].merge!(org_uid: app_instance.channel_id)
-    response = MnoEnterprise::AddOnHelper.send_request(app_instance, :post, "/auth/#{app_instance.name.downcase}/request", body: body)
+    response = MnoEnterprise::AddOnHelper.send_request(app_instance, :post, "/maestrano/api/account/link_account", body: body)
     MnoEnterprise::EventLogger.info('addon_create_omniauth', current_user.id, 'Link account to add_on', app_instance)
     render json: JSON.parse(response.body)
   end
@@ -66,7 +66,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
     authorize! :manage_app_instances, app_instance.owner
     body = { group_id: app_instance.uid, opts: { full_sync: params[:full_sync] } }
     response = MnoEnterprise::AddOnHelper.send_request(app_instance, :post, app_instance.metadata['app']['synchronization_start_path'], body: body)
-    MnoEnterprise::EventLogger.info('addon_syn', current_user.id, 'Launch sync on add_on', app_instance)
+    MnoEnterprise::EventLogger.info('addon_sync', current_user.id, 'Launch sync on add_on', app_instance)
     head :accepted
   end
 
@@ -75,7 +75,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
     app_instance = MnoEnterprise::AppInstance.find_one(params[:id], :app, :owner)
     authorize! :manage_app_instances, app_instance.owner
     body = { uid: app_instance.uid }
-    response = MnoEnterprise::AddOnHelper.send_request(app_instance, :post, '/disconnect', body: body)
+    response = MnoEnterprise::AddOnHelper.send_request(app_instance, :post, '/maestrano/api/account/unlink_account', body: body)
     MnoEnterprise::EventLogger.info('addon_disconnect', current_user.id, 'Unlink account from add_on', app_instance)
     head :accepted
   end
@@ -87,7 +87,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
     authorize! :manage_app_instances, app_instance.owner
     syncs = app_instance.sync_history(params.except(:id, :organization_id, :action, :controller))
     response.headers['x-total-count'] = syncs.meta[:record_count]
-    MnoEnterprise::EventLogger.info('addon_sync_history', current_user.id, 'Get list of add_on syncs', app_instance)
     render json: syncs.as_json
   end
 
@@ -98,7 +97,23 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
     authorize! :manage_app_instances, app_instance.owner
     id_maps = app_instance.id_maps(params.except(:id, :organization_id, :action, :controller))
     response.headers['x-total-count'] = id_maps.meta[:record_count]
-    MnoEnterprise::EventLogger.info('addon_id_maps', current_user.id, 'Get list of add_on id_maps', app_instance)
     render json: id_maps.as_json
+  end
+
+  # PUT /mnoe/jpi/v1/organization/1/app_instances/11/update_addon_synchronized_entities
+  def update_addon_synchronized_entities
+    app_instance = MnoEnterprise::AppInstance.find_one(params[:id], :app, :owner)
+    authorize! :manage_app_instances, app_instance.owner
+    body = {
+      data: {
+        type: 'organizations',
+        id: params[:org_id],
+        attributes: {
+          synchronized_entities: params[:entities]
+        }
+      }
+    }
+    MnoEnterprise::AddOnHelper.send_request(app_instance, :put, "/maestrano/api/organizations/#{params[:org_id]}", body: body.to_json, headers: {'Content-Type' => 'application/vnd.api+json'})
+    head :accepted
   end
 end
