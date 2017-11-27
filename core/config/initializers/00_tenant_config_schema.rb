@@ -226,11 +226,11 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                   description: "Display Product pricing information on the Marketplace",
                   default: true
                 },
-                # currency: {
-                #   type: "string",
-                #   description: "Currency to display price in",
-                #   default: "AUD"
-                # }
+                currency: {
+                  type: "string",
+                  description: "Currency to display price in",
+                  default: "AUD"
+                }
               }
             },
             questions: {
