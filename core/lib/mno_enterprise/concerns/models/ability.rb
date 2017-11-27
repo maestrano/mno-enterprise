@@ -19,7 +19,7 @@ module MnoEnterprise::Concerns::Models::Ability
   #==================================================================
   # Instance methods
   #==================================================================
-  def initialize(user)
+  def initialize(user, session)
     user ||= MnoEnterprise::User.new
 
     #===================================================
@@ -68,78 +68,57 @@ module MnoEnterprise::Concerns::Models::Ability
     #===================================================
     # Impac
     #===================================================
-    impac_abilities(user)
+    orgs_with_acl = user.organizations.active.include_acl(session[:impersonator_user_id]).to_a
+
+    can :create_impac_dashboards, MnoEnterprise::Impac::Dashboard do |d|
+      orgs = d.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :dashboards, :create) }
+    end
+
+    can :update_impac_dashboards, MnoEnterprise::Impac::Dashboard do |d|
+      orgs = d.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :dashboards, :update) }
+    end
+
+    can :destroy_impac_dashboards, MnoEnterprise::Impac::Dashboard do |d|
+      orgs = d.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :dashboards, :destroy) }
+    end
+
+    can :create_impac_widgets, MnoEnterprise::Impac::Widget do |w|
+      orgs = w.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :widgets, :create) }
+    end
+
+    can :update_impac_widgets, MnoEnterprise::Impac::Widget do |w|
+      orgs = w.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :widgets, :update) }
+    end
+
+    can :destroy_impac_widgets, MnoEnterprise::Impac::Widget do |w|
+      orgs = w.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :widgets, :destroy) }
+    end
+
+    can :create_impac_kpis, MnoEnterprise::Impac::Kpi do |k|
+      orgs = k.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :kpis, :create) }
+    end
+
+    can :update_impac_kpis, MnoEnterprise::Impac::Kpi do |k|
+      orgs = k.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :kpis, :update) }
+    end
+
+    can :destroy_impac_kpis, MnoEnterprise::Impac::Kpi do |k|
+      orgs = k.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :kpis, :destroy) }
+    end
 
     #===================================================
     # Admin abilities
     #===================================================
     admin_abilities(user)
-
-    # Define abilities for the passed in user here. For example:
-    #
-    #   user ||= User.new # guest user (not logged in)
-    #   if user.admin?
-    #     can :manage, :all
-    #   else
-    #     can :read, :all
-    #   end
-    #
-    # The first argument to `can` is the action you are giving the user
-    # permission to do.
-    # If you pass :manage it will apply to every action. Other common actions
-    # here are :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on.
-    # If you pass :all it will apply to every resource. Otherwise pass a Ruby
-    # class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the
-    # objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, :published => true
-    #
-    # See the wiki for details:
-    # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
-  end
-
-  def impac_abilities(user)
-    can :manage_impac, MnoEnterprise::Impac::Dashboard do |dhb|
-      dhb.organizations.any? && dhb.organizations.all? do |org|
-        !!user.role(org) && ['Super Admin', 'Admin'].include?(user.role(org))
-      end
-    end
-
-    can :manage_dashboard, MnoEnterprise::Impac::Dashboard do |dashboard|
-      if dashboard.owner_type == "Organization"
-        # The current user is a member of the organization that owns the dashboard that has the kpi attached to
-        owner = MnoEnterprise::Organization.find(dashboard.owner_id)
-        owner && !!user.role(owner)
-      elsif dashboard.owner_type == "User"
-        # The current user is the owner of the dashboard that has the kpi attached to
-        dashboard.owner_id == user.id
-      else
-        false
-      end
-    end
-
-    can :manage_widget, MnoEnterprise::Impac::Widget do |widget|
-      dashboard = widget.dashboard
-      authorize! :manage_dashboard, dashboard
-    end
-
-    can :manage_kpi, MnoEnterprise::Impac::Kpi do |kpi|
-      if kpi.widget.present?
-        authorize! :manage_widget, MnoEnterprise::Impac::Widget.find(kpi.widget.id)
-      else
-        authorize! :manage_dashboard, kpi.dashboard
-      end
-    end
-
-    can :manage_alert, MnoEnterprise::Impac::Alert do |alert|
-      kpi = alert.kpi
-      authorize! :manage_kpi, kpi
-    end
   end
 
   # Abilities for admin user
