@@ -195,6 +195,12 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               title: "Product ordering",
               description: "Enable the ordering of products"
             },
+            product_markup: {
+              type: "boolean",
+              default: true,
+              title: "Product Markup",
+              description: "Enable the markup feature for products"
+            },
             local_products: {
               type: "boolean",
               default: false,

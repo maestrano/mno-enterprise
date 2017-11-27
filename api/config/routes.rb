@@ -309,7 +309,10 @@ MnoEnterprise::Engine.routes.draw do
         end
 
         resources :app_metrics, only: [:index, :show]
-        resources :product_markups, only: [:index, :show, :destroy, :update, :create]
+
+        if Settings&.dashboard&.marketplace&.product_markup
+          resources :product_markups, only: [:index, :show, :destroy, :update, :create]
+        end
 
         # Theme Previewer
         post 'theme/save'
