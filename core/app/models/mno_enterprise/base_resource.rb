@@ -108,11 +108,8 @@ module MnoEnterprise
     end
 
     def destroy!
-      unless destroy
-        # HotFix waiting for #https://github.com/chingor13/json_api_client/pull/275 to be merged
-        collect_errors(last_result_set.errors)
-        raise_if_errors
-      end
+      destroy
+      raise_if_errors
     end
 
     def collect_errors(external_errors)
