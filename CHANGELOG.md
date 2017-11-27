@@ -16,7 +16,7 @@ The settings have been refactored in v4 to make them more consistent.
 * `admin.impersonation.disabled` is now `admin.impersonation.enabled`
 * `payment.disabled` is now `payment.enabled`
 * `pricing` and `review` configuration are now nested under `marketplace`
-* `devise.registration` is now `devise.registration`
+* `devise.registration.disabled` is now `dashboard.registration.enabled`
 
 ## [v3.3.2](https://github.com/maestrano/mno-enterprise/tree/v3.3.2) (2017-11-09)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.1...v3.3.2)
