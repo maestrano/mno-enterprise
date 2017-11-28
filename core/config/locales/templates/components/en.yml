@@ -88,6 +88,7 @@ en:
           confirm: 'Are you sure you want to change language to {name}?'
 
         addon_connect:
+          title: "Connect to {appname}"
           link_account:
             title: Link your account
             link: "Link your {appname} account to Maestrano to get your business in sync."

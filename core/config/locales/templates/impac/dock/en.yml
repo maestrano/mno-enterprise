@@ -43,6 +43,21 @@ en:
               upgrading: Upgrading
               downgrading: Downgrading
             sync_started: "The sync with {appname} has started"
-            sync_list: "List of previous synchronizations:"
+            sync_list:
+              title: "List of previous synchronizations:"
+              history: "History"
+              date: "Date"
+              status: "Status"
+              message: "Message"
+            sync: "Synchronize"
+            entities:
+              title: "Entities"
+              update: "Update"
+            id_maps:
+              title: "Data"
+              name: "Name"
+              type: "Type"
+              in_maestrano: "In Maestrano"
+              in_app: "In {app}"
             disconnect_app: Disconnect
 
