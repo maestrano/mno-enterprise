@@ -24,7 +24,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
     #==============================================================
     ACTIVE_STATUSES = [:running, :stopped, :staged, :provisioning, :starting, :stopping, :updating]
     TERMINATION_STATUSES = [:terminating, :terminated]
-    REQUIRED_INDEX_FIELDS = [:uid, :stack, :name, :status, :oauth_keys_valid, :created_at, :per_user_licence, :addon_organization, :channel_id, :oauth_company, :app]
+    REQUIRED_INDEX_FIELDS = [:uid, :stack, :name, :status, :oauth_keys_valid, :created_at, :per_user_licence, :addon_organization, :channel_id, :oauth_company, :app, :owner_id]
   end
 
   #==================================================================
