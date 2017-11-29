@@ -102,6 +102,8 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   namespace :jpi do
     namespace :v1 do
+      resources :system_identity, only: [:index]
+
       resources :marketplace, only: [:index, :show] do
         member do
           %i(app_reviews app_feedbacks app_comments app_questions app_answers).each do |name|
