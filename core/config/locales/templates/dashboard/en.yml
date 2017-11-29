@@ -87,7 +87,7 @@ en:
           marketplace: Marketplace
           logout: Logout
           new_company: New Company
-          access_admin_panel: Access Admin Panel
+          access_admin_panel: Access Control Panel
           subscriptions: Subscriptions
 
         create_company:

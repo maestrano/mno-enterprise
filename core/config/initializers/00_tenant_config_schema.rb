@@ -414,7 +414,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
     },
     admin_panel: {
       title: "Admin feature",
-      description: "This section lets you customize which functionalities you want to see in the Admin Panel",
+      description: "This section lets you customize which functionalities you want to see in the Control Panel",
       type: "object",
       properties: {
         customer_batch_import: {
@@ -451,7 +451,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 enabled: {
                   type: "boolean",
                   default: true,
-                  description: "Control the ability to create companies from the admin panel"
+                  description: "Control the ability to create companies from the Control panel"
                 }
               }
             },
@@ -461,7 +461,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 enabled: {
                   type: "boolean",
                   default: true,
-                  description: "Control the ability to add users to companies from the admin panel"
+                  description: "Control the ability to add users to companies from the Control Panel"
                 }
               }
             }
@@ -483,7 +483,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              description: "Control the ability to impersonate users (login to the webstore with their identity) from the admin panel"
+              description: "Control the ability to impersonate users (login to the webstore with their identity) from the Control Panel"
             },
             consent_required: {
               type: "boolean",
@@ -514,7 +514,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: true,
-              description: "Enable settings in Admin Panel"
+              description: "Enable settings in Control Panel"
             }
           }
         },
@@ -529,7 +529,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enabled: {
               type: "boolean",
               default: false,
-              description: "enable sub tenant management from the Admin Panel"
+              description: "enable sub tenant management from the Control Panel"
             }
           }
         },
