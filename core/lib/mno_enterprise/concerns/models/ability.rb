@@ -66,10 +66,26 @@ module MnoEnterprise::Concerns::Models::Ability
     end
 
     #===================================================
+    # Admin abilities
+    #===================================================
+    admin_abilities(user)
+
+    #===================================================
     # Impac
     #===================================================
     orgs_with_acl = user.organizations.active.include_acl(session[:impersonator_user_id]).to_a
+    impac_abilities(orgs_with_acl)
+  end
 
+  # Abilities for admin user
+  def admin_abilities(user)
+    if user.admin_role.to_s.casecmp('admin').zero? || user.admin_role.to_s.casecmp('staff').zero?
+      can :manage_app_instances, MnoEnterprise::Organization
+    end
+  end
+
+  # Enables / disables Impac! Angular capabilities
+  def impac_abilities(orgs_with_acl)
     can :create_impac_dashboards, MnoEnterprise::Impac::Dashboard do |d|
       orgs = d.organizations(orgs_with_acl)
       orgs.present? && orgs.all? { |org| org.acl.dig(:related, :dashboards, :create) }
@@ -113,18 +129,6 @@ module MnoEnterprise::Concerns::Models::Ability
     can :destroy_impac_kpis, MnoEnterprise::Impac::Kpi do |k|
       orgs = k.organizations(orgs_with_acl)
       orgs.present? && orgs.all? { |org| org.acl.dig(:related, :kpis, :destroy) }
-    end
-
-    #===================================================
-    # Admin abilities
-    #===================================================
-    admin_abilities(user)
-  end
-
-  # Abilities for admin user
-  def admin_abilities(user)
-    if user.admin_role.to_s.casecmp('admin').zero? || user.admin_role.to_s.casecmp('staff').zero?
-      can :manage_app_instances, MnoEnterprise::Organization
     end
   end
 end
