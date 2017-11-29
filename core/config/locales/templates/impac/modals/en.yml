@@ -8,7 +8,7 @@ en:
             label_name: Name
             label_current_company: Current Company
             label_multi_company: Multi Company
-            unauthorized_to_access_company_reporting: "Oops! Only Admins and Super Admins can create dashboards for company %{companyname}."
+            unauthorized_to_access_company_reporting: "Oops! Only Managers and Admins can create dashboards for company %{companyname}."
             please_select_multi_company: Please select a "Multi Company" dashboard to select data from other companies.
             label_companies: Companies
             cancel: Cancel

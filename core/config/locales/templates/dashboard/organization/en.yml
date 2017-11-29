@@ -86,13 +86,13 @@ en:
             roles:
               member: Member
               power_user: Power User
-              admin: Admin
-              super_admin: Super Admin
+              admin: Manager
+              super_admin: Admin
               invited:
                 member: Invited (Member)
                 power_user: Invited (Power User)
-                admin: Invited (Admin)
-                super_admin: Invited (Super Admin)
+                admin: Invited (Manager)
+                super_admin: Invited (Admin)
             invite_modal:
               title_name: "Edit Member: {name} {surname}"
               title_email: "Edit Member: {email}"
@@ -106,15 +106,15 @@ en:
               invite: Invite
               roles_info:
                 member: "A <b>Member</b> can see other members and access the company apps"
-                admin: "An <b>Admin</b> can manage other members (except Super Admin users) and manage the company apps"
-                super_admin: "A <b>Super Admin</b> has all power within the company including access to billing management"
+                admin: "A <b>Manager</b> can manage other members (except Admin users) and manage the company apps"
+                super_admin: "An <b>Admin</b> has all power within the company including access to billing management"
             edition_modal:
               cancel: Cancel
               change: Change
               roles:
                 member: A member can see other members and access the company apps
-                admin: An Admin can manage other members (except Super Admin users) and manage the company apps
-                super_admin: A Super Admin has all power within the company including access to billing management
+                admin: A Manager can manage other members (except Admin users) and manage the company apps
+                super_admin: An Admin has all power within the company including access to billing management
             removal_modal:
               title: Confirm action
               body_name: Are you really sure you want to remove {name} {surname}?
