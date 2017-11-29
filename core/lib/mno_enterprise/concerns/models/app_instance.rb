@@ -37,10 +37,10 @@ module MnoEnterprise::Concerns::Models::AppInstance
   def active?
     status.to_sym.in? ACTIVE_STATUSES
   end
+
   #==================================================================
   # Instance methods
   #==================================================================
-
 
 
   def to_audit_event

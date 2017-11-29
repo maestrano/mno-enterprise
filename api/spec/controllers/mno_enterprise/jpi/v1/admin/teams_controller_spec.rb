@@ -48,7 +48,6 @@ module MnoEnterprise
     let!(:user) { build(:user, :admin) }
     let!(:organization) { build(:organization) }
     let!(:team) { build(:team, organization: organization) }
-    let!(:Ateam) { build(:team, organization: organization) }
     let!(:role) { 'Admin' }
     let!(:app) { build(:app) }
     let!(:orga_relation) { build(:orga_relation, organization_id: organization.id, role: role, user_id: user.id) }
@@ -61,12 +60,20 @@ module MnoEnterprise
     #===============================================
     describe 'GET #index' do
       subject { get :index, organization_id: organization.id }
-      
+
       let!(:current_user_stub) { stub_user(user) }
-      let(:includes) { [:organization, :app_instances, :users] }
+      let(:includes) { [:app_instances, :users, :'app_instances.app'] }
       let(:data) { JSON.parse(response.body) }
       let(:expected_params) do
-        {filter: {organization_id: organization.id}}
+        {
+          filter: {'organization.id': organization.id},
+          fields:{
+            teams: 'id,name,app_instances,users',
+            app_instances:'id,name,app',
+            users: 'id,name,surname,email',
+            apps: 'logo'
+          }
+        }
       end
 
       before { stub_api_v2(:get, "/teams", team, includes, expected_params) }
