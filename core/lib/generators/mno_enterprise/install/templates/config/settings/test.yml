@@ -1,6 +1,8 @@
 impac:
   protocol: https
   host: api-impac.maestrano.test
+  pusher:
+    key: <%= %w(e60058ab d5a0 4828 9b3a dbd996c82694).join('-') %>
 mno:
   protocol: https
   host: api-enterprise.maestrano.test

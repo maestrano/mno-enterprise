@@ -37,6 +37,7 @@ module MnoEnterprise
         template "config/settings.yml", "config/settings.yml"
         create_file "config/settings.local.yml"
         directory "config/settings", "config/settings"
+        template "config/settings/test.yml", force: true
 
         template "config/application.yml", "config/application.yml"
         template "config/application.yml", "config/application.sample.yml"
