@@ -58,5 +58,4 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::DeletionRequestsController
       head :bad_request
     end
   end
-
 end

@@ -99,7 +99,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
       # to the user orga
       # Only for new users for which an orga was created (not an invited user
       # typically)
-      app_instances = setup_apps(@user,['quickbooks',params[:app]], oauth_keyset: params[:app])
+      app_instances = setup_apps(@user, ['quickbooks', params[:app]], oauth_keyset: params[:app])
       qb_instance = app_instances.first
 
       # On Intuit, Mno is configured to add qb_initiated=true if the user
@@ -141,63 +141,64 @@ module MnoEnterprise::Concerns::Controllers::Auth::OmniauthCallbacksController
   #================================================
   private
 
-    def cleanup_intuit_session
-      session.delete("omniauth.intuit.passthru_email")
-      session.delete("omniauth.intuit.request_account_link")
+  def cleanup_intuit_session
+    session.delete("omniauth.intuit.passthru_email")
+    session.delete("omniauth.intuit.request_account_link")
+  end
+
+  # Whether to create an orga on user creation
+  def create_orga_on_user_creation(user_email = nil)
+    return false if user_email.blank?
+    return false if MnoEnterprise::User.exists?(email: user_email)
+
+    # First check previous url to see if the user
+    # was trying to accept an orga
+    if !session[:previous_url].blank? && (r = session[:previous_url].match(/\/orga_invites\/(\d+)\?token=(\w+)/))
+      invite_params = { id: r.captures[0].to_i, token: r.captures[1] }
+      return false if MnoEnterprise::OrgaInvite.where(invite_params).any?
     end
 
-    # Whether to create an orga on user creation
-    def create_orga_on_user_creation(user_email = nil)
-      return false if user_email.blank?
-      return false if MnoEnterprise::User.exists?(email: user_email)
+    # Get remaining invites via email address
+    return MnoEnterprise::OrgaInvite.where(user_email: user_email).empty?
+  end
 
-      # First check previous url to see if the user
-      # was trying to accept an orga
-      if !session[:previous_url].blank? && (r = session[:previous_url].match(/\/orga_invites\/(\d+)\?token=(\w+)/))
-        invite_params = { id: r.captures[0].to_i, token: r.captures[1] }
-        return false if MnoEnterprise::OrgaInvite.where(invite_params).any?
+  # Create or find the apps provided in argument
+  # Accept an array of app nid (named id - e.g: 'quickbooks')
+  # opts:
+  #   oauth_keyset: If a oauth_keyset is provided then it will be added to the
+  # oauth_keys of any app that is oauth ready (QuickBooks for example)
+  #
+  # Return an array of app instances (found or created)
+  def setup_apps(user, app_nids, opts)
+    organizations = MnoEnterprise::Organization.where('users.id': user.id).select(:id)
+    orga_relations = MnoEnterprise::OrgaRelation.where('user.id': user.id).select(:role)
+    return [] unless (organizations.count == 1 && orga_relations.count == 1)
+    organization = organizations.first
+    return [] unless MnoEnterprise::Ability.new(user).can?(:update, orga_relations.first)
+    apps = MnoEnterprise::App.where('nid.in': app_nids.compact.join(',')).select('id,nid')
+    existing = MnoEnterprise::AppInstance
+                 .where(
+                   'owner.id': organization.id,
+                   'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')
+                 ).includes(:app)
+                 .index_by { |a| a.app.id }
+
+    # For each app nid (which is not nil), try to find an existing instance or create one
+    results = apps.map do |app|
+      unless (app_instance = existing[app.id])
+        # Provision instance
+        app_instance = MnoEnterprise::AppInstance.provision!(app.nid, organization.id, 'Organization' )
+        app_instance = app_instance.load_required(:owner)
+        MnoEnterprise::EventLogger.info('app_add', user.id, 'App added', app_instance)
       end
-
-      # Get remaining invites via email address
-      return MnoEnterprise::OrgaInvite.where(user_email: user_email).empty?
-    end
-
-    # Create or find the apps provided in argument
-    # Accept an array of app nid (named id - e.g: 'quickbooks')
-    # opts:
-    #   oauth_keyset: If a oauth_keyset is provided then it will be added to the
-    # oauth_keys of any app that is oauth ready (QuickBooks for example)
-    #
-    # Return an array of app instances (found or created)
-    def setup_apps(user = nil, app_nids = [], opts = {})
-      return [] unless user
-      return [] unless (user.organizations.reload.count == 1)
-      return [] unless (org = user.organizations.first)
-      return [] unless MnoEnterprise::Ability.new(user).can?(:edit,org)
-
-      results = []
-
-      apps = MnoEnterprise::App.where(nid: app_nids.compact)
-      existing = org.app_instances.active.index_by(&:app_id)
-
-      # For each app nid (which is not nil), try to find an existing instance or create one
-      apps.each do |app|
-        if (app_instance = existing[app.id])
-          results << app_instance
-        else
-          # Provision instance and add to results
-          app_instance = org.provision_app_instance!(app.nid)
-          results << app_instance
-          MnoEnterprise::EventLogger.info('app_add', user.id, 'App added', app_instance)
-        end
-
-        # Add oauth keyset if defined and app_instance is
-        # oauth ready and does not have a valid set of oauth keys
-        if app_instance && opts[:oauth_keyset].present? && !app_instance.oauth_keys_valid
-          app_instance.oauth_keys = { keyset: opts[:oauth_keyset] }
-          app_instance.save
-        end
+      # Add oauth keyset if defined and app_instance is
+      # oauth ready and does not have a valid set of oauth keys
+      if opts[:oauth_keyset].present? && !app_instance.oauth_keys_valid
+        app_instance.oauth_keys = { keyset: opts[:oauth_keyset] }
+        app_instance.save!
       end
-      return results
+      app_instance
     end
+    return results
+  end
 end
