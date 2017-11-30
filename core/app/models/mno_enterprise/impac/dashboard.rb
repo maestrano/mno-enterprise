@@ -44,10 +44,7 @@ module MnoEnterprise
     end
 
     def to_audit_event
-      {
-        name: name,
-        organization_id: (owner_type == 'Organization') ? owner_id : nil
-      }
+      { name: name }
     end
 
     def copy(owner, name, organization_ids)

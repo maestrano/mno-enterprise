@@ -37,6 +37,7 @@ module MnoEnterprise
       end
     end
 
+    let!(:ability) { stub_ability }
     let(:user) { build(:user, :with_organizations) }
     let(:org) { build(:organization, users: [user]) }
     let(:metadata) { { hist_parameters: { from: '2015-01-01', to: '2015-03-31', period: 'MONTHLY' } } }
@@ -130,6 +131,10 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
+      subject { post :create, user_id: user.id, dashboard: dashboard_params }
+
+      include_context "#{described_class}: dashboard dependencies stubs"
+      
       before do
         api_stub_for(
           post: "users/#{user.id}/dashboards",
@@ -140,20 +145,24 @@ module MnoEnterprise
           get: "users/#{user.id}/dashboards",
           response: from_api([dashboard])
         )
+        allow(ability).to receive(:can?).with(:create_impac_dashboards, any_args).and_return(true)
       end
-      include_context "#{described_class}: dashboard dependencies stubs"
-
-      subject { post :create, user_id: user.id, dashboard: dashboard_params }
 
       it_behaves_like "jpi v1 protected action"
 
-      it 'returns a dashboard' do
-        subject
-        expect(JSON.parse(response.body)).to eq(hash_for_dashboard)
+      context 'when authorized' do
+        it 'returns a dashboard' do
+          subject
+          expect(JSON.parse(response.body)).to eq(hash_for_dashboard)
+        end
       end
     end
 
     describe 'PUT #update' do
+      subject { put :update, id: dashboard.id, dashboard: dashboard_params }
+
+      include_context "#{described_class}: dashboard dependencies stubs"
+
       before do
         api_stub_for(
           get: "users/#{user.id}/dashboards/#{dashboard.id}",
@@ -163,10 +172,8 @@ module MnoEnterprise
           put: "dashboards/#{dashboard.id}",
           response: from_api(dashboard)
         )
+        allow(ability).to receive(:can?).with(:update_impac_dashboards, any_args).and_return(true)
       end
-      include_context "#{described_class}: dashboard dependencies stubs"
-
-      subject { put :update, id: dashboard.id, dashboard: dashboard_params }
 
       it_behaves_like "jpi v1 protected action"
 
@@ -177,6 +184,10 @@ module MnoEnterprise
     end
 
     describe "DELETE destroy" do
+      subject { delete :destroy, id: dashboard.id }
+
+      include_context "#{described_class}: dashboard dependencies stubs"
+      
       before do
         api_stub_for(
           get: "users/#{user.id}/dashboards/#{dashboard.id}",
@@ -186,15 +197,17 @@ module MnoEnterprise
           delete: "dashboards/#{dashboard.id}",
           response: from_api(dashboard)
         )
+        allow(ability).to receive(:can?).with(:destroy_impac_dashboards, any_args).and_return(true)
       end
-      include_context "#{described_class}: dashboard dependencies stubs"
-
-      subject { delete :destroy, id: dashboard.id }
       
       it_behaves_like "jpi v1 protected action"
     end
 
     describe 'POST copy' do
+      subject { post :copy, id: template.id, dashboard: dashboard_params }
+
+      include_context "#{described_class}: dashboard dependencies stubs"
+      
       let(:template) { build(:impac_dashboard, dashboard_type: 'template') }
 
       before do
@@ -207,10 +220,8 @@ module MnoEnterprise
           post: "/dashboards/#{template.id}/copy",
           response: from_api(dashboard)
         )
+        allow(ability).to receive(:can?).with(:create_impac_dashboards, any_args).and_return(true)
       end
-      include_context "#{described_class}: dashboard dependencies stubs"
-
-      subject { post :copy, id: template.id, dashboard: dashboard_params }
 
       it_behaves_like "jpi v1 protected action"
 

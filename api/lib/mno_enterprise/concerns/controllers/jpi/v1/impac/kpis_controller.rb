@@ -145,7 +145,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
     def kpi_create_params
       whitelist = [:dashboard_id, :widget_id, :endpoint, :source, :element_watched, {extra_watchables: []}]
       create_params = extract_params(whitelist)
-      create_params[:settings][:organization_ids] ||= kpi_parent.settings[:organization_ids]
+      create_params[:settings][:organization_ids] ||= kpi_parent.settings.to_h[:organization_ids]
       create_params
     end
 
