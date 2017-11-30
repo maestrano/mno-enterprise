@@ -66,15 +66,15 @@ module MnoEnterprise::Concerns::Models::Ability
     end
 
     #===================================================
-    # Admin abilities
-    #===================================================
-    admin_abilities(user)
-
-    #===================================================
     # Impac
     #===================================================
     orgs_with_acl = user.organizations.active.include_acl(session[:impersonator_user_id]).to_a
     impac_abilities(orgs_with_acl)
+
+    #===================================================
+    # Admin abilities
+    #===================================================
+    admin_abilities(user)
   end
 
   # Abilities for admin user
@@ -88,47 +88,65 @@ module MnoEnterprise::Concerns::Models::Ability
   def impac_abilities(orgs_with_acl)
     can :create_impac_dashboards, MnoEnterprise::Impac::Dashboard do |d|
       orgs = d.organizations(orgs_with_acl)
-      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :dashboards, :create) }
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:dashboards] && org.acl[:related][:dashboards][:create]
+      end
     end
 
     can :update_impac_dashboards, MnoEnterprise::Impac::Dashboard do |d|
       orgs = d.organizations(orgs_with_acl)
-      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :dashboards, :update) }
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:dashboards] && org.acl[:related][:dashboards][:update]
+      end
     end
 
     can :destroy_impac_dashboards, MnoEnterprise::Impac::Dashboard do |d|
       orgs = d.organizations(orgs_with_acl)
-      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :dashboards, :destroy) }
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:dashboards] && org.acl[:related][:dashboards][:destroy]
+      end
     end
 
     can :create_impac_widgets, MnoEnterprise::Impac::Widget do |w|
       orgs = w.organizations(orgs_with_acl)
-      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :widgets, :create) }
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:widgets] && org.acl[:related][:widgets][:create]
+      end
     end
 
     can :update_impac_widgets, MnoEnterprise::Impac::Widget do |w|
       orgs = w.organizations(orgs_with_acl)
-      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :widgets, :update) }
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:widgets] && org.acl[:related][:widgets][:update]
+      end
     end
 
     can :destroy_impac_widgets, MnoEnterprise::Impac::Widget do |w|
       orgs = w.organizations(orgs_with_acl)
-      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :widgets, :destroy) }
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:widgets] && org.acl[:related][:widgets][:destroy]
+      end
     end
 
     can :create_impac_kpis, MnoEnterprise::Impac::Kpi do |k|
       orgs = k.organizations(orgs_with_acl)
-      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :kpis, :create) }
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:kpis] && org.acl[:related][:kpis][:create]
+      end
     end
 
     can :update_impac_kpis, MnoEnterprise::Impac::Kpi do |k|
       orgs = k.organizations(orgs_with_acl)
-      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :kpis, :update) }
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:kpis] && org.acl[:related][:kpis][:update]
+      end
     end
 
     can :destroy_impac_kpis, MnoEnterprise::Impac::Kpi do |k|
       orgs = k.organizations(orgs_with_acl)
-      orgs.present? && orgs.all? { |org| org.acl.dig(:related, :kpis, :destroy) }
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:kpis] && org.acl[:related][:kpis][:destroy]
+      end
     end
   end
 end
