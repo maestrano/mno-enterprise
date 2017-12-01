@@ -533,7 +533,7 @@ server {
   root /apps/<%= app_name %>/current/public;
   index        index.html index.htm;
 
-  location ~* "^/[A-Za-z]{2}/dashboard(.*)" {
+  location ~* "^/[A-Za-z]{2}(?:-[A-Za-z]{2})?/dashboard(.*)" {
     try_files  /dashboard$1/index.html /dashboard$1.html /dashboard$1 @backend;
   }
 
