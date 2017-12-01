@@ -38,6 +38,7 @@ _Note: `4.0` is actively under development. If you're looking for the stable cod
     1.  [Docker](#docker)
     2.  [Sample nginx config for I18n](#sample-nginx-config-for-i18n)
     3.  [Health Checks](#health-checks)
+    4.  [New Relic Monitoring](#new-relic-monitoring)
 10. [Contributing](#contributing)
 
 - - -
@@ -571,6 +572,14 @@ HealthCheck.setup do |config|
   config.full_checks = %w(cache site custom database migrations)
 end
 ```
+
+### New Relic Monitoring
+
+The New Relic Ruby agent is already installed in `uat` and `production` environment if you used the [template](#one-step-install-recommended) to generate your app.
+
+You can review the settings in `config/settings.yml` if you need to change them.
+
+To enable monitoring, you just need to set the `NEWRELIC_LICENSE_KEY` environment variable to a valid New Relic licence key.
 
 ## Contributing
 
