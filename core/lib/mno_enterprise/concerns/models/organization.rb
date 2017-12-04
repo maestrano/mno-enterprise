@@ -87,9 +87,9 @@ module MnoEnterprise::Concerns::Models::Organization
 
   # Update a user role within self
   #
-  # user - A MnoEnterprise::User who performed the action
-  # updated_user - The user to update. ∈ [MnoEnterprise::User, MnoEnterprise::OrgaInvite]
-  # new_role - The role to assign to updated_user
+  # @param user [MnoEnterprise::User] the user performing the action
+  # @param updated_user [MnoEnterprise::User, MnoEnterprise::OrgaInvite] the user to update
+  # @param new_role [String] the role to assign to updated_user
   #
   def update_user_role(user, updated_user, new_role)
     if user.role(self) == 'Admin'

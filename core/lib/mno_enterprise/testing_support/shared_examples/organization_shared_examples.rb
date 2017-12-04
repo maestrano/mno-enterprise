@@ -10,7 +10,7 @@ module MnoEnterprise::TestingSupport::SharedExamples::OrganizationSharedExamples
       let(:email) { member.email }
 
       let(:new_member_role) { 'Power User' }
-      let(:params) { {email: email, role: new_member_role} }
+      let(:params) { {id: member.id, email: email, role: new_member_role} }
 
       # reloading organization
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations)) }
