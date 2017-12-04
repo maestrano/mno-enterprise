@@ -258,6 +258,9 @@ MnoEnterprise::Engine.routes.draw do
           resources :users, only: [] do
             resource :invites, only: [:create]
           end
+
+          resources :teams, only: [:index]
+
           if Settings&.dashboard&.marketplace&.provisioning
             resources :subscriptions, only: [:index, :show, :create, :update] do
               member do

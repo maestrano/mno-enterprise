@@ -8,7 +8,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
   # context where it is included rather than being executed in the module's context
   included do
     ADMIN_CACHE_DURATION = 12.hours
-
     before_filter :check_authorization
   end
 
@@ -16,10 +15,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
 
   def timestamp
     @timestamp ||= (params[:timestamp] || 0).to_i
-  end
-
-  def parent_organization
-    @parent_organization ||= current_user.organizations.to_a.find { |o| o.id.to_s == params[:organization_id].to_s }
   end
 
   # Check current user is logged in
