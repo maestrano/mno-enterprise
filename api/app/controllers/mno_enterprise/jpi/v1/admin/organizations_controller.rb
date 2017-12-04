@@ -73,14 +73,19 @@ module MnoEnterprise
       user = MnoEnterprise::User.find_by(email: user_params[:email]) || create_unconfirmed_user(user_params)
 
       # Create the invitation
-      invite = @organization.org_invites.create(
+      invite = MnoEnterprise::OrgInvite.create(
         user_email: user.email,
         user_role: params[:user][:role],
         referrer_id: current_user.id,
-        status: 'staged' # Will be updated to 'accepted' for unconfirmed users
+        status: 'staged', # Will be updated to 'accepted' for unconfirmed users
+        organization_id: @organization.id
       )
 
-      @user = user.confirmed? ? invite : user.reload
+      if invite.save
+        @user = user.confirmed? ? invite : user.reload
+      else
+        render json: invite.errors, status: :bad_request
+      end
     end
 
     protected
