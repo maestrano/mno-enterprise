@@ -81,7 +81,7 @@ module MnoEnterprise
         organization_id: @organization.id
       )
 
-      if invite.save
+      if invite.persisted?
         @user = user.confirmed? ? invite : user.reload
       else
         render json: invite.errors, status: :bad_request

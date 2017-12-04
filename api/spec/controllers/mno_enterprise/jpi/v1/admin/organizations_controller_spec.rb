@@ -157,7 +157,7 @@ module MnoEnterprise
         # Track the api call
         @api_call = false
         stub = -> { @api_call = true; from_api(org_invite) }
-        api_stub_for(post: "/organizations/#{organization.id}/org_invites", response: stub)
+        api_stub_for(post: "/org_invites", response: stub)
       end
 
       let(:params) { FactoryGirl.attributes_for(:user) }
