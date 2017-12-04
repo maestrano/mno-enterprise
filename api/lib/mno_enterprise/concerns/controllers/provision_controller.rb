@@ -67,7 +67,8 @@ module MnoEnterprise::Concerns::Controllers::ProvisionController
 
     app_instances = []
     params[:apps].each do |product_name|
-      app_instance = @organization.provision_app_instance!(product_name)
+      app_instance = MnoEnterprise::AppInstance.provision!(product_name, params[:organization_id], 'Organization' )
+      app_instance = app_instance.load_required(:owner)
       app_instances << app_instance
       MnoEnterprise::EventLogger.info('app_add', current_user.id, 'App added', app_instance)
     end

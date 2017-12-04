@@ -10,5 +10,8 @@ FactoryGirl.define do
     user_id '265'
     organization_id '265'
     role 'Admin'
+    trait :super_admin do
+      role 'Super Admin'
+    end
   end
 end

@@ -58,18 +58,19 @@ module MnoEnterprise
     # Specs
     #===============================================
     describe 'PUT #add_users' do
-
-      let!(:current_user_stub) { stub_user(user) }
-
-      before { stub_api_v2(:get, "/apps", [app]) }
-      before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations)) }
-      before { stub_api_v2(:get, "/teams/#{team.id}", team, %i(organization)) }
-      before { stub_api_v2(:patch, "/teams/#{team.id}") }
-      before { stub_audit_events }
       subject { put :add_users, id: team.id, team: {users: [{id: user.id}]} }
+      before do
+        stub_user(user)
+        stub_orga_relation(user, organization, build(:orga_relation))
+        stub_api_v2(:get, "/apps", [app])
+        stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations))
+        stub_api_v2(:get, "/teams/#{team.id}", team, %i(organization))
+        stub_api_v2(:patch, "/teams/#{team.id}")
+        # team reload
+        stub_api_v2(:get, "/teams/#{team.id}", team, %i(organization users app_instances))
+        stub_audit_events
+      end
 
-      # team reload
-      before { stub_api_v2(:get, "/teams/#{team.id}", team, %i(organization users app_instances)) }
       context 'success' do
         before { subject }
 

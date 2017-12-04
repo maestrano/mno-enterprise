@@ -22,7 +22,7 @@ module MnoEnterprise
 
     def current_impersonator
       return unless session[:impersonator_user_id]
-      @admin_user ||= MnoEnterprise::User.find_one(session[:impersonator_user_id], :deletion_requests, :organizations, :orga_relations, :dashboards, :teams, :sub_tenant)
+      @admin_user ||= MnoEnterprise::User.find_one(session[:impersonator_user_id])
     end
 
   end

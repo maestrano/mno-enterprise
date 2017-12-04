@@ -5,10 +5,19 @@ module MnoEnterprise
 
     custom_endpoint :freeze, on: :member, request_method: :patch
 
+    has_one :deletable
+
     #============================================
     # CONSTANTS
     #============================================
     EXPIRATION_TIME = 60 #minutes
+
+    #============================================
+    # Class methods
+    #============================================
+    def self.active(query = where)
+      query.where('status.ne': 'cancelled', 'created_at.gt': EXPIRATION_TIME.minutes.ago)
+    end
 
     #============================================
     # Instance methods
@@ -26,7 +35,6 @@ module MnoEnterprise
       result = self.freeze
       process_custom_result(result)
     end
-
   end
 end
 

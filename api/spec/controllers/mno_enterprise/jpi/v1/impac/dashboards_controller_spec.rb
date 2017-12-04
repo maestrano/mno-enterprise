@@ -11,8 +11,8 @@ module MnoEnterprise
     let(:dashboard_dependencies) { [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts', :'kpis.alerts.recipients'] }
 
     # Stub user and user call
-    let(:org) { build(:organization, users: [], orga_relations: []) }
-    let!(:user) { build(:user, organizations: [org]) }
+    let(:organization) { build(:organization) }
+    let!(:user) { build(:user) }
     let!(:current_user_stub) { stub_user(user) }
 
     let(:metadata) { { hist_parameters: { from: '2015-01-01', to: '2015-03-31', period: 'MONTHLY' } } }
@@ -25,7 +25,7 @@ module MnoEnterprise
     let(:dashboard) do
       build(:impac_dashboard,
             dashboard_type: 'dashboard',
-            organization_ids: [org.uid],
+            organization_ids: [organization.uid],
             currency: 'EUR',
             settings: metadata,
             widgets: [widget],
@@ -76,7 +76,7 @@ module MnoEnterprise
         "full_name" => dashboard.full_name,
         "currency" => 'EUR',
         "metadata" => metadata.deep_stringify_keys,
-        "data_sources" => [{ "id" => org.id, "uid" => org.uid, "label" => org.name }],
+        "data_sources" => [{ "id" => organization.id, "uid" => organization.uid, "label" => organization.name }],
         "kpis" => [hash_for_kpi(d_kpi)],
         "widgets" => [hash_for_widget]
       }
@@ -85,6 +85,7 @@ module MnoEnterprise
     before do
       sign_in user
       stub_audit_events
+      stub_api_v2(:get, '/organizations', [organization], [], filter: { 'users.id': user.id})
     end
 
     describe 'GET #index' do

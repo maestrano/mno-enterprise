@@ -25,7 +25,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
   # TODO: Access + existence checks could be added in the future. This is not
   # mandatory as Mno Enterprise will do it anyway
   def launch
-    app_instance = MnoEnterprise::AppInstance.where(uid: params[:id]).first
+    app_instance = MnoEnterprise::AppInstance.where(uid: params[:id]).includes(:owner).first
     MnoEnterprise::EventLogger.info('app_launch', current_user.id, 'App launched', app_instance)
     redirect_to MnoEnterprise.router.launch_url(params[:id], {wtk: MnoEnterprise.jwt(user_id: current_user.uid)}.reverse_merge(request.query_parameters))
   end

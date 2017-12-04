@@ -94,11 +94,6 @@ module MnoEnterprise::Concerns::Models::Organization
     MnoEnterprise::OrgaRelation.create!(organization_id: self.id, user_id: user.id, role: role)
   end
 
-  def provision_app_instance!(app_nid)
-    input = { data: { attributes: { app_nid: app_nid, owner_id: id, owner_type: 'Organization' } } }
-    MnoEnterprise::AppInstance.provision!(input)
-  end
-
   def new_credit_card
     MnoEnterprise::CreditCard.new(owner_id: id, owner_type: 'Organization')
   end

@@ -46,7 +46,7 @@ module MnoEnterprise
 
         if event_type == :added
           address = MnoEnterprise::Address.new(
-            city:         row['city'],
+            city: row['city'],
             country_code: row['country'],
             street: [row['address1'], row['address2']].reject(&:blank?).join(' '),
             state_code: row['state_province'],
@@ -72,10 +72,10 @@ module MnoEnterprise
         user.phone = row['phone']
 
         user.save
-        orga_relation = MnoEnterprise::OrgaRelation.where(user_id: user.id, organization_id: organization.id).first
+        orga_relation = MnoEnterprise::OrgaRelation.where('user.id': user.id, 'organization.id': organization.id).first
         # Add User as Super Admin to Organization if he is not already in it
         unless orga_relation
-          MnoEnterprise::OrgaRelation.create(user_id: user.id, organization_id: organization.id, role: 'Super Admin')
+          MnoEnterprise::OrgaRelation.create(user: user, organization: organization, role: 'Super Admin')
         end
       end
       report

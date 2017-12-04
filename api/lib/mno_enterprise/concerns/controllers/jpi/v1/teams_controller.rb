@@ -15,29 +15,33 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   #==================================================================
   # GET /mnoe/jpi/v1/organizations/:organization_id/teams
   def index
-    authorize! :read, parent_organization
-    @teams = MnoEnterprise::Team.includes(:organization, :app_instances, :users).find(organization_id: parent_organization.id)
+    authorize! :read, orga_relation
+    @teams = MnoEnterprise::Team.includes(:organization, :app_instances, :users).where('organization.id': parent_organization_id)
+    load_parent_organization(parent_organization_id)
   end
 
   # GET /mnoe/jpi/v1/teams/:id
   def show
+    authorize! :read, orga_relation
     @team = MnoEnterprise::Team.find_one(params[:id], :organization, :app_instances, :users)
-    authorize! :read, @team.organization
+    authorize! :read, current_user.orga_relation(@team.organization)
+    load_parent_organization(@team.organization.id)
   end
 
   # POST /mnoe/jpi/v1/organizations/:organization_id/teams
   def create
-    authorize! :manage_teams, parent_organization
-    @team = MnoEnterprise::Team.create(create_params)
-    MnoEnterprise::EventLogger.info('team_add', current_user.id, 'Team created', @team) if @team
+    authorize! :manage_teams, orga_relation
+    @team = MnoEnterprise::Team.create!(create_params)
+    MnoEnterprise::EventLogger.info('team_add', current_user.id, 'Team created', @team)
+    load_parent_organization(parent_organization_id)
     render 'show'
   end
 
   # PUT /mnoe/jpi/v1/teams/:id
   def update
-    @team = MnoEnterprise::Team.find_one(params[:id], :organization)
-    @parent_organization = MnoEnterprise::Organization.find_one(@team.organization.id, :orga_relations)
-    authorize! :manage_teams, @parent_organization
+    @team = MnoEnterprise::Team.find_one!(params[:id], :organization)
+    organization = @team.organization
+    authorize! :manage_teams, current_user.orga_relation(organization)
     @team.update_attributes!(update_params)
     # # Update permissions
     if params[:team] && params[:team][:app_instances]
@@ -45,6 +49,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
       MnoEnterprise::EventLogger.info('team_apps_update', current_user.id, 'Team apps updated', @team,
                                       {apps: list.map{|l| l['name']}})
     end
+    load_parent_organization(organization.id)
     render 'show'
   end
 
@@ -60,23 +65,28 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
 
   # DELETE /mnoe/jpi/v1/teams/:id
   def destroy
-    @team = MnoEnterprise::Team.find_one(params[:id], :organization)
-    authorize! :manage_teams, @team.organization
-    MnoEnterprise::EventLogger.info('team_delete', current_user.id, 'Team deleted', @team) if @team
+    @team = MnoEnterprise::Team.find_one!(params[:id], :organization)
+    authorize! :manage_teams, current_user.orga_relation(@team.organization)
+    MnoEnterprise::EventLogger.info('team_delete', current_user.id, 'Team deleted', @team)
     @team.destroy!
     head :no_content
   end
 
   private
 
+  def load_parent_organization(id)
+    @parent_organization = MnoEnterprise::Organization.find_one(id, :orga_relations)
+  end
+
   # Update the members of a team
   # Reduce duplication between add and remove
   def update_members(action)
-    @team = MnoEnterprise::Team.find_one(params[:id], :organization)
-    authorize! :manage_teams, @team.organization
-
+    @team = MnoEnterprise::Team.find_one!(params[:id], :organization)
+    organization = @team.organization
+    authorize! :manage_teams, current_user.orga_relation(organization)
     if params[:team] && params[:team][:users]
       id_list = params[:team][:users].map { |h| h[:id].to_i }.compact
+      # TODO: use a Custom method to update user_ids
       user_ids = case action
                    when :add_user
                      @team.user_ids | id_list
@@ -88,7 +98,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
                                       {action: action.to_s, user_ids: user_ids})
     end
     @team = @team.load_required(:organization, :users, :app_instances)
-    @parent_organization = MnoEnterprise::Organization.find_one(@team.organization.id, :orga_relations)
+    load_parent_organization(organization.id)
     render 'show'
   end
 
@@ -102,7 +112,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   end
 
   def create_params
-    params.require(:team).permit(:name).merge(organization_id: parent_organization.id)
+    params.require(:team).permit(:name).merge(organization_id: parent_organization_id)
   end
 
 end

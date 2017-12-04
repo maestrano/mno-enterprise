@@ -24,13 +24,12 @@ module MnoEnterprise
     before { sign_in user }
 
     # Stub organization
-    # Stub organization and association
-    let!(:organization) {
-      o = build(:organization, orga_relations: [])
-      o.orga_relations << build(:orga_relation, user_id: user.id, organization_id: o.id, role: 'Super Admin')
-      o
-    }
-    before { stub_api_v2(:get, '/organizations', [organization], %i(orga_relations users), {filter: {uid: organization.uid}}) }
+    let(:orga_relation) { build(:orga_relation, role: 'Admin') }
+    let!(:organization) { build(:organization) }
+    before do
+      stub_orga_relation(user, organization, orga_relation, 'uid')
+      stub_api_v2(:get, '/organizations', [organization], [], { filter: { uid: organization.uid } })
+    end
 
     # Apps sync
     let(:connectors) { [
@@ -62,7 +61,7 @@ module MnoEnterprise
 
       context 'when no connector is syncing' do
         let(:connectors) { [
-          HashWithIndifferentAccess.new({name: 'a_name', status: 'FAILED', date: nil})
+          HashWithIndifferentAccess.new({ name: 'a_name', status: 'FAILED', date: nil })
         ] }
 
         before { subject }
@@ -71,7 +70,7 @@ module MnoEnterprise
 
       context 'when connector is pending' do
         let(:connectors) { [
-          HashWithIndifferentAccess.new({name: 'a_name', status: 'PENDING', date: nil})
+          HashWithIndifferentAccess.new({ name: 'a_name', status: 'PENDING', date: nil })
         ] }
         before { subject }
         it { expect(JSON.parse(response.body)['is_syncing']).to be_truthy }
@@ -80,7 +79,7 @@ module MnoEnterprise
 
     describe 'POST #create' do
       # Apps sync
-      let(:sync_results) { {connectors: []} }
+      let(:sync_results) { { connectors: [] } }
 
       before { stub_api_v2(:post, "/organizations/#{organization.id}/trigger_app_instances_sync", [organization_with_connectors]) }
 

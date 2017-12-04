@@ -21,18 +21,12 @@ module MnoEnterprise
     # Stub organization + associations
     let(:metadata) { {} }
     let!(:organization) { build(:organization, metadata: metadata, orga_invites: [], users: [], orga_relations: [], credit_card: credit_card, invoices: []) }
-    let(:role) { 'Admin' }
-    let!(:user) {
-      u = build(:user, organizations: [organization], orga_relations: [orga_relation], dashboards: [])
-      orga_relation.user_id = u.id
-      u
-    }
-    let!(:orga_relation) { build(:orga_relation, organization_id: organization.id, role: role) }
+    let!(:user) { build(:user) }
 
     let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices)) }
     # Stub user and user call
     let!(:current_user_stub) { stub_user(user) }
-
+    let(:role) { 'Admin' }
     before { sign_in user }
 
     # Advanced features - currently disabled
@@ -45,7 +39,7 @@ module MnoEnterprise
     #===============================================
     shared_examples 'an organization management action' do
       context 'when Organization management is disabled' do
-        before { Settings.merge!(dashboard: {organization_management: {enabled: false}}) }
+        before { Settings.merge!(dashboard: { organization_management: { enabled: false } }) }
         after { Settings.reload! }
 
         it { is_expected.to have_http_status(:forbidden) }
@@ -55,7 +49,10 @@ module MnoEnterprise
     describe 'GET #index' do
       subject { get :index }
       it_behaves_like 'jpi v1 protected action'
-
+      before do
+        stub_api_v2(:get, '/organizations', [organization], [], { filter: { 'users.id': user.id } })
+        stub_orga_relation(user, organization, build(:orga_relation))
+      end
       context 'success' do
         before { subject }
 
@@ -71,8 +68,10 @@ module MnoEnterprise
 
       it_behaves_like 'jpi v1 protected action'
 
+      before { stub_orga_relation(user, organization, build(:orga_relation, role: role)) }
+
       context 'success' do
-        before { subject}
+        before { subject }
 
         it 'returns a complete description of the organization' do
           expect(response).to be_success
@@ -81,20 +80,17 @@ module MnoEnterprise
       end
 
       context 'contains invoices' do
+
         subject { get :show, id: organization.id }
-        
-        let(:money) { Money.new(0, 'AUD') }
         let(:role) { 'Super Admin' }
-        let(:member_role) { role }
-        let(:member) { build(:user, id: user.id, email: user.email) }
-        
-        before {
+        let(:money) { Money.new(0, 'AUD') }
+        before do
           allow_any_instance_of(MnoEnterprise::Organization).to receive(:current_billing).and_return(money)
           allow_any_instance_of(MnoEnterprise::Organization).to receive(:current_credit).and_return(money)
           organization.invoices << invoice
-          stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices)) 
-        }
-      
+          stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices))
+        end
+
         it 'renders the list of invoices' do
           subject
           expect(JSON.parse(response.body)['invoices']).to eq(partial_hash_for_invoices(organization))
@@ -103,12 +99,15 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
-      let(:params) { {'name' => organization.name} }
+      let(:params) { { 'name' => organization.name } }
+      let(:orga_relation) { build(:orga_relation) }
       subject { post :create, organization: params }
-      before { stub_api_v2(:post, '/organizations', organization) }
-      before { stub_api_v2(:post, '/orga_relations', orga_relation) }
-      # reloading organization
-      before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations)) }
+      before do
+        stub_orga_relation(user, organization, orga_relation)
+        stub_api_v2(:post, '/organizations', organization)
+        stub_api_v2(:post, '/orga_relations', orga_relation)
+        stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations))
+      end
       it_behaves_like 'jpi v1 protected action'
       it_behaves_like 'an organization management action'
 
@@ -128,8 +127,12 @@ module MnoEnterprise
 
     describe 'PUT #update' do
 
-      let(:params) { {'name' => organization.name + 'a', 'soa_enabled' => !organization.soa_enabled} }
-      before { stub_api_v2(:patch, "/organizations/#{organization.id}", updated_organization) }
+      let(:params) { { 'name' => organization.name + 'a', 'soa_enabled' => !organization.soa_enabled } }
+      before do
+        stub_api_v2(:patch, "/organizations/#{organization.id}", updated_organization)
+        stub_orga_relation(user, organization, build(:orga_relation))
+      end
+
       let!(:updated_organization) { build(:organization, name: params['name'], id: organization.id, soa_enabled: params['soa_enabled']) }
 
       subject { put :update, id: organization.id, organization: params }
@@ -196,7 +199,7 @@ module MnoEnterprise
         end
 
         describe 'when payment restrictions are set' do
-          let(:metadata) { {payment_restriction: [:visa]} }
+          let(:metadata) { { payment_restriction: [:visa] } }
           let(:visa) { '4111111111111111' }
           let(:mastercard) { '5105105105105100' }
 
@@ -227,7 +230,7 @@ module MnoEnterprise
             it 'returns an error' do
               subject
               expect(response).to have_http_status(:bad_request)
-              expect(JSON.parse(response.body)).to eq({'number' => ['Payment is limited to Visa Card Holders']})
+              expect(JSON.parse(response.body)).to eq({ 'number' => ['Payment is limited to Visa Card Holders'] })
             end
           end
         end
@@ -243,7 +246,7 @@ module MnoEnterprise
       before { stub_api_v2(:patch, "/orga_invites/#{organization.id}", orga_invite) }
 
       let(:team) { build(:team, organization: organization) }
-      let(:params) { [{email: 'newmember@maestrano.com', role: 'Power User', team_id: team.id}] }
+      let(:params) { [{ email: 'newmember@maestrano.com', role: 'Power User', team_id: team.id }] }
       subject { put :invite_members, id: organization.id, invites: params }
 
       it_behaves_like 'jpi v1 authorizable action'
@@ -270,23 +273,26 @@ module MnoEnterprise
 
         it 'returns a partial representation of the entity' do
           subject
-          expect(JSON.parse(response.body)).to eq({'members' => partial_hash_for_members(organization)})
+          expect(JSON.parse(response.body)).to eq({ 'members' => partial_hash_for_members(organization) })
         end
       end
     end
 
     describe 'PUT #update_member' do
-
+      let(:role) { 'Admin' }
+      let!(:orga_relation) { build(:orga_relation, organization_id: organization.id, role: role) }
       let(:email) { 'somemember@maestrano.com' }
       let(:member_role) { 'Member' }
       let(:member) { build(:user) }
       let(:email) { member.email }
-
       let(:new_member_role) { 'Power User' }
-      let(:params) { {email: email, role: new_member_role} }
+      let(:params) { { email: email, role: new_member_role } }
 
-      # reloading organization
-      before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations)) }
+      before do
+        stub_orga_relation(user, organization, build(:orga_relation))
+        # reloading organization
+        stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations))
+      end
 
       subject { put :update_member, id: organization.id, member: params }
       it_behaves_like 'jpi v1 authorizable action'
@@ -294,14 +300,16 @@ module MnoEnterprise
 
       context 'with user' do
         let(:member_orga_relation) { build(:orga_relation, user_id: member.id, organization_id: organization.id, role: member_role) }
-        let(:organization_stub) {
+        let(:organization_stub) do
           organization.users << member
           organization.orga_relations << member_orga_relation
           stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices))
-        }
-        before { stub_api_v2(:get, "/orga_relations", [member_orga_relation], [], {filter: {organization_id: organization.id, user_id: member.id}, page:{ number: 1, size: 1}}) }
-        before { stub_api_v2(:post, "/orga_relations/#{member_orga_relation.id}", orga_relation) }
-        before { stub_api_v2(:patch, "/orga_relations/#{member_orga_relation.id}") }
+        end
+        before do
+          stub_api_v2(:get, "/orga_relations", [member_orga_relation], [], { filter: { organization_id: organization.id, user_id: member.id }, page: one_page })
+          stub_api_v2(:post, "/orga_relations/#{member_orga_relation.id}", orga_relation)
+          stub_api_v2(:patch, "/orga_relations/#{member_orga_relation.id}")
+        end
 
         # Happy path
         it 'updates the member role' do
@@ -381,7 +389,7 @@ module MnoEnterprise
 
       it 'renders a the user list' do
         subject
-        expect(JSON.parse(response.body)).to eq({'members' => partial_hash_for_members(organization)})
+        expect(JSON.parse(response.body)).to eq({ 'members' => partial_hash_for_members(organization) })
       end
     end
 
@@ -399,7 +407,7 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations)) }
 
 
-      let(:params) { {email: 'somemember@maestrano.com'} }
+      let(:params) { { email: 'somemember@maestrano.com' } }
       subject { put :remove_member, id: organization.id, member: params }
 
       it_behaves_like 'jpi v1 authorizable action'
@@ -407,7 +415,7 @@ module MnoEnterprise
 
       context 'with user' do
         before { stub_api_v2(:delete, "/orga_relations/#{member_orga_relation.id}") }
-        let(:params) { {email: member.email} }
+        let(:params) { { email: member.email } }
         it 'removes the member' do
           subject
         end
@@ -420,7 +428,7 @@ module MnoEnterprise
           stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices))
         }
 
-        before { stub_api_v2(:get, "/orga_invites/#{orga_invite.id}/decline")}
+        before { stub_api_v2(:get, "/orga_invites/#{orga_invite.id}/decline") }
         it 'removes the member' do
           subject
         end
@@ -428,7 +436,7 @@ module MnoEnterprise
 
       it 'renders a the user list' do
         subject
-        expect(JSON.parse(response.body)).to eq({'members' => partial_hash_for_members(organization)})
+        expect(JSON.parse(response.body)).to eq({ 'members' => partial_hash_for_members(organization) })
       end
     end
   end

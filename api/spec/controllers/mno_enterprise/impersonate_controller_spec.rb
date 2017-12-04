@@ -8,12 +8,11 @@ module MnoEnterprise
     let(:user) { build(:user, :admin) }
     let(:user2) { build(:user) }
     before do
-      stub_user(user)
-      stub_api_v2(:get, "/users/#{user2.id}", user2, %i(deletion_requests organizations orga_relations dashboards teams user_access_requests sub_tenant))
-
+      stub_api_v2(:get, "/users/#{user.id}", user)
+      stub_api_v2(:get, "/users/#{user.id}", user, %i(user_access_requests))
+      stub_api_v2(:get, "/users/#{user2.id}", user2, %i(user_access_requests))
       stub_api_v2(:patch, "/users/#{user.id}")
       stub_api_v2(:patch, "/users/#{user2.id}")
-
     end
     before { stub_audit_events }
 
@@ -37,7 +36,7 @@ module MnoEnterprise
         end
 
         context 'when the user does not exist' do
-          before { stub_api_v2(:get, '/users/crappyId', [], %i(deletion_requests organizations orga_relations dashboards teams user_access_requests sub_tenant)) }
+          before { stub_api_v2(:get, '/users/crappyId', [], %i(user_access_requests)) }
           subject { get :create, user_id: 'crappyId', dhbRefId: 10 }
           it do
             is_expected.to redirect_to('/admin/#!?flash=%7B%22msg%22%3A%22User+does+not+exist%22%2C%22type%22%3A%22error%22%7D')

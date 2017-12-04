@@ -17,7 +17,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   #  -> GET /api/mnoe/v1/organizations/:id/widgets
   def index
     render_not_found('organization') unless parent_organization
-    @widgets = MnoEnterprise::Widget.find(organization_id: parent_organization.id)
+    @widgets = MnoEnterprise::Widget.find('organization.id': parent_organization.id)
   end
 
   # POST /mnoe/jpi/v1/impac/dashboards/:id/widgets

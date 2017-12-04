@@ -127,12 +127,15 @@ module MnoEnterprise
         subject { get :index, organization_id: organization.id }
         let!(:organization) { build(:organization) }
         let!(:user) { build(:user) }
+        let(:orga_relation) { build(:orga_relation) }
         let!(:current_user_stub) { stub_user(user) }
 
-        before { sign_in user }
-        before { stub_api_v2(:get, "/organizations", [organization], [], { fields: { organizations: 'id' }, filter: { id: organization.id, 'users.id' => user.id }, page: { number: 1, size: 1 } }) }
-        before { stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true } }) }
         before do
+          sign_in(user)
+          stub_api_v2(:get, "/organizations", [organization], [], { fields: { organizations: 'id' }, filter: { id: organization.id, 'users.id' => user.id }, page: one_page })
+          stub_api_v2(:get, '/orga_relations', [orga_relation], [], { fields: { orga_relations: 'id' }, filter: { 'user.id': user.id, 'organization.id': organization.id }, page: one_page })
+
+          stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true } })
           stub_api_v2(:get, '/apps', [app], [],
                       {
                         _metadata: { organization_id: organization.id },

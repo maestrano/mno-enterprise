@@ -7,15 +7,21 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
+    # Time needs to be frozen for DeletionRequest
+    before { Timecop.freeze(Time.local(1985, 9, 17)) }
+    after { Timecop.return }
+
+
     # Stub model calls
     let(:deletion_request) { build(:deletion_request) }
-    let(:user) { build(:user, deletion_requests: [deletion_request]) }
+    let(:user) { build(:user) }
     let!(:current_user_stub) { stub_user(user) }
+    before { stub_deletion_requests(user, [deletion_request]) }
 
     before { sign_in user }
 
     describe 'POST #create' do
-      before {stub_api_v2(:post, '/deletion_requests', deletion_request)}
+      before { stub_api_v2(:post, '/deletion_requests', deletion_request) }
 
       subject { post :create }
       it_behaves_like 'jpi v1 protected action'
@@ -28,10 +34,7 @@ module MnoEnterprise
         it 'sends the instructions email' do
           message_delivery = instance_double(ActionMailer::MessageDelivery)
           expect(message_delivery).to receive(:deliver_now).with(no_args)
-
-          expect(SystemNotificationMailer).to receive(:deletion_request_instructions)
-                                                  .and_return(message_delivery)
-
+          expect(SystemNotificationMailer).to receive(:deletion_request_instructions).and_return(message_delivery)
           subject
         end
       end
@@ -45,17 +48,14 @@ module MnoEnterprise
         it 'resends the deletion instructions' do
           message_delivery = instance_double(ActionMailer::MessageDelivery)
           expect(message_delivery).to receive(:deliver_now).with(no_args)
-
-          expect(SystemNotificationMailer).to receive(:deletion_request_instructions)
-                                                  .and_return(message_delivery)
-
+          expect(SystemNotificationMailer).to receive(:deletion_request_instructions).and_return(message_delivery)
           subject
         end
       end
     end
 
     describe 'DELETE #destroy' do
-      before {stub_api_v2(:delete, "/deletion_requests/#{deletion_request.id}")}
+      before { stub_api_v2(:delete, "/deletion_requests/#{deletion_request.id}") }
 
       subject { delete :destroy, id: deletion_request.token }
       it_behaves_like 'jpi v1 protected action'
@@ -66,6 +66,5 @@ module MnoEnterprise
         end
       end
     end
-
   end
 end

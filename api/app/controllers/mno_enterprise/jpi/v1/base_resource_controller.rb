@@ -4,49 +4,49 @@ module MnoEnterprise
 
     protected
 
-      def timestamp
-        @timestamp ||= (params[:timestamp] || 0).to_i
-      end
+    # test if the provided argument is a id or an uid
+    # @param [Object] id or uid
+    def is_id?(string)
+      string.to_i.to_s == string
+    end
 
-      def is_integer?(string)
-        string.to_i.to_s == string
+    def parent_organization_id
+      id_or_uid = params[:organization_id]
+      if is_id?(id_or_uid)
+        id_or_uid
+      else
+        parent_organization.id
       end
+    end
 
-      def parent_organization
-        @parent_organization ||= begin
-          id_or_uid = params[:organization_id]
-          query = is_integer?(id_or_uid) ? id_or_uid : {uid: id_or_uid}
-          o = MnoEnterprise::Organization.includes(:orga_relations, :users).find(query).first
-          ## check that user is in the organization
-          o if o && o.orga_relation(current_user)
-        end
+    def parent_organization
+      @parent_organization ||= begin
+        id_or_uid = params[:organization_id]
+        query = is_id?(id_or_uid) ? id_or_uid : { uid: id_or_uid }
+        MnoEnterprise::Organization.find(query).first
       end
+    end
 
-      # Check current user is logged in
-      # Check organization is valid if specified
-      def check_authorization
-        unless current_user
-          render nothing: true, status: :unauthorized
-          return false
-        end
-        if params[:organization_id] && !parent_organization
-          render nothing: true, status: :forbidden
-          return false
-        end
-        true
+    def orga_relation
+      @orga_relation ||= begin
+        id_or_uid = params[:organization_id]
+        organization_field = is_id?(id_or_uid) ? 'id' : 'uid'
+        MnoEnterprise::OrgaRelation.where('user.id' => current_user.id, "organization.#{organization_field}" => id_or_uid).first
       end
+    end
 
-      def render_not_found(resource, id = params[:id])
-        render json: { errors: {message: "#{resource.titleize} not found (id=#{id})", code: 404, params: params} }, status: :not_found
+    # Check current user is logged in
+    # Check organization is valid if specified
+    def check_authorization
+      unless current_user
+        render nothing: true, status: :unauthorized
+        return false
       end
-
-      def render_bad_request(attempted_action, issue)
-        issue = issue.full_messages if issue.respond_to?(:full_messages)
-        render json: { errors: {message: "Error while trying to #{attempted_action}: #{issue}", code: 400, params: params} }, status: :bad_request
+      if params[:organization_id] && !orga_relation
+        render nothing: true, status: :forbidden
+        return false
       end
-
-      def render_forbidden_request(attempted_action)
-        render json: { errors: {message: "Error while trying to #{attempted_action}: you do not have permission", code: 403} }, status: :forbidden
-      end
+      true
+    end
   end
 end

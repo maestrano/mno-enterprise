@@ -16,25 +16,25 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
   # GET /mnoe/jpi/v1/organization/1/app_instances
   def index
     statuses = MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')
-    @app_instances = MnoEnterprise::AppInstance.includes(:app).where(owner_id: parent_organization.id, 'status.in': statuses, 'fulfilled_only': true).to_a.select do |i|
+    @app_instances = MnoEnterprise::AppInstance.includes(:app).where('owner.id': parent_organization_id, 'status.in': statuses, 'fulfilled_only': true).to_a.select do |i|
       can?(:access,i)
     end
   end
 
   # POST /mnoe/jpi/v1/organization/1/app_instances
   def create
-    authorize! :manage_app_instances, parent_organization
-    app_instance = parent_organization.provision_app_instance!(params[:nid])
+    authorize! :manage_app_instances, orga_relation
+    app_instance = MnoEnterprise::AppInstance.provision!(params[:nid], parent_organization_id, 'Organization' )
+    app_instance = app_instance.load_required(:owner)
     MnoEnterprise::EventLogger.info('app_add', current_user.id, 'App added', app_instance)
     head :created
   end
 
   # DELETE /mnoe/jpi/v1/app_instances/1
   def destroy
-    @app_instance = MnoEnterprise::AppInstance.find_one(params[:id])
+    @app_instance = MnoEnterprise::AppInstance.find_one(params[:id], :owner)
     if @app_instance
-      organization = MnoEnterprise::Organization.find_one(@app_instance.owner_id)
-      authorize! :manage_app_instances, organization
+      authorize! :manage_app_instances,  current_user.orga_relation(@app_instance.owner)
       MnoEnterprise::EventLogger.info('app_destroy', current_user.id, 'App destroyed', @app_instance)
       @app_instance = @app_instance.terminate!
     end

@@ -7,8 +7,6 @@ module MnoEnterprise
     include ActiveModel::AttributeMethods
     include ActiveModel::Validations
 
-    INCLUDED_DEPENDENCIES = %i(deletion_requests organizations orga_relations dashboards teams sub_tenant)
-
     # ids
     property :id
     property :uid, type: :string
@@ -107,8 +105,7 @@ module MnoEnterprise
 
     def refresh_user_cache
       self.expire_view_cache
-      reloaded = self.load_required_dependencies
-      Rails.cache.write(['user', reloaded.to_key], reloaded)
+      Rails.cache.write(['user', self.to_key], self)
     end
 
     def load_required_dependencies
@@ -129,7 +126,11 @@ module MnoEnterprise
     end
 
     def orga_relation_from_id(organization_id)
-      self.orga_relations.find { |r| r.organization_id == organization_id }
+      if relation_loaded?(:orga_relations)
+        self.orga_relations.find { |r| r.organization.id == organization_id }
+      else
+        MnoEnterprise::OrgaRelation.where('user.id': id, 'organization.id': organization_id).first
+      end
     end
 
     def create_deletion_request!
@@ -137,11 +138,12 @@ module MnoEnterprise
     end
 
     def current_deletion_request
-      @current_deletion_request ||= if self.account_frozen
-                                      self.deletion_requests.sort_by(&:created_at).last
-                                    else
-                                      self.deletion_requests.select(&:active?).sort_by(&:created_at).first
-                                    end
+      query = if self.account_frozen
+                MnoEnterprise::DeletionRequest.where
+              else
+                MnoEnterprise::DeletionRequest.active
+              end
+      query.where('deletable.id': self.id, 'deletable.type': 'users').order(created_at: :desc).first
     end
 
     def update_password!(input)

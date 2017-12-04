@@ -9,6 +9,7 @@ module MnoEnterprise
     #==================================================================
     # GET /mnoe/jpi/v1/admin/impac/dashboard_templates
     def index
+      dashboard_templates = MnoEnterprise::Dashboard.templates.includes(*DASHBOARD_DEPENDENCIES)
       if params[:terms]
         # For search mode
         @dashboard_templates = []
@@ -19,61 +20,47 @@ module MnoEnterprise
         @dashboard_templates = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
       end
+      load_organizations
     end
 
     # GET /mnoe/jpi/v1/admin/impac/dashboard_templates/1
     def show
-      render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless dashboard_template.present?
+      @dashboard_template = MnoEnterprise::Dashboard.find_one!(params[:id], *DASHBOARD_DEPENDENCIES)
+      load_organizations
     end
 
     # POST /mnoe/jpi/v1/admin/impac/dashboard_templates
     def create
       @dashboard_template = MnoEnterprise::Dashboard.new(dashboard_template_params.merge(dashboard_type: 'template'))
-
-      # Abort on failure
-      unless @dashboard_template.save
-        return render json: { errors: dashboard_template.errors }, status: :bad_request
-      end
-
-      MnoEnterprise::EventLogger.info('dashboard_template_create', current_user.id, 'Dashboard Template Creation', dashboard_template)
+      @dashboard_template.save!
+      MnoEnterprise::EventLogger.info('dashboard_template_create', current_user.id, 'Dashboard Template Creation', @dashboard_template)
+      @dashboard_template = @dashboard_template.load_required(*DASHBOARD_DEPENDENCIES)
+      load_organizations
       render 'show'
     end
 
     # PATCH/PUT /mnoe/jpi/v1/admin/impac/dashboard_templates/1
     def update
-      return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless dashboard_template
-
-      # Abort on failure
-      unless dashboard_template.update(dashboard_template_params)
-        return render json: { errors: dashboard_template.errors }, status: :bad_request
-      end
-
-      MnoEnterprise::EventLogger.info('dashboard_template_update', current_user.id, 'Dashboard Template Update', dashboard_template)
+      @dashboard_template = MnoEnterprise::Dashboard.find_one!(params[:id])
+      dashboard_template.update!(dashboard_template_params)
+      @dashboard_template = @dashboard_template.load_required(*DASHBOARD_DEPENDENCIES)
+      MnoEnterprise::EventLogger.info('dashboard_template_update', current_user.id, 'Dashboard Template Update', @dashboard_template)
+      load_organizations
       render 'show'
     end
 
     # DELETE /mnoe/jpi/v1/admin/impac/dashboard_templates/1
     def destroy
-      return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless dashboard_template
-
-      MnoEnterprise::EventLogger.info('dashboard_template_delete', current_user.id, 'Dashboard Template Deletion', dashboard_template)
-
-      # Abort on failure
-      unless dashboard_template.destroy
-        return render json: { errors: 'Cannot destroy dashboard template' }, status: :bad_request
-      end
-
+      @dashboard_template = MnoEnterprise::Dashboard.find_one!(params[:id])
+      MnoEnterprise::EventLogger.info('dashboard_template_delete', current_user.id, 'Dashboard Template Deletion', @dashboard_template)
+      @dashboard_template.destroy!
       head status: :ok
     end
 
     private
 
-    def dashboard_templates
-      @dashboard_templates ||= MnoEnterprise::Dashboard.templates.includes(*DASHBOARD_DEPENDENCIES)
-    end
-
-    def dashboard_template
-      @dashboard_template ||= dashboard_templates.find(params[:id].to_i).first
+    def load_organizations
+      @organizations = MnoEnterprise::Organization.where('users.id': current_user.id)
     end
 
     def whitelisted_params
@@ -86,7 +73,7 @@ module MnoEnterprise
       params.require(:dashboard).permit(*whitelisted_params).tap do |whitelisted|
         whitelisted[:settings] = params[:dashboard][:metadata] || {}
       end
-      .except(:metadata)
+        .except(:metadata)
     end
   end
 end

@@ -109,6 +109,7 @@ module MnoEnterprise
       subject { post :create, params }
       before do
         stub_api_v2(:post, "/app_instances/provision", app_instance)
+        stub_api_v2(:get, "/app_instances/#{app_instance.id}", app_instance, [:owner])
       end
 
       describe 'guest' do

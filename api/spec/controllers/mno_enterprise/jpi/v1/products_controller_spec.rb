@@ -8,24 +8,23 @@ module MnoEnterprise
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
     before(:all) do
-      Settings.merge!(dashboard: {marketplace: {local_products: true}})
+      Settings.merge!(dashboard: { marketplace: { local_products: true } })
       Rails.application.reload_routes!
     end
 
     # Stub user and user call
     let!(:user) { build(:user) }
+    let(:organization) { build(:organization) }
     let!(:current_user_stub) { stub_user(user) }
+    before do
+      stub_orga_relation(user, organization, build(:orga_relation))
+    end
 
     describe 'GET #index' do
       subject { get :index, params }
 
       let(:params) { {} }
       let(:product) { build(:product) }
-      let(:organization) {
-        o = build(:organization, orga_relations: [])
-        o.orga_relations << build(:orga_relation, user_id: user.id, organization_id: o.id, role: 'Super Admin')
-        o
-      }
 
       before { sign_in user }
 
@@ -40,7 +39,7 @@ module MnoEnterprise
         before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
         before do
           stub_api_v2(:get, "/products", [product],
-            [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true }, _metadata: { organization_id: organization.id } })
+                      [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true }, _metadata: { organization_id: organization.id } })
         end
 
         it_behaves_like 'jpi v1 protected action'

@@ -25,17 +25,15 @@ module MnoEnterprise::Concerns::Models::Ability
     #===================================================
     # Organization
     #===================================================
-    can :create, MnoEnterprise::Organization
+    can :create, MnoEnterprise::OrgaRelation
 
-    can :read, MnoEnterprise::Organization do |organization|
-      !!user.role(organization)
+    can :read, MnoEnterprise::OrgaRelation do |orga_relation|
+      !!orga_relation
     end
 
-    can [:update, :destroy, :manage_billing], MnoEnterprise::Organization do |organization|
-      user.role(organization) == 'Super Admin'
+    can [:update, :destroy, :manage_billing], MnoEnterprise::OrgaRelation do |orga_relation|
+      orga_relation&.role == 'Super Admin'
     end
-
-
 
     # TODO: replace by organization_id, no need to load a full organization, and make user.role accept a string
     can [:upload,
@@ -43,32 +41,34 @@ module MnoEnterprise::Concerns::Models::Ability
          :invite_member,
          :administrate,
          :manage_app_instances,
-         :manage_teams], MnoEnterprise::Organization do |organization|
-      ['Super Admin','Admin'].include? user.role(organization)
+         :manage_teams], MnoEnterprise::OrgaRelation do |orga_relation|
+      orga_relation && ['Super Admin', 'Admin'].include?(orga_relation.role)
     end
 
     # To be updated
     # TODO: replace by organization_id, no need to load a full organization
-    can :sync_apps, MnoEnterprise::Organization do |organization|
-      user.role(organization)
+    can :sync_apps, MnoEnterprise::OrgaRelation do |orga_relation|
+      !!orga_relation
     end
 
     # To be updated
     # TODO: replace by organization_id, no need to load a full organization
-    can :check_apps_sync, MnoEnterprise::Organization do |organization|
-      user.role(organization)
+    can :check_apps_sync, MnoEnterprise::OrgaRelation do |orga_relation|
+      !!orga_relation
     end
 
     #===================================================
     # AppInstance
     #===================================================
     can :access, MnoEnterprise::AppInstance do |app_instance|
-      role = user.role_from_id(app_instance.owner_id)
-      !!role && (
-      ['Super Admin','Admin'].include?(role) ||
-          user.teams.empty? ||
-          user.teams.map(&:app_instances).compact.flatten.map(&:id).include?(app_instance.id)
-      )
+      orga_relation = MnoEnterprise::OrgaRelation.where('user.id': user.id, 'organization.id': app_instance.owner_id).first
+      role = orga_relation&.role
+      if role && ['Super Admin', 'Admin'].include?(role)
+        true
+      else
+        teams = MnoEnterprise::Team.where('users.id': user.id).includes(:app_instances).with_params(fields: { app_instances: 'id' })
+        teams.empty? || teams.map(&:app_instances).compact.flatten.map(&:id).include?(app_instance.id)
+      end
     end
 
     #===================================================
@@ -112,15 +112,15 @@ module MnoEnterprise::Concerns::Models::Ability
   def impac_abilities(user)
     can :manage_impac, MnoEnterprise::Dashboard do |dhb|
       dhb.organizations.any? && dhb.organizations.all? do |org|
-        !!user.role(org) && ['Super Admin', 'Admin'].include?(user.role(org))
+        role = orga_relation(user.id, org.id)&.role
+        role && ['Super Admin', 'Admin'].include?(role)
       end
     end
 
     can :manage_dashboard, MnoEnterprise::Dashboard do |dashboard|
-      if dashboard.owner_type == "Organization"
+      if dashboard.owner_type == 'Organization'
         # The current user is a member of the organization that owns the dashboard that has the kpi attached to
-        owner = MnoEnterprise::Organization.find(dashboard.owner_id)
-        owner && !!user.role(owner)
+        !!orga_relation(user, dashboard.owner_id)
       elsif dashboard.owner_type == "User"
         # The current user is the owner of the dashboard that has the kpi attached to
         dashboard.owner_id == user.id
@@ -151,7 +151,7 @@ module MnoEnterprise::Concerns::Models::Ability
   # Abilities for admin user
   def admin_abilities(user)
     if user.admin_role.to_s.casecmp('admin').zero? || user.admin_role.to_s.casecmp('staff').zero?
-      can :manage_app_instances, MnoEnterprise::Organization
+      can :manage_app_instances, MnoEnterprise::OrgaRelation
       can :manage_sub_tenant, MnoEnterprise::SubTenant
     end
   end

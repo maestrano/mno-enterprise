@@ -21,17 +21,18 @@ module MnoEnterprise
     let!(:current_user_stub) { stub_user(user) }
 
     # Stub organization and association
-    let!(:organization) { build(:organization, orga_relations: []) }
-    let!(:orga_relation) { organization.orga_relations << build(:orga_relation, user_id: user.id, organization_id: organization.id, role: 'Super Admin') }
-    let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
-
+    let!(:organization) { build(:organization) }
+    let!(:orga_relation) { build(:orga_relation, role: 'Super Admin') }
+    before do
+      stub_orga_relation(user, organization, orga_relation)
+    end
     # Stub license_assignments association
     before { allow_any_instance_of(MnoEnterprise::Subscription).to receive(:license_assignments).and_return([]) }
 
     describe 'GET #index' do
       let(:subscription) { build(:subscription) }
 
-      before { stub_api_v2(:get, "/subscriptions", [subscription], [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id}, '_metadata[organization_id]' => organization.id}) }
+      before { stub_api_v2(:get, "/subscriptions", [subscription], [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {'organization.id': organization.id}, '_metadata[organization_id]' => organization.id}) }
       before { sign_in user }
 
       subject { get :index, organization_id: organization.id }
@@ -42,7 +43,7 @@ module MnoEnterprise
     describe 'GET #show' do
       let(:subscription) { build(:subscription) }
 
-      before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {'organization.id': organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
       before { sign_in user }
 
       subject { get :show, organization_id: organization.id, id: subscription.id }
@@ -57,7 +58,7 @@ module MnoEnterprise
 
       before { stub_audit_events }
       before { stub_api_v2(:post, "/subscriptions", subscription, [], {}) }
-      before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {'organization.id': organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
       before { sign_in user }
 
       subject { post :create, organization_id: organization.id, subscription: {custom_data: {foo: :bar}.to_json, product_pricing_id: product_pricing.id} }
@@ -90,8 +91,8 @@ module MnoEnterprise
 
       before { stub_audit_events }
       before { stub_api_v2(:post, "/subscriptions/#{subscription.id}/modify", subscription, [], {}) }
-      before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
-      before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {'organization.id': organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {'organization.id': organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
       before { sign_in user }
 
       subject { put :update, organization_id: organization.id, id: subscription.id, subscription: {custom_data: {foo: :bar}.to_json, product_pricing_id: product_pricing.id} }
@@ -123,8 +124,8 @@ module MnoEnterprise
 
       before { stub_audit_events }
       before { stub_api_v2(:post, "/subscriptions/#{subscription.id}/cancel", subscription, [], {}) }
-      before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
-      before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {'organization.id': organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
+      before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {'organization.id': organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
       before { sign_in user }
 
       subject { post :cancel, organization_id: organization.id, id: subscription.id }

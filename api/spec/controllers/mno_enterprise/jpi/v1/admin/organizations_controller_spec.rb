@@ -110,10 +110,10 @@ module MnoEnterprise
 
       describe 'app provisioning' do
         let(:params) { attributes_for(:organization).merge(app_nids: ['xero', app_instance.app.nid]) }
-
-        before { expect_any_instance_of(Organization).to receive(:provision_app_instance!) }
+        let!(:provisionning_stub) { stub_api_v2(:post, '/app_instances/provision')}
         before { subject }
         it { expect(data['organization']['id']).to eq(organization.id) }
+        it { expect(provisionning_stub).to have_been_requested }
       end
     end
 
@@ -130,7 +130,7 @@ module MnoEnterprise
         let(:orga_invite) { build(:orga_invite) }
 
         before { allow(orga_invite).to receive(:user).and_return(invited_user) }
-        before { stub_api_v2(:get, '/users', invited_user, [:orga_relations], { filter: { email: params[:email] }, page: { number: 1, size: 1 } }) }
+        before { stub_api_v2(:get, '/users', invited_user, [:orga_relations], { filter: { email: params[:email] }, page: one_page }) }
         before { stub_api_v2(:get, "/orga_invites/#{orga_invite.id}", orga_invite, [:user]) }
         before { expect(MnoEnterprise::OrgaInvite).to receive(:create).and_return(orga_invite) }
         before { subject }
@@ -232,10 +232,9 @@ module MnoEnterprise
             stub_api_v2(:post, '/users', user2),
             stub_api_v2(:patch, "/users/#{user1.id}", user1),
 
-            stub_api_v2(:get, '/orga_relations', [], [], { filter: { user_id: user1.id, organization_id: organization1.id }, page: { number: 1, size: 1 } }),
-            stub_api_v2(:get, '/orga_relations', [orga_relation1], [], { filter: { user_id: user2.id, organization_id: organization2.id }, page: { number: 1, size: 1 } }),
-
-            stub_api_v2(:post, '/orga_relations', orga_relation2)
+            stub_orga_relation(user1, organization1, nil),
+            stub_orga_relation(user2, organization2, orga_relation2),
+            stub_api_v2(:post, '/orga_relations', orga_relation1)
           ]
         }
 

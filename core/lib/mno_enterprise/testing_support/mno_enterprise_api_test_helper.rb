@@ -8,7 +8,11 @@ module MnoEnterpriseApiTestHelper
     basic_auth: [MnoEnterprise.tenant_id, MnoEnterprise.tenant_key]
   }
 
-  JSON_API_RESULT_HEADERS = {content_type: 'application/vnd.api+json'}
+  JSON_API_RESULT_HEADERS = { content_type: 'application/vnd.api+json' }
+
+  def one_page
+    { number: 1, size: 1 }
+  end
 
   def serialize_type(res)
     case
@@ -16,13 +20,13 @@ module MnoEnterpriseApiTestHelper
       return res.map { |e| serialize_type(e) }
     when res.kind_of?(MnoEnterprise::BaseResource)
       hash = res.attributes.dup
-      hash.each do |k,v|
+      hash.each do |k, v|
         hash[k] = serialize_type(v)
       end
       return hash
     when res.kind_of?(Hash)
       hash = res.dup
-      hash.each do |k,v|
+      hash.each do |k, v|
         hash[k] = serialize_type(v)
       end
       return hash
@@ -50,8 +54,23 @@ module MnoEnterpriseApiTestHelper
     stub_api_v2(:post, '/audit_events')
   end
 
-  def stub_user(user)
-    stub_api_v2(:get, "/users/#{user.id}", user, %i(deletion_requests organizations orga_relations dashboards teams sub_tenant))
+  def stub_user(user, included = [], params = {})
+    stub_api_v2(:get, "/users/#{user.id}", user, included, params)
+  end
+
+  def stub_orga_relation(user, organization, orga_relation, id_field = 'id')
+    filter = { 'user.id': user.id, "organization.#{id_field}": organization.public_send(id_field) }
+    stub_api_v2(:get, '/orga_relations', [orga_relation].compact, [], { filter: filter, page: one_page })
+  end
+
+  def stub_deletion_requests(user, deletion_requests)
+    filter = {
+      'created_at.gt': MnoEnterprise::DeletionRequest::EXPIRATION_TIME.minutes.ago,
+      'deletable.id': user.id,
+      'deletable.type': 'users',
+      'status.ne': 'cancelled'
+    }
+    stub_api_v2(:get, '/deletion_requests', deletion_requests, [], { filter: filter, page: one_page, sort: '-created_at' })
   end
 
   def api_v2_url(suffix, included = [], params = {})
@@ -141,7 +160,7 @@ module MnoEnterpriseApiTestHelper
   def from_apiv2(entity, included)
     included_entities = {}
     data = if entity.kind_of?(Array)
-             entity.map{|e| serialize_data(e, included, included_entities)}
+             entity.map { |e| serialize_data(e, included, included_entities) }
            else
              serialize_data(entity, included, included_entities)
            end

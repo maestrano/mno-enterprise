@@ -20,7 +20,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     expires_in 0, public: true, must_revalidate: true
 
     # Memoize parent_organization_id if any
-    org_id = parent_organization_id
+    org_id = app_instance_organization_id
 
     # Compute cache key timestamp
     app_last_modified = app_relation(org_id).order(updated_at: :desc).select(:updated_at).first&.updated_at || Time.new(0)
@@ -45,7 +45,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
 
   # GET /mnoe/jpi/v1/marketplace/1(?organization_id=123)
   def show
-    @app = app_relation(parent_organization_id).find_one(params[:id])
+    @app = app_relation(app_instance_organization_id).find_one(params[:id])
   end
 
   #==================================================================
@@ -59,13 +59,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     rel
   end
 
-  # Return the organization_id passed as query parameters if the current_user
-  # has access to it
-  def parent_organization_id
-    return nil unless current_user && params[:organization_id].presence
-    MnoEnterprise::Organization
-      .select(:id)
-      .where('id' => params[:organization_id], 'users.id' => current_user.id)
-      .first&.id
+  # Return the organization_id  passed as query parameters if the current_user has access to it
+  def app_instance_organization_id
+    return params[:organization_id] if current_user && params[:organization_id].presence && orga_relation_id
+  end
+
+  def orga_relation_id
+    MnoEnterprise::OrgaRelation.where('user.id': current_user.id, 'organization.id': params[:organization_id]).select(:id).first&.id
   end
 end
