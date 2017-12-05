@@ -33,13 +33,13 @@ module MnoEnterprise
         if row['external_id'].present?
           organization = MnoEnterprise::Organization.where(external_id: row['external_id']).first
         end
-        if organization
-          event_type = :updated
-        else
-          organization = MnoEnterprise::Organization.new
-          organization.external_id = row['external_id']
-          event_type = :added
-        end
+        event_type = if organization
+                       :updated
+                     else
+                       organization = MnoEnterprise::Organization.new
+                       organization.external_id = row['external_id']
+                       :added
+                     end
         organization.name = row['company_name']
         organization.billing_currency = row['billing_currency']
         organization.save
@@ -59,19 +59,22 @@ module MnoEnterprise
 
         # Create or Update User
         user = MnoEnterprise::User.where(email: row['email']).first
-        if user
-          report[:users][:updated] << user
-        else
-          user = MnoEnterprise::User.new
-          report[:users][:added] << user
-          user.password = Devise.friendly_token
-          user.email = row['email']
-        end
+        event_type = if user
+                       :added
+                     else
+                       user = MnoEnterprise::User.new
+                       report[:users][:added] << user
+                       user.password = Devise.friendly_token
+                       user.email = row['email']
+                       :updated
+                     end
         user.name = row['name']
         user.surname = row['surname']
         user.phone = row['phone']
-
         user.save
+        user = user.load_required(:sub_tenant)
+        report[:users][event_type] << user
+
         orga_relation = MnoEnterprise::OrgaRelation.where(user_id: user.id, organization_id: organization.id).first
         # Add User as Super Admin to Organization if he is not already in it
         unless orga_relation
