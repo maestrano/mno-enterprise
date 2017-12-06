@@ -60,13 +60,12 @@ module MnoEnterprise
         # Create or Update User
         user = MnoEnterprise::User.where(email: row['email']).first
         event_type = if user
-                       :added
+                       :updated
                      else
                        user = MnoEnterprise::User.new
-                       report[:users][:added] << user
                        user.password = Devise.friendly_token
                        user.email = row['email']
-                       :updated
+                       :added
                      end
         user.name = row['name']
         user.surname = row['surname']
