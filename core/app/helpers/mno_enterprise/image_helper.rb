@@ -1,8 +1,10 @@
+require 'fastimage'
+
 module MnoEnterprise
   module ImageHelper
-    
+
     IMAGES_LOCATION = "/app/assets/images/mno_enterprise/"
-    
+
     # Helper method to easily access and select the images
     # If full_path is true returns filename appended to the path
     # If full_path is false returns filename
@@ -31,6 +33,27 @@ module MnoEnterprise
 
     def fit_image
       'max-width: 150px; max-height: 150px;'
+    end
+
+    def main_logo_white_bg_dimensions
+      FastImage.size(main_logo_white_bg_path(true))
+    end
+
+    # Returns dimensions for the main_logo_white_bg, with width < 150px && height < 150px
+    # while keeping the same aspect ratio
+    def main_logo_white_bg_size_to_fit
+      dimensions = main_logo_white_bg_dimensions
+      original_width, original_height = dimensions
+      return { width: original_width, height: original_height } if original_width < 150 && original_height < 150
+
+      if original_width > original_height
+        width = [original_width, 150].min
+        height = width * original_height / original_width
+      else
+        height = [original_height, 150].min
+        width = height * original_width / original_height
+      end
+      { width: width, height: height }
     end
   end
 end
