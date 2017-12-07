@@ -86,3 +86,6 @@ en:
             cancel_modal.yes: "Yes"
             cancel_modal.no: "No"
             cancel_error: "An error occurred while canceling this subscription. Please contact your administrator."
+            aborted_modal.title: "Subscription has been aborted"
+            aborted_modal.body: "Something wrong happened when fulfilling your order.<p>It can be a temporary issue, please check again in 15 minutes.<p>If the issue persists, contact your system administrator"
+            aborted_modal.close: "Close"
