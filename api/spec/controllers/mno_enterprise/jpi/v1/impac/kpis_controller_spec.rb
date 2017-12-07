@@ -78,7 +78,6 @@ module MnoEnterprise
 
     describe 'POST #create' do
       shared_examples "create kpi action" do
-
         it "creates the kpi" do
           subject
           expect(assigns(:kpi)).to eq(kpi)
@@ -88,6 +87,8 @@ module MnoEnterprise
       end
 
       let (:kpi_targets) { {} }
+
+      before { allow(ability).to receive(:can?).with(:create_impac_kpis, any_args).and_return(true) }
 
       context "a dashboard KPI" do
         subject { post :create, dashboard_id: dashboard.id, kpi: kpi_hash }
@@ -170,6 +171,8 @@ module MnoEnterprise
     end
 
     describe 'PUT #update' do
+      subject { put :update, id: kpi.id, kpi: kpi_hash.merge(params) }
+
       RSpec.shared_examples 'a kpi update action' do
         it "updates the kpi" do
           subject
@@ -233,15 +236,13 @@ module MnoEnterprise
       let(:kpi_hash) { from_api(kpi)[:data].except(:dashboard).merge(element_watched: 'New Watchable') }
       let(:params) { {} }
 
-      subject { put :update, id: kpi.id, kpi: kpi_hash.merge(params) }
-
       before do
         api_stub_for(get: "/kpis/#{kpi.id}", response: from_api(kpi))
         api_stub_for(put: "/kpis/#{kpi.id}", response: kpi_hash)
         api_stub_for(get: "/kpis/#{kpi.id}/alerts", response: from_api(alerts_hashes))
+        allow(ability).to receive(:can?).with(:update_impac_kpis, any_args).and_return(true)
+        kpi.save
       end
-
-      before { kpi.save }
 
       context "a dashboard KPI" do
         it_behaves_like "jpi v1 authorizable action"
@@ -260,8 +261,11 @@ module MnoEnterprise
     describe 'DELETE #destroy' do
       subject { delete :destroy, id: kpi.id }
 
-      before { api_stub_for(get: "/kpis/#{kpi.id}", response: from_api(kpi)) }
-      before { api_stub_for(delete: "/kpis/#{kpi.id}", response: {message: 'ok', code: 200}) }
+      before do
+        api_stub_for(get: "/kpis/#{kpi.id}", response: from_api(kpi))
+        api_stub_for(delete: "/kpis/#{kpi.id}", response: {message: 'ok', code: 200})
+        allow(ability).to receive(:can?).with(:destroy_impac_kpis, any_args).and_return(true)
+      end
 
       it_behaves_like "jpi v1 authorizable action"
 

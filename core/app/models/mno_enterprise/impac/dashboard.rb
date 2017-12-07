@@ -22,13 +22,13 @@ module MnoEnterprise
     end
 
     # Return all the organizations linked to this dashboard and to which the user has access
-    # If the dashboard is a template, return all the current user's organization
+    # If the dashboard is a template, return all the current user's organizations
     def organizations(org_list = nil)
       if org_list
         return org_list if dashboard_type == 'template'
-        org_list.to_a.select { |e| self.organization_ids.include?(e.uid) }
+        org_list.to_a.select { |e| organization_ids.include?(e.uid) || organization_ids.include?(e.id) }
       else
-        MnoEnterprise::Organization.where('uid.in' => self.organization_ids).to_a
+        MnoEnterprise::Organization.where('uid.in' => organization_ids).to_a
       end
     end
 
@@ -44,10 +44,7 @@ module MnoEnterprise
     end
 
     def to_audit_event
-      {
-        name: name,
-        organization_id: (owner_type == 'Organization') ? owner_id : nil
-      }
+      { name: name }
     end
 
     def copy(owner, name, organization_ids)

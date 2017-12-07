@@ -30,7 +30,7 @@ module MnoEnterprise
     end
 
     def current_ability
-      MnoEnterprise::Ability.new(current_user)
+      MnoEnterprise::Ability.new(current_user, session)
     end
 
     def set_default_meta

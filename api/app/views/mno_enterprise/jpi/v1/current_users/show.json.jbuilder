@@ -1,4 +1,4 @@
-json.cache! ['v1', @user.cache_key] do
+json.cache! ['v2', @user.cache_key] do
   json.current_user do
     json.id @user.id
     json.name @user.name
@@ -29,7 +29,7 @@ json.cache! ['v1', @user.cache_key] do
     # Embed association if user is persisted
     if @user.id
       json.organizations do
-        json.array! (@user.organizations.active || []) do |o|
+        json.array! (@user.organizations.active.include_acl(session[:impersonator_user_id]) || []) do |o|
           json.id o.id
           json.uid o.uid
           json.name o.name
@@ -37,6 +37,7 @@ json.cache! ['v1', @user.cache_key] do
           json.current_user_role o.role
           json.has_myob_essentials_only o.has_myob_essentials_only?
           json.financial_year_end_month o.financial_year_end_month
+          json.acl o.acl
         end
       end
 

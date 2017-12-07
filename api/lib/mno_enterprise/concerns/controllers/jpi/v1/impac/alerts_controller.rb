@@ -19,8 +19,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
   def create
     return render_bad_request('attach alert to kpi', 'no alert specified') unless params.require(:alert)
     return render_not_found('kpi') unless kpi_alert.kpi
-
-    authorize! :manage_alert, kpi_alert
+    authorize! :update_impac_kpis, kpi_alert.kpi
 
     if (@alert = current_user.alerts.create(kpi_alert.attributes))
       render 'show'
@@ -33,10 +32,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
   def update
     return render_bad_request('update alert attributes', 'no alert hash specified') unless params.require(:alert)
     return render_not_found('alert') unless alert
+    authorize! :update_impac_kpis, alert.kpi
 
     attributes = params.require(:alert).permit(:title, :webhook, :sent)
-
-    authorize! :manage_alert, alert
 
     if alert.update(attributes)
       render 'show'
@@ -48,8 +46,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::AlertsController
   # DELETE /jpi/v1/impac/alerts/:id
   def destroy
     return render_not_found('alert') unless alert
-
-    authorize! :manage_alert, alert
+    authorize! :update_impac_kpis, alert.kpi
 
     service = alert.service
     if alert.destroy

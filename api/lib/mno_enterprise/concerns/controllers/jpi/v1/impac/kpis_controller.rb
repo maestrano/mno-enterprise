@@ -49,16 +49,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   # POST /mnoe/jpi/v1/impac/dashboards/:dashboard_id/kpis
   #   -> POST /api/mnoe/v1/dashboards/:id/kpis
   #   -> POST /api/mnoe/v1/users/:id/alerts
+  # TODO: nest alert in as a param, with the current user as a recipient.
   def create
     if params[:kpi][:widget_id].present?
       return render_not_found('widget') if widget.blank?
-      authorize! :manage_widget, widget
     else
       return render_not_found('dashboard') if dashboard.blank?
-      authorize! :manage_dashboard, dashboard
     end  
+    authorize! :create_impac_kpis, kpi_parent.kpis.build(kpi_create_params)
 
-    # TODO: nest alert in as a param, with the current user as a recipient.
     @kpi = kpi_parent.kpis.create(kpi_create_params)
     unless kpi.errors?
       # Creates a default alert for kpis created with targets defined.
@@ -80,8 +79,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   #   -> PUT /api/mnoe/v1/kpis/:id
   def update
     render_not_found('kpi') unless kpi.present?
-
-    authorize! :manage_kpi, kpi
+    authorize! :update_impac_kpis, kpi
 
     params = kpi_update_params
 
@@ -113,8 +111,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
   #   -> DELETE /api/mnoe/v1/kpis/:id
   def destroy
     render_not_found('kpi') unless kpi.present?
-
-    authorize! :manage_kpi, kpi
+    authorize! :destroy_impac_kpis, kpi
 
     if kpi.destroy
       head status: :ok
@@ -147,7 +144,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
 
     def kpi_create_params
       whitelist = [:dashboard_id, :widget_id, :endpoint, :source, :element_watched, {extra_watchables: []}]
-      extract_params(whitelist)
+      create_params = extract_params(whitelist)
+      create_params[:settings][:organization_ids] ||= kpi_parent.settings.to_h[:organization_ids]
+      create_params
     end
 
     def kpi_update_params

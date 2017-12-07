@@ -24,6 +24,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   #  -> POST /api/mnoe/v1/dashboards/:id/widgets
   def create
     if widgets
+      authorize! :create_impac_widgets, widgets.build(widget_create_params)
+
       if @widget = widgets.create(widget_create_params)
         MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Widget Creation', widget)
         @nocontent = true # no data fetch from Connec!
@@ -39,6 +41,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   # PUT /mnoe/jpi/v1/impac/widgets/:id
   #   -> PUT /api/mnoe/v1/widgets/:id
   def update
+    authorize! :update_impac_widgets, widget
+
     if widget.update(widget_update_params)
       MnoEnterprise::EventLogger.info('widget_update', current_user.id, 'Widget Update', widget, {widget_action: params[:widget]})
       @nocontent = !params['metadata']
@@ -51,6 +55,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
   # DELETE /mnoe/jpi/v1/impac/widgets/:id
   #   -> DELETE /api/mnoe/v1/widgets/:id
   def destroy
+    authorize! :destroy_impac_widgets, widget
+
     if widget.destroy
       MnoEnterprise::EventLogger.info('widget_delete', current_user.id, 'Widget Deletion', widget)
       head status: :ok
@@ -69,13 +75,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
       @widget ||= MnoEnterprise::Impac::Widget.find(params[:id])
     end
 
+    def parent_dashboard
+      @parent_dashboard ||= MnoEnterprise::Impac::Dashboard.find(params[:dashboard_id])
+    end
+
     def widgets
-      @widgets ||= MnoEnterprise::Impac::Dashboard.find(params[:dashboard_id]).widgets
+      @widgets ||= parent_dashboard.widgets
     end
 
     def widget_create_params
       params.require(:widget).permit(:endpoint, :name, :width).tap do |whitelisted|
         whitelisted[:settings] = params[:widget][:metadata] || {}
+        whitelisted[:settings][:organization_ids] ||= parent_dashboard.settings[:organization_ids]
         # TODO: remove when mnohub migrated to new model
         whitelisted[:widget_category] = params[:widget][:endpoint]
       end
