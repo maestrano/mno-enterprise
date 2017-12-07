@@ -114,33 +114,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
 
     # Authorize and update => Admin or Super Admin
     authorize! :invite_member, organization
-    if current_user.role(organization) == 'Admin'
-      # Admin cannot assign Super Admin role
-      raise CanCan::AccessDenied if attributes[:role] == 'Super Admin'
-      member_current_role = if member.is_a?(MnoEnterprise::User)
-                              organization.role(member)
-                            elsif member.is_a?(MnoEnterprise::OrgaInvite)
-                              member.user_role
-                            end
-      # Admin cannot edit Super Admin
-      if member_current_role == 'Super Admin'
-        raise CanCan::AccessDenied
-      end
-    elsif member.id == current_user.id && attributes[:role] != 'Super Admin' && organization.orga_relations.count { |u| u.role == 'Super Admin' } <= 1
-      # A super admin cannot modify his role if he's the last super admin
-      raise CanCan::AccessDenied
-    end
+    organization.update_user_role(current_user, member, attributes[:role])
 
-    # Happy Path
-    case member
-    when MnoEnterprise::User
-      orga_relation = MnoEnterprise::OrgaRelation.where(user_id: member.id, organization_id: organization.id).first
-      orga_relation.update_attributes!(role: attributes[:role])
-      MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in org', organization, {email: attributes[:email], role: attributes[:role]})
-    when MnoEnterprise::OrgaInvite
-      member.update_attributes!(user_role: attributes[:role])
-      MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in invitation', organization, {email: attributes[:email], role: attributes[:role]})
-    end
+    MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in #{member.is_a?(MnoEnterprise::User) ? "org" : "invitation"}', organization, {email: attributes[:email], role: attributes[:role]})
+
     # Reload organization
     @organization = organization.load_required(:users, :orga_invites, :orga_relations)
 

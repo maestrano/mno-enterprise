@@ -85,6 +85,40 @@ module MnoEnterprise::Concerns::Models::Organization
     }
   end
 
+  # Update a user role within self
+  #
+  # @param user [MnoEnterprise::User] the user performing the action
+  # @param updated_user [MnoEnterprise::User, MnoEnterprise::OrgaInvite] the user to update
+  # @param new_role [String] the role to assign to updated_user
+  #
+  def update_user_role(user, updated_user, new_role)
+    if user.role(self) == 'Admin'
+      # Admin cannot assign Super Admin role
+      raise CanCan::AccessDenied if new_role == 'Super Admin'
+      current_role = if updated_user.is_a?(MnoEnterprise::User)
+                          role(updated_user)
+                        elsif updated_user.is_a?(MnoEnterprise::OrgaInvite)
+                          updated_user.user_role
+                        end
+      # Admin cannot edit Super Admin
+      if current_role == 'Super Admin'
+        raise CanCan::AccessDenied
+      end
+    elsif updated_user.id == user.id && new_role != 'Super Admin' && orga_relations.count { |u| u.role == 'Super Admin' } <= 1
+      # A super admin cannot modify his role if he's the last super admin
+      raise CanCan::AccessDenied
+    end
+
+    # Happy Path
+    case updated_user
+    when MnoEnterprise::User
+      orga_relation = orga_relations.find { |rel| rel.user_id == updated_user.id }
+      orga_relation.update_attributes!(role: new_role)
+    when MnoEnterprise::OrgaInvite
+      updated_user.update_attributes!(user_role: new_role)
+    end
+  end
+
   def remove_user!(user)
     relation = self.orga_relation(user)
     relation.destroy! if relation
