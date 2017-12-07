@@ -33,7 +33,8 @@ module MnoEnterprise
           'website' => res.website,
           'sso_session' => res.sso_session,
           'admin_role' => res.admin_role,
-          'avatar_url' => avatar_url(res)
+          'avatar_url' => avatar_url(res),
+          'mnoe_sub_tenant_id' => res.mnoe_sub_tenant_id
       }
 
       if res.id

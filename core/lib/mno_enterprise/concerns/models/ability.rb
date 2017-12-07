@@ -75,13 +75,33 @@ module MnoEnterprise::Concerns::Models::Ability
     # Admin abilities
     #===================================================
     admin_abilities(user)
-  end
 
-  # Abilities for admin user
-  def admin_abilities(user)
-    if user.admin_role.to_s.casecmp('admin').zero? || user.admin_role.to_s.casecmp('staff').zero?
-      can :manage_app_instances, MnoEnterprise::Organization
-    end
+    # Define abilities for the passed in user here. For example:
+    #
+    #   user ||= User.new # guest user (not logged in)
+    #   if user.admin?
+    #     can :manage, :all
+    #   else
+    #     can :read, :all
+    #   end
+    #
+    # The first argument to `can` is the action you are giving the user
+    # permission to do.
+    # If you pass :manage it will apply to every action. Other common actions
+    # here are :read, :create, :update and :destroy.
+    #
+    # The second argument is the resource the user can perform the action on.
+    # If you pass :all it will apply to every resource. Otherwise pass a Ruby
+    # class of the resource.
+    #
+    # The third argument is an optional hash of conditions to further filter the
+    # objects.
+    # For example, here the user can only update published articles.
+    #
+    #   can :update, Article, :published => true
+    #
+    # See the wiki for details:
+    # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
   end
 
   # Enables / disables Impac! Angular capabilities
@@ -147,6 +167,14 @@ module MnoEnterprise::Concerns::Models::Ability
       orgs.present? && orgs.all? do |org|
         org.acl[:related] && org.acl[:related][:kpis] && org.acl[:related][:kpis][:destroy]
       end
+    end
+  end
+
+  # Abilities for admin user
+  def admin_abilities(user)
+    if user.admin_role.to_s.casecmp('admin').zero? || user.admin_role.to_s.casecmp('staff').zero?
+      can :manage_app_instances, MnoEnterprise::Organization
+      can :manage_sub_tenant, MnoEnterprise::SubTenant
     end
   end
 end

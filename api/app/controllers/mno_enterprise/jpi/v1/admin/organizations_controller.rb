@@ -10,12 +10,18 @@ module MnoEnterprise
         response.headers['X-Total-Count'] = @organizations.count
       else
         # Index mode
-        @organizations = MnoEnterprise::Organization
-        @organizations = @organizations.limit(params[:limit]) if params[:limit]
-        @organizations = @organizations.skip(params[:offset]) if params[:offset]
-        @organizations = @organizations.order_by(params[:order_by]) if params[:order_by]
-        @organizations = @organizations.where(params[:where]) if params[:where]
-        @organizations = @organizations.all.fetch
+        query = MnoEnterprise::Organization
+        query = query.limit(params[:limit]) if params[:limit]
+        query = query.skip(params[:offset]) if params[:offset]
+        query = query.order_by(params[:order_by]) if params[:order_by]
+        query = query.where(params[:where]) if params[:where]
+        all = query.all
+
+        all.params[:sub_tenant_id] = params[:sub_tenant_id]
+        all.params[:account_manager_id] = params[:account_manager_id]
+
+        @organizations = all.fetch
+
         response.headers['X-Total-Count'] = @organizations.metadata[:pagination][:count]
       end
     end
