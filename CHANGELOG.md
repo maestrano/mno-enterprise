@@ -5,7 +5,9 @@
 
 **Dependencies:**
 
-Requires MnoHub containing [maestrano/maestrano-hub#269](https://github.com/maestrano/maestrano-hub/pull/269) (eg: v2.0.0-rc7+)
+Requires MnoHub containing
+- [maestrano/maestrano-hub#269](https://github.com/maestrano/maestrano-hub/pull/269) (eg: v2.0.0-rc7+)
+- [maestrano/maestrano-hub#818](https://github.com/maestrano/maestrano-hub/pull/818) (eg: v2.0.0-rc8+)
 
 **Implemented enhancements:**
 

@@ -28,15 +28,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   # POST /mnoe/jpi/v1/impac/dashboards
   #   -> POST /api/mnoe/v1/users/1/dashboards
   def create
-    # TODO: dashboards.build breaks as dashboard.organization_ids returns nil, instead of an
-    #       empty array. (see MnoEnterprise::Impac::Dashboard #organizations)
-    # @dashboard = dashboards.build(dashboard_create_params)
-    # TODO: enable authorization
-    # authorize! :manage_dashboard, @dashboard
-    # if @dashboard.save
+    authorize! :create_impac_dashboards, dashboards.build(dashboard_create_params)
+
     if @dashboard = dashboards.create(dashboard_create_params)
       MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', @dashboard)
-
       render 'show'
     else
       render_bad_request('create dashboard', @dashboard.errors)
@@ -47,9 +42,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   #   -> PUT /api/mnoe/v1/dashboards/1
   def update
     return render_not_found('dashboard') unless dashboard
-
-    # TODO: enable authorization
-    # authorize! :manage_dashboard, dashboard
+    authorize! :update_impac_dashboards, dashboard
 
     if dashboard.update(dashboard_update_params)
       render 'show'
@@ -62,9 +55,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   #   -> DELETE /api/mnoe/v1/dashboards/1
   def destroy
     return render_not_found('dashboard') unless dashboard
-
-    # TODO: enable authorization
-    # authorize! :manage_dashboard, dashboard
+    authorize! :destroy_impac_dashboards, dashboard
 
     if dashboard.destroy
       MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', dashboard)
@@ -81,6 +72,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
   # POST mnoe/jpi/v1/impac/dashboards/1/copy
   def copy
     return render_not_found('template') unless template
+    authorize! :create_impac_dashboards, template
 
     # Owner is the current user by default, can be overriden to something else (eg: current organization)
     @dashboard = template.copy(current_user, dashboard_params[:name], dashboard_params[:organization_ids])
@@ -91,35 +83,34 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
 
   private
 
-    def dashboards
-      @dashboards ||= current_user.dashboards
-    end
+  def dashboards
+    @dashboards ||= current_user.dashboards
+  end
 
-    def dashboard
-      @dashboard ||= current_user.dashboards.find(params[:id].to_i)
-    end
+  def dashboard
+    @dashboard ||= current_user.dashboards.find(params[:id].to_i)
+  end
 
-    def templates
-      @templates ||= MnoEnterprise::Impac::Dashboard.templates
-    end
+  def templates
+    @templates ||= MnoEnterprise::Impac::Dashboard.templates
+  end
 
-    def template
-      @template ||= templates.find(params[:id].to_i)
-    end
+  def template
+    @template ||= templates.find(params[:id].to_i)
+  end
 
-    def whitelisted_params
-      [:name, :currency, {widgets_order: []}, {organization_ids: []}]
-    end
+  def whitelisted_params
+    [:name, :currency, { widgets_order: [] }, { organization_ids: [] }]
+  end
 
-    # Allows all metadata attrs to be permitted, and maps it to :settings
-    # for the Her "meta_data" issue.
-    def dashboard_params
-      params.require(:dashboard).permit(*whitelisted_params).tap do |whitelisted|
-        whitelisted[:settings] = params[:dashboard][:metadata] || {}
-      end
-      .except(:metadata)
+  # Allows all metadata attrs to be permitted, and maps it to :settings
+  # for the Her "meta_data" issue.
+  def dashboard_params
+    params.require(:dashboard).permit(*whitelisted_params).tap do |whitelisted|
+      whitelisted[:settings] = params[:dashboard][:metadata] || {}
     end
-    alias :dashboard_update_params  :dashboard_params
-    alias :dashboard_create_params  :dashboard_params
-
+    .except(:metadata)
+  end
+  alias :dashboard_update_params  :dashboard_params
+  alias :dashboard_create_params  :dashboard_params
 end

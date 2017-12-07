@@ -37,12 +37,11 @@ module MnoEnterprise::Concerns::Models::Organization
   included do
     attributes :uid, :orga_relation_id, :name, :account_frozen, :free_trial_end_at, :soa_enabled, :mails, :logo,
       :latitude, :longitude, :geo_country_code, :geo_state_code, :geo_city, :geo_tz, :geo_currency,
-      :meta_data, :industry, :size, :financial_year_end_month
+      :meta_data, :industry, :size, :financial_year_end_month, :acl
 
     scope :in_arrears, -> { where(in_arrears?: true) }
-
     scope :active, -> { where(account_frozen: false) }
-
+    scope :include_acl, ->(imp_id) { tap { |x| x.params.merge!(include_acl?: true, account_manager_id: imp_id) } }
     default_scope lambda { where(account_frozen: false) }
 
     #================================

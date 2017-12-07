@@ -19,7 +19,7 @@ module MnoEnterprise::Concerns::Models::Ability
   #==================================================================
   # Instance methods
   #==================================================================
-  def initialize(user)
+  def initialize(user, session)
     user ||= MnoEnterprise::User.new
 
     #===================================================
@@ -68,7 +68,8 @@ module MnoEnterprise::Concerns::Models::Ability
     #===================================================
     # Impac
     #===================================================
-    impac_abilities(user)
+    orgs_with_acl = user.organizations.active.include_acl(session[:impersonator_user_id]).to_a
+    impac_abilities(orgs_with_acl)
 
     #===================================================
     # Admin abilities
@@ -103,42 +104,69 @@ module MnoEnterprise::Concerns::Models::Ability
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
   end
 
-  def impac_abilities(user)
-    can :manage_impac, MnoEnterprise::Impac::Dashboard do |dhb|
-      dhb.organizations.any? && dhb.organizations.all? do |org|
-        !!user.role(org) && ['Super Admin', 'Admin'].include?(user.role(org))
+  # Enables / disables Impac! Angular capabilities
+  def impac_abilities(orgs_with_acl)
+    can :create_impac_dashboards, MnoEnterprise::Impac::Dashboard do |d|
+      orgs = d.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:dashboards] && org.acl[:related][:dashboards][:create]
       end
     end
 
-    can :manage_dashboard, MnoEnterprise::Impac::Dashboard do |dashboard|
-      if dashboard.owner_type == "Organization"
-        # The current user is a member of the organization that owns the dashboard that has the kpi attached to
-        owner = MnoEnterprise::Organization.find(dashboard.owner_id)
-        owner && !!user.role(owner)
-      elsif dashboard.owner_type == "User"
-        # The current user is the owner of the dashboard that has the kpi attached to
-        dashboard.owner_id == user.id
-      else
-        false
+    can :update_impac_dashboards, MnoEnterprise::Impac::Dashboard do |d|
+      orgs = d.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:dashboards] && org.acl[:related][:dashboards][:update]
       end
     end
 
-    can :manage_widget, MnoEnterprise::Impac::Widget do |widget|
-      dashboard = widget.dashboard
-      authorize! :manage_dashboard, dashboard
-    end
-
-    can :manage_kpi, MnoEnterprise::Impac::Kpi do |kpi|
-      if kpi.widget.present?
-        authorize! :manage_widget, MnoEnterprise::Impac::Widget.find(kpi.widget.id)
-      else
-        authorize! :manage_dashboard, kpi.dashboard
+    can :destroy_impac_dashboards, MnoEnterprise::Impac::Dashboard do |d|
+      orgs = d.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:dashboards] && org.acl[:related][:dashboards][:destroy]
       end
     end
 
-    can :manage_alert, MnoEnterprise::Impac::Alert do |alert|
-      kpi = alert.kpi
-      authorize! :manage_kpi, kpi
+    can :create_impac_widgets, MnoEnterprise::Impac::Widget do |w|
+      orgs = w.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:widgets] && org.acl[:related][:widgets][:create]
+      end
+    end
+
+    can :update_impac_widgets, MnoEnterprise::Impac::Widget do |w|
+      orgs = w.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:widgets] && org.acl[:related][:widgets][:update]
+      end
+    end
+
+    can :destroy_impac_widgets, MnoEnterprise::Impac::Widget do |w|
+      orgs = w.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:widgets] && org.acl[:related][:widgets][:destroy]
+      end
+    end
+
+    can :create_impac_kpis, MnoEnterprise::Impac::Kpi do |k|
+      orgs = k.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:kpis] && org.acl[:related][:kpis][:create]
+      end
+    end
+
+    can :update_impac_kpis, MnoEnterprise::Impac::Kpi do |k|
+      orgs = k.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:kpis] && org.acl[:related][:kpis][:update]
+      end
+    end
+
+    can :destroy_impac_kpis, MnoEnterprise::Impac::Kpi do |k|
+      orgs = k.organizations(orgs_with_acl)
+      orgs.present? && orgs.all? do |org|
+        org.acl[:related] && org.acl[:related][:kpis] && org.acl[:related][:kpis][:destroy]
+      end
     end
   end
 

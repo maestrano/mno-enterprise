@@ -75,6 +75,7 @@ module MnoEnterprise
       api_stub_for(get: '/sub_tenants', response: from_api([sub_tenant]))
       api_stub_for(get: "/sub_tenants/#{sub_tenant.id}", response: from_api(sub_tenant))
       api_stub_for(get: "/users/#{current_user.id}", response: from_api(current_user))
+      api_stub_for(get: "/users/#{current_user.id}/organizations", response: from_api([organization]))
       sign_in current_user
     end
 
@@ -121,17 +122,21 @@ module MnoEnterprise
     describe 'PUT #update' do
       subject { put :update, id: sub_tenant.id, sub_tenant: {name: 'new name'} }
 
-
       before do
         api_stub_for(get: "/sub_tenants/#{sub_tenant.id}", response: from_api(sub_tenant))
         api_stub_for(put: "/sub_tenants/#{sub_tenant.id}", response: -> { sub_tenant.name = 'new name'; from_api(sub_tenant) })
         sign_in current_user
       end
+
+      it_behaves_like 'a jpi v1 admin action' do
+        before { api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization])) }
+      end
+
       context 'not admin' do
         let(:current_user) { build(:user) }
         it_behaves_like 'unauthorized access'
       end
-      it_behaves_like 'a jpi v1 admin action'
+      
       context 'admin' do
         before { subject }
         context 'success' do
@@ -141,6 +146,7 @@ module MnoEnterprise
         end
       end
     end
+
     describe 'DELETE #destroy' do
       subject { delete :destroy, id: sub_tenant.id }
       before do
