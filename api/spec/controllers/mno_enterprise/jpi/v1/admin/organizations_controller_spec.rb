@@ -246,6 +246,9 @@ module MnoEnterprise
             stub_api_v2(:post, '/users', user2),
             stub_api_v2(:patch, "/users/#{user1.id}", user1),
 
+            stub_api_v2(:get, "/users/#{user1.id}", user1, [:sub_tenant]),
+            stub_api_v2(:get, "/users/#{user2.id}", user2, [:sub_tenant]),
+
             stub_api_v2(:get, '/orga_relations', [], [], { filter: { user_id: user1.id, organization_id: organization1.id }, page: { number: 1, size: 1 } }),
             stub_api_v2(:get, '/orga_relations', [orga_relation1], [], { filter: { user_id: user2.id, organization_id: organization2.id }, page: { number: 1, size: 1 } }),
 
@@ -269,6 +272,21 @@ module MnoEnterprise
         it 'does the requests' do
           stubs.each { |stub| expect(stub).to have_been_requested.at_least_once }
         end
+        it 'generates the report' do
+          import_report = assigns(:import_report)
+          expect(import_report).not_to be_nil
+          organizations = import_report[:organizations]
+          expect(organizations[:updated].length).to be 1
+          expect(organizations[:updated].first.id).to eq organization1.id
+          expect(organizations[:added].length).to be 1
+          expect(organizations[:added].first.id).to eq organization2.id
+          users = import_report[:users]
+          expect(users[:updated].length).to be 1
+          expect(users[:updated].first.id).to eq user1.id
+          expect(users[:added].length).to be 1
+          expect(users[:added].first.id).to eq user2.id
+        end
+
       end
     end
   end
