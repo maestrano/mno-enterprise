@@ -24,7 +24,7 @@ gem 'puma', '~> 3.0'
 
 # Ops gems
 group :uat, :production do
-  gem 'newrelic_rpm'
+  gem 'newrelic_rpm', '~> 4.4'
 end
 
 # CI gems
