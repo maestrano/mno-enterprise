@@ -81,4 +81,6 @@ admin_panel:
     enabled: true
   sub_tenant:
     enabled: false
+  account_manager:
+    enabled: false
 
