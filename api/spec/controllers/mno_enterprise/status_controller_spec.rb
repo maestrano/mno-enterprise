@@ -18,7 +18,6 @@ module MnoEnterprise
       it { is_expected.to respond_with(200) }
 
       it 'returns the main app version' do
-        puts MnoEnterprise::APP_VERSION
         expect(data['app-version']).to eq(MnoEnterprise::APP_VERSION)
       end
 
