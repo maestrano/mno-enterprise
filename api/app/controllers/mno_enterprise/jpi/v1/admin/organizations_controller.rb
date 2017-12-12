@@ -131,6 +131,7 @@ module MnoEnterprise
         status: 'staged' # Will be updated to 'accepted' for unconfirmed users
       )
       invite = invite.load_required(:user)
+      @organization = @organization.load_required(:orga_relations) unless user.confirmed?
       @user = user.confirmed? ? invite : user
     end
 
