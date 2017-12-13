@@ -155,6 +155,7 @@ module MnoEnterprise
         before { allow(invited_user).to receive(:confirmed?).and_return(false) }
         before { allow(controller).to receive(:create_unconfirmed_user).and_return(invited_user) }
         before { allow(orga_invite).to receive(:user).and_return(invited_user) }
+        before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, [:orga_relations]) }
         before { stub_api_v2(:get, '/users', nil, [:orga_relations], { filter: { email: params[:email] }, page: { number: 1, size: 1 } }) }
         before { stub_api_v2(:get, "/orga_invites/#{orga_invite.id}", orga_invite, [:user]) }
         before { expect(MnoEnterprise::OrgaInvite).to receive(:create).and_return(orga_invite) }
