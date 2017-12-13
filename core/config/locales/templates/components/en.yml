@@ -22,7 +22,7 @@ en:
 
         layout:
           your_dashboard_is_loading: "Your Customer View is loading..."
-          title": "Customer View"
+          title: "Customer View"
 
         without_organisation:
           hello: "Hi, {name}!"
