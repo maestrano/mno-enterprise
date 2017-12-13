@@ -9,7 +9,6 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
-
     #===============================================
     # Assignments
     #===============================================
@@ -38,7 +37,7 @@ module MnoEnterprise
       HashWithIndifferentAccess.new(name: 'a_name', status: 'FAILED', date: nil)
     ] }
 
-    let!(:organization_with_connectors) { build(:organization, connectors: connectors) }
+    let!(:organization_with_connectors) { build(:organization, connectors: connectors, has_running_cube: false) }
 
     #===============================================
     # Specs
@@ -53,6 +52,20 @@ module MnoEnterprise
       it 'returns the fetched connectors' do
         subject
         expect(JSON.parse(response.body)['connectors']).to eq(connectors)
+      end
+
+      context 'without cubes' do
+        before { subject }
+        it { expect(JSON.parse(response.body)['has_running_cube']).to be_falsey }
+      end
+
+      context 'with cubes' do
+        let!(:organization_with_cubes) { build(:organization, connectors: connectors, has_running_cube: true) }
+        before {
+          stub_api_v2(:get, "/organizations/#{organization.id}/app_instances_sync", [organization_with_cubes])
+          subject
+        }
+        it { expect(JSON.parse(response.body)['has_running_cube']).to be_truthy }
       end
 
       context 'when a connector is still syncing' do

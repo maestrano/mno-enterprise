@@ -153,12 +153,12 @@ module MnoEnterprise::Concerns::Models::Organization
 
   def app_instances_sync!
     result = app_instances_sync
-    process_custom_result(result).connectors
+    process_custom_result(result)
   end
 
   def trigger_app_instances_sync!
     result = trigger_app_instances_sync
-    process_custom_result(result).connectors
+    process_custom_result(result)
   end
 
   def to_audit_event

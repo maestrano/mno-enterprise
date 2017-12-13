@@ -5,23 +5,24 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/organization/org-fbba/app_instances_sync
     def index
       authorize! :check_apps_sync, @parent_organization
-      connectors = parent_organization.app_instances_sync!
-      render json: results(connectors)
+      org = parent_organization.app_instances_sync!
+      render json: results(org)
     end
 
 
     # POST /mnoe/jpi/v1/organizations/org-fbba/app_instances_sync
     def create
       authorize! :sync_apps, @parent_organization
-      connectors = parent_organization.trigger_app_instances_sync!
-      render json: results(connectors)
+      org = parent_organization.trigger_app_instances_sync!
+      render json: results(org)
     end
 
     private
-      def results(connectors)
+      def results(org)
         {
-          connectors: connectors,
-          is_syncing: connectors.any? { |c| CONNECTOR_STATUS_RUNNING.include?(c[:status]) }
+          connectors: org.connectors,
+          is_syncing: org.connectors.any? { |c| CONNECTOR_STATUS_RUNNING.include?(c[:status]) },
+          has_running_cube: org.has_running_cube
         }
       end
   end
