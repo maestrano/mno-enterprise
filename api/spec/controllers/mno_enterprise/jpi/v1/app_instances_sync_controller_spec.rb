@@ -59,7 +59,7 @@ module MnoEnterprise
         it { expect(JSON.parse(response.body)['has_running_cube']).to be_falsey }
       end
 
-      context 'without cubes' do
+      context 'with cubes' do
         let!(:organization_with_cubes) { build(:organization, connectors: connectors, has_running_cube: true) }
         before {
           stub_api_v2(:get, "/organizations/#{organization.id}/app_instances_sync", [organization_with_cubes])
