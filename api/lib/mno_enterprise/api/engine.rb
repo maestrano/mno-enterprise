@@ -7,7 +7,7 @@ module MnoEnterprise
 
       # Add assets
       if config.respond_to? (:assets)
-        config.assets.precompile += %w( mno_enterprise/config.js )
+        config.assets.precompile += %w( mno_enterprise/config.js mno_enterprise/error_page.js )
 
         # Allow sprockets to find file in the config/ path
         config.before_configuration do
