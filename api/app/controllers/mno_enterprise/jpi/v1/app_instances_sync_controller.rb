@@ -5,8 +5,8 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/organization/org-fbba/app_instances_sync
     def index
       authorize! :check_apps_sync, @parent_organization
-      org = parent_organization.app_instances_sync!
-      render json: results(org)
+      @parent_organization = parent_organization.app_instances_sync!
+      render json: results(parent_organization)
     end
 
 
@@ -19,10 +19,13 @@ module MnoEnterprise
 
     private
       def results(org)
+        statuses = MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')
+        has_running_cube = MnoEnterprise::AppInstance.where('owner.id': org.id, 'status.in': statuses, 'fulfilled_only': true, stack: 'cube').first.present?
+
         {
           connectors: org.connectors,
-          is_syncing: org.connectors.any? { |c| CONNECTOR_STATUS_RUNNING.include?(c[:status]) },
-          has_running_cube: org.has_running_cube
+          is_syncing: org.connectors.any? { |c| CONNECTOR_STATUS_RUNNING.include?(c[:status].upcase) },
+          has_running_cube: has_running_cube
         }
       end
   end

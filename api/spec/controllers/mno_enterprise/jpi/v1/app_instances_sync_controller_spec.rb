@@ -37,13 +37,15 @@ module MnoEnterprise
       HashWithIndifferentAccess.new(name: 'a_name', status: 'FAILED', date: nil)
     ] }
 
-    let!(:organization_with_connectors) { build(:organization, connectors: connectors, has_running_cube: false) }
+    let!(:organization_with_connectors) { build(:organization, connectors: connectors) }
+    let(:cubes) { [] }
 
     #===============================================
     # Specs
     #===============================================
     describe 'GET #index' do
       before { stub_api_v2(:get, "/organizations/#{organization.id}/app_instances_sync", [organization_with_connectors]) }
+      before { stub_api_v2(:get, "/app_instances", cubes, [], {filter: {'owner.id': organization_with_connectors.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(','), 'fulfilled_only': true, stack: 'cube' }, page: { number: 1, size: 1}}) }
 
       subject { get :index, organization_id: organization.uid }
 
@@ -60,9 +62,12 @@ module MnoEnterprise
       end
 
       context 'with cubes' do
-        let!(:organization_with_cubes) { build(:organization, connectors: connectors, has_running_cube: true) }
+        let!(:organization_with_cubes) { build(:organization, connectors: connectors) }
+        let(:cubes) { [double('cube', id: '123')] }
+
         before {
           stub_api_v2(:get, "/organizations/#{organization.id}/app_instances_sync", [organization_with_cubes])
+          stub_api_v2(:get, "/app_instances", cubes, [], {filter: {'owner.id': organization_with_cubes.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(','), 'fulfilled_only': true, stack: 'cube' }, page: { number: 1, size: 1}})
           subject
         }
         it { expect(JSON.parse(response.body)['has_running_cube']).to be_truthy }
@@ -96,6 +101,7 @@ module MnoEnterprise
       let(:sync_results) { {connectors: []} }
 
       before { stub_api_v2(:post, "/organizations/#{organization.id}/trigger_app_instances_sync", [organization_with_connectors]) }
+      before { stub_api_v2(:get, "/app_instances", [], [], {filter: {'owner.id': organization_with_connectors.id, 'status.in': MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(','), 'fulfilled_only': true, stack: 'cube' }, page: { number: 1, size: 1}}) }
 
       subject { post :create, organization_id: organization.uid, mode: 'a_mode', return_url: 'a/random/url' }
       before { subject }
