@@ -23,7 +23,7 @@ module MnoEnterprise
     describe 'GET #index' do
       subject { get :index }
       let(:product) { build(:product) }
-      before { stub_api_v2(:get, '/products', [product], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], {}) }
+      before { stub_api_v2(:get, '/products', [product], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], {filter: {active: true}}) }
       it_behaves_like 'a jpi v1 admin action'
     end
 
