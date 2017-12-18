@@ -3,11 +3,11 @@
     .error-code
       = @status
     .error-title
-      = t("mno_enterprise.errors.#{@status}-title")
+      = t("mno_enterprise.errors.#{@status}.title")
     %hr
     .error-context
       %p
-        = t("mno_enterprise.errors.#{@status}-context")
+        = t("mno_enterprise.errors.#{@status}.description")
     .error-button
       %button
         = link_to(mno_enterprise.root_path) do
