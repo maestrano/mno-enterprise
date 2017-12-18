@@ -171,6 +171,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
       default_sender,
       {email: recipient[:email]},
       {
+        from: "#{from.name} #{from.surname}",
         first_name: recipient[:name],
         title: task[:title],
         content: task[:message],
