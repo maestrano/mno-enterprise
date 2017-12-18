@@ -185,6 +185,7 @@ module MnoEnterprise
             SystemNotificationMailer::DEFAULT_SENDER,
             { email: recipient.email},
             {
+              from: "#{user.name} #{user.surname}",
               first_name: recipient.name,
               title: task.title,
               content: task.message,
