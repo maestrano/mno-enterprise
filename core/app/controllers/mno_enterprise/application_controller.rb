@@ -18,6 +18,8 @@ module MnoEnterprise
       include MnoEnterprise::Concerns::Controllers::AngularCSRF
     end
 
+    rescue_from Faraday::ConnectionFailed, Faraday::TimeoutError, with: :handle_mnohub_error
+
     #============================================
     # CanCan Authorization Rescue
     #============================================
@@ -132,6 +134,25 @@ module MnoEnterprise
       fragment.query = URI.encode_www_form(params)
       uri.fragment = fragment.to_s
       uri.to_s
+    end
+
+    def handle_mnohub_error(exception)
+      @status = case exception
+                when Faraday::ConnectionFailed
+                  503 # :service_unavailable
+                when Faraday::TimeoutError
+                  429 # :too_many_requests
+                else
+                  exception
+                end
+
+      respond_to do |format|
+        format.html do
+          @meta = {title: 'Backend unavailable'}
+          render 'error_page', layout: 'mno_enterprise/public', status: @status
+        end
+        format.json {render json: {error: 'API hub unavailable'}, status: @status}
+      end
     end
   end
 end
