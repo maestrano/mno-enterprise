@@ -5,7 +5,7 @@ module MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
 
       it "prevents access" do
         expect(subject).to_not be_successful
-        expect(subject.code).to eq('401')
+        expect(subject).to have_http_status(:unauthorized)
       end
     end
 
@@ -18,7 +18,7 @@ module MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
 
       it "prevents access" do
         expect(subject).to_not be_successful
-        expect(subject.code).to eq('401')
+        expect(subject).to have_http_status(:forbidden)
       end
     end
 
