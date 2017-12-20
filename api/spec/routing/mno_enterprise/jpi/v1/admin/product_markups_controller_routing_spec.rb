@@ -4,11 +4,9 @@ module MnoEnterprise
   RSpec.describe Jpi::V1::Admin::ProductMarkupsController, type: :routing do
     routes { MnoEnterprise::Engine.routes }
 
-    [:index, :show, :destroy, :update, :create]
-
     context 'Product Markup is enabled' do
       before(:all) do
-        Settings.merge!(dashboard: {marketplace: {product_markup: true}})
+        Settings[:dashboard][:marketplace][:product_markup] = true
         Rails.application.reload_routes!
       end
 
@@ -36,7 +34,7 @@ module MnoEnterprise
 
     context 'Product Markup is disabled' do
       before(:all) do
-        Settings.merge!(dashboard: {marketplace: {product_markup: false}})
+        Settings[:dashboard][:marketplace][:product_markup] = false
         Rails.application.reload_routes!
       end
 

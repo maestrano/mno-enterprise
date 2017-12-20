@@ -78,9 +78,9 @@ namespace :mnoe do
       main_content = File.read(less_file)
 
       src_content = Dir.glob(included)
-                .uniq
-                .reject { |e| excluded.include?(e) }
-                .map { |e| File.read(e) }
+                       .uniq
+                       .reject { |e| excluded.include?(e) }
+                       .map { |e| File.read(e) }
 
       main_content = main_content.gsub("// injector\n// endinjector", src_content.join("\n"))
 
@@ -133,7 +133,7 @@ namespace :mnoe do
         File.write(dst_file, content)
       end
 
-      return dst_file
+      dst_file
     end
 
     # Build the previewer css stylesheet
@@ -148,7 +148,7 @@ namespace :mnoe do
         rm_f(src_file)
       end
 
-      return dst_file
+      dst_file
     end
 
     #================================================================
@@ -162,7 +162,7 @@ namespace :mnoe do
       task :prepare_build_folder do
         # Create tmp build folder
         # Minimize copy activity if folder has already been copied
-        if File.directory?("#{frontend_tmp_folder}")
+        if File.directory?(frontend_tmp_folder.to_s)
           rm_rf "#{frontend_tmp_folder}/src"
           cp_r("#{FRONTEND_PKG_FOLDER}/src", "#{frontend_tmp_folder}/")
         else
@@ -228,7 +228,7 @@ namespace :mnoe do
 
         # Update reference in index.html
         index_html_file = "#{frontend_dist_folder}/index.html"
-        index_content = File.read(index_html_file).gsub(/styles\/app-\w+.css/, "styles/#{css_digest_filename}")
+        index_content = File.read(index_html_file).gsub(%r{styles/app-\w+.css}, "styles/#{css_digest_filename}")
         File.write(index_html_file, index_content)
 
         # Generates locales

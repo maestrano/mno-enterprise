@@ -99,10 +99,10 @@ module MnoEnterprise::Concerns::Models::Organization
       # Admin cannot assign Super Admin role
       raise CanCan::AccessDenied if new_role == 'Super Admin'
       current_role = if updated_user.is_a?(MnoEnterprise::User)
-                          role(updated_user)
-                        elsif updated_user.is_a?(MnoEnterprise::OrgaInvite)
-                          updated_user.user_role
-                        end
+                       role(updated_user)
+                     elsif updated_user.is_a?(MnoEnterprise::OrgaInvite)
+                       updated_user.user_role
+                     end
       # Admin cannot edit Super Admin
       if current_role == 'Super Admin'
         raise CanCan::AccessDenied

@@ -24,7 +24,7 @@ module MnoEnterprise::TestingSupport::SharedExamples::OrganizationSharedExamples
           organization.orga_relations << member_orga_relation
           stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices main_address))
         }
-        before { stub_api_v2(:get, "/orga_relations", [member_orga_relation], [], {filter: {organization_id: organization.id, user_id: member.id}, page:{ number: 1, size: 1}}) }
+        before { stub_api_v2(:get, "/orga_relations", [member_orga_relation], [], {filter: {organization_id: organization.id, user_id: member.id}, page: { number: 1, size: 1}}) }
         before { stub_api_v2(:post, "/orga_relations/#{member_orga_relation.id}", orga_relation) }
         before { stub_api_v2(:patch, "/orga_relations/#{member_orga_relation.id}") }
 
@@ -122,7 +122,6 @@ module MnoEnterprise::TestingSupport::SharedExamples::OrganizationSharedExamples
       }
       # reloading organization
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations)) }
-
 
       let(:params) { {email: 'somemember@maestrano.com'} }
       subject { put :remove_member, id: organization.id, member: params }

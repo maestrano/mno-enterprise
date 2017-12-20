@@ -1,7 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_EVENT_INCLUDES ||= [:'subscription', :'subscription.organization', :'subscription.product', :'product_pricing']
+  SUBSCRIPTION_EVENT_INCLUDES ||= [:subscription, :'subscription.organization', :'subscription.product', :'product_pricing']
 
   #==================================================================
   # Instance methods
@@ -101,8 +101,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
 
   def fetch_subscription_event(organization_id, subscription_id, id, includes = nil)
     rel = MnoEnterprise::SubscriptionEvent
-            .with_params(_metadata: { act_as_manager: current_user.id, organization_id: organization_id })
-            .where('subscription.id' => subscription_id, id: id)
+          .with_params(_metadata: { act_as_manager: current_user.id, organization_id: organization_id })
+          .where('subscription.id' => subscription_id, id: id)
     rel = rel.includes(*includes) if includes.present?
     rel.first
   end

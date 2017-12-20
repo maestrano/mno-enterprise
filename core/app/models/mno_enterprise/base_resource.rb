@@ -129,7 +129,7 @@ module MnoEnterprise
     end
 
     def raise_if_errors
-      raise ResourceError.new(errors) unless errors.empty?
+      raise ResourceError, errors unless errors.empty?
     end
 
     # emulate active record call of callbacks, a bit different as before_update is called before before_save

@@ -213,7 +213,7 @@ describe MnoEnterprise::TenantConfig do
           type: "array",
           items: {
             type: 'string',
-            enum: %w(A B C D),
+            enum: %w(A B C D)
           },
           default: ['A']
         }

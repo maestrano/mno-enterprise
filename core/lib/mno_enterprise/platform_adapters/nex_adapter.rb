@@ -57,7 +57,7 @@ module MnoEnterprise
         def clear_assets
           # Clear the whole bucket
           %x(#{aws_cli} s3 rm s3://${MINIO_BUCKET} --recursive)
-          $?.exitstatus == 0
+          $CHILD_STATUS.exitstatus == 0
         end
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#publish_assets
@@ -163,7 +163,7 @@ module MnoEnterprise
         # @param [Array<String>] files the list of files to include
         # @return [String] the cli option String
         def generate_opts(files)
-          files.map{|f| "--include '#{f}'"}.unshift("--exclude '*' --delete").join(' ')
+          files.map {|f| "--include '#{f}'"}.unshift("--exclude '*' --delete").join(' ')
         end
 
         # Syncs directories and S3 prefixes.

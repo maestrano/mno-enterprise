@@ -261,6 +261,7 @@ module MnoEnterprise
   end
 
   private
+
     # Load the provided styleguide hash into nested structure or load a default one
     def self.configure_styleguide
       # Load default gem configuration

@@ -25,14 +25,16 @@ module MnoEnterprise
       it 'returns the right response' do
         subject
 
-        expect(JSON.parse(response.body)['system_identity']).to include({
-          "id" => system_identity.id,
-          "mnohub_endpoint" => system_identity.mnohub_endpoint,
-          "connec_endpoint" => system_identity.connec_endpoint,
-          "impac_endpoint" => system_identity.impac_endpoint,
-          "nex_endpoint" => system_identity.nex_endpoint,
-          "preferred_locale" => system_identity.preferred_locale
-        })
+        expect(JSON.parse(response.body)['system_identity']).to include(
+          {
+            "id" => system_identity.id,
+            "mnohub_endpoint" => system_identity.mnohub_endpoint,
+            "connec_endpoint" => system_identity.connec_endpoint,
+            "impac_endpoint" => system_identity.impac_endpoint,
+            "nex_endpoint" => system_identity.nex_endpoint,
+            "preferred_locale" => system_identity.preferred_locale
+          }
+        )
       end
     end
   end

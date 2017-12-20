@@ -67,9 +67,9 @@ module MnoEnterprise
       let(:expected_params) do
         {
           filter: {'organization.id': organization.id},
-          fields:{
+          fields: {
             teams: 'id,name,app_instances,users',
-            app_instances:'id,name,app',
+            app_instances: 'id,name,app',
             users: 'id,name,surname,email',
             apps: 'logo'
           }

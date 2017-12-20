@@ -9,7 +9,7 @@ module MnoEnterprise
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
     before(:each) do
-      Settings.merge!(dashboard: { marketplace: {provisioning: true } })
+      Settings[:dashboard][:marketplace][:provisioning] = true
       Rails.application.reload_routes!
     end
 
@@ -34,7 +34,7 @@ module MnoEnterprise
       subject { get :index, organization_id: organization.id, subscription_id: subscription.id }
 
       let(:data) { JSON.parse(response.body) }
-      let(:includes) { [:'subscription', :'subscription.organization', :'subscription.product', :'product_pricing'] }
+      let(:includes) { [:subscription, :'subscription.organization', :'subscription.product', :'product_pricing'] }
       let(:expected_params) { { filter: { 'subscription.id': subscription.id }, _metadata: { act_as_manager: user.id, organization_id: organization.id } } }
 
       before { stub_api_v2(:get, "/subscription_events", [subscription_event], includes, expected_params) }
@@ -51,12 +51,13 @@ module MnoEnterprise
       subject { get :show, id: subscription_event.id, organization_id: organization.id, subscription_id: subscription.id }
 
       let(:data) { JSON.parse(response.body) }
-      let(:includes) { [:'subscription', :'subscription.organization', :'subscription.product', :'product_pricing'] }
+      let(:includes) { [:subscription, :'subscription.organization', :'subscription.product', :'product_pricing'] }
       let(:expected_params) do
         {
           filter: { id: subscription_event.id, 'subscription.id': subscription.id },
           _metadata: { act_as_manager: user.id, organization_id: organization.id },
-          page: { number: 1, size: 1 } }
+          page: { number: 1, size: 1 }
+        }
       end
 
       before { allow(subscription_event).to receive(:license_assignments).and_return([]) }
