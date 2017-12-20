@@ -14,7 +14,7 @@ module MnoEnterprise
     let(:product_markup) { build(:product_markup, organization: organization, product: product ) }
 
     before(:all) do
-      Settings.merge!(dashboard: {provisioning: {enabled: true}})
+      Settings.dashboard.marketplace.provisioning = true
       Rails.application.reload_routes!
     end
 

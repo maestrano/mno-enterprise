@@ -330,7 +330,7 @@ module MnoEnterprise
 
         context 'enabled' do
           before do
-            Settings.merge!(dashboard: { registration: { disabled: true } })
+            Settings.dashboard.registration.enabled = true
             reload_user
           end
           it 'is registerable' do
@@ -340,7 +340,7 @@ module MnoEnterprise
 
         context 'disabled' do
           before do
-            Settings.merge!(dashboard: { registration: { enabled: false } })
+            Settings.dashboard.registration.enabled = false
             reload_user
           end
           it 'is not registerable' do

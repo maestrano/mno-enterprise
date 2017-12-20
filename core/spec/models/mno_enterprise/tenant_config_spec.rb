@@ -50,7 +50,7 @@ describe MnoEnterprise::TenantConfig do
       Settings.system.email.default_sender.name = 'New Sender Name'
       Settings.system.email.default_sender.email = 'New Sender Email'
       Settings.system.i18n.enabled = 'New I18n'
-      Settings.system.smtp.merge!(address: 'smtp.test')
+      Settings.system.smtp.address = 'smtp.test'
       described_class.reconfigure_mnoe!
     end
 
