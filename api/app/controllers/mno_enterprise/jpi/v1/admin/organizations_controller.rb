@@ -8,10 +8,11 @@ module MnoEnterprise
                        :geo_country_code, :geo_state_code, :geo_city,
                        :geo_tz, :geo_currency, :metadata, :industry, :size,
                        :financial_year_end_month, :credit_card,
-                       :financial_metrics, :created_at, :external_id, :belong_to_sub_tenant, :belong_to_account_manager]
+                       :financial_metrics, :created_at, :external_id, :belong_to_sub_tenant, :belong_to_account_manager,
+                       :demo_account]
     INCLUDED_FIELDS_SHOW = [:name, :uid, :soa_enabled, :created_at, :account_frozen, :financial_metrics,
                             :billing_currency, :external_id, :app_instances, :orga_invites, :users,
-                            :orga_relations, :invoices, :credit_card]
+                            :orga_relations, :invoices, :credit_card, :demo_account]
 
     # GET /mnoe/jpi/v1/admin/organizations
     def index

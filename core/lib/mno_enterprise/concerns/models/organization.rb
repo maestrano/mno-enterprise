@@ -37,6 +37,7 @@ module MnoEnterprise::Concerns::Models::Organization
     property :external_id, type: :string
     property :belong_to_sub_tenant, type: :boolean
     property :belong_to_account_manager, type: :boolean
+    property :demo_account, type: :boolean
   end
 
   #==================================================================
