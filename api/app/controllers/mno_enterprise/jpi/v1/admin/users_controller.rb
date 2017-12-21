@@ -129,7 +129,7 @@ module MnoEnterprise
     def user_create_params
       attrs = user_update_params.merge(password: Devise.friendly_token.first(12))
       if attrs.key?(:admin_role)
-        attrs.merge!(orga_on_create: true, company: 'Demo Company', demo_account: true)
+        attrs.merge!(orga_on_create: true, company: 'Demo Company', demo_account: 'Staff demo company')
       end
       attrs
     end
