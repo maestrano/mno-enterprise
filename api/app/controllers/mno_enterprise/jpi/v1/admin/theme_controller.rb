@@ -19,8 +19,8 @@ module MnoEnterprise
         # Save and rebuild previewer style only
         # (so it is kept across page reloads)
         save_previewer_style(theme)
-        rebuild_previewer_style
       end
+      rebuild_previewer_style
       SystemManager.publish_assets
       render json: {status:  'Ok'},  status: :created
     end
