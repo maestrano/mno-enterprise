@@ -4,6 +4,9 @@ en:
       "503":
         title: "Looks like we're having some server issues."
         description: "We will redirect you as soon as it's online. Otherwise try again in a moment."
+      "500":
+        title: "Looks like we're having some server issues."
+        description: "If the problem persists, please contact support at %{support_email}."
       "429":
         title: "Too many requests."
         description: "We are receiving too many requests. Please try again in a moment."

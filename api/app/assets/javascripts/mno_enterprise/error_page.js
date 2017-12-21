@@ -34,6 +34,13 @@ mnoHub.redirect = function() {
 };
 
 mnoHub.startAutoCheck = function() {
+  // For 500 error, we should not keep auto refreshing the page till bug
+  //  is resolved manually by our team.
+  var page_error_code = document.getElementById('status_code').value;
+  if(parseInt(page_error_code) == 500) {
+    return;
+  }
+
   return mnoHub.timerId = window.setInterval(function() {
     return mnoHub.check();
   }, 10 * 1000);
