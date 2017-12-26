@@ -42,6 +42,9 @@ module MnoEnterprise
       # Create new organization
       @organization = MnoEnterprise::Organization.create(organization_update_params)
 
+      # Set the role to be same as current user role
+      @organization.add_user(current_user, current_user.admin_role)
+
       # OPTIMIZE: move this into a delayed job?
       update_app_list
 
