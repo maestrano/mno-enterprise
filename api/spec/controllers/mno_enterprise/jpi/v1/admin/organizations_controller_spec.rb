@@ -127,13 +127,16 @@ module MnoEnterprise
 
     describe 'POST #create' do
       let(:params) { FactoryGirl.attributes_for(:organization) }
-      before { allow(MnoEnterprise::Organization).to receive(:create) { organization } }
+      before do
+        allow(MnoEnterprise::Organization).to receive(:create) { organization }
+        allow_any_instance_of(MnoEnterprise::Organization).to receive(:add_user).and_return(true)
+      end
 
       subject { post :create, organization: params }
 
       it_behaves_like 'a jpi v1 admin action'
 
-      it 'creates the organization' do
+      it 'creates the organization and assigns current user to the organization' do
         expect(MnoEnterprise::Organization).to receive(:create).with(params.slice(:name)) { organization }
         subject
       end
