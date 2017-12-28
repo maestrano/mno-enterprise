@@ -1,5 +1,13 @@
 require 'rails_helper'
 
+# TODO: Monkey Patch while waiting for PR to be merged
+# https://github.com/bblimke/webmock/pull/734
+module WebMock
+  class BodyPattern
+    BODY_FORMATS.merge!('application/vnd.api+json' => :json)
+  end
+end
+
 module MnoEnterprise
   describe Jpi::V1::Admin::UsersController, type: :controller do
     include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
@@ -67,6 +75,21 @@ module MnoEnterprise
 
       it { expect(data['user']['id']).to eq(user.id) }
       it { expect(stub).to have_been_requested }
+
+      context 'with a staff user' do
+        let(:params) { { 'name' => 'Foo', 'email' => 'test@toto.com', 'admin_role' => 'staff' } }
+
+        let!(:stub) do
+          args = {'orga_on_create' => true, 'company' => 'Demo Company', 'demo_account' => 'Staff demo company'}
+          stub_request(:post, 'https://api-enterprise.maestrano.test/api/mnoe/v2/users?_locale=en')
+            .with(body: {"data" => hash_including("attributes" => hash_including(args))})
+            .to_return(status: 200, body: from_apiv2(user, []).to_json, headers: MnoEnterpriseApiTestHelper::JSON_API_RESULT_HEADERS)
+        end
+
+        before { subject }
+
+        it { expect(stub).to have_been_requested }
+      end
     end
 
     describe 'PUT #update' do

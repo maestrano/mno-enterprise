@@ -127,7 +127,11 @@ module MnoEnterprise
     end
 
     def user_create_params
-      user_update_params.merge(password: Devise.friendly_token.first(12))
+      attrs = user_update_params.merge(password: Devise.friendly_token.first(12))
+      if attrs.key?(:admin_role)
+        attrs.merge!(orga_on_create: true, company: 'Demo Company', demo_account: 'Staff demo company')
+      end
+      attrs
     end
 
     def update_sub_tenant(user)
