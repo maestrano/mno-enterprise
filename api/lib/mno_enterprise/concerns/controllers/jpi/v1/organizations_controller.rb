@@ -157,6 +157,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
       member.update(user_role: attributes[:role])
       MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in invitation', organization, {email: attributes[:email], role: attributes[:role]})
     end
+    current_user.refresh_user_cache
 
     render 'members'
   end
