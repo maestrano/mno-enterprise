@@ -1,0 +1,18 @@
+.error-page
+  .container
+    .error-code
+      = @status
+    .error-title
+      = t("mno_enterprise.errors.#{@status}.title")
+    %hr
+    .error-context
+      %p
+        = t("mno_enterprise.errors.#{@status}.description")
+    .error-button
+      %button
+        = link_to(mno_enterprise.root_path) do
+          %i{class: "fa fa-home"}
+          = t("mno_enterprise.errors.redirection")
+    #error-loader
+
+= javascript_include_tag "mno_enterprise/error_page"

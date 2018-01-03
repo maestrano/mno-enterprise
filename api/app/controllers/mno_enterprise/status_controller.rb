@@ -1,6 +1,10 @@
 # Health Check endpoint
 module MnoEnterprise
   class StatusController < ApplicationController
+    # Skip filters than rely on MnoHub (RemoteAuthenticatable)
+    skip_before_filter :handle_password_change
+    skip_before_filter :perform_return_to
+
     # Simple check to see that the app is up
     # Returns:
     #   {status: 'Ok'}

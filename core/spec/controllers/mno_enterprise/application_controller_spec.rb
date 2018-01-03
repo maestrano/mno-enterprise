@@ -27,5 +27,43 @@ module MnoEnterprise
       it { expect(controller.after_sign_in_path_for(User.new(admin_role: ""))).to eq('/dashboard/') }
       it { expect(controller.after_sign_in_path_for(User.new(admin_role: "admin"))).to eq('/admin/') }
     end
+
+    describe 'Error Handling' do
+      subject { get :index, format: :json }
+
+      context 'ConnectionFailed' do
+        controller(MnoEnterprise::ApplicationController) do
+          skip_before_filter :perform_return_to, only: [:index]
+
+          def index
+            raise Faraday::ConnectionFailed, nil
+          end
+
+          def handle_mnohub_error(exception)
+            super
+          end
+        end
+
+        subject { get :index, format: :json }
+
+        it { is_expected.to have_http_status(:service_unavailable) }
+      end
+
+      context 'TimeoutError' do
+        controller(MnoEnterprise::ApplicationController) do
+          skip_before_filter :perform_return_to, only: [:index]
+
+          def index
+            raise Faraday::TimeoutError, nil
+          end
+
+          def handle_mnohub_error(exception)
+            super
+          end
+        end
+
+        it { is_expected.to have_http_status(:too_many_requests) }
+      end
+    end
   end
 end

@@ -37,7 +37,7 @@ en:
             platform_admin: "Platform moderator"
             edited_by_user: "Edited by User"
             edited_by_user_tooltip: "Show edit history"
-            edited_by_admin: "Edited by Admin"
+            edited_by_admin: "Edited by Platform moderator"
             just_now: "Just Now"
             company_feedback: "Company feedback"
             review_title: "Review"

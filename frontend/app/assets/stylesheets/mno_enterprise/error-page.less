@@ -1,0 +1,147 @@
+.error-page {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: @login-bg-color;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.error-page when (isstring(@login-bg-img)) {
+  background-image: asset-url(@login-bg-img);
+  background-size: cover;
+}
+
+.error-page .container {
+  border-radius: 6px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,.2);
+  padding: 50px;
+  background-color: @error-bg-color;
+  margin-top: 150px;
+  width: 90%;
+  max-width: 525px;
+  position: relative;
+
+  @media (max-width: @screen-xs-max) {
+    margin-top: 50px;
+    padding: 30px 10px;
+  }
+
+  .error-code {
+    transition: color .2s linear;
+    font-size: 40px;
+    line-height: 60px;
+    letter-spacing: -1px;
+    margin-bottom: 5px;
+    color: @error-status-code-color;
+  }
+  .error-title {
+    transition: color .2s linear;
+    font-size: 36px;
+    line-height: 46px;
+    color: @error-title-color;
+
+    @media (max-width: @screen-xs-max) {
+      font-size: 26px;
+      line-height: 30px;
+    }
+  }
+
+  .error-context {
+    transition: color .2s linear;
+    font-size: 18px;
+    line-height: 27px;
+    color: @error-context-color;
+  }
+
+  hr {
+    height: 1px;
+    background-color: @error-hr-bg-color;
+    width: 60%;
+    max-width: 250px;
+    margin: 35px auto;
+
+    @media (max-width: @screen-xs-max) {
+      margin: 25px auto;
+    }
+  }
+
+  .error-button {
+    margin-top: 35px;
+    overflow: hidden;
+
+    button {
+      border-radius: @error-btn-border-radius;
+      position: relative;
+      border: none;
+      background-color: @error-btn-bg-color;
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
+      transition: background-color .2s linear;
+
+      @media (max-width: @screen-xs-max) {
+        width: 70%;
+        max-width: 250px;
+      }
+
+      &:hover {
+        background-color: darken(#2ecc71, 5%);
+      }
+
+      a {
+        text-indent: 0px;
+        font-size: 14px;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: @error-btn-text-color;
+        padding: 12px 0 13px;
+        text-align: center;
+        display: inline-block;
+        overflow: hidden;
+        position: relative;
+        transition: text-indent .2s ease-out, color .2s linear;
+        width: 100%;
+
+        @media (max-width: @screen-xs-max) {
+          text-indent: 15px;
+          padding: 10px 0;
+        }
+
+        &:hover {
+          text-indent: 15px;
+
+          i {
+            left: 0;
+          }
+        }
+
+        i {
+          transition: left .2s ease-out;
+          position: absolute;
+          left: -50px;
+          font-size: 17px;
+
+          @media (max-width: @screen-xs-max) {
+            left: 0;
+          }
+        }
+      }
+    }
+  }
+
+  #error-loader {
+    padding: 5px 0 5px 0;
+    color: @error-loader-text-color;
+    position: absolute;
+    left: 15px;
+    bottom: 10px;
+    right: 15px;
+    transition: 5s;
+  }
+}

@@ -25,6 +25,8 @@ en:
           search: "Search"
           categories: "Categories"
           max_apps_selected: "You cannot start with more than 4 apps, you will be able to add more at a later stage."
+          max_apps_selected_tooltip: "You can only select 4 applications at a time, please remove one application before adding a new one"
+          conflicting_app_selected_tooltip: "You cannot install this App as it is incompatible with: {appName}"
         data_sync:
           what_data: "What data will be synchronised"
           start: "Visualise what data will be synchronised from your applications by clicking on their icons."
