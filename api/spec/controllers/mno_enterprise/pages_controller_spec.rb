@@ -76,9 +76,25 @@ module MnoEnterprise
       before { subject }
 
       it { expect(response).to be_success }
-      
+
       it 'returns the apps in the correct alphabetical order' do
         expect(assigns(:apps)).to eq([app2, app1, app3])
+      end
+    end
+
+    describe 'GET #error' do
+      subject { get :error, error_code: error_code, format: :json }
+
+      context '503 error' do
+        let(:error_code) { 503 }
+        it { is_expected.to have_http_status(:service_unavailable) }
+        it { expect(subject.body).to eq({error: 'API hub unavailable'}.to_json) }
+      end
+
+      context '429 error' do
+        let(:error_code) { 429 }
+        it { is_expected.to have_http_status(:too_many_requests) }
+        it { expect(subject.body).to eq({error: 'API hub unavailable'}.to_json) }
       end
     end
   end

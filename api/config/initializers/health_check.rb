@@ -31,3 +31,11 @@ HealthCheck.setup do |config|
     MnoEnterprise::HealthCheck.perform_mno_hub_check
   end
 end
+
+# Monkey patch HealthCheckController to skip filters than rely on MnoHub (RemoteAuthenticatable)
+module HealthCheck
+  class HealthCheckController
+    skip_before_filter :handle_password_change
+    skip_before_filter :perform_return_to
+  end
+end
