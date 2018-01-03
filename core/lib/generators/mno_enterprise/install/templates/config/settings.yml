@@ -60,6 +60,8 @@ devise:
 
 # Admin Panel Config
 admin_panel:
+  account_manager:
+    enabled: false
   apps_management:
     enabled: true
   audit_log:
@@ -71,16 +73,13 @@ admin_panel:
       enabled: true
   finance:
     enabled: true
+  impersonation:
+    disabled: false
   # Ability to enable Intercom on the admin panel
   # Intercom needs to be properly setup for the dashboard
   intercom:
     enabled: false
-  impersonation:
-    disabled: false
   staff:
     enabled: true
   sub_tenant:
     enabled: false
-  account_manager:
-    enabled: false
-
