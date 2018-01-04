@@ -36,7 +36,8 @@ module MnoEnterprise
           frontend_config: Settings.to_hash,
           plugins_config: {
             payment_gateways: []
-          }
+          },
+          app_management: "marketplace"
         }
 
         # TODO: using JSON parse for better error

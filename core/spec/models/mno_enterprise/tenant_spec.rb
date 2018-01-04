@@ -22,7 +22,7 @@ module MnoEnterprise
           }.merge(params)
         }
       }}
-      let(:params) { {frontend_config: {}} }
+      let(:params) { {frontend_config: {}, metadata: {app_management: "marketplace"} } }
       let!(:stub) { stub_api_v2(:patch, '/tenant', tenant).with(body: body.to_json) }
       before { tenant.update_attributes(params) }
       it { expect(stub).to have_been_requested }
