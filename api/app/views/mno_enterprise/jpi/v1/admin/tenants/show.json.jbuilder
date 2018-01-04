@@ -5,4 +5,5 @@ json.tenant do
   json.plugins_config @tenant.plugins_config
   json.config_schema Hash(MnoEnterprise::TenantConfig.json_schema)
   json.plugins_config_schema Hash(MnoEnterprise::PLUGINS_CONFIG_JSON_SCHEMA)
+  json.app_management @tenant.metadata[:app_management] || "marketplace"
 end

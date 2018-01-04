@@ -4,5 +4,6 @@ FactoryGirl.define do
     sequence(:name) { |n| "Tenant#{n}" }
     domain 'tenant.domain.test'
     frontend_config { {} }
+    metadata { {app_management: "marketplace"} }
   end
 end
