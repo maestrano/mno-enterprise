@@ -49,8 +49,9 @@ module MnoEnterprise
     end
 
     describe 'PUT #update' do
+      let(:review) { build(:feedback) }
       subject { put :update, id: review.id, app_review: {status: 'rejected'} }
-      let!(:patch_stub) { stub_api_v2(:patch, "/reviews/#{review.id}", review) }
+      let!(:patch_stub) { stub_api_v2(:patch, "/feedbacks/#{review.id}", review) }
       let!(:get_stub) { stub_api_v2(:get, "/reviews/#{review.id}", review) }
       it_behaves_like 'a jpi v1 admin action'
 
