@@ -180,7 +180,6 @@ module MnoEnterprise
         # Directly stubbing the controller method as user creation is a PITA to stub
         let(:new_user) { build(:user, params.slice(:email, :name, :surname, :phone)) }
         before { allow(controller).to receive(:create_unconfirmed_user) { new_user } }
-        before { api_stub_for(get: "/users/#{new_user.id}", response: new_user) }
 
         it_behaves_like 'a jpi v1 admin action'
 
