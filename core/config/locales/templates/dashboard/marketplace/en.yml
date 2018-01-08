@@ -109,6 +109,7 @@ en:
             provision: "Provision"
             pricing:
               payg: "Usage Based"
+              free: "Free"
 
           app_selection:
             next: "Next"

@@ -16,6 +16,7 @@ en:
             next: "Next"
             pricing_type:
               payg: "Usage Based"
+              free: "Free"
             licenses: "Number of licenses"
             total: "Total price"
           details:
