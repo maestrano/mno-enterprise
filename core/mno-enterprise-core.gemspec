@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'prawn', '~> 2.0', '>= 2.0.1'
   s.add_dependency 'prawn-table', '~> 0.2.1'
   s.add_dependency 'money', '~> 6.5', '>= 6.5.1'
+  s.add_dependency 'fastimage'
 
   # Authentication & Authorization
   s.add_dependency 'devise', '~> 3.0'
