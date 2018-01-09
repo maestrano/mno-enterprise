@@ -155,7 +155,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   end
 
   def organization_permitted_update_params
-    [:name, :soa_enabled, :industry, :size]
+    [:name, :soa_enabled, :industry, :size, :billing_currency]
   end
 
   def organization_update_params
