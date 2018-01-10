@@ -20,10 +20,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
   # Check current user is logged in
   # Check organization is valid if specified
   def check_authorization
-    if current_user && current_user.admin_role.present?
-      return true
-    end
-    render nothing: true, status: :unauthorized
+    return true if current_user && current_user.admin_role.present?
+    status = current_user ? :forbidden : :unauthorized
+    render nothing: true, status: status
     false
   end
 

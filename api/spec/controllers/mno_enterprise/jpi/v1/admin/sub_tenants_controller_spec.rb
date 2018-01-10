@@ -26,14 +26,6 @@ module MnoEnterprise
       }
     end
 
-    shared_examples_for 'unauthorized access' do
-      it { expect(subject).to_not be_success }
-      it do
-        subject
-        expect(response.status).to eq(401)
-      end
-    end
-
     #===============================================
     # Specs
     #===============================================
@@ -43,21 +35,16 @@ module MnoEnterprise
 
     describe '#index' do
       subject { get :index }
-      context 'not admin' do
-        let!(:user) { build(:user) }
-        it_behaves_like 'unauthorized access'
-      end
-      context 'admin' do
-        context 'success' do
-          before do
-            stub_api_v2(:get, "/sub_tenants", [sub_tenant])
-            sign_in user
-          end
-          before { subject }
-          it 'returns a list of sub_tenant' do
-            expect(response).to be_success
-            expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_sub_tenants([sub_tenant]).to_json))
-          end
+
+      before { stub_api_v2(:get, "/sub_tenants", [sub_tenant]) }
+
+      it_behaves_like 'a jpi v1 admin action'
+
+      context 'success' do
+        before { sign_in user }
+
+        it 'returns a list of sub_tenant' do
+          expect(JSON.parse(subject.body)).to eq(JSON.parse(hash_for_sub_tenants([sub_tenant]).to_json))
         end
       end
     end
@@ -65,111 +52,80 @@ module MnoEnterprise
     describe 'GET #show' do
       subject { get :show, id: sub_tenant.id }
 
-      before do
-        stub_api_v2(:get, "/sub_tenants/#{sub_tenant.id}", sub_tenant)
-      end
-      context 'not admin' do
-        let!(:user) { build(:user) }
-        it_behaves_like 'unauthorized access'
-      end
-      context 'admin' do
-        it_behaves_like 'a jpi v1 admin action'
-        context 'success' do
-          before do
-            sign_in user
-            subject
-          end
-          it 'returns a complete description of the sub_tenant' do
-            expect(response).to be_success
-            expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_sub_tenant(sub_tenant).to_json))
-          end
+      before { stub_api_v2(:get, "/sub_tenants/#{sub_tenant.id}", sub_tenant) }
+
+      it_behaves_like 'a jpi v1 admin action'
+
+      context 'success' do
+        before { sign_in user }
+        it 'returns a complete description of the sub_tenant' do
+          expect(response).to be_success
+          expect(JSON.parse(subject.body)).to eq(JSON.parse(hash_for_sub_tenant(sub_tenant).to_json))
         end
       end
     end
 
     describe 'PUT #update' do
       subject { put :update, id: sub_tenant.id, sub_tenant: { name: 'new name' } }
-      before do
-        stub_api_v2(:get, "/sub_tenants/#{sub_tenant.id}", sub_tenant)
-        sign_in user
-      end
+
+      before { stub_api_v2(:get, "/sub_tenants/#{sub_tenant.id}", sub_tenant) }
       let!(:stub) { stub_api_v2(:patch, "/sub_tenants/#{sub_tenant.id}", sub_tenant) }
-      context 'not admin' do
-        let!(:user) { build(:user) }
-        it_behaves_like 'unauthorized access'
-      end
+
       it_behaves_like 'a jpi v1 admin action'
-      context 'admin' do
-        context 'success' do
-          before { subject }
-          it { expect(response).to be_success }
-          it { expect(stub).to have_been_requested }
-        end
+
+      context 'success' do
+        before { sign_in user }
+        before { subject }
+        it { expect(response).to be_success }
+        it { expect(stub).to have_been_requested }
       end
     end
 
     describe 'PATCH #update_clients' do
       subject { put :update_clients, id: sub_tenant.id, sub_tenant: { add: [] } }
-      before do
-        stub_api_v2(:get, "/sub_tenants/#{sub_tenant.id}", sub_tenant)
-        sign_in user
-      end
+
+      before { stub_api_v2(:get, "/sub_tenants/#{sub_tenant.id}", sub_tenant) }
       let!(:stub) { stub_api_v2(:patch, "/sub_tenants/#{sub_tenant.id}/update_clients", sub_tenant) }
-      context 'not admin' do
-        let!(:user) { build(:user) }
-        it_behaves_like 'unauthorized access'
-      end
+
       it_behaves_like 'a jpi v1 admin action'
-      context 'admin' do
-        context 'success' do
-          before { subject }
-          it { expect(response).to be_success }
-          it { expect(stub).to have_been_requested }
-        end
+
+      context 'success' do
+        before { sign_in user }
+        before { subject }
+        it { expect(response).to be_success }
+        it { expect(stub).to have_been_requested }
       end
     end
 
     describe 'PATCH #update_account_managers' do
       subject { put :update_account_managers, id: sub_tenant.id, sub_tenant: { add: [] } }
-      before do
-        stub_api_v2(:get, "/sub_tenants/#{sub_tenant.id}", sub_tenant)
-        sign_in user
-      end
+
+      before { stub_api_v2(:get, "/sub_tenants/#{sub_tenant.id}", sub_tenant) }
       let!(:stub) { stub_api_v2(:patch, "/sub_tenants/#{sub_tenant.id}/update_account_managers", sub_tenant) }
-      context 'not admin' do
-        let!(:user) { build(:user) }
-        it_behaves_like 'unauthorized access'
-      end
+
       it_behaves_like 'a jpi v1 admin action'
-      context 'admin' do
-        context 'success' do
-          before { subject }
-          it { expect(response).to be_success }
-          it { expect(stub).to have_been_requested }
-        end
+
+      context 'success' do
+        before { sign_in user }
+        before { subject }
+        it { expect(response).to be_success }
+        it { expect(stub).to have_been_requested }
       end
     end
 
     describe 'DELETE #destroy' do
       subject { delete :destroy, id: sub_tenant.id }
-      before do
-        stub_api_v2(:get, "/sub_tenants/#{sub_tenant.id}", sub_tenant)
-        sign_in user
-      end
+
+      before { stub_api_v2(:get, "/sub_tenants/#{sub_tenant.id}", sub_tenant) }
       let!(:stub) { stub_api_v2(:delete, "/sub_tenants/#{sub_tenant.id}", sub_tenant) }
 
       it_behaves_like 'a jpi v1 admin action'
 
-      context 'not admin' do
-        let!(:user) { build(:user) }
-        it_behaves_like 'unauthorized access'
-      end
-      context 'admin' do
-        context 'success' do
-          before { subject }
-          it { expect(response).to be_success }
-          it { expect(stub).to have_been_requested }
-        end
+      context 'success' do
+        before { sign_in user  }
+        before { subject }
+        it { expect(response).to be_success }
+        it { expect(stub).to have_been_requested }
       end
     end
   end
