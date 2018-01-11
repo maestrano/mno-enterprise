@@ -67,6 +67,7 @@ module MnoEnterprise
     # This does not send any emails (emails are manually triggered later)
     def invite_member
       @organization = MnoEnterprise::Organization.find(params[:id])
+      @new_user = false
 
       # Find or create a new user - We create it in the frontend as MnoHub will send confirmation instructions for newly
       # created users
@@ -75,12 +76,17 @@ module MnoEnterprise
       # Create the invitation
       invite = @organization.org_invites.create(
         user_email: user.email,
-        user_role: params[:user][:role],
+        user_role: 'Admin',
         referrer_id: current_user.id,
         status: 'staged' # Will be updated to 'accepted' for unconfirmed users
       )
 
-      @user = user.confirmed? ? invite : user.reload
+      @user = if @new_user
+        user.reload
+      else
+        invite.accept!(user)
+        invite
+      end
     end
 
     protected
@@ -100,6 +106,7 @@ module MnoEnterprise
     # Create an unconfirmed user and skip the confirmation notification
     # TODO: monkey patch User#confirmation_required? to simplify this? Use refinements?
     def create_unconfirmed_user(user_params)
+      @new_user = true
       user = MnoEnterprise::User.new(user_params)
       user.skip_confirmation_notification!
       user.save

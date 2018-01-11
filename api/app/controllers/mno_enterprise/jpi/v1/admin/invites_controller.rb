@@ -6,13 +6,9 @@ module MnoEnterprise::Jpi::V1::Admin
       user = MnoEnterprise::User.find(params[:user_id])
       return render json: {error: 'Could not find account or user'}, status: :not_found unless @organization && user
 
-      if user.confirmation_required?
-        user.resend_confirmation_instructions
-      else
-        invite = find_org_invite(@organization, user)
-        return render json: {error: 'No active invitation found'}, status: :not_found unless invite
-        send_org_invite(invite)
-      end
+      invite = find_org_invite(@organization, user)
+      return render json: {error: 'No active invitation found'}, status: :not_found unless invite
+      send_org_invite(invite)
 
       MnoEnterprise::EventLogger.info('user_invite', current_user.id, 'User invited', user, {user_email: user.email, account_name: @organization.name})
 
@@ -37,7 +33,13 @@ module MnoEnterprise::Jpi::V1::Admin
     def send_org_invite(invite)
       user = invite.user
       # Generate token if not generated
-      user.send(:generate_confirmation_token!) if !user.confirmed? && user.confirmation_token.blank?
+      if !user.confirmed? && user.confirmation_token.blank?
+        user.send(:generate_confirmation_token!)
+        # Note: Not sure why `generate_confirmation_token!` is not saving the
+        #       user as well. Perhaps something that is just happening for
+        #       me locally.
+        user.save(validate: false)
+      end
 
       MnoEnterprise::SystemNotificationMailer.organization_invite(invite).deliver_later
 

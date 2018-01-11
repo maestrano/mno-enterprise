@@ -7,7 +7,7 @@ if member.is_a?(MnoEnterprise::User)
   status = case
            when member.confirmed? then 'active'
            when member.confirmation_sent_at.nil? then 'pending'
-           when member.confirmation_sent_at.present? then 'invited'
+           when !member.confirmed? then 'invited'
            end
 
   user = member
@@ -15,14 +15,16 @@ if member.is_a?(MnoEnterprise::User)
 elsif member.is_a?(MnoEnterprise::OrgInvite)
   json.entity 'OrgInvite'
   json.role member.user_role
+  user = member.user
 
   status = case member.status
-           when 'staged' then 'pending'
-           when 'pending' then 'invited'
+           when 'staged'
+            then user.confirmed? ? 'notify' : 'pending'
+           when 'pending'
+           then user.confirmed? ? 'notify-disabled' : 'invited'
            when 'accepted' then 'active'
            end
 
-  user = member.user
 end
 
 json.extract! user, :id, :created_at, :email, :name, :surname
