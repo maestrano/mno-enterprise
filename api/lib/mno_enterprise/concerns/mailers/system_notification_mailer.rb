@@ -123,7 +123,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   def organization_invite(org_invite)
     new_user = !org_invite.user.confirmed?
     confirmation_link = new_user ? user_confirmation_url(confirmation_token: org_invite.user.confirmation_token) : org_invite_url(org_invite, token: org_invite.token)
-    email_template = new_user ? 'organization-invite-new-user' : 'organization-invite-existing-user'
+    email_template = new_user ? 'organization-invite-new-user' : 'organization-invite-notification'
 
     MnoEnterprise::MailClient.deliver(email_template,
       default_sender,
