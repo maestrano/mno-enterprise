@@ -19,6 +19,7 @@ en:
               free: "Free"
             licenses: "Number of licenses"
             total: "Total price"
+            no_pricing_found: "There are currently no subscriptions available in your currency"
           details:
             title: "Enter details"
             next: "Next"
