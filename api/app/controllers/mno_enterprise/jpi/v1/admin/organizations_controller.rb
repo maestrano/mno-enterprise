@@ -76,7 +76,7 @@ module MnoEnterprise
       # Create the invitation
       invite = @organization.org_invites.create(
         user_email: user.email,
-        user_role: 'Admin',
+        user_role: params[:user][:role],
         referrer_id: current_user.id,
         status: 'staged' # Will be updated to 'accepted' for unconfirmed users
       )
@@ -85,7 +85,7 @@ module MnoEnterprise
         user.reload
       else
         invite.accept!(user)
-        invite
+        invite.reload
       end
     end
 

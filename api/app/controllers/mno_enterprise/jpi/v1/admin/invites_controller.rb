@@ -19,13 +19,8 @@ module MnoEnterprise::Jpi::V1::Admin
 
     private
 
-    # Invite for unconfirmed users are automatically accepted
     def find_org_invite(organization, user)
-      if user.confirmed?
-        status_scope = { 'status.in' => %w(staged pending) }
-      else
-        status_scope = { status: 'accepted' }
-      end
+      status_scope = { 'status.in' => %w(staged pending accepted) }
       organization.org_invites.where(status_scope.merge(user_id: user.id)).first
     end
 
@@ -33,13 +28,7 @@ module MnoEnterprise::Jpi::V1::Admin
     def send_org_invite(invite)
       user = invite.user
       # Generate token if not generated
-      if !user.confirmed? && user.confirmation_token.blank?
-        user.send(:generate_confirmation_token!)
-        # Note: Not sure why `generate_confirmation_token!` is not saving the
-        #       user as well. Perhaps something that is just happening for
-        #       me locally.
-        user.save(validate: false)
-      end
+      data = user.send(:generate_confirmation_token!) if !user.confirmed? && user.confirmation_token.blank?
 
       MnoEnterprise::SystemNotificationMailer.organization_invite(invite).deliver_later
 
