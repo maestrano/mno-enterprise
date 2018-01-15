@@ -6,7 +6,7 @@ module MnoEnterprise
       if params[:terms]
         # Search mode
         @organizations = []
-        JSON.parse(params[:terms]).map { |t| @organizations = @organizations | MnoEnterprise::Organization.where(Hash[*t]) }
+        JSON.parse(params[:terms]).map { |t| @organizations = @organizations | MnoEnterprise::Organization.where(Hash[*t]).fetch }
         response.headers['X-Total-Count'] = @organizations.count
       else
         # Index mode
@@ -28,7 +28,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/organizations/in_arrears
     def in_arrears
-      @arrears = MnoEnterprise::ArrearsSituation.all
+      @arrears = MnoEnterprise::ArrearsSituation.all.fetch
     end
 
     # GET /mnoe/jpi/v1/admin/organizations/count
