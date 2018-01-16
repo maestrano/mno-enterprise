@@ -22,6 +22,7 @@ en:
             launch_app: "Launch app"
             connect_app: "Connect App"
             price: "Price"
+            free_trial_duration: "Free trial duration"
             no_pricing_found: "This plan is not available in your currency"
             tag_responsive: "Responsive"
             tag_star: "Star!™ Tutorials"
