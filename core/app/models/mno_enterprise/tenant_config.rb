@@ -157,12 +157,18 @@ module MnoEnterprise
     # TODO: replace with a Proc.call
     def self.update_application_list!
       available_app_nids = App.all.map(&:nid)
+      available_local_product_nids = Product.where(local: true, active: true).map(&:nid)
       available_app_map = Hash[App.all.map{|a| [a.nid, a.name]}]
+      available_local_product_map = Hash[Product.where(local: true, active: true).map{|a| [a.nid, a.name]}]
       public_pages_properties = json_schema['properties']['dashboard']['properties']['public_pages']['properties']
       public_pages_properties['applications']['items']['enum'] = available_app_nids
       public_pages_properties['applications']['x-schema-form']['titleMap'] = available_app_map
       public_pages_properties['highlighted_applications']['items']['enum'] = available_app_nids
       public_pages_properties['highlighted_applications']['x-schema-form']['titleMap'] = available_app_map
+      public_pages_properties['local_products']['items']['enum'] = available_local_product_nids
+      public_pages_properties['local_products']['x-schema-form']['titleMap'] = available_local_product_map
+      public_pages_properties['highlighted_local_products']['items']['enum'] = available_local_product_nids
+      public_pages_properties['highlighted_local_products']['x-schema-form']['titleMap'] = available_local_product_map
     end
   end
 end
