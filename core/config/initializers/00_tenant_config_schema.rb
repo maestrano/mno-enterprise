@@ -317,9 +317,9 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               description: "Display product pricings in public pages"
             },
             applications: {
-              title: "Applications",
+              title: "Products",
               type: "array",
-              description: "List of applications featured on the public landing page",
+              description: "List of products featured on the public landing page",
               default: [],
               items: {
                 type: "string",
@@ -330,9 +330,9 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               }
             },
             highlighted_applications: {
-              title: "Highlighted Applications",
+              title: "Highlighted Products",
               type: "array",
-              description: "List of applications that will be hightlighted in the landing page carousel",
+              description: "List of products that will be hightlighted in the landing page carousel",
               default: [],
               items: {
                 type: "string",
