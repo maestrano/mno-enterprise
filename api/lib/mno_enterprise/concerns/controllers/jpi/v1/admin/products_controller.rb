@@ -16,7 +16,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
       JSON.parse(params[:terms]).map { |t| @products = @products | MnoEnterprise::ProductMarkup.includes(DEPENDENCIES).where(Hash[*t]).where(active: true) }
       response.headers['X-Total-Count'] = @products.count
     else
-      query = MnoEnterprise::Product.apply_query_params(params).where(active: true).includes(DEPENDENCIES)
+      query = MnoEnterprise::Product.apply_query_params(params).where(active: true)
+      query = query.includes(DEPENDENCIES) unless params[:skip_dependencies]
       @products = MnoEnterprise::Product.fetch_all(query)
       response.headers['X-Total-Count'] = query.meta.record_count
     end

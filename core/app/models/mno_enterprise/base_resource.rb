@@ -29,6 +29,7 @@ module MnoEnterprise
       relation.paginate(page: 1 + params[:offset].to_i/params[:limit].to_i, per_page: params[:limit].to_i) if params[:limit] && params[:offset]
       relation.order(adapt_order_by(params[:order_by])) if params[:order_by]
       relation.where(params[:where]) if params[:where]
+      relation.select(JSON.parse(params[:fields])) if params[:fields]
       relation
     end
 
