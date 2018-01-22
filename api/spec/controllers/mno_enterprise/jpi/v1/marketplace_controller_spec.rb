@@ -59,7 +59,7 @@ module MnoEnterprise
     end
 
     def hash_for_apps(apps)
-      hash = {}
+      hash = {products: []}
       hash['apps'] = []
       hash['categories'] = App.categories(apps)
       hash['categories'].delete('Most Popular')
@@ -78,6 +78,7 @@ module MnoEnterprise
         stub_api_v2(:get, '/tenant', tenant)
         stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { filter: { active: true } })
         stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
+        stub_api_v2(:get, '/products', [], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true }} )
       end
 
       it { is_expected.to be_success }
@@ -93,6 +94,7 @@ module MnoEnterprise
 
         before do
           stub_api_v2(:get, '/apps', [app1, app2], DEPENDENCIES, { filter: { active: true } })
+          stub_api_v2(:get, '/products', [], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true }} )
           stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
         end
 
@@ -115,6 +117,7 @@ module MnoEnterprise
                         page: { number: 1, size: 1 },
                         sort: '-updated_at'
                       })
+          stub_api_v2(:get, '/products', [], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true }} )
         end
 
         it 'returns the apps in the correct order' do
@@ -141,6 +144,8 @@ module MnoEnterprise
                         sort: '-updated_at'
                       }
           )
+          stub_api_v2(:get, '/products', [], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { _metadata: { organization_id: organization.id }, filter: { active: true }} )
+
         end
 
         it { is_expected.to be_success }
@@ -182,6 +187,7 @@ module MnoEnterprise
                         sort: '-updated_at'
                       }
           )
+          stub_api_v2(:get, '/products', [], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true }} )
         end
 
         it { is_expected.to have_http_status(:ok) }
@@ -216,6 +222,8 @@ module MnoEnterprise
     describe 'GET #show' do
       before do
         stub_api_v2(:get, "/apps/#{app.id}", app)
+        stub_api_v2(:get, '/products', [], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true }} )
+
       end
       subject { get :show, id: app.id }
 
