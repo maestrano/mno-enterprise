@@ -172,6 +172,7 @@ module MnoEnterprise
     def perform_confirmation(confirmation_token)
       self.confirm if self.persisted?
       self.confirmation_token = confirmation_token
+      self.last_sign_in_at = Time.now
     end
 
     # Used by omniauth providers to find or create users
