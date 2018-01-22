@@ -38,8 +38,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     query = MnoEnterprise::Product.includes(:'values.field', :assets, :categories, :product_pricings, :product_contracts).where(active: true)
 
     # Ensure prices include organization-specific markups/discounts
-    if params[:organization_id] && parent_organization
-      query = query.with_params(_metadata: { organization_id: parent_organization.id })
+    if params[:organization_id] && parent_organization_id
+      query = query.with_params(_metadata: { organization_id: parent_organization_id })
     end
 
     @products = MnoEnterprise::Product.fetch_all(query)
