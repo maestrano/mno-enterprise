@@ -185,6 +185,10 @@ namespace :mnoe do
 
       # Apply frontend customisations
       cp_r("#{admin_panel_project_folder}/.", "#{admin_panel_tmp_folder}/")
+      # Defaults the enterprise logo to the Login logo
+      unless File.exist?("#{admin_panel_project_folder}/src/images/main-logo.png")
+        cp("app/assets/images/mno_enterprise/main-logo.png", "#{admin_panel_tmp_folder}/src/images/")
+      end
     end
 
     desc 'Remove all generated files'
