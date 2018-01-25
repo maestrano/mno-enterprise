@@ -50,6 +50,7 @@ module MnoEnterprise
 
       # OPTIMIZE: move this into a delayed job?
       update_app_list
+      update_sub_tenants
 
       @organization_active_apps = @organization.app_instances
 
@@ -139,6 +140,20 @@ module MnoEnterprise
 
         # Force reload
         existing_apps.reload
+      end
+    end
+
+    def update_sub_tenants
+      return unless params[:organization].key?(:sub_tenant_ids)
+
+      sub_tenants = MnoEnterprise::SubTenant.where({'id.in' => params[:organization][:sub_tenant_ids]})
+
+      sub_tenants.to_a.each do |sub_tnt|
+        new_client_ids = sub_tnt.client_ids
+        new_client_ids << @organization.id
+        new_client_ids = new_client_ids.collect(&:to_s)
+
+        sub_tnt.update({"client_ids"=>new_client_ids})
       end
     end
   end
