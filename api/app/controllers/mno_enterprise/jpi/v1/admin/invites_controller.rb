@@ -8,7 +8,7 @@ module MnoEnterprise::Jpi::V1::Admin
 
       invite = find_org_invite(@organization, user)
       return render json: {error: 'No active invitation found'}, status: :not_found unless invite
-      send_org_invite(invite)
+      send_org_invite(user, invite)
 
       MnoEnterprise::EventLogger.info('user_invite', current_user.id, 'User invited', user, {user_email: user.email, account_name: @organization.name})
 
@@ -25,16 +25,15 @@ module MnoEnterprise::Jpi::V1::Admin
     end
 
     # Send the org invite and update the status
-    def send_org_invite(invite)
-      user = invite.user
+    def send_org_invite(user, invite)
       # Generate token if not generated
-      data = user.send(:generate_confirmation_token!) if !user.confirmed? && user.confirmation_token.blank?
+      user.send(:generate_confirmation_token!) if !user.confirmed? && user.confirmation_token.blank?
 
       MnoEnterprise::SystemNotificationMailer.organization_invite(invite).deliver_later
 
       # Update staged invite status
-      return unless invite.status == 'staged'
-      invite.status = 'pending'
+      invite.status = 'pending' unless invite.status == 'staged'
+      invite.confirmation_sent_at = Time.now unless invite.confirmation_sent_at.present?
       invite.save
     end
   end

@@ -6,7 +6,8 @@ if member.is_a?(MnoEnterprise::User)
   invite = MnoEnterprise::OrgInvite.find_by(user_id: member.id, organization_id: organization.id)
 
   status = case
-           when member.confirmed? then 'active'
+           when member.confirmed?
+            then invite.notification_sent_at.present? ? 'active' : 'notify'
            when member.confirmation_sent_at.nil? then 'pending'
            when !member.confirmed? then 'invited'
            end
@@ -19,16 +20,15 @@ elsif member.is_a?(MnoEnterprise::OrgInvite)
   invite = member
 
   status = case member.status
-           when 'staged'
-            then user.confirmed? ? 'notify' : 'pending'
+           when 'staged' then 'pending'
            when 'pending'
-           then user.confirmed? ? 'notify' : 'invited'
-           when 'accepted' then 'active'
+            then invite.notification_sent_at.present? ? 'notified' : 'notify'
+           when 'accepted'
+            then invite.notification_sent_at.present? ? 'active' : 'notify'
            end
 
 end
 
-#TODO: Add a new field to OrgInvite to handle the buttons here. MNOE-887
 allow_impersonation = invite.present? ? user.confirmed? && invite.status == 'accepted' : true
 
 json.extract! user, :id, :created_at, :email, :name, :surname
