@@ -33,7 +33,7 @@ module MnoEnterprise::Jpi::V1::Admin
 
       # Update staged invite status
       invite.status = 'pending' unless invite.status == 'staged'
-      invite.confirmation_sent_at = Time.now unless invite.confirmation_sent_at.present?
+      invite.notification_sent_at = Time.now unless invite.notification_sent_at.present?
       invite.save
     end
   end

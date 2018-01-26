@@ -126,7 +126,7 @@ module MnoEnterprise
 
       context 'when invitee is a confirmed user' do
         it 'sends the right email' do
-          expect(MnoEnterprise::MailClient).to receive(:deliver).with('organization-invite-existing-user',
+          expect(MnoEnterprise::MailClient).to receive(:deliver).with('organization-invite-notification',
             SystemNotificationMailer::DEFAULT_SENDER,
             { name: "#{invitee.name} #{invitee.surname}".strip, email: invitee.email },
             invite_vars(org_invite).merge(confirmation_link: routes.org_invite_url(id: org_invite.id, token: org_invite.token))
