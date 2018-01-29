@@ -46,6 +46,13 @@ Gem::Specification.new do |s|
   # JSON Schema validation
   s.add_runtime_dependency 'json-schema'
 
+  # I18n
+  # 0.9.3 breaks TenantConfig as it won't load non available locales.
+  # We still want to translate at least the `language` key to display the list
+  # of available locales in the admin panel.
+  # See: https://github.com/svenfuchs/i18n/pull/391
+  s.add_runtime_dependency 'i18n', '0.9.1'
+
   # Emailing
   s.add_development_dependency 'mandrill-api', '~> 1.0', '>= 1.0.53'
   s.add_development_dependency 'sparkpost', '~> 0.1.4'
