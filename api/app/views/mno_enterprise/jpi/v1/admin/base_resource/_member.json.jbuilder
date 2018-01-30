@@ -7,7 +7,7 @@ if member.is_a?(MnoEnterprise::User)
 
   status = case
            when member.confirmed?
-            then invite.notification_sent_at.present? ? 'active' : 'notify'
+            invite.notification_sent_at.present? ? 'active' : 'notify'
            when member.confirmation_sent_at.nil? then 'pending'
            when !member.confirmed? then 'invited'
            end
@@ -22,9 +22,9 @@ elsif member.is_a?(MnoEnterprise::OrgInvite)
   status = case member.status
            when 'staged' then 'pending'
            when 'pending'
-            then invite.notification_sent_at.present? ? 'notified' : 'notify'
+            invite.notification_sent_at.present? ? 'notified' : 'notify'
            when 'accepted'
-            then invite.notification_sent_at.present? ? 'active' : 'notify'
+            invite.notification_sent_at.present? ? 'active' : 'notify'
            end
 
 end
