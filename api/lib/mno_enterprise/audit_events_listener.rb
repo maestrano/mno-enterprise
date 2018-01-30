@@ -15,11 +15,10 @@ module MnoEnterprise
       organization_id = if (subject_type == 'MnoEnterprise::Organization') then
                           subject_id
                         elsif metadata.is_a?(Hash)
-                          metadata[:organization_id].presence
+                          metadata["organization_id"].presence
                         end
       data[:organization_id] = organization_id if organization_id
       MnoEnterprise::AuditEvent.create(data)
     end
   end
 end
-
