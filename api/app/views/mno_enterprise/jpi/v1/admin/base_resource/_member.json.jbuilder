@@ -7,7 +7,7 @@ if member.is_a?(MnoEnterprise::User)
 
   status = case
            when member.confirmed?
-            invite.notification_sent_at.present? ? 'active' : 'notify'
+            invite.blank? || invite.notification_sent_at.present? ? 'active' : 'notify'
            when member.confirmation_sent_at.nil? then 'pending'
            when !member.confirmed? then 'invited'
            end
