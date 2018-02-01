@@ -187,7 +187,7 @@ namespace :mnoe do
       cp_r("#{admin_panel_project_folder}/.", "#{admin_panel_tmp_folder}/")
       # Defaults the enterprise logo to the Login logo
       unless File.exist?("#{admin_panel_project_folder}/src/images/main-logo.png")
-        cp("app/assets/images/mno_enterprise/main-logo.png", "#{admin_panel_tmp_folder}/src/images/")
+        cp('app/assets/images/mno_enterprise/main-logo.png', "#{admin_panel_tmp_folder}/src/images/") if File.exist?('app/assets/images/mno_enterprise/main-logo.png')
       end
     end
 
