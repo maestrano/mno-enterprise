@@ -23,6 +23,7 @@ end
 #   json.connector_version app_instance.oauth_keys[:version]
 # end
 
+app_instance.without_tenant = true if params[:data] && params[:data] == 'unscoped'
 app_instance.app.tap do |a|
   json.app_id a.id
   json.app_name a.name
