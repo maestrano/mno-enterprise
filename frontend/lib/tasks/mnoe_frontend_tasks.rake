@@ -182,10 +182,6 @@ namespace :mnoe do
 
         # Apply frontend customisations
         cp_r("#{frontend_project_folder}/.", "#{frontend_tmp_folder}/")
-        # Defaults the enterprise logo to the Login logo
-        unless File.exist?("#{frontend_project_folder}/src/images/main-logo.png")
-          cp("app/assets/images/mno_enterprise/main-logo.png", "#{frontend_tmp_folder}/src/images/")
-        end
       end
 
       # Rebuild the Live Previewer Style
@@ -430,6 +426,10 @@ namespace :mnoe do
 
       # Apply frontend customisations
       cp_r("#{frontend_project_folder}/.", "#{frontend_tmp_folder}/")
+      # Defaults the enterprise logo to the Login logo
+      unless File.exist?("#{frontend_project_folder}/src/images/main-logo.png")
+        cp('app/assets/images/mno_enterprise/main-logo.png', "#{frontend_tmp_folder}/src/images/") if File.exist?('app/assets/images/mno_enterprise/main-logo.png')
+      end
     end
 
     desc "Remove all generated files"
