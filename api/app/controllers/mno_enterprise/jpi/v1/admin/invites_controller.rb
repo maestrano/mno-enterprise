@@ -32,7 +32,7 @@ module MnoEnterprise::Jpi::V1::Admin
       MnoEnterprise::SystemNotificationMailer.organization_invite(invite).deliver_later
 
       # Update staged invite status
-      invite.status = 'pending' unless invite.status == 'staged'
+      invite.status = 'pending' if invite.status == 'staged'
       invite.notification_sent_at = Time.now unless invite.notification_sent_at.present?
       invite.save
     end
