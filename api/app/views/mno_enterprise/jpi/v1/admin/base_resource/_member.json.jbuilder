@@ -29,7 +29,7 @@ elsif member.is_a?(MnoEnterprise::OrgInvite)
 
 end
 
-allow_impersonation = invite.present? ? user.confirmed? && invite.status == 'accepted' : true
+allow_impersonation = invite.present? ? invite.status == 'accepted' : true
 
 json.extract! user, :id, :created_at, :email, :name, :surname
 json.status status
