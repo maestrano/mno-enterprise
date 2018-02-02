@@ -291,6 +291,9 @@ module MnoEnterprise
         let(:relation) { instance_double('Her::Model::Relation') }
         before do
           allow(relation).to receive(:active).and_return(relation)
+
+          @fake_time = Time.now
+          Time.stub(:now) { @fake_time }
         end
 
         it 'creates an invitation' do
@@ -302,7 +305,8 @@ module MnoEnterprise
             user_email: 'newmember@maestrano.com',
             user_role: 'Power User',
             team_id: team.id.to_s,
-            referrer_id: user.id
+            referrer_id: user.id,
+            notification_sent_at: Time.now
           ).and_return(org_invite)
           subject
         end

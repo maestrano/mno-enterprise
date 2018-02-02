@@ -27,7 +27,7 @@ module MnoEnterprise
     # API stubs
     before do
       api_stub_for(get: "/organizations/#{organization.id}", response: from_api(organization))
-      api_stub_for(get: "/organizations/#{organization.id}/org_invites?filter[status.in][]=pending&filter[status.in][]=staged&filter[user_id]=#{invitee.id}", response: from_api([invite]))
+      api_stub_for(get: "/organizations/#{organization.id}/org_invites?filter[status.in][]=pending&filter[status.in][]=staged&filter[status.in][]=accepted&filter[user_id]=#{invitee.id}", response: from_api([invite]))
 
       allow(MnoEnterprise::User).to receive(:find) do |user_id|
         case user_id.to_i
@@ -57,9 +57,10 @@ module MnoEnterprise
       context 'new user'  do
         before { invitee.confirmed_at = nil }
 
-        it 'sends the confirmation instructions' do
-          expect(invitee).to receive(:resend_confirmation_instructions)
+        it 'sends organization invite to new user' do
+          expect(SystemNotificationMailer).to receive(:organization_invite).with(invite).and_return(message_delivery)
           subject
+          expect(response).to be_success
         end
       end
     end

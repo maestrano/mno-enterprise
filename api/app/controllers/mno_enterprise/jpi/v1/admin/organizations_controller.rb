@@ -80,7 +80,12 @@ module MnoEnterprise
         status: 'staged' # Will be updated to 'accepted' for unconfirmed users
       )
 
-      @user = user.confirmed? ? invite : user.reload
+      @user = if user.confirmed?
+        invite.accept!(user)
+        invite.reload
+      else
+        user.reload
+      end
     end
 
     protected
