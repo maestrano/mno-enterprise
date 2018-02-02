@@ -116,7 +116,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
         user_email: invite['email'],
         user_role: invite['role'],
         team_id: invite['team_id'],
-        referrer_id: current_user.id
+        referrer_id: current_user.id,
+        notification_sent_at: Time.now
       )
 
       MnoEnterprise::SystemNotificationMailer.organization_invite(@org_invite).deliver_now

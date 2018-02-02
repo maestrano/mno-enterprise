@@ -22,7 +22,7 @@ elsif member.is_a?(MnoEnterprise::OrgInvite)
   status = case member.status
            when 'staged' then 'pending'
            when 'pending'
-            invite.notification_sent_at.present? ? 'notified' : 'notify'
+            'invited'
            when 'accepted'
             invite.notification_sent_at.present? ? 'active' : 'notify'
            end
