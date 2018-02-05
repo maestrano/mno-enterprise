@@ -89,6 +89,8 @@ en:
 
         addon_connect:
           title: "Connect to {appname}"
+          next: Next
+          back: Back
           link_account:
             title: Link your account
             link: "Link your {appname} account to Maestrano to get your business in sync."

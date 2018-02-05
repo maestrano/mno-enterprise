@@ -57,7 +57,12 @@ en:
               title: "Data"
               name: "Name"
               type: "Type"
-              in_maestrano: "In Maestrano"
-              in_app: "In {app}"
+              status: "Status"
             disconnect_app: Disconnect
-
+            disconnect:
+              modal:
+                cancel: "Cancel"
+                action: "Disconnect app"
+                header: "Disconnect {appname}?"
+                body: "Are you sure you want to disconnect {appname} and Maestrano?"
+                success: "Your application has been disconnected"
