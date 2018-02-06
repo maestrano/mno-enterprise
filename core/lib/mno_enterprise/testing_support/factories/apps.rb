@@ -32,6 +32,8 @@ FactoryGirl.define do
     running_instances_count { rand(0..10) }
     multi_instantiable true
     api_key '96bdac9554418a8db9c374cc7f3f7e07af8954decc13f1c2edc4dcedfc0b57c8'
+    free_trial_duration 20
+    free_trial_unit 'days'
     pricing_plans { {
       'default' => [{name: 'Monthly Plan', price: '20.0', currency: 'AUD', factor: '/month'}]
     } }
