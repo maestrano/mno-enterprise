@@ -2,7 +2,7 @@ module MnoEnterprise
   class ImpersonateController < ApplicationController
     include MnoEnterprise::ImpersonateHelper
 
-    before_filter :skip_trackable, only: [:create]
+    before_filter :skip_devise_trackable!, only: [:create]
     before_filter :authenticate_user!, except: [:destroy]
     before_filter :current_user_must_be_admin!, except: [:destroy]
 
@@ -39,10 +39,6 @@ module MnoEnterprise
     end
 
     private
-
-    def skip_trackable
-      request.env["devise.skip_trackable"] = true
-    end
 
     def current_user_must_be_admin!
       unless current_user.admin_role.present?
