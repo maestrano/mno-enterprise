@@ -27,7 +27,7 @@ module MnoEnterprise
       it { expect(subject.attributes).to include(info_data(user)) }
 
       context 'with an organization_id in the metadata' do
-        subject { MnoEnterprise::AuditEventsListener.new.info('user_update_password', user.id, 'User password change', user.class.name, user.id, {organization_id: 'foobar'}) }
+        subject { MnoEnterprise::AuditEventsListener.new.info('user_update_password', user.id, 'User password change', user.class.name, user.id, {"organization_id" => 'foobar'}) }
         it { expect(subject.organization_id).to eq('foobar') }
       end
 

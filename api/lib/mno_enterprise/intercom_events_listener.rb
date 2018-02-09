@@ -27,15 +27,15 @@ module MnoEnterprise
           data[:event_name] = 'removed-widget'
         when 'widget_create'
           data[:event_name] = 'added-widget'
-          data[:metadata] = {widget: metadata[:name]}
+          data[:metadata] = {widget: metadata["name"]}
         when 'app_launch'
-          data[:event_name] = 'launched-app-' + metadata[:app_nid]
+          data[:event_name] = 'launched-app-' + metadata["app_nid"]
         when 'app_destroy'
-          data[:event_name] = 'deleted-app-'  + metadata[:app_nid]
-          data[:metadata] = {type: 'single', app_list: metadata[:app_nid]}
+          data[:event_name] = 'deleted-app-'  + metadata["app_nid"]
+          data[:metadata] = {type: 'single', app_list: metadata["app_nid"]}
         when 'app_add'
-          data[:event_name] = 'added-app-' + metadata[:app_nid]
-          data[:metadata] = {type: 'single', app_list: metadata[:app_nid]}
+          data[:event_name] = 'added-app-' + metadata["app_nid"]
+          data[:metadata] = {type: 'single', app_list: metadata["app_nid"]}
       end
       # Update user data in intercom
       # OPTIMIZE: we could fetch the user for intercom and only update fields that have changed
@@ -85,4 +85,3 @@ module MnoEnterprise
     end
   end
 end
-
