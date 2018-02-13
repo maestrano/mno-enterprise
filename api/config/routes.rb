@@ -254,7 +254,7 @@ MnoEnterprise::Engine.routes.draw do
             post :users, action: :invite_member
             put :update_member
             put :remove_member
-            put :freeze
+            put :freeze, action: :freeze_account
             put :unfreeze
           end
           resources :users, only: [] do

@@ -158,7 +158,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   end
 
   # PUT /mnoe/jpi/v1/admin/organizations/1/freeze
-  def freeze
+  def freeze_account
     @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
                                                .includes(*DEPENDENCIES)
                                                .find(params[:id])
