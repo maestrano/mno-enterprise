@@ -3,5 +3,6 @@ json.user do
 
   json.organizations @user_organizations do |org|
     json.extract! org, :id, :uid, :name, :account_frozen, :created_at
+    json.role @user.role(org)
   end
 end
