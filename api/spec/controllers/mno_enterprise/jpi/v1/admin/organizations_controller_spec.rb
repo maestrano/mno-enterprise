@@ -168,10 +168,10 @@ module MnoEnterprise
       it_behaves_like 'organization update and remove'
     end
 
-    describe 'PUT #freeze' do
+    describe 'PUT #freeze_account' do
       let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user'] }
 
-      subject { put :freeze, id: organization.id }
+      subject { put :freeze_account, id: organization.id }
 
       before { allow(app_instance).to receive(:app).and_return(app) }
       before { allow(organization).to receive(:app_instances).and_return([app_instance]) }

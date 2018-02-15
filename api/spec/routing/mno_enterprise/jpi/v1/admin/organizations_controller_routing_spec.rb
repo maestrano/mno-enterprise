@@ -29,7 +29,7 @@ module MnoEnterprise
     end
 
     it 'routes to #freeze' do
-      expect(put('/jpi/v1/admin/organizations/1/freeze')).to route_to("mno_enterprise/jpi/v1/admin/organizations#freeze", id: '1', format: 'json')
+      expect(put('/jpi/v1/admin/organizations/1/freeze')).to route_to("mno_enterprise/jpi/v1/admin/organizations#freeze_account", id: '1', format: 'json')
     end
 
     it 'routes to #unfreeze' do
