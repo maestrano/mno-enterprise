@@ -46,6 +46,7 @@ module MnoEnterprise
             'id' => o.id,
             'uid' => o.uid,
             'name' => o.name,
+            'active' => o.active?,
             'currency' => 'AUD',
             'current_user_role' => res.role(o),
             'has_myob_essentials_only' => o.has_myob_essentials_only,

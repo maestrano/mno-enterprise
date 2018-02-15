@@ -19,5 +19,10 @@ module MnoEnterprise
     def paid?
       !self.paid_at.blank?
     end
+
+    # Will the organization be deleted after this invoice ?
+    def will_org_be_deleted?
+      self.organization.account_frozen && !self.organization.frozen_at.nil? && self.organization.frozen_at < self.ended_at
+    end
   end
 end

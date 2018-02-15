@@ -30,7 +30,7 @@ FactoryGirl.define do
 
       tax_pips_applied 5000
 
-      organization { build(:organization) }
+      organization
       bills []
 
       billing_summary [

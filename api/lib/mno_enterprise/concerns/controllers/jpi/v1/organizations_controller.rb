@@ -140,6 +140,23 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     render 'members'
   end
 
+
+  # POST /mnoe/jpi/v1/organizations/:id/freeze
+  # Avoid conflicts with #freeze
+  def freeze_org
+    # Check the password provided
+    return head :forbidden unless current_user.class.authenticate_user({email: current_user.email, password: params[:password]})
+    del_req = MnoEnterprise::DeletionRequest.create(deletable_type: "Organization", deletable_id: params[:id], reason: params[:reason])
+    # Processes it
+    del_req.freeze
+    # Refresh cache
+    current_user.refresh_user_cache()
+
+    @organization = organization.load_required(:users, :orga_invites, :orga_relations)
+
+    render json: del_req
+  end
+
   protected
   def member
     @member ||= begin

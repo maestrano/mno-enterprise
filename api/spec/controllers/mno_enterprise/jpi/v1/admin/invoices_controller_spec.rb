@@ -16,6 +16,7 @@ module MnoEnterprise
     let(:billable) { build(:app_instance) }
     let(:bill) { build(:bill) }
     let(:organization) { build(:organization) }
+    before { stub_api_v2(:post, '/organizations', organization) }
     let(:invoice) { build(:invoice) }
 
     before { sign_in user }

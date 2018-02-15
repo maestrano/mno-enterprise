@@ -71,6 +71,11 @@ module MnoEnterprise::Concerns::Models::Organization
     !self.account_frozen
   end
 
+  # Visible organizations for the dashboard - active orgs (not frozen) and orgs being frozen
+  def visible?(user)
+    self.active? || (self.freezing && user.role_from_id(self.id) == "Super Admin")
+  end
+
   def payment_restriction
     metadata && metadata['payment_restriction']
   end
