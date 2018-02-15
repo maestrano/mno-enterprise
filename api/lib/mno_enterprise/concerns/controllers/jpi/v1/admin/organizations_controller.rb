@@ -1,19 +1,29 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsController
   extend ActiveSupport::Concern
 
-  DEPENDENCIES = [:app_instances, :'app_instances.app', :users, :'users.user_access_requests',
-                  :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user']
-  INCLUDED_FIELDS_INDEX = [:uid, :name, :account_frozen,
-                     :soa_enabled, :mails, :logo, :latitude, :longitude,
-                     :geo_country_code, :geo_state_code, :geo_city,
-                     :geo_tz, :geo_currency, :metadata, :industry, :size,
-                     :financial_year_end_month, :credit_card,
-                     :financial_metrics, :created_at, :external_id, :belong_to_sub_tenant, :belong_to_account_manager,
-                     :demo_account]
-  INCLUDED_FIELDS_SHOW = [:name, :uid, :soa_enabled, :created_at, :account_frozen, :financial_metrics,
-                          :billing_currency, :external_id, :app_instances, :orga_invites, :users,
-                          :orga_relations, :invoices, :credit_card, :demo_account]
+  #==================================================================
+  # Included methods
+  #==================================================================
+  # 'included do' causes the included code to be evaluated in the
+  # context where it is included rather than being executed in the module's context
+  included do
+    DEPENDENCIES = [:app_instances, :'app_instances.app', :users, :'users.user_access_requests',
+                    :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user']
+    INCLUDED_FIELDS_INDEX = [:uid, :name, :account_frozen,
+                             :soa_enabled, :mails, :logo, :latitude, :longitude,
+                             :geo_country_code, :geo_state_code, :geo_city,
+                             :geo_tz, :geo_currency, :metadata, :industry, :size,
+                             :financial_year_end_month, :credit_card,
+                             :financial_metrics, :created_at, :external_id, :belong_to_sub_tenant,
+                             :belong_to_account_manager, :demo_account]
+    INCLUDED_FIELDS_SHOW = [:name, :uid, :soa_enabled, :created_at, :account_frozen, :financial_metrics,
+                            :billing_currency, :external_id, :app_instances, :orga_invites, :users,
+                            :orga_relations, :invoices, :credit_card, :demo_account]
+  end
 
+  #==================================================================
+  # Instance methods
+  #==================================================================
   # GET /mnoe/jpi/v1/admin/organizations
   def index
     if params[:terms]
@@ -45,7 +55,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     end
   end
 
-  # GET /mnoe/jpi/v1/admin/organizations/1
+  # GET /mnoe/jpi/v1/admin/organizations/:id
   def show
     @organization = MnoEnterprise::Organization.apply_query_params(params)
                       .with_params(_metadata: { act_as_manager: current_user.id })
@@ -90,7 +100,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     render 'show'
   end
 
-  # PATCH /mnoe/jpi/v1/admin/organizations/1
+  # PATCH /mnoe/jpi/v1/admin/organizations/:id
   def update
     # get organization
     @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
@@ -109,9 +119,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     render 'show'
   end
 
-  # POST /mnoe/jpi/v1/admin/organizations/1/users
   # Invite a user to the organization (and create it if needed)
   # This does not send any emails (emails are manually triggered later)
+  # POST /mnoe/jpi/v1/admin/organizations/:id/users
   def invite_member
     @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
                       .includes(:orga_relations)
@@ -157,7 +167,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     render 'members'
   end
 
-  # PUT /mnoe/jpi/v1/admin/organizations/1/freeze
+  # PUT /mnoe/jpi/v1/admin/organizations/:id/freeze
   def freeze_account
     @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
                                                .includes(*DEPENDENCIES)
@@ -169,7 +179,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     render 'show'
   end
 
-  # PUT /mnoe/jpi/v1/admin/organizations/1/unfreeze
+  # PUT /mnoe/jpi/v1/admin/organizations/:id/unfreeze
   def unfreeze
     @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
                                                .includes(*DEPENDENCIES)
@@ -182,6 +192,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     render 'show'
   end
 
+  # GET /mnoe/jpi/v1/admin/organizations/download_batch_example
   def download_batch_example
     path = File.join(File.dirname(File.expand_path(__FILE__)), '../../../../../assets/batch-example.csv')
     send_file(path, filename: 'batch-example.csv', type: 'application/csv')
