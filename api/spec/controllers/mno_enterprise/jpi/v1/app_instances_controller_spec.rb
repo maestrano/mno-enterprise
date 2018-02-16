@@ -17,7 +17,11 @@ module MnoEnterprise
     before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     # Stub organization + associations
     let(:organization) { build(:organization) }
+    let(:app) { build(:app)}
     before { allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) }
+
+    before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:without_tenant).and_return(true) }
+    before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:app).and_return(app) }
 
     describe 'GET #index' do
       let(:app_instance) { build(:app_instance, status: "running") }

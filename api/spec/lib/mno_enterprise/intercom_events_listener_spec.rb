@@ -8,6 +8,7 @@ module MnoEnterprise
     let(:credit_card) { build(:credit_card) }
     let(:organization) { build(:organization) }
     before do
+      allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:app).and_return(app)
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
       api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization]))
       api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
