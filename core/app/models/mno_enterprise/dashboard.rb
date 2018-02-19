@@ -53,7 +53,7 @@ module MnoEnterprise
     end
 
     def sorted_widgets
-      ids = self.widgets_order | self.widgets.map(&:id)
+      ids = self.widgets_order.map(&:to_s) | self.widgets.map(&:id)
       widgets_per_ids = self.widgets.each_with_object({}) do |w, hash|
         hash[w.id] = w
       end
