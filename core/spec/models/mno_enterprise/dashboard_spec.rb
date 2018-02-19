@@ -11,7 +11,30 @@ module MnoEnterprise
     end
 
     describe '#sorted_widgets' do
-      it 'is pending'
+      let(:w1) { build(:impac_widget) }
+      let(:w2) { build(:impac_widget) }
+      let(:w3) { build(:impac_widget) }
+
+      let(:dashboard) { build(:impac_dashboard, organization_ids: [org1.uid], widgets: [w1, w2, w3]) }
+
+      subject { dashboard.sorted_widgets }
+
+      context 'without #widgets_order' do
+        it { is_expected.to eq([w1, w2, w3])}
+      end
+
+      context 'with a #widget_order' do
+        before { dashboard.widgets_order = [w3.id, w2.id]}
+        # unsorted widgets at the end
+        it { is_expected.to eq([w3, w2, w1])}
+
+        context 'APIv1 backward compatibility' do
+          # APIv1 widgets have integer id
+          before { dashboard.widgets_order = [w3.id.to_i, w2.id.to_i]}
+          # unsorted widgets at the end
+          it { is_expected.to eq([w3, w2, w1])}
+        end
+      end
     end
 
     describe '#filtered_widgets_templates' do
