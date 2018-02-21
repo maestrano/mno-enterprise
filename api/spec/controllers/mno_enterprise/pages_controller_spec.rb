@@ -20,7 +20,6 @@ module MnoEnterprise
     end
 
     describe 'GET #launch' do
-      let(:app_instance) { build(:app_instance) }
       before { sign_in user }
       subject { get :launch, id: app_instance.uid }
 
@@ -43,6 +42,18 @@ module MnoEnterprise
         subject
         expect(response).to redirect_to(MnoEnterprise.router.launch_url(app_instance.uid, wtk: MnoEnterprise.jwt({user_id: user.uid}), specific_parameters: 'specific_parameters_value'))
       end
+    end
+
+    describe 'GET #loading' do
+      before do
+        stub_api_v2(:get, '/app_instances', [app_instance], [:app], {filter:{uid: app_instance.uid}, page:{number: 1, size: 1}})
+      end
+
+      # before { sign_in user }
+      subject { get :loading, id: app_instance.uid }
+
+      before { subject }
+      it { expect(response).to be_success }
     end
 
     describe 'GET #app_access_unauthorized' do

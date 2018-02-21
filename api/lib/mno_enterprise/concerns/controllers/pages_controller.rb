@@ -33,7 +33,7 @@ module MnoEnterprise::Concerns::Controllers::PagesController
   # GET /loading/:id
   # Loading lounge - wait for an app to be online
   def loading
-    @app_instance = MnoEnterprise::AppInstance.where(uid: params[:id]).first
+    @app_instance = MnoEnterprise::AppInstance.where(uid: params[:id]).includes(:app).first
 
     respond_to do |format|
       format.html { @app_instance_hash = app_instance_hash(@app_instance) }

@@ -23,6 +23,7 @@ FactoryGirl.define do
       oauth_company 'oauth company'
       app_nid 'app-nid'
       per_user_licence 1
+      durations { {"provisioning"=>120, "starting"=>90, "stopping"=>60, "terminating"=>40} }
       app { build(:app, nid: app_nid) }
       sequence(:owner) { |n| build(:organization, id: n.to_s) }
       sequence(:owner_id, &:to_s)
