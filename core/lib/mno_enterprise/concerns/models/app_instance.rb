@@ -38,10 +38,13 @@ module MnoEnterprise::Concerns::Models::AppInstance
     status.to_sym.in? ACTIVE_STATUSES
   end
 
+  def running?
+    self.status.to_sym == :running
+  end
+
   #==================================================================
   # Instance methods
   #==================================================================
-
 
   def to_audit_event
     {
@@ -58,5 +61,4 @@ module MnoEnterprise::Concerns::Models::AppInstance
     process_custom_result(result)
     result.first
   end
-
 end
