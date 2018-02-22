@@ -54,7 +54,7 @@ module MnoEnterprise
       context 'with unscoped data' do
         before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:without_tenant).and_return(true) }
 
-        it 'retrived the app instance with the app' do
+        it 'retrieved the app instance with the app' do
           subject
           expect(app_instance.app).to eq(app)
         end
