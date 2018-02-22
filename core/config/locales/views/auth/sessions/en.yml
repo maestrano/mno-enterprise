@@ -5,3 +5,4 @@ en:
         new:
           title: Sign In
           sign_in: Sign in
+          timeout: You are logged off due to inactivity. Please log in again
