@@ -16,6 +16,7 @@ json.cache! ['v1', @user.cache_key] do
     json.sso_session @user.sso_session
     json.admin_role @user.admin_role
     json.avatar_url avatar_url(@user)
+    json.tos_accepted_at @user.meta_data[:tos_accepted_at] || false
     if current_impersonator
       json.current_impersonator true
       json.current_impersonator_role current_impersonator.admin_role
