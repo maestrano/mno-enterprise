@@ -20,7 +20,7 @@ module MnoEnterprise
     let(:app) { build(:app)}
     before { allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) }
 
-    before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:without_tenant).and_return(true) }
+    before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:without_tenant).and_return(false) }
     before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:app).and_return(app) }
 
     describe 'GET #index' do
@@ -48,6 +48,15 @@ module MnoEnterprise
         it 'filter only active instances' do
           expect(app_instances).to receive(:active)
           subject
+        end
+      end
+
+      context 'with unscoped data' do
+        before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:without_tenant).and_return(true) }
+
+        it 'retrived the app instance with the app' do
+          subject
+          expect(app_instance.app).to eq(app)
         end
       end
 
