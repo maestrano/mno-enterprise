@@ -42,8 +42,6 @@ module MnoEnterprise::Concerns::Models::AppInstance
     :owner_type, :terminated_at, :stopped_at, :billing_type, :autostop_at, :autostop_interval,
     :next_status, :soa_enabled, :oauth_company, :oauth_keys, :oauth_keys_valid, :free_trial_end_at, :per_user_licence, :active_licences_count
 
-    attr_accessor :without_tenant
-
     #==============================================================
     # Constants
     #==============================================================
@@ -54,6 +52,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
     # Associations
     #==============================================================
     belongs_to :owner, class_name: 'MnoEnterprise::Organization'
+    belongs_to :app, class_name: 'MnoEnterprise::App'
 
     # Define connector_stack?, cloud_stack? etc. methods
     [:cube, :cloud, :connector].each do |stackname|
@@ -63,10 +62,6 @@ module MnoEnterprise::Concerns::Models::AppInstance
     end
 
     scope :active, -> { where('status.in' => ACTIVE_STATUSES) }
-
-    def app
-      MnoEnterprise::App.find(self.app_id, { unscoped: self.without_tenant })
-    end
   end
 
   #==================================================================

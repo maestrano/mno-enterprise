@@ -43,13 +43,11 @@ module MnoEnterprise
     let(:org_invite) { build(:org_invite, organization: organization) }
     let(:app_instance) { build(:app_instance, organization: organization) }
     let(:credit_card) { build(:credit_card, organization: organization) }
-    let(:app) { build(:app)}
 
     before do
       organizations = [organization]
       allow(organizations).to receive(:loaded?).and_return(true)
       allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return(organizations)
-      allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:app).and_return(app)
       api_stub_for(get: "/organizations/#{organization.id}/invoices", response: from_api([invoice]))
       api_stub_for(get: "/organizations", response: from_api([organization]))
       api_stub_for(get: "/organizations/#{organization.id}", response: from_api(organization))

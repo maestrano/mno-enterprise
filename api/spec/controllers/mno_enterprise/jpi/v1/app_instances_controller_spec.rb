@@ -17,11 +17,9 @@ module MnoEnterprise
     before { api_stub_for(get: "/users/#{user.id}", response: from_api(user)) }
     # Stub organization + associations
     let(:organization) { build(:organization) }
-    let(:app) { build(:app)}
     before { allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) }
 
-    before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:without_tenant).and_return(false) }
-    before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:app).and_return(app) }
+    let(:app) { build(:app) }
 
     describe 'GET #index' do
       let(:app_instance) { build(:app_instance, status: "running") }
@@ -34,6 +32,11 @@ module MnoEnterprise
         allow(app_instances).to receive(:active).and_return(app_instances)
         # Updated since last tick
         allow(app_instances).to receive(:where).and_return([app_instance])
+
+        allow(app_instance).to receive(:app_id).and_return(app.id)
+
+        api_stub_for(get: "/apps?filter[id.in][]=#{app.id}&filter[unscoped]=false", response: from_api([app]))
+        api_stub_for(get: "/apps?filter[id.in]&filter[unscoped]=false", response: from_api(nil))
       end
 
       before { sign_in user }
@@ -52,11 +55,11 @@ module MnoEnterprise
       end
 
       context 'with unscoped data' do
-        before { allow_any_instance_of(MnoEnterprise::AppInstance).to receive(:without_tenant).and_return(true) }
+        before { api_stub_for(get: "/apps?filter[id.in][]=#{app.id}&filter[unscoped]=true", response: from_api([app])) }
+        subject { get :index, organization_id: organization.id, timestamp: timestamp, unscoped: true }
 
         it 'retrieved the app instance with the app' do
           subject
-          expect(app_instance.app).to eq(app)
         end
       end
 
