@@ -199,7 +199,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     end
 
     def organization_permitted_update_params
-      [:name, :soa_enabled, :industry, :size]
+      [:name, :soa_enabled, :industry, :size, :financial_year_end_month]
     end
 
     def organization_update_params
