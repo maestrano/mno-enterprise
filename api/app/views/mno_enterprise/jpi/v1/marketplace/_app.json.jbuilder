@@ -10,6 +10,7 @@ json.is_star_ready app.star_ready?
 json.is_connec_ready app.connec_ready?
 json.is_coming_soon app.coming_soon?
 json.single_billing app.single_billing?
+json.sso_enabled app.sso_enabled
 json.multi_instantiable app.multi_instantiable
 json.subcategories app.subcategories
 json.average_rating app.average_rating
