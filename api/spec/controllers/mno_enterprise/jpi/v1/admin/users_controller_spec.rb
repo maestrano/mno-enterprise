@@ -15,6 +15,7 @@ module MnoEnterprise
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
+    before { I18n.default_locale = :en }
 
     #===============================================
     # Assignments
@@ -35,7 +36,7 @@ module MnoEnterprise
 
       let(:data) { JSON.parse(response.body) }
 
-      before { stub_api_v2(:get, "/users", [user], [:user_access_requests, :sub_tenant], { _metadata: { act_as_manager: current_user.id } }) }
+      before { stub_api_v2(:get, "/users", [user], [:user_access_requests, :sub_tenant], { _locale: :en, _metadata: { act_as_manager: current_user.id } }) }
       before { subject }
 
       it { expect(data['users'].first['id']).to eq(user.id) }
