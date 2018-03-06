@@ -116,7 +116,7 @@ en:
                 member: A member can see other members and access the company apps
                 admin: A Manager can manage other members (except Admin users) and manage the company apps
                 super_admin: An Admin has all power within the company including access to billing management
-                super_admin_without_billing: "An <b>Admin</b> has all power within the company"
+                super_admin_without_billing: "An Admin has all power within the company"
             removal_modal:
               title: Confirm action
               body_name: Are you really sure you want to remove {name} {surname}?
