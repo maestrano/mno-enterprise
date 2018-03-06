@@ -12,7 +12,7 @@ module MnoEnterprise
     let(:org) { build(:organization, users: [user]) }
     let(:template) { build(:impac_dashboard, dashboard_type: 'template') }
     let(:metadata) { { hist_parameters: { from: '2015-01-01', to: '2015-03-31', period: 'MONTHLY' } } }
-    let(:widget) { build(:impac_widget, dashboard: template, settings: metadata) }
+    let(:widget) { build(:impac_widget, dashboard: template, settings: metadata, layouts: ['figure', 'highcharts']) }
     let(:kpi) { build(:impac_kpi, widget: widget) }
 
     let(:hash_for_kpi) do
@@ -29,7 +29,8 @@ module MnoEnterprise
         'metadata' => metadata.deep_stringify_keys,
         "endpoint" => widget.widget_category,
         "width" => widget.width,
-        "kpis" => [hash_for_kpi]
+        "kpis" => [hash_for_kpi],
+        "layouts" => widget.layouts
       }
     end
 
@@ -45,12 +46,13 @@ module MnoEnterprise
           name: widget.name,
           width: widget.width,
           metadata: metadata,
+          layouts: widget.layouts,
           forbidden: 'param'
         }
       end
 
       subject { post :create, dashboard_template_id: template.id, widget: widget_params }
-      
+
       before do
         api_stub_for(
           get: "/dashboards/#{template.id}",
@@ -96,7 +98,7 @@ module MnoEnterprise
       end
 
       subject { put :update, id: widget.id, widget: widget_params }
-      
+
       before do
         api_stub_for(
           get: "widgets/#{widget.id}",
@@ -127,7 +129,7 @@ module MnoEnterprise
 
     describe '#destroy' do
       subject { delete :destroy, id: widget.id }
-      
+
       before do
         api_stub_for(
           get: "widgets/#{widget.id}",

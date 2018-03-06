@@ -2,7 +2,7 @@ module MnoEnterprise
   class Impac::Widget < BaseResource
 
     # TODO: remove :widget_category when mnohub migrated to new model
-    attributes :name, :width, :widget_category, :settings, :endpoint
+    attributes :name, :width, :widget_category, :settings, :endpoint, :layouts
 
     belongs_to :dashboard, class_name: 'MnoEnterprise::Impac::Dashboard'
     has_many :kpis, class_name: 'MnoEnterprise::Impac::Kpi'

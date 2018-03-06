@@ -49,7 +49,8 @@ module MnoEnterprise
     end
 
     def widget_create_params
-      params.require(:widget).permit(:endpoint, :name, :width).tap do |whitelisted|
+      permitted_attrs = [:endpoint, :name, :width, { layouts: [] }]
+      params.require(:widget).permit(*permitted_attrs).tap do |whitelisted|
         whitelisted[:settings] = params[:widget][:metadata] || {}
         # TODO: remove when all deployed versions of Impac! Angular will be above v1.5.0
         # When this is done:
