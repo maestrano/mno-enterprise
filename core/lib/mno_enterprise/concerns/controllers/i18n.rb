@@ -7,7 +7,7 @@ module MnoEnterprise::Concerns::Controllers::I18n
   end
 
   def set_locale
-    I18n.locale =  if params[:locale] && I18n.available_locales.include?(params[:locale].to_sym) &&MnoEnterprise.i18n_enabled
+    I18n.locale =  if params[:locale] && I18n.available_locales.include?(params[:locale].to_sym) && MnoEnterprise.i18n_enabled
       params[:locale]
     else
       I18n.default_locale
