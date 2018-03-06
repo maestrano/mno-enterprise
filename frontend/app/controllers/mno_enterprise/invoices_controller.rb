@@ -6,7 +6,7 @@ module MnoEnterprise
     # GET /mnoe/invoices/201504-NU4
     def show
       @invoice = MnoEnterprise::Invoice.where(slug: params[:id].upcase).includes(:organization).first
-      authorize! :manage_billing, current_user.organizations.find(@invoice.organization_id)
+      authorize! :manage_billing, current_user.organizations.find(@invoice.organization_id).first
 
       respond_to do |format|
         if @invoice
