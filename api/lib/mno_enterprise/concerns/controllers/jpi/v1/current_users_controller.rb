@@ -62,7 +62,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     @user = current_user
 
     if @user.update({ meta_data: { tos_accepted_at: Time.now } })
-      MnoEnterprise::EventLogger.info('user_update_tos_accpeted_at', current_user.id, 'User accepted TOS', @user)
+      MnoEnterprise::EventLogger.info('user_update_tos_accepted_at', current_user.id, 'User accepted TOS', @user)
       render :show
     else
       render json: @user.errors, status: :bad_request
