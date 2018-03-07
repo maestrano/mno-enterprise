@@ -45,15 +45,45 @@ module MnoEnterprise
     end
 
     describe 'GET #loading' do
-      before do
-        stub_api_v2(:get, '/app_instances', [app_instance], [:app], {filter:{uid: app_instance.uid}, page:{number: 1, size: 1}})
-      end
-
-      # before { sign_in user }
       subject { get :loading, id: app_instance.uid }
 
-      before { subject }
-      it { expect(response).to be_success }
+      before do
+        stub_api_v2(:get, '/app_instances', [app_instance], [:app], {filter: {uid: app_instance.uid}, page: {number: 1, size: 1}})
+      end
+
+      it { is_expected.to be_success }
+
+      context 'JSON format' do
+        before { request.env['HTTP_ACCEPT'] = 'application/json' }
+
+        it 'returns the application hash' do
+          Timecop.freeze do
+            expected_hash = {
+              'id' => app_instance.id,
+              'uid' => app_instance.uid,
+              'name' => 'SomeApp',
+              'status' => 'running',
+              'durations' => app_instance.durations,
+              'started_at' => app_instance.started_at.to_s(:iso8601),
+              'stopped_at' => nil,
+              'created_at' => app_instance.created_at.to_s(:iso8601),
+              'server_time' => Time.now.utc.to_s(:iso8601),
+              'is_online' => true,
+              'errors' => [],
+              'logo' => app_instance.app.logo
+            }
+            expect(JSON.parse(subject.body)).to eq(expected_hash)
+          end
+        end
+
+        context 'when the application is not found' do
+          before do
+            stub_api_v2(:get, '/app_instances', [], [:app], {filter: {uid: app_instance.uid}, page: {number: 1, size: 1}})
+          end
+
+          it { expect(JSON.parse(subject.body)).to eq({}) }
+        end
+      end
     end
 
     describe 'GET #app_access_unauthorized' do
