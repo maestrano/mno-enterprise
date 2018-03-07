@@ -341,6 +341,32 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
               'x-schema-form': {
                 titleMap: {}
               }
+            },
+            local_products: {
+              title: "My products",
+              type: "array",
+              description: "List of my products featured on the public landing page",
+              default: [],
+              items: {
+                type: "string",
+                enum: []
+              },
+              'x-schema-form': {
+                titleMap: {}
+              }
+            },
+            highlighted_local_products: {
+              title: "My Highlighted Products",
+              type: "array",
+              description: "List of my products that will be hightlighted in the landing page carousel",
+              default: [],
+              items: {
+                type: "string",
+                enum: []
+              },
+              'x-schema-form': {
+                titleMap: {}
+              }
             }
           }
         },
