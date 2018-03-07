@@ -30,7 +30,7 @@ module MnoEnterprise
       before { sign_in user }
 
       context 'without organization_id' do
-        before { stub_api_v2(:get, "/products", [product], [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true } }) }
+        before { stub_api_v2(:get, "/products", [product], [:'values.field', :assets, :categories, :product_contracts], { filter: { active: true } }) }
         it_behaves_like 'jpi v1 protected action'
       end
 
@@ -40,7 +40,7 @@ module MnoEnterprise
         before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
         before do
           stub_api_v2(:get, "/products", [product],
-            [:'values.field', :assets, :categories, :product_pricings, :product_contracts], { filter: { active: true }, _metadata: { organization_id: organization.id } })
+            [:'values.field', :assets, :categories, :product_contracts], { filter: { active: true }, _metadata: { organization_id: organization.id } })
         end
 
         it_behaves_like 'jpi v1 protected action'
@@ -50,7 +50,7 @@ module MnoEnterprise
     describe 'GET #show' do
       let(:product) { build(:product) }
 
-      before { stub_api_v2(:get, "/products/#{product.id}", product, [:'values.field', :assets, :categories, :product_pricings, :product_contracts], {}) }
+      before { stub_api_v2(:get, "/products/#{product.id}", product, [:'values.field', :assets, :categories, :product_contracts], {}) }
       before { sign_in user }
 
       subject { get :show, id: product.id }
