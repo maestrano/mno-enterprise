@@ -1,4 +1,4 @@
-json.cache! ['v2', @user.cache_key] do
+json.cache! ['v2', @user.cache_key, session[:impersonator_user_id]] do
   json.current_user do
     json.id @user.id
     json.name @user.name
