@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module MnoEnterprise
-  describe InvoicesController, type: :controller do
+  describe Jpi::V1::InvoicesController, type: :controller do
     render_views
     routes { MnoEnterprise::Engine.routes }
 
@@ -10,8 +10,8 @@ module MnoEnterprise
     before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
 
     # Stub model calls
-    let(:user) { build(:user) }
     let(:organization) { build(:organization) }
+    let(:user) { build(:user, organizations: [organization]) }
     let(:invoice) {build(:invoice, organization: organization, organization_id: organization.id)}
 
     before do

@@ -92,7 +92,7 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
                           'ended_at' => invoice.ended_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
                           'amount' => AccountingjsSerializer.serialize(invoice.total_due),
                           'paid' => invoice.paid?,
-                          'link' => "/mnoe/admin/invoices/#{invoice.slug}"
+                          'link' => "/mnoe/jpi/v1/invoices/#{invoice.slug}"
                         })
     end
     orga_invoices

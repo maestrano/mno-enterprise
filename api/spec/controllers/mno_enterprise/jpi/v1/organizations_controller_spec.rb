@@ -73,7 +73,7 @@ module MnoEnterprise
       it_behaves_like 'jpi v1 protected action'
 
       context 'success' do
-        before { subject}
+        before { subject }
 
         it 'returns a complete description of the organization' do
           expect(response).to be_success
