@@ -7,7 +7,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
-    before_filter :authenticate_user!, only: [:update, :update_password]
+    before_filter :authenticate_user!, only: [:update, :update_password, :update_tos]
     before_filter :user_management_enabled?, only: [:update, :update_password]
     respond_to :json
   end
@@ -52,6 +52,17 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     if @user.update(password_params.merge(current_password_required: true))
       MnoEnterprise::EventLogger.info('user_update_password', current_user.id, 'User password change', @user)
       sign_in @user, bypass: true
+      render :show
+    else
+      render json: @user.errors, status: :bad_request
+    end
+  end
+
+  def update_tos
+    @user = current_user
+
+    if @user.update({ meta_data: { tos_accepted_at: Time.now } })
+      MnoEnterprise::EventLogger.info('user_update_tos_accepted_at', current_user.id, 'User accepted TOS', @user)
       render :show
     else
       render json: @user.errors, status: :bad_request
