@@ -28,8 +28,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
 
     # Fetch application listings & pricings
     if stale?(last_modified: @last_modified)
-      fetch_apps
-      fetch_products
+      @apps = fetch_apps
+      @products = fetch_products
 
       @categories = MnoEnterprise::App.categories(@apps)
       @categories.delete('Most Popular')
@@ -74,7 +74,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   end
 
   def fetch_apps
-    @apps = Rails.cache.fetch("marketplace/index-apps-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
+    Rails.cache.fetch("marketplace/index-apps-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
       apps = MnoEnterprise::App.fetch_all(app_relation(parent_organization_id).includes(:app_shared_entities, { app_shared_entities: :shared_entity }).where(active: true))
       apps.sort_by! { |app| [app.rank ? 0 : 1, app.rank] } # the nil ranks will appear at the end
       apps
@@ -82,9 +82,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   end
 
   def fetch_products
-    @products = Rails.cache.fetch("marketplace/index-products-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
-      products = MnoEnterprise::Product.fetch_all(product_relation(parent_organization_id).includes(PRODUCT_DEPENDENCIES).where(active: true))
-      products
+    Rails.cache.fetch("marketplace/index-products-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
+      MnoEnterprise::Product.fetch_all(product_relation(parent_organization_id).includes(PRODUCT_DEPENDENCIES).where(active: true))
     end
   end
 end
