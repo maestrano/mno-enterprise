@@ -13,7 +13,7 @@ module MnoEnterprise
 
     describe 'I18n' do
       before do
-        I18n.available_locales = [:en, :fr]
+        I18n.available_locales = [:en, :fr, :zh]
         I18n.default_locale = :en
       end
 
@@ -25,6 +25,12 @@ module MnoEnterprise
         context 'when a valid locale is provided' do
           before { get :index, locale: :fr }
           it { is_expected.to eq(:en) }
+        end
+
+        context 'when default language gets changed' do
+          before { I18n.default_locale = :zh }
+          before { get :index, locale: :fr }
+          it { is_expected.to eq(:zh) }
         end
       end
 

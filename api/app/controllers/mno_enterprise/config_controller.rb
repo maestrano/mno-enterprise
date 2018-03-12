@@ -31,6 +31,7 @@ module MnoEnterprise
       available_locales = if Settings.system.i18n.enabled
         Settings.system.i18n.available_locales
       else
+        set_default_locale
         Settings.system.i18n.preferred_locale
       end
       Array(available_locales).map do |locale|
@@ -45,6 +46,10 @@ module MnoEnterprise
           flag: ''
         }
       end
+    end
+
+    def set_default_locale
+      I18n.default_locale = Settings.system.i18n.preferred_locale
     end
   end
 end
