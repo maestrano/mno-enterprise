@@ -194,7 +194,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
   # GET /mnoe/jpi/v1/admin/organizations/download_batch_example
   def download_batch_example
-    path = File.join(File.dirname(File.expand_path(__FILE__)), '../../../../../assets/batch-example.csv')
+    path = MnoEnterprise::Api::Engine.root.join('app/assets/batch-example.csv')
     send_file(path, filename: 'batch-example.csv', type: 'application/csv')
   end
 

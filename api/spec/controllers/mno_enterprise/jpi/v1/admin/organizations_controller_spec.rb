@@ -202,11 +202,24 @@ module MnoEnterprise
       it { expect(response).to be_success }
     end
 
+    describe 'GET #download_batch_example' do
+
+      subject { get :download_batch_example, file: file }
+
+      context 'successful download' do
+        let(:path) { MnoEnterprise::Api::Engine.root.join('app/assets/batch-example.csv') }
+        let(:file) { File.read(path) }
+
+        it { expect(subject.status).to eq 200 }
+        it { expect(subject.body).to eq file }
+      end
+    end
+
     describe 'POST #batch_upload' do
       subject { post :batch_import, file: file }
 
       context 'invalid file' do
-        let(:file) { file = fixture_file_upload('batch-example-bad.csv', 'text/csv') }
+        let(:file) { fixture_file_upload('batch-example-bad.csv', 'text/csv') }
         before { subject }
         it { expect(response.status).to eq 400 }
 

@@ -13,7 +13,7 @@ module MnoEnterprise
     # CSV IMPORT
     REQUIRED_HEADERS = %w(external_id company_name billing_currency name surname phone email address1 address2 city state_province country postal_code)
     MANDATORY_COLUMNS = %w(company_name name surname email address1 city state_province country)
-    CSV_OPTIONS = { headers: true, header_converters: lambda { |f| f.strip.parameterize.underscore }, converters: lambda { |f| f&.strip } }
+    CSV_OPTIONS = { encoding: "ISO8859-1:utf-8", headers: true, header_converters: lambda { |f| f.strip.parameterize.underscore }, converters: lambda { |f| f&.strip } }
 
     def self.process(file_path)
       # validate File
