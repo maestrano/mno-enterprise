@@ -207,7 +207,7 @@ module MnoEnterprise
       subject { get :download_batch_example, file: file }
 
       context 'successful download' do
-        let(:path) { MnoEnterprise::Api::Engine.root.join('spec/fixtures/batch-download-example.csv') }
+        let(:path) { MnoEnterprise::Api::Engine.root.join('app/assets/batch-example.csv') }
         let(:file) { File.read(path) }
 
         it { expect(subject.status).to eq 200 }
