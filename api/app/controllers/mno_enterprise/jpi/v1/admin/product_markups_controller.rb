@@ -1,7 +1,7 @@
 module MnoEnterprise
   class Jpi::V1::Admin::ProductMarkupsController < Jpi::V1::Admin::BaseResourceController
 
-    DEPENDENCIES = [:product, :organization]
+    DEPENDENCIES = [:product, :'product.product_pricings', :organization]
 
     # GET /mnoe/jpi/v1/admin/product_markups
     def index
