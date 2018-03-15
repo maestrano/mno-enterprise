@@ -17,6 +17,10 @@ module MnoEnterprise
 
     def info(key, current_user_id, description, subject_type, subject_id, metadata)
       u = User.find(current_user_id)
+      # Note: Monkeypatch: do not allow data to be added to Intercom till
+      #       TOS are accepted.
+      return if u.meta_data && u.meta_data[:tos_accepted_at].blank?
+
       data = {created_at: Time.now.to_i, email: u.email, user_id: u.id, event_name: key.tr('_', '-')}
       case key
         when 'user_update', 'organization_update'
