@@ -61,25 +61,38 @@ module MnoEnterprise
     describe '#info' do
       before do
         allow(MnoEnterprise::User).to receive(:find).and_return(user)
-        # It refreshes the user
-        expect(users).to receive(:create).with(expected_user_data)
       end
 
       subject { described_class.new }
 
-      it 'add an event when a password is changed' do
-        expect(events).to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'user-update-password'))
-        subject.info('user_update_password', user.id, 'User password change', user.class.name, user.id, user.email)
+      context 'user has not accepted TOS' do
+        before { expect(users).not_to receive(:create).with(expected_user_data) }
+
+        it 'does not add an event' do
+          expect(events).not_to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'user-update-password'))
+          subject.info('user_update_password', user.id, 'User password change', user.class.name, user.id, user.email)
+        end
       end
 
-      it 'add an event when an app is added' do
-        expect(events).to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'added-app-' + app.nid, metadata: {type: 'single', app_list: app.nid}))
-        subject.info('app_add', user.id, 'App Added', app_instance.class.name, app_instance.id, {name: app_instance.name, app_nid: app_instance.app.nid} )
-      end
+      context 'user has accepted TOS' do
+        before { allow_any_instance_of(MnoEnterprise::User).to receive(:meta_data).and_return({tos_accepted_at: Time.now}) }
+        # It refreshes the user
+        before { expect(users).to receive(:create).with(expected_user_data) }
 
-      it 'add an event when an app is launched' do
-        expect(events).to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'launched-app-' + app.nid))
-        subject.info('app_launch', user.id, 'App Launched', app_instance.class.name, app_instance.id, {name: app_instance.name, app_nid: app_instance.app.nid} )
+        it 'add an event when a password is changed' do
+          expect(events).to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'user-update-password'))
+          subject.info('user_update_password', user.id, 'User password change', user.class.name, user.id, user.email)
+        end
+
+        it 'add an event when an app is added' do
+          expect(events).to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'added-app-' + app.nid, metadata: {type: 'single', app_list: app.nid}))
+          subject.info('app_add', user.id, 'App Added', app_instance.class.name, app_instance.id, {name: app_instance.name, app_nid: app_instance.app.nid} )
+        end
+
+        it 'add an event when an app is launched' do
+          expect(events).to receive(:create).with(hash_including(email: user.email, user_id: user.id, event_name: 'launched-app-' + app.nid))
+          subject.info('app_launch', user.id, 'App Launched', app_instance.class.name, app_instance.id, {name: app_instance.name, app_nid: app_instance.app.nid} )
+        end
       end
     end
 
@@ -103,7 +116,7 @@ module MnoEnterprise
       end
 
       context 'when the user has a source' do
-        before { user.meta_data = {source: 'acme'}}
+        before { user.meta_data = {source: 'acme', tos_accepted_at: Time.now}}
         it 'tags the user' do
           expect(tags).to receive(:tag).with(name: 'acme', users: [{user_id: user.id}])
           subject
