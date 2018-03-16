@@ -1,6 +1,9 @@
 .registration
   .container
     .row
+      - if params[:session_timeout].present?
+        .alert.alert-warning.text-center
+          = t('mno_enterprise.auth.sessions.new.timeout')
       .login-box-wrapper
         .login-box-title
           %h2= t('mno_enterprise.auth.sessions.new.title')

@@ -5,3 +5,11 @@ en:
         new:
           title: Sign In
           sign_in: Sign in
+          timeout: You are logged off due to inactivity. Please log in again
+        timeout:
+          header: "Session Timeout"
+          body:
+            can_login: "Your session has expired due to inactivity. You can extend your session or log out by clicking on the relevant option below"
+          stay_logged_in: "Stay Logged In"
+          log_off: "Log Off"
+          error: "We could not manage to remain you logged in. You will be redirected to the login page"
