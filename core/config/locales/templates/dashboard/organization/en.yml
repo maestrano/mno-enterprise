@@ -114,6 +114,7 @@ en:
 
           settings:
             company_name: Company name
+            financial_year_end_month: Financial Year End Month,
             connec_data_sharing: Connec!™ Data Sharing
             enable: "On"
             disable: "Off"

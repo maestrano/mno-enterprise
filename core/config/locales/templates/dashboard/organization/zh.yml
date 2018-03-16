@@ -96,6 +96,7 @@ zh:
 
           settings:
             company_name: 公司名称
+            financial_year_end_month: 财政年度结束月份
             connec_data_sharing: Connec!??数据分享
             enable: "On"
             disable: "Off"
