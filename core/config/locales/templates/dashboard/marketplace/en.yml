@@ -5,7 +5,7 @@ en:
         marketplace:
           index:
             applications: "Products"
-            reseller_products: "Reseller's products"
+            reseller_products: "{appname}'s products"
             title: "Marketplace"
             select_all: "All"
             search: "Search"
