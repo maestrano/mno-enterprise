@@ -15,6 +15,7 @@ module MnoEnterprise
     property :external_id, type: :string
     property :custom_data
     property :provisioning_data
+    property :available_edit_actions
 
     has_one :product
     has_one :product_instance
