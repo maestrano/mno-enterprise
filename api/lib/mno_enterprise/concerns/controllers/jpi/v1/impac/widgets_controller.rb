@@ -84,7 +84,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
     end
 
     def widget_create_params
-      params.require(:widget).permit(:endpoint, :name, :width).tap do |whitelisted|
+      permitted_attrs = [:endpoint, :name, :width, { layouts: [] }]
+      params.require(:widget).permit(*permitted_attrs).tap do |whitelisted|
         whitelisted[:settings] = params[:widget][:metadata] || {}
         whitelisted[:settings][:organization_ids] ||= parent_dashboard.settings[:organization_ids]
         # TODO: remove when mnohub migrated to new model
