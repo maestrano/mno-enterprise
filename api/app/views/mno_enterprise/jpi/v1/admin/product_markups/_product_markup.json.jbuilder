@@ -3,6 +3,7 @@ json.extract! product_markup, :id, :percentage, :created_at
 json.product do
   json.id product_markup.product.id
   json.name product_markup.product.name
+  json.nid product_markup.product.nid
 
   json.product_pricings do
     json.array! product_markup.product.product_pricings.each do |pricing|
