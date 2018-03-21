@@ -96,6 +96,7 @@ id:
 
           settings:
             company_name: Nama perusahaan
+            financial_year_end_month: Bulan Akhir Tahun Keuangan
             connec_data_sharing: Berbagi Data Connec!™
             enable: "On"
             disable: "Off"
