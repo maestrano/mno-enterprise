@@ -56,25 +56,6 @@ module MnoEnterprise
       }
     end
 
-    def hash_for_app(app)
-      {
-        'app' => partial_hash_for_app(app)
-      }
-    end
-
-    def hash_for_apps(apps)
-      hash = {}
-      hash['apps'] = []
-      hash['categories'] = App.categories(apps)
-      hash['categories'].delete('Most Popular')
-
-      apps.each do |app|
-        hash['apps'] << partial_hash_for_app(app)
-      end
-
-      return hash
-    end
-
     def partial_hash_for_product(product)
       {
         "id" => product.id,
@@ -92,22 +73,26 @@ module MnoEnterprise
         "local" => product.local,
         "values_attributes" => product.values,
         "assets_attributes" => product.assets,
-        "product_pricings" => product.product_pricings
+        # "product_pricings" => product.product_pricings
       }
     end
 
-    def hash_for_products(products)
-      hash = {}
-      hash['products'] = []
-      products.each do |product|
-        hash['products'] << partial_hash_for_product(product)
-      end
-
-      hash
+    def hash_for_app(app)
+      {
+        'app' => partial_hash_for_app(app)
+      }
     end
 
     def index_hash(apps, products)
-      hash_for_apps(apps).merge(hash_for_products(products))
+      # hash_for_apps(apps).merge(hash_for_products(products))
+      hash = {}
+      hash['categories'] = App.categories(apps)
+      hash['categories'].delete('Most Popular')
+
+      hash['apps'] = apps.map {|a| partial_hash_for_app(a)}
+      hash['products'] = products.map {|p| partial_hash_for_product(p)}
+
+      hash
     end
 
     describe 'GET #index' do
