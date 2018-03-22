@@ -8,8 +8,10 @@ module MnoEnterprise
     before { Rails.cache.clear }
 
     DEPENDENCIES = [:app_shared_entities, :'app_shared_entities.shared_entity']
+    PRODUCT_DEPENDENCIES = [:'values.field', :assets, :categories, :product_pricings, :product_contracts]
 
     let!(:app) { build(:app) }
+    let!(:product) { build(:product) }
     let(:tenant) { build(:tenant, updated_at: 2.days.ago) }
 
     def markdown(text)
@@ -54,23 +56,43 @@ module MnoEnterprise
       }
     end
 
+    def partial_hash_for_product(product)
+      {
+        "id" => product.id,
+        "nid" => product.nid,
+        "name" => product.name,
+        "active" => product.active,
+        "product_type" => product.product_type,
+        "logo" => product.logo,
+        "external_id" => product.external_id,
+        "externally_provisioned" => product.externally_provisioned,
+        "custom_schema" => product.custom_schema,
+        "free_trial_enabled" => product.free_trial_enabled,
+        "free_trial_duration" => product.free_trial_duration,
+        "free_trial_unit" => product.free_trial_unit,
+        "local" => product.local,
+        "values_attributes" => product.values,
+        "assets_attributes" => product.assets,
+        # "product_pricings" => product.product_pricings
+      }
+    end
+
     def hash_for_app(app)
       {
         'app' => partial_hash_for_app(app)
       }
     end
 
-    def hash_for_apps(apps)
+    def index_hash(apps, products)
+      # hash_for_apps(apps).merge(hash_for_products(products))
       hash = {}
-      hash['apps'] = []
       hash['categories'] = App.categories(apps)
       hash['categories'].delete('Most Popular')
 
-      apps.each do |app|
-        hash['apps'] << partial_hash_for_app(app)
-      end
+      hash['apps'] = apps.map {|a| partial_hash_for_app(a)}
+      hash['products'] = products.map {|p| partial_hash_for_product(p)}
 
-      return hash
+      hash
     end
 
     describe 'GET #index' do
@@ -80,13 +102,15 @@ module MnoEnterprise
         stub_api_v2(:get, '/tenant', tenant)
         stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { filter: { active: true } })
         stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
+        stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { filter: { active: true }} )
+        stub_api_v2(:get, '/products', [product], [], { fields: { products: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
       end
 
       it { is_expected.to be_success }
 
       it 'returns the right response' do
         subject
-        expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_apps([app]).to_json))
+        expect(JSON.parse(response.body)).to eq(JSON.parse(index_hash([app], [product]).to_json))
       end
 
       context 'with multiple apps' do
@@ -95,6 +119,7 @@ module MnoEnterprise
 
         before do
           stub_api_v2(:get, '/apps', [app1, app2], DEPENDENCIES, { filter: { active: true } })
+          stub_api_v2(:get, '/products', [], PRODUCT_DEPENDENCIES, { filter: { active: true }} )
           stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
         end
 
@@ -108,12 +133,20 @@ module MnoEnterprise
         let(:app1) { build(:app, rank: 5) }
         let(:app2) { build(:app, rank: 0) }
         let(:app3) { build(:app, rank: nil) }
+        let(:product1) { build(:product) }
 
         before do
           stub_api_v2(:get, '/apps', [app1, app3, app2], DEPENDENCIES, { filter: { active: true } })
           stub_api_v2(:get, '/apps', [app1], [],
                       {
                         fields: { apps: 'updated_at' },
+                        page: { number: 1, size: 1 },
+                        sort: '-updated_at'
+                      })
+          stub_api_v2(:get, '/products', [product1], PRODUCT_DEPENDENCIES, { filter: { active: true }} )
+          stub_api_v2(:get, '/products', [product1], [],
+                      {
+                        fields: { products: 'updated_at' },
                         page: { number: 1, size: 1 },
                         sort: '-updated_at'
                       })
@@ -134,11 +167,20 @@ module MnoEnterprise
         before { sign_in user }
         before { stub_api_v2(:get, "/organizations", [organization], [], { fields: { organizations: 'id' }, filter: { id: organization.id, 'users.id' => user.id }, page: { number: 1, size: 1 } }) }
         before { stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true } }) }
+        before { stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true } }) }
         before do
           stub_api_v2(:get, '/apps', [app], [],
                       {
                         _metadata: { organization_id: organization.id },
                         fields: { apps: 'updated_at' },
+                        page: { number: 1, size: 1 },
+                        sort: '-updated_at'
+                      }
+          )
+          stub_api_v2(:get, '/products', [product], [],
+                      {
+                        _metadata: { organization_id: organization.id },
+                        fields: { products: 'updated_at' },
                         page: { number: 1, size: 1 },
                         sort: '-updated_at'
                       }
@@ -184,6 +226,13 @@ module MnoEnterprise
                         sort: '-updated_at'
                       }
           )
+          stub_api_v2(:get, '/products', [], [],
+                      {
+                        fields: { apps: 'updated_at' },
+                        page: { number: 1, size: 1 },
+                        sort: '-updated_at'
+                      }
+          )
         end
 
         it { is_expected.to have_http_status(:ok) }
@@ -218,6 +267,8 @@ module MnoEnterprise
     describe 'GET #show' do
       before do
         stub_api_v2(:get, "/apps/#{app.id}", app)
+        stub_api_v2(:get, "/products/#{product.id}", product)
+
       end
       subject { get :show, id: app.id }
 

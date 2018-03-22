@@ -9,6 +9,8 @@ describe MnoEnterprise::TenantConfig do
   describe '.load_config!' do
     before { stub_api_v2(:get, '/tenant', tenant) }
     before { stub_api_v2(:get, '/apps', []) }
+    before { stub_api_v2(:get, '/products', [], [], { filter: { active: true, local: true }} ) }
+
     subject { described_class.load_config! }
 
     it 'fetch the tenant config' do
@@ -72,6 +74,8 @@ describe MnoEnterprise::TenantConfig do
 
   describe '.refresh_json_schema!' do
     before { stub_api_v2(:get, '/apps', [build(:app, name: 'My App', nid: 'my-app')]) }
+    before { stub_api_v2(:get, '/products', [build(:product, name: 'My Product', nid: 'my-product')], [], { filter: { active: true, local: true }} ) }
+
     subject { described_class.refresh_json_schema!({}) }
 
     let(:preferred_locale_hash) do
@@ -121,6 +125,22 @@ describe MnoEnterprise::TenantConfig do
       }
     end
 
+    let(:available_local_product_hash)  do
+      {
+        'x-schema-form' => {
+          'titleMap' => {
+            'my-product' => 'My Product'
+          }
+        }
+      }
+    end
+
+    let(:available_local_product_items_hash) do
+      {
+        'enum' => %w(my-product)
+      }
+    end
+
     it 'refresh the json schema' do
       I18n.available_locales = %w(fr-FR fr en en-GB en-AU)
 
@@ -137,6 +157,10 @@ describe MnoEnterprise::TenantConfig do
       expect(public_pages_properties['applications']['items']).to include(available_app_items_hash)
       expect(public_pages_properties['highlighted_applications']).to include(available_app_hash)
       expect(public_pages_properties['highlighted_applications']['items']).to include(available_app_items_hash)
+      expect(public_pages_properties['local_products']).to include(available_local_product_hash)
+      expect(public_pages_properties['local_products']['items']).to include(available_local_product_items_hash)
+      expect(public_pages_properties['highlighted_local_products']).to include(available_local_product_hash)
+      expect(public_pages_properties['highlighted_local_products']['items']).to include(available_local_product_items_hash)
     end
   end
 
