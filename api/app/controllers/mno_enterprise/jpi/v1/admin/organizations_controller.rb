@@ -6,7 +6,13 @@ module MnoEnterprise
       if params[:terms]
         # Search mode
         @organizations = []
-        JSON.parse(params[:terms]).map { |t| @organizations = @organizations | MnoEnterprise::Organization.where(Hash[*t]).fetch }
+        terms = JSON.parse(params[:terms])
+        terms.map { |t| @organizations = @organizations | MnoEnterprise::Organization.where(Hash[*t]).fetch }
+        filters = terms['listing_filters']
+        if filters
+          @organizations.reject! { |x| x.account_frozen? } if filters && filters.dig('account_frozen') == 'true'
+          @organizations.reject! { |x| x.demo_account? } if filters && filters.dig('demo_account') == 'true'
+        end
         response.headers['X-Total-Count'] = @organizations.count
       else
         # Index mode
@@ -14,7 +20,10 @@ module MnoEnterprise
         @organizations = @organizations.limit(params[:limit]) if params[:limit]
         @organizations = @organizations.skip(params[:offset]) if params[:offset]
         @organizations = @organizations.order_by(params[:order_by]) if params[:order_by]
-        @organizations = @organizations.where(params[:where]) if params[:where]
+        if params[:where]
+          hash_filter = params[:where].is_a?(String) ? JSON.parse(params[:where]) : params[:where]
+          @organizations = @organizations.where(hash_filter)
+        end
         @organizations = @organizations.all.fetch
         response.headers['X-Total-Count'] = @organizations.metadata[:pagination][:count]
       end
