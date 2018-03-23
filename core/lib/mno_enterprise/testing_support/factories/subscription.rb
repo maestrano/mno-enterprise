@@ -7,6 +7,7 @@ FactoryGirl.define do
     currency 'USD'
     max_licenses 10
     available_licenses 10
+    available_edit_actions ['SUSPEND', 'EDIT']
 
     product_instance { build(:product_instance) }
     product_pricing { build(:product_pricing) }

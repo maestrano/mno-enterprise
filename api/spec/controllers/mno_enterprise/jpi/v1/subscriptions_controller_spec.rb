@@ -108,7 +108,7 @@ module MnoEnterprise
                                     "attributes" => {
                                       "product_pricing_id" => product_pricing.id,
                                       "custom_data" => {"foo" => "bar"}.to_json}
-                                    }
+                                    },
                                   }.to_json)
       end
     end

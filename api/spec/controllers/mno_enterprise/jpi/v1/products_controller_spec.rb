@@ -50,10 +50,10 @@ module MnoEnterprise
     describe 'GET #show' do
       let(:product) { build(:product) }
 
-      before { stub_api_v2(:get, "/products/#{product.id}", product, [:'values.field', :assets, :categories, :product_contracts], {}) }
+      before { stub_api_v2(:get, "/products/#{product.id}", product, [:'values.field', :assets, :categories, :product_contracts], { _edit_action: 'SUSPEND' }) }
       before { sign_in user }
 
-      subject { get :show, id: product.id }
+      subject { get :show, id: product.id, editAction: 'SUSPEND' }
 
       it_behaves_like 'jpi v1 protected action'
     end
