@@ -45,16 +45,9 @@ module MnoEnterprise
         organization.save
 
         if event_type == :added
-          address = MnoEnterprise::Address.new(
-            city:         row['city'],
-            country_code: row['country'],
-            street: [row['address1'], row['address2']].reject(&:blank?).join(' '),
-            state_code: row['state_province'],
-            postal_code: row['postal_code']
-          )
-          address.relationships.owner = organization
-          address.save
+          add_address(row, organization)
         end
+
         report[:organizations][event_type] << organization
 
         # Create or Update User
@@ -67,10 +60,16 @@ module MnoEnterprise
                        user.email = row['email']
                        :added
                      end
+
         user.name = row['name']
         user.surname = row['surname']
         user.phone = row['phone']
         user.save
+
+        if event_type == :added
+          add_address(row, user)
+        end
+
         user = user.load_required(:sub_tenant)
         report[:users][event_type] << user
 
@@ -103,6 +102,18 @@ module MnoEnterprise
         index += 1
       end
       errors
+    end
+
+    def self.add_address(row, owner)
+      address = MnoEnterprise::Address.new(
+        city:         row['city'],
+        country_code: row['country'],
+        street: [row['address1'], row['address2']].reject(&:blank?).join(' '),
+        state_code: row['state_province'],
+        postal_code: row['postal_code']
+      )
+      address.relationships.owner = owner
+      address.save
     end
   end
 end
