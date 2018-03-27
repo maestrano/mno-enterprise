@@ -26,6 +26,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   #==================================================================
   # GET /mnoe/jpi/v1/admin/organizations
   def index
+    # When fetching multiple organizations attached to one user, we must fetch the user's role for each organization.
+    user_id = params.dig('where', 'users.id')
+    @user = MnoEnterprise::User.find_one(user_id, :orga_relations) if user_id
+
     if params[:terms]
       # Search mode
       @organizations = []
