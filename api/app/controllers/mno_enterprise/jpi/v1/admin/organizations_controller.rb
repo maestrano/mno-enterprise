@@ -10,8 +10,8 @@ module MnoEnterprise
         terms.map { |t| @organizations = @organizations | MnoEnterprise::Organization.where(Hash[*t]).fetch }
         filters = terms['listing_filters']
         if filters
-          @organizations.reject! { |x| x.account_frozen? } if filters && filters.dig('account_frozen') == false
-          @organizations.reject! { |x| x.demo_account.present? } if filters && filters.dig('demo_account') == false
+          @organizations.reject! { |x| x.account_frozen? } if filters.dig('account_frozen') == false
+          @organizations.reject! { |x| x.demo_account.present? } if filters.dig('demo_account') == false
         end
         response.headers['X-Total-Count'] = @organizations.count
       else
