@@ -159,7 +159,7 @@ def mnoe_gemfile_entry
   gems << GemfileEntry.new('omniauth-openid', '~> 1.0', 'Omniauth authentication strategies', {}, true)
   gems << GemfileEntry.new('openid-store-redis', '~> 1.0', nil, {}, true)
   gems << GemfileEntry.new('omniauth-linkedin-oauth2', '~> 0.1.5', nil, {}, true)
-  gems << GemfileEntry.new('omniauth-google-oauth2', '~> 0.2.6', nil, {}, true)
+  gems << GemfileEntry.new('omniauth-google-oauth2', '~> 0.5.3', nil, {}, true)
   gems << GemfileEntry.new('omniauth-facebook', '~> 4.0.0', nil, {}, true)
 
   gems
