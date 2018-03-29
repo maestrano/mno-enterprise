@@ -254,7 +254,8 @@ Devise.setup do |config|
   end
   if ENV['OAUTH_FACEBOOK_KEY'] && ENV['OAUTH_FACEBOOK_SECRET']
     require 'omniauth-facebook'
-    config.omniauth :facebook, ENV['OAUTH_FACEBOOK_KEY'], ENV['OAUTH_FACEBOOK_SECRET'], secure_image_url: true
+    config.omniauth :facebook, ENV['OAUTH_FACEBOOK_KEY'], ENV['OAUTH_FACEBOOK_SECRET'],
+                    secure_image_url: true, info_fields: 'name,email,first_name,last_name'
   end
 
   # ==> Warden configuration
