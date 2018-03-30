@@ -21,4 +21,5 @@ app_instance.app.tap do |a|
   json.app_nid a.nid
   json.logo a.logo
   json.add_on a.add_on?
+  json.data_sharing a.connec_ready?
 end

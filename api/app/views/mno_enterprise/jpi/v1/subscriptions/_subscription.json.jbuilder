@@ -38,6 +38,7 @@ if subscription.product
     json.id subscription.product.id
     json.name subscription.product.name
     json.product_type subscription.product.product_type
+    json.nid subscription.product.nid
   end
 end
 
