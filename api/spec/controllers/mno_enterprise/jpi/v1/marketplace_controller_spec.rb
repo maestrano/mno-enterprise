@@ -45,6 +45,7 @@ module MnoEnterprise
         'support_url' => app.support_url,
         'key_workflows' => app.key_workflows,
         'key_features' => app.key_features,
+        'sso_enabled' => app.sso_enabled,
         'multi_instantiable' => app.multi_instantiable,
         'subcategories' => app.subcategories,
         'average_rating' => app.average_rating,
