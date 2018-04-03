@@ -13,10 +13,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
     if params[:terms]
       # Search mode
       @products = []
-      JSON.parse(params[:terms]).map { |t| @products = @products | MnoEnterprise::ProductMarkup.includes(DEPENDENCIES).where(Hash[*t]).where(active: true) }
+      JSON.parse(params[:terms]).map { |t| @products = @products | MnoEnterprise::ProductMarkup.includes(DEPENDENCIES).where(Hash[*t]) }
       response.headers['X-Total-Count'] = @products.count
     else
-      query = MnoEnterprise::Product.apply_query_params(params).where(active: true)
+      query = MnoEnterprise::Product.apply_query_params(params)
       query = query.includes(DEPENDENCIES) unless params[:skip_dependencies]
       @products = MnoEnterprise::Product.fetch_all(query)
       response.headers['X-Total-Count'] = query.meta.record_count
