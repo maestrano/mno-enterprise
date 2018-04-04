@@ -34,7 +34,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
         query = MnoEnterprise::Organization
                   .apply_query_params(params.except(:terms))
                   .select(INCLUDED_FIELDS_INDEX)
-                  .with_params(_metadata: { act_as_manager: current_user.id })
+                  .with_params(_metadata: act_as_manager)
                   .where(Hash[*t])
         query = query.with_params(sub_tenant_id: params[:sub_tenant_id]) if params[:sub_tenant_id]
         query = query.with_params(account_manager_id: params[:account_manager_id]) if params[:account_manager_id]
@@ -46,7 +46,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
       # Explicitly list fields to be retrieved to trigger financial_metrics calculation
       query = MnoEnterprise::Organization
                 .apply_query_params(params)
-                .with_params(_metadata: { act_as_manager: current_user.id })
+                .with_params(_metadata: act_as_manager)
                 .select(INCLUDED_FIELDS_INDEX)
       query = query.with_params(sub_tenant_id: params[:sub_tenant_id]) if params[:sub_tenant_id]
       query = query.with_params(account_manager_id: params[:account_manager_id]) if params[:account_manager_id]
@@ -58,7 +58,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   # GET /mnoe/jpi/v1/admin/organizations/:id
   def show
     @organization = MnoEnterprise::Organization.apply_query_params(params)
-                      .with_params(_metadata: { act_as_manager: current_user.id })
+                      .with_params(_metadata: act_as_manager)
                       .select(INCLUDED_FIELDS_SHOW)
                       .includes(*DEPENDENCIES)
                       .find(params[:id])

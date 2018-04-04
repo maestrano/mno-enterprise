@@ -108,23 +108,25 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   end
 
   def fetch_all_subscriptions
-    MnoEnterprise::Subscription
+    query = MnoEnterprise::Subscription
       .apply_query_params(params)
-      .with_params(_metadata: { act_as_manager: current_user.id })
+      .with_params(_metadata: act_as_manager)
       .includes(SUBSCRIPTION_INCLUDES)
+    # account_manager_enabled = MnoEnterprise::Tenant.show&.frontend_config.dig('admin_panel', 'account_manager', 'enabled')
+    # account_manager_enabled ? query.with_params(_metadata: { act_as_manager: current_user.id }) : query
   end
 
   def fetch_subscriptions(organization_id)
     MnoEnterprise::Subscription
       .apply_query_params(params)
-      .with_params(_metadata: { act_as_manager: current_user.id })
+      .with_params(_metadata: act_as_manager)
       .includes(SUBSCRIPTION_INCLUDES)
       .where(organization_id: organization_id)
   end
 
   def fetch_subscription(organization_id, id, includes = nil)
     rel = MnoEnterprise::Subscription
-            .with_params(_metadata: { act_as_manager: current_user.id })
+            .with_params(_metadata: act_as_manager)
             .where(organization_id: organization_id, id: id)
     rel = rel.includes(*includes) if includes.present?
     rel.first

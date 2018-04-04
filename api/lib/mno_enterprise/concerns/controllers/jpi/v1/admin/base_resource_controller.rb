@@ -13,6 +13,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
 
   protected
 
+  def act_as_manager
+    account_manager_enabled = MnoEnterprise::Tenant.show&.frontend_config.dig('admin_panel', 'account_manager', 'enabled')
+    account_manager_enabled ? { act_as_manager: current_user.id } : {}
+  end
+
   def timestamp
     @timestamp ||= (params[:timestamp] || 0).to_i
   end
