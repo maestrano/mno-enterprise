@@ -81,8 +81,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   end
 
   def fetch_subscriptions(organization_id)
+    filter_params = JSON.parse(params[:where]) || {} rescue {}
     query = MnoEnterprise::Subscription.with_params(_metadata: { organization_id: organization_id })
-    MnoEnterprise::Subscription.fetch_all(query.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id))
+    MnoEnterprise::Subscription.fetch_all(query.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id).where(filter_params))
   end
 
   def fetch_subscription(organization_id, id)
