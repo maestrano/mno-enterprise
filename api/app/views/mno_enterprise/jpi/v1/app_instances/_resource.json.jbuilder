@@ -6,6 +6,7 @@ json.status app_instance.status
 json.oauth_keys_valid app_instance.oauth_keys_valid
 json.created_at app_instance.created_at
 json.per_user_licence app_instance.per_user_licence
+json.last_sync_at app_instance.sync_status&.finished_at
 
 if app_instance.oauth_company
   json.oauth_company_name app_instance.oauth_company
@@ -22,4 +23,7 @@ app_instance.app.tap do |a|
   json.logo a.logo
   json.add_on a.add_on?
   json.data_sharing a.connec_ready?
+  json.tiny_description a.tiny_description
+  json.getting_started markdown(a.getting_started)
+  json.support_url a.support_url
 end
