@@ -28,14 +28,14 @@ en:
 
                 support:
                   title: Support
-                  helpdesk: {app_name} Helpdesk
+                  helpdesk: "{app_name} Helpdesk"
                   knowledge_base: Maestrano knowledge base
 
                 technical_details:
                   title: Technical details
                   details: These details would be useful when communicating with support
-                  organization_id: Organization id:
-                  group_id: Group id(uid):
+                  organization_id: "Organization id:"
+                  group_id: "Group id(uid):"
 
               connection_status:
                 title: Connection status
