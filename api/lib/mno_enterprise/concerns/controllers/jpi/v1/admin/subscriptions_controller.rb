@@ -112,8 +112,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
       .apply_query_params(params)
       .with_params(_metadata: act_as_manager)
       .includes(SUBSCRIPTION_INCLUDES)
-    # account_manager_enabled = MnoEnterprise::Tenant.show&.frontend_config.dig('admin_panel', 'account_manager', 'enabled')
-    # account_manager_enabled ? query.with_params(_metadata: { act_as_manager: current_user.id }) : query
   end
 
   def fetch_subscriptions(organization_id)

@@ -47,7 +47,7 @@ module MnoEnterprise
           ].join(',')
         }
       end
-      let(:expected_params) { { fields: select_fields, _metadata: { act_as_manager: user.id } } }
+      let(:expected_params) { { fields: select_fields } }
 
       before { stub_api_v2(:get, "/organizations", [organization], [], expected_params) }
       before { subject }
@@ -77,7 +77,7 @@ module MnoEnterprise
         }
       end
 
-      let(:expected_params) { { _metadata: { act_as_manager: user.id }, fields: selected_fields } }
+      let(:expected_params) { { fields: selected_fields } }
 
       before { allow(app_instance).to receive(:app).and_return(app) }
       before { allow(organization).to receive(:app_instances).and_return([app_instance]) }
