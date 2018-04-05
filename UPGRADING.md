@@ -54,7 +54,7 @@ You must upgrade your ruby version to >= 2.3
 
 ##### Frontend packages
 
-You must upgrade the frontend components (`mno-enterprise-angular` and `mnoe-admin-panel`) to the `2.0` version.
+You must upgrade the frontend components (`mno-enterprise-angular` and `mnoe-admin-panel`) to the `2.0` version (in `package.json`).
 
 ##### Gems
 
@@ -90,6 +90,22 @@ If you want to leverage the dynamic configuration introduced in v4, replace them
 See the [template](https://github.com/maestrano/mno-enterprise/blob/4.0/core/lib/generators/mno_enterprise/install/templates/config/initializers/mno_enterprise.rb)
 for more details.
 
+##### nginx configuration
+
+Since `/config.js` is no longer a precompiled asset and served via a controller action, the following block needs to be removed from the `nginx.conf`:
+```
+location ~* config\.js$ {
+  add_header Cache-Control "max-age=0, must-revalidate";
+}
+```
+
+To work with I18n, the following block can be added at the beginning:
+```
+location ~* "^/[A-Za-z]{2}(?:-[A-Za-z]{2})?/dashboard(.*)" {
+  try_files  /dashboard$1/index.html /dashboard$1.html /dashboard$1 @app;
+}
+```
+See the [README I18n section](README.md#sample-nginx-config-for-i18n) for more info.
 
 ### Migrating from v3.2 to v3.3
 

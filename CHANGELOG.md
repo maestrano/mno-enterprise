@@ -4,11 +4,12 @@
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.2...4.0)
 
 - Drop support for Ruby < 2.3
-- Remove deprecated marketplace_listing
+- Remove deprecated `marketplace_listing` filtering (the App list is now configured via the Control Panel)
 - Remove deprecated MandrillClient
 - Default to SMTP
 - Remove hard dependency on figaro (if using `config/application.yml`, you should add `gem 'figaro'` to your `Gemfile`)
-- Intercom: drop support for api_key (replaced by token)
+- Intercom: drop support for `api_key` (replaced by `token`)
+- `config.js` is no longer a precompiled asset and served via a controller action
 
 The settings have been refactored in v4 to make them more consistent.
 
