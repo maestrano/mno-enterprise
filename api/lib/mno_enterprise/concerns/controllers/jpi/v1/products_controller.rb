@@ -14,7 +14,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
     if params[:organization_id] && parent_organization
       query = query.with_params(_metadata: { organization_id: parent_organization.id })
     end
-    @products = MnoEnterprise::Product.fetch_all(query)
+
+    # Paginate if requested, otherwise return all the records, as opposed to the default 25.
+    @products = params[:limit] && params[:offset] ? query.to_a : MnoEnterprise::Product.fetch_all(query)
     response.headers['X-Total-Count'] = query.meta.record_count
   end
 
