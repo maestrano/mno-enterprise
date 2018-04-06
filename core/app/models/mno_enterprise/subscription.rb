@@ -45,7 +45,12 @@ module MnoEnterprise
     end
 
     def approve!
-      process_custom_result(approve)
+      case edit_action
+      when 'SUSPEND' || 'RENEW'
+        process_custom_result(self.send(edit_action.downcase))
+      else
+        process_custom_result(approve)
+      end
     end
 
     def cancel!

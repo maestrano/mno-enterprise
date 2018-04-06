@@ -41,8 +41,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   # PUT /mnoe/jpi/v1/organizations/1/subscriptions/abc
   def update
     authorize! :manage_app_instances, parent_organization
+    subscription = MnoEnterprise::Subscription
+      .where(organization_id: parent_organization.id, id: params[:id])
+      .first
 
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
     if params[:subscription][:product_pricing_id]
       subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
@@ -52,6 +54,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     end
 
     subscription.attributes = subscription_update_params
+    # THIS MIGHT BE WHERE WE WANT TO TRIGGER DIFFERENT SUBSCRIPTION EVENTS
     subscription.modify!(data: subscription.as_json_api)
 
     MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
@@ -77,7 +80,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   def subscription_update_params
     # custom_data is an arbitrary hash
     # On Rails 5.1 use `permit(custom_data: {})`
-    params.require(:subscription).permit(:start_date, :max_licenses, :product_pricing_id, :product_contract_id, :custom_data).tap do |whitelisted|
+    params.require(:subscription).permit(:start_date, :max_licenses, :product_pricing_id, :product_contract_id, :custom_data, :edit_action).tap do |whitelisted|
       whitelisted[:custom_data] = params[:subscription][:custom_data] if params[:subscription].has_key?(:custom_data) && params[:subscription][:custom_data].is_a?(Hash)
     end
   end

@@ -21,6 +21,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
 
   # GET /mnoe/jpi/v1/products/id
   def show
-    @product = MnoEnterprise::Product.find_one(params[:id], DEPENDENCIES)
+    @product = MnoEnterprise::Product
+      .includes(DEPENDENCIES)
+      .with_params(_edit_action: params[:editAction])
+      .find(params[:id])
+      .first
   end
 end
