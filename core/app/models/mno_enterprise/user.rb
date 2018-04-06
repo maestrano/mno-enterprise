@@ -29,6 +29,7 @@ module MnoEnterprise
     property :geo_country_code, type: :string
     property :geo_state_code, type: :string
     property :geo_city, type: :string
+    property :geo_tz, type: :string
     property :last_sign_in_ip
     property :name, type: :string
     property :password, type: :string
