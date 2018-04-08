@@ -9,7 +9,7 @@ module MnoEnterprise
         JSON.parse(params[:terms]).map do |t|
           @users = @users | MnoEnterprise::User
                               .apply_query_params(params.except(:terms))
-                              .with_params(_metadata: act_as_manager)
+                              .with_params(_metadata: { act_as_manager: current_user.id })
                               .includes(:user_access_requests, :sub_tenant)
                               .where(Hash[*t])
         end
@@ -23,7 +23,7 @@ module MnoEnterprise
         # Index mode
         query = MnoEnterprise::User
           .apply_query_params(params)
-          .with_params(_metadata: act_as_manager)
+          .with_params(_metadata: { act_as_manager: current_user.id })
           .includes(:user_access_requests, :sub_tenant)
         @users = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
@@ -32,7 +32,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/users/1
     def show
-      @user = MnoEnterprise::User.with_params(_metadata: act_as_manager)
+      @user = MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id })
                                  .includes(:orga_relations, :organizations, :user_access_requests, :sub_tenant)
                                  .find(params[:id])
                                  .first

@@ -108,7 +108,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   end
 
   def fetch_all_subscriptions
-    query = MnoEnterprise::Subscription
+    MnoEnterprise::Subscription
       .apply_query_params(params)
       .with_params(_metadata: act_as_manager)
       .includes(SUBSCRIPTION_INCLUDES)

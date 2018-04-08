@@ -36,7 +36,7 @@ module MnoEnterprise
 
       let(:data) { JSON.parse(response.body) }
 
-      before { stub_api_v2(:get, "/users", [user], [:user_access_requests, :sub_tenant], { _locale: :en }) }
+      before { stub_api_v2(:get, "/users", [user], [:user_access_requests, :sub_tenant], { _locale: :en, _metadata: { act_as_manager: current_user.id } }) }
       before { subject }
 
       it { expect(data['users'].first['id']).to eq(user.id) }
@@ -48,7 +48,7 @@ module MnoEnterprise
       let(:data) { JSON.parse(response.body) }
       let(:included) { [:orga_relations, :organizations, :user_access_requests, :sub_tenant] }
 
-      before { stub_api_v2(:get, "/users/#{user.id}", user, included) }
+      before { stub_api_v2(:get, "/users/#{user.id}", user, included, { _metadata: { act_as_manager: current_user.id } }) }
       before { subject }
 
       it { expect(data['user']['id']).to eq(user.id) }
