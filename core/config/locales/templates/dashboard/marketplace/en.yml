@@ -112,6 +112,7 @@ en:
             pricing:
               payg: "Usage Based"
               free: "Free"
+              one-off: "One-time Payment"
 
           app_selection:
             next: "Next"
