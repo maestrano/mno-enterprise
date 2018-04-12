@@ -3,15 +3,22 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/app_metrics
     def index
+      org_ids = current_user.organizations.collect(&:id) if current_user.admin_role == 'staff'
+
       if params[:terms]
         # Search mode
         @app_metrics = []
 
-        JSON.parse(params[:terms]).map { |t| @app_metrics = @app_metrics | MnoEnterprise::AppMetrics.where(Hash[*t]) }
+        if org_ids
+          JSON.parse(params[:terms]).map { |t| @app_metrics = @app_metrics | MnoEnterprise::AppMetrics.with_params(_metadata: { organization_ids: org_ids }) .where(Hash[*t]) }
+        else
+          JSON.parse(params[:terms]).map { |t| @app_metrics = @app_metrics | MnoEnterprise::AppMetrics.where(Hash[*t]) }
+        end
         response.headers['X-Total-Count'] = @app_metrics.count
       else
         # Index mode
         query = MnoEnterprise::AppMetrics.apply_query_params(params)
+        query = query.with_params(_metadata: { organization_ids: org_ids }) if org_ids.present?
         @app_metrics = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
       end
