@@ -3,7 +3,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/app_metrics
     def index
-      org_ids = current_user.organizations.collect(&:id) if current_user.admin_role == 'staff'
+      org_ids = current_user.client_ids if current_user.admin_role == 'staff'
 
       if params[:terms]
         # Search mode
