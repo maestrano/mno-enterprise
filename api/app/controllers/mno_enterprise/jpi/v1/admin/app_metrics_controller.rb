@@ -10,7 +10,7 @@ module MnoEnterprise
         @app_metrics = []
 
         if org_ids
-          JSON.parse(params[:terms]).map { |t| @app_metrics = @app_metrics | MnoEnterprise::AppMetrics.with_params(_metadata: { organization_ids: org_ids }) .where(Hash[*t]) }
+          JSON.parse(params[:terms]).map { |t| @app_metrics = @app_metrics | MnoEnterprise::AppMetrics.where(organization_ids: org_ids).where(Hash[*t]) }
         else
           JSON.parse(params[:terms]).map { |t| @app_metrics = @app_metrics | MnoEnterprise::AppMetrics.where(Hash[*t]) }
         end
@@ -18,7 +18,7 @@ module MnoEnterprise
       else
         # Index mode
         query = MnoEnterprise::AppMetrics.apply_query_params(params)
-        query = query.with_params(_metadata: { organization_ids: org_ids }) if org_ids.present?
+        query = query.where(organization_ids: org_ids ) if org_ids.present?
         @app_metrics = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
       end
