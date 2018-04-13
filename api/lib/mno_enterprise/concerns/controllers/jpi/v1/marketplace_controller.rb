@@ -7,6 +7,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
+    PRODUCT_DEPENDENCIES = [:app]
     respond_to :json
   end
 
@@ -69,7 +70,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
 
   def fetch_products
     Rails.cache.fetch("marketplace/index-products-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
-      MnoEnterprise::Product.fetch_all(product_relation(parent_organization_id).where(active: true))
+      MnoEnterprise::Product.fetch_all(product_relation(parent_organization_id).includes(PRODUCT_DEPENDENCIES).where(active: true))
     end
   end
 end
