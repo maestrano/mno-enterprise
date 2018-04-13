@@ -7,7 +7,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
-    PRODUCT_DEPENDENCIES = [:'values.field', :assets, :categories, :product_pricings, :product_contracts]
     respond_to :json
   end
 
@@ -21,18 +20,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     expires_in 0, public: true, must_revalidate: true
 
     # Compute cache key timestamp
-    app_last_modified = app_relation(parent_organization_id).order(updated_at: :desc).select(:updated_at).first&.updated_at || Time.new(0)
     product_last_modified = product_relation(parent_organization_id).order(updated_at: :desc).select(:updated_at).first&.updated_at || Time.new(0)
     tenant_last_modified = MnoEnterprise::Tenant.show.updated_at
-    @last_modified = [app_last_modified, tenant_last_modified, product_last_modified].max
+    @last_modified = [tenant_last_modified, product_last_modified].max
 
     # Fetch application listings & pricings
     if stale?(last_modified: @last_modified)
-      @apps = fetch_apps
       @products = fetch_products
-
-      @categories = MnoEnterprise::App.categories(@apps)
-      @categories.delete('Most Popular')
 
       respond_to do |format|
         format.json
@@ -73,17 +67,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
                   .first&.id
   end
 
-  def fetch_apps
-    Rails.cache.fetch("marketplace/index-apps-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
-      apps = MnoEnterprise::App.fetch_all(app_relation(parent_organization_id).includes(:app_shared_entities, { app_shared_entities: :shared_entity }).where(active: true))
-      apps.sort_by! { |app| [app.rank ? 0 : 1, app.rank] } # the nil ranks will appear at the end
-      apps
-    end
-  end
-
   def fetch_products
     Rails.cache.fetch("marketplace/index-products-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
-      MnoEnterprise::Product.fetch_all(product_relation(parent_organization_id).includes(PRODUCT_DEPENDENCIES).where(active: true))
+      MnoEnterprise::Product.fetch_all(product_relation(parent_organization_id).where(active: true))
     end
   end
 end
