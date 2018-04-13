@@ -340,7 +340,11 @@ MnoEnterprise::Engine.routes.draw do
     namespace :v2 do
       # TODO: dynamic routes?
       resources :organizations, only: [:index, :show, :create, :update, :destroy]
-      resources :users, only: [:index, :show]
+      resources :users, only: [:index, :show] do
+        member do
+          patch :update_password
+        end
+      end
       resources :dashboards, only: [:index, :show, :create, :update, :destroy]
       resources :widgets, only: [:index, :show, :create, :update, :destroy]
       resources :products, only: [:index, :show]
