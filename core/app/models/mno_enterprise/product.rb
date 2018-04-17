@@ -26,5 +26,9 @@ module MnoEnterprise
         product_type: product_type
       }
     end
+
+    def tiny_description
+      values.find { |v| v.field&.name == 'Tiny description' }&.data
+    end
   end
 end
