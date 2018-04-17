@@ -16,6 +16,7 @@ module MnoEnterprise
     property :custom_data
     property :provisioning_data
 
+    has_one :product
     has_one :product_instance
     has_one :organization
     has_one :user
