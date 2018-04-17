@@ -31,6 +31,11 @@ en:
             validate: "Validate"
             price: "Price"
             licenses: "Licenses"
+            pricing_info:
+              title: "Pricing Information"
+              single_billing_disabled: "Subscription plan is managed by the application"
+              externally_managed: "Subscription plan is managed by the application and billed via Maestrano"
+              billed_locally: "Billing is operated via Maestrano"
           summary:
             title: "Order summary"
             order_being_processed: "Your order is being processed by the provider."
