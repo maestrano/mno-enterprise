@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-gem 'nex_client', '~> 0.16.0'
+gem 'nex_client', '~> 0.17.0'
 require 'nex_client'
 require 'rake'
 
@@ -33,7 +33,7 @@ module MnoEnterprise
         ]
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#restart
-        def restart
+        def restart(timestamp = nil)
           # TODO: implement using nex_client
           # For now this work with one node
 
@@ -41,7 +41,30 @@ module MnoEnterprise
           # nex_app.restart
           # puts "success" unless nex_app.errors.any?
 
-          FileUtils.touch('tmp/restart.txt')
+          cmd = "touch tmp/restart.txt && " \
+            "timestamp=0 && " \
+            "while [ $timestamp -ne #{timestamp} ]; " \
+            "do aux=$(echo `curl -s -X GET http://localhost/mnoe/config.json`) && " \
+            "timestamp=${aux:-0}; done"
+          c = NexClient::ExecCmd.new(
+            name: "check restart timestamp",
+            script: cmd,
+            local: true,
+            parallel: true
+          )
+          c.relationships.executor = nex_app
+          c.save
+
+          c.execute
+
+          Rails.cache.write("exec_cmd_id", c.id)
+        end
+
+        def restart_status
+          setup_nex_client
+          cmd_id = Rails.cache.fetch("exec_cmd_id")
+          cmd = NexClient::ExecCmd.select(:status).find(cmd_id).first
+          cmd.status
         end
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#clear_assets

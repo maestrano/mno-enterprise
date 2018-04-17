@@ -5,8 +5,13 @@ module MnoEnterprise
     class LocalAdapter < Adapter
       class << self
         # @see MnoEnterprise::PlatformAdapters::Adapter#restart
-        def restart
+        def restart(timestamp = nil)
           FileUtils.touch('tmp/restart.txt')
+        end
+
+        # @see MnoEnterprise::PlatformAdapters::Adapter#restart_done?
+        def restart_status
+          'success'
         end
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#publish_assets

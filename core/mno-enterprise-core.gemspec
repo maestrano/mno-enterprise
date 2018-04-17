@@ -58,5 +58,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'sparkpost', '~> 0.1.4'
 
   # Platform
-  s.add_development_dependency 'nex_client', '~> 0.16.0'
+  s.add_development_dependency 'nex_client', '~> 0.17.0'
 end

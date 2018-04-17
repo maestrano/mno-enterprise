@@ -89,6 +89,18 @@ describe MnoEnterprise::PlatformAdapters::NexAdapter do
       allow(NexClient::App).to receive(:find).with('nex-app-id').and_return([nex_app])
     end
 
+    describe '.restart' do
+      subject { described_class.restart }
+      let(:exec_cmd) { NexClient::ExecCmd.new(id: 1) }
+      before { allow(NexClient::ExecCmd).to receive(:new).and_return(exec_cmd) }
+      before { allow(exec_cmd).to receive_messages(:save => exec_cmd, :execute => true) }
+      before { allow(FileUtils).to receive(:touch) }
+
+      it 'creates a script to check to restart status' do
+        expect(exec_cmd).to receive(:execute)
+        subject
+      end
+    end
 
     describe '.update_domain' do
       before  { allow_any_instance_of(NexClient::Domain).to receive(:save).and_return(true) }

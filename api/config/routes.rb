@@ -311,6 +311,7 @@ MnoEnterprise::Engine.routes.draw do
 
         resource 'tenant', only: [:show, :update] do
           member do
+            get :restart_status
             post :ssl_certificates, action: :add_certificates
             match :domain, action: :update_domain, via: [:put, :patch]
           end
