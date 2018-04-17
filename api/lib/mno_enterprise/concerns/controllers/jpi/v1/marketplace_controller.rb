@@ -73,8 +73,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
 
   def fetch_products
     Rails.cache.fetch("marketplace/index-products-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
-      product_relation(parent_organization_id).select(:id, :logo, :name, :local, :categories,
-        { categories: [:name] }, :app, { apps: [:id] }, :values, { values: [:data, :field] }
+      product_relation(parent_organization_id).select(:id, :logo, :name, :local, :nid,
+        :categories, { categories: [:name] }, :app, { apps: [:id] }, :values, { values: [:data, :field] }
       ).includes(PRODUCT_DEPENDENCIES).where(active: true)
     end
   end
