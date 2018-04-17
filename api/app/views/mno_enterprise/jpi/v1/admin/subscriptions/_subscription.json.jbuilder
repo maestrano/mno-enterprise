@@ -28,14 +28,14 @@ if subscription.product_pricing
     json.prices subscription.product_pricing.prices
     json.external_id subscription.product_pricing.external_id
   end
+end
 
-  json.product_id subscription.product_pricing.product&.id
-  if subscription.product_pricing.product
-    json.product do
-      json.id subscription.product_pricing.product.id
-      json.name subscription.product_pricing.product.name
-      json.product_type subscription.product_pricing.product.product_type
-    end
+json.product_id subscription.product&.id
+if subscription.product
+  json.product do
+    json.id subscription.product.id
+    json.name subscription.product.name
+    json.product_type subscription.product.product_type
   end
 end
 
