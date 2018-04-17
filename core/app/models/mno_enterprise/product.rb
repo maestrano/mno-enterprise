@@ -18,6 +18,17 @@ module MnoEnterprise
     property :free_trial_duration, type: :integer
     property :free_trial_unit, type: :string
 
+    def self.categories(list = nil)
+      product_list = list || self.all.to_a
+
+      categories = []
+      product_list.each do |p|
+        categories += p.categories.map(&:name)
+      end
+
+      categories.uniq { |cat| cat.downcase }.sort
+    end
+
     def to_audit_event
       {
         id: id,
