@@ -38,7 +38,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
 
   # GET /mnoe/jpi/v1/marketplace/1(?organization_id=123)
   def show
-    @app = app_relation(parent_organization_id).find_one(params[:id])
+    @app = app_relation(parent_organization_id).find(params[:id]).first
   end
 
   #==================================================================
