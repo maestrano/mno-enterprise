@@ -35,7 +35,7 @@ module MnoEnterprise
     private
 
     def authentication_hash
-      {basic_auth: {username: current_user.sso_session, password: ''}}
+      {basic_auth: {username: current_user&.sso_session, password: ''}}
     end
 
     # Filter params to only forward the params we need
