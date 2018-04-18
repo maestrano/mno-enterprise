@@ -39,13 +39,19 @@ module MnoEnterprise
     end
 
     # Filter params to only forward the params we need
+    # TODO: Rails 5.1.2 support for arbitrary hashes in strong parameters
     def filter_params(params)
       # options[:query] = options[:query].inject({}) { |h, q| h[q[0].to_s.camelize] = q[1]; h }
       {
         query: params.permit(
           :include,
+          :sort,
+          :_locale,
           page: [:number, :size]
-        )
+        ).tap do |whitelisted|
+          whitelisted[:fields] = params[:fields] if params[:fields]
+          whitelisted[:filter] = params[:filter] if params[:filter]
+        end
       }
     end
 
