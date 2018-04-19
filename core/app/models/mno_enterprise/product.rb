@@ -18,6 +18,26 @@ module MnoEnterprise
     property :free_trial_duration, type: :integer
     property :free_trial_unit, type: :string
 
+    def values_attributes
+      product_values = {}
+
+      values.each do |value|
+        nid = value.field&.nid
+
+        if nid
+          # Some fields will be valid JSON, whereas others will be simple strings.
+          begin
+            data = JSON.parse(value.data)
+          rescue
+            data = value.data
+          end
+          product_values[nid] = data
+        end
+      end
+
+      product_values
+    end
+
     def self.categories(list = nil)
       product_list = list || self.all.to_a
 
@@ -44,10 +64,6 @@ module MnoEnterprise
         name: name,
         product_type: product_type
       }
-    end
-
-    def tiny_description
-      values.find { |v| v.field&.name == 'Tiny description' }&.data
     end
   end
 end
