@@ -23,10 +23,18 @@ module MnoEnterprise
 
       categories = []
       product_list.each do |p|
-        categories += p.categories.map(&:name)
+        categories += p.product_categories
       end
 
       categories.uniq { |cat| cat.downcase }.sort
+    end
+
+    def product_categories
+      categories.map do |c|
+        # Only find top-level categories
+        next if c.parent_id
+        c.name
+      end
     end
 
     def to_audit_event
