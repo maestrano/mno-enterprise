@@ -19,7 +19,7 @@ module MnoEnterprise
     let(:app) { build(:app) }
 
     describe 'GET #index' do
-      before { stub_api_v2(:get, '/apps', [app], [], {fields: {apps: [:name, :id, :logo, :nid, :tiny_description].join(',')}, filter: {scope: 'all', active: true}}) }
+      before { stub_api_v2(:get, '/apps', [app], [], {fields: {apps: [:name, :id, :logo, :nid, :tiny_description, :categories].join(',')}, filter: {scope: 'all', active: true}}) }
 
       subject { get :index }
 
