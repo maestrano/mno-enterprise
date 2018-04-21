@@ -7,7 +7,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::AppsController
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
-    FIELDS = [:name, :id, :logo, :nid, :tiny_description]
+    FIELDS = [:name, :id, :logo, :nid, :tiny_description, :categories]
   end
 
   #==================================================================

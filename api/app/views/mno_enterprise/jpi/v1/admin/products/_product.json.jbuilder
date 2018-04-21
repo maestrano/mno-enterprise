@@ -18,3 +18,5 @@ json.product_pricings do
     json.extract! pricing, :id, :name, :description, :position, :free, :license_based, :pricing_type, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, :prices, :external_id
   end if product.respond_to?(:product_pricings)
 end
+
+json.categories product.categories.map(&:name)
