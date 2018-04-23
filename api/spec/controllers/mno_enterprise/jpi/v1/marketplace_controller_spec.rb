@@ -191,32 +191,33 @@ module MnoEnterprise
         it { is_expected.to be_success }
       end
 
-      describe 'caching' do
-        context 'on the first request' do
-          it { is_expected.to have_http_status(:ok) }
-          it 'sets the correct cache headers' do
-            subject
-            header = response.headers['Last-Modified']
-            expect(header).to be_present
-            # Parse and serialise to get correct format and avoid ms difference
-            expect(Time.rfc822(header).in_time_zone.to_s).to eq(app.updated_at.to_s)
-          end
-        end
-        context 'on a subsequent request' do
-          before do
-            request.env['HTTP_IF_MODIFIED_SINCE'] = last_modified.rfc2822
-          end
-          context 'if it is not stale' do
-            # Can't be based on the previous request due to parsing and rounding issues with ms
-            let(:last_modified) { app.updated_at + 10.minutes }
-            it { is_expected.to have_http_status(:not_modified) }
-          end
-          context 'if it is stale' do
-            let(:last_modified) { app.updated_at - 10.minutes }
-            it { is_expected.to have_http_status(:ok) }
-          end
-        end
-      end
+      # Note: Temporarily rmeoved stale caching
+      # describe 'caching' do
+      #   context 'on the first request' do
+      #     it { is_expected.to have_http_status(:ok) }
+      #     it 'sets the correct cache headers' do
+      #       subject
+      #       header = response.headers['Last-Modified']
+      #       expect(header).to be_present
+      #       # Parse and serialise to get correct format and avoid ms difference
+      #       expect(Time.rfc822(header).in_time_zone.to_s).to eq(app.updated_at.to_s)
+      #     end
+      #   end
+      #   context 'on a subsequent request' do
+      #     before do
+      #       request.env['HTTP_IF_MODIFIED_SINCE'] = last_modified.rfc2822
+      #     end
+      #     context 'if it is not stale' do
+      #       # Can't be based on the previous request due to parsing and rounding issues with ms
+      #       let(:last_modified) { app.updated_at + 10.minutes }
+      #       it { is_expected.to have_http_status(:not_modified) }
+      #     end
+      #     context 'if it is stale' do
+      #       let(:last_modified) { app.updated_at - 10.minutes }
+      #       it { is_expected.to have_http_status(:ok) }
+      #     end
+      #   end
+      # end
 
       context 'without apps' do
         before do
@@ -238,30 +239,31 @@ module MnoEnterprise
 
         it { is_expected.to have_http_status(:ok) }
 
-        context 'on the first request' do
-          it { is_expected.to have_http_status(:ok) }
-          it 'sets the correct cache headers' do
-            subject
-            header = response.headers['Last-Modified']
-            expect(header).to be_present
-            # Parse and serialise to get correct format and avoid ms difference
-            expect(Time.rfc822(header).in_time_zone.to_s).to eq(tenant.updated_at.to_s)
-          end
-        end
-        context 'on a subsequent request' do
-          before do
-            request.env['HTTP_IF_MODIFIED_SINCE'] = last_modified.rfc2822
-          end
-          context 'if it is not stale' do
-            # Can't be based on the previous request due to parsing and rounding issues with ms
-            let(:last_modified) { tenant.updated_at + 10.minutes }
-            it { is_expected.to have_http_status(:not_modified) }
-          end
-          context 'if it is stale' do
-            let(:last_modified) { tenant.updated_at - 10.minutes }
-            it { is_expected.to have_http_status(:ok) }
-          end
-        end
+        # Note: Temporarily rmeoved stale caching
+        # context 'on the first request' do
+        #   it { is_expected.to have_http_status(:ok) }
+        #   it 'sets the correct cache headers' do
+        #     subject
+        #     header = response.headers['Last-Modified']
+        #     expect(header).to be_present
+        #     # Parse and serialise to get correct format and avoid ms difference
+        #     expect(Time.rfc822(header).in_time_zone.to_s).to eq(tenant.updated_at.to_s)
+        #   end
+        # end
+        # context 'on a subsequent request' do
+        #   before do
+        #     request.env['HTTP_IF_MODIFIED_SINCE'] = last_modified.rfc2822
+        #   end
+        #   context 'if it is not stale' do
+        #     # Can't be based on the previous request due to parsing and rounding issues with ms
+        #     let(:last_modified) { tenant.updated_at + 10.minutes }
+        #     it { is_expected.to have_http_status(:not_modified) }
+        #   end
+        #   context 'if it is stale' do
+        #     let(:last_modified) { tenant.updated_at - 10.minutes }
+        #     it { is_expected.to have_http_status(:ok) }
+        #   end
+        # end
       end
     end
 
