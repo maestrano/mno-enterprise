@@ -16,7 +16,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   # GET /mnoe/jpi/v1/organizations/:organization_id/teams
   def index
     authorize! :read, parent_organization
-    @teams = MnoEnterprise::Team.includes(:organization, :app_instances, :users).find(organization_id: parent_organization.id)
+    @teams = MnoEnterprise::Team.includes(:organization, :app_instances, :'app_instances.app', :users).find(organization_id: parent_organization.id)
   end
 
   # GET /mnoe/jpi/v1/teams/:id
