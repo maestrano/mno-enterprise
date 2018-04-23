@@ -1,4 +1,5 @@
-json.extract! product, :id, :nid, :name, :active, :product_type, :logo, :external_id, :externally_provisioned, :custom_schema, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :local, :values_attributes
+json.extract! product, :id, :nid, :name, :active, :product_type, :logo, :external_id, :externally_provisioned, :custom_schema, :free_trial_enabled,
+  :free_trial_duration, :free_trial_unit, :local, :values_attributes, :product_instances
 
 json.assets_attributes do
   json.array! product.assets.each do |asset|

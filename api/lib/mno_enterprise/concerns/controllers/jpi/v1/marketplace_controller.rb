@@ -56,6 +56,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   def product_relation(org_id = nil)
     rel = MnoEnterprise::Product
     # Ensure prices include organization-specific markups/discounts
+
     rel = rel.with_params(_metadata: { organization_id: org_id }) if org_id.present?
 
     rel
@@ -73,9 +74,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
 
   def fetch_products
     Rails.cache.fetch("marketplace/index-products-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
-      product_relation(parent_organization_id).select(:id, :logo, :name, :local, :nid,
+      relation = product_relation(parent_organization_id).select(:id, :logo, :name, :local, :nid,
         :categories, { categories: [:name] }, :app, { apps: [:id] }, :values, { values: [:data, :field] }
       ).includes(PRODUCT_DEPENDENCIES).where(active: true)
+      MnoEnterprise::Product.fetch_all(relation)
     end
   end
 end
