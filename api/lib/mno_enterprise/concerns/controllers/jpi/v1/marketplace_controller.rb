@@ -27,17 +27,20 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     @last_modified = [app_last_modified, tenant_last_modified, product_last_modified].max
 
     # Fetch application listings & pricings
-    if stale?(last_modified: @last_modified)
-      @apps = fetch_apps
-      @products = fetch_products
+    # if stale?(last_modified: @last_modified)
 
-      @categories = MnoEnterprise::App.categories(@apps)
-      @categories.delete('Most Popular')
+    # Note: Temporarily removed stale check to allow cache fetching to be based
+    #       on both last_modifited and parent_organization_id
+    @apps = fetch_apps
+    @products = fetch_products
 
-      respond_to do |format|
-        format.json
-      end
+    @categories = MnoEnterprise::App.categories(@apps)
+    @categories.delete('Most Popular')
+
+    respond_to do |format|
+      format.json
     end
+    # end
   end
 
   # GET /mnoe/jpi/v1/marketplace/1(?organization_id=123)
