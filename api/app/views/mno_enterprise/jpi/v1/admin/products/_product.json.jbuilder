@@ -19,4 +19,4 @@ json.product_pricings do
   end if product.respond_to?(:product_pricings)
 end
 
-json.categories product.categories.map(&:name)
+json.categories product.categories&.map(&:name) if product.respond_to?(:categories)
