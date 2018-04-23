@@ -110,21 +110,21 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   def fetch_all_subscriptions
     MnoEnterprise::Subscription
       .apply_query_params(params)
-      .with_params(_metadata: { act_as_manager: current_user.id })
+      .with_params(_metadata: act_as_manager)
       .includes(SUBSCRIPTION_INCLUDES)
   end
 
   def fetch_subscriptions(organization_id)
     MnoEnterprise::Subscription
       .apply_query_params(params)
-      .with_params(_metadata: { act_as_manager: current_user.id })
+      .with_params(_metadata: act_as_manager)
       .includes(SUBSCRIPTION_INCLUDES)
       .where(organization_id: organization_id)
   end
 
   def fetch_subscription(organization_id, id, includes = nil)
     rel = MnoEnterprise::Subscription
-            .with_params(_metadata: { act_as_manager: current_user.id })
+            .with_params(_metadata: act_as_manager)
             .where(organization_id: organization_id, id: id)
     rel = rel.includes(*includes) if includes.present?
     rel.first

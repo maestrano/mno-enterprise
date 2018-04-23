@@ -13,6 +13,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
 
   protected
 
+  def act_as_manager
+    account_manager_enabled = Settings&.admin_panel&.account_manager&.enabled
+
+    if current_user.admin_role == 'staff'
+      account_manager_enabled ? { act_as_manager: current_user.id } : {}
+    else
+      { act_as_manager: current_user.id }
+    end
+  end
+
   def timestamp
     @timestamp ||= (params[:timestamp] || 0).to_i
   end

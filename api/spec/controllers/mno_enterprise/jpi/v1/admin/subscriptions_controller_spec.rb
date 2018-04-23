@@ -28,20 +28,62 @@ module MnoEnterprise
     before { sign_in user }
 
     describe 'GET #index' do
-      subject { get :index }
+      context 'When Admin User' do
+        subject { get :index }
 
-      let(:data) { JSON.parse(response.body) }
-      let(:includes) { [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'] }
-      let(:expected_params) { { _metadata: { act_as_manager: user.id } } }
+        let(:data) { JSON.parse(response.body) }
+        let(:includes) { [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'] }
+        let(:expected_params) { { _metadata: { act_as_manager: user.id } } }
+        before { allow(subscription).to receive(:license_assignments).and_return([]) }
+        before { stub_api_v2(:get, "/subscriptions", [subscription], includes, expected_params) }
+        before { subject }
 
-      before { allow(subscription).to receive(:license_assignments).and_return([]) }
-      before { stub_api_v2(:get, "/subscriptions", [subscription], includes, expected_params) }
-      before { subject }
+        it { expect(data['subscriptions'].first['id']).to eq(subscription.id) }
+      end
 
-      it { expect(data['subscriptions'].first['id']).to eq(subscription.id) }
+      context 'When Account Manager' do
+        let(:user) { build(:user, :staff) }
+        let!(:current_user_stub) { stub_user(user) }
+        before { sign_in user}
+        subject { get :index }
+
+        let(:data) { JSON.parse(response.body) }
+        let(:includes) { [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'] }
+        before { allow(subscription).to receive(:license_assignments).and_return([]) }
+        before { stub_api_v2(:get, "/subscriptions", [subscription], includes) }
+        before { subject }
+
+        it { expect(data['subscriptions'].first['id']).to eq(subscription.id) }
+      end
+
     end
 
     describe 'GET #show' do
+      context 'When Admin User' do
+        subject { get :show, id: subscription.id, organization_id: organization.id }
+
+        let(:data) { JSON.parse(response.body) }
+        let(:includes) { [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'] }
+        let(:expected_params) do
+          {
+            filter: { id: subscription.id, organization_id: organization.id },
+            _metadata: { act_as_manager: user.id },
+            page: { number: 1, size: 1 } }
+        end
+
+        before { allow(subscription).to receive(:license_assignments).and_return([]) }
+        before { allow(subscription).to receive(:organization).and_return(organization) }
+        before { stub_api_v2(:get, "/subscriptions", subscription, includes, expected_params) }
+        before { subject }
+
+        it { expect(data['subscription']['id']).to eq(subscription.id) }
+      end
+    end
+
+    context 'When Account Manager' do
+      let(:user) { build(:user, :staff) }
+      let!(:current_user_stub) { stub_user(user) }
+      before { sign_in user}
       subject { get :show, id: subscription.id, organization_id: organization.id }
 
       let(:data) { JSON.parse(response.body) }
@@ -49,7 +91,6 @@ module MnoEnterprise
       let(:expected_params) do
         {
           filter: { id: subscription.id, organization_id: organization.id },
-          _metadata: { act_as_manager: user.id },
           page: { number: 1, size: 1 } }
       end
 
