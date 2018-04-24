@@ -25,22 +25,21 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     product_last_modified = product_relation(parent_organization_id).order(updated_at: :desc).select(:updated_at).first&.updated_at || Time.new(0)
     tenant_last_modified = MnoEnterprise::Tenant.show.updated_at
     @last_modified = [app_last_modified, tenant_last_modified, product_last_modified].max
+    @org_id = parent_organization_id
 
     # Fetch application listings & pricings
-    # if stale?(last_modified: @last_modified)
+    if stale?(etag: parent_organization, last_modified: @last_modified)
 
-    # Note: Temporarily removed stale check to allow cache fetching to be based
-    #       on both last_modifited and parent_organization_id
-    @apps = fetch_apps
-    @products = fetch_products
+      @apps = fetch_apps
+      @products = fetch_products
 
-    @categories = MnoEnterprise::App.categories(@apps)
-    @categories.delete('Most Popular')
+      @categories = MnoEnterprise::App.categories(@apps)
+      @categories.delete('Most Popular')
 
-    respond_to do |format|
-      format.json
+      respond_to do |format|
+        format.json
+      end
     end
-    # end
   end
 
   # GET /mnoe/jpi/v1/marketplace/1(?organization_id=123)
@@ -66,14 +65,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     rel
   end
 
+  def parent_organization
+    return nil unless current_user && params[:organization_id].presence
+    @org ||= MnoEnterprise::Organization
+                  .select(:id)
+                  .where('id' => params[:organization_id], 'users.id' => current_user.id)
+                  .first
+  end
+
   # Return the organization_id passed as query parameters if the current_user
   # has access to it
   def parent_organization_id
-    return nil unless current_user && params[:organization_id].presence
-    @org_id ||= MnoEnterprise::Organization
-                  .select(:id)
-                  .where('id' => params[:organization_id], 'users.id' => current_user.id)
-                  .first&.id
+    parent_organization&.id
   end
 
   def fetch_apps
