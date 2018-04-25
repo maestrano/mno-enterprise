@@ -596,6 +596,20 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             }
           }
         },
+        tenant_reporting: {
+          title: 'Reporting',
+          description: 'Tenant Reporting',
+          type: 'object',
+          properties: {
+            currency: {
+              type: 'string',
+              title: 'Reporting Currency',
+              description: 'Currency for Tenant reporting purposes',
+              default: 'AUD',
+              enum: %w(AED AUD CAD EUR GBP HKD JPY NZD SGD USD)
+            }
+          }
+        },
       }
     }
   }
