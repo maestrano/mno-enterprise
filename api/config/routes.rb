@@ -132,6 +132,7 @@ MnoEnterprise::Engine.routes.draw do
       resources :organizations, only: [:index, :show, :create, :update, :destroy] do
         member do
           put :update_billing
+          put :update_main_address
           put :invite_members
           put :update_member
           put :remove_member
