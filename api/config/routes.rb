@@ -190,6 +190,9 @@ MnoEnterprise::Engine.routes.draw do
       end
 
       resources :products, only: [:index, :show] do
+        member do
+          get :custom_schema
+        end
         resources :pricings, only: :index
       end
 

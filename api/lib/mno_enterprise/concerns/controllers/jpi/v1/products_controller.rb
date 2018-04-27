@@ -14,7 +14,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
     if params[:organization_id] && parent_organization
       query = query.with_params(_metadata: { organization_id: parent_organization.id })
     end
-
     @products = MnoEnterprise::Product.fetch_all(query)
     response.headers['X-Total-Count'] = query.meta.record_count
   end
@@ -23,8 +22,21 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
   def show
     @product = MnoEnterprise::Product
       .includes(DEPENDENCIES)
-      .with_params(_edit_action: params[:editAction])
       .find(params[:id])
       .first
+  end
+
+  # GET /mnoe/jpi/v1/products/id/custom_schema
+  # This endpoint is used just to fetch the product's custom_schema. This streamlines
+  # error handling, as we don't want the entire product to error out, when its
+  # custom_schema is unavailable.
+  def custom_schema
+    @product = MnoEnterprise::Product
+      .with_params(_fetch_custom_schema: true, _edit_action: params[:editAction])
+      .select(:custom_schema)
+      .find(params[:id])
+      .first
+
+    render json: @product.custom_schema
   end
 end
