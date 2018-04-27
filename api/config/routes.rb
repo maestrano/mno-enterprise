@@ -237,6 +237,7 @@ MnoEnterprise::Engine.routes.draw do
           resources :products, only: [:index, :show, :destroy, :update, :create] do
             member do
               post :upload_logo
+              get :custom_schema
             end
 
             resources :assets, only: [:index, :create]
