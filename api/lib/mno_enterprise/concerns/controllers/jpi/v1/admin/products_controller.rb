@@ -43,7 +43,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
       .find(params[:id])
       .first
 
-    render json: @product.custom_schema
+    render json: {custom_schema: @product.custom_schema}
   end
 
   # POST /mnoe/jpi/v1/admin/products
