@@ -25,10 +25,6 @@ describe MnoEnterprise::PlatformAdapters::NexAdapter do
     end
   end
 
-  describe '.restart' do
-    it 'restarts the app'
-  end
-
   context 'Assets Operation' do
     let(:aws_cmd) { "AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY} aws --endpoint-url ${MINIO_URL}" }
     let(:logo_file) { Rails.root.join('app', 'assets', 'images', 'mno_enterprise', 'main-logo.png') }
@@ -90,11 +86,10 @@ describe MnoEnterprise::PlatformAdapters::NexAdapter do
     end
 
     describe '.restart' do
-      subject { described_class.restart }
+      subject { described_class.restart(Time.current.to_i) }
       let(:exec_cmd) { NexClient::ExecCmd.new(id: 1) }
       before { allow(NexClient::ExecCmd).to receive(:new).and_return(exec_cmd) }
       before { allow(exec_cmd).to receive_messages(:save => exec_cmd, :execute => true) }
-      before { allow(FileUtils).to receive(:touch) }
 
       it 'creates a script to check to restart status' do
         expect(exec_cmd).to receive(:execute)

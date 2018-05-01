@@ -10,9 +10,10 @@ module MnoEnterprise
 
     # PATCH /mnoe/jpi/v1/admin/tenant
     def update
+      timestamp = Time.current.to_i
+      params[:tenant].deep_merge!(frontend_config: { config_timestamp: timestamp })
+
       @tenant = MnoEnterprise::Tenant.show
-      timestamp = Time.now.utc.to_i
-      tenant_params['frontend_config']&.merge!(config_timestamp: timestamp)
       @tenant.update_attributes!(tenant_params)
 
       MnoEnterprise::SystemManager.restart(timestamp)

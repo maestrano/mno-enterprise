@@ -34,23 +34,21 @@ module MnoEnterprise
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#restart
         def restart(timestamp = nil)
-          # TODO: implement using nex_client
-          # For now this work with one node
+          return FileUtils.touch('tmp/restart.txt') unless timestamp
 
-          # Restart myself
-          # nex_app.restart
-          # puts "success" unless nex_app.errors.any?
-
-          cmd = "touch tmp/restart.txt && " \
-            "timestamp=0 && " \
-            "while [ $timestamp -ne #{timestamp} ]; " \
-            "do aux=$(echo `curl -s -X GET http://localhost/mnoe/config.json`) && " \
-            "timestamp=${aux:-0}; done"
+          cmd = <<~CMD.squish
+            touch tmp/restart.txt &&
+            timestamp=0 &&
+            while [ $timestamp -ne #{timestamp} ];
+            do aux=$(echo `curl -s -X GET http://localhost/mnoe/config.json`) &&
+            timestamp=${aux:-0} &&
+            sleep 1; done
+          CMD
           c = NexClient::ExecCmd.new(
             name: "check restart timestamp",
             script: cmd,
             local: true,
-            parallel: true
+            parallel: false
           )
           c.relationships.executor = nex_app
           c.save

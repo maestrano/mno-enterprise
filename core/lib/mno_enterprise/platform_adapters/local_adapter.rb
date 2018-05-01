@@ -9,7 +9,7 @@ module MnoEnterprise
           FileUtils.touch('tmp/restart.txt')
         end
 
-        # @see MnoEnterprise::PlatformAdapters::Adapter#restart_done?
+        # @see MnoEnterprise::PlatformAdapters::Adapter#restart_status
         def restart_status
           'success'
         end
