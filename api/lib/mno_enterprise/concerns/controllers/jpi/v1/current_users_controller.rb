@@ -7,7 +7,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
-    before_filter :authenticate_user!, only: [:update, :update_password, :update_tos]
+    before_filter :authenticate_user!, only: [:update, :update_password, :update_tos, :reset_password_redirect]
     before_filter :user_management_enabled?, only: [:update, :update_password]
     respond_to :json
   end

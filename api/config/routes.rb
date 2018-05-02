@@ -114,6 +114,7 @@ MnoEnterprise::Engine.routes.draw do
         put :update_password
         put :register_developer
         put :update_tos
+        get :reset_password_redirect
         #post :deletion_request, action: :create_deletion_request
         #delete :deletion_request, action: :cancel_deletion_request
       end
