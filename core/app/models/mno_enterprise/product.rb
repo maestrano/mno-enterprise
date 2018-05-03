@@ -18,6 +18,7 @@ module MnoEnterprise
     property :free_trial_duration, type: :integer
     property :free_trial_unit, type: :string
 
+
     def values_attributes
       product_values = {}
 
@@ -36,6 +37,24 @@ module MnoEnterprise
       end
 
       product_values
+    end
+
+    def asset_attributes
+      asset_values = {}
+
+      assets.each do |asset|
+        nid = asset.field&.nid
+        next unless nid
+
+        asset_values[nid] ||= []
+        asset_attrs = {
+          url: asset.url,
+          description: asset.field&.description,
+        }
+        asset_values[nid] << asset_attrs
+      end
+
+      asset_values
     end
 
     def self.categories(list = nil)
