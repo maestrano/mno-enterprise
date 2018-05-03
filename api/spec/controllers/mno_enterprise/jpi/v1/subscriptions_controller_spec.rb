@@ -105,9 +105,6 @@ module MnoEnterprise
                                   "data" => {
                                     "id" => subscription.id,
                                     "type" => "subscriptions",
-                                    "relationships" => {
-                                      "product_pricing" => {"data" => {"type" => "product_pricings", "id" => product_pricing.id}}
-                                    },
                                     "attributes" => {
                                       "product_pricing_id" => product_pricing.id,
                                       "custom_data" => {"foo" => "bar"}.to_json}
