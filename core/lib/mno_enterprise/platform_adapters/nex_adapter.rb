@@ -8,7 +8,7 @@ Rails.application.load_tasks # load application tasks
 
 module MnoEnterprise
   module PlatformAdapters
-    # Nex!™ Adapter for MnoEnterprise::PlatformClient
+    # Nex!™ Adapter for MnoEnterprise::PlatformClient for apps with only one node
     # The Nex!™ docker image provide `awscli` and a Minio storage addon
     class NexAdapter < Adapter
       class << self
@@ -34,35 +34,22 @@ module MnoEnterprise
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#restart
         def restart(timestamp = nil)
-          return FileUtils.touch('tmp/restart.txt') unless timestamp
-
-          cmd = <<~CMD.squish
-            touch tmp/restart.txt &&
-            timestamp=0 &&
-            while [ $timestamp -ne #{timestamp} ];
-            do aux=$(echo `curl -s -X GET http://localhost/mnoe/config.json`) &&
-            timestamp=${aux:-0} &&
-            sleep 1; done
-          CMD
-          c = NexClient::ExecCmd.new(
-            name: "check restart timestamp",
-            script: cmd,
-            local: true,
-            parallel: false
-          )
-          c.relationships.executor = nex_app
-          c.save
-
-          c.execute
-
-          Rails.cache.write("exec_cmd_id", c.id)
+          FileUtils.touch('tmp/restart.txt')
+          Rails.cache.write('config_timestamp', timestamp)
         end
 
         def restart_status
-          setup_nex_client
-          cmd_id = Rails.cache.fetch("exec_cmd_id")
-          cmd = NexClient::ExecCmd.select(:status).find(cmd_id).first
-          cmd.status
+          timestamp = Rails.cache.fetch('config_timestamp')
+          if Rails.cache.is_a?(ActiveSupport::Cache::MemoryStore)
+            # If the app has properly restarted, MemoryStore will be cleared
+            return 'success' unless timestamp
+            return 'pending' unless Settings.config_timestamp && timestamp <= Settings.config_timestamp
+            'failed'
+          else
+            return 'failed' unless timestamp && timestamp >= Settings.config_timestamp
+            return 'pending' unless Settings.config_timestamp && timestamp <= Settings.config_timestamp
+            'success'
+          end
         end
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#clear_assets
@@ -130,7 +117,7 @@ module MnoEnterprise
           end
         end
 
-        private
+        protected
 
         # Configure the Nex!™ client
         def setup_nex_client
