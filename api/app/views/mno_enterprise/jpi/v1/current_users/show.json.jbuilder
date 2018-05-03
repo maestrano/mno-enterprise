@@ -18,6 +18,8 @@ json.cache! ['v2', @user.cache_key, session[:impersonator_user_id]] do
     json.avatar_url avatar_url(@user)
     json.settings @user.settings
     json.sub_tenant_id @user.sub_tenant&.id
+    # Including address requirement for user's companies
+    json.org_address_required MnoEnterprise::Tenant.show.org_address_required
 
     if current_impersonator
       json.current_impersonator true
