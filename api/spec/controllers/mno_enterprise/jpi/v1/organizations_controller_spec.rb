@@ -21,7 +21,7 @@ module MnoEnterprise
 
     # Stub organization + associations
     let(:metadata) { {} }
-    let!(:organization) { build(:organization, metadata: metadata, orga_invites: [], users: [], orga_relations: [], credit_card: credit_card, invoices: []) }
+    let!(:organization) { build(:organization, metadata: metadata, orga_invites: [], users: [], orga_relations: [], credit_card: credit_card, invoices: [], main_address: main_address) }
     let(:role) { 'Admin' }
     let!(:user) {
       u = build(:user, organizations: [organization], orga_relations: [orga_relation], dashboards: [])
@@ -30,7 +30,7 @@ module MnoEnterprise
     }
     let!(:orga_relation) { build(:orga_relation, organization_id: organization.id, role: role) }
 
-    let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices)) }
+    let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices main_address)) }
     # Stub user and user call
     let!(:current_user_stub) { stub_user(user) }
 
@@ -40,6 +40,7 @@ module MnoEnterprise
     let!(:credit_card) { build(:credit_card) }
     let!(:invoice) { build(:invoice, organization_id: organization.id) }
     let!(:orga_invite) { build(:orga_invite, organization: organization) }
+    let!(:main_address) { build(:main_address, organization: organization) }
 
     #===============================================
     # Specs
@@ -151,6 +152,33 @@ module MnoEnterprise
           expect(JSON.parse(response.body)).to eq(hash_for_reduced_organization(updated_organization))
         end
       end
+    end
+
+    describe 'PUT #update_main_address' do
+
+      let(:params) { { 'main_address' => {'street' => '404 New 5th Ave.', 'country_code' => 'AU' } } }
+      before { stub_api_v2(:patch, "/organizations/#{organization.id}", updated_main_address) }
+      let!(:updated_main_address) { build(:main_address, street: params['street'], country_code: params['country_code']) }
+
+      subject { put :update_main_address, id: organization.id, main_address: params }
+
+      it_behaves_like 'jpi v1 authorizable action'
+      it_behaves_like 'an organization management action'
+
+      context 'success' do
+
+        it 'updates the main address' do
+          subject
+          expect(assigns(:main_address).street).to eq(params['street'])
+          expect(assigns(:main_address).country_code).to eq(params['country_code'])
+        end
+
+        it 'returns a partial representation of the entity' do
+          subject
+          expect(JSON.parse(response.body)).to eq(partial_hash_for_main_address(updated_main_address))
+        end
+      end
+
     end
 
     describe 'DELETE #destroy' do

@@ -22,6 +22,9 @@ FactoryGirl.define do
       trait :with_org_invites do
         org_invites { [build(:org_invite)] }
       end
+      trait :with_main_address do
+        main_address { build(:main_address) }
+      end
     end
   end
 end
