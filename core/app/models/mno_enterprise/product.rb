@@ -18,6 +18,64 @@ module MnoEnterprise
     property :free_trial_duration, type: :integer
     property :free_trial_unit, type: :string
 
+
+    def values_attributes
+      product_values = {}
+
+      values.each do |value|
+        nid = value.field&.nid
+
+        if nid
+          # Some fields will be valid JSON, whereas others will be simple strings.
+          begin
+            data = JSON.parse(value.data)
+          rescue
+            data = value.data
+          end
+          product_values[nid] = data
+        end
+      end
+
+      product_values
+    end
+
+    def asset_attributes
+      asset_values = {}
+
+      assets.each do |asset|
+        nid = asset.field&.nid
+        next unless nid
+
+        asset_values[nid] ||= []
+        asset_attrs = {
+          url: asset.url,
+          description: asset.field&.description,
+        }
+        asset_values[nid] << asset_attrs
+      end
+
+      asset_values
+    end
+
+    def self.categories(list = nil)
+      product_list = list || self.all.to_a
+
+      categories = []
+      product_list.each do |p|
+        categories += p.product_categories
+      end
+
+      categories.uniq { |cat| cat.downcase }.sort
+    end
+
+    def product_categories
+      categories.map do |c|
+        # Only find top-level categories
+        next if c.parent_id
+        c.name
+      end
+    end
+
     def to_audit_event
       {
         id: id,

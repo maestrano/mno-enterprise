@@ -17,7 +17,7 @@ json.average_rating app.average_rating
 json.add_on app.add_on?
 json.running_instances_count app.running_instances_count
 
-if app.app_shared_entities.any?
+if app.app_shared_entities&.any?
   json.app_shared_entities do
     json.array! app.app_shared_entities do |shared_entity|
       json.shared_entity_nid shared_entity.shared_entity.nid

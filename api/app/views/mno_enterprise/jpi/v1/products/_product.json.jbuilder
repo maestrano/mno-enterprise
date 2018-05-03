@@ -1,11 +1,5 @@
-json.extract! product, :id, :nid, :name, :active, :product_type, :logo, :external_id, :externally_provisioned, :custom_schema, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :local
-
-json.values_attributes do
-  json.array! product.values.each do |value|
-    json.extract! value, :data
-    json.name value.field.name
-  end if product.respond_to?(:values)
-end
+json.extract! product, :id, :nid, :name, :active, :product_type, :logo, :external_id, :externally_provisioned, :custom_schema, :free_trial_enabled,
+  :free_trial_duration, :free_trial_unit, :local, :values_attributes, :product_instances
 
 json.assets_attributes do
   json.array! product.assets.each do |asset|
