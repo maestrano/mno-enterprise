@@ -67,7 +67,6 @@ module MnoEnterprise
         "logo" => product.logo,
         "external_id" => product.external_id,
         "externally_provisioned" => product.externally_provisioned,
-        "custom_schema" => product.custom_schema,
         "free_trial_enabled" => product.free_trial_enabled,
         "free_trial_duration" => product.free_trial_duration,
         "free_trial_unit" => product.free_trial_unit,

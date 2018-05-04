@@ -1,4 +1,15 @@
-json.extract! product, :id, :nid, :name, :active, :product_type, :logo, :external_id, :externally_provisioned, :custom_schema, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :created_at, :updated_at
+json.extract! product, :id, :nid, :name, :active, :product_type, :logo, :external_id, :externally_provisioned, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :created_at, :updated_at
+
+if product.custom_schema
+  schema = JSON.parse(product.custom_schema)
+  # When a custom_schema has angular-schema-form options, the custom_schema will be namespaced under #json_schema.
+
+  custom_schema = schema['json_schema'] ? schema['json_schema'].to_json : schema.to_json
+  asf_options = schema['asf_options'] ? schema['asf_options'].to_json : nil
+
+  json.custom_schema custom_schema
+  json.asf_options asf_options
+end
 
 json.values_attributes do
   json.array! product.values.each do |value|
