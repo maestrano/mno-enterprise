@@ -1,4 +1,4 @@
-json.extract! product, :id, :nid, :name, :active, :product_type, :logo, :external_id, :externally_provisioned, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :local
+json.extract! product, :id, :nid, :name, :active, :product_type, :logo, :external_id, :externally_provisioned, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :local, :single_billing_enabled, :billed_locally
 
 if product.custom_schema
   schema = JSON.parse(product.custom_schema)
