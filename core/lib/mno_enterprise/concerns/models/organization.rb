@@ -138,6 +138,10 @@ module MnoEnterprise::Concerns::Models::Organization
     MnoEnterprise::CreditCard.new(owner_id: id, owner_type: 'Organization')
   end
 
+  def new_main_address(main_address_params)
+    MnoEnterprise::Address.new(main_address_params.merge(main: true))
+  end
+
   def has_credit_card_details?
     credit_card_id.present?
   end

@@ -1,7 +1,8 @@
 require 'csv'
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   extend ActiveSupport::Concern
-  DEPENDENCIES = [:users, :orga_invites, :orga_relations, :credit_card, :invoices]
+  ADDRESS_ATTRIBUTES = %w[street city state_code postal_code country_code]
+  DEPENDENCIES = [:users, :orga_invites, :orga_relations, :credit_card, :invoices, :main_address]
   #==================================================================
   # Included methods
   #==================================================================
@@ -9,7 +10,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   # context where it is included rather than being executed in the module's context
   included do
     respond_to :json
-    before_filter :organization_management_enabled?, only: [:create, :update, :destroy, :update_billing,
+    before_filter :organization_management_enabled?, only: [:create, :update, :destroy, :update_billing, :update_main_address,
                                                             :invite_members, :update_member, :remove_member]
   end
 
@@ -62,6 +63,26 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     @organization = @organization.load_required(:users, :orga_invites, :orga_relations)
     MnoEnterprise::EventLogger.info('organization_create', current_user.id, 'Organization created', organization)
     render 'show'
+  end
+
+  # PUT /mnoe/jpi/v1/organizations/:id/update_main_address
+  def update_main_address
+    return unless address_change_present?
+    authorize! :update, organization
+    # Find or create main address
+    @main_address = organization.main_address || organization.new_main_address(main_address_params)
+    @main_address.relationships.owner = MnoEnterprise::Organization.new(id: organization.id)
+    @main_address.update_attributes!(main_address_params)
+    if @main_address.errors.empty?
+      # Render updated address
+      render 'main_address'
+    else
+      render json: @main_address.errors, status: :bad_request
+    end
+  end
+
+  def address_change_present?
+    main_address_params != organization.main_address&.attributes&.slice(*ADDRESS_ATTRIBUTES)
   end
 
   # PUT /mnoe/jpi/v1/organizations/:id/update_billing
@@ -162,6 +183,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     params.fetch(:organization, {}).permit(*organization_permitted_update_params)
   end
 
+  def main_address_params
+    params.fetch(:organization, {}).require(:main_address).permit(ADDRESS_ATTRIBUTES)
+  end
+
   def organization_billing_params
     params.require(:credit_card).permit(
       'title', 'first_name', 'last_name', 'number', 'month', 'year', 'country', 'verification_value',
@@ -184,5 +209,4 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   def organization_management_enabled?
     return head :forbidden unless Settings.dashboard.organization_management.enabled
   end
-
 end

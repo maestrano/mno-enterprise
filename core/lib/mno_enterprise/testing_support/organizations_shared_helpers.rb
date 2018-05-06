@@ -98,6 +98,20 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     orga_invoices
   end
 
+  def partial_hash_for_main_address(address)
+    {
+        'main_address' => {
+            'id' => address.id,
+            'street' => address.street,
+            'city' => address.city,
+            'state_code' => address.state_code,
+            'postal_code' => address.postal_code,
+            'country_code' => address.country_code,
+            'main' => address.main,
+        }
+    }
+  end
+
   def hash_for_organizations(organizations, admin = false)
     {
         'organizations' => organizations.map { |o| partial_hash_for_organization(o, admin) }
