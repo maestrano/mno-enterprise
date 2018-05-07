@@ -11,6 +11,8 @@ FactoryGirl.define do
       billing_group 'Some App'
       currency 'AUD'
       billable { build(:app_instance) }
+      closed_end_user_price Money.new(7980,'AUD')
+      closure_exchange_rate 1.51
     end
   end
 end
