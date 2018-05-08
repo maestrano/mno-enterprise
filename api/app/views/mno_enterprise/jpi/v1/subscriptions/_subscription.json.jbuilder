@@ -9,6 +9,7 @@ json.available_licenses subscription.available_licenses
 json.external_id subscription.external_id
 json.custom_data subscription.custom_data
 json.provisioning_data subscription.provisioning_data
+json.available_actions subscription.available_actions
 
 json.product_pricing_id subscription.product_pricing&.id
 if subscription.product_pricing

@@ -30,7 +30,14 @@ module MnoEnterprise
     describe 'GET #show' do
       subject { get :show, id: product.id }
       let(:product) { build(:product) }
-      before { stub_api_v2(:get, "/products/#{product.id}", product, [:'values.field', :assets, :categories, :product_pricings, :product_contracts], {}) }
+      before { stub_api_v2(:get, "/products/#{product.id}", product, [:'values.field', :assets, :categories, :product_pricings, :product_contracts]) }
+      it_behaves_like 'a jpi v1 admin action'
+    end
+
+    describe 'GET #custom_schema' do
+      subject { get :custom_schema, id: product.id, editAction: 'SUSPEND' }
+      let(:product) { build(:product) }
+      before { stub_api_v2(:get, "/products/#{product.id}", product, [], { _fetch_custom_schema: true, _edit_action: 'SUSPEND', fields: { products: 'custom_schema' } }) }
       it_behaves_like 'a jpi v1 admin action'
     end
   end

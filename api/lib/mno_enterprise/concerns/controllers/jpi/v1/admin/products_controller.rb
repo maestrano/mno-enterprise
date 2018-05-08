@@ -26,7 +26,24 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
 
   # GET /mnoe/jpi/v1/admin/products/id
   def show
-    @product = MnoEnterprise::Product.find_one(params[:id], DEPENDENCIES)
+    @product = MnoEnterprise::Product
+      .includes(DEPENDENCIES)
+      .find(params[:id])
+      .first
+  end
+
+  # GET /mnoe/jpi/v1/admin/products/id/custom_schema
+  # This endpoint is used just to fetch the product's custom_schema. This streamlines
+  # error handling, as we don't want the entire product to error out, when its
+  # custom_schema is unavailable.
+  def custom_schema
+    @product = MnoEnterprise::Product
+      .with_params(_fetch_custom_schema: true, _edit_action: params[:editAction])
+      .select(:custom_schema)
+      .find(params[:id])
+      .first
+
+    render json: {custom_schema: @product.custom_schema}
   end
 
   # POST /mnoe/jpi/v1/admin/products
