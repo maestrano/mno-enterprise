@@ -349,6 +349,7 @@ MnoEnterprise::Engine.routes.draw do
       resources :widgets, only: [:index, :show, :create, :update, :destroy]
       resources :products, only: [:index, :show]
       resources :product_instances, only: [:index, :show]
+      resources :subscriptions, only: [:index, :show, :create]
 
       # scope ':entity' do
       #   resources '', as: :resource, controller: 'resources', only: [:index, :show, :create, :update, :destroy]
