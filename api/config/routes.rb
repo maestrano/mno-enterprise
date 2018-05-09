@@ -231,13 +231,16 @@ MnoEnterprise::Engine.routes.draw do
           end
         end
 
-        resources :products, only: [:index, :show]
+        resources :products, only: [:index, :show] do
+          member do
+            get :custom_schema
+          end
+        end
 
         if Settings&.dashboard&.marketplace&.local_products
           resources :products, only: [:index, :show, :destroy, :update, :create] do
             member do
               post :upload_logo
-              get :custom_schema
             end
 
             resources :assets, only: [:index, :create]
