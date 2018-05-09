@@ -157,6 +157,10 @@ MnoEnterprise::Engine.routes.draw do
             member do
               post :cancel
             end
+            collection do
+              post :cancel_cart_subscriptions
+              post :submit_cart_subscriptions
+            end
 
             resources :subscription_events, only: [:index, :show]
           end

@@ -39,6 +39,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     return render_not_found('Organization') unless organization
 
     subscription = MnoEnterprise::Subscription.new(subscription_update_params)
+    subscription.status = :requested if cart_subscription_param.blank?
     subscription.relationships.organization = organization
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
     subscription.relationships.product = MnoEnterprise::Product.new(id: params[:subscription][:product_id])
@@ -46,30 +47,45 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
     subscription.save!
 
-    MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription)
+    if cart_subscription_param.blank?
+      MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription)
+    end
+
+    set_staged_subscription_params if cart_subscription_param.present?
     @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
     render :show
   end
 
   # PUT /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc
   def update
+    set_staged_subscription_params if cart_subscription_param.present?
     subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
     subscription.attributes = subscription_update_params
-    subscription.modify!(data: subscription.as_json_api)
-    MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
+    if cart_subscription_param.present?
+      subscription.modify_cart!(data: subscription.as_json_api)
+    else
+      subscription.modify!(data: subscription.as_json_api)
+      MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
+    end
     @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
     render :show
   end
 
   # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc/cancel
   def cancel
+    set_staged_subscription_params if cart_subscription_param.present?
     subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
-    subscription.cancel!
-    MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription cancelled', subscription)
-    @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
-    render :show
+    if cart_subscription_param.present?
+      subscription.abandon!
+      head :no_content
+    else
+      subscription.cancel!
+      MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription cancelled', subscription)
+      @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
+      render :show
+    end
   end
 
   # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc/approve
@@ -108,6 +124,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     end
   end
 
+  def cart_subscription_param
+    params.dig(:subscription, :cart_entry)
+  end
+
   def fetch_all_subscriptions
     MnoEnterprise::Subscription
       .apply_query_params(params)
@@ -125,9 +145,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
   def fetch_subscription(organization_id, id, includes = nil)
     rel = MnoEnterprise::Subscription
-            .with_params(_metadata: { act_as_manager: current_user.id })
-            .where(organization_id: organization_id, id: id)
+          .apply_query_params(params)
+          .with_params(_metadata: { act_as_manager: current_user.id })
+          .where(organization_id: organization_id, id: id)
     rel = rel.includes(*includes) if includes.present?
     rel.first
+  end
+
+  def set_staged_subscription_params
+    params[:where] ||= {}
+    params[:where][:staged_subscriptions] = true
   end
 end
