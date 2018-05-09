@@ -5,3 +5,7 @@ json.message subscription_event.message
 json.provisioning_data subscription_event.provisioning_data
 json.created_at subscription_event.created_at
 json.updated_at subscription_event.updated_at
+
+if subscription_event.subscription
+  json.subscription subscription_event.subscription
+end

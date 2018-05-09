@@ -210,6 +210,10 @@ MnoEnterprise::Engine.routes.draw do
         resources :app_comments, only: [:create]
         resources :app_answers, only: [:create]
 
+        if Settings&.dashboard&.marketplace&.provisioning
+          resources :subscription_events, only: [:index]
+        end
+
         resources :apps, only: [:index] do
           collection do
             patch :enable

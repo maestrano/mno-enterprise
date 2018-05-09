@@ -7,9 +7,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
   # Instance methods
   #==================================================================
   # GET /mnoe/jpi/v1/admin/organizations/1/subscriptions/xyz/subscription_events
+  # OR
+  # GET /mnoe/jpi/v1/admin/subscription_events
   def index
-    query = fetch_subscription_events(params[:organization_id], params[:subscription_id])
-    @subscription_events = query.to_a
+    # Either fetch a single subscription's #subscription_events or all the #subscription_events of a tenant.
+    if params[:organization_id]
+      query = fetch_subscription_events(params[:organization_id], params[:subscription_id])
+      @subscription_events = query.to_a
+    else
+      query = MnoEnterprise::SubscriptionEvent.apply_query_params(params).includes(SUBSCRIPTION_EVENT_INCLUDES)
+      @subscription_events = query.to_a
+    end
+
     response.headers['X-Total-Count'] = query.meta.record_count
   end
 
