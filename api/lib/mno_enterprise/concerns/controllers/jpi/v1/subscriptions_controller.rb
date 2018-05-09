@@ -49,7 +49,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     return render_not_found('subscription') unless subscription
 
     subscription.attributes = subscription_update_params
-    subscription.modify!(data: subscription.as_json_api)
+    edit_action = params[:subscription][:edit_action]
+    subscription.proccess_update_request!({data: subscription.as_json_api}, edit_action)
 
     MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
     @subscription = fetch_subscription(parent_organization.id, subscription.id)
