@@ -145,6 +145,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     render 'members'
   end
 
+  # POST /mnoe/jpi/v1/organizations/:id/quote
+  def quote
+    resp = organization.quote!
+    render json: resp, status: :ok
+  end
+
   protected
 
   def member

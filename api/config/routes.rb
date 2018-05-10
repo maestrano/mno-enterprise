@@ -154,7 +154,9 @@ MnoEnterprise::Engine.routes.draw do
 
         resources :audit_events, only: [:index]
 
+
         if Settings&.dashboard&.marketplace&.provisioning
+          post :quote, on: :member
           resources :subscriptions, only: [:index, :show, :create, :update] do
             member do
               post :cancel
