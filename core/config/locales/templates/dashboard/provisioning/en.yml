@@ -96,5 +96,7 @@ en:
             aborted_modal.title: "Subscription has been aborted"
             aborted_modal.body: "Something wrong happened when fulfilling your order.<p>It can be a temporary issue, please check again in 15 minutes.<p>If the issue persists, contact your system administrator"
             aborted_modal.close: "Close"
+            not_available: "N/A"
             tooltip:
               aborted: Your order was aborted during fulfillment. Please contact your administrator for more information
+              external_billing: "This product is billed externally"
