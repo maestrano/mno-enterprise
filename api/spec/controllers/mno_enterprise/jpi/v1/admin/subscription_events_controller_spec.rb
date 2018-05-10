@@ -21,7 +21,7 @@ module MnoEnterprise
 
     let(:organization) { build(:organization) }
     let(:subscription) { build(:subscription) }
-    let(:subscription_event) { build(:subscription_event, subscription: subscription) }
+    let!(:subscription_event) { build(:subscription_event, subscription: subscription) }
 
     #===============================================
     # Specs
@@ -32,7 +32,7 @@ module MnoEnterprise
       subject { get :index, organization_id: organization.id, subscription_id: subscription.id }
 
       let(:data) { JSON.parse(response.body) }
-      let(:includes) { [:'subscription'] }
+      let(:includes) { [:'subscription', :'subscription.organization', :'subscription.product', :'subscription.product_pricing'] }
       let(:expected_params) { { filter: { 'subscription.id': subscription.id }, _metadata: { act_as_manager: user.id, organization_id: organization.id } } }
 
       before { stub_api_v2(:get, "/subscription_events", [subscription_event], includes, expected_params) }
@@ -49,7 +49,7 @@ module MnoEnterprise
       subject { get :show, id: subscription_event.id, organization_id: organization.id, subscription_id: subscription.id }
 
       let(:data) { JSON.parse(response.body) }
-      let(:includes) { [:'subscription'] }
+      let(:includes) { [:'subscription', :'subscription.organization', :'subscription.product', :'subscription.product_pricing'] }
       let(:expected_params) do
         {
           filter: { id: subscription_event.id, 'subscription.id': subscription.id },
@@ -67,6 +67,36 @@ module MnoEnterprise
         subject
         expect(data['subscription_event']['id']).to eq(subscription_event.id)
       end
+    end
+
+    describe 'POST #approve' do
+      let(:expected_params) do
+        {
+          filter: { id: subscription_event.id },
+          page: { number: 1, size: 1 }
+        }
+      end
+
+      before { stub_api_v2(:get, "/subscription_events", [subscription_event], [], expected_params) }
+      before { stub_api_v2(:post, "/subscription_events/#{subscription_event.id}/approve") }
+      subject { post :approve, id: subscription_event.id }
+
+      it_behaves_like 'a jpi v1 admin action'
+    end
+
+    describe 'POST #reject' do
+      let(:expected_params) do
+        {
+          filter: { id: subscription_event.id },
+          page: { number: 1, size: 1 }
+        }
+      end
+
+      before { stub_api_v2(:get, "/subscription_events", [subscription_event], [], expected_params) }
+      before { stub_api_v2(:post, "/subscription_events/#{subscription_event.id}/reject") }
+      subject { post :reject, id: subscription_event.id }
+
+      it_behaves_like 'a jpi v1 admin action'
     end
   end
 end

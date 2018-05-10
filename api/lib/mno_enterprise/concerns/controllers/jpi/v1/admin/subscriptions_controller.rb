@@ -58,7 +58,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     subscription.attributes = subscription_update_params
 
     edit_action = params[:subscription][:edit_action]
-    subscription.proccess_update_request!({data: subscription.as_json_api}, edit_action)
+    subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
 
     MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
     @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)

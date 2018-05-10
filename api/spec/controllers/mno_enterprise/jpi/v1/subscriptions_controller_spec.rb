@@ -87,20 +87,21 @@ module MnoEnterprise
       let(:subscription) { build(:subscription) }
       let(:product) { build(:product) }
       let(:product_pricing) { build(:product_pricing, product: product) }
+      let(:edit_action) { "change" }
 
       before { stub_audit_events }
-      before { stub_api_v2(:post, "/subscriptions/#{subscription.id}/modify", subscription, [], {}) }
+      before { stub_api_v2(:post, "/subscriptions/#{subscription.id}/#{edit_action}", subscription, [], {}) }
       before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
       before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
       before { sign_in user }
 
-      subject { put :update, organization_id: organization.id, id: subscription.id, subscription: {custom_data: {foo: :bar}.to_json, product_pricing_id: product_pricing.id} }
+      subject { put :update, organization_id: organization.id, id: subscription.id, subscription: {custom_data: {foo: :bar}.to_json, product_pricing_id: product_pricing.id, edit_action: edit_action }}
 
       it_behaves_like 'jpi v1 protected action'
 
       it 'passes the correct parameters' do
         expect(subject).to be_successful
-        assert_requested_api_v2(:post, "/subscriptions/#{subscription.id}/modify",
+        assert_requested_api_v2(:post, "/subscriptions/#{subscription.id}/#{edit_action}",
                                  body: {
                                   "data" => {
                                     "id" => subscription.id,

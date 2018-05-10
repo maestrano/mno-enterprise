@@ -38,7 +38,7 @@ module MnoEnterprise
       event
     end
 
-    def proccess_update_request!(subscription, edit_action)
+    def process_update_request!(subscription, edit_action)
       # Dynamically call the #mno_hub endpoint corresponding with #edit_action specified by the user.
       self.send("#{edit_action}!", subscription)
     end
