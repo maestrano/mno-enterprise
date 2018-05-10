@@ -37,9 +37,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     end
     subscription.save!
 
-    if cart_subscription_param.blank?
-      MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription)
-    end
+    MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription) if cart_subscription_param.blank?
     @subscription = fetch_subscription(parent_organization.id, subscription.id)
     render :show
   end
@@ -48,9 +46,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   def update
     authorize! :manage_app_instances, parent_organization
 
-    status_params = {}
+    status_params = { organization_id: parent_organization.id, id: params[:id] }
     status_params[:staged_subscriptions] = true if cart_subscription_param.present?
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).where(status_params).first
+    subscription = MnoEnterprise::Subscription.where(status_params).first
     return render_not_found('subscription') unless subscription
 
     subscription.attributes = subscription_update_params
@@ -69,9 +67,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   def cancel
     authorize! :manage_app_instances, parent_organization
 
-    status_params = {}
+    status_params = { organization_id: parent_organization.id, id: params[:id] }
     status_params[:staged_subscriptions] = true if cart_subscription_param.present?
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).where(status_params).first
+    subscription = MnoEnterprise::Subscription.where(status_params).first
     return render_not_found('subscription') unless subscription
     if cart_subscription_param.present?
       subscription.abandon!
