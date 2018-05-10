@@ -17,6 +17,7 @@ mno:
     root: /api/mnoe/v1
 url_config:
   after_sign_out_url: <%= ENV['AFTER_SIGN_OUT_URL']%>
+  developer_onboarding_url: <%= ENV['DEVELOPER_ONBOARDING_URL'] %>
 
 system:
   app_name: 'My Company'
