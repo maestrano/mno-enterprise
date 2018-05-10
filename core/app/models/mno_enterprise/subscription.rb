@@ -27,8 +27,12 @@ module MnoEnterprise
     custom_endpoint :approve, on: :member, request_method: :post
     custom_endpoint :fulfill, on: :member, request_method: :post
     custom_endpoint :modify, on: :member, request_method: :post
+    custom_endpoint :modify_cart, on: :member, request_method: :post
     custom_endpoint :enable, on: :member, request_method: :post
     custom_endpoint :suspend, on: :member, request_method: :post
+    custom_endpoint :abandon, on: :member, request_method: :post
+    custom_endpoint :cancel_cart, on: :collection, request_method: :post
+    custom_endpoint :submit_cart, on: :collection, request_method: :post
 
     def to_audit_event
       event = {id: id, status: status}
@@ -45,12 +49,20 @@ module MnoEnterprise
       process_custom_result(modify(args))
     end
 
+    def modify_cart!(args)
+      process_custom_result(modify_cart(args))
+    end
+
     def approve!
       process_custom_result(approve)
     end
 
     def cancel!
       process_custom_result(cancel)
+    end
+
+    def abandon!
+      process_custom_result(abandon)
     end
   end
 end
