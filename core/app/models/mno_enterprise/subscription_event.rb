@@ -11,6 +11,17 @@ module MnoEnterprise
 
     has_one :subscription
 
+    custom_endpoint :approve, on: :member, request_method: :post
+    custom_endpoint :reject, on: :member, request_method: :post
+
+    def approve!(args)
+      process_custom_result(approve(args))
+    end
+
+    def reject!(args)
+      process_custom_result(reject(args))
+    end
+
     def to_audit_event
       event = {id: id, status: status}
       if relationships.respond_to?(:subscription)

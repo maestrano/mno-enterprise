@@ -1,7 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_EVENT_INCLUDES ||= [:'subscription']
+  SUBSCRIPTION_EVENT_INCLUDES ||= [:'subscription', :'subscription.organization', :'subscription.product', :'subscription.product_pricing']
 
   #==================================================================
   # Instance methods
@@ -26,6 +26,26 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
   def show
     @subscription_event = fetch_subscription_event(params[:organization_id], params[:subscription_id], params[:id], SUBSCRIPTION_EVENT_INCLUDES)
     return render_not_found('SubscriptionEvent') unless @subscription_event
+  end
+
+  # POST /mnoe/jpi/v1/admin/subscription_events/id/approve
+  def approve
+    subscription_event = MnoEnterprise::SubscriptionEvent.where(id: params[:id]).first
+    return render_not_found('subscription_event') unless subscription_event
+
+    subscription_event.approve!({data: subscription_event.as_json_api})
+
+    head :ok
+  end
+
+  # POST /mnoe/jpi/v1/admin/subscription_events/id/reject
+  def reject
+    subscription_event = MnoEnterprise::SubscriptionEvent.where(id: params[:id]).first
+    return render_not_found('subscription_event') unless subscription_event
+
+    subscription_event.reject!({data: subscription_event.as_json_api})
+
+    head :ok
   end
 
   protected
