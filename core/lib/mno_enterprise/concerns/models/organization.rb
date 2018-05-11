@@ -12,7 +12,6 @@ module MnoEnterprise::Concerns::Models::Organization
     custom_endpoint :trigger_app_instances_sync, on: :member, request_method: :post
     custom_endpoint :freeze, on: :member, request_method: :patch
     custom_endpoint :unfreeze, on: :member, request_method: :patch
-    custom_endpoint :quote, on: :member, request_method: :post
     property :uid, type: :string
     property :name, type: :string
     property :account_frozen, type: :boolean
@@ -161,12 +160,6 @@ module MnoEnterprise::Concerns::Models::Organization
 
   def trigger_app_instances_sync!
     result = trigger_app_instances_sync
-    process_custom_result(result)
-  end
-
-  def quote!
-    result = quote
-    binding.pry
     process_custom_result(result)
   end
 

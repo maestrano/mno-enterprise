@@ -156,7 +156,7 @@ MnoEnterprise::Engine.routes.draw do
 
 
         if Settings&.dashboard&.marketplace&.provisioning
-          post :quote, on: :member
+          resources :quotes, only: [:index, :show, :create]
           resources :subscriptions, only: [:index, :show, :create, :update] do
             member do
               post :cancel
