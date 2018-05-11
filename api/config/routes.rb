@@ -210,6 +210,15 @@ MnoEnterprise::Engine.routes.draw do
         resources :app_comments, only: [:create]
         resources :app_answers, only: [:create]
 
+        if Settings&.dashboard&.marketplace&.provisioning
+          resources :subscription_events, only: [:index] do
+            member do
+              post :approve
+              post :reject
+            end
+          end
+        end
+
         resources :apps, only: [:index] do
           collection do
             patch :enable
@@ -275,8 +284,6 @@ MnoEnterprise::Engine.routes.draw do
             resources :subscriptions, only: [:index, :show, :create, :update] do
               member do
                 post :cancel
-                post :approve
-                post :fulfill
               end
 
               resources :subscription_events, only: [:index, :show]
