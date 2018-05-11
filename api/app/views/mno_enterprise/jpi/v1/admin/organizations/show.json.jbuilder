@@ -9,4 +9,16 @@ json.organization do
     json.app_logo instance.app.logo
     json.nid instance.app.nid
   end
+  json.product_instances @organization_product_instances do |instance|
+    json.extract! instance, :id, :uid, :status
+    json.nid instance.product.nid
+    json.name instance.product.name
+    json.logo instance.product.logo
+    json.product_type instance.product.product_type
+    json.subscriptions do
+      json.array! instance.subscriptions&.each do |subscription|
+        json.extract! subscription, :id, :status
+      end if instance.respond_to?(:subscriptions)
+    end
+  end
 end

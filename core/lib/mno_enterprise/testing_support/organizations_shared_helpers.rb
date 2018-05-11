@@ -140,6 +140,7 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     hash['organization']['credit_card'] = {'presence' => false}
     hash['organization'].merge!(admin_partial_hash_for_invoices(organization))
     hash['organization'].merge!(admin_partial_hash_for_active_apps(organization))
+    hash['organization'].merge!(admin_partial_hash_for_product_instances(organization))
     hash
   end
 
@@ -171,4 +172,20 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     hash
   end
 
+  def admin_partial_hash_for_product_instances(organization)
+    hash = {'product_instances' => []}
+    organization.product_instances.each do |instance|
+      hash['product_instances'].push({
+                                   'id' => instance.id,
+                                   'uid' => instance.uid,
+                                   'status' => instance.status,
+                                   'nid' => instance.product.nid,
+                                   'name' => instance.product.name,
+                                   'logo' => instance.product.logo,
+                                   'product_type' => instance.product.product_type,
+                                   'subscriptions' => instance.subscriptions.present? ? instance.subscriptions.map { |s| s.slice('id', 'status') } : []
+                               })
+    end
+    hash
+  end
 end
