@@ -71,6 +71,15 @@ module MnoEnterprise::Concerns::Models::Ability
       )
     end
 
+    can :access_product_instance, MnoEnterprise::ProductInstance do |product_instance|
+      role = user.role_from_id(product_instance.organization_id)
+      !!role && (
+      ['Super Admin','Admin'].include?(role) ||
+          user.teams.empty? ||
+          user.teams.map(&:product_instances).compact.flatten.map(&:id).include?(product_instance.id)
+      )
+    end
+
     #===================================================
     # Impac
     #===================================================

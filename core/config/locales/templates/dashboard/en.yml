@@ -6,9 +6,10 @@ en:
           heading: Manage your applications
           status: "Status:"
           access: Access
-          manage: Manage
+          manage_app: Manage
           back: Back to list
           no_status: This application does not provide any status
+          unavailable: App is not available
 
           data_sharing:
             status: "Data sharing: {status}"
