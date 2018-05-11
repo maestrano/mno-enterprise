@@ -15,6 +15,7 @@ module MnoEnterprise
     property :external_id, type: :string
     property :custom_data
     property :provisioning_data
+    property :available_actions
 
     has_one :product
     has_one :product_instance
@@ -23,12 +24,12 @@ module MnoEnterprise
     has_one :product_contract
     has_one :product_pricing
 
-    custom_endpoint :cancel, on: :member, request_method: :post
-    custom_endpoint :approve, on: :member, request_method: :post
-    custom_endpoint :fulfill, on: :member, request_method: :post
     custom_endpoint :modify, on: :member, request_method: :post
-    custom_endpoint :enable, on: :member, request_method: :post
+    custom_endpoint :change, on: :member, request_method: :post
     custom_endpoint :suspend, on: :member, request_method: :post
+    custom_endpoint :renew, on: :member, request_method: :post
+    custom_endpoint :reactivate, on: :member, request_method: :post
+    custom_endpoint :cancel, on: :member, request_method: :post
 
     def to_audit_event
       event = {id: id, status: status}
@@ -37,16 +38,29 @@ module MnoEnterprise
       event
     end
 
-    def fulfill!
-      process_custom_result(fulfill)
+    def process_update_request!(subscription, edit_action)
+      # Dynamically call the #mno_hub endpoint corresponding with #edit_action specified by the user.
+      self.send("#{edit_action}!", subscription)
     end
 
     def modify!(args)
       process_custom_result(modify(args))
     end
 
-    def approve!
-      process_custom_result(approve)
+    def change!(args)
+      process_custom_result(change(args))
+    end
+
+    def suspend!(args)
+      process_custom_result(suspend(args))
+    end
+
+    def renew!(args)
+      process_custom_result(renew(args))
+    end
+
+    def reactivate!(args)
+      process_custom_result(reactivate(args))
     end
 
     def cancel!
