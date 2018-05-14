@@ -19,7 +19,7 @@ en:
 
           manage:
             tab:
-              update_subscription: Update subscription
+              manage_subscription: Manage subscription
 
               app_info:
                 title: App info
