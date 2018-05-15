@@ -7,6 +7,7 @@ module MnoEnterprise
     render_views
 
     before { stub_audit_events }
+    before { Timecop.freeze(Date.parse('2015-02-15')) }
 
     let(:tenant) { build(:tenant,  domain: 'tenant.domain.test')}
     let(:user) { build(:user, :admin, mnoe_tenant: tenant) }
@@ -31,7 +32,7 @@ module MnoEnterprise
       end
 
       describe 'deep_munge' do
-        let(:tenant_params) { {frontend_config: {foo: {bar: []}}} }
+        let(:tenant_params) { { frontend_config: {foo: {bar: []}, config_timestamp: Time.now.to_i } } }
 
         it 'does not munge the frontend config' do
           allow(MnoEnterprise::Tenant).to receive(:show).and_return(tenant)
