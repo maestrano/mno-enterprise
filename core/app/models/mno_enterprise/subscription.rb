@@ -25,15 +25,14 @@ module MnoEnterprise
     has_one :product_pricing
 
     custom_endpoint :modify, on: :member, request_method: :post
-    custom_endpoint :modify_cart, on: :member, request_method: :post
     custom_endpoint :change, on: :member, request_method: :post
     custom_endpoint :suspend, on: :member, request_method: :post
     custom_endpoint :renew, on: :member, request_method: :post
     custom_endpoint :reactivate, on: :member, request_method: :post
     custom_endpoint :cancel, on: :member, request_method: :post
     custom_endpoint :abandon, on: :member, request_method: :post
-    custom_endpoint :cancel_cart, on: :collection, request_method: :post
-    custom_endpoint :submit_cart, on: :collection, request_method: :post
+    custom_endpoint :cancel_staged, on: :collection, request_method: :post
+    custom_endpoint :submit_staged, on: :collection, request_method: :post
 
     def to_audit_event
       event = {id: id, status: status}

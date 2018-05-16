@@ -155,6 +155,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
   def set_staged_subscription_params
     params[:where] ||= {}
-    params[:where][:staged_subscriptions] = true
+    params[:where][:status_for] = 'staged'
   end
 end

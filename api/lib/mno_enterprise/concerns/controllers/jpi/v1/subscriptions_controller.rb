@@ -47,7 +47,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     authorize! :manage_app_instances, parent_organization
 
     status_params = { organization_id: parent_organization.id, id: params[:id] }
-    status_params[:staged_subscriptions] = true if cart_subscription_param.present?
+    status_params[:status_for] = 'staged' if cart_subscription_param.present?
     subscription = MnoEnterprise::Subscription.where(status_params).first
     return render_not_found('subscription') unless subscription
 
@@ -66,7 +66,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     authorize! :manage_app_instances, parent_organization
 
     status_params = { organization_id: parent_organization.id, id: params[:id] }
-    status_params[:staged_subscriptions] = true if cart_subscription_param.present?
+    status_params[:status_for] = 'staged' if cart_subscription_param.present?
     subscription = MnoEnterprise::Subscription.where(status_params).first
     subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
@@ -84,13 +84,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   # POST /mnoe/jpi/v1/organizations/1/subscriptions/cancel_cart_subscriptions
   def cancel_cart_subscriptions
     authorize! :manage_app_instances, parent_organization
+    MnoEnterprise::Subscription.cancel_staged(organization_id: parent_organization.id)
 
-    subscriptions = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, status: :staged).to_a
-    MnoEnterprise::Subscription.cancel_cart(organization_id: parent_organization.id)
-
-    subscriptions.each do |sub|
-      MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription cancelled', sub)
-    end
     head :no_content
   end
 
@@ -100,7 +95,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     authorize! :manage_app_instances, parent_organization
 
     subscriptions = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, status: :staged).to_a
-    MnoEnterprise::Subscription.submit_cart(organization_id: parent_organization.id)
+    MnoEnterprise::Subscription.submit_staged(organization_id: parent_organization.id)
 
     subscriptions.each do |sub|
       MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', sub)
@@ -129,7 +124,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   end
 
   def fetch_subscription(organization_id, id)
-    status_params = cart_subscription_param.present? ? { staged_subscriptions: true } : {}
+    status_params = cart_subscription_param.present? ? { status_for: 'staged' } : {}
     query = MnoEnterprise::Subscription.with_params(_metadata: { organization_id: organization_id })
     query.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id, id: id).where(status_params).first
   end
