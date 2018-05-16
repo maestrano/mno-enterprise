@@ -39,6 +39,7 @@ en:
             update_cart: "Update Cart"
             validate: "Validate"
             price: "Price"
+            quoted_price: "Quoted Total Price"
             licenses: "Licenses"
             no_licenses:
               message: "N/A"
