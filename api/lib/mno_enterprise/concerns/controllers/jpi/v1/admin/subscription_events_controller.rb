@@ -6,14 +6,26 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
   #==================================================================
   # Instance methods
   #==================================================================
-  # GET /mnoe/jpi/v1/admin/organizations/1/subscriptions/xyz/subscription_events
-  # OR
+  # GET /mnoe/jpi/v1/admin/organizations/1/subscriptions/xyz/subscription_events or
+  # GET /mnoe/jpi/v1/admin/organizations/1/subscription_events or
   # GET /mnoe/jpi/v1/admin/subscription_events
   def index
-    # Either fetch a single subscription's #subscription_events or all the #subscription_events of a tenant.
-    if params[:organization_id]
+    # Fetch only the subscription events of a subscription
+    if params[:subscription_id]
       query = fetch_subscription_events(params[:organization_id], params[:subscription_id])
       @subscription_events = query.to_a
+
+    # Fetch all the subscription events of an organization
+    elsif params[:organization_id]
+      org = MnoEnterprise::Organization.includes([:subscriptions]).find(params[:organization_id]).first
+      #Find organization's subscription_ids.
+      query = MnoEnterprise::SubscriptionEvent
+        .apply_query_params(params)
+        .where('subscription.id': org.subscriptions.map(&:id))
+        .includes(SUBSCRIPTION_EVENT_INCLUDES)
+      @subscription_events = query.to_a
+
+    # Fetch all the subscription events of a tenant
     else
       query = MnoEnterprise::SubscriptionEvent.apply_query_params(params).includes(SUBSCRIPTION_EVENT_INCLUDES)
       @subscription_events = query.to_a

@@ -281,9 +281,14 @@ MnoEnterprise::Engine.routes.draw do
           resources :teams, only: [:index]
 
           if Settings&.dashboard&.marketplace&.provisioning
+            resources :subscription_events, only: [:index]
+          end
+
+          if Settings&.dashboard&.marketplace&.provisioning
             resources :subscriptions, only: [:index, :show, :create, :update] do
               member do
                 post :cancel
+                post :fulfill
               end
 
               resources :subscription_events, only: [:index, :show]
