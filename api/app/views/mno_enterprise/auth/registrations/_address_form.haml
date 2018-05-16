@@ -1,0 +1,20 @@
+.row
+  .col-sm-12
+    = text_field_tag "street", nil, class: "form-control", placeholder: "Street"
+%br
+.row
+  .col-sm-12
+    = text_field_tag "city", nil, class: "form-control", placeholder: "City"
+%br
+.row
+  .col-sm-12
+    = text_field_tag "state_code", nil, class: "form-control", placeholder: "State"
+%br
+.row
+  .col-sm-12
+    = text_field_tag "postal_code", nil, class: "form-control", placeholder: "Postal Code"
+%br
+.row
+  .col-sm-12
+    = select_tag "country_code", options_for_select(ISO3166::Country.codes.map { |code| [ISO3166::Country[code].name, code] }), class: "form-control", include_blank: '---SELECT---'
+%br

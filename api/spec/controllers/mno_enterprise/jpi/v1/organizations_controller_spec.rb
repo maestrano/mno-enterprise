@@ -21,7 +21,7 @@ module MnoEnterprise
 
     # Stub organization + associations
     let(:metadata) { {} }
-    let!(:organization) { build(:organization, metadata: metadata, orga_invites: [], users: [], orga_relations: [], credit_card: credit_card, invoices: []) }
+    let!(:organization) { build(:organization, metadata: metadata, orga_invites: [], users: [], orga_relations: [], credit_card: credit_card, invoices: [], main_address: main_address) }
     let(:role) { 'Admin' }
     let!(:user) {
       u = build(:user, organizations: [organization], orga_relations: [orga_relation], dashboards: [])
@@ -30,7 +30,7 @@ module MnoEnterprise
     }
     let!(:orga_relation) { build(:orga_relation, organization_id: organization.id, role: role) }
 
-    let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices)) }
+    let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices main_address)) }
     # Stub user and user call
     let!(:current_user_stub) { stub_user(user) }
 
@@ -40,6 +40,7 @@ module MnoEnterprise
     let!(:credit_card) { build(:credit_card) }
     let!(:invoice) { build(:invoice, organization_id: organization.id) }
     let!(:orga_invite) { build(:orga_invite, organization: organization) }
+    let!(:main_address) { build(:main_address) }
 
     #===============================================
     # Specs
@@ -77,7 +78,7 @@ module MnoEnterprise
 
         it 'returns a complete description of the organization' do
           expect(response).to be_success
-          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_organization(organization, user).to_json))
+          expect(JSON.parse(response.body)).to eq(hash_for_organization(organization, user, false, main_address))
         end
       end
 
@@ -93,7 +94,7 @@ module MnoEnterprise
           allow_any_instance_of(MnoEnterprise::Organization).to receive(:current_billing).and_return(money)
           allow_any_instance_of(MnoEnterprise::Organization).to receive(:current_credit).and_return(money)
           organization.invoices << invoice
-          stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices))
+          stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices main_address))
         }
 
         it 'renders the list of invoices' do
@@ -104,7 +105,8 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
-      let(:params) { {'name' => organization.name} }
+      let(:main_address_attributes) { {street: "404 5th Ave", city: "New York", state_code: "NY", postal_code: "10018", country_code: "US" } }
+      let(:params) { {'name' => organization.name, 'main_address_attributes' => main_address_attributes} }
       subject { post :create, organization: params }
       before { stub_api_v2(:post, '/organizations', organization) }
       before { stub_api_v2(:post, '/orga_relations', orga_relation) }
@@ -118,6 +120,7 @@ module MnoEnterprise
 
         it 'creates the organization' do
           expect(assigns(:organization).name).to eq(organization.name)
+          expect(assigns(:organization).main_address).to eq(organization.main_address.attributes)
         end
         # TODO: Fix Specs
         xit 'adds the user as Super Admin' do
