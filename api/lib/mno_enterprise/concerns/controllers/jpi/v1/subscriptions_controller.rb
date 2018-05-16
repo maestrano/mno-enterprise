@@ -124,7 +124,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   end
 
   def fetch_subscription(organization_id, id)
-    status_params = cart_subscription_param.present? ? { status_for: 'staged' } : {}
+    status_params = { status_for: cart_subscription_param.present? ? 'staged' : 'non_staged' }
     query = MnoEnterprise::Subscription.with_params(_metadata: { organization_id: organization_id })
     query.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id, id: id).where(status_params).first
   end

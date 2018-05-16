@@ -50,15 +50,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
     MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription) if cart_subscription_param.blank?
 
-    set_staged_subscription_params if cart_subscription_param.present?
+    set_staged_subscription_params
     @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
     render :show
   end
 
   # PUT /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc
   def update
-    set_staged_subscription_params if cart_subscription_param.present?
-
+    set_staged_subscription_params
     subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
     subscription.attributes = subscription_update_params
@@ -74,8 +73,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
   # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc/cancel
   def cancel
-    set_staged_subscription_params if cart_subscription_param.present?
-
+    set_staged_subscription_params
     subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
     if cart_subscription_param.present?
@@ -155,6 +153,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
   def set_staged_subscription_params
     params[:where] ||= {}
-    params[:where][:status_for] = 'staged'
+    params[:where][:status_for] = cart_subscription_param.present? ? 'staged' : 'non_staged'
   end
 end
