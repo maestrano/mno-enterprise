@@ -282,9 +282,6 @@ MnoEnterprise::Engine.routes.draw do
 
           if Settings&.dashboard&.marketplace&.provisioning
             resources :subscription_events, only: [:index]
-          end
-
-          if Settings&.dashboard&.marketplace&.provisioning
             resources :subscriptions, only: [:index, :show, :create, :update] do
               resources :subscription_events, only: [:index, :show]
             end
