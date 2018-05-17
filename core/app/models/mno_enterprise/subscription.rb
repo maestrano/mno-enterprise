@@ -46,6 +46,15 @@ module MnoEnterprise
       self.send("#{edit_action}!", subscription)
     end
 
+    def process_staged_update_request!(subscription, edit_action)
+      case edit_action
+      when 'cancel'
+        abandon!
+      else
+        process_update_request!(subscription, edit_action)
+      end
+    end
+
     def modify!(args)
       process_custom_result(modify(args))
     end
@@ -66,8 +75,8 @@ module MnoEnterprise
       process_custom_result(reactivate(args))
     end
 
-    def cancel!
-      process_custom_result(cancel)
+    def cancel!(args)
+      process_custom_result(cancel(args))
     end
 
     def abandon!

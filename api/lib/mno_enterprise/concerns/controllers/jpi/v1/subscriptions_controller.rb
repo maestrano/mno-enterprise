@@ -53,12 +53,19 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
 
     subscription.attributes = subscription_update_params
     edit_action = params[:subscription][:edit_action]
-    # TODO: We need to adjust this logic for cart request
-    subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
+    if cart_subscription_param.present?
+      subscription.process_staged_update_request!({data: subscription.as_json_api}, edit_action)
+    else
+      subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
+    end
 
     MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription) if cart_subscription_param.blank?
-    @subscription = fetch_subscription(parent_organization.id, subscription.id)
-    render :show
+    if cancel_staged_subscription_request
+      head :no_content
+    else
+      @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      render :show
+    end
   end
 
   # POST /mnoe/jpi/v1/organizations/1/subscriptions/abc/cancel
@@ -127,5 +134,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     status_params = { subscription_status_in: cart_subscription_param.present? ? 'staged' : 'non_staged' }
     query = MnoEnterprise::Subscription.with_params(_metadata: { organization_id: organization_id })
     query.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id, id: id).where(status_params).first
+  end
+
+  def cancel_staged_subscription_request
+    params[:subscription][:edit_action] == 'cancel' && cart_subscription_param.present?
   end
 end
