@@ -47,7 +47,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     authorize! :manage_app_instances, parent_organization
 
     status_params = { organization_id: parent_organization.id, id: params[:id] }
-    status_params[:status_for] = 'staged' if cart_subscription_param.present?
+    status_params[:subscription_status_in] = 'staged' if cart_subscription_param.present?
     subscription = MnoEnterprise::Subscription.where(status_params).first
     return render_not_found('subscription') unless subscription
 
@@ -66,7 +66,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     authorize! :manage_app_instances, parent_organization
 
     status_params = { organization_id: parent_organization.id, id: params[:id] }
-    status_params[:status_for] = 'staged' if cart_subscription_param.present?
+    status_params[:subscription_status_in] = 'staged' if cart_subscription_param.present?
     subscription = MnoEnterprise::Subscription.where(status_params).first
     subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
@@ -124,7 +124,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   end
 
   def fetch_subscription(organization_id, id)
-    status_params = { status_for: cart_subscription_param.present? ? 'staged' : 'non_staged' }
+    status_params = { subscription_status_in: cart_subscription_param.present? ? 'staged' : 'non_staged' }
     query = MnoEnterprise::Subscription.with_params(_metadata: { organization_id: organization_id })
     query.includes(*SUBSCRIPTION_INCLUDES).where(organization_id: organization_id, id: id).where(status_params).first
   end
