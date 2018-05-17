@@ -70,6 +70,7 @@ en:
             no_custom_data: "No information provided by the customer"
             licenses: "Licenses"
             events: "Provisioning events"
+            no_provisioning_events: "No provisioning events"
           subscriptions:
             new: "New install"
             change: "Change plan"
