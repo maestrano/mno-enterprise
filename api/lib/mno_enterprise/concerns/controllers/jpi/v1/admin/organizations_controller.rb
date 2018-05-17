@@ -1,24 +1,26 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsController
   extend ActiveSupport::Concern
-
+  #==================================================================
+  WRITEABLE_ATTRIBUTES = [:name, :billing_currency]
   #==================================================================
   # Included methods
   #==================================================================
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
-    DEPENDENCIES = [:app_instances, :'app_instances.app', :users, :'users.user_access_requests',
-                    :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user']
-    INCLUDED_FIELDS_INDEX = [:uid, :name, :account_frozen,
-                             :soa_enabled, :mails, :logo, :latitude, :longitude,
-                             :geo_country_code, :geo_state_code, :geo_city,
-                             :geo_tz, :geo_currency, :metadata, :industry, :size,
-                             :financial_year_end_month, :credit_card,
-                             :financial_metrics, :created_at, :external_id, :belong_to_sub_tenant,
-                             :belong_to_account_manager, :demo_account]
-    INCLUDED_FIELDS_SHOW = [:name, :uid, :soa_enabled, :created_at, :account_frozen, :financial_metrics,
-                            :billing_currency, :external_id, :app_instances, :orga_invites, :users,
-                            :orga_relations, :invoices, :credit_card, :demo_account]
+    DEPENDENCIES = %i[app_instances app_instances.app users
+                      users.user_access_requests orga_relations invoices
+                      credit_card orga_invites orga_invites.user main_address].freeze
+    INCLUDED_FIELDS_INDEX = %i[uid name account_frozen soa_enabled mails logo
+                               latitude longitude geo_country_code geo_state_code
+                               geo_city geo_tz geo_currency metadata industry size
+                               financial_year_end_month credit_card financial_metrics
+                               created_at external_id belong_to_sub_tenant
+                               belong_to_account_manager demo_account].freeze
+    INCLUDED_FIELDS_SHOW = %i[name uid soa_enabled created_at account_frozen
+                              financial_metrics billing_currency external_id
+                              app_instances orga_invites users orga_relations
+                              invoices credit_card demo_account main_address].freeze
   end
 
   #==================================================================
@@ -91,6 +93,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   def create
     # Create new organization
     @organization = MnoEnterprise::Organization.create!(organization_update_params)
+
     @organization = @organization.load_required(*DEPENDENCIES)
     # OPTIMIZE: move this into a delayed job?
     update_app_list
@@ -211,12 +214,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
   protected
 
+  def organization_params
+    params.require(:organization)
+  end
+
   def organization_permitted_update_params
-    [:name, :billing_currency]
+    WRITEABLE_ATTRIBUTES
   end
 
   def organization_update_params
-    params.fetch(:organization, {}).permit(*organization_permitted_update_params)
+    organization_params.permit(*organization_permitted_update_params).tap do |whitelisted|
+      whitelisted[:main_address_attributes] = organization_params[:main_address_attributes]
+    end
   end
 
   def user_params

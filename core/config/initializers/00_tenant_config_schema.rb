@@ -29,6 +29,18 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           description: "Name displayed in the browser title bar and in the public pages",
           default: "My Webstore"
         },
+        organization_requirements: {
+          type: "array",
+          title: "Webstore organization requirements",
+          description: "Information required for new organizations",
+          items: {
+            type: "string",
+            enum: MnoEnterprise::Organization::REQUIRABLE_FIELDS
+          },
+          'x-schema-form': {
+            titleMap: Hash[MnoEnterprise::Organization::REQUIRABLE_FIELDS.map{|f| [f, f.titleize]}]
+          }
+        },
         i18n: {
           type: "object",
           title: "Internationalization",

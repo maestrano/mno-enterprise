@@ -22,7 +22,7 @@ module MnoEnterprise::TestingSupport::SharedExamples::OrganizationSharedExamples
         let(:organization_stub) {
           organization.users << member
           organization.orga_relations << member_orga_relation
-          stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices))
+          stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices main_address))
         }
         before { stub_api_v2(:get, "/orga_relations", [member_orga_relation], [], {filter: {organization_id: organization.id, user_id: member.id}, page:{ number: 1, size: 1}}) }
         before { stub_api_v2(:post, "/orga_relations/#{member_orga_relation.id}", orga_relation) }
@@ -68,10 +68,10 @@ module MnoEnterprise::TestingSupport::SharedExamples::OrganizationSharedExamples
         let(:orga_invite) { build(:orga_invite, user_id: member.id, organization_id: organization.id, user_role: member_role, status: 'pending', user_email: email) }
         let!(:organization_stub) {
           organization.orga_invites << orga_invite
-          stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices))
+          stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices main_address))
         }
 
-        before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices)) }
+        before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices main_address)) }
         # reloading organization
         before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations)) }
 
@@ -118,7 +118,7 @@ module MnoEnterprise::TestingSupport::SharedExamples::OrganizationSharedExamples
       let!(:organization_stub) {
         organization.users << member
         organization.orga_relations << member_orga_relation
-        stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices))
+        stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices main_address))
       }
       # reloading organization
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations)) }
@@ -139,7 +139,7 @@ module MnoEnterprise::TestingSupport::SharedExamples::OrganizationSharedExamples
         let(:orga_invite) { build(:orga_invite, user_id: member.id, organization_id: organization.id, status: 'pending', user_email: member.email) }
         let!(:organization_stub) {
           organization.orga_invites << orga_invite
-          stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices))
+          stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices main_address))
         }
 
         before { stub_api_v2(:get, "/orga_invites/#{orga_invite.id}/decline")}
