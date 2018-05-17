@@ -40,7 +40,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     return render_not_found('Organization') unless organization
 
     subscription = MnoEnterprise::Subscription.new(subscription_update_params)
-    # Note: This needs to change based on rework
     subscription.status = :provisioning if cart_subscription_param.blank?
     subscription.relationships.organization = organization
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
