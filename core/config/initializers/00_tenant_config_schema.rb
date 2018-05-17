@@ -296,6 +296,18 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                   type: "boolean",
                   default: true,
                   description: "Display information about billing (invoices...)"
+                },
+                invoice_contact_details: {
+                  type: "string",
+                  title: "Invoice Contact Details",
+                  description: "Let your customer know who to contact for invoice support.",
+                  default: ""
+                },
+                invoice_payment_information: {
+                  type: "string",
+                  title: "Invoice Payment Information",
+                  description: "Payment information (e.g. Payment via wire transfer...)",
+                  default: ""
                 }
               }
             }
