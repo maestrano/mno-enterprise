@@ -6,7 +6,11 @@ module MnoEnterprise
     class TestAdapter < Adapter
       class << self
         # @see MnoEnterprise::PlatformAdapters::Adapter#restart
-        def restart
+        def restart(timestamp = nil)
+        end
+
+        def restart_status
+          'success'
         end
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#publish_assets

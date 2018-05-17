@@ -67,11 +67,12 @@ module MnoEnterprise
         "logo" => product.logo,
         "external_id" => product.external_id,
         "externally_provisioned" => product.externally_provisioned,
-        "custom_schema" => product.custom_schema,
         "free_trial_enabled" => product.free_trial_enabled,
         "free_trial_duration" => product.free_trial_duration,
         "free_trial_unit" => product.free_trial_unit,
         "local" => product.local,
+        "single_billing_enabled" => product.single_billing_enabled,
+        "billed_locally" => product.billed_locally,
         "values_attributes" => product.values,
         "assets_attributes" => product.assets,
         # "product_pricings" => product.product_pricings

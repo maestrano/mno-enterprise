@@ -10,6 +10,7 @@ module MnoEnterprise
 
     let(:organization) { build(:organization) }
     let(:product) { build(:product) }
+    let(:product_pricing) { build(:product_pricing, product: product) }
     let(:product_markup) { build(:product_markup, organization: organization, product: product ) }
 
     before(:all) do
@@ -18,7 +19,7 @@ module MnoEnterprise
     end
 
     before do
-      stub_api_v2(:get, "/product_markups", [product_markup], [:product, :organization], {})
+      stub_api_v2(:get, "/product_markups", [product_markup], [:product, :'product.product_pricings', :organization], {})
       stub_api_v2(:get, "/product_markups/#{product_markup.id}", product_markup, [:product, :organization], {})
       stub_api_v2(:post, "/product_markups", product_markup, [], {})
       stub_api_v2(:get, "/product_markups", product_markup, [], {})
@@ -38,7 +39,7 @@ module MnoEnterprise
         let(:params)  { { "product.id" => product_markup.id }.to_json }
         let(:data) { JSON.parse(response.body) }
 
-        before { stub_api_v2(:get, "/product_markups", [product_markup], [:product, :organization], { filter: { 'product.id' => product_markup.id } }) }
+        before { stub_api_v2(:get, "/product_markups", [product_markup], [:product, :'product.product_pricings', :organization], { filter: { 'product.id' => product_markup.id } }) }
 
         it 'finds a markup' do
           expect(subject).to be_successful

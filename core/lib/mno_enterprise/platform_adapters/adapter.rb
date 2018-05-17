@@ -6,7 +6,12 @@ module MnoEnterprise
     class Adapter
       class << self
         # Restart the MnoEnterprise App
-        def restart
+        def restart(timestamp = nil)
+          raise NotImplementedError
+        end
+
+        # Check if the app restart has finished
+        def restart_status
           raise NotImplementedError
         end
 

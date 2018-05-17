@@ -2,7 +2,7 @@ require 'rails_helper'
 
 module MnoEnterprise
   RSpec.describe Subscription, type: :model do
-    %w(cancel approve fulfill modify enable suspend).each do |action|
+    %w(modify change suspend renew reactivate cancel).each do |action|
       describe "##{action}" do
         let(:subscription) { build(:subscription) }
 

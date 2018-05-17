@@ -10,11 +10,20 @@ module MnoEnterprise
 
     # PATCH /mnoe/jpi/v1/admin/tenant
     def update
+      timestamp = Time.current.to_i
+      params[:tenant].deep_merge!(frontend_config: { config_timestamp: timestamp })
+
       @tenant = MnoEnterprise::Tenant.show
       @tenant.update_attributes!(tenant_params)
 
-      MnoEnterprise::SystemManager.restart
+      MnoEnterprise::SystemManager.restart(timestamp)
       render :show
+    end
+
+    # GET /mnoe/jpi/v1/admin/tenant/restart_status
+    def restart_status
+      status = MnoEnterprise::SystemManager.restart_status
+      render json: { status: status }
     end
 
     # PATCH /mnoe/jpi/v1/admin/tenant/domain

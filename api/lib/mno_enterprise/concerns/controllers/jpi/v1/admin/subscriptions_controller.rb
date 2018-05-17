@@ -1,7 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_INCLUDES ||= [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
+  SUBSCRIPTION_INCLUDES ||= [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
 
   #==================================================================
   # Instance methods
@@ -43,6 +43,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     if params[:subscription][:currency]
       subscription.currency = params[:subscription][:currency]
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
+    subscription.relationships.product = MnoEnterprise::Product.new(id: params[:subscription][:product_id])
     subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
     subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
     subscription.save!
@@ -57,7 +58,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
     subscription.attributes = subscription_update_params
-    subscription.modify!(data: subscription.as_json_api)
+
+    edit_action = params[:subscription][:edit_action]
+    subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
+
     MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
     @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
     render :show
@@ -104,7 +108,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   def subscription_update_params
     # custom_data is an arbitrary hash
     # On Rails 5.1 use `permit(custom_data: {})`
-    params.require(:subscription).permit(:start_date, :max_licenses, :custom_data).tap do |whitelisted|
+    params.require(:subscription).permit(:start_date, :max_licenses, :custom_data, :product_contract_id, :product_pricing_id).tap do |whitelisted|
       whitelisted[:custom_data] = params[:subscription][:custom_data] if params[:subscription].has_key?(:custom_data) && params[:subscription][:custom_data].is_a?(Hash)
     end
   end
