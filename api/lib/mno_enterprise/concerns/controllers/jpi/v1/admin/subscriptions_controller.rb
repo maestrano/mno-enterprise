@@ -42,6 +42,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     subscription.relationships.organization = organization
     if params[:subscription][:currency]
       subscription.currency = params[:subscription][:currency]
+    end
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
     subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
     subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
