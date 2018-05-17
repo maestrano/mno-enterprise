@@ -18,11 +18,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
     # Fetch all the subscription events of an organization
     elsif params[:organization_id]
       org = MnoEnterprise::Organization.includes([:subscriptions]).find(params[:organization_id]).first
+
       #Find organization's subscription_ids.
       query = MnoEnterprise::SubscriptionEvent
         .apply_query_params(params)
-        .where('subscription.id': org.subscriptions.map(&:id))
+        .where('subscription.id': org.subscriptions.map(&:id).presence)
         .includes(SUBSCRIPTION_EVENT_INCLUDES)
+
       @subscription_events = query.to_a
 
     # Fetch all the subscription events of a tenant
