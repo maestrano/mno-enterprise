@@ -8,7 +8,7 @@ Rails.application.load_tasks # load application tasks
 
 module MnoEnterprise
   module PlatformAdapters
-    # Nex!™ Adapter for MnoEnterprise::PlatformClient
+    # Nex!™ Adapter for MnoEnterprise::PlatformClient for apps with only one node
     # The Nex!™ docker image provide `awscli` and a Minio storage addon
     class NexAdapter < Adapter
       class << self
@@ -33,15 +33,23 @@ module MnoEnterprise
         ]
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#restart
-        def restart
-          # TODO: implement using nex_client
-          # For now this work with one node
-
-          # Restart myself
-          # nex_app.restart
-          # puts "success" unless nex_app.errors.any?
-
+        def restart(timestamp = nil)
           FileUtils.touch('tmp/restart.txt')
+          Rails.cache.write('config_timestamp', timestamp)
+        end
+
+        def restart_status
+          timestamp = Rails.cache.fetch('config_timestamp')
+          if Rails.cache.is_a?(ActiveSupport::Cache::MemoryStore)
+            # If the app has properly restarted, MemoryStore will be cleared
+            return 'success' unless timestamp
+            return 'pending' unless Settings.config_timestamp && timestamp <= Settings.config_timestamp
+            'failed'
+          else
+            return 'failed' unless timestamp && timestamp >= Settings.config_timestamp
+            return 'pending' unless Settings.config_timestamp && timestamp <= Settings.config_timestamp
+            'success'
+          end
         end
 
         # @see MnoEnterprise::PlatformAdapters::Adapter#clear_assets
@@ -109,7 +117,7 @@ module MnoEnterprise
           end
         end
 
-        private
+        protected
 
         # Configure the Nex!™ client
         def setup_nex_client

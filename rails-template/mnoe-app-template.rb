@@ -162,6 +162,8 @@ def mnoe_gemfile_entry
   gems << GemfileEntry.new('omniauth-google-oauth2', '~> 0.2.6', nil, {}, true)
   gems << GemfileEntry.new('omniauth-facebook', '~> 2.0.1', nil, {}, true)
 
+  gems << GemfileEntry.new('redis-rails', '~> 5.0.2', 'Redis cache', {}, true)
+
   gems
 end
 
@@ -213,6 +215,14 @@ def update_application_rb
 
     # Mail delivery settings
     config.action_mailer.delivery_method = :smtp
+
+    # Cache Store
+    # Add the redis-rails gem to use redis
+    # config.cache_store = if ENV['REDIS_URL'].present?
+    #                        [:redis_store, File.join(ENV['REDIS_URL'], 'cache')]
+    #                      else
+    #                        :memory_store
+    #                      end
 
     # STDOUT logging for Rails 4
     # For Rails 5 see https://github.com/heroku/rails_12factor#rails-5-and-beyond

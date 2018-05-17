@@ -25,10 +25,6 @@ describe MnoEnterprise::PlatformAdapters::NexAdapter do
     end
   end
 
-  describe '.restart' do
-    it 'restarts the app'
-  end
-
   context 'Assets Operation' do
     let(:aws_cmd) { "AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY} aws --endpoint-url ${MINIO_URL}" }
     let(:logo_file) { Rails.root.join('app', 'assets', 'images', 'mno_enterprise', 'main-logo.png') }
@@ -89,6 +85,9 @@ describe MnoEnterprise::PlatformAdapters::NexAdapter do
       allow(NexClient::App).to receive(:find).with('nex-app-id').and_return([nex_app])
     end
 
+    describe '.restart' do
+      it 'restarts the app'
+    end
 
     describe '.update_domain' do
       before  { allow_any_instance_of(NexClient::Domain).to receive(:save).and_return(true) }

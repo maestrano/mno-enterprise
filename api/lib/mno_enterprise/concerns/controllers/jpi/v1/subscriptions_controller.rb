@@ -1,7 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_INCLUDES ||= [:'product_pricing.product', :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
+  SUBSCRIPTION_INCLUDES ||= [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
 
   #==================================================================
   # Instance methods
@@ -27,6 +27,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
     if params[:subscription][:currency]
       subscription.currency = params[:subscription][:currency]
+    if params[:subscription][:product_id]
+      subscription.relationships.product = MnoEnterprise::Product.new(id: params[:subscription][:product_id])
     end
     if params[:subscription][:product_pricing_id]
       subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
@@ -47,15 +49,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
 
     subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
-    if params[:subscription][:product_pricing_id]
-      subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
-    end
-    if params[:subscription][:product_contract_id]
-      subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
-    end
 
     subscription.attributes = subscription_update_params
-    subscription.modify!(data: subscription.as_json_api)
+    edit_action = params[:subscription][:edit_action]
+    subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
 
     MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
     @subscription = fetch_subscription(parent_organization.id, subscription.id)
