@@ -131,9 +131,10 @@ module MnoEnterprise
     end
 
     describe 'PUT #update' do
-
       let(:params) { {'name' => organization.name + 'a', 'soa_enabled' => !organization.soa_enabled} }
       before { stub_api_v2(:patch, "/organizations/#{organization.id}", updated_organization) }
+      # Stub reload with main_address
+      before { stub_api_v2(:get, "/organizations/#{organization.id}", updated_organization, [:main_address]) }
       let!(:updated_organization) { build(:organization, name: params['name'], id: organization.id, soa_enabled: params['soa_enabled']) }
 
       subject { put :update, id: organization.id, organization: params }
@@ -142,7 +143,6 @@ module MnoEnterprise
       it_behaves_like 'an organization management action'
 
       context 'success' do
-
         it 'updates the organization' do
           subject
           expect(assigns(:organization).name).to eq(params['name'])
