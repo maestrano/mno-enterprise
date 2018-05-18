@@ -18,3 +18,7 @@
   .col-sm-12
     = select_tag "country_code", options_for_select(ISO3166::Country.codes.map { |code| [ISO3166::Country[code].name, code] }), class: "form-control", include_blank: '---SELECT---'
 %br
+.row
+  .col-sm-12
+    = text_field_tag "phone", nil, class: "form-control", placeholder: "Phone"
+%br
