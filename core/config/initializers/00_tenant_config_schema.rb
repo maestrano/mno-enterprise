@@ -33,6 +33,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           type: "array",
           title: "Webstore organization requirements",
           description: "Information required for new organizations",
+          default: [],
           items: {
             type: "string",
             enum: MnoEnterprise::Organization::REQUIRABLE_FIELDS
