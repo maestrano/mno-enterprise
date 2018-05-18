@@ -113,26 +113,5 @@ module MnoEnterprise
                                   }.to_json)
       end
     end
-
-    describe 'POST #cancel' do
-      let(:subscription) { build(:subscription) }
-      let(:product) { build(:product) }
-      let(:product_pricing) { build(:product_pricing, product: product) }
-
-      before { stub_audit_events }
-      before { stub_api_v2(:post, "/subscriptions/#{subscription.id}/cancel", subscription, [], {}) }
-      before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
-      before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
-      before { sign_in user }
-
-      subject { post :cancel, organization_id: organization.id, id: subscription.id }
-
-      it_behaves_like 'jpi v1 protected action'
-
-      it 'forwards the correct request' do
-        expect(subject).to be_successful
-        assert_requested_api_v2(:post, "/subscriptions/#{subscription.id}/cancel")
-      end
-    end
   end
 end

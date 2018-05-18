@@ -63,8 +63,8 @@ module MnoEnterprise
       process_custom_result(reactivate(args))
     end
 
-    def cancel!
-      process_custom_result(cancel)
+    def cancel!(args)
+      process_custom_result(cancel(args))
     end
   end
 end
