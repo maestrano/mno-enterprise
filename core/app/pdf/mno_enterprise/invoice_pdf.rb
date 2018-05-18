@@ -135,6 +135,10 @@ module MnoEnterprise
           @pdf.float do
             @pdf.image main_logo_white_bg_path(true), fit: [135, (@format[:footer_size])]
           end
+          if contact_details = Settings.dashboard&.organization_management&.billing&.invoice_contact_details.presence
+            @pdf.move_down 10
+            @pdf.font_size(10) { @pdf.text contact_details, align: :right }
+          end
           @pdf.move_down 52
           @pdf.font_size(20) { @pdf.text "#{title} #{@data[:period_month]}", style: :bold, align: :right }
         end
@@ -522,6 +526,17 @@ module MnoEnterprise
         t.row(0).borders = [:bottom]
         t.row(0).border_width = 2
         t.row(0).font_style = :bold
+      end
+
+      #===============================
+      # Payment Information
+      #===============================
+      if payment_information = Settings.dashboard&.organization_management&.billing&.invoice_payment_information.presence
+        @pdf.start_new_page
+        @pdf.font_size(20) { @pdf.text t('payment_information'), style: :bold }
+        @pdf.stroke_horizontal_rule
+        @pdf.move_down 10
+        @pdf.font_size(10) { @pdf.text payment_information }
       end
     end
   end
