@@ -21,6 +21,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   # POST /mnoe/jpi/v1/organizations/1/subscriptions
   def create
     authorize! :manage_app_instances, parent_organization
+
     subscription = MnoEnterprise::Subscription.new(subscription_update_params)
     subscription.status = :staged if cart_subscription_param.present?
     subscription.relationships.organization = MnoEnterprise::Organization.new(id: parent_organization.id)

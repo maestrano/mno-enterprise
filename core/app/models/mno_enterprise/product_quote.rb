@@ -1,5 +1,5 @@
 module MnoEnterprise
-  class Quote < BaseResource
+  class ProductQuote < BaseResource
     property :id
     property :organization_id
     property :product_id
