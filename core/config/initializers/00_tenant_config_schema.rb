@@ -242,9 +242,16 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                   type: "string",
                   description: "Currency to display price in",
                   default: "AUD"
+                },
+                currency_selection: {
+                  type: "boolean",
+                  title: "Currency Selection",
+                  default: "true",
+                  description: "Allow user to choose a different currency when placing an order"
                 }
               }
             },
+            
             questions: {
               type: "object",
               title: "Product questions",
