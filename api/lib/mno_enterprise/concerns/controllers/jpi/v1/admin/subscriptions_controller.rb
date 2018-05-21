@@ -118,7 +118,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
   def set_staged_subscription_params
     params[:where] ||= {}
-    params[:where][:subscription_status_in] = cart_subscription_param.present? ? 'staged' : 'non_staged'
+    params[:where][:subscription_status_in] = cart_subscription_param.present? ? 'staged' : 'visible'
   end
 
   def cancel_staged_subscription_request
