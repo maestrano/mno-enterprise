@@ -123,7 +123,7 @@ en:
             tooltip:
               aborted: Your order was aborted during fulfillment. Please contact your administrator for more information
               external_billing: "This product is billed externally"
-              cart:
+            cart:
               title: "Your Company Cart"
               empty: "Please add some items to the cart"
               add_to_cart: "Add to Cart and continue Shopping"
