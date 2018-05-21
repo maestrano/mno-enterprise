@@ -9,6 +9,7 @@ FactoryGirl.define do
       country_code 'US'
       main true
       owner nil
+      phone '9174550598'
     end
   end
 end
