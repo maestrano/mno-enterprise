@@ -105,7 +105,17 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
-      let(:main_address_attributes) { {street: "404 5th Ave", city: "New York", state_code: "NY", postal_code: "10018", country_code: "US", phone: '9174550598' } }
+      let(:main_address_attributes) do
+        {
+          street: "404 5th Ave",
+          city: "New York",
+          state_code: "NY",
+          postal_code: "10018",
+          country_code: "US",
+          phone: '9174550598',
+          phone_country_code: '1'
+        }
+      end
       let(:params) { {'name' => organization.name, 'main_address_attributes' => main_address_attributes} }
       subject { post :create, organization: params }
       before { stub_api_v2(:post, '/organizations', organization) }

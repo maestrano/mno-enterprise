@@ -109,7 +109,8 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
       'state_code' => address.state_code,
       'postal_code' => address.postal_code,
       'country_code' => address.country_code,
-      'phone' => address.phone
+      'phone' => address.phone,
+      'phone_country_code' => address.phone_country_code
     }
   end
 
