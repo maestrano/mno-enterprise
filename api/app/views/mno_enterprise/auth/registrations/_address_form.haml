@@ -19,10 +19,8 @@
     = select_tag "country_code", options_for_select(ISO3166::Country.codes.map { |code| [ISO3166::Country[code].name, code] }), class: "form-control", include_blank: '---SELECT---'
 %br
 .row
-  .col-sm-12
-    = text_field_tag "phone", nil, class: "form-control", placeholder: "Phone"
-%br
-.row
-  .col-sm-12
-    =  select_tag "phone_country_code", options_for_select(ISO3166::Country.codes.map { |code| c = ISO3166::Country[code]; ["#{c.alpha2} +#{c.country_code}", code]}, MnoEnterprise.app_country),  class: 'form-control'
+  .phone
+    .col-sm-12
+      = select_tag "phone_country_code", options_for_select(ISO3166::Country.codes.map { |code| c = ISO3166::Country[code]; ["#{c.alpha2} +#{c.country_code}", code]}, MnoEnterprise.app_country),class: 'form-control'
+      = text_field_tag "phone", nil, class: "form-control", placeholder: "Phone"
 %br
