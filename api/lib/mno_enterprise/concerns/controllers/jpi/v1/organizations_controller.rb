@@ -1,7 +1,9 @@
 require 'csv'
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   extend ActiveSupport::Concern
-  DEPENDENCIES = [:users, :orga_invites, :orga_relations, :credit_card, :invoices]
+
+  WRITEABLE_ATTRIBUTES = %i[name soa_enabled industry size billing_currency].freeze
+  DEPENDENCIES = %i[users orga_invites orga_relations credit_card invoices main_address].freeze
   #==================================================================
   # Included methods
   #==================================================================
@@ -9,8 +11,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   # context where it is included rather than being executed in the module's context
   included do
     respond_to :json
-    before_filter :organization_management_enabled?, only: [:create, :update, :destroy, :update_billing,
-                                                            :invite_members, :update_member, :remove_member]
+    before_filter :organization_management_enabled?, only: %i[create update destroy update_billing
+                                                              invite_members update_member remove_member].freeze
   end
 
   #==================================================================
@@ -35,7 +37,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     changed_attributes = organization.changed_attributes
     organization.save!
     MnoEnterprise::EventLogger.info('organization_update', current_user.id, 'Organization update', organization, changed_attributes)
+    # Bust cache
     current_user.refresh_user_cache
+    # Reload organization with changes
+    @organization = organization.load_required(:main_address)
     render 'show_reduced'
   end
 
@@ -83,7 +88,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   # PUT /mnoe/jpi/v1/organizations/:id/invite_members
   def invite_members
     # Filter
-    whitelist = ['email', 'role', 'team_id']
+    whitelist = %w[email role team_id]
     attributes = []
     params[:invites].each do |invite|
       attributes << invite.slice(*whitelist)
@@ -116,7 +121,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     authorize! :invite_member, organization
     organization.update_user_role(current_user, member, attributes[:role])
 
-    MnoEnterprise::EventLogger.info('user_role_update', current_user.id, 'User role update in #{member.is_a?(MnoEnterprise::User) ? "org" : "invitation"}', organization, {email: attributes[:email], role: attributes[:role]})
+    MnoEnterprise::EventLogger.info('user_role_update', current_user.id, "User role update in #{member.is_a?(MnoEnterprise::User) ? 'org' : 'invitation'}", organization, {email: attributes[:email], role: attributes[:role]})
 
     # Reload organization
     @organization = organization.load_required(:users, :orga_invites, :orga_relations)
@@ -141,6 +146,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   end
 
   protected
+
   def member
     @member ||= begin
       email = params.require(:member).require(:email)
@@ -154,12 +160,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
     @organization ||= MnoEnterprise::Organization.find_one(params[:id], DEPENDENCIES)
   end
 
+  def organization_params
+    params.require(:organization)
+  end
+
   def organization_permitted_update_params
-    [:name, :soa_enabled, :industry, :size, :billing_currency]
+    WRITEABLE_ATTRIBUTES
   end
 
   def organization_update_params
-    params.fetch(:organization, {}).permit(*organization_permitted_update_params)
+    organization_params.permit(*organization_permitted_update_params).tap do |whitelisted|
+      whitelisted[:main_address_attributes] = organization_params[:main_address_attributes]
+    end
   end
 
   def organization_billing_params
@@ -184,5 +196,4 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::OrganizationsController
   def organization_management_enabled?
     return head :forbidden unless Settings.dashboard.organization_management.enabled
   end
-
 end

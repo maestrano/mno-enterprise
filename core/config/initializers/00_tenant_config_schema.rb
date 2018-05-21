@@ -29,6 +29,19 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           description: "Name displayed in the browser title bar and in the public pages",
           default: "My Webstore"
         },
+        organization_requirements: {
+          type: "array",
+          title: "Webstore organization requirements",
+          description: "Information required for new organizations",
+          default: [],
+          items: {
+            type: "string",
+            enum: MnoEnterprise::Organization::REQUIRABLE_FIELDS
+          },
+          'x-schema-form': {
+            titleMap: Hash[MnoEnterprise::Organization::REQUIRABLE_FIELDS.map{|f| [f, f.titleize]}]
+          }
+        },
         i18n: {
           type: "object",
           title: "Internationalization",
@@ -284,6 +297,18 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                   type: "boolean",
                   default: true,
                   description: "Display information about billing (invoices...)"
+                },
+                invoice_contact_details: {
+                  type: "string",
+                  title: "Invoice Contact Details",
+                  description: "Let your customer know who to contact for invoice support.",
+                  default: ""
+                },
+                invoice_payment_information: {
+                  type: "string",
+                  title: "Invoice Payment Information",
+                  description: "Payment information (e.g. Payment via wire transfer...)",
+                  default: ""
                 }
               }
             }

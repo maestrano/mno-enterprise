@@ -7,14 +7,15 @@ module MnoEnterprise
     let(:user) { build(:user, :unconfirmed, confirmation_token: confirmation_token) }
     let(:email_uniq_resp) { [] }
     let(:signup_attrs) { {name: 'John', surname: 'Doe', email: 'john@doecorp.com', password: 'securepassword'} }
+    let(:tenant) { build(:tenant) }
 
     # Stub user calls
     before {
+      stub_api_v2(:get, '/tenant', tenant)
       stub_api_v2(:post, '/users', user)
       stub_user(user)
       stub_api_v2(:patch, "/users/#{user.id}", user)
       stub_api_v2(:get, '/orga_invites', [], [], {filter: {user_email: signup_attrs[:email]}})
-
       stub_api_v2(:get, '/users', email_uniq_resp, [], {filter: {email: signup_attrs[:email]}, page: {number: 1, size: 1}})
       allow(Devise.token_generator).to receive(:generate).and_return(['ABCD1234', nil])
     }

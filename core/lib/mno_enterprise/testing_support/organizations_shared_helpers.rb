@@ -48,7 +48,7 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     return list
   end
 
-  def partial_hash_for_organization(organization, admin = false)
+  def partial_hash_for_organization(organization, admin = false, main_address = false)
     ret = {
         'id' => organization.id,
         'name' => organization.name,
@@ -62,6 +62,9 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
       ret['uid'] = organization.uid
     end
 
+    if main_address
+      ret['main_address_attributes'] = partial_hash_for_main_address_attributes(main_address)
+    end
     ret
   end
 
@@ -98,7 +101,18 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     orga_invoices
   end
 
-  def hash_for_organizations(organizations, admin = false)
+  def partial_hash_for_main_address_attributes(address)
+    {
+      'id' => address.id,
+      'street' => address.street,
+      'city' => address.city,
+      'state_code' => address.state_code,
+      'postal_code' => address.postal_code,
+      'country_code' => address.country_code,
+    }
+  end
+
+  def hash_for_organizations(organizations, admin = false, main_address = false)
     {
         'organizations' => organizations.map { |o| partial_hash_for_organization(o, admin) }
     }
@@ -110,9 +124,9 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     }
   end
 
-  def hash_for_organization(organization, user, admin = false)
+  def hash_for_organization(organization, user, admin = false, main_address = false)
     hash = {
-        'organization' => partial_hash_for_organization(organization),
+        'organization' => partial_hash_for_organization(organization, false, main_address),
         'current_user' => partial_hash_for_current_user(organization, user)
     }
     hash['organization']['members'] = partial_hash_for_members(organization)

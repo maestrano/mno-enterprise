@@ -19,6 +19,9 @@ module MnoEnterprise
       # @see MnoEnterprise::PlatformAdapters::Adapter#restart
       delegate :restart, to: :adapter
 
+      # @see MnoEnterprise::PlatformAdapters::Adapter#restart_done?
+      delegate :restart_status, to: :adapter
+
       # @see MnoEnterprise::PlatformAdapters::Adapter#clear_assets
       delegate :clear_assets, to: :adapter
 

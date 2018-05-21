@@ -12,25 +12,24 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
   def index
     # Fetch only the subscription events of a subscription
     if params[:subscription_id]
-      query = fetch_subscription_events(params[:organization_id], params[:subscription_id])
-      @subscription_events = query.to_a
+      query = fetch_subscription_events(organization_id: params[:organization_id], subscription_id: params[:subscription_id])
 
     # Fetch all the subscription events of an organization
     elsif params[:organization_id]
-      org = MnoEnterprise::Organization.includes([:subscriptions]).find(params[:organization_id]).first
-      #Find organization's subscription_ids.
-      query = MnoEnterprise::SubscriptionEvent
-        .apply_query_params(params)
-        .where('subscription.id': org.subscriptions.map(&:id))
-        .includes(SUBSCRIPTION_EVENT_INCLUDES)
-      @subscription_events = query.to_a
+      org = MnoEnterprise::Organization
+              .with_params(_metadata: { act_as_manager: current_user.id })
+              .includes([:subscriptions])
+              .find(params[:organization_id]).first
+
+      #Find organization's subscription_ids
+      query = fetch_subscription_events(subscription_id: org.subscriptions.map(&:id).presence)
 
     # Fetch all the subscription events of a tenant
     else
-      query = MnoEnterprise::SubscriptionEvent.apply_query_params(params).includes(SUBSCRIPTION_EVENT_INCLUDES)
-      @subscription_events = query.to_a
+      query = fetch_subscription_events()
     end
 
+    @subscription_events = query.to_a
     response.headers['X-Total-Count'] = query.meta.record_count
   end
 
@@ -62,12 +61,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
 
   protected
 
-  def fetch_subscription_events(organization_id, subscription_id)
-    MnoEnterprise::SubscriptionEvent
-      .apply_query_params(params)
-      .with_params(_metadata: { act_as_manager: current_user.id, organization_id: organization_id })
-      .includes(SUBSCRIPTION_EVENT_INCLUDES)
-      .where('subscription.id' => subscription_id)
+  def fetch_subscription_events(organization_id: nil, subscription_id: nil)
+    metadata = {act_as_manager: current_user.id}
+    metadata[:organization_id] = organization_id if organization_id
+
+    rel = MnoEnterprise::SubscriptionEvent
+            .apply_query_params(params)
+            .with_params(_metadata: metadata)
+            .includes(SUBSCRIPTION_EVENT_INCLUDES)
+
+    rel = rel.where('subscription.id' => subscription_id) if subscription_id
+
+    rel
   end
 
   def fetch_subscription_event(organization_id, subscription_id, id, includes = nil)

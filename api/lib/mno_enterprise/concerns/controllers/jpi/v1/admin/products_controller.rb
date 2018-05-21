@@ -19,7 +19,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
       query = MnoEnterprise::Product.apply_query_params(params)
       query = query.includes(params[:includes]) if params[:includes]
       query = query.includes(DEPENDENCIES) unless params[:skip_dependencies]
-      @products = MnoEnterprise::Product.fetch_all(query)
+
+      # Paginate if requested, otherwise return all the records, as opposed to the default 25.
+      @products = params[:limit] && params[:offset] ? query.to_a : MnoEnterprise::Product.fetch_all(query)
       response.headers['X-Total-Count'] = query.meta.record_count
     end
   end
