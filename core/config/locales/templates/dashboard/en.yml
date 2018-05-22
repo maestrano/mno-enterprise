@@ -93,5 +93,6 @@ en:
         create_company:
           title: Create New Company
           enter_name: Enter a name for your new company
+          enter_address: Enter an address for your new company
           cancel: Cancel
           create: Create

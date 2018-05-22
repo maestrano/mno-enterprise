@@ -1,6 +1,7 @@
 module MnoEnterprise::Concerns::Models::Organization
   extend ActiveSupport::Concern
-
+  # Fields that can be required in webstore settings
+  REQUIRABLE_FIELDS = ['main_address']
   #==================================================================
   # Included methods
   #==================================================================

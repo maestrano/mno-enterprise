@@ -56,6 +56,14 @@ en:
             action: Action
             description: Description
 
+        mno_address:
+          street: Street
+          city: City
+          state: State
+          postal_code: Postal code
+          country: Country
+          country_select: ---SELECT---
+
         mno_pagination:
           items_per_page: "Items per page: "
 

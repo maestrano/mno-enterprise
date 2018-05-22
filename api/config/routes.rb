@@ -190,6 +190,9 @@ MnoEnterprise::Engine.routes.draw do
       end
 
       resources :products, only: [:index, :show] do
+        member do
+          get :custom_schema
+        end
         resources :pricings, only: :index
       end
 
@@ -206,6 +209,15 @@ MnoEnterprise::Engine.routes.draw do
         resources :app_reviews, only: [:index, :show,  :update]
         resources :app_comments, only: [:create]
         resources :app_answers, only: [:create]
+
+        if Settings&.dashboard&.marketplace&.provisioning
+          resources :subscription_events, only: [:index] do
+            member do
+              post :approve
+              post :reject
+            end
+          end
+        end
 
         resources :apps, only: [:index] do
           collection do
@@ -228,7 +240,11 @@ MnoEnterprise::Engine.routes.draw do
           end
         end
 
-        resources :products, only: [:index, :show]
+        resources :products, only: [:index, :show] do
+          member do
+            get :custom_schema
+          end
+        end
 
         if Settings&.dashboard&.marketplace&.local_products
           resources :products, only: [:index, :show, :destroy, :update, :create] do
@@ -265,13 +281,8 @@ MnoEnterprise::Engine.routes.draw do
           resources :teams, only: [:index]
 
           if Settings&.dashboard&.marketplace&.provisioning
+            resources :subscription_events, only: [:index]
             resources :subscriptions, only: [:index, :show, :create, :update] do
-              member do
-                post :cancel
-                post :approve
-                post :fulfill
-              end
-
               resources :subscription_events, only: [:index, :show]
             end
           end
@@ -311,6 +322,7 @@ MnoEnterprise::Engine.routes.draw do
 
         resource 'tenant', only: [:show, :update] do
           member do
+            get :restart_status
             post :ssl_certificates, action: :add_certificates
             match :domain, action: :update_domain, via: [:put, :patch]
           end

@@ -11,6 +11,7 @@ module MnoEnterprise
 
       respond_to do |format|
         format.js { self.response_body = minify(render_to_string) }
+        format.json { render json: Settings.config_timestamp }
       end
     end
 

@@ -127,6 +127,7 @@ en:
           settings:
             company_name: Company name
             billing_currency: Billing currency
+            main_address: Main address
             connec_data_sharing: Connec!™ Data Sharing
             enable: "On"
             disable: "Off"

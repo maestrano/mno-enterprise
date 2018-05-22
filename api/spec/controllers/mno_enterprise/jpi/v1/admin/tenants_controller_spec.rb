@@ -64,6 +64,18 @@ module MnoEnterprise
       end
     end
 
+    describe 'GET #restart_status' do
+      let(:tenant_params) { {frontend_config: {}} }
+
+      subject { get :restart_status }
+      it { is_expected.to have_http_status(:ok) }
+
+      it 'gets the restart status' do
+        expect(MnoEnterprise::SystemManager).to receive(:restart_status)
+        subject
+      end
+    end
+
     describe 'PATCH #update_domain' do
       let(:tenant_params) { {domain: 'foo.test'} }
 

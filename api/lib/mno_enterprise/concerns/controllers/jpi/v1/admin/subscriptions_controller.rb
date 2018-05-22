@@ -56,44 +56,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
     subscription.attributes = subscription_update_params
-    subscription.modify!(data: subscription.as_json_api)
+
+    edit_action = params[:subscription][:edit_action]
+    subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
+
     MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
-    @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
-    render :show
-  end
-
-  # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc/cancel
-  def cancel
-    subscription = fetch_subscription(params[:organization_id], params[:id])
-    return render_not_found('subscription') unless subscription
-    subscription.cancel!
-    MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription cancelled', subscription)
-    @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
-    render :show
-  end
-
-  # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc/approve
-  def approve
-    subscription = fetch_subscription(params[:organization_id], params[:id])
-    return render_not_found('subscription') unless subscription
-    subscription.approve!
-
-    if subscription.errors.any?
-      render json: subscription.errors, status: :bad_request
-    else
-      MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription approved', subscription)
-      @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
-      render :show
-    end
-  end
-
-  # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc/fulfill
-  def fulfill
-    subscription = fetch_subscription(params[:organization_id], params[:id])
-    return render_not_found('subscription') unless subscription
-    subscription.fulfill!
-
-    MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription fulfilled', subscription)
     @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
     render :show
   end

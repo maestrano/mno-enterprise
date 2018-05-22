@@ -54,7 +54,6 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
     resource.password ||= Devise.friendly_token
 
     if resource.save
-
       MnoEnterprise::EventLogger.info('user_add', resource.id, 'User Signup', resource)
 
       if resource.active_for_authentication?
@@ -122,7 +121,11 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
 
     def sign_up_params
       attrs = super
-      attrs.merge(orga_on_create: create_orga_on_user_creation(attrs))
+      attrs.merge(orga_on_create: create_orga_on_user_creation(attrs), registration_address: address_params)
+    end
+
+    def address_params
+      params.permit(:street, :city, :state_code, :postal_code, :country_code)
     end
 
     # Check whether we should create an organization for the user
