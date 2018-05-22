@@ -6,6 +6,7 @@ json.obsolete subscription_event.obsolete
 json.provisioning_data subscription_event.provisioning_data
 json.created_at subscription_event.created_at
 json.updated_at subscription_event.updated_at
+json.user_name subscription_event.user_name
 
 if subscription_event.subscription
   subscription = subscription_event.subscription
