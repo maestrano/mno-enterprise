@@ -63,6 +63,7 @@ en:
           postal_code: Postal code
           country: Country
           country_select: ---SELECT---
+          phone: Phone
 
         mno_pagination:
           items_per_page: "Items per page: "

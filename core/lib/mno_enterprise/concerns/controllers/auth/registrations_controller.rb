@@ -125,7 +125,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
     end
 
     def address_params
-      params.permit(:street, :city, :state_code, :postal_code, :country_code)
+      params.permit(:street, :city, :state_code, :postal_code, :country_code, :phone, :phone_country_code)
     end
 
     # Check whether we should create an organization for the user
