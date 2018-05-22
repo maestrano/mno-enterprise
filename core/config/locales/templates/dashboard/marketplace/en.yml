@@ -27,6 +27,7 @@ en:
             no_pricing_plans_found: "There are currently no subscriptions available in your currency"
             no_pricing_plans_found_tooltip: "There are currently no subscriptions available in your currency"
             quote_based: "pricing is indicative - final price will be calculated at order time"
+            quote_error: "Unable to Fetch Quote"
             tag_responsive: "Responsive"
             tag_star: "Star!™ Tutorials"
             tag_connec: "Connec!™ Ready"
