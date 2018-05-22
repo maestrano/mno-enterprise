@@ -22,7 +22,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
               .find(params[:organization_id]).first
 
       #Find organization's subscription_ids
-      query = fetch_subscription_events(subscription_id: org.subscriptions.map(&:id).presence)
+      query = fetch_subscription_events(subscription_id: org.subscriptions.map(&:id))
 
     # Fetch all the subscription events of a tenant
     else
@@ -70,7 +70,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
             .with_params(_metadata: metadata)
             .includes(SUBSCRIPTION_EVENT_INCLUDES)
 
-    rel = rel.where('subscription.id' => subscription_id) if subscription_id
+    rel = rel.where('subscription.id' => subscription_id.presence) if subscription_id
 
     rel
   end
