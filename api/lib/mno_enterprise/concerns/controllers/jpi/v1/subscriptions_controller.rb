@@ -23,7 +23,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     authorize! :manage_app_instances, parent_organization
 
     subscription = MnoEnterprise::Subscription.new(subscription_update_params)
-    subscription.status = :provisioning if cart_subscription_param.blank?
+    subscription.status = :staged if cart_subscription_param.present?
     subscription.relationships.organization = MnoEnterprise::Organization.new(id: parent_organization.id)
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
     if params[:subscription][:product_id]

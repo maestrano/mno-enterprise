@@ -79,7 +79,8 @@ module MnoEnterprise
                                       },
                                       "attributes" => {
                                         "product_pricing_id" => product_pricing.id,
-                                        "custom_data" => {"foo" => "bar"}.to_json}
+                                        "custom_data" => {"foo" => "bar"}.to_json,
+                                        "status" => "staged"}
                                       }
                                     }.to_json)
         end
@@ -111,8 +112,7 @@ module MnoEnterprise
                                       },
                                       "attributes" => {
                                         "product_pricing_id" => product_pricing.id,
-                                        "custom_data" => {"foo" => "bar"}.to_json,
-                                        "status" => "provisioning"}
+                                        "custom_data" => {"foo" => "bar"}.to_json}
                                       }
                                     }.to_json)
         end
