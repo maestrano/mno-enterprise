@@ -25,6 +25,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     subscription = MnoEnterprise::Subscription.new(subscription_update_params)
     subscription.relationships.organization = MnoEnterprise::Organization.new(id: parent_organization.id)
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
+    if params[:subscription][:currency]
+      subscription.currency = params[:subscription][:currency]
+    end
     if params[:subscription][:product_id]
       subscription.relationships.product = MnoEnterprise::Product.new(id: params[:subscription][:product_id])
     end
