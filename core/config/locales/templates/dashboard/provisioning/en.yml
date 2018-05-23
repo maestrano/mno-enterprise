@@ -28,6 +28,7 @@ en:
             reactivate_title: "Reactivate your plan"
             renew_title: "Renew your plan"
             suspend_title: "Suspend your plan"
+            cancel_title: "Cancel your plan"
             next: "Next"
           confirm:
             title: "Subscription"
@@ -52,6 +53,7 @@ en:
             description: "Description"
             price: "Price"
             go_to_my_app: "Go to my app"
+            order_type: "Order type"
           subscription:
             back: "back"
             info: "Info"
@@ -70,18 +72,21 @@ en:
             no_custom_data: "No information provided by the customer"
             licenses: "Licenses"
             events: "Provisioning events"
+            no_provisioning_events: "No provisioning events"
           subscriptions:
             new: "New install"
             change: "Change plan"
             modify: "Modify"
             renew: "Renew"
             suspend: "Suspend"
+            cancel: "Cancel"
             reactivate: "Reactivate"
             change_tooltip: "Change subscription plan"
             modify_tooltip: "Modify subscription details"
             reactivate_tooltip: "Reactivate subscription"
             renew_tooltip: "Renew subscription"
             suspend_tooltip: "Suspend subscription"
+            cancel_tooltip: "Cancel subscription"
             title: "Manage your subscriptions"
             currency_warning: "Some prices are missing for your current currency. Please contact your administrator for more information."
             name: "Name"
@@ -114,5 +119,7 @@ en:
             aborted_modal.title: "Subscription has been aborted"
             aborted_modal.body: "Something wrong happened when fulfilling your order.<p>It can be a temporary issue, please check again in 15 minutes.<p>If the issue persists, contact your system administrator"
             aborted_modal.close: "Close"
+            not_available: "N/A"
             tooltip:
               aborted: Your order was aborted during fulfillment. Please contact your administrator for more information
+              external_billing: "This product is billed externally"

@@ -24,6 +24,7 @@ en:
         including_tax: 'incl. Tax'
         monthly_invoice: 'Monthly Invoice'
         paging: 'Page <page> of <total>'
+        payment_information: 'Payment Information'
         period: 'Period'
         summary: 'Summary'
         summary_section:

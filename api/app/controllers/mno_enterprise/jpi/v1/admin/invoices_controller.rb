@@ -183,7 +183,7 @@ module MnoEnterprise
     end
 
     def invoice_params
-      params.require(:invoice).permit(:paid_at)
+      params.require(:invoice).permit(:paid_at, :tax_pips_applied)
     end
 
     def adjustment_params

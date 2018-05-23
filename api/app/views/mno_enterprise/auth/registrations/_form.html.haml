@@ -20,6 +20,12 @@
 
   %br
 
+  -if Settings.system.organization_requirements&.include?('main_address')
+
+    %hr
+    = render "mno_enterprise/auth/registrations/address_form"
+    %br
+
   .row
     .col-sm-12
       .checkbox-section.text-center

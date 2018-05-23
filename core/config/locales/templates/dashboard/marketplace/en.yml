@@ -24,6 +24,8 @@ en:
             price: "Price"
             free_trial_duration: "Free trial duration"
             no_pricing_found: "This plan is not available in your currency"
+            no_pricing_plans_found: "There are currently no subscriptions available in your currency"
+            no_pricing_plans_found_tooltip: "There are currently no subscriptions available in your currency"
             tag_responsive: "Responsive"
             tag_star: "Star!™ Tutorials"
             tag_connec: "Connec!™ Ready"

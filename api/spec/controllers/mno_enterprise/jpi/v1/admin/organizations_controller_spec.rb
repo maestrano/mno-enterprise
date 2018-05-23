@@ -13,7 +13,7 @@ module MnoEnterprise
     #===============================================
     # Assignments
     #===============================================
-    let!(:organization) { build(:organization, orga_invites: [], users: [], orga_relations: []) }
+    let!(:organization) { build(:organization, orga_invites: [], users: [], orga_relations: [], main_address: main_address) }
     let(:role) { 'Admin' }
     let!(:user) {
       u = build(:user, :admin, organizations: [organization], orga_relations: [orga_relation], dashboards: [])
@@ -21,13 +21,14 @@ module MnoEnterprise
       u
     }
     let!(:orga_relation) { build(:orga_relation, organization_id: organization.id, role: role) }
-    let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices)) }
+    let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(users orga_invites orga_relations credit_card invoices main_address)) }
     # Stub user and user call
     let!(:current_user_stub) { stub_user(user) }
 
-    let(:arrears_situation) { build(:arrears_situation) }
-    let(:app) { build(:app) }
-    let(:app_instance) { build(:app_instance, organization: organization) }
+    let!(:arrears_situation) { build(:arrears_situation) }
+    let!(:app) { build(:app) }
+    let!(:app_instance) { build(:app_instance, organization: organization) }
+    let!(:main_address) { build(:main_address) }
 
     #===============================================
     # Specs
@@ -57,9 +58,8 @@ module MnoEnterprise
 
     describe 'GET #show' do
       subject { get :show, id: organization.id }
-
       let(:data) { JSON.parse(response.body) }
-      let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user'] }
+      let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user', :main_address] }
       let(:app_instance_includes) { [:app] }
       let(:app_instance_filter) do
         {
@@ -73,7 +73,7 @@ module MnoEnterprise
         {
           organizations: [:name, :uid, :soa_enabled, :created_at, :account_frozen, :financial_metrics,
                           :billing_currency, :external_id, :app_instances, :orga_invites, :users,
-                          :orga_relations, :invoices, :credit_card, :demo_account].join(',')
+                          :orga_relations, :invoices, :credit_card, :demo_account, :main_address].join(',')
         }
       end
 
@@ -101,29 +101,38 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
+      let(:main_address_attributes) { {street: "404 5th Ave", city: "New York", state_code: "NY", postal_code: "10018", country_code: "US" } }
+      let(:params) { {'name' => organization.name, 'main_address_attributes' => main_address_attributes} }
+      let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user', :main_address] }
+
       subject { post :create, organization: params }
-      let(:params) { attributes_for(:organization) }
 
-      let(:data) { JSON.parse(response.body) }
-      let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user'] }
-
+      before { stub_api_v2(:post, '/organizations', organization) }
       before { allow(app_instance).to receive(:app).and_return(app) }
       before { allow(organization).to receive(:app_instances).and_return([app_instance]) }
       before { allow(organization).to receive(:invoices).and_return([]) }
+      # Reloading organization
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, includes) }
-      before { expect(MnoEnterprise::Organization).to receive(:create).with(params.slice(:name, :billing_currency)).and_return(organization) }
 
       describe 'creation' do
-        before { subject }
-        it { expect(data['organization']['id']).to eq(organization.id) }
+        context 'success' do
+          before { subject }
+
+          it 'creates the organization' do
+            expect(assigns(:organization).name).to eq(organization.name)
+            expect(assigns(:organization).main_address).to eq(organization.main_address)
+          end
+        end
       end
 
-      describe 'app provisioning' do
-        let(:params) { attributes_for(:organization).merge(app_nids: ['xero', app_instance.app.nid]) }
+      describe '#update_app_list' do
+        let(:app_nids) { ['xero', app_instance.app.nid] }
+        let(:params) { attributes_for(:organization).merge(app_nids: app_nids) }
 
         before { expect_any_instance_of(Organization).to receive(:provision_app_instance!) }
         before { subject }
-        it { expect(data['organization']['id']).to eq(organization.id) }
+
+        it { expect(assigns(:organization).app_instances.map(&:id)).to eq(organization.app_instances.map(&:id)) }
       end
     end
 
@@ -169,7 +178,7 @@ module MnoEnterprise
     end
 
     describe 'PUT #freeze_account' do
-      let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user'] }
+      let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user', :main_address] }
 
       subject { put :freeze_account, id: organization.id }
 
@@ -186,7 +195,7 @@ module MnoEnterprise
     end
 
     describe 'PUT #unfreeze' do
-      let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user'] }
+      let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user', :main_address] }
 
       subject { put :unfreeze, id: organization.id }
 
