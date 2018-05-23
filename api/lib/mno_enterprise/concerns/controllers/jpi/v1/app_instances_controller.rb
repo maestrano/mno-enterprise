@@ -16,7 +16,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
   # GET /mnoe/jpi/v1/organization/1/app_instances
   def index
     statuses = MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')
-    @app_instances = MnoEnterprise::AppInstance.includes(:app).where(owner_id: parent_organization.id, 'status.in': statuses, 'fulfilled_only': true).to_a.select do |i|
+    @app_instances = MnoEnterprise::AppInstance.includes(:app).where(owner_id: parent_organization.id, 'status.in': statuses, 'fulfilled_subscription': true).to_a.select do |i|
       can?(:access,i)
     end
   end
