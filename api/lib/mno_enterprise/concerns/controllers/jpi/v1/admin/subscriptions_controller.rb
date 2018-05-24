@@ -24,6 +24,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
   # GET /mnoe/jpi/v1/admin/organizations/1/subscriptions/id
   def show
+    set_staged_subscription_params
     @subscription = fetch_subscription(params[:organization_id], params[:id], SUBSCRIPTION_INCLUDES)
     return render_not_found('Subscription') unless @subscription
   end
@@ -39,6 +40,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     return render_not_found('Organization') unless organization
 
     subscription = MnoEnterprise::Subscription.new(subscription_update_params)
+    subscription.status = :staged if cart_subscription_param.present?
     subscription.relationships.organization = organization
     if params[:subscription][:currency]
       subscription.currency = params[:subscription][:currency]
@@ -49,26 +51,41 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
     subscription.save!
 
-    MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription)
+    MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription) if cart_subscription_param.blank?
+
+    set_staged_subscription_params
     @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
     render :show
   end
 
   # PUT /mnoe/jpi/v1/admin/organizations/1/subscriptions/abc
   def update
+    set_staged_subscription_params
     subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
     subscription.attributes = subscription_update_params
 
     edit_action = params[:subscription][:edit_action]
-    subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
+    if cart_subscription_param.present?
+      subscription.process_staged_update_request!({data: subscription.as_json_api}, edit_action)
+    else
+      subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
+    end
 
-    MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription)
-    @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
-    render :show
+    MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription) if cart_subscription_param.blank?
+    if cancel_staged_subscription_request
+      head :no_content
+    else
+      @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
+      render :show
+    end
   end
 
   protected
+
+  def cart_subscription_param
+    params.dig(:subscription, :cart_entry)
+  end
 
   def subscription_update_params
     # custom_data is an arbitrary hash
@@ -95,9 +112,19 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
   def fetch_subscription(organization_id, id, includes = nil)
     rel = MnoEnterprise::Subscription
+            .apply_query_params(params)
             .with_params(_metadata: { act_as_manager: current_user.id })
             .where(organization_id: organization_id, id: id)
     rel = rel.includes(*includes) if includes.present?
     rel.first
+  end
+
+  def set_staged_subscription_params
+    params[:where] ||= {}
+    params[:where][:subscription_status_in] = cart_subscription_param.present? ? 'staged' : 'visible'
+  end
+
+  def cancel_staged_subscription_request
+    params[:subscription][:edit_action] == 'cancel' && cart_subscription_param.present?
   end
 end

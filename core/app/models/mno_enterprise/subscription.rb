@@ -30,6 +30,9 @@ module MnoEnterprise
     custom_endpoint :renew, on: :member, request_method: :post
     custom_endpoint :reactivate, on: :member, request_method: :post
     custom_endpoint :cancel, on: :member, request_method: :post
+    custom_endpoint :abandon, on: :member, request_method: :post
+    custom_endpoint :cancel_staged, on: :collection, request_method: :post
+    custom_endpoint :submit_staged, on: :collection, request_method: :post
 
     def to_audit_event
       event = {id: id, status: status}
@@ -41,6 +44,15 @@ module MnoEnterprise
     def process_update_request!(subscription, edit_action)
       # Dynamically call the #mno_hub endpoint corresponding with #edit_action specified by the user.
       self.send("#{edit_action}!", subscription)
+    end
+
+    def process_staged_update_request!(subscription, edit_action)
+      case edit_action
+      when 'cancel'
+        abandon!
+      else
+        process_update_request!(subscription, edit_action)
+      end
     end
 
     def modify!(args)
@@ -65,6 +77,10 @@ module MnoEnterprise
 
     def cancel!(args)
       process_custom_result(cancel(args))
+    end
+
+    def abandon!
+      process_custom_result(abandon)
     end
   end
 end
