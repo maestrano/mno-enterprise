@@ -22,10 +22,10 @@ end
 # TODO: This is a temporary mapping of values that are not currently available
 #       in products or are depreciated. They need to be updated when added to
 #       products or are permanently depreciated.
-json.stack product_instance.app_instance.stack
-json.oauth_keys_valid product_instance.app_instance.oauth_keys_valid
-json.per_user_licence product_instance.app_instance.per_user_licence
+json.stack product_instance.app_instance&.stack
+json.oauth_keys_valid product_instance.app_instance&.oauth_keys_valid
+json.per_user_licence product_instance.app_instance&.per_user_licence
 
-if product_instance.app_instance.oauth_company
-  json.oauth_company_name product_instance.app_instance.oauth_company
+if product_instance.app_instance&.oauth_company
+  json.oauth_company_name product_instance.app_instance&.oauth_company
 end
