@@ -2,6 +2,55 @@ en:
   mno_enterprise:
     templates:
       dashboard:
+        app_management:
+          heading: Manage your applications
+          status: "Status:"
+          access: Access
+          manage_app: Manage
+          back: Back to list
+          no_status: This application does not provide any status
+          unavailable: App is not available
+
+          data_sharing:
+            status: "Data sharing: {status}"
+
+          subscription:
+            status: "Subscription: {status}"
+
+          manage:
+            tab:
+              manage_subscription: Manage subscription
+
+              app_info:
+                title: App info
+                description: Description
+                description_details: View details of product on the marketplace
+                getting_started: Getting started
+
+                support:
+                  title: Support
+                  helpdesk: "{app_name} Helpdesk"
+                  knowledge_base: Maestrano knowledge base
+
+                technical_details:
+                  title: Technical details
+                  details: These details would be useful when communicating with support
+                  organization_id: "Organization id:"
+                  group_id: "Group id(uid):"
+
+              connection_status:
+                title: Connection status
+                last_sync: "Last sync:"
+                sync_in_progress: Sync In Progress
+                never_sync: None
+
+              order_history:
+                title: Order history
+                start_date: Start date
+                offer_name: Offer name
+                status: Status
+                no_history: No previous history available
+
         account:
           my_account: My Account
           personal_information: Personal Information
@@ -82,6 +131,7 @@ en:
           toggle_navigation: Toggle navigation
           dashboard: Dashboard
           impac: Impac!
+          app_management: App Management
           my_account: My Account
           company: Company
           marketplace: Marketplace
