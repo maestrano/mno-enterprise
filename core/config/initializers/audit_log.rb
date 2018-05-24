@@ -26,6 +26,7 @@ unless defined? AUDIT_LOG_CONFIG
         "app_disconnected" => "App '%{name}' disconnected",
         "impersonate_created" => "Impersonated session created for user %{user_email}",
         "impersonate_destroyed" => "Impersonated session destroyed",
+        "subscription_update" => "%{edit_action}"
       }
     }
   end
