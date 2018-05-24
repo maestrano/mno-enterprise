@@ -127,7 +127,6 @@ en:
               title: "Your Company Cart"
               empty: "Please add some items to the cart"
               add_to_cart: "Add to Cart and continue Shopping"
-              cancel: "Remove Item"
               cancel_modal:
                 title: "Remove Item"
                 body: "This will remove the subscription from the cart. Continue?"
