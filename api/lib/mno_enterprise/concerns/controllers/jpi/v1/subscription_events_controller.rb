@@ -21,7 +21,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionEventsControll
   protected
 
   def fetch_subscription_events(organization_id, subscription_id)
-    query = MnoEnterprise::SubscriptionEvent.with_params(_metadata: { organization_id: organization_id })
+    query = MnoEnterprise::SubscriptionEvent.apply_query_params(params).with_params(_metadata: { organization_id: organization_id })
     MnoEnterprise::SubscriptionEvent.fetch_all(query.includes(*SUBSCRIPTION_EVENT_INCLUDES).where('subscription.id' => subscription_id))
   end
 
