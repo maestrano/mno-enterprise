@@ -446,6 +446,28 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             }
           }
         },
+        apps_management: {
+          type: "object",
+          title: "App Management",
+          properties: {
+            enabled: {
+              type: "boolean",
+              description: "Allow customer to manage apps",
+              default: false
+            }
+          }
+        },
+        data_sharing: {
+          type: "object",
+          title: "Data Sharing",
+          properties: {
+            enabled: {
+              type: "boolean",
+              description: "Enable data sharing for apps",
+              default: false
+            }
+          }
+        },
         audit_log: {
           type: "object",
           title: "Audit log",
