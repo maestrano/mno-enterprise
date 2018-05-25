@@ -1,26 +1,26 @@
 .row
   .col-sm-12
-    = text_field_tag "street", nil, class: "form-control", placeholder: "Street"
+    = text_field_tag "street", nil, class: "form-control", placeholder: "*Street", required: true
 %br
 .row
   .col-sm-12
-    = text_field_tag "city", nil, class: "form-control", placeholder: "City"
+    = text_field_tag "city", nil, class: "form-control", placeholder: "*City", required: true
 %br
 .row
   .col-sm-12
-    = text_field_tag "state_code", nil, class: "form-control", placeholder: "State"
+    = text_field_tag "state_code", nil, class: "form-control", placeholder: "*State", required: true
 %br
 .row
   .col-sm-12
-    = text_field_tag "postal_code", nil, class: "form-control", placeholder: "Postal Code"
+    = text_field_tag "postal_code", nil, class: "form-control", placeholder: "*Postal Code", required: true
 %br
 .row
   .col-sm-12
-    = select_tag "country_code", options_for_select(ISO3166::Country.codes.map { |code| [ISO3166::Country[code].name, code] }), class: "form-control", include_blank: '---SELECT---'
+    = select_tag "country_code", options_for_select(ISO3166::Country.codes.map { |code| [ISO3166::Country[code].name, code] }), class: "form-control", include_blank: '---*SELECT---', required: true
 %br
 .row
   .phone
     .col-sm-12
       = select_tag "phone_country_code", options_for_select(ISO3166::Country.codes.map { |code| c = ISO3166::Country[code]; ["#{c.alpha2} +#{c.country_code}", code]}, MnoEnterprise.app_country),class: 'form-control'
-      = text_field_tag "phone", nil, class: "form-control", placeholder: "Phone"
+      = text_field_tag "phone", nil, class: "form-control", placeholder: "*Phone", required: true
 %br
