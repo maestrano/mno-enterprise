@@ -48,7 +48,7 @@ module MnoEnterprise
       let(:includes) { [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'] }
       let(:expected_params) do
         {
-          filter: { id: subscription.id, organization_id: organization.id },
+          filter: { id: subscription.id, organization_id: organization.id, subscription_status_in: 'visible' },
           _metadata: { act_as_manager: user.id },
           page: { number: 1, size: 1 } }
       end

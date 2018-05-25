@@ -139,6 +139,8 @@ MnoEnterprise::Engine.routes.draw do
 
         # AppInstances
         resources :app_instances, only: [:index, :create, :destroy], shallow: true
+        # ProductInstances
+        resources :product_instances, only: [:index, :create, :destroy], shallow: true
 
         # Teams
         resources :teams, only: [:index, :show, :create, :update, :destroy], shallow: true do
@@ -156,6 +158,10 @@ MnoEnterprise::Engine.routes.draw do
           resources :subscriptions, only: [:index, :show, :create, :update] do
             member do
               post :cancel
+            end
+            collection do
+              post :cancel_cart_subscriptions
+              post :submit_cart_subscriptions
             end
 
             resources :subscription_events, only: [:index, :show]

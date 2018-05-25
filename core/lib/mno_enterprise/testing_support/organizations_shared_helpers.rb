@@ -52,6 +52,7 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     ret = {
         'id' => organization.id,
         'name' => organization.name,
+        'uid' => organization.uid,
         'soa_enabled' => organization.soa_enabled,
         'account_frozen' => organization.account_frozen,
         'payment_restriction' => organization.payment_restriction,
