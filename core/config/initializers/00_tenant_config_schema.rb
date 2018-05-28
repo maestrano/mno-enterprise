@@ -59,7 +59,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             },
             enabled: {
               type: "boolean",
-              description: "Allow user to change the webstore languqge",
+              description: "Allow user to change the webstore language",
               default: false
             },
             available_locales: {
