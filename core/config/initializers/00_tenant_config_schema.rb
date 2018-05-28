@@ -247,12 +247,12 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 currency_selection: {
                   type: "boolean",
                   title: "Currency Selection",
-                  default: "true",
+                  default: true,
                   description: "Allow user to choose a different currency when placing an order"
                 }
               }
             },
-            
+
             questions: {
               type: "object",
               title: "Product questions",
