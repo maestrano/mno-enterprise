@@ -215,6 +215,7 @@ MnoEnterprise::Engine.routes.draw do
         resources :app_reviews, only: [:index, :show,  :update]
         resources :app_comments, only: [:create]
         resources :app_answers, only: [:create]
+        resources :account_transactions, only: [:create]
 
         if Settings&.dashboard&.marketplace&.provisioning
           resources :subscription_events, only: [:index] do
