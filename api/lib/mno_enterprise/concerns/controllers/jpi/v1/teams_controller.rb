@@ -45,6 +45,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
       MnoEnterprise::EventLogger.info('team_apps_update', current_user.id, 'Team apps updated', @team,
                                       {apps: list.map{|l| l['name']}})
     end
+    @team = @team.load_required(:organization, :users, :app_instances)
     render 'show'
   end
 
