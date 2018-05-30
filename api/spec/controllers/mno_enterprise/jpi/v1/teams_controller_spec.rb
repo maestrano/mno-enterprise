@@ -31,13 +31,24 @@ module MnoEnterprise
       end
     end
 
+    def products_for_team(team)
+      team.product_instances.map do |product_instance|
+        {
+          'id' => product_instance.id,
+          'name' => product_instance.name,
+          'logo' => product_instance.product.logo
+        }
+      end
+    end
+
     def hash_for_team(team)
       {
         'team' => {
           id: team.id,
           name: team.name,
           users: users_for_team(team),
-          app_instances: apps_for_team(team)
+          app_instances: apps_for_team(team),
+          product_instances: products_for_team(team)
         }
       }
     end
@@ -51,6 +62,7 @@ module MnoEnterprise
     before { sign_in user }
     # Stub user and user call
     let!(:app) { build(:app) }
+    let!(:product) { build(:product) }
     let!(:user) { build(:user) }
     let(:organization) { build(:organization) }
     let(:team) { build(:team, organization: organization) }
@@ -62,6 +74,7 @@ module MnoEnterprise
       let!(:current_user_stub) { stub_user(user) }
 
       before { stub_api_v2(:get, "/apps", [app]) }
+      before { stub_api_v2(:get, "/products", [product]) }
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations)) }
       before { stub_api_v2(:get, "/teams/#{team.id}", team, %i(organization)) }
       before { stub_api_v2(:patch, "/teams/#{team.id}") }
@@ -69,7 +82,7 @@ module MnoEnterprise
       subject { put :add_users, id: team.id, team: {users: [{id: user.id}]} }
 
       # team reload
-      before { stub_api_v2(:get, "/teams/#{team.id}", team, %i(organization users app_instances)) }
+      before { stub_api_v2(:get, "/teams/#{team.id}", team, %i(organization app_instances product_instances users)) }
       context 'success' do
         before { subject }
 

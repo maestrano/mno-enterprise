@@ -30,13 +30,24 @@ module MnoEnterprise
       end
     end
 
+    def products_for_team(team)
+      team.product_instances.map do |product_instance|
+        {
+          'id': product_instance.id,
+          'name': product_instance.name,
+          'logo': product_instance.product.logo
+        }
+      end
+    end
+
     def hash_for_teams(team)
       {
         'teams': [{
           id: team.id,
           name: team.name,
           users: users_for_team(team),
-          app_instances: apps_for_team(team)
+          app_instances: apps_for_team(team),
+          product_instances: products_for_team(team)
         }]
       }
     end
@@ -50,6 +61,7 @@ module MnoEnterprise
     let!(:team) { build(:team, organization: organization) }
     let!(:role) { 'Admin' }
     let!(:app) { build(:app) }
+    let!(:product) { build(:product) }
     let!(:orga_relation) { build(:orga_relation, organization_id: organization.id, role: role, user_id: user.id) }
 
     before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
@@ -62,16 +74,18 @@ module MnoEnterprise
       subject { get :index, organization_id: organization.id }
 
       let!(:current_user_stub) { stub_user(user) }
-      let(:includes) { [:app_instances, :users, :'app_instances.app'] }
+      let(:includes) { [:app_instances, :product_instances, :users, :'app_instances.app', :'product_instances.product'] }
       let(:data) { JSON.parse(response.body) }
       let(:expected_params) do
         {
           filter: {'organization.id': organization.id},
           fields:{
-            teams: 'id,name,app_instances,users',
+            teams: 'id,name,app_instances,product_instances,users',
             app_instances:'id,name,app',
+            product_instances:'id,name,product',
             users: 'id,name,surname,email',
-            apps: 'logo'
+            apps: 'logo',
+            products: 'logo'
           }
         }
       end
