@@ -23,7 +23,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::AccountTransactions
 
   def transaction_params
     params.require(:account_transaction).permit(:currency, :amount_cents, :description, :side).merge!(
-      credit_account_id: parent_organization.id
+      credit_account_id: parent_organization.credit_account_id
     )
   end
 
