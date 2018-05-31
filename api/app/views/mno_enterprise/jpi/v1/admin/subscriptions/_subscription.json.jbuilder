@@ -37,6 +37,8 @@ if subscription.product
     json.id subscription.product.id
     json.name subscription.product.name
     json.product_type subscription.product.product_type
+    json.single_billing_enabled subscription.product.single_billing_enabled
+    json.billed_locally subscription.product.billed_locally
   end
 end
 
