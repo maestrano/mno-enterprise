@@ -21,7 +21,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
 
   # GET /mnoe/jpi/v1/teams/:id
   def show
-    @team = MnoEnterprise::Team.find_one(params[:id], :organization, :app_instances, :users)
+    @team = MnoEnterprise::Team.find_one(params[:id], :organization, :app_instances, :'app_instances.app', :users)
     authorize! :read, @team.organization
   end
 
