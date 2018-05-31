@@ -11,7 +11,6 @@ FactoryGirl.define do
       updated_at 1.hour.ago
       side 'credit'
       description 'Test Description'
-      has_myob_essentials_only false
       credit_account_id nil
     end
   end

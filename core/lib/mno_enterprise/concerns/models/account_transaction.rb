@@ -22,6 +22,7 @@ module MnoEnterprise::Concerns::Models::AccountTransaction
   def to_audit_event
     {
       id: id,
+      side: side,
       amount_cents: currency,
       currency: currency,
       description: description,

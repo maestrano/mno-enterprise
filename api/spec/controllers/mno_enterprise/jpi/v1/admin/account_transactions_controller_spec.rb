@@ -11,9 +11,10 @@ module MnoEnterprise
     #===============================================
     # Assignments
     #===============================================
-    let!(:organization) { build(:organization) }
+    let(:tenant) { build(:tenant)}
+    let!(:organization) { build(:organization, mnoe_tenant: tenant) }
     let!(:account_transaction) { build(:account_transaction) }
-    let!(:user) { build(:user, :admin, organizations: [organization]) }
+    let!(:user) { build(:user, :admin, organizations: [organization], mnoe_tenant: tenant) }
     let!(:organization_stub) { stub_api_v2(:get, "/organizations/#{organization.id}", organization, []) }
     let!(:current_user_stub) { stub_user(user) }
 
@@ -29,14 +30,28 @@ module MnoEnterprise
 
       before { stub_api_v2(:post, '/account_transactions', account_transaction) }
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, []) }
+      before { stub_audit_events }
 
       describe 'creation' do
         context 'success' do
+          before { stub_api_v2(:get, '/tenant', tenant) }
           before { subject }
 
+          let(:data) { JSON.parse(response.body) }
           it 'creates the account_transaction' do
-            expect(assigns(:account_transaction).amount_cents).to eq(account_transaction.amount_cents)
-            expect(assigns(:account_transaction).currency).to eq(account_transaction.currency)
+            expect(data['attributes']['currency']).to eq(account_transaction.currency)
+            expect(data['attributes']['amount_cents']).to eq(account_transaction.amount_cents)
+          end
+        end
+
+        context 'Tenant feature flag not active' do
+          before { tenant.metadata[:can_manage_organization_credit] = false }
+          before { stub_api_v2(:get, '/tenant', tenant) }
+          before { subject }
+
+          it "does not create the account_transaction" do
+            expect(response.body).to be_blank
+            expect(response).to have_http_status(:forbidden)
           end
         end
       end
