@@ -24,10 +24,9 @@ module MnoEnterprise
 
     def to_audit_event
       event = {id: id, status: status}
-      if relationships.respond_to?(:subscription)
-        subscription = relationships.subscription
-        event[:subscription_id] = subscription&.dig('data', 'id')
-        event[:organization_id] = subscription.relationships.organization&.dig('data', 'id') if subscription.relationships.respond_to?(:subscription)
+      if subscription = self.subscription
+        event[:subscription_id] = subscription.id
+        event[:organization_id] = subscription.organization_id 
       end
       event
     end

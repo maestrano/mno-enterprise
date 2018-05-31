@@ -46,6 +46,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
 
     subscription_event.approve!({data: subscription_event.as_json_api})
 
+    MnoEnterprise::EventLogger.info('subscription_approved', current_user.id, 'Subscription update', subscription_event, {edit_action: "#{subscription_event.event_type}"})
+
     head :ok
   end
 
@@ -55,6 +57,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
     return render_not_found('subscription_event') unless subscription_event
 
     subscription_event.reject!({data: subscription_event.as_json_api})
+
+    MnoEnterprise::EventLogger.info('subscription_rejected', current_user.id, 'Subscription update', subscription_event, {edit_action: "#{subscription_event.event_type}"})
 
     head :ok
   end

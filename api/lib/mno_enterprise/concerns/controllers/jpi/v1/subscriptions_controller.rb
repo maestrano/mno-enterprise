@@ -62,7 +62,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
       subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
     end
 
-    MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription, {edit_action: "#{edit_action}"}) if cart_subscription_param.blank?
+    MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription update', subscription, {edit_action: "#{edit_action}"}) if cart_subscription_param.blank?
     if cancel_staged_subscription_request
       head :no_content
     else
