@@ -155,6 +155,10 @@ module MnoEnterprise::Concerns::Models::Ability
       kpi = alert.kpi
       authorize! :manage_kpi, kpi
     end
+
+    can :create_account_transaction, MnoEnterprise::Tenant do |tenant|
+      tenant.metadata[:can_manage_organization_credit]
+    end
   end
 
   # Abilities for admin user

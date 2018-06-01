@@ -20,7 +20,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     INCLUDED_FIELDS_SHOW = %i[name uid soa_enabled created_at account_frozen
                               financial_metrics billing_currency external_id
                               app_instances orga_invites users orga_relations
-                              invoices credit_card demo_account main_address].freeze
+                              invoices credit_card demo_account main_address
+                              current_credit].freeze
   end
 
   #==================================================================

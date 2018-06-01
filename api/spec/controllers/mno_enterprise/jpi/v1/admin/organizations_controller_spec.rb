@@ -29,11 +29,13 @@ module MnoEnterprise
     let!(:app) { build(:app) }
     let!(:app_instance) { build(:app_instance, organization: organization) }
     let!(:main_address) { build(:main_address) }
+    let(:money) { Money.new(0, 'AUD') }
 
     #===============================================
     # Specs
     #===============================================
     before { sign_in user }
+    before { allow_any_instance_of(MnoEnterprise::Organization).to receive(:current_credit).and_return(money) }
 
     describe 'GET #index' do
       subject { get :index }
@@ -73,7 +75,8 @@ module MnoEnterprise
         {
           organizations: [:name, :uid, :soa_enabled, :created_at, :account_frozen, :financial_metrics,
                           :billing_currency, :external_id, :app_instances, :orga_invites, :users,
-                          :orga_relations, :invoices, :credit_card, :demo_account, :main_address].join(',')
+                          :orga_relations, :invoices, :credit_card, :demo_account, :main_address,
+                          :current_credit].join(',')
         }
       end
 

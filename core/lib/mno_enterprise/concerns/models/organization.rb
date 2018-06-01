@@ -39,6 +39,7 @@ module MnoEnterprise::Concerns::Models::Organization
     property :belong_to_sub_tenant, type: :boolean
     property :belong_to_account_manager, type: :boolean
     property :demo_account, type: :string
+    property :credit_account_id, type: :integer
   end
 
   #==================================================================

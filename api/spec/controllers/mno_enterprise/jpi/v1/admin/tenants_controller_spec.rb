@@ -37,7 +37,8 @@ module MnoEnterprise
           plugins_config: {
             payment_gateways: []
           },
-          app_management: "marketplace"
+          app_management: "marketplace",
+          organization_credit_management: true
         }
 
         # TODO: using JSON parse for better error
