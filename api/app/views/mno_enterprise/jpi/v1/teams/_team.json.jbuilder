@@ -1,5 +1,4 @@
 @all_apps ||= MnoEnterprise::App.all.to_a
-@all_products ||= MnoEnterprise::Product.all.to_a
 
 json.id team.id
 json.name team.name
@@ -24,11 +23,7 @@ end
 
 json.product_instances do
   json.array! team.product_instances do |product_instance|
-    json.id product_instance.id
-    json.name product_instance.name
-
-    if product = @all_products.find { |e| e.id == product_instance.product_id }
-      json.logo product.logo.to_s
-    end
+    json.extract! product_instance, :id, :name
+    json.logo product_instance&.product.logo&.to_s
   end
 end

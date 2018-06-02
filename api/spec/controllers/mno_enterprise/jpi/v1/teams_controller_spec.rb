@@ -82,7 +82,7 @@ module MnoEnterprise
       subject { put :add_users, id: team.id, team: {users: [{id: user.id}]} }
 
       # team reload
-      before { stub_api_v2(:get, "/teams/#{team.id}", team, %i(organization app_instances product_instances users)) }
+      before { stub_api_v2(:get, "/teams/#{team.id}", team, %i(organization app_instances product_instances users product_instances.product)) }
       context 'success' do
         before { subject }
 

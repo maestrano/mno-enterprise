@@ -7,7 +7,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
-    DEPENDENCIES = %i[organization app_instances product_instances users].freeze
+    DEPENDENCIES = %i[organization app_instances product_instances users product_instances.product].freeze
     respond_to :json
   end
 
