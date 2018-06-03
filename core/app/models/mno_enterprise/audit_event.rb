@@ -20,7 +20,7 @@ module MnoEnterprise
     def format_serialized_details
       AUDIT_LOG_CONFIG.fetch('events', {}).fetch(key, '') % metadata.symbolize_keys
     rescue KeyError => e
-      e.message unless key == 'subscription_update'
+      e.message unless key.start_with?('subscription_')
       # details.inspect
     end
 

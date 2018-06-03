@@ -51,10 +51,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
     subscription.save!
 
-    MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription) if cart_subscription_param.blank?
-
     set_staged_subscription_params
     @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
+
+    MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription) if cart_subscription_param.blank?
+
     render :show
   end
 
@@ -72,11 +73,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
       subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
     end
 
-    MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription, {edit_action: "#{edit_action}"}) if cart_subscription_param.blank?
     if cancel_staged_subscription_request
       head :no_content
     else
       @subscription = fetch_subscription(params[:organization_id], subscription.id, SUBSCRIPTION_INCLUDES)
+      MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', @subscription, {edit_action: edit_action.to_s}) if cart_subscription_param.blank?
       render :show
     end
   end
