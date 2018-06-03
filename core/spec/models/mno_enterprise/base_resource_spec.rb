@@ -46,6 +46,47 @@ module MnoEnterprise
       end
     end
 
+    describe '#loaded?' do
+      subject { subscription.loaded?(:product) }
+
+      before {
+        stub_api_v2(:get, '/subscriptions/1', build(:subscription), included, {}, mock_body)
+      }
+
+      let(:subscription) { MnoEnterprise::Subscription.find_one(1, included) }
+      let(:included) { [] }
+      let(:mock_body) { from_apiv2(build(:subscription), included) }
+
+      context 'when the association is loaded' do
+        let(:included) { [:product] }
+
+        let(:mock_body) do
+          {
+            data: {
+              type: 'subscriptions',
+              relationships: {
+                product: { data: { type: 'products', id: '1' } }
+              }
+            },
+            included: [
+              { id: '1', type: 'products' }
+            ]
+          }
+        end
+
+        it { is_expected.to be true }
+      end
+
+      context 'when the association is not loaded' do
+        it { is_expected.to be false }
+      end
+
+      context 'with an invalid association' do
+        subject { subscription.loaded?(:foobar) }
+        it { is_expected.to be nil }
+      end
+    end
+
     describe JsonApiClientExtension::CustomParser do
       describe 'time parsing' do
         subject { BaseResource.find(1).first }

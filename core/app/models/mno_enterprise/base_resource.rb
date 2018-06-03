@@ -183,6 +183,12 @@ module MnoEnterprise
       load_required
     end
 
+    # Returns true if the association has been loaded, otherwise false.
+    def loaded?(association)
+      table_name = association_for(association)&.association_class&.table_name
+      table_name && last_result_set&.included&.has_link?(table_name)
+    end
+
     def ==(o)
       o.class == self.class && o.attributes == attributes
     end
