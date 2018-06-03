@@ -23,11 +23,21 @@ module MnoEnterprise
     end
 
     def to_audit_event
-      event = {id: id, status: status}
-      if subscription = self.subscription
-        event[:subscription_id] = subscription.id
-        event[:organization_id] = subscription.organization_id 
+      event = self.attributes.slice(:id, :status)
+
+      record = if loaded?(:subscription) && subscription.loaded?(:product) && subscription.loaded?(:product_pricing)
+        self
+      else
+        load_required(:subscription, 'subscription.product', 'subscription.product_pricing')
       end
+
+      event.merge!(
+        subscription_id: record.subscription.id,
+        organization_id: record.subscription.organization_id,
+        product_name: record.subscription.product.name,
+        product_pricing_name: record.subscription.product_pricing.name
+      )
+
       event
     end
   end
