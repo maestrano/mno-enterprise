@@ -35,9 +35,19 @@ module MnoEnterprise
     custom_endpoint :submit_staged, on: :collection, request_method: :post
 
     def to_audit_event
-      event = {id: id, status: status}
-      event[:organization_id] = relationships.organization&.dig('data', 'id') if relationships.respond_to?(:organization)
-      event[:user_id] = relationships.user&.dig('data', 'id') if relationships.respond_to?(:user)
+      event = self.attributes.slice(:id, :status, :organization_id, :user_id, :product_id, :product_pricing_id).compact
+
+      # Avoid extra request if associations are already loaded
+      subscription = if loaded?(:product) && loaded?(:product_pricing)
+                       self
+                     else
+                       load_required(:product, :product_pricing)
+                     end
+
+      event.merge!(
+        product_name: subscription.product.name,
+        product_pricing_name: subscription.product_pricing.name
+      )
       event
     end
 

@@ -28,6 +28,9 @@ module MnoEnterprise
     # Stub license_assignments association
     before { allow_any_instance_of(MnoEnterprise::Subscription).to receive(:license_assignments).and_return([]) }
 
+    # Stub Audit Log
+    before { allow_any_instance_of(MnoEnterprise::Subscription).to receive(:to_audit_event).and_return({}) }
+
     describe 'GET #index' do
       let(:subscription) { build(:subscription) }
 

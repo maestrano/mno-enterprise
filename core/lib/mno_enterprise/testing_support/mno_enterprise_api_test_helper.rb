@@ -62,11 +62,11 @@ module MnoEnterpriseApiTestHelper
   end
 
   # Emulate the answer returned by the API V2. Returns a subset of json defined by the jsonapi-resources spec, so that it can be read by json api client
-  def stub_api_v2(method, suffix, entity = nil, included = [], params = {})
+  def stub_api_v2(method, suffix, entity = nil, included = [], params = {}, body = nil)
     params.reverse_merge!(_locale: I18n.locale)
     url = api_v2_url(suffix, included, params)
     stub = stub_request(method, url).with(MOCK_OPTIONS)
-    stub.to_return(status: 200, body: from_apiv2(entity, included).to_json, headers: JSON_API_RESULT_HEADERS) if entity
+    stub.to_return(status: 200, body: (body || from_apiv2(entity, included)).to_json, headers: JSON_API_RESULT_HEADERS) if entity
     stub
   end
 

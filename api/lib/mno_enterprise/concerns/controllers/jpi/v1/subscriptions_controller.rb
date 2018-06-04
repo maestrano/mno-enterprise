@@ -40,8 +40,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     end
     subscription.save!
 
-    MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', subscription) if cart_subscription_param.blank?
     @subscription = fetch_subscription(parent_organization.id, subscription.id)
+
+    MnoEnterprise::EventLogger.info('subscription_add', current_user.id, 'Subscription added', @subscription) if cart_subscription_param.blank?
+
     render :show
   end
 
@@ -62,11 +64,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
       subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
     end
 
-    MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription updated', subscription) if cart_subscription_param.blank?
     if cancel_staged_subscription_request
       head :no_content
     else
       @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription update', @subscription, {edit_action: edit_action.to_s}) if cart_subscription_param.blank?
       render :show
     end
   end
@@ -78,15 +80,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     status_params = { organization_id: parent_organization.id, id: params[:id] }
     status_params[:subscription_status_in] = 'staged' if cart_subscription_param.present?
     subscription = MnoEnterprise::Subscription.where(status_params).first
-    subscription = MnoEnterprise::Subscription.where(organization_id: parent_organization.id, id: params[:id]).first
     return render_not_found('subscription') unless subscription
     if cart_subscription_param.present?
       subscription.abandon!
       head :no_content
     else
       subscription.cancel!
-      MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription cancelled', subscription)
       @subscription = fetch_subscription(parent_organization.id, subscription.id)
+      MnoEnterprise::EventLogger.info('subscription_update', current_user.id, 'Subscription cancelled', @subscription)
       render :show
     end
   end
