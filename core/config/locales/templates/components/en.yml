@@ -86,3 +86,26 @@ en:
           change_language: 'Change language'
           confirm_header: 'Change language to {name}?'
           confirm: 'Are you sure you want to change language to {name}?'
+
+        addon_connect:
+          title: "Connect to {appname}"
+          next: Next
+          back: Back
+          link_account:
+            title: Link your account
+            link: "Link your {appname} account to Maestrano to get your business in sync."
+            submit_form: Submit
+          entities:
+            update_entities: Update
+            select: Select your entities
+            entity: Entity
+            to_app: "From Connec™ to {appname}"
+            chose_entities: Chose which entities you want to synchronize
+            to_connec: "From {appname} to Connec™"
+          sync:
+            sync_launched: "Congratulations, your data is now being synced!"
+            start_sync: Start synchronizing
+            chose_historical: Chose wether to synchronize historical data
+            warning_hisorical_html: "<p><b>All data</b> created prior to the date you linked {appname} <b>will be synchronized both ways</b></p><p>It means that:<br/>- all data from applications you already have linked to the platform will be sent to your {appname} account<br/>- all exisiting data from {appname} will be sent to your other applications<br/></p><p>If you have been manually copying records in multiple applications, <b>you risk seeing duplicates arising!</b></p><p><b>This action cannot be undone at any time!</b></p><b>Synchronize my historical data:</b>"
+            historical_unchecked: "Only data created after {date} will be synchronized"
+            historical_checked: "Synchronizing your historical data will share all data in {appname}. This action is not reversible. Want to know more? Check <a href=\"https://maestrano.atlassian.net/wiki/display/UKB/How+Connec%21+manages+Historical+Data+Sharing\" target=\"_blank\">here</a>"

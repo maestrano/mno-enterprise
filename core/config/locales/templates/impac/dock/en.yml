@@ -42,4 +42,27 @@ en:
               updating: Updating
               upgrading: Upgrading
               downgrading: Downgrading
-
+            sync_started: "The sync with {appname} has started"
+            sync_list:
+              title: "List of previous synchronizations:"
+              history: "History"
+              date: "Date"
+              status: "Status"
+              message: "Message"
+            sync: "Synchronize"
+            entities:
+              title: "Entities"
+              update: "Update"
+            id_maps:
+              title: "Data"
+              name: "Name"
+              type: "Type"
+              status: "Status"
+            disconnect_app: Disconnect
+            disconnect:
+              modal:
+                cancel: "Cancel"
+                action: "Disconnect app"
+                header: "Disconnect {appname}?"
+                body: "Are you sure you want to disconnect {appname} and Maestrano?"
+                success: "Your application has been disconnected"

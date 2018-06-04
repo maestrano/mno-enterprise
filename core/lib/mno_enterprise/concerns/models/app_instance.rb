@@ -16,12 +16,15 @@ module MnoEnterprise::Concerns::Models::AppInstance
     # delete <api_root>/app_instances/:id/terminate
     custom_endpoint :terminate, on: :member, request_method: :delete
     custom_endpoint :provision, on: :collection, request_method: :post
+    custom_endpoint :sync_history, on: :member, request_method: :get
+    custom_endpoint :id_maps, on: :member, request_method: :get
 
     #==============================================================
     # Constants
     #==============================================================
     ACTIVE_STATUSES = [:running, :stopped, :staged, :provisioning, :starting, :stopping, :updating]
     TERMINATION_STATUSES = [:terminating, :terminated]
+    REQUIRED_INDEX_FIELDS = [:uid, :stack, :name, :status, :oauth_keys_valid, :created_at, :per_user_licence, :addon_organization, :channel_id, :oauth_company, :app, :owner_id]
   end
 
   #==================================================================

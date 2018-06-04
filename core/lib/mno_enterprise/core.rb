@@ -289,7 +289,7 @@ module MnoEnterprise
           connection.use Faraday::Response::Logger
 
           # Instrumentation (see below for the subscription)
-          connection.use FaradayMiddleware::Instrumentation if Rails.env.development?
+          connection.use FaradayMiddleware::Instrumentation
         end
       end
     end
