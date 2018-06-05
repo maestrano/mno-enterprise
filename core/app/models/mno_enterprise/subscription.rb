@@ -46,7 +46,7 @@ module MnoEnterprise
 
       event.merge!(
         product_name: subscription.product.name,
-        product_pricing_name: subscription.product_pricing.name
+        product_pricing_name: subscription.product_pricing&.name || 'N/A'
       )
       event
     end

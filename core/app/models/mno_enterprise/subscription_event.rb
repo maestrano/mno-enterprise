@@ -35,7 +35,7 @@ module MnoEnterprise
         subscription_id: record.subscription.id,
         organization_id: record.subscription.organization_id,
         product_name: record.subscription.product.name,
-        product_pricing_name: record.subscription.product_pricing.name
+        product_pricing_name: record.subscription.product_pricing&.name || 'N/A'
       )
 
       event
