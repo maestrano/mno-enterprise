@@ -21,22 +21,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
   # POST /mnoe/jpi/v1/organizations/1/subscriptions
   def create
     authorize! :manage_app_instances, parent_organization
-
-    subscription = MnoEnterprise::Subscription.new(subscription_update_params)
+    subscription = MnoEnterprise::Subscription.new(subscription_events_attributes_params)
     subscription.status = :staged if cart_subscription_param.present?
     subscription.relationships.organization = MnoEnterprise::Organization.new(id: parent_organization.id)
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
-    if params[:subscription][:currency]
-      subscription.currency = params[:subscription][:currency]
-    end
     if params[:subscription][:product_id]
       subscription.relationships.product = MnoEnterprise::Product.new(id: params[:subscription][:product_id])
-    end
-    if params[:subscription][:product_pricing_id]
-      subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
-    end
-    if params[:subscription][:product_contract_id]
-      subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
     end
     subscription.save!
 
@@ -116,6 +106,19 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
 
   protected
 
+  def subscription_events_attributes_params
+    attrs = params.require(:subscription_events_attributes).permit(:start_date, :currency, :max_licenses, :product_pricing_id, :product_contract_id, :custom_data, :event_type).tap do |whitelisted|
+      whitelisted[:custom_data] = params[:subscription_events_attributes][:custom_data] if params[:subscription_events_attributes].has_key?(:custom_data) && params[:subscription_events_attributes][:custom_data].is_a?(Hash)
+    end
+    # Subscription details must be stored under the subscription event, so that once the subscription event is approved
+    # and the subscription is fulfilled, the subscription will be updated.
+    {
+      subscription_events_attributes: [{
+        subscription_details: attrs.except(:event_type),
+        event_type: attrs[:event_type]
+      }]
+    }
+  end
   def cart_subscription_param
     params.dig(:subscription, :cart_entry)
   end
