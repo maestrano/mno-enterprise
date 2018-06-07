@@ -110,6 +110,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     attrs = params.require(:subscription_events_attributes).permit(:start_date, :currency, :max_licenses, :product_pricing_id, :product_contract_id, :custom_data, :event_type).tap do |whitelisted|
       whitelisted[:custom_data] = params[:subscription_events_attributes][:custom_data] if params[:subscription_events_attributes].has_key?(:custom_data) && params[:subscription_events_attributes][:custom_data].is_a?(Hash)
     end
+
     # Subscription details must be stored under the subscription event, so that once the subscription event is approved
     # and the subscription is fulfilled, the subscription will be updated.
     {
@@ -119,6 +120,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
       }]
     }
   end
+
   def cart_subscription_param
     params.dig(:subscription, :cart_entry)
   end

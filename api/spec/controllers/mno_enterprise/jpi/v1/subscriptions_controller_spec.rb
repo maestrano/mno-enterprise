@@ -54,7 +54,8 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
-      let(:subscription) { build(:subscription, status: :provisioning) }
+      let(:subscription) { build(:subscription, subscription_events_attributes: subscription_events_attributes, status: :provisioning) }
+      let(:subscription_events_attributes) { { "currency" => "USD", "event_type" => "provision" } }
       let(:product) { build(:product) }
       let(:product_pricing) { build(:product_pricing, product: product) }
 
@@ -65,25 +66,28 @@ module MnoEnterprise
         before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id, subscription_status_in: 'staged'}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
         before { sign_in user }
 
-        subject { post :create, organization_id: organization.id, subscription: {custom_data: {foo: :bar}.to_json, product_pricing_id: product_pricing.id, cart_entry: true} }
+        subject { post :create, organization_id: organization.id, subscription: { cart_entry: true }, subscription_events_attributes: subscription_events_attributes }
 
         it_behaves_like 'jpi v1 protected action'
 
         it 'passes the correct parameters' do
           expect(subject).to be_successful
           assert_requested_api_v2(:post, '/subscriptions',
-                                   body: {
-                                    "data" => {
-                                      "type" => "subscriptions",
-                                      "relationships" => {
-                                        "organization" => {"data" => {"type" => "organizations", "id" => organization.id}},
-                                        "user" => {"data" => {"type" => "users", "id" => user.id}},
-                                        "product_pricing" => {"data" => {"type" => "product_pricings", "id" => product_pricing.id}}
-                                      },
-                                      "attributes" => {
-                                        "product_pricing_id" => product_pricing.id,
-                                        "custom_data" => {"foo" => "bar"}.to_json,
-                                        "status" => "staged"}
+                                   body:
+                                   {
+                                      "data" => {
+                                        "type" => "subscriptions",
+                                        "relationships" => {
+                                          "organization" => {"data" => {"type" => "organizations", "id" => organization.id}},
+                                          "user" => {"data" => {"type" => "users", "id" => user.id}},
+                                        },
+                                        "attributes" => {
+                                          "subscription_events_attributes" => [{
+                                            "subscription_details" => subscription_events_attributes.except("event_type"),
+                                            "event_type" => subscription_events_attributes["event_type"]
+                                          }],
+                                          "status" => "staged"
+                                        }
                                       }
                                     }.to_json)
         end
