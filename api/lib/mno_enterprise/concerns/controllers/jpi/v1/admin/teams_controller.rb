@@ -25,12 +25,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::TeamsController
     MnoEnterprise::Team
       .apply_query_params(params)
       .where('organization.id': organization_id)
-      .includes(:app_instances, :users, app_instances: :app)
+      .includes(:app_instances, :product_instances, :users, app_instances: :app, product_instances: :product)
       .with_params(fields:{
-        teams: 'id,name,app_instances,users',
+        teams: 'id,name,app_instances,product_instances,users',
         app_instances:'id,name,app',
+        product_instances:'id,name,product',
         users: 'id,name,surname,email',
-        apps: 'logo'
+        apps: 'logo',
+        products: 'logo'
       })
   end
 end

@@ -13,6 +13,7 @@ FactoryGirl.define do
       users []
       user_ids []
       app_instances []
+      product_instances []
     end
   end
 end

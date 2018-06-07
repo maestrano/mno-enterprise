@@ -7,6 +7,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
+    DEPENDENCIES = %i[organization app_instances product_instances users product_instances.product].freeze
     respond_to :json
   end
 
@@ -16,12 +17,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
   # GET /mnoe/jpi/v1/organizations/:organization_id/teams
   def index
     authorize! :read, parent_organization
-    @teams = MnoEnterprise::Team.includes(:organization, :app_instances, :users).find(organization_id: parent_organization.id)
+    @teams = MnoEnterprise::Team.includes(*DEPENDENCIES).find(organization_id: parent_organization.id)
   end
 
   # GET /mnoe/jpi/v1/teams/:id
   def show
-    @team = MnoEnterprise::Team.find_one(params[:id], :organization, :app_instances, :users)
+    @team = MnoEnterprise::Team.find_one(params[:id], *DEPENDENCIES)
     authorize! :read, @team.organization
   end
 
@@ -40,12 +41,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
     authorize! :manage_teams, @parent_organization
     @team.update_attributes!(update_params)
     # # Update permissions
-    if params[:team] && params[:team][:app_instances]
-      list = params[:team][:app_instances].select { |e| e != {} }
-      MnoEnterprise::EventLogger.info('team_apps_update', current_user.id, 'Team apps updated', @team,
-                                      {apps: list.map{|l| l['name']}})
+    if params[:team] && params[:team][:product_instances]
+      list = params[:team][:product_instances].select { |e| e != {} }
+      MnoEnterprise::EventLogger.info('team_apps_update', current_user.id, 'Team products updated', @team,
+                                      {products: list.map{|l| l['name']}})
     end
-    @team = @team.load_required(:organization, :users, :app_instances)
+    @team = @team.load_required(*DEPENDENCIES)
     render 'show'
   end
 
@@ -88,16 +89,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
       MnoEnterprise::EventLogger.info('team_update', current_user.id, 'Team composition updated', @team,
                                       {action: action.to_s, user_ids: user_ids})
     end
-    @team = @team.load_required(:organization, :users, :app_instances)
+    @team = @team.load_required(*DEPENDENCIES)
     @parent_organization = MnoEnterprise::Organization.find_one(@team.organization.id, :orga_relations)
     render 'show'
   end
 
   def update_params
     update = params.require(:team).permit(:name)
-    if params[:team] && params[:team][:app_instances]
-      list = params[:team][:app_instances].map { |e| e['id'] }.compact
-      update[:app_instance_ids] = list
+    if params[:team] && params[:team][:product_instances]
+      list = params[:team][:product_instances].map { |e| e['id'] }.compact
+      update[:product_instance_ids] = list
     end
     update
   end
