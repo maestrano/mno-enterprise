@@ -56,6 +56,11 @@ en:
             price: "Price"
             go_to_my_app: "Go to my app"
             order_type: "Order type"
+            pricing_info:
+              title: "Pricing Information"
+              single_billing_disabled: "Subscription plan is managed by the application"
+              externally_managed: "Subscription plan is managed by the application and billed via Maestrano"
+              billed_locally: "Billing is operated via Maestrano"
           subscription:
             back: "back"
             info: "Info"
