@@ -118,11 +118,6 @@ en:
             modify: "Modify subscription"
             empty_list: "You don't have any subscriptions"
             cancel: "Cancel subscription"
-            cancel_modal.title: "Cancel subscription"
-            cancel_modal.body: "Do you want to cancel this subscription?"
-            cancel_modal.yes: "Yes"
-            cancel_modal.no: "No"
-            cancel_error: "An error occurred while canceling this subscription. Please contact your administrator."
             aborted_modal.title: "Subscription has been aborted"
             aborted_modal.body: "Something wrong happened when fulfilling your order.<p>It can be a temporary issue, please check again in 15 minutes.<p>If the issue persists, contact your system administrator"
             aborted_modal.close: "Close"
@@ -134,9 +129,7 @@ en:
               title: "Your Company Cart"
               empty: "Please add some items to the cart"
               add_to_cart: "Add to Cart and continue Shopping"
-              cancel_modal:
-                title: "Remove Item"
-                body: "This will remove the subscription from the cart. Continue?"
+              cancel_tooltip: "Remove Item"
               delete_cart:
                 title: "Delete Cart"
                 toastr: "Your cart has been cleared"
