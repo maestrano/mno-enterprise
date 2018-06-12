@@ -8,6 +8,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::QuotesController
   # Sends post request to MnoHub
   def create
     @quote =  MnoEnterprise::ProductQuote.fetch_quote!(params)
-    render :show
+    if @quote.errors.empty?
+      render :show
+    else
+      render json: @quote.errors, status: :bad_request
+    end
   end
 end
