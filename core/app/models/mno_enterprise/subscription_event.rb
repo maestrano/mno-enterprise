@@ -10,6 +10,7 @@ module MnoEnterprise
     property :provisioning_data
 
     has_one :subscription
+    has_one :product_pricing
 
     custom_endpoint :approve, on: :member, request_method: :post
     custom_endpoint :reject, on: :member, request_method: :post

@@ -8,6 +8,10 @@ json.created_at subscription_event.created_at
 json.updated_at subscription_event.updated_at
 json.user_name subscription_event.user_name
 
+json.product_pricing do
+  json.name subscription_event.product_pricing&.name
+end
+
 if subscription_event.subscription
   subscription = subscription_event.subscription
 
@@ -18,6 +22,5 @@ if subscription_event.subscription
     json.organization_name subscription.organization&.name
     json.organization_id subscription.organization&.id
     json.product_name subscription.product&.name
-    json.product_pricing_name subscription.product_pricing&.name
   end
 end

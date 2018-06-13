@@ -1,7 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_EVENT_INCLUDES ||= [:'subscription', :'subscription.organization', :'subscription.product', :'subscription.product_pricing']
+  SUBSCRIPTION_EVENT_INCLUDES ||= [:'subscription', :'subscription.organization', :'subscription.product', :'product_pricing']
 
   #==================================================================
   # Instance methods
