@@ -24,7 +24,7 @@ module MnoEnterprise
 
         {
           connectors: org.connectors,
-          is_syncing: org.connectors.any? { |c| CONNECTOR_STATUS_RUNNING.include?(c[:status].upcase) },
+          is_syncing: org.connectors.any? { |c| CONNECTOR_STATUS_RUNNING.include?(c[:status]&.upcase) },
           has_running_cube: has_running_cube
         }
       end
