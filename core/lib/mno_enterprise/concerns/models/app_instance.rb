@@ -35,7 +35,7 @@ module MnoEnterprise::Concerns::Models::AppInstance
   end
 
   def active?
-    status.to_sym.in? ACTIVE_STATUSES
+    status&.to_sym.in? ACTIVE_STATUSES
   end
 
   def running?
