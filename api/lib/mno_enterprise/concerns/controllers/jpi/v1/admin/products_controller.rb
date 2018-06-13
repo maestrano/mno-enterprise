@@ -12,7 +12,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
   def index
     if params[:terms]
       # Search mode
-      @products = []
+      query = MnoEnterprise::Product.apply_query_params(params)
+      @products = MnoEnterprise::Product.fetch_all(query)
       JSON.parse(params[:terms]).map { |t| @products = @products | MnoEnterprise::ProductMarkup.includes(DEPENDENCIES).where(Hash[*t]) }
       response.headers['X-Total-Count'] = @products.count
     else

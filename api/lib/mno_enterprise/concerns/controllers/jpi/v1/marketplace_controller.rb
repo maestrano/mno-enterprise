@@ -19,17 +19,17 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   # into any markup/discounts applied specifically to this organization
   def index
     expires_in 0, public: true, must_revalidate: true
+    params[:purchasables] = params[:purchasables].present? ? params[:purchasables] : 'user_purchasable'
 
     # Compute cache key timestamp
-    app_last_modified = app_relation(parent_organization_id).order(updated_at: :desc).select(:updated_at).first&.updated_at || Time.new(0)
-    product_last_modified = product_relation(parent_organization_id).order(updated_at: :desc).select(:updated_at).first&.updated_at || Time.new(0)
+    app_last_modified = app_relation(parent_organization_id).where(purchasables: params[:purchasables]).order(updated_at: :desc).select(:updated_at).first&.updated_at || Time.new(0)
+    product_last_modified = product_relation(parent_organization_id).where(purchasables: params[:purchasables]).order(updated_at: :desc).select(:updated_at).first&.updated_at || Time.new(0)
     tenant_last_modified = MnoEnterprise::Tenant.show.updated_at
     @last_modified = [app_last_modified, tenant_last_modified, product_last_modified].max
     @org_id = parent_organization_id
 
     # Fetch application listings & pricings
     if stale?(etag: parent_organization, last_modified: @last_modified)
-
       @apps = fetch_apps
       @products = fetch_products
 
@@ -81,7 +81,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
 
   def fetch_apps
     Rails.cache.fetch("marketplace/index-apps-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
-      apps = MnoEnterprise::App.fetch_all(app_relation(parent_organization_id).includes(:app_shared_entities, { app_shared_entities: :shared_entity }).where(active: true))
+      apps = MnoEnterprise::App.fetch_all(app_relation(parent_organization_id).includes(:app_shared_entities, { app_shared_entities: :shared_entity }).where(active: true, purchasables: params[:purchasables]))
       apps.sort_by! { |app| [app.rank ? 0 : 1, app.rank] } # the nil ranks will appear at the end
       apps
     end
@@ -89,7 +89,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
 
   def fetch_products
     Rails.cache.fetch("marketplace/index-products-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
-      MnoEnterprise::Product.fetch_all(product_relation(parent_organization_id).includes(PRODUCT_DEPENDENCIES).where(active: true))
+      MnoEnterprise::Product.fetch_all(product_relation(parent_organization_id).includes(PRODUCT_DEPENDENCIES).where(active: true, purchasables: params[:purchasables]))
     end
   end
 end
