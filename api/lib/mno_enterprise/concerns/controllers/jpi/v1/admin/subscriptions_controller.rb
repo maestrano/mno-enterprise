@@ -88,8 +88,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     # and the subscription is fulfilled, the subscription will be updated.
     {
       subscription_events_attributes: [{
-        subscription_details: attrs.except(:event_type),
-        event_type: attrs[:event_type]
+        subscription_details: attrs.except(:event_type, :product_pricing_id),
+        event_type: attrs[:event_type],
+        product_pricing_id: attrs[:product_pricing_id]
       }]
     }
   end
