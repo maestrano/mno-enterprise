@@ -15,12 +15,11 @@ module MnoEnterprise
     # Stub user and user call
     let!(:user) { build(:user) }
     let!(:current_user_stub) { stub_user(user) }
-    let(:purchasable) { 'user_purchasable' }
 
     describe 'GET #index' do
       subject { get :index, params }
 
-      let(:params) { { purchasables: purchasable } }
+      let(:params) { {} }
       let(:product) { build(:product) }
       let(:organization) {
         o = build(:organization, orga_relations: [])
@@ -31,17 +30,17 @@ module MnoEnterprise
       before { sign_in user }
 
       context 'without organization_id' do
-        before { stub_api_v2(:get, "/products", [product], [:'values.field', :assets, :categories, :product_contracts], { filter: { active: true, purchasables: purchasable } }) }
+        before { stub_api_v2(:get, "/products", [product], [:'values.field', :assets, :categories, :product_contracts], { filter: { active: true } }) }
         it_behaves_like 'jpi v1 protected action'
       end
 
       context 'with organization_id' do
-        let(:params) { { organization_id: organization.id, purchasables: purchasable } }
+        let(:params) { { organization_id: organization.id } }
 
         before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
         before do
           stub_api_v2(:get, "/products", [product],
-            [:'values.field', :assets, :categories, :product_contracts], { filter: { active: true, purchasables: purchasable }, _metadata: { organization_id: organization.id } })
+            [:'values.field', :assets, :categories, :product_contracts], { filter: { active: true }, _metadata: { organization_id: organization.id } })
         end
 
         it_behaves_like 'jpi v1 protected action'
