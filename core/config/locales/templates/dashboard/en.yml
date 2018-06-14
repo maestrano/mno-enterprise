@@ -47,8 +47,9 @@ en:
               order_history:
                 title: Order history
                 start_date: Start date
-                offer_name: Offer name
+                event_type: Event Type
                 status: Status
+                message: Message
                 no_history: No previous history available
 
         account:
