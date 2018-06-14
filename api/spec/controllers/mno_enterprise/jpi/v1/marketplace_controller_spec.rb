@@ -13,6 +13,7 @@ module MnoEnterprise
     let!(:app) { build(:app) }
     let!(:product) { build(:product) }
     let(:tenant) { build(:tenant, updated_at: 2.days.ago) }
+    let(:purchasable) { 'user_purchasable' }
 
     def markdown(text)
       return text unless text.present?
@@ -102,10 +103,10 @@ module MnoEnterprise
 
       before do
         stub_api_v2(:get, '/tenant', tenant)
-        stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { filter: { active: true } })
-        stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
-        stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { filter: { active: true }} )
-        stub_api_v2(:get, '/products', [product], [], { fields: { products: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
+        stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { filter: { active: true, purchasables: purchasable } })
+        stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, filter: { purchasables: purchasable }, page: { number: 1, size: 1 }, sort: '-updated_at' })
+        stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { filter: { active: true, purchasables: purchasable } } )
+        stub_api_v2(:get, '/products', [product], [], { fields: { products: 'updated_at' }, filter: { purchasables: purchasable }, page: { number: 1, size: 1 }, sort: '-updated_at' })
       end
 
       it { is_expected.to be_success }
@@ -120,9 +121,9 @@ module MnoEnterprise
         let(:app2) { build(:app, rank: 0) }
 
         before do
-          stub_api_v2(:get, '/apps', [app1, app2], DEPENDENCIES, { filter: { active: true } })
-          stub_api_v2(:get, '/products', [], PRODUCT_DEPENDENCIES, { filter: { active: true }} )
-          stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
+          stub_api_v2(:get, '/apps', [app1, app2], DEPENDENCIES, { filter: { active: true, purchasables: purchasable } })
+          stub_api_v2(:get, '/products', [], PRODUCT_DEPENDENCIES, { filter: { active: true, purchasables: purchasable }} )
+          stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, filter: { purchasables: purchasable }, page: { number: 1, size: 1 }, sort: '-updated_at' })
         end
 
         it 'returns the apps in the correct order' do
@@ -138,14 +139,14 @@ module MnoEnterprise
         let(:product1) { build(:product) }
 
         before do
-          stub_api_v2(:get, '/apps', [app1, app3, app2], DEPENDENCIES, { filter: { active: true } })
+          stub_api_v2(:get, '/apps', [app1, app3, app2], DEPENDENCIES, { filter: { active: true, purchasables: purchasable } })
           stub_api_v2(:get, '/apps', [app1], [],
                       {
                         fields: { apps: 'updated_at' },
                         page: { number: 1, size: 1 },
                         sort: '-updated_at'
                       })
-          stub_api_v2(:get, '/products', [product1], PRODUCT_DEPENDENCIES, { filter: { active: true }} )
+          stub_api_v2(:get, '/products', [product1], PRODUCT_DEPENDENCIES, { filter: { active: true, purchasables: purchasable }} )
           stub_api_v2(:get, '/products', [product1], [],
                       {
                         fields: { products: 'updated_at' },
@@ -161,20 +162,21 @@ module MnoEnterprise
       end
 
       context 'with organization_id' do
-        subject { get :index, organization_id: organization.id }
+        subject { get :index, organization_id: organization.id, purchasables: purchasable }
         let!(:organization) { build(:organization) }
         let!(:user) { build(:user) }
         let!(:current_user_stub) { stub_user(user) }
 
         before { sign_in user }
         before { stub_api_v2(:get, "/organizations", [organization], [], { fields: { organizations: 'id' }, filter: { id: organization.id, 'users.id' => user.id }, page: { number: 1, size: 1 } }) }
-        before { stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true } }) }
-        before { stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true } }) }
+        before { stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true, purchasables: purchasable } }) }
+        before { stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true, purchasables: purchasable } }) }
         before do
           stub_api_v2(:get, '/apps', [app], [],
                       {
                         _metadata: { organization_id: organization.id },
                         fields: { apps: 'updated_at' },
+                        filter: { purchasables: purchasable },
                         page: { number: 1, size: 1 },
                         sort: '-updated_at'
                       }
@@ -183,6 +185,7 @@ module MnoEnterprise
                       {
                         _metadata: { organization_id: organization.id },
                         fields: { products: 'updated_at' },
+                        filter: { purchasables: purchasable },
                         page: { number: 1, size: 1 },
                         sort: '-updated_at'
                       }
@@ -224,6 +227,7 @@ module MnoEnterprise
           stub_api_v2(:get, '/apps', [], [],
                       {
                         fields: { apps: 'updated_at' },
+                        filter: { purchasables: purchasable },
                         page: { number: 1, size: 1 },
                         sort: '-updated_at'
                       }
@@ -231,6 +235,7 @@ module MnoEnterprise
           stub_api_v2(:get, '/products', [], [],
                       {
                         fields: { apps: 'updated_at' },
+                        filter: { purchasables: purchasable },
                         page: { number: 1, size: 1 },
                         sort: '-updated_at'
                       }
