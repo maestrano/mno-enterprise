@@ -20,7 +20,7 @@ module MnoEnterprise
     describe 'GET #index' do
       subject { get :index, params }
 
-      let(:params) { {} }
+      let(:params) { { purchasables: purchasable } }
       let(:product) { build(:product) }
       let(:organization) {
         o = build(:organization, orga_relations: [])
@@ -36,7 +36,7 @@ module MnoEnterprise
       end
 
       context 'with organization_id' do
-        let(:params) { { organization_id: organization.id } }
+        let(:params) { { organization_id: organization.id, purchasables: purchasable } }
 
         before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations users)) }
         before do

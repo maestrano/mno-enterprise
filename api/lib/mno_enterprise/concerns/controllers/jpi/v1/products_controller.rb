@@ -8,7 +8,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
   DEPENDENCIES = [:'values.field', :assets, :categories, :product_contracts]
 
   def index
-    query = MnoEnterprise::Product.apply_query_params(params).includes(DEPENDENCIES).where(active: true, purchasables: 'user_purchasable')
+    query = MnoEnterprise::Product.apply_query_params(params).includes(DEPENDENCIES).where(active: true, purchasables: params[:purchasables])
 
     # Ensure prices include organization-specific markups/discounts
     if params[:organization_id] && parent_organization
