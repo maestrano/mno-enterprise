@@ -22,7 +22,7 @@
 
   -if Settings.system.organization_requirements&.include?('main_address')
 
-    %hr
+    %hr{ 'ng-init' => "user.main_address = {}" }
     = render "mno_enterprise/auth/registrations/address_form"
     %br
 
