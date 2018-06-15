@@ -39,12 +39,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
       .first
     return render_not_found('Organization') unless organization
 
-    subscription = MnoEnterprise::Subscription.new(subscription_events_attributes_params)
+    subscription = MnoEnterprise::Subscription.new(subscription_update_params)
     subscription.status = :staged if cart_subscription_param.present?
     subscription.relationships.organization = organization
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
     subscription.relationships.product = MnoEnterprise::Product.new(id: params[:subscription][:product_id])
-
     subscription.save!
 
     set_staged_subscription_params
@@ -80,30 +79,18 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
   protected
 
-  def subscription_events_attributes_params
-    attrs = params.require(:subscription_events_attributes).permit(:start_date, :currency, :max_licenses, :product_pricing_id, :product_contract_id, :custom_data, :event_type).tap do |whitelisted|
-      whitelisted[:custom_data] = params[:subscription_events_attributes][:custom_data] if params[:subscription_events_attributes].has_key?(:custom_data) && params[:subscription_events_attributes][:custom_data].is_a?(Hash)
-    end
-    # Subscription details must be stored under the subscription event, so that once the subscription event is approved
-    # and the subscription is fulfilled, the subscription will be updated.
-    {
-      subscription_events_attributes: [{
-        subscription_details: attrs.except(:event_type, :product_pricing_id),
-        event_type: attrs[:event_type],
-        product_pricing_id: attrs[:product_pricing_id]
-      }]
-    }
-  end
-
   def cart_subscription_param
     params.dig(:subscription, :cart_entry)
   end
 
+  def subscription_params
+    params.require(:subscription)
+  end
+
   def subscription_update_params
     # custom_data is an arbitrary hash
-    # On Rails 5.1 use `permit(custom_data: {})`
-    params.require(:subscription).permit(:start_date, :max_licenses, :custom_data, :product_contract_id, :product_pricing_id).tap do |whitelisted|
-      whitelisted[:custom_data] = params[:subscription][:custom_data] if params[:subscription].has_key?(:custom_data) && params[:subscription][:custom_data].is_a?(Hash)
+    subscription_params.permit(:start_date, :product_contract_id, :product_pricing_id, :product_id).tap do |whitelisted|
+      whitelisted[:subscription_events_attributes] = params[:subscription][:subscription_events_attributes]
     end
   end
 
