@@ -42,6 +42,7 @@ if subscription.product
     json.nid subscription.product.nid
     json.single_billing_enabled subscription.product.single_billing_enabled
     json.billed_locally subscription.product.billed_locally
+    json.externally_provisioned subscription.externally_provisioned
   end
 end
 
