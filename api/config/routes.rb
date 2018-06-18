@@ -165,7 +165,7 @@ MnoEnterprise::Engine.routes.draw do
               post :submit_cart_subscriptions
             end
 
-            resources :subscription_events, only: [:index, :show]
+            resources :subscription_events, only: [:index, :show, :create]
           end
         end
       end
@@ -292,7 +292,7 @@ MnoEnterprise::Engine.routes.draw do
             resources :quotes, only: [:create]
             resources :subscription_events, only: [:index]
             resources :subscriptions, only: [:index, :show, :create, :update] do
-              resources :subscription_events, only: [:index, :show]
+              resources :subscription_events, only: [:index, :show, :create]
             end
           end
         end
