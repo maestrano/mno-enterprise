@@ -16,6 +16,7 @@ json.subcategories app.subcategories
 json.average_rating app.average_rating
 json.add_on app.add_on?
 json.running_instances_count app.running_instances_count
+json.sso_init_url app.sso_init_url
 
 if app.app_shared_entities.any?
   json.app_shared_entities do
