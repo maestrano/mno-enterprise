@@ -40,5 +40,12 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/products/#{product.id}", product, [], { _fetch_custom_schema: true, _edit_action: 'SUSPEND', fields: { products: 'custom_schema' } }) }
       it_behaves_like 'a jpi v1 admin action'
     end
+
+    describe 'GET #subscribed_tenant_products' do
+      let(:organization) { build(:organization) }
+      subject { get :subscribed_tenant_products, organization_id: organization.id }
+      before { stub_api_v2(:get, "/products", [], [:'values.field', :assets, :categories, :product_pricings, :product_contracts, :subscriptions], { filter: { 'subscriptions.organization_id': organization.id, purchasables: 'tenant_purchasable' } }) }
+      it_behaves_like 'a jpi v1 admin action'
+    end
   end
 end

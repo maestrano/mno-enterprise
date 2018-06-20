@@ -54,7 +54,8 @@ module MnoEnterprise
         'running_instances_count' => app.running_instances_count,
         'pricing_text' => app.pricing_text,
         'free_trial_duration' => app.free_trial_duration,
-        'free_trial_unit' => app.free_trial_unit
+        'free_trial_unit' => app.free_trial_unit,
+        'sso_init_url' => app.sso_init_url,
       }
     end
 

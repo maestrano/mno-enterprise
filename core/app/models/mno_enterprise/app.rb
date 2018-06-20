@@ -5,6 +5,7 @@ module MnoEnterprise
 
     property :created_at, type: :time
     property :updated_at, type: :time
+    property :sso_init_url, type: :string
 
     custom_endpoint :regenerate_api_key, on: :member, request_method: :patch
 
