@@ -199,6 +199,9 @@ MnoEnterprise::Engine.routes.draw do
         member do
           get :custom_schema
         end
+        collection do
+          get :subscribed_tenant_products
+        end
         resources :pricings, only: :index
       end
 

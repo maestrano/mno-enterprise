@@ -4,6 +4,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
   ATTRIBUTES = [:name, :active, :logo, :external_id, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :single_billing_enabled, :billed_locally]
   DEPENDENCIES = [:'values.field', :assets, :categories, :product_pricings, :product_contracts]
   PRICING_ATTRIBUTES = [:name, :description, :position, :free, :pricing_type, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, {:prices => [:currency, :price_cents] }, :external_id]
+  SUBSCRIBED_TENANT_DEPENDENCIES = DEPENDENCIES + [:subscriptions]
 
   #==================================================================
   # Instance methods
@@ -108,6 +109,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
     logo = { data_base64: image_encoded, filename: image.original_filename, content_type: image.content_type }.to_json
     product.update!(logo: logo)
     head :created
+  end
+
+  def subscribed_tenant_products
+    @products = MnoEnterprise::Product.includes(SUBSCRIBED_TENANT_DEPENDENCIES)
+      .where('subscriptions.organization_id': params[:organization_id], purchasables: 'tenant_purchasable')
+      .to_a
+
+    render :index
   end
 
   private
