@@ -18,3 +18,5 @@ json.pricing_plans do
     json.extract! pricing, :id, :name, :description, :position, :free, :license_based, :pricing_type, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, :prices, :external_id, :quote_based
   end if product.respond_to?(:pricing_plans)
 end
+
+json.js_editor_enabled product.nid.in? Settings.product_nids
