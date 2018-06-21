@@ -65,7 +65,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     if cart_subscription_param.present?
       subscription.process_staged_update_request!({data: subscription.as_json_api}, edit_action)
     else
-      subscription.process_update_request!({data: subscription.as_json_api}, edit_action)
+      subscription.save!
     end
 
     if cancel_staged_subscription_request
@@ -89,7 +89,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
   def subscription_update_params
     # custom_data is an arbitrary hash
-    subscription_params.permit(:start_date, :product_contract_id, :product_pricing_id, :product_id).tap do |whitelisted|
+    subscription_params.permit(:product_contract_id, :product_id).tap do |whitelisted|
       whitelisted[:subscription_events_attributes] = params[:subscription][:subscription_events_attributes]
     end
   end
