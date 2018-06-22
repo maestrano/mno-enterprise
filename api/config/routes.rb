@@ -94,6 +94,9 @@ MnoEnterprise::Engine.routes.draw do
       end
     end
     # Maestrano-hub events
+    namespace :mnohub do 
+      resources :receive, only: [:create]
+    end
     resources :events, only: [:create]
   end
 

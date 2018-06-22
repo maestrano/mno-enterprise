@@ -65,7 +65,7 @@ module MnoEnterprise::Concerns::Models::Organization
       else
         invite.status == 'staged'
       end
-    end
+    end unless self.orga_invites.blank?
     [self.users, invites.to_a].flatten
   end
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <%= stylesheet_link_tag('mno_enterprise/mail.css') %>
+  </head>
+  <body>
+    <p class="header">
+      <%= image_tag(main_logo_white_bg_path, main_logo_white_bg_size_to_fit) %>
+    </p>
+
+    <p>Hi there,</p>
+    <p>
+      <%= @info[:first_name] %>, Order status of this customer has changed to <%= @info[:subscription_status] %>, which is associated to this product <%= @info[:product_name] %> and its subscription id is <%= @info[:subscription_id] %>.
+    </p>
+
+    <p>
+      You can find subscription here.
+      <a href="<%= @info[:subscription_link] %>">Subscription Link</a>
+    </p>
+
+    <p>
+       Regards,<br/>
+       The Marketplace team
+    </p>
+
+    <p class="footer">
+      <%= @info[:company] %>
+    </p>
+  </body>
+</html>
