@@ -39,11 +39,24 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
       .first
     return render_not_found('Organization') unless organization
 
-    subscription = MnoEnterprise::Subscription.new(subscription_update_params)
-    subscription.status = :staged if cart_subscription_param.present?
+    if cart_subscription_param.present?
+      # Workaround, because once a subscription is requested from the cart, the attributes of the subscription get
+      # deleted and moved over to the subscription event. TODO: Refactor cart system to take place on subscription event.
+      subscription = MnoEnterprise::Subscription.new(subscription_cart_params)
+      subscription.status = :staged
+    else
+      subscription = MnoEnterprise::Subscription.new(subscription_update_params)
+    end
+
     subscription.relationships.organization = organization
     subscription.relationships.user = MnoEnterprise::User.new(id: current_user.id)
     subscription.relationships.product = MnoEnterprise::Product.new(id: params[:subscription][:product_id])
+    if params[:subscription][:product_pricing_id]
+      subscription.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription][:product_pricing_id])
+    end
+    if params[:subscription][:product_contract_id]
+      subscription.relationships.product_contract = MnoEnterprise::ProductContract.new(id: params[:subscription][:product_contract_id])
+    end
     subscription.save!
 
     set_staged_subscription_params
@@ -59,12 +72,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     set_staged_subscription_params
     subscription = fetch_subscription(params[:organization_id], params[:id])
     return render_not_found('subscription') unless subscription
-    subscription.attributes = subscription_update_params
 
     edit_action = params[:subscription][:edit_action]
     if cart_subscription_param.present?
+      subscription.attributes = subscription_cart_params
       subscription.process_staged_update_request!({data: subscription.as_json_api}, edit_action)
     else
+      subscription.attributes = subscription_update_params
       subscription.save!
     end
 
@@ -87,8 +101,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
     params.require(:subscription)
   end
 
-  def subscription_update_params
+  def subscription_cart_params
     # custom_data is an arbitrary hash
+    # On Rails 5.1 use `permit(custom_data: {})`
+    subscription_params.permit(:start_date, :max_licenses,:custom_data, :product_contract_id, :product_pricing_id, :currency).tap do |whitelisted|
+      whitelisted[:custom_data] = params[:subscription][:custom_data] if params[:subscription].has_key?(:custom_data) && params[:subscription][:custom_data].is_a?(Hash)
+    end
+  end
+
+  def subscription_update_params
     subscription_params.permit(:product_contract_id, :product_id).tap do |whitelisted|
       whitelisted[:subscription_events_attributes] = params[:subscription][:subscription_events_attributes]
     end

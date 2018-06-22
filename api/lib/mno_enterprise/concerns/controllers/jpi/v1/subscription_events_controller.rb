@@ -29,7 +29,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionEventsControll
     subscription_event.save!
     # Fetch so that we can include relationships.
     @subscription_event = fetch_subscription_event(params[:organization_id], params[:subscription_id], subscription_event.id)
-    render :show  end
+    render :show
+  end
 
   protected
 

@@ -50,7 +50,7 @@ module MnoEnterprise
       when 'cancel'
         abandon!
       else
-        process_update_request!(subscription, edit_action)
+        self.save!
       end
     end
 
