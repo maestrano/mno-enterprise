@@ -5,6 +5,7 @@ module MnoEnterprise
     property :product_id
     property :quote
     property :custom_schema
+    property :selected_currency
 
     def self.fetch_quote!(form_data)
       create(form_data)
