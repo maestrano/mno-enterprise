@@ -165,6 +165,11 @@ module MnoEnterprise
       process_custom_result(result)
     end
 
+    def clear_clients!
+      result = update_clients({data: {attributes: {set: []}}})
+      process_custom_result(result)
+    end
+
     # Find a user using a confirmation token
     def self.find_for_confirmation(confirmation_token)
       original_token = confirmation_token

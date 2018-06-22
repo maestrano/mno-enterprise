@@ -96,16 +96,24 @@ module MnoEnterprise
     describe 'PUT #update' do
       subject { put :update, id: user.id, user: params }
 
-      let(:data) { JSON.parse(response.body) }
+      let(:data) { JSON.parse(subject.body) }
       let(:params) { { 'name' => 'Foo' } }
       let(:expected_params) { params.merge('sub_tenant_id' => nil) }
 
-      before { expect_any_instance_of(MnoEnterprise::User).to receive(:save) }
+      before { expect_any_instance_of(MnoEnterprise::User).to receive(:save!) }
       before { stub_api_v2(:get, "/users/#{user.id}", user, [], { _metadata: { act_as_manager: current_user.id } }) }
       before { stub_api_v2(:get, "/users/#{user.id}", user, [:sub_tenant]) }
-      before { subject }
 
       it { expect(data['user']['id']).to eq(user.id) }
+
+      context 'when changing a staff to admin' do
+        let(:user) { build(:user, admin_role: 'staff') }
+        let(:params) { { 'name' => 'Foo', 'admin_role' => 'admin' } }
+        before { expect_any_instance_of(MnoEnterprise::User).to receive(:clear_clients!) }
+
+        # Dummy test to trigger the above expectation
+        it { expect(data['user']['id']).to eq(user.id) }
+      end
     end
 
     describe 'PATCH #update_clients' do
