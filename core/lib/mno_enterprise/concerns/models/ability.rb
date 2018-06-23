@@ -67,7 +67,7 @@ module MnoEnterprise::Concerns::Models::Ability
       !!role && (
       ['Super Admin','Admin'].include?(role) ||
           user.teams.empty? ||
-          user.teams.map(&:app_instances).compact.flatten.map(&:id).include?(app_instance.id)
+          user.teams.map(&:app_instance_ids).compact.flatten.map(&:to_i).include?(app_instance.id.to_i)
       )
     end
 
