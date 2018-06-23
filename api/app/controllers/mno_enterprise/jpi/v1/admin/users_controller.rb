@@ -63,6 +63,7 @@ module MnoEnterprise
       return render_not_found('User') unless @user
       @user.attributes = user_update_params
       update_sub_tenant(@user)
+      clear_clients(@user)
       @user.save!
       @user = @user.load_required(:sub_tenant)
       render :show
@@ -132,6 +133,13 @@ module MnoEnterprise
         attrs.merge!(orga_on_create: true, company: 'Demo Company', demo_account: 'Staff demo company')
       end
       attrs
+    end
+
+    def clear_clients(user)
+      # if the user is updated to admin or division admin, their clients are cleared
+      if user_update_params[:admin_role] && user_update_params[:admin_role] != 'staff'
+        user.clear_clients!
+      end
     end
 
     def update_sub_tenant(user)

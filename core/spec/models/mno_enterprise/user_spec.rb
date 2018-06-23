@@ -372,5 +372,30 @@ module MnoEnterprise
         end
       end
     end
+
+    describe '#clear_clients!' do
+      subject { user.clear_clients! }
+
+      let(:user) { build(:user) }
+      let!(:stub) { stub_api_v2(:patch, "/users/#{user.id}/update_clients", [], [], {}, {data: {attributes: {set: []}}})}
+
+      it 'clears the clients' do
+        subject
+        expect(stub).to have_been_requested
+      end
+    end
+
+    describe '#update_clients!' do
+      subject { user.update_clients!(params) }
+
+      let(:params) { {data: {attributes: {add: [1, 2]}}} }
+      let(:user) { build(:user) }
+      let!(:stub) { stub_api_v2(:patch, "/users/#{user.id}/update_clients", [], [], {}, params)}
+
+      it 'updates the clients' do
+        subject
+        expect(stub).to have_been_requested
+      end
+    end
   end
 end
