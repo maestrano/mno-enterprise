@@ -22,10 +22,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::ProductsController
 
   # GET /mnoe/jpi/v1/products/id
   def show
-    @product = MnoEnterprise::Product
-      .includes(DEPENDENCIES)
-      .find(params[:id])
-      .first
+    query = MnoEnterprise::Product.includes(DEPENDENCIES)
+
+    # Ensure prices include organization-specific markups/discounts
+    if params[:organization_id] && parent_organization
+      query = query.with_params(_metadata: { organization_id: parent_organization.id })
+    end
+
+    @product = query.find(params[:id]).first
   end
 
   # GET /mnoe/jpi/v1/products/id/custom_schema
