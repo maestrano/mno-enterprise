@@ -108,6 +108,24 @@ module MnoEnterprise
       head :no_content
     end
 
+    # POST /mnoe/jpi/v1/admin/users/:id?organization_external_id=1234
+    def login_with_org_external_id
+      # Can only log in with an external_id if you are a support user.
+      return render_not_found('User') unless current_user.support?
+      org = Organization.where(external_id: params[:organization_external_id]).first
+      return render_not_found('Organization') unless org
+      # So that the organization that is signed in
+      session[:support_org_id] = org.id
+      head :no_content
+    end
+
+    # DELETE /mnoe/jpi/v1/admin/users/:id
+    def logout_support
+      return render_not_found('User') unless current_user.support?
+      session[:support_org_id] = nil
+      head :no_content
+    end
+
     private
 
     # Return the tenant reporting object scoped for the current user
