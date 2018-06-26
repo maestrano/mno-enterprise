@@ -1,7 +1,7 @@
 require "rails_helper"
 
 module MnoEnterprise
-  RSpec.describe Jpi::V1::QuotesController, type: :routing do
+  RSpec.describe Jpi::V1::Admin::QuotesController, type: :routing do
     routes { MnoEnterprise::Engine.routes }
     context "Product provisioning is enabled" do
       before(:all) do
@@ -10,7 +10,7 @@ module MnoEnterprise
       end
 
       it 'routes to #create' do
-        expect(post('/jpi/v1/organizations/1/quotes')).to route_to("mno_enterprise/jpi/v1/quotes#create", organization_id: '1')
+        expect(post('/jpi/v1/admin/organizations/1/quotes')).to route_to("mno_enterprise/jpi/v1/admin/quotes#create", format: 'json', organization_id: '1')
       end
     end
 
@@ -21,7 +21,7 @@ module MnoEnterprise
       end
 
       it 'does not route to #create' do
-        expect(get('/jpi/v1/organizations/1/quotes')).not_to be_routable
+        expect(get('/jpi/v1/admin/organizations/1/quotes')).not_to be_routable
       end
     end
   end
