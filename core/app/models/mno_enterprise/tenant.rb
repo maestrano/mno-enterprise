@@ -35,7 +35,7 @@ module MnoEnterprise
     end
 
     def self.show
-      self.find.first
+      self.includes(:tenant_company).find.first
     end
 
     # == Instance Methods =====================================================
