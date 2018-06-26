@@ -8,6 +8,9 @@ FactoryGirl.define do
     externally_provisioned true
     custom_schema nil
     local false
+    notification_on_success false
+    notification_on_failure false
+    notification_on_approval false
     values []
     assets []
     categories []

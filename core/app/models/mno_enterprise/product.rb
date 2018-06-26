@@ -20,7 +20,9 @@ module MnoEnterprise
     property :single_billing_enabled, type: :boolean
     property :billed_locally, type: :boolean
     property :available_actions
-
+    property :notification_on_success
+    property :notification_on_failure
+    property :notification_on_approval
 
     def to_audit_event
       {
