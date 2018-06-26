@@ -397,5 +397,20 @@ module MnoEnterprise
         expect(stub).to have_been_requested
       end
     end
+
+    describe '#support?' do
+      subject { user.support? }
+      let(:user) { build(:user, admin_role: admin_role) }
+      let(:admin_role) { 'admin' }
+
+      context 'when the user is not support' do
+        it { is_expected. to be false}
+      end
+
+      context 'when the user is support' do
+        let(:admin_role) { 'support' }
+        it { is_expected. to be true}
+      end
+    end
   end
 end

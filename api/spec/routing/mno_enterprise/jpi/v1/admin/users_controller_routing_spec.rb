@@ -27,5 +27,13 @@ module MnoEnterprise
     it 'routes to #signup_email' do
       expect(post('/jpi/v1/admin/users/signup_email')).to route_to("mno_enterprise/jpi/v1/admin/users#signup_email", format: 'json')
     end
+
+    it 'routes to #signup_email' do
+      expect(post('/jpi/v1/admin/users/1/login_with_org_external_id')).to route_to("mno_enterprise/jpi/v1/admin/users#login_with_org_external_id", id: '1', format: 'json')
+    end
+
+    it 'routes to #signup_email' do
+      expect(delete('/jpi/v1/admin/users/1/logout_support')).to route_to("mno_enterprise/jpi/v1/admin/users#logout_support", id: '1', format: 'json')
+    end
   end
 end

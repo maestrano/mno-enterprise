@@ -244,6 +244,8 @@ MnoEnterprise::Engine.routes.draw do
           resource :user_access_requests, only: [:create]
           member do
             patch :update_clients
+            post :login_with_org_external_id
+            delete :logout_support
           end
         end
 
