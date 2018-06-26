@@ -73,6 +73,9 @@ module MnoEnterprise
         "local" => product.local,
         "single_billing_enabled" => product.single_billing_enabled,
         "billed_locally" => product.billed_locally,
+        "notification_on_success" => product.notification_on_success,
+        "notification_on_failure" => product.notification_on_failure,
+        "notification_on_approval" => product.notification_on_approval,
         "values_attributes" => product.values,
         "assets_attributes" => product.assets,
         # "product_pricings" => product.product_pricings

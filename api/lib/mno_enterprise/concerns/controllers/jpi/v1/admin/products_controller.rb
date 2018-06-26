@@ -1,7 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
   extend ActiveSupport::Concern
 
-  ATTRIBUTES = [:name, :active, :logo, :external_id, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :single_billing_enabled, :billed_locally]
+  ATTRIBUTES = [:name, :active, :logo, :external_id, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :single_billing_enabled, :billed_locally, :notification_on_success, :notification_on_failure, :notification_on_approval]
   DEPENDENCIES = [:'values.field', :assets, :categories, :product_pricings, :product_contracts]
   PRICING_ATTRIBUTES = [:name, :description, :position, :free, :pricing_type, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, {:prices => [:currency, :price_cents] }, :external_id]
 
