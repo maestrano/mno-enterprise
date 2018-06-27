@@ -29,7 +29,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   #==================================================================
   # GET /mnoe/jpi/v1/admin/organizations
   def index
-    if params[:terms]
+    if params[:organization_external_id]
+      # Endpoint created so that users with support #admin_role cannot see an organization unless they match their external_id.
+      return render_not_found('user') unless current_user.support?
+      @organizations = MnoEnterprise::Organization.where(external_id: params[:organization_external_id])
+    elsif params[:terms]
       # Search mode
       @organizations = []
       JSON.parse(params[:terms]).map do |t|
