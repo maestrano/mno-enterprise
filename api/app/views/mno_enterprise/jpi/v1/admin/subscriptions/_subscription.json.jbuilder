@@ -28,6 +28,7 @@ if subscription.product_pricing
     json.per_unit subscription.product_pricing.per_unit
     json.prices subscription.product_pricing.prices
     json.external_id subscription.product_pricing.external_id
+    json.quote_based subscription.product_pricing.quote_based
   end
 end
 
