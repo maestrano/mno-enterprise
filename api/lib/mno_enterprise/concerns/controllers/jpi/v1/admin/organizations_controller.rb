@@ -31,6 +31,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   def index
     if params[:organization_external_id]
       # Endpoint created so that users with support #admin_role cannot see an organization unless they match their external_id.
+      support_enabled?
       return render_not_found('user') unless current_user.support?
       @organizations = MnoEnterprise::Organization.where(external_id: params[:organization_external_id])
     elsif params[:terms]
@@ -272,5 +273,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
       existing_apps.each { |app_instance| desired_nids.delete(app_instance.app.nid) || app_instance.terminate }
       desired_nids.each { |nid| @organization.provision_app_instance!(nid) }
     end
+  end
+
+  private
+
+  def support_enabled?
+    return head :forbidden unless Settings.admin_panel.support.enabled
   end
 end
