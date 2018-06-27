@@ -1,5 +1,7 @@
 module MnoEnterprise
   class Jpi::V1::Admin::UsersController < Jpi::V1::Admin::BaseResourceController
+    before_filter :support_enabled?, only: [:logout_support, :login_with_org_external_id]
+    before_filter :user_support?, only: [:logout_support, :login_with_org_external_id]
 
     # GET /mnoe/jpi/v1/admin/users
     def index
@@ -111,7 +113,6 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/admin/users/:id?organization_external_id=1234
     def login_with_org_external_id
       # Can only log in with an external_id if you are a support user.
-      return render_not_found('User') unless current_user.support?
       org = Organization.where(external_id: params[:organization_external_id]).first
       return render_not_found('Organization') unless org
       # So that the organization that is signed in
@@ -121,12 +122,19 @@ module MnoEnterprise
 
     # DELETE /mnoe/jpi/v1/admin/users/:id
     def logout_support
-      return render_not_found('User') unless current_user.support?
       session[:support_org_id] = nil
       head :no_content
     end
 
     private
+
+    def support_enabled?
+      return head :forbidden unless Settings.admin_panel.support.enabled
+    end
+
+    def user_support?
+      return render_not_found('User') unless current_user.support?
+    end
 
     # Return the tenant reporting object scoped for the current user
     def tenant_reporting

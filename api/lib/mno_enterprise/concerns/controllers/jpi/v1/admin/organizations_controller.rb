@@ -274,4 +274,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
       desired_nids.each { |nid| @organization.provision_app_instance!(nid) }
     end
   end
+
+  private
+
+  def support_enabled?
+    return head :forbidden unless Settings.admin_panel.support.enabled
+  end
 end
