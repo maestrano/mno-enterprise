@@ -61,6 +61,8 @@ en:
             go_to_my_app: "Go to my app"
             order_type: "Order type"
             licenses: "Licenses"
+            quoted_price: "Quoted Total Price"
+            quote_error: "Quoted Price Currently Unavailable"
             no_licenses:
               message: "N/A"
               tooltip: "This is not a licensed plan"
