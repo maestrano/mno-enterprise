@@ -15,7 +15,7 @@ module MnoEnterprise
     before do
       sign_in(user)
 
-      stub_api_v2(:get, '/tenant', tenant)
+      stub_api_v2(:get, '/tenant', tenant, ['tenant_company'])
       stub_api_v2(:patch, '/tenant', tenant)
     end
 
