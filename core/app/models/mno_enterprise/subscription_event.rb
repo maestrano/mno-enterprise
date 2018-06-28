@@ -8,6 +8,7 @@ module MnoEnterprise
     property :event_type, type: :string
     property :message, type: :string
     property :provisioning_data
+    property :subscription_details
 
     has_one :subscription
     has_one :product_pricing
