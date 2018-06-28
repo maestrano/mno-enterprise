@@ -116,13 +116,13 @@ module MnoEnterprise
       org = Organization.where(external_id: params[:organization_external_id]).first
       return render_not_found('Organization') unless org
       # So that the organization that is signed in
-      session[:support_org_id] = org.id
+      session[:support_org_external_id] = org.external_id
       head :no_content
     end
 
     # DELETE /mnoe/jpi/v1/admin/users/:id
     def logout_support
-      session[:support_org_id] = nil
+      session[:support_org_external_id] = nil
       head :no_content
     end
 
