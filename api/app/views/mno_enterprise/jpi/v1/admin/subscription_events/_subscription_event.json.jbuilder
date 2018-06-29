@@ -8,8 +8,10 @@ json.subscription_details subscription_event.subscription_details
 json.created_at subscription_event.created_at
 json.updated_at subscription_event.updated_at
 json.user_name subscription_event.user_name
-json.product_pricing do
-  json.name subscription_event.product_pricing&.name
+if subscription_event.product_pricing
+  json.product_pricing do
+    json.partial! 'mno_enterprise/jpi/v1/admin/product_pricing/product_pricing', product_pricing: subscription_event.product_pricing
+  end
 end
 
 if subscription_event.subscription

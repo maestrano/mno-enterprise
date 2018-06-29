@@ -14,6 +14,7 @@ json.available_actions subscription.available_actions
 json.product_pricing_id subscription.product_pricing&.id
 if subscription.product_pricing
   json.product_pricing do
+<<<<<<< HEAD
     json.id subscription.product_pricing.id
     json.name subscription.product_pricing.name
     json.description subscription.product_pricing.description
@@ -29,8 +30,10 @@ if subscription.product_pricing
     json.prices subscription.product_pricing.prices
     json.external_id subscription.product_pricing.external_id
     json.quote_based subscription.product_pricing.quote_based
+=======
+    json.partial! 'mno_enterprise/jpi/v1/product_pricing/product_pricing', product_pricing: subscription.product_pricing
+>>>>>>> Refactor product pricing to json partial
   end
-
 end
 
 json.product_id subscription.product&.id

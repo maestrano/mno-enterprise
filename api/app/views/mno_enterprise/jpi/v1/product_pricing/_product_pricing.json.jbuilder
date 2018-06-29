@@ -1,0 +1,1 @@
+json.extract! product_pricing, :id, :name, :description, :free, :license_based, :pricing_type, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :position, :per_duration, :per_unit, :prices, :external_id, :quote_based
