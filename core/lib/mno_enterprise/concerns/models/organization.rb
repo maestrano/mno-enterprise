@@ -12,7 +12,7 @@ module MnoEnterprise::Concerns::Models::Organization
     custom_endpoint :trigger_app_instances_sync, on: :member, request_method: :post
     custom_endpoint :freeze, on: :member, request_method: :patch
     custom_endpoint :unfreeze, on: :member, request_method: :patch
-
+    
     property :uid, type: :string
     property :name, type: :string
     property :account_frozen, type: :boolean

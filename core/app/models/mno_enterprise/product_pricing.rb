@@ -17,6 +17,7 @@ module MnoEnterprise
     property :prices
     property :external_id
     property :product_id
+    property :quote_based
 
     def to_audit_event
       {
