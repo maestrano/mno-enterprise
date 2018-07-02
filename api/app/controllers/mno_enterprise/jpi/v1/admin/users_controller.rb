@@ -1,5 +1,6 @@
 module MnoEnterprise
   class Jpi::V1::Admin::UsersController < Jpi::V1::Admin::BaseResourceController
+    before_filter :user_support?, only: [:logout_support, :login_with_org_external_id]
 
     # GET /mnoe/jpi/v1/admin/users
     def index
@@ -9,7 +10,7 @@ module MnoEnterprise
         JSON.parse(params[:terms]).map do |t|
           @users = @users | MnoEnterprise::User
                               .apply_query_params(params.except(:terms))
-                              .with_params(_metadata: { act_as_manager: current_user.id })
+                              .with_params(_metadata: special_roles_metadata)
                               .includes(:user_access_requests, :sub_tenant)
                               .where(Hash[*t])
         end
@@ -23,7 +24,7 @@ module MnoEnterprise
         # Index mode
         query = MnoEnterprise::User
           .apply_query_params(params)
-          .with_params(_metadata: { act_as_manager: current_user.id })
+          .with_params(_metadata: special_roles_metadata)
           .includes(:user_access_requests, :sub_tenant)
         @users = query.to_a
         response.headers['X-Total-Count'] = query.meta.record_count
@@ -32,7 +33,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/users/1
     def show
-      @user = MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id })
+      @user = MnoEnterprise::User.with_params(_metadata: special_roles_metadata)
                                  .includes(:orga_relations, :organizations, :user_access_requests, :sub_tenant)
                                  .find(params[:id])
                                  .first
@@ -59,7 +60,7 @@ module MnoEnterprise
 
       # Fetch user or abort if user does not exist
       # (the current_user may not have access to this record)
-      @user = MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id }).find(params[:id]).first
+      @user = MnoEnterprise::User.with_params(_metadata: special_roles_metadata).find(params[:id]).first
       return render_not_found('User') unless @user
       @user.attributes = user_update_params
       update_sub_tenant(@user)
@@ -71,7 +72,7 @@ module MnoEnterprise
 
     # PATCH /mnoe/jpi/v1/admin/organizations/1/update_clients
     def update_clients
-      @user = MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id }).find(params[:id]).first
+      @user = MnoEnterprise::User.with_params(_metadata: special_roles_metadata).find(params[:id]).first
       return render_not_found('User') unless @user
       attributes = params.require(:user).permit(add: [], remove: [])
       @user.update_clients!({data: {attributes: attributes}})
@@ -83,7 +84,7 @@ module MnoEnterprise
     def destroy
       # Fetch user or abort if user does not exist
       # (the current_user may not have access to this record)
-      user = MnoEnterprise::User.with_params(_metadata: { act_as_manager: current_user.id }).find(params[:id]).first
+      user = MnoEnterprise::User.with_params(_metadata: special_roles_metadata).find(params[:id]).first
       # Destroy user
       user.destroy!
       head :no_content
@@ -108,12 +109,32 @@ module MnoEnterprise
       head :no_content
     end
 
+    # POST /mnoe/jpi/v1/admin/users/:id?organization_external_id=1234
+    def login_with_org_external_id
+      # Can only log in with an external_id if you are a support user.
+      org = Organization.where(external_id: params[:organization_external_id]).first
+      return render_not_found('Organization') unless org
+      # So that the organization that is signed in
+      session[:support_org_external_id] = org.external_id
+      head :no_content
+    end
+
+    # DELETE /mnoe/jpi/v1/admin/users/:id
+    def logout_support
+      session[:support_org_external_id] = nil
+      head :no_content
+    end
+
     private
+
+    def user_support?
+      return render_not_found('User') unless current_user.support?
+    end
 
     # Return the tenant reporting object scoped for the current user
     def tenant_reporting
       MnoEnterprise::TenantReporting
-        .with_params(_metadata: { act_as_manager: current_user.id })
+        .with_params(_metadata: special_roles_metadata)
         .find
         .first
     end

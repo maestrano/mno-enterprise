@@ -27,7 +27,7 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/admin/invoices/1
     def show
       @invoice = MnoEnterprise::Invoice
-        .with_params(_metadata: { act_as_manager: current_user.id })
+        .with_params(_metadata: special_roles_metadata)
         .select(:id, :price, :started_at, :ended_at, :created_at, :updated_at, :paid_at, :slug, :tax_pips_applied,
           :organization, { organizations: [:id, :name] },
           :bills, bills: [:id, :adjustment, :billing_group, :end_user_price_cents, :currency, :description,
@@ -39,7 +39,7 @@ module MnoEnterprise
     # PATCH /mnoe/jpi/v1/admin/invoices/1
     def update
       # Fetch or fail
-      invoice = MnoEnterprise::Invoice.with_params(_metadata: { act_as_manager: current_user.id })
+      invoice = MnoEnterprise::Invoice.with_params(_metadata: special_roles_metadata)
                                       .select(:id)
                                       .find(params[:id])
                                       .first
@@ -58,7 +58,7 @@ module MnoEnterprise
     def create_adjustment
       # Fetch invoice
       invoice = MnoEnterprise::Invoice
-        .with_params(_metadata: { act_as_manager: current_user.id })
+        .with_params(_metadata: special_roles_metadata)
         .select(:currency, :organization, organizations: [:id])
         .includes(:organization)
         .find(params[:id]).first
@@ -86,7 +86,7 @@ module MnoEnterprise
     # DELETE /mnoe/jpi/v1/admin/invoices/:id/adjustments/:bill_id
     def delete_adjustment
       # Check that current user has access to the invoice
-      invoice = MnoEnterprise::Invoice.with_params(_metadata: { act_as_manager: current_user.id }).select(:id)
+      invoice = MnoEnterprise::Invoice.with_params(_metadata: special_roles_metadata).select(:id)
       return render_not_found('Invoice') unless invoice
 
       # Find adjustment bill
@@ -141,7 +141,7 @@ module MnoEnterprise
     # POST /mnoe/jpi/v1/admin/invoices/1/send_to_customer
     def send_to_customer
       invoice = MnoEnterprise::Invoice
-                  .with_params(_metadata: { act_as_manager: current_user.id })
+                  .with_params(_metadata: special_roles_metadata)
                   .select(:organization, organizations: [:id])
                   .includes(:organization)
                   .find(params[:id]).first
@@ -169,7 +169,7 @@ module MnoEnterprise
     private
 
     def tenant_reporting
-      @tenant_reporting ||= MnoEnterprise::TenantReporting.with_params(_metadata: { act_as_manager: current_user.id })
+      @tenant_reporting ||= MnoEnterprise::TenantReporting.with_params(_metadata: special_roles_metadata)
                                                           .find
                                                           .first
     end
@@ -193,7 +193,7 @@ module MnoEnterprise
     def invoice_index_query(query_params = nil)
       rel = MnoEnterprise::Invoice
       rel = rel.apply_query_params(query_params) if query_params
-      rel.with_params(_metadata: { act_as_manager: current_user.id })
+      rel.with_params(_metadata: special_roles_metadata)
          .select(:id, :price, :started_at, :ended_at, :created_at, :updated_at, :paid_at, :slug,
                  :organization, organizations: [:id, :name])
          .includes(:organization)

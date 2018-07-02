@@ -4,6 +4,20 @@ module MnoEnterprise
 
     protected
 
+      # This method is created to properly scope users with a support role viewing an organization
+      # and an account manager with specific assignments.
+
+      def special_roles_metadata
+        support_role_enabled = Settings&.admin_panel&.support&.enabled
+
+        if current_user.support? && support_role_enabled
+          { organization_external_id: session[:organization_external_id] }
+        else
+          # TODO: Only pass this in when #account_manager_enabled (requires massive rewriting of specs.)
+          { act_as_manager: current_user.id }
+        end
+      end
+
       def timestamp
         @timestamp ||= (params[:timestamp] || 0).to_i
       end

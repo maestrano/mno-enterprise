@@ -265,5 +265,12 @@ module MnoEnterprise
       'never_requested'
     end
 
+    def support?
+      admin_role == 'support'
+    end
+
+    def staff?
+      admin_role == 'staff'
+    end
   end
 end

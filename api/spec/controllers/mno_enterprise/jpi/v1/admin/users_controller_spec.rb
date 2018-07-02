@@ -152,5 +152,78 @@ module MnoEnterprise
 
       it { is_expected.to be_success }
     end
+
+    describe 'POST #login_with_org_external_id' do
+      subject { post :login_with_org_external_id, id: current_user.id, organization_external_id: organization_external_id }
+
+      before { Settings.merge!(admin_panel: {support: {enabled: enabled}}) }
+      let(:enabled) { true }
+      let(:organization_external_id) { 1 }
+
+      context 'with support settings disabled' do
+        let(:enabled) { false }
+        it { is_expected.not_to be_success }
+      end
+
+      context 'with support settings enabled' do
+        let(:current_user) { build(:user, admin_role: admin_role) }
+        let(:organizations) { [organization] }
+        let(:organization) { build(:organization, external_id: 1) }
+        let(:admin_role) { 'support' }
+
+        context 'when the current user is not a support user' do
+          let(:admin_role) { 'admin' }
+          it { is_expected.not_to be_success }
+        end
+
+        context 'when the user is a support user' do
+          before { stub_api_v2(:get, '/organizations', organizations, [], { filter: { external_id: 1 }, page: { number: 1, size: 1 } }) }
+
+          it { is_expected.to be_success }
+          it 'sets the session of support_org_id' do
+            expect(session[:support_org_external_id]).to be_nil
+            subject
+            expect(session[:support_org_external_id]).to eq(organization.external_id)
+          end
+
+          context 'when mnohub cannot find the organization' do
+            let(:organizations) { [] }
+            it { is_expected.not_to be_success }
+          end
+        end
+      end
+    end
+
+    describe 'DELETE #logout_support' do
+      subject { delete :logout_support, { id: current_user.id }, { support_org_external_id: organization.external_id } }
+
+      before { Settings.merge!(admin_panel: {support: {enabled: enabled}}) }
+      let(:enabled) { true }
+      let(:organization) { build(:organization, external_id: 1) }
+
+      context 'with support settings disabled' do
+        let(:enabled) { false }
+        it { is_expected.not_to be_success }
+      end
+
+      context 'with support settings enabled' do
+        let(:organization) { build(:organization) }
+        let(:current_user) { build(:user, admin_role: admin_role) }
+        let(:admin_role) { 'support' }
+
+        context 'when the current user is not a support user' do
+          let(:admin_role) { 'admin' }
+          it { is_expected.not_to be_success }
+        end
+
+        context 'when the user is a support user' do
+          it { is_expected.to be_success }
+          it 'sets the session of support_org_id' do
+            subject
+            expect(session[:support_org_id]).to be_nil
+          end
+        end
+      end
+    end
   end
 end
