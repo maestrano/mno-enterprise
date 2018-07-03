@@ -269,5 +269,8 @@ module MnoEnterprise
       admin_role == 'support'
     end
 
+    def staff?
+      admin_role == 'staff'
+    end
   end
 end

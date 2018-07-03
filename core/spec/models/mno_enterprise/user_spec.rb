@@ -412,5 +412,20 @@ module MnoEnterprise
         it { is_expected. to be true}
       end
     end
+
+    describe '#staff?' do
+      subject { user.staff? }
+      let(:user) { build(:user, admin_role: admin_role) }
+      let(:admin_role) { 'admin' }
+
+      context 'when the user is not staff' do
+        it { is_expected. to be false}
+      end
+
+      context 'when the user is staff' do
+        let(:admin_role) { 'staff' }
+        it { is_expected. to be true}
+      end
+    end
   end
 end

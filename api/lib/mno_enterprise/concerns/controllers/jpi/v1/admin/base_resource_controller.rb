@@ -13,6 +13,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
 
   protected
 
+  # This method is created to properly scope api with a staff/account manage role to MnoHub.
+  def special_roles_metadata
+    { act_as_manager: current_user.id }
+  end
+
   def timestamp
     @timestamp ||= (params[:timestamp] || 0).to_i
   end

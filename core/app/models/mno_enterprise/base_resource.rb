@@ -192,6 +192,5 @@ module MnoEnterprise
     def ==(o)
       o.class == self.class && o.attributes == attributes
     end
-
   end
 end

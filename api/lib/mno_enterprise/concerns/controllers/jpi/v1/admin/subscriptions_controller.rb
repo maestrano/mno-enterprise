@@ -33,7 +33,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   def create
     # Abort if user does not have access to the organization
     organization = MnoEnterprise::Organization
-      .with_params(_metadata: { act_as_manager: current_user.id })
+      .with_params(_metadata: special_roles_metadata)
       .select(:id)
       .find(params[:organization_id])
       .first
@@ -118,22 +118,25 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   def fetch_all_subscriptions
     MnoEnterprise::Subscription
       .apply_query_params(params)
-      .with_params(_metadata: { act_as_manager: current_user.id })
+      .with_params(_metadata: special_roles_metadata)
       .includes(SUBSCRIPTION_INCLUDES)
   end
 
   def fetch_subscriptions(organization_id)
     MnoEnterprise::Subscription
       .apply_query_params(params)
-      .with_params(_metadata: { act_as_manager: current_user.id })
+      .with_params(_metadata: special_roles_metadata)
       .includes(SUBSCRIPTION_INCLUDES)
       .where(organization_id: organization_id)
   end
 
   def fetch_subscription(organization_id, id, includes = nil)
+    metadata = special_roles_metadata
+    metadata[:organization_id] = organization_id
+
     rel = MnoEnterprise::Subscription
             .apply_query_params(params)
-            .with_params(_metadata: { act_as_manager: current_user.id, organization_id: organization_id })
+            .with_params(_metadata: metadata)
             .where(organization_id: organization_id, id: id)
     rel = rel.includes(*includes) if includes.present?
     rel.first

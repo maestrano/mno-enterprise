@@ -17,7 +17,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
     # Fetch all the subscription events of an organization
     elsif params[:organization_id]
       org = MnoEnterprise::Organization
-              .with_params(_metadata: { act_as_manager: current_user.id })
+              .with_params(_metadata: special_roles_metadata)
               .includes([:subscriptions])
               .find(params[:organization_id]).first
 
@@ -86,12 +86,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
   end
 
   def fetch_subscription_events(organization_id: nil, subscription_id: nil)
-    metadata = {act_as_manager: current_user.id}
-    metadata[:organization_id] = organization_id if organization_id
-
     rel = MnoEnterprise::SubscriptionEvent
             .apply_query_params(params)
-            .with_params(_metadata: metadata)
+            .with_params(_metadata: subscription_metadata(organization_id))
             .includes(SUBSCRIPTION_EVENT_INCLUDES)
 
     rel = rel.where('subscription.id' => subscription_id.presence) if subscription_id
@@ -101,9 +98,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
 
   def fetch_subscription_event(organization_id, subscription_id, id, includes = nil)
     rel = MnoEnterprise::SubscriptionEvent
-            .with_params(_metadata: { act_as_manager: current_user.id, organization_id: organization_id })
+            .with_params(_metadata: subscription_metadata(organization_id))
             .where('subscription.id' => subscription_id, id: id)
     rel = rel.includes(*includes) if includes.present?
     rel.first
+  end
+
+  def subscription_metadata(organization_id = nil)
+    metadata = special_roles_metadata
+    metadata[:organization_id] = organization_id if organization_id
+    metadata
   end
 end
