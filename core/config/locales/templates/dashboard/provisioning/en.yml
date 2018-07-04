@@ -76,10 +76,11 @@ en:
             back: "back"
             info: "Info"
             subscription_info: "Subscription info"
+            not_available: "N/A"
             product: "Product"
             subscription: "Subscription"
             description: "Description"
-            date: "Date"
+            start_date: "Start Date"
             end_date: "End date"
             status: "Status"
             amount: "Amount"
@@ -116,6 +117,9 @@ en:
             start_date: "Start"
             end_date: "End"
             licenses: "Licenses"
+            no_licenses:
+              message: "N/A"
+              tooltip: "This is not a licensed plan"
             status: "Status"
             states:
               requested: requested
