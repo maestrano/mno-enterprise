@@ -4,7 +4,6 @@ en:
       dashboard:
         app_management:
           heading: Manage your applications
-          status: "Status:"
           access: Access
           manage_app: Manage
           back: Back to list
