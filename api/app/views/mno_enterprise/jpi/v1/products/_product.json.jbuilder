@@ -19,4 +19,4 @@ json.pricing_plans do
   end if product.respond_to?(:pricing_plans)
 end
 
-json.js_editor_enabled product.nid.in? Settings.product_nids
+json.js_editor_enabled product.nid.in? Settings.product_nids.to_a

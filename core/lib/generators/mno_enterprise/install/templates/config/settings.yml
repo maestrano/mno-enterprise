@@ -19,8 +19,6 @@ url_config:
   after_sign_out_url: <%= ENV['AFTER_SIGN_OUT_URL']%>
   developer_onboarding_url: <%= ENV['DEVELOPER_ONBOARDING_URL'] %>
 
-product_nids: []
-
 system:
   app_name: 'My Company'
   email:
