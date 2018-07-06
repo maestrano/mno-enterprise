@@ -14,25 +14,7 @@ json.available_actions subscription.available_actions
 json.product_pricing_id subscription.product_pricing&.id
 if subscription.product_pricing
   json.product_pricing do
-<<<<<<< HEAD
-    json.id subscription.product_pricing.id
-    json.name subscription.product_pricing.name
-    json.description subscription.product_pricing.description
-    json.free subscription.product_pricing.free
-    json.license_based subscription.product_pricing.license_based
-    json.pricing_type subscription.product_pricing.pricing_type
-    json.free_trial_enabled subscription.product_pricing.free_trial_enabled
-    json.free_trial_duration subscription.product_pricing.free_trial_duration
-    json.free_trial_unit subscription.product_pricing.free_trial_unit
-    json.position subscription.product_pricing.position
-    json.per_duration subscription.product_pricing.per_duration
-    json.per_unit subscription.product_pricing.per_unit
-    json.prices subscription.product_pricing.prices
-    json.external_id subscription.product_pricing.external_id
-    json.quote_based subscription.product_pricing.quote_based
-=======
     json.partial! 'mno_enterprise/jpi/v1/product_pricing/product_pricing', product_pricing: subscription.product_pricing
->>>>>>> Refactor product pricing to json partial
   end
 end
 
