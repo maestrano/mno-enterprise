@@ -5,7 +5,7 @@ module MnoEnterprise
 
     # Test singular resource
     describe '.show' do
-      let!(:stub) { stub_api_v2(:get, '/tenant', tenant) }
+      let!(:stub) { stub_api_v2(:get, '/tenant', tenant, [:tenant_company]) }
       before { described_class.show }
       it { expect(stub).to have_been_requested }
     end
@@ -22,7 +22,7 @@ module MnoEnterprise
           }.merge(params)
         }
       }}
-      let(:params) { {frontend_config: {}, metadata: {app_management: "marketplace", can_manage_organization_credit: true} } }
+      let(:params) { {frontend_config: {}, metadata: {app_management: "marketplace", can_manage_organization_credit: true}, tenant_company: nil } }
       let!(:stub) { stub_api_v2(:patch, '/tenant', tenant).with(body: body.to_json) }
       before { tenant.update_attributes(params) }
       it { expect(stub).to have_been_requested }
