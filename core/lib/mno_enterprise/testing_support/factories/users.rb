@@ -44,15 +44,15 @@ FactoryGirl.define do
     end
 
     trait :admin do
-      admin_role 'admin'
+      admin_role MnoEnterprise::User::ADMIN_ROLE
     end
 
     trait :staff do
-      admin_role 'staff'
+      admin_role MnoEnterprise::User::STAFF_ROLE
     end
 
     trait :support do
-      admin_role 'support'
+      admin_role MnoEnterprise::User::SUPPORT_ROLE
     end
 
     trait :with_deletion_request do

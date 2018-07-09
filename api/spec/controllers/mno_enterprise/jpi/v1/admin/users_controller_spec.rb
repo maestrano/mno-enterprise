@@ -78,7 +78,7 @@ module MnoEnterprise
       it { expect(stub).to have_been_requested }
 
       context 'with a staff user' do
-        let(:params) { { 'name' => 'Foo', 'email' => 'test@toto.com', 'admin_role' => 'staff' } }
+        let(:params) { { 'name' => 'Foo', 'email' => 'test@toto.com', 'admin_role' => MnoEnterprise::User::STAFF_ROLE } }
 
         let!(:stub) do
           args = {'orga_on_create' => true, 'company' => 'Demo Company', 'demo_account' => 'Staff demo company'}
@@ -107,8 +107,8 @@ module MnoEnterprise
       it { expect(data['user']['id']).to eq(user.id) }
 
       context 'when changing a staff to admin' do
-        let(:user) { build(:user, admin_role: 'staff') }
-        let(:params) { { 'name' => 'Foo', 'admin_role' => 'admin' } }
+        let(:user) { build(:user, admin_role: MnoEnterprise::User::STAFF_ROLE) }
+        let(:params) { { 'name' => 'Foo', 'admin_role' => MnoEnterprise::User::ADMIN_ROLE } }
         before { expect_any_instance_of(MnoEnterprise::User).to receive(:clear_clients!) }
 
         # Dummy test to trigger the above expectation
@@ -167,10 +167,10 @@ module MnoEnterprise
         let(:current_user) { build(:user, admin_role: admin_role) }
         let(:organizations) { [organization] }
         let(:organization) { build(:organization, external_id: 1) }
-        let(:admin_role) { 'support' }
+        let(:admin_role) { MnoEnterprise::User::SUPPORT_ROLE }
 
         context 'when the current user is not a support user' do
-          let(:admin_role) { 'admin' }
+          let(:admin_role) { MnoEnterprise::User::ADMIN_ROLE }
           it { is_expected.not_to be_success }
         end
 
@@ -206,10 +206,10 @@ module MnoEnterprise
       context 'with support settings enabled' do
         let(:organization) { build(:organization) }
         let(:current_user) { build(:user, admin_role: admin_role) }
-        let(:admin_role) { 'support' }
+        let(:admin_role) { MnoEnterprise::User::SUPPORT_ROLE }
 
         context 'when the current user is not a support user' do
-          let(:admin_role) { 'admin' }
+          let(:admin_role) { MnoEnterprise::User::ADMIN_ROLE }
           it { is_expected.not_to be_success }
         end
 

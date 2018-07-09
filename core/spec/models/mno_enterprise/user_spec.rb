@@ -61,7 +61,7 @@ module MnoEnterprise
         load 'app/models/mno_enterprise/user.rb'
       end
 
-      let(:user) { MnoEnterprise::User.new(attributes_for(:user, admin_role: 'admin')) }
+      let(:user) { MnoEnterprise::User.new(attributes_for(:user, admin_role: MnoEnterprise::User::ADMIN_ROLE)) }
 
       describe :intercom_user_hash do
         it 'returns the user intercom secure hash' do
@@ -401,14 +401,14 @@ module MnoEnterprise
     describe '#support?' do
       subject { user.support? }
       let(:user) { build(:user, admin_role: admin_role) }
-      let(:admin_role) { 'admin' }
+      let(:admin_role) { MnoEnterprise::User::ADMIN_ROLE }
 
       context 'when the user is not support' do
         it { is_expected. to be false}
       end
 
       context 'when the user is support' do
-        let(:admin_role) { 'support' }
+        let(:admin_role) { MnoEnterprise::User::SUPPORT_ROLE }
         it { is_expected. to be true}
       end
     end
@@ -416,14 +416,14 @@ module MnoEnterprise
     describe '#staff?' do
       subject { user.staff? }
       let(:user) { build(:user, admin_role: admin_role) }
-      let(:admin_role) { 'admin' }
+      let(:admin_role) { MnoEnterprise::User::ADMIN_ROLE }
 
       context 'when the user is not staff' do
         it { is_expected. to be false}
       end
 
       context 'when the user is staff' do
-        let(:admin_role) { 'staff' }
+        let(:admin_role) { MnoEnterprise::User::STAFF_ROLE }
         it { is_expected. to be true}
       end
     end

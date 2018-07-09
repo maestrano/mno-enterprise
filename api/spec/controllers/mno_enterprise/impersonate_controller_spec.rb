@@ -45,7 +45,7 @@ module MnoEnterprise
         end
 
         context 'when the user is a staff member' do
-          let(:user2) { build(:user, admin_role: 'staff') }
+          let(:user2) { build(:user, admin_role: MnoEnterprise::User::STAFF_ROLE) }
           it do
             is_expected.to redirect_to('/admin/#!?flash=%7B%22msg%22%3A%22User+is+a+staff+member%22%2C%22type%22%3A%22error%22%7D')
           end

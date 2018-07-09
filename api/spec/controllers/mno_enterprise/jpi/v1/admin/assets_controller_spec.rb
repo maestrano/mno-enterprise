@@ -14,7 +14,7 @@ module MnoEnterprise
     end
 
     # Stub user and user call
-    let(:user) { build(:user, admin_role: 'admin') }
+    let(:user) { build(:user, admin_role: MnoEnterprise::User::ADMIN_ROLE) }
     let!(:current_user_stub) { stub_user(user) }
     before { sign_in user }
 

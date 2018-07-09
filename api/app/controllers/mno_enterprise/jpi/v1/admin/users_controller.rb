@@ -148,7 +148,7 @@ module MnoEnterprise
     def user_update_params
       attrs = [:name, :surname, :email, :phone]
       # TODO: replace with authorize/ability
-      if current_user.admin_role == 'admin'
+      if current_user.admin?
         attrs << :admin_role
       end
       params.require(:user).permit(attrs)
@@ -164,13 +164,13 @@ module MnoEnterprise
 
     def clear_clients(user)
       # if the user is updated to admin or division admin, their clients are cleared
-      if user_update_params[:admin_role] && user_update_params[:admin_role] != 'staff'
+      if user_update_params[:admin_role] && user_update_params[:admin_role] != MnoEnterprise::User::STAFF_ROLE
         user.clear_clients!
       end
     end
 
     def update_sub_tenant(user)
-      if current_user.admin_role == 'admin' && params.require(:user).has_key?(:sub_tenant_id)
+      if current_user.admin? && params.require(:user).has_key?(:sub_tenant_id)
         if params.require(:user)[:sub_tenant_id]
           user.relationships.sub_tenant = MnoEnterprise::SubTenant.new(id: params.require(:user)[:sub_tenant_id])
         else

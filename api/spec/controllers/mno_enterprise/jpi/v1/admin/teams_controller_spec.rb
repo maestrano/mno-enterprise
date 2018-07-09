@@ -48,7 +48,7 @@ module MnoEnterprise
     let!(:user) { build(:user, :admin) }
     let!(:organization) { build(:organization) }
     let!(:team) { build(:team, organization: organization) }
-    let!(:role) { 'Admin' }
+    let!(:role) { MnoEnterprise::User::ADMIN_ROLE }
     let!(:app) { build(:app) }
     let!(:orga_relation) { build(:orga_relation, organization_id: organization.id, role: role, user_id: user.id) }
 

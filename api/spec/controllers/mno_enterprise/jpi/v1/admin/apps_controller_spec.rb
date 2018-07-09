@@ -9,7 +9,7 @@ module MnoEnterprise
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
 
     # Stub user and user call
-    let(:user) { build(:user, admin_role: 'admin') }
+    let(:user) { build(:user, admin_role: MnoEnterprise::User::ADMIN_ROLE) }
     let!(:current_user_stub) { stub_user(user) }
     before do
       sign_in user
