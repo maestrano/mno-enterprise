@@ -36,7 +36,6 @@ module MnoEnterprise::Concerns::Models::Ability
     end
 
 
-
     # TODO: replace by organization_id, no need to load a full organization, and make user.role accept a string
     can [:upload,
          :purchase,

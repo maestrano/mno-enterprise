@@ -22,6 +22,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
                               app_instances orga_invites users orga_relations
                               invoices credit_card demo_account main_address
                               current_credit].freeze
+
+    before_filter :support_enabled?, only: [:index], if: :support_parameters
   end
 
   #==================================================================
@@ -278,6 +280,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   private
 
   def support_enabled?
-    return head :forbidden unless Settings.admin_panel.support.enabled
+    return head :forbidden unless Settings.admin_panel.support.enabled && current_user.support?
+  end
+
+  def support_parameters
+    params[:organization_external_id]
   end
 end

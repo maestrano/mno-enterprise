@@ -51,6 +51,10 @@ FactoryGirl.define do
       admin_role 'staff'
     end
 
+    trait :support do
+      admin_role 'support'
+    end
+
     trait :with_deletion_request do
       deletion_request { build(:deletion_request) }
     end
