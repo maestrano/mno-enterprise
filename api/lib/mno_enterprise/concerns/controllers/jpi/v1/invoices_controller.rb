@@ -15,6 +15,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::InvoicesController
   #==================================================================
   # Instance methods
   #================================================================
+  # GET /mnoe/jpi/v1/organizations/:organization_id/invoices
+  def index
+    authorize! :manage_billing, parent_organization
+    query = MnoEnterprise::Invoice.apply_query_params(params, MnoEnterprise::Invoice.where('organization.id': parent_organization.id))
+
+    response.headers['X-Total-Count'] = query.meta.record_count
+    @invoices = query.to_a
+  end
 
   # GET /mnoe/jpi/v1/invoices/201504-NU4
   # Invoices endpoint for admins of an organization, rather than admin of a tenant

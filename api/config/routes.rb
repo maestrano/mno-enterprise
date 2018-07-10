@@ -150,6 +150,9 @@ MnoEnterprise::Engine.routes.draw do
           end
         end
 
+        # /jp1/v1/organizations/:id/invoices
+        resources :invoices, only: [:index]
+
         resources :app_instances_sync, only: [:create, :index]
 
         resources :audit_events, only: [:index]
