@@ -36,25 +36,16 @@ module MnoEnterprise
         event_type = if organization
                        :updated
                      else
-                       organization = MnoEnterprise::Organization.new
-                       organization.external_id = row['external_id']
                        :added
                      end
-        organization.name = row['company_name']
-        organization.billing_currency = row['billing_currency']
-        organization.save
-
         if event_type == :added
-          address = MnoEnterprise::Address.new(
-            city:         row['city'],
-            country_code: row['country'],
-            street: [row['address1'], row['address2']].reject(&:blank?).join(' '),
-            state_code: row['state_province'],
-            postal_code: row['postal_code']
-          )
-          address.relationships.owner = organization
-          address.save
+          organization = MnoEnterprise::Organization.create!(org_create_params(row))
+        else
+          organization.name = row['company_name']
+          organization.billing_currency = row['billing_currency']
+          organization.save
         end
+
         report[:organizations][event_type] << organization
 
         # Create or Update User
@@ -81,6 +72,22 @@ module MnoEnterprise
         end
       end
       report
+    end
+
+    def self.org_create_params(row)
+      {
+        name: row['company_name'],
+        external_id: row['external_id'],
+        billing_currency: row['billing_currency'],
+        main_address_attributes: {
+          city: row['city'],
+          country_code: row['country'],
+          street: [row['address1'], row['address2']].reject(&:blank?).join(' '),
+          state_code: row['state_province'],
+          postal_code: row['postal_code'],
+          phone: row['phone']
+        }
+      }
     end
 
     def self.validate_csv(csv)
