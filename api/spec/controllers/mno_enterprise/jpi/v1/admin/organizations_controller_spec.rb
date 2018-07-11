@@ -249,7 +249,7 @@ module MnoEnterprise
 
       context 'valid file' do
         let(:organization1) { build(:organization) }
-        let(:organization2) { build(:organization) }
+        let(:organization2) { build(:organization, main_address: build(:main_address)) }
 
         let(:user1) { build(:user) }
         let(:user2) { build(:user) }
@@ -263,7 +263,6 @@ module MnoEnterprise
             stub_api_v2(:get, '/organizations', [organization1], [], { filter: { external_id: 'O2' }, page: { number: 1, size: 1 } }),
 
             stub_api_v2(:post, '/organizations', organization2),
-            stub_api_v2(:post, '/addresses'),
             stub_api_v2(:patch, "/organizations/#{organization1.id}", organization1),
 
             stub_api_v2(:get, '/users', [], [], { filter: { email: 'john.doe@example.com' }, page: { number: 1, size: 1 } }),
@@ -306,6 +305,7 @@ module MnoEnterprise
           expect(organizations[:updated].first.id).to eq organization1.id
           expect(organizations[:added].length).to be 1
           expect(organizations[:added].first.id).to eq organization2.id
+          expect(organizations[:added].first.main_address[:id]).to eq organization2.main_address.id
           users = import_report[:users]
           expect(users[:updated].length).to be 1
           expect(users[:updated].first.id).to eq user1.id
