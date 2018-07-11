@@ -8,8 +8,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::InvoicesController
   # context where it is included rather than being executed in the module's context
 
   included do
-    before_filter :authenticate_user!
-    before_filter :redirect_to_lounge_if_unconfirmed
+    before_filter :authenticate_user!, only: :show
+    before_filter :redirect_to_lounge_if_unconfirmed, only: :show
+    before_filter :check_authorization, only: :index
   end
 
   #==================================================================

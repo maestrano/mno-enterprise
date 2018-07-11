@@ -2,8 +2,10 @@ require 'rails_helper'
 
 module MnoEnterprise
   describe Jpi::V1::InvoicesController, type: :controller do
+
     render_views
     routes { MnoEnterprise::Engine.routes }
+
 
     # Stub controller ability
     let!(:ability) { stub_ability }
@@ -14,14 +16,37 @@ module MnoEnterprise
     let(:user) { build(:user, organizations: [organization]) }
     let(:invoice) {build(:invoice, organization: organization, organization_id: organization.id)}
 
+    let!(:current_user_stub) { stub_user(user) }
     before do
-      stub_api_v2(:get, '/invoices', [invoice], [:organization], {filter:{slug:invoice.slug}, page:{number: 1, size: 1}})
+      organization.orga_relations << build(:orga_relation, user_id: user.id, organization_id: organization.id, role: "Super Admin")
+    end
+    before { sign_in user }
+
+    describe "GET #index" do
+      
+      before { request.env['HTTP_ACCEPT'] = 'application/json' }
+
+      before do
+        stub_api_v2(:get, "/organizations/#{organization.id}", [organization], [:orga_relations, :users])
+        stub_api_v2(:get, '/invoices', [invoice], [], {filter: {'organization.id': organization.id}})
+      end
+      
+      subject { get :index, organization_id: organization.id }
+
+      it { subject; expect(response).to be_success }
+
+      it 'return the correct invoices' do
+        subject
+        expect(assigns(:invoices).first.slug).to eq invoice.slug
+      end
     end
 
-    let!(:current_user_stub) { stub_user(user) }
-
     describe "GET #show" do
-      before { sign_in user }
+
+      before do
+        stub_api_v2(:get, '/invoices', [invoice], [:organization], {filter:{slug:invoice.slug}, page:{number: 1, size: 1}})
+      end
+
       subject { get :show, id: invoice.slug }
 
       it_behaves_like "a navigatable protected user action"
