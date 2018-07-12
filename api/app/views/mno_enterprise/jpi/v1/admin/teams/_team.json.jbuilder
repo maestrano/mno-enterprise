@@ -11,6 +11,6 @@ end
 json.app_instances do
   json.array! team.app_instances do |app_instance|
     json.extract! app_instance, :id, :name
-    json.logo app_instance&.app.logo&.to_s
+    json.logo app_instance.app.logo if app_instance.app
   end
 end
