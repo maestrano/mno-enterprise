@@ -49,7 +49,7 @@ module MnoEnterprise
       let(:expected_params) do
         {
           filter: { id: subscription.id, organization_id: organization.id, subscription_status_in: 'visible' },
-          _metadata: { act_as_manager: user.id },
+          _metadata: { act_as_manager: user.id, organization_id: organization.id },
           page: { number: 1, size: 1 } }
       end
 

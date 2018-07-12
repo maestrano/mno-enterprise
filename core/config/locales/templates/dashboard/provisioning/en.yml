@@ -9,7 +9,7 @@ en:
             confirm: "Confirm"
             order_summary: "Order summary"
           order:
-            new_title: "Choose your subscription plan"
+            provision_title: "Choose your subscription plan"
             change_title: "Change your subscription plan"
             name: "Name"
             description: "Description"
@@ -22,7 +22,7 @@ en:
             total: "Total price"
             no_pricing_found: "There are currently no subscriptions available in your currency"
           details:
-            new_title: "Enter details"
+            provision_title: "Enter your details"
             modify_title: "Modify your details"
             change_title: "Edit your details"
             reactivate_title: "Reactivate your plan"
@@ -93,7 +93,7 @@ en:
             events: "Provisioning events"
             no_provisioning_events: "No provisioning events"
           subscriptions:
-            new: "New install"
+            provision: "New install"
             change: "Change plan"
             modify: "Modify"
             renew: "Renew"
@@ -130,6 +130,7 @@ en:
               cancelling: cancelling
               cancelled: cancelled
               aborted: aborted
+              pending: pending
             modify: "Modify subscription"
             empty_list: "You don't have any subscriptions"
             cancel: "Cancel subscription"
@@ -140,6 +141,7 @@ en:
             tooltip:
               aborted: Your order was aborted during fulfillment. Please contact your administrator for more information
               external_billing: "This product is billed externally"
+              pending_subscription: This subscription has not yet been fulfilled
             cart:
               title: "Your Company Cart"
               empty: "Please add some items to the cart"

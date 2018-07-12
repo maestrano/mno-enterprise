@@ -28,6 +28,9 @@ module MnoEnterprise
     # Stub license_assignments association
     before { allow_any_instance_of(MnoEnterprise::Subscription).to receive(:license_assignments).and_return([]) }
 
+    # Stub subscription events attributes
+    let(:subscription_events_attributes) { [{ "subscription details" => { "currency": "USD" }, "event_type" => "provision" }] }
+
     # Stub Audit Log
     before { allow_any_instance_of(MnoEnterprise::Subscription).to receive(:to_audit_event).and_return({}) }
 
@@ -54,7 +57,7 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
-      let(:subscription) { build(:subscription, status: :provisioning) }
+      let(:subscription) { build(:subscription, subscription_events_attributes: subscription_events_attributes, status: :provisioning) }
       let(:product) { build(:product) }
       let(:product_pricing) { build(:product_pricing, product: product) }
 
@@ -93,7 +96,7 @@ module MnoEnterprise
         before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id, subscription_status_in: 'visible'}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
         before { sign_in user }
 
-        subject { post :create, organization_id: organization.id, subscription: {custom_data: {foo: :bar}.to_json, product_pricing_id: product_pricing.id, cart_entry: false} }
+        subject { post :create, organization_id: organization.id, subscription: { subscription_events_attributes: subscription_events_attributes, cart_entry: false } }
 
         it_behaves_like 'jpi v1 protected action'
 
@@ -111,11 +114,8 @@ module MnoEnterprise
                                             }
                                           },
                                         "user" => {"data" => {"type" => "users", "id" => user.id}},
-                                        "product_pricing" => {"data" => {"type" => "product_pricings", "id" => product_pricing.id}}
                                       },
-                                      "attributes" => {
-                                        "product_pricing_id" => product_pricing.id,
-                                        "custom_data" => {"foo" => "bar"}.to_json}
+                                      "attributes" => { "subscription_events_attributes" => subscription_events_attributes }
                                       }
                                     }.to_json)
         end
@@ -126,30 +126,27 @@ module MnoEnterprise
       let(:subscription) { build(:subscription) }
       let(:product) { build(:product) }
       let(:product_pricing) { build(:product_pricing, product: product) }
-      let(:edit_action) { "change" }
 
       before { stub_audit_events }
-      before { stub_api_v2(:post, "/subscriptions/#{subscription.id}/#{edit_action}", subscription, [], {}) }
+      before { stub_api_v2(:patch, "/subscriptions/#{subscription.id}", subscription, [], {}) }
       before { stub_api_v2(:get, "/subscriptions", subscription, [], {filter: {organization_id: organization.id, id: subscription.id}, 'page[number]' => 1, 'page[size]' => 1}) }
       before { stub_api_v2(:get, "/subscriptions", subscription, [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product'], {filter: {organization_id: organization.id, id: subscription.id, subscription_status_in: 'visible'}, 'page[number]' => 1, 'page[size]' => 1, '_metadata[organization_id]' => organization.id}) }
       before { sign_in user }
 
-      subject { put :update, organization_id: organization.id, id: subscription.id, subscription: {custom_data: {foo: :bar}.to_json, product_pricing_id: product_pricing.id, edit_action: edit_action }}
+      subject { put :update, organization_id: organization.id, id: subscription.id, subscription: { subscription_events_attributes: subscription_events_attributes }}
 
       it_behaves_like 'jpi v1 protected action'
 
       it 'passes the correct parameters' do
         expect(subject).to be_successful
-        assert_requested_api_v2(:post, "/subscriptions/#{subscription.id}/#{edit_action}",
+        assert_requested_api_v2(:patch, "/subscriptions/#{subscription.id}",
                                  body: {
                                   "data" => {
                                     "id" => subscription.id,
                                     "type" => "subscriptions",
-                                    "attributes" => {
-                                      "product_pricing_id" => product_pricing.id,
-                                      "custom_data" => {"foo" => "bar"}.to_json}
-                                    },
-                                  }.to_json)
+                                    "attributes" => {"subscription_events_attributes" => subscription_events_attributes}
+                                  }
+                                }.to_json)
       end
     end
   end

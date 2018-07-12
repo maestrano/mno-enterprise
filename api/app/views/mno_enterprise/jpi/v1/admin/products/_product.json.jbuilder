@@ -15,7 +15,7 @@ end
 
 json.product_pricings do
   json.array! product.product_pricings.each do |pricing|
-    json.extract! pricing, :id, :name, :description, :position, :free, :license_based, :pricing_type, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :per_duration, :per_unit, :prices, :external_id, :quote_based
+    json.partial! 'mno_enterprise/jpi/v1/admin/product_pricing/product_pricing', product_pricing: pricing
   end if product.respond_to?(:product_pricings)
 end
 

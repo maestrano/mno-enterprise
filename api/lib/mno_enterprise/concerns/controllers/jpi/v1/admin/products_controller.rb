@@ -16,9 +16,17 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
       JSON.parse(params[:terms]).map { |t| @products = @products | MnoEnterprise::ProductMarkup.includes(DEPENDENCIES).where(Hash[*t]) }
       response.headers['X-Total-Count'] = @products.count
     else
-      query = MnoEnterprise::Product.apply_query_params(params)
+      query = MnoEnterprise::Product
+
+      if params[:organization_id]
+        query = query.with_params(_metadata: { organization_id: parent_organization.id })
+      end
+
+      query = query.apply_query_params(params)
       query = query.includes(params[:includes]) if params[:includes]
       query = query.includes(DEPENDENCIES) unless params[:skip_dependencies]
+
+      # Ensure prices include organization-specific markups/discounts
 
       # Paginate if requested, otherwise return all the records, as opposed to the default 25.
       @products = params[:limit] && params[:offset] ? query.to_a : MnoEnterprise::Product.fetch_all(query)
@@ -28,10 +36,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
 
   # GET /mnoe/jpi/v1/admin/products/id
   def show
-    @product = MnoEnterprise::Product
-      .includes(DEPENDENCIES)
-      .find(params[:id])
-      .first
+    rel = MnoEnterprise::Product
+
+    # Ensure prices include organization-specific markups/discounts
+    if params[:organization_id]
+      rel = rel.with_params(_metadata: { organization_id: params[:organization_id]})
+    end
+
+    @product = rel.includes(DEPENDENCIES).find(params[:id]).first
   end
 
   # GET /mnoe/jpi/v1/admin/products/id/custom_schema

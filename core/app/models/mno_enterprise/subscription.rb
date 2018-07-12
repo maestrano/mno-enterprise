@@ -24,12 +24,6 @@ module MnoEnterprise
     has_one :product_contract
     has_one :product_pricing
 
-    custom_endpoint :modify, on: :member, request_method: :post
-    custom_endpoint :change, on: :member, request_method: :post
-    custom_endpoint :suspend, on: :member, request_method: :post
-    custom_endpoint :renew, on: :member, request_method: :post
-    custom_endpoint :reactivate, on: :member, request_method: :post
-    custom_endpoint :cancel, on: :member, request_method: :post
     custom_endpoint :abandon, on: :member, request_method: :post
     custom_endpoint :cancel_staged, on: :collection, request_method: :post
     custom_endpoint :submit_staged, on: :collection, request_method: :post
@@ -51,17 +45,12 @@ module MnoEnterprise
       event
     end
 
-    def process_update_request!(subscription, edit_action)
-      # Dynamically call the #mno_hub endpoint corresponding with #edit_action specified by the user.
-      self.send("#{edit_action}!", subscription)
-    end
-
     def process_staged_update_request!(subscription, edit_action)
       case edit_action
       when 'cancel'
         abandon!
       else
-        process_update_request!(subscription, edit_action)
+        self.save!
       end
     end
 

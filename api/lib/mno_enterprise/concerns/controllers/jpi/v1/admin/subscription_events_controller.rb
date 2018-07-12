@@ -1,7 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_EVENT_INCLUDES ||= [:'subscription', :'subscription.organization', :'subscription.product', :'subscription.product_pricing']
+  SUBSCRIPTION_EVENT_INCLUDES ||= [:'subscription', :'subscription.organization', :'subscription.product', :'product_pricing']
 
   #==================================================================
   # Instance methods
@@ -39,6 +39,20 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
     return render_not_found('SubscriptionEvent') unless @subscription_event
   end
 
+  # POST /mnoe/jpi/v1/admin/organizations/1/subscriptions/xyz/subscription_events
+  def create
+    subscription_event = MnoEnterprise::SubscriptionEvent.new(subscription_event_params)
+    subscription_event.relationships.subscription = MnoEnterprise::Subscription.new(id: params[:subscription_id])
+    if params[:subscription_event][:product_pricing_id]
+      subscription_event.relationships.product_pricing = MnoEnterprise::ProductPricing.new(id: params[:subscription_event][:product_pricing_id])
+    end
+
+    subscription_event.save!
+    # Fetch so that we can include relationships.
+    @subscription_event = fetch_subscription_event(params[:organization_id], params[:subscription_id], subscription_event.id, SUBSCRIPTION_EVENT_INCLUDES)
+    render :show
+  end
+
   # POST /mnoe/jpi/v1/admin/subscription_events/id/approve
   def approve
     subscription_event = MnoEnterprise::SubscriptionEvent.where(id: params[:id]).first
@@ -64,6 +78,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
   end
 
   protected
+
+  def subscription_event_params
+    params.require(:subscription_event).permit(:event_type).tap do |whitelisted|
+      whitelisted[:subscription_details] = params[:subscription_event][:subscription_details]
+    end
+  end
 
   def fetch_subscription_events(organization_id: nil, subscription_id: nil)
     metadata = {act_as_manager: current_user.id}
