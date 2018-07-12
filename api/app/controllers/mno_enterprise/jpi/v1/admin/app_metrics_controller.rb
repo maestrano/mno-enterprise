@@ -9,19 +9,16 @@ module MnoEnterprise
 
       if params[:terms]
         # Search mode
-        unless staff_role
-          JSON.parse(params[:terms]).map { |t| @app_metrics = @app_metrics | MnoEnterprise::AppMetrics.where(Hash[*t]) }
+        if staff_role
+          JSON.parse(params[:terms]).map { |t| @app_metrics |= MnoEnterprise::AppMetrics.where(organization_ids: org_ids).where(Hash[*t]) } if org_ids.present?
         else
-          JSON.parse(params[:terms]).map { |t| @app_metrics = @app_metrics | MnoEnterprise::AppMetrics.where(organization_ids: org_ids).where(Hash[*t]) } if org_ids.present?
+          JSON.parse(params[:terms]).map { |t| @app_metrics |= MnoEnterprise::AppMetrics.where(Hash[*t]) }
         end
-
-      else
+      elsif !staff_role || org_ids.present?
         # Index mode
-        if !staff_role || org_ids.present?
-          query = MnoEnterprise::AppMetrics.apply_query_params(params)
-          query = query.where(organization_ids: org_ids) if org_ids.present?
-          @app_metrics = query.to_a
-        end
+        query = MnoEnterprise::AppMetrics.apply_query_params(params)
+        query = query.where(organization_ids: org_ids) if org_ids.present?
+        @app_metrics = query.to_a
       end
       response.headers['X-Total-Count'] = @app_metrics.count
     end

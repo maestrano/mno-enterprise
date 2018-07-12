@@ -26,10 +26,10 @@ module MnoEnterprise::Concerns::Models::ProductInstance
   #==================================================================
 
   def to_audit_event
-      {
-        id: id,
-        status: status,
-        organization_id: organization_id
-      }
-    end
+    {
+      id: id,
+      status: status,
+      organization_id: organization_id
+    }
+  end
 end

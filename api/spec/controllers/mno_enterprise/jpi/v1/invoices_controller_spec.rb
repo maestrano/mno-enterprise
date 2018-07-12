@@ -15,7 +15,7 @@ module MnoEnterprise
     let(:invoice) {build(:invoice, organization: organization, organization_id: organization.id)}
 
     before do
-      stub_api_v2(:get, '/invoices', [invoice], [:organization], {filter:{slug:invoice.slug}, page:{number: 1, size: 1}})
+      stub_api_v2(:get, '/invoices', [invoice], [:organization], {filter: {slug: invoice.slug}, page: {number: 1, size: 1}})
     end
 
     let!(:current_user_stub) { stub_user(user) }

@@ -39,7 +39,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             enum: MnoEnterprise::Organization::REQUIRABLE_FIELDS
           },
           'x-schema-form': {
-            titleMap: Hash[MnoEnterprise::Organization::REQUIRABLE_FIELDS.map{|f| [f, f.titleize]}]
+            titleMap: Hash[MnoEnterprise::Organization::REQUIRABLE_FIELDS.map {|f| [f, f.titleize]}]
           }
         },
         i18n: {

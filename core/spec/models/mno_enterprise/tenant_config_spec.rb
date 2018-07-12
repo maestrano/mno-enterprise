@@ -9,7 +9,7 @@ describe MnoEnterprise::TenantConfig do
   describe '.load_config!' do
     before { stub_api_v2(:get, '/tenant', tenant) }
     before { stub_api_v2(:get, '/apps', []) }
-    before { stub_api_v2(:get, '/products', [], [], { filter: { active: true, local: true }} ) }
+    before { stub_api_v2(:get, '/products', [], [], { filter: { active: true, local: true }}) }
 
     subject { described_class.load_config! }
 
@@ -74,7 +74,7 @@ describe MnoEnterprise::TenantConfig do
 
   describe '.refresh_json_schema!' do
     before { stub_api_v2(:get, '/apps', [build(:app, name: 'My App', nid: 'my-app')]) }
-    before { stub_api_v2(:get, '/products', [build(:product, name: 'My Product', nid: 'my-product')], [], { filter: { active: true, local: true }} ) }
+    before { stub_api_v2(:get, '/products', [build(:product, name: 'My Product', nid: 'my-product')], [], { filter: { active: true, local: true }}) }
 
     subject { described_class.refresh_json_schema!({}) }
 
@@ -125,7 +125,7 @@ describe MnoEnterprise::TenantConfig do
       }
     end
 
-    let(:available_local_product_hash)  do
+    let(:available_local_product_hash) do
       {
         'x-schema-form' => {
           'titleMap' => {

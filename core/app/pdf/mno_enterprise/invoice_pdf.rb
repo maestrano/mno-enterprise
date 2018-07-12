@@ -135,7 +135,7 @@ module MnoEnterprise
           @pdf.float do
             @pdf.image main_logo_white_bg_path(true), fit: [135, (@format[:footer_size])]
           end
-          if contact_details = Settings.dashboard&.organization_management&.billing&.invoice_contact_details.presence
+          if (contact_details = Settings.dashboard&.organization_management&.billing&.invoice_contact_details.presence)
             @pdf.move_down 10
             @pdf.font_size(10) { @pdf.text contact_details, align: :right }
           end
@@ -531,7 +531,7 @@ module MnoEnterprise
       #===============================
       # Payment Information
       #===============================
-      if payment_information = Settings.dashboard&.organization_management&.billing&.invoice_payment_information.presence
+      if (payment_information = Settings.dashboard&.organization_management&.billing&.invoice_payment_information.presence)
         @pdf.start_new_page
         @pdf.font_size(20) { @pdf.text t('payment_information'), style: :bold }
         @pdf.stroke_horizontal_rule

@@ -52,10 +52,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
   # custom_schema is unavailable.
   def custom_schema
     @product = MnoEnterprise::Product
-      .with_params(_fetch_custom_schema: true, _edit_action: params[:editAction])
-      .select(:custom_schema)
-      .find(params[:id])
-      .first
+               .with_params(_fetch_custom_schema: true, _edit_action: params[:editAction])
+               .select(:custom_schema)
+               .find(params[:id])
+               .first
 
     render json: {custom_schema: @product.custom_schema}
   end

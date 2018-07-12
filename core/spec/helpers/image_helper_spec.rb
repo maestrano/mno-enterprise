@@ -73,7 +73,7 @@ module MnoEnterprise
     end
 
     describe '#main_logo_white_bg_size_to_fit' do
-      let (:original_dimensions) { [300, 300]}
+      let(:original_dimensions) { [300, 300]}
       before { allow(helper).to receive(:main_logo_white_bg_dimensions) { original_dimensions } }
 
       context 'when both dimensions are bigger than 150x150' do
@@ -83,21 +83,21 @@ module MnoEnterprise
       end
 
       context 'when both dimensions are smaller than 150x150' do
-        let (:original_dimensions) { [120, 75] }
+        let(:original_dimensions) { [120, 75] }
         it "doesn't modify the dimensions" do
           expect(helper.main_logo_white_bg_size_to_fit).to eq({ width: 120, height: 75 })
         end
       end
 
       context 'when the width is bigger' do
-        let (:original_dimensions) { [170, 75] }
+        let(:original_dimensions) { [170, 75] }
         it "returns the dimensions to fit" do
           expect(helper.main_logo_white_bg_size_to_fit).to eq({ width: 150, height: 75 * 150 / 170 })
         end
       end
 
       context 'when the height is bigger' do
-        let (:original_dimensions) { [40, 200] }
+        let(:original_dimensions) { [40, 200] }
         it "returns the dimensions to fit" do
           expect(helper.main_logo_white_bg_size_to_fit).to eq({ width: 40 * 150 / 200, height: 150 })
         end

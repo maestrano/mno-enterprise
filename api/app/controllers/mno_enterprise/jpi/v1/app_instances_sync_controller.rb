@@ -17,6 +17,7 @@ module MnoEnterprise
     end
 
     private
+
     def results(org)
       statuses = MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')
       has_running_cube = MnoEnterprise::AppInstance.where('owner.id': org.id, 'status.in': statuses, 'fulfilled_only': true, stack: 'cube').first.present?

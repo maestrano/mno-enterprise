@@ -1,7 +1,7 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_EVENT_INCLUDES ||= [:subscription, :'subscription.organization', :'subscription.product', :'product_pricing']
+  SUBSCRIPTION_EVENT_INCLUDES ||= [:subscription, :'subscription.organization', :'subscription.product', :product_pricing]
 
   #==================================================================
   # Instance methods
@@ -17,16 +17,16 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
     # Fetch all the subscription events of an organization
     elsif params[:organization_id]
       org = MnoEnterprise::Organization
-              .with_params(_metadata: { act_as_manager: current_user.id })
-              .includes([:subscriptions])
-              .find(params[:organization_id]).first
+            .with_params(_metadata: { act_as_manager: current_user.id })
+            .includes([:subscriptions])
+            .find(params[:organization_id]).first
 
       #Find organization's subscription_ids
       query = fetch_subscription_events(subscription_id: org.subscriptions.map(&:id))
 
     # Fetch all the subscription events of a tenant
     else
-      query = fetch_subscription_events()
+      query = fetch_subscription_events
     end
 
     @subscription_events = query.to_a
@@ -90,9 +90,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
     metadata[:organization_id] = organization_id if organization_id
 
     rel = MnoEnterprise::SubscriptionEvent
-            .apply_query_params(params)
-            .with_params(_metadata: metadata)
-            .includes(SUBSCRIPTION_EVENT_INCLUDES)
+          .apply_query_params(params)
+          .with_params(_metadata: metadata)
+          .includes(SUBSCRIPTION_EVENT_INCLUDES)
 
     rel = rel.where('subscription.id' => subscription_id.presence) if subscription_id
 

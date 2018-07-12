@@ -528,8 +528,13 @@ Lint/RescueWithoutErrorClass:
     - 'api/app/models/mno_enterprise/health_check.rb'
     - 'api/config/initializers/main_app_version.rb'
     - 'api/lib/mno_enterprise/concerns/controllers/jpi/v1/impac/kpis_controller.rb'
+    - 'api/lib/mno_enterprise/concerns/controllers/jpi/v1/subscriptions_controller.rb'
     - 'core/config/initializers/audit_log.rb'
     - 'core/lib/generators/mno_enterprise/database_extension/database_extension_generator.rb'
+
+Lint/SafeNavigationChain:
+  Exclude:
+    - 'core/lib/mno_enterprise/concerns/models/app_instance.rb'
 
 # Offense count: 1
 Lint/ShadowingOuterLocalVariable:
@@ -603,7 +608,7 @@ Lint/UselessAssignment:
 
 # Offense count: 126
 Metrics/AbcSize:
-  Max: 225
+  Max: 238
 
 # Offense count: 167
 # Configuration parameters: CountComments, ExcludedMethods.
@@ -618,7 +623,7 @@ Metrics/BlockNesting:
 # Offense count: 7
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 383
+  Max: 394
 
 # Offense count: 21
 Metrics/CyclomaticComplexity:
@@ -633,7 +638,7 @@ Metrics/LineLength:
 # Offense count: 113
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
-  Max: 259
+  Max: 266
 
 # Offense count: 22
 # Configuration parameters: CountComments.
@@ -974,6 +979,7 @@ Style/RedundantSelf:
 Style/RescueModifier:
   Exclude:
     - 'api/config/initializers/main_app_version.rb'
+    - 'api/lib/mno_enterprise/concerns/controllers/jpi/v1/subscriptions_controller.rb'
     - 'core/lib/generators/mno_enterprise/database_extension/database_extension_generator.rb'
 
 # Offense count: 27
@@ -1002,6 +1008,7 @@ Style/Semicolon:
     - 'api/spec/controllers/mno_enterprise/impersonate_controller_spec.rb'
     - 'api/spec/controllers/mno_enterprise/jpi/v1/impac/alerts_controller_spec.rb'
     - 'api/spec/controllers/mno_enterprise/jpi/v1/impac/kpis_controller_spec.rb'
+    - 'api/spec/controllers/mno_enterprise/jpi/v1/invoices_controller_spec.rb'
     - 'api/spec/controllers/mno_enterprise/jpi/v1/user_access_requests_controller_spec.rb'
     - 'api/spec/controllers/mno_enterprise/webhook/o_auth_controller_spec.rb'
     - 'core/spec/mno_enterprise_spec.rb'

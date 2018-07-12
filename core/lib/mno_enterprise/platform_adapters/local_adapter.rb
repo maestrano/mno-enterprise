@@ -6,7 +6,7 @@ module MnoEnterprise
     class LocalAdapter < Adapter
       class << self
         # @see MnoEnterprise::PlatformAdapters::Adapter#restart
-        def restart(timestamp = nil)
+        def restart(_timestamp = nil)
           FileUtils.touch('tmp/restart.txt')
         end
 

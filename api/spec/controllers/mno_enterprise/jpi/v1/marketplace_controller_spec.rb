@@ -105,7 +105,7 @@ module MnoEnterprise
         stub_api_v2(:get, '/tenant', tenant)
         stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { filter: { active: true } })
         stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
-        stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { filter: { active: true }} )
+        stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { filter: { active: true }})
         stub_api_v2(:get, '/products', [product], [], { fields: { products: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
       end
 
@@ -122,7 +122,7 @@ module MnoEnterprise
 
         before do
           stub_api_v2(:get, '/apps', [app1, app2], DEPENDENCIES, { filter: { active: true } })
-          stub_api_v2(:get, '/products', [], PRODUCT_DEPENDENCIES, { filter: { active: true }} )
+          stub_api_v2(:get, '/products', [], PRODUCT_DEPENDENCIES, { filter: { active: true }})
           stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
         end
 
@@ -146,7 +146,7 @@ module MnoEnterprise
                         page: { number: 1, size: 1 },
                         sort: '-updated_at'
                       })
-          stub_api_v2(:get, '/products', [product1], PRODUCT_DEPENDENCIES, { filter: { active: true }} )
+          stub_api_v2(:get, '/products', [product1], PRODUCT_DEPENDENCIES, { filter: { active: true }})
           stub_api_v2(:get, '/products', [product1], [],
                       {
                         fields: { products: 'updated_at' },

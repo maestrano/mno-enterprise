@@ -5,7 +5,7 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     context "Product provisioning is enabled" do
       before(:all) do
-        Settings.merge!(dashboard: {marketplace: {provisioning: true} })
+        Settings.dashboard.marketplace.provisioning = true
         Rails.application.reload_routes!
       end
 
@@ -16,7 +16,7 @@ module MnoEnterprise
 
     context "Product provisioning is disabled" do
       before(:all) do
-        Settings.merge!(dashboard: {marketplace: {provisioning: false}})
+        Settings.dashboard.marketplace.provisioning = false
         Rails.application.reload_routes!
       end
 
