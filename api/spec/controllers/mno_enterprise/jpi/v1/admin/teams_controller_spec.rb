@@ -45,10 +45,11 @@ module MnoEnterprise
     # Assignments
     #===============================================
     let!(:ability) { stub_ability }
-    let!(:user) { build(:user, :admin) }
+    let!(:user) { build(:user, admin_role) }
+    let(:admin_role) { :admin }
     let!(:organization) { build(:organization) }
     let!(:team) { build(:team, organization: organization) }
-    let!(:role) { MnoEnterprise::User::ADMIN_ROLE }
+    let!(:role) { 'Admin' }
     let!(:app) { build(:app) }
     let!(:orga_relation) { build(:orga_relation, organization_id: organization.id, role: role, user_id: user.id) }
 
@@ -79,11 +80,21 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/teams", team, includes, expected_params) }
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations)) }
       before { stub_api_v2(:get, "/apps", [app]) }
-      before { subject }
 
-      it { expect(response).to be_success }
-      it { expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_teams(team).to_json)) }
-      it { expect(data['teams'].first['id']).to eq(team.id) }
+      it 'fetches the correct teams' do
+        subject
+        expect(response).to be_success
+        expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_teams(team).to_json))
+        expect(data['teams'].first['id']).to eq(team.id)
+      end
+
+      context 'with a support user' do
+        let(:admin_role) { :support }
+        let(:entity) { nil }
+        let(:controller_action) { :index }
+
+        it_behaves_like "an authorized #organization_id route for support users"
+      end
     end
   end
 end

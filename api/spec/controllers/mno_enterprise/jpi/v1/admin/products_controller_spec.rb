@@ -25,6 +25,7 @@ module MnoEnterprise
       let(:product) { build(:product) }
       before { stub_api_v2(:get, '/products', [product], [:'values.field', :assets, :categories, :product_pricings, :product_contracts]) }
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
     end
 
     describe 'GET #show' do
@@ -32,6 +33,7 @@ module MnoEnterprise
       let(:product) { build(:product) }
       before { stub_api_v2(:get, "/products/#{product.id}", product, [:'values.field', :assets, :categories, :product_pricings, :product_contracts]) }
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
     end
 
     describe 'GET #custom_schema' do
@@ -39,6 +41,7 @@ module MnoEnterprise
       let(:product) { build(:product) }
       before { stub_api_v2(:get, "/products/#{product.id}", product, [], { _fetch_custom_schema: true, _edit_action: 'SUSPEND', fields: { products: 'custom_schema' } }) }
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an authorized route for support users'
     end
   end
 end
