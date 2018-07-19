@@ -1,6 +1,9 @@
 module MnoEnterprise
   class Jpi::V1::Admin::UsersController < Jpi::V1::Admin::BaseResourceController
+
+    # Overwrite check support authorization for specific actions, as these authorizations take place in controller.
     before_filter :user_support?, only: [:logout_support, :login_with_org_external_id]
+    skip_before_filter :block_support_users, only: [:show, :logout_support, :login_with_org_external_id]
 
     # GET /mnoe/jpi/v1/admin/users
     def index
@@ -38,6 +41,7 @@ module MnoEnterprise
                                  .find(params[:id])
                                  .first
 
+      authorize_user_for_support_role
       @user_organizations = @user.organizations
     end
 
@@ -130,7 +134,7 @@ module MnoEnterprise
       # Add #support_org_id in the cookies so that the frontend can read it.
       # Store #support_org_external_id in the session so that the support user can authenticate with mnoe.
       cookies[:support_org_id] = org&.id
-      session[:support_org_external_id] = org&.external_id
+      session[:support_org_id] = org&.id
     end
 
     def user_support?
@@ -177,6 +181,10 @@ module MnoEnterprise
           user.relationships.sub_tenant = nil
         end
       end
+    end
+
+    def authorize_user_for_support_role
+      authorize! :read, @user if current_user.support?
     end
   end
 end

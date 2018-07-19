@@ -20,38 +20,55 @@ module MnoEnterprise
     #===============================================
     # Assignments
     #===============================================
-    let(:current_user) { build(:user, :admin) }
-    let!(:current_user_stub) { stub_user(current_user) }
+    # This is the current user, it must be named user so that the shared examples can work.
+    let(:user) { build(:user, current_user_admin_role) }
+    let(:current_user_admin_role) { :admin }
+    let!(:current_user_stub) { stub_user(user) }
 
-    # Stub user and user call
-    let(:user) { build(:user) }
+    # This is the user searched for, i.e. what is returned from a show request.
+    let(:user_searched) { build(:user, admin_role) }
+    let(:admin_role) { :admin }
 
     #===============================================
     # Specs
     #===============================================
-    before { sign_in current_user }
+    before { sign_in user }
 
     describe 'GET #index' do
       subject { get :index }
 
       let(:data) { JSON.parse(response.body) }
 
-      before { stub_api_v2(:get, "/users", [user], [:user_access_requests, :sub_tenant], { _locale: :en, _metadata: { act_as_manager: current_user.id } }) }
-      before { subject }
+      before { stub_api_v2(:get, "/users", [user_searched], [:user_access_requests, :sub_tenant], { _locale: :en, _metadata: { act_as_manager: user.id } }) }
 
-      it { expect(data['users'].first['id']).to eq(user.id) }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
+      it { subject; expect(data['users'].first['id']).to eq(user_searched.id) }
     end
 
     describe 'GET #show' do
-      subject { get :show, id: user.id }
+      subject { get :show, id: user_searched.id }
 
       let(:data) { JSON.parse(response.body) }
       let(:included) { [:orga_relations, :organizations, :user_access_requests, :sub_tenant] }
 
-      before { stub_api_v2(:get, "/users/#{user.id}", user, included, { _metadata: { act_as_manager: current_user.id } }) }
-      before { subject }
+      before { stub_api_v2(:get, "/users/#{user_searched.id}", user_searched, included, { _metadata: { act_as_manager: user.id } }) }
 
-      it { expect(data['user']['id']).to eq(user.id) }
+      it_behaves_like 'a jpi v1 admin action'
+
+      it 'finds the correct user' do
+        expect(controller).not_to receive(:authorize!)
+        subject
+        expect(data['user']['id']).to eq(user_searched.id)
+      end
+
+      context 'with a suport user' do
+        let(:current_user_admin_role) { :support }
+        it 'authorizes the user' do
+          expect(controller).to receive(:authorize!)
+          subject
+        end
+      end
     end
 
     describe 'POST #create' do
@@ -60,8 +77,8 @@ module MnoEnterprise
         Devise.token_generator
         stub_api_v2(:get, '/users', [], [], { filter: { email: 'test@toto.com' }, page: { number: 1, size: 1 } })
         stub_api_v2(:get, '/users', [], [], { filter: { confirmation_token: confirmation_token } })
-        stub_api_v2(:get, "/users/#{user.id}", user, [:sub_tenant])
-        stub_api_v2(:patch, "/users/#{user.id}", user)
+        stub_api_v2(:get, "/users/#{user_searched.id}", user_searched, [:sub_tenant])
+        stub_api_v2(:patch, "/users/#{user_searched.id}", user_searched)
         allow_any_instance_of(Devise::TokenGenerator).to receive(:digest).and_return(confirmation_token)
         allow_any_instance_of(Devise::TokenGenerator).to receive(:generate).and_return(confirmation_token)
       }
@@ -70,12 +87,15 @@ module MnoEnterprise
       let(:data) { JSON.parse(response.body) }
       let(:params) { { 'name' => 'Foo', 'email' => 'test@toto.com' } }
       let(:expected_params) { params.merge('sub_tenant_id' => nil) }
-      let!(:stub) { stub_api_v2(:post, '/users', user) }
+      let!(:stub) { stub_api_v2(:post, '/users', user_searched) }
 
-      before { subject }
-
-      it { expect(data['user']['id']).to eq(user.id) }
-      it { expect(stub).to have_been_requested }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
+      it 'creates the appropriate user' do
+        subject
+        expect(stub).to have_been_requested
+        expect(data['user']['id']).to eq(user_searched.id)
+      end
 
       context 'with a staff user' do
         let(:params) { { 'name' => 'Foo', 'email' => 'test@toto.com', 'admin_role' => MnoEnterprise::User::STAFF_ROLE } }
@@ -84,61 +104,78 @@ module MnoEnterprise
           args = {'orga_on_create' => true, 'company' => 'Demo Company', 'demo_account' => 'Staff demo company'}
           stub_request(:post, 'https://api-enterprise.maestrano.test/api/mnoe/v2/users?_locale=en')
             .with(body: {"data" => hash_including("attributes" => hash_including(args))})
-            .to_return(status: 200, body: from_apiv2(user, []).to_json, headers: MnoEnterpriseApiTestHelper::JSON_API_RESULT_HEADERS)
+            .to_return(status: 200, body: from_apiv2(user_searched, []).to_json, headers: MnoEnterpriseApiTestHelper::JSON_API_RESULT_HEADERS)
         end
 
-        before { subject }
-
-        it { expect(stub).to have_been_requested }
+        it { subject; expect(stub).to have_been_requested }
       end
     end
 
     describe 'PUT #update' do
-      subject { put :update, id: user.id, user: params }
+      subject { put :update, id: user_searched.id, user: params }
 
       let(:data) { JSON.parse(subject.body) }
       let(:params) { { 'name' => 'Foo' } }
       let(:expected_params) { params.merge('sub_tenant_id' => nil) }
 
-      before { expect_any_instance_of(MnoEnterprise::User).to receive(:save!) }
-      before { stub_api_v2(:get, "/users/#{user.id}", user, [], { _metadata: { act_as_manager: current_user.id } }) }
-      before { stub_api_v2(:get, "/users/#{user.id}", user, [:sub_tenant]) }
+      before { stub_api_v2(:get, "/users/#{user_searched.id}", user_searched, [], { _metadata: { act_as_manager: user.id } }) }
+      before { stub_api_v2(:get, "/users/#{user_searched.id}", user_searched, [:sub_tenant]) }
+      before { stub_api_v2(:patch, "/users/#{user_searched.id}") }
 
-      it { expect(data['user']['id']).to eq(user.id) }
+      it_behaves_like 'an unauthorized route for support users'
+      it_behaves_like 'a jpi v1 admin action'
+
+      it 'properly saves the user' do
+        expect_any_instance_of(MnoEnterprise::User).to receive(:save!)
+        subject
+        expect(data['user']['id']).to eq(user_searched.id)
+      end
 
       context 'when changing a staff to admin' do
-        let(:user) { build(:user, admin_role: MnoEnterprise::User::STAFF_ROLE) }
+        let(:user_searched) { build(:user, admin_role: MnoEnterprise::User::STAFF_ROLE) }
         let(:params) { { 'name' => 'Foo', 'admin_role' => MnoEnterprise::User::ADMIN_ROLE } }
         before { expect_any_instance_of(MnoEnterprise::User).to receive(:clear_clients!) }
 
         # Dummy test to trigger the above expectation
-        it { expect(data['user']['id']).to eq(user.id) }
+        it { subject; expect(data['user']['id']).to eq(user_searched.id) }
       end
     end
 
     describe 'PATCH #update_clients' do
-      subject { put :update_clients, id: user.id, user: params }
+      subject { put :update_clients, id: user_searched.id, user: params }
 
       let(:data) { JSON.parse(response.body) }
       let(:params) { { add: ['id'] } }
 
-      before { stub_api_v2(:get, "/users/#{user.id}", user, [], { _metadata: { act_as_manager: current_user.id } }) }
-      before { stub_api_v2(:get, "/users/#{user.id}", user, [:sub_tenant]) }
-      let!(:stub) { stub_api_v2(:patch, "/users/#{user.id}/update_clients", user) }
-      before { subject }
-      it { expect(data['user']['id']).to eq(user.id) }
-      it { expect(stub).to have_been_requested }
+      before { stub_api_v2(:get, "/users/#{user_searched.id}", user_searched, [], { _metadata: { act_as_manager: user.id } }) }
+      before { stub_api_v2(:get, "/users/#{user_searched.id}", user_searched, [:sub_tenant]) }
+      let!(:stub) { stub_api_v2(:patch, "/users/#{user_searched.id}/update_clients", user_searched) }
+
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
+
+      it 'updates the clients' do
+        subject
+        expect(data['user']['id']).to eq(user_searched.id)
+        expect(stub).to have_been_requested
+      end
     end
 
     describe 'DELETE #destroy' do
-      subject { delete :destroy, id: user.id }
+      subject { delete :destroy, id: user_searched.id }
 
       let(:data) { JSON.parse(response.body) }
 
-      before { expect_any_instance_of(MnoEnterprise::User).to receive(:destroy) }
-      before { stub_api_v2(:get, "/users/#{user.id}", user, [], { _metadata: { act_as_manager: current_user.id } }) }
+      before { stub_api_v2(:get, "/users/#{user_searched.id}", user_searched, [], { _metadata: { act_as_manager: user.id } }) }
+      before { stub_api_v2(:delete, "/users/#{user_searched.id}") }
 
-      it { is_expected.to be_success }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
+
+      it 'makes a call to delete the organization' do
+        expect_any_instance_of(MnoEnterprise::User).to receive(:destroy)
+        expect(subject).to be_success
+      end
     end
 
     describe 'POST #signup_email' do
@@ -147,14 +184,18 @@ module MnoEnterprise
       let(:email) { 'test@test.com' }
       let(:mailer) { double('mailer') }
 
-      before { expect(MnoEnterprise::SystemNotificationMailer).to receive(:registration_instructions).with(email).and_return(mailer) }
-      before { expect(mailer).to receive(:deliver_later) }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
-      it { is_expected.to be_success }
+      it 'makes the appropriate request for the signup email' do
+        expect(MnoEnterprise::SystemNotificationMailer).to receive(:registration_instructions).with(email).and_return(mailer)
+        expect(mailer).to receive(:deliver_later)
+        expect(subject).to be_success
+      end
     end
 
     describe 'POST #login_with_org_external_id' do
-      subject { post :login_with_org_external_id, id: current_user.id, organization_external_id: organization_external_id }
+      subject { post :login_with_org_external_id, id: user.id, organization_external_id: organization_external_id }
 
       before do
         Settings.merge!(admin_panel: {support: {enabled: true}})
@@ -164,26 +205,24 @@ module MnoEnterprise
       let(:organization_external_id) { 1 }
 
       context 'with support settings enabled' do
-        let(:current_user) { build(:user, admin_role: admin_role) }
         let(:organizations) { [organization] }
         let(:organization) { build(:organization, external_id: 1) }
-        let(:admin_role) { MnoEnterprise::User::SUPPORT_ROLE }
 
         context 'when the current user is not a support user' do
-          let(:admin_role) { MnoEnterprise::User::ADMIN_ROLE }
           it { is_expected.not_to be_success }
         end
 
         context 'when the user is a support user' do
+          let(:current_user_admin_role) { :support }
           before { stub_api_v2(:get, '/organizations', organizations, [], { filter: { external_id: 1 }, page: { number: 1, size: 1 } }) }
 
           it { is_expected.to be_success }
           it 'sets the session of support_org_id' do
             expect(cookies[:support_org_id]).to be_nil
-            expect(session[:support_org_external_id]).to be_nil
+            expect(session[:support_org_id]).to be_nil
             subject
             expect(cookies[:support_org_id]).to eq(organization.id)
-            expect(session[:support_org_external_id]).to eq(organization.external_id)
+            expect(session[:support_org_id]).to eq(organization.id)
           end
 
           context 'when mnohub cannot find the organization' do
@@ -195,7 +234,7 @@ module MnoEnterprise
     end
 
     describe 'DELETE #logout_support' do
-      subject { delete :logout_support, { id: current_user.id }, { support_org_external_id: organization.external_id } }
+      subject { delete :logout_support, { id: user.id }, { support_org_external_id: organization.external_id } }
 
       before do
         Settings.merge!(admin_panel: {support: {enabled: true}})
@@ -205,7 +244,7 @@ module MnoEnterprise
 
       context 'with support settings enabled' do
         let(:organization) { build(:organization) }
-        let(:current_user) { build(:user, admin_role: admin_role) }
+        let(:user) { build(:user, admin_role: admin_role) }
         let(:admin_role) { MnoEnterprise::User::SUPPORT_ROLE }
 
         context 'when the current user is not a support user' do
