@@ -24,6 +24,7 @@ module MnoEnterprise
       subject { get :index }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
     end
 
     describe 'PATCH #enable' do
@@ -49,6 +50,7 @@ module MnoEnterprise
           before { stub_api_v2(:patch, "/apps/#{app.id}/enable", nil) }
 
           it_behaves_like 'a jpi v1 admin action'
+          it_behaves_like "an unauthorized route for support users"
 
           it 'makes to correct request to MnoHub' do
             subject
@@ -69,6 +71,7 @@ module MnoEnterprise
           before { stub_api_v2(:patch, "/apps/enable", nil) }
 
           it_behaves_like 'a jpi v1 admin action'
+          it_behaves_like "an unauthorized route for support users"
 
           it 'makes to correct request to MnoHub' do
             subject
@@ -91,6 +94,7 @@ module MnoEnterprise
         before { stub_api_v2(:patch, "/apps/#{app.id}/disable", nil) }
 
         it_behaves_like 'a jpi v1 admin action'
+        it_behaves_like "an unauthorized route for support users"
 
         it 'makes to correct request to MnoHub' do
           subject

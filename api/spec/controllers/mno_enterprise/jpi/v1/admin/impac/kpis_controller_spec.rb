@@ -55,6 +55,7 @@ module MnoEnterprise
       end
 
       it_behaves_like "a jpi v1 admin action"
+      it_behaves_like "an unauthorized route for support users"
 
       it 'creates a kpi' do
         subject
@@ -98,6 +99,7 @@ module MnoEnterprise
       end
 
       it_behaves_like "a jpi v1 admin action"
+      it_behaves_like "an unauthorized route for support users"
 
       it 'updates the kpi' do
         subject
@@ -132,6 +134,7 @@ module MnoEnterprise
       end
 
       it_behaves_like "a jpi v1 admin action"
+      it_behaves_like "an unauthorized route for support users"
 
       it 'destroys the kpi' do
         subject

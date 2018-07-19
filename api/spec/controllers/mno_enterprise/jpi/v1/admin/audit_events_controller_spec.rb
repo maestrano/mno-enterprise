@@ -22,6 +22,7 @@ module MnoEnterprise
     describe 'GET #index' do
       subject { get :index }
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
       context 'success' do
         it 'renders the :index view' do
           subject

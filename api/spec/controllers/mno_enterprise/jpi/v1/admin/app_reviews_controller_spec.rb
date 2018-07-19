@@ -23,7 +23,10 @@ module MnoEnterprise
 
     describe '#index' do
       subject { get :index }
+
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
+
       context 'success' do
         before { subject }
         it 'returns a list of app_review' do
@@ -36,7 +39,10 @@ module MnoEnterprise
 
     describe 'GET #show' do
       subject { get :show, id: review.id }
+
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
+
       let!(:get_stub) { stub_api_v2(:get, "/reviews/#{review.id}", review) }
       context 'success' do
         before { subject }
@@ -53,7 +59,9 @@ module MnoEnterprise
       subject { put :update, id: review.id, app_review: {status: 'rejected'} }
       let!(:patch_stub) { stub_api_v2(:patch, "/feedbacks/#{review.id}", review) }
       let!(:get_stub) { stub_api_v2(:get, "/reviews/#{review.id}", review) }
+
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
 
       context 'success' do
         before { subject }

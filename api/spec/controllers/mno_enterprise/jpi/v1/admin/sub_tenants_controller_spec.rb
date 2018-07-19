@@ -39,6 +39,7 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/sub_tenants", [sub_tenant]) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       context 'success' do
         before { sign_in user }
@@ -55,6 +56,7 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/sub_tenants/#{sub_tenant.id}", sub_tenant) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       context 'success' do
         before { sign_in user }
@@ -72,6 +74,7 @@ module MnoEnterprise
       let!(:stub) { stub_api_v2(:patch, "/sub_tenants/#{sub_tenant.id}", sub_tenant) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       context 'success' do
         before { sign_in user }
@@ -88,6 +91,7 @@ module MnoEnterprise
       let!(:stub) { stub_api_v2(:patch, "/sub_tenants/#{sub_tenant.id}/update_clients", sub_tenant) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       context 'success' do
         before { sign_in user }
@@ -104,6 +108,7 @@ module MnoEnterprise
       let!(:stub) { stub_api_v2(:patch, "/sub_tenants/#{sub_tenant.id}/update_account_managers", sub_tenant) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       context 'success' do
         before { sign_in user }
@@ -120,6 +125,7 @@ module MnoEnterprise
       let!(:stub) { stub_api_v2(:delete, "/sub_tenants/#{sub_tenant.id}", sub_tenant) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       context 'success' do
         before { sign_in user  }

@@ -69,6 +69,7 @@ module MnoEnterprise
       subject { get :index }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
       context 'success' do
         before { subject }
         it 'returns a list of tenant_invoices' do
@@ -82,6 +83,7 @@ module MnoEnterprise
       subject { get :show, id: tenant_invoice.id }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
       context 'success' do
         before { subject }
 

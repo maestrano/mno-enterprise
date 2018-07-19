@@ -61,6 +61,7 @@ module MnoEnterprise
       end
 
       it_behaves_like "a jpi v1 admin action"
+      it_behaves_like "an unauthorized route for support users"
 
       it 'creates a widget' do
         subject
@@ -109,6 +110,7 @@ module MnoEnterprise
       end
 
       it_behaves_like "a jpi v1 admin action"
+      it_behaves_like "an unauthorized route for support users"
 
       it 'updates the widget' do
         subject
@@ -143,6 +145,7 @@ module MnoEnterprise
       end
 
       it_behaves_like "a jpi v1 admin action"
+      it_behaves_like "an unauthorized route for support users"
 
       it 'destroys the widget' do
         subject

@@ -26,6 +26,7 @@ module MnoEnterprise
       before { stub_api_v2(:get, '/assets', [asset], [:product], {}) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
     end
 
     describe 'GET product#index' do
@@ -37,6 +38,7 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/assets", [asset], [:product], { filter: { "product.id" => product_id } }) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
     end
 
     describe 'GET #show' do
@@ -47,6 +49,7 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/assets/#{asset.id}", asset, [:product], {}) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
     end
 
     describe 'POST #create' do
@@ -58,6 +61,7 @@ module MnoEnterprise
       before { stub_api_v2(:post, '/assets', build(:asset)) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
     end
 
     describe 'POST product#create' do
@@ -69,6 +73,7 @@ module MnoEnterprise
       before { stub_api_v2(:post, '/assets', build(:asset)) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
     end
 
     describe 'DELETE #destroy' do
@@ -80,6 +85,7 @@ module MnoEnterprise
       before { stub_api_v2(:delete, "/assets/#{asset.id}", asset, [], {}) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
     end
   end
 end
