@@ -23,7 +23,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
                               invoices credit_card demo_account main_address
                               current_credit].freeze
 
-    before_filter :support_enabled?, only: [:index], if: :support_parameters
+    # Overwrite check support authorization for index action only.
+
+    # Workaround because using only and if are not possible (it checks to see if either satisfy, not both.)
+    # https://github.com/rails/rails/issues/9703#issuecomment-223574827
+    skip_before_filter :block_support_users, if: -> { support_org_external_id && action_name == 'index'}
+    before_filter :support_enabled?, if: -> { support_org_external_id && action_name == 'index'}
+
+    skip_before_filter :block_support_users, only: [:show]
+    before_filter :authorize_support_user_organization, only: [:show]
   end
 
   #==================================================================
@@ -35,7 +43,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
       # Created so that users with support #admin_role cannot see an organization unless they match their external_id.
       @organizations = MnoEnterprise::Organization
         .select(INCLUDED_FIELDS_INDEX)
-        .where(external_id: support_parameters)
+        .where(external_id: support_org_external_id)
     elsif params[:terms]
       # Search mode
       @organizations = []
@@ -78,7 +86,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     @organization_active_apps = MnoEnterprise::AppInstance.includes(:app)
                       .where('owner.id': params[:id], 'status.in': statuses, 'fulfilled_only': true)
                       .select(&:active?)
-
   end
 
   # TODO: sub-tenant scoping
@@ -283,7 +290,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     return head :forbidden unless Settings.admin_panel.support.enabled && current_user.support?
   end
 
-  def support_parameters
+  def support_org_external_id
     params[:organization_external_id]
+  end
+
+  # Monkey patch Admin::BaseResource#support_org_params to handle support authorization.
+  def support_org_params
+    params[:id]
   end
 end
