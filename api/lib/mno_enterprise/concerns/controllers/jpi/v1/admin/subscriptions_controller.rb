@@ -1,8 +1,12 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_INCLUDES ||= [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
+  included do
+    SUBSCRIPTION_INCLUDES ||= [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
 
+    skip_before_filter :block_support_users, if: :skip_block_support_users?
+    before_filter :authorize_support_user_organization, if: :skip_block_support_users?
+  end
   #==================================================================
   # Instance methods
   #==================================================================
@@ -92,6 +96,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   end
 
   protected
+
+  def skip_block_support_users?
+    # Workaround because using only and if are not possible (it checks to see if either satisfy, not both.)
+    # https://github.com/rails/rails/issues/9703#issuecomment-223574827
+    support_org_params && ["index", "show"].include?(action_name)
+  end
 
   def cart_subscription_param
     params.dig(:subscription, :cart_entry)

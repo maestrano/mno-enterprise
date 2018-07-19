@@ -1,7 +1,14 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_EVENT_INCLUDES ||= [:'subscription', :'subscription.organization', :'subscription.product', :'product_pricing']
+  included do
+    SUBSCRIPTION_EVENT_INCLUDES ||= [:'subscription', :'subscription.organization', :'subscription.product', :'product_pricing']
+
+    # Workaround because using only and if are not possible (it checks to see if either satisfy, not both.)
+    # https://github.com/rails/rails/issues/9703#issuecomment-223574827
+    skip_before_filter :block_support_users, if: :authorize_support?
+    before_filter :authorize_support_user_organization, if: :authorize_support?
+  end
 
   #==================================================================
   # Instance methods
@@ -108,5 +115,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
     metadata = special_roles_metadata
     metadata[:organization_id] = organization_id if organization_id
     metadata
+  end
+
+  def authorize_support?
+    support_org_params && ['show', 'index'].include?(action_name)
   end
 end
