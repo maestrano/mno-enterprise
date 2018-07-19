@@ -74,6 +74,7 @@ module MnoEnterprise
 
     describe 'GET #show' do
       subject { get :show, id: product_markup.id }
+
       it_behaves_like 'a jpi v1 admin action'
       it_behaves_like 'an unauthorized route for support users'
     end

@@ -37,7 +37,6 @@ module MnoEnterprise
       subject { post :create, app_comment: params, feedback_id: feedback.id }
 
       it_behaves_like "an unauthorized route for support users"
-
       it 'renders the new review' do
         expect(JSON.parse(subject.body)['app_comment']).to eq(expected_hash_for_comment)
       end

@@ -48,6 +48,7 @@ module MnoEnterprise
       subject { post :create, user_id: invitee.id, organization_id: organization.id }
 
       before { allow(SystemNotificationMailer).to receive(:organization_invite).and_return(message_delivery) }
+
       it_behaves_like 'a jpi v1 admin action'
       it_behaves_like "an unauthorized route for support users"
 

@@ -38,12 +38,12 @@ module MnoEnterprise
     end
 
     describe 'GET #show' do
+      let!(:get_stub) { stub_api_v2(:get, "/reviews/#{review.id}", review) }
       subject { get :show, id: review.id }
 
       it_behaves_like 'a jpi v1 admin action'
       it_behaves_like "an unauthorized route for support users"
 
-      let!(:get_stub) { stub_api_v2(:get, "/reviews/#{review.id}", review) }
       context 'success' do
         before { subject }
         it 'returns a complete description of the app_review' do

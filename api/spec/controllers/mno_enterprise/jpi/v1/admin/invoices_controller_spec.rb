@@ -66,6 +66,7 @@ module MnoEnterprise
 
       it_behaves_like 'a jpi v1 admin action'
       it_behaves_like "an unauthorized route for support users"
+
       it 'find correct invoice' do
         subject
         expect(data['invoice']['id']).to eq(invoice.id)
@@ -83,6 +84,7 @@ module MnoEnterprise
 
       it_behaves_like 'a jpi v1 admin action'
       it_behaves_like "an unauthorized route for support users"
+
       it { is_expected.to be_successful }
     end
 
@@ -99,6 +101,7 @@ module MnoEnterprise
 
       it_behaves_like 'a jpi v1 admin action'
       it_behaves_like "an unauthorized route for support users"
+
       it 'creates the proper adjustments' do
         subject
         expect(data['id']).to eq(bill.id)
@@ -127,6 +130,7 @@ module MnoEnterprise
 
       it_behaves_like 'a jpi v1 admin action'
       it_behaves_like "an unauthorized route for support users"
+
       it 'deletes the proper adjustments' do
         subject
         expect(data['invoice']['total_due']['fractional']).to eq(invoice.total_due.cents.to_f.to_s)
@@ -146,6 +150,7 @@ module MnoEnterprise
 
       it_behaves_like 'a jpi v1 admin action'
       it_behaves_like "an unauthorized route for support users"
+
       it 'sends to customer' do
         subject
         expect(data['status']).to eq('request_sent')
