@@ -269,15 +269,15 @@ module MnoEnterprise
     end
 
     def support?
-      admin_role == SUPPORT_ROLE
+      admin_role.downcase == SUPPORT_ROLE
     end
 
     def staff?
-      admin_role == STAFF_ROLE
+      admin_role.downcase == STAFF_ROLE
     end
 
     def admin?
-      admin_role == ADMIN_ROLE
+      admin_role.downcase == ADMIN_ROLE
     end
   end
 end

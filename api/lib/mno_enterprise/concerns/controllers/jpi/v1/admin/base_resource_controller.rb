@@ -9,11 +9,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
   included do
     ADMIN_CACHE_DURATION = 12.hours
     before_filter :check_authorization
+    before_filter :block_support_users
   end
 
   protected
 
-  # This method is created to properly scope api with a staff/account manage role to MnoHub.
+  # This method is created to properly scope api calls to MnoHub with account_manager users.
   def special_roles_metadata
     { act_as_manager: current_user.id }
   end
@@ -29,6 +30,28 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::BaseResourceControl
     status = current_user ? :forbidden : :unauthorized
     render nothing: true, status: status
     false
+  end
+
+  # Blacklist support users from all admin routes. To whitelist a route for a
+  # support_user, skip the callback, and create a proper callback, or CanCan
+  # authorization inside the controller action.
+  def block_support_users
+    return true unless current_user.support?
+    status = current_user ? :forbidden : :unauthorized
+    render nothing: true, status: status
+    false
+  end
+
+  # Generic authorization that can be called as a #before_filter in a controller with organization params.
+  def authorize_support_user_organization
+    return true unless current_user.support?
+    authorize! :read, MnoEnterprise::Organization.new(id: support_org_params)
+  end
+
+  # Generic organization parameters, can be monkeypatched in controller with appropriate organization id.
+  # e.g. in organization controller it can be monkey patched to #params[:id]
+  def support_org_params
+    params[:organization_id]
   end
 
   def render_not_found(resource = controller_name.singularize, id = params[:id])
