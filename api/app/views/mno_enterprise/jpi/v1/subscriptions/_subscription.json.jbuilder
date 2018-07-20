@@ -28,6 +28,7 @@ if subscription.product
     json.single_billing_enabled subscription.product.single_billing_enabled
     json.billed_locally subscription.product.billed_locally
     json.externally_provisioned subscription.externally_provisioned
+    json.js_editor_enabled subscription.product.nid.in? Settings.product_nids.to_a
   end
 end
 
