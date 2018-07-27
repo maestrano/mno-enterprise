@@ -34,7 +34,7 @@ module MnoEnterprise
 
       describe 'creation' do
         context 'success' do
-          before { stub_api_v2(:get, '/tenant', tenant) }
+          before { stub_api_v2(:get, '/tenant', tenant, ['tenant_company']) }
           before { subject }
 
           let(:data) { JSON.parse(response.body) }
@@ -46,7 +46,7 @@ module MnoEnterprise
 
         context 'Tenant feature flag not active' do
           before { tenant.metadata[:can_manage_organization_credit] = false }
-          before { stub_api_v2(:get, '/tenant', tenant) }
+          before { stub_api_v2(:get, '/tenant', tenant, ['tenant_company']) }
           before { subject }
 
           it "does not create the account_transaction" do

@@ -16,7 +16,7 @@ module MnoEnterprise
       stub_user(user)
       sign_in user
 
-      stub_api_v2(:get, '/tenant', tenant)
+      stub_api_v2(:get, '/tenant', tenant, ['tenant_company'])
       stub_api_v2(:patch, '/tenant', tenant)
     end
 
@@ -38,7 +38,8 @@ module MnoEnterprise
             payment_gateways: []
           },
           app_management: "marketplace",
-          organization_credit_management: true
+          organization_credit_management: true,
+          tenant_organization_id: tenant.tenant_company.id
         }
 
         # TODO: using JSON parse for better error

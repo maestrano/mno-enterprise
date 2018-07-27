@@ -7,7 +7,7 @@ describe MnoEnterprise::TenantConfig do
   let(:tenant) { build(:tenant, frontend_config: {'foo' => 'bar'})}
 
   describe '.load_config!' do
-    before { stub_api_v2(:get, '/tenant', tenant) }
+    before { stub_api_v2(:get, '/tenant', tenant, ['tenant_company']) }
     before { stub_api_v2(:get, '/apps', []) }
     before { stub_api_v2(:get, '/products', [], [], { filter: { active: true, local: true }} ) }
 
@@ -33,12 +33,12 @@ describe MnoEnterprise::TenantConfig do
     subject { described_class.fetch_tenant_config }
 
     it 'get the tenant config from MnoHub' do
-      stub_api_v2(:get, '/tenant', tenant)
+      stub_api_v2(:get, '/tenant', tenant, ['tenant_company'])
       expect(subject).to eq(tenant.frontend_config)
     end
 
     it 'does not fail on connection error' do
-      stub_api_v2(:get, '/tenant').to_timeout
+      stub_api_v2(:get, '/tenant', nil, ['tenant_company']).to_timeout
       expect(subject).to be_nil
     end
   end

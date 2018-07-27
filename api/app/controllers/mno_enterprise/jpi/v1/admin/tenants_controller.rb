@@ -15,6 +15,9 @@ module MnoEnterprise
 
       @tenant = MnoEnterprise::Tenant.show
       @tenant.update_attributes!(tenant_params)
+      # Need to re-retrieve the tenant with tenant company after
+      # update_attributes! call
+      @tenant = MnoEnterprise::Tenant.show
 
       MnoEnterprise::SystemManager.restart(timestamp)
       render :show
@@ -30,6 +33,9 @@ module MnoEnterprise
     def update_domain
       @tenant = MnoEnterprise::Tenant.show
       @tenant.update_attributes!(tenant_params)
+      # Need to re-retrieve the tenant with tenant company after
+      # update_attributes! call
+      @tenant = MnoEnterprise::Tenant.show
       domain = MnoEnterprise::SystemManager.update_domain(tenant_params[:domain])
       if domain
         # Need to restart to reconfigure the app
