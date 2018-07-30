@@ -153,3 +153,8 @@ en:
               submit_cart:
                 title: "Submit Cart"
                 toastr: "Orders requested"
+          quote:
+            unit_price: "Unit Price"
+            quantity: "Quantity"
+            total_price: "Total"
+            total_price_list: "Total Price List"
