@@ -14,7 +14,7 @@ The Maestrano Enterprise Engine can be included in a Rails project to bootstrap 
 
 The goal of this engine is to provide a base that you can easily extend with custom style or logic.
 
-_Note: `4.0` is actively under development. If you're looking for the stable code, see the `3.x` branch_
+_Note: `5.0` is the edge version which contains the jpi/v2 jsonapi.org proxy to the Maestrano Hub API. If you're looking for production grade code, see the `3.x` branch. If you are looking for all the latest stable features, see the `4.x` branch_
 
 - - -
 
