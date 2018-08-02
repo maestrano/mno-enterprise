@@ -357,5 +357,25 @@ MnoEnterprise::Engine.routes.draw do
         end
       end
     end
+
+    namespace :v2 do
+      # TODO: dynamic routes?
+      resources :organizations, only: [:index, :show, :create, :update, :destroy]
+      resources :users, only: [:index, :show] do
+        member do
+          patch :update_password
+        end
+      end
+      resources :dashboards, only: [:index, :show, :create, :update, :destroy]
+      resources :widgets, only: [:index, :show, :create, :update, :destroy]
+      resources :products, only: [:index, :show]
+      resources :product_instances, only: [:index, :show]
+      resources :subscriptions, only: [:index, :show, :create]
+
+      # scope ':entity' do
+      #   resources '', as: :resource, controller: 'resources', only: [:index, :show, :create, :update, :destroy]
+      #   resource '', controller: 'resources', only: [:update]
+      # end
+    end
   end
 end
