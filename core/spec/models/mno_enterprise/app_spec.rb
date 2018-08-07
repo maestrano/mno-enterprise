@@ -41,6 +41,11 @@ module MnoEnterprise
         app.description = 'Screenshot: <img src="//cdn.maestrano.com/web/mno/screenshot.png"/>'
         expect(app.sanitized_description).to eq(app.description)
       end
+
+      it 'does not replace for bucket name cdn-prd-maestrano' do
+        app.description = '<a href="https://s3.amazonaws.com/cdn-prd-maestrano/somefile" target="_blank">report</a>'
+        expect(app.sanitized_description).to eq(app.description)
+      end
     end
 
     describe '#regenerate_api_key!' do
