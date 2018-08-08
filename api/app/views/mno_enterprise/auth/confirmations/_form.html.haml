@@ -2,6 +2,8 @@
 
 = form_for(resource, as: resource_name, :url => mno_enterprise.user_confirmation_finalize_path, :html => { 'name' => 'loginForm', :class => 'autofill-detect text-center' }) do |f|
 
+  / Soak up the browser need to fill username from cached data
+  = text_field_tag :username, nil, class: 'hidden'
   .row
     .col-sm-12
       = f.text_field :name, placeholder: "*First Name", required: true, 'ng-model' => 'user.name', class:'form-control'
