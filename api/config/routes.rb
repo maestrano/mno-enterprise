@@ -368,6 +368,7 @@ MnoEnterprise::Engine.routes.draw do
       end
       resources :dashboards, only: [:index, :show, :create, :update, :destroy]
       resources :widgets, only: [:index, :show, :create, :update, :destroy]
+      resources :kpis, only: [:index, :show, :create, :update, :destroy]
       resources :products, only: [:index, :show]
       resources :product_instances, only: [:index, :show]
       resources :subscriptions, only: [:index, :show, :create]
