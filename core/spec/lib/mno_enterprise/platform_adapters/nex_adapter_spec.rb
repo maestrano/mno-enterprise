@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 describe MnoEnterprise::PlatformAdapters::NexAdapter do
@@ -90,7 +91,7 @@ describe MnoEnterprise::PlatformAdapters::NexAdapter do
     end
 
     describe '.update_domain' do
-      before  { allow_any_instance_of(NexClient::Domain).to receive(:save).and_return(true) }
+      before { allow_any_instance_of(NexClient::Domain).to receive(:save).and_return(true) }
 
       let(:domain) { 'foo.example.test' }
       subject { described_class.update_domain(domain) }

@@ -1,3 +1,9 @@
+if ENV['COVERAGE']
+  # Run Coverage report
+  require 'simplecov'
+  SimpleCov.start 'rails'
+end
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 
@@ -9,13 +15,12 @@ require 'factory_girl_rails'
 require 'shoulda/matchers'
 
 # Load the Dummy application
-require File.expand_path("../../spec/dummy/config/environment.rb",  __FILE__)
+require File.expand_path("../../spec/dummy/config/environment.rb", __FILE__)
 require 'rspec/rails'
 
 # Check Dummy application migrations
 ActiveRecord::Migrator.migrations_paths = [File.expand_path("../../test/dummy/db/migrate", __FILE__)]
 ActiveRecord::Migrator.migrations_paths << File.expand_path('../../db/migrate', __FILE__)
-
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

@@ -10,19 +10,18 @@ module MnoEnterprise
     let(:path_main_logo_white) { "#{root}/main-logo-whitebg.png" }
 
     describe '#main_logo_white_bg_path' do
-
-      context 'when no logos exist'  do
+      context 'when no logos exist' do
 
         it 'returns the engine main-logo filename' do
           expect(helper.main_logo_white_bg_path).to match('mno_enterprise/main-logo.png')
         end
 
-        it 'returns the engine main-logo full path'  do
+        it 'returns the engine main-logo full path' do
           expect(helper.main_logo_white_bg_path(true)).to match(path_engine_main_logo)
         end
       end
 
-      context 'when main-logo.png exists and main-logo-whitebg.png do not exist'  do
+      context 'when main-logo.png exists and main-logo-whitebg.png do not exist' do
         before { allow(File).to receive(:exists?).with(path_main_logo_white).and_return(false) }
         before { allow(File).to receive(:exists?).with(path_main_logo).and_return(true) }
 
@@ -30,19 +29,19 @@ module MnoEnterprise
           expect(helper.main_logo_white_bg_path).to match('mno_enterprise/main-logo.png')
         end
 
-        it 'returns the main-logo full path'  do
+        it 'returns the main-logo full path' do
           expect(helper.main_logo_white_bg_path(true)).to match(path_main_logo)
         end
       end
 
-      context 'when main-logo-whitebg.png exists'  do
+      context 'when main-logo-whitebg.png exists' do
         before { allow(File).to receive(:exists?).with(path_main_logo_white).and_return(true) }
 
         it 'returns the filename' do
           expect(helper.main_logo_white_bg_path).to match('mno_enterprise/main-logo-whitebg.png')
         end
 
-        it 'returns the full path'  do
+        it 'returns the full path' do
           expect(helper.main_logo_white_bg_path(true)).to match(path_main_logo_white)
         end
       end
@@ -57,10 +56,10 @@ module MnoEnterprise
         end
       end
 
-      context 'when main-logo.png exists'  do
+      context 'when main-logo.png exists' do
         before { allow(File).to receive(:exists?).with(path_main_logo).and_return(true) }
 
-        it 'returns the full path'  do
+        it 'returns the full path' do
           expect(helper.main_logo_path).to match(path_main_logo)
         end
       end
@@ -74,7 +73,7 @@ module MnoEnterprise
     end
 
     describe '#main_logo_white_bg_size_to_fit' do
-      let (:original_dimensions) { [300, 300]}
+      let(:original_dimensions) { [300, 300]}
       before { allow(helper).to receive(:main_logo_white_bg_dimensions) { original_dimensions } }
 
       context 'when both dimensions are bigger than 150x150' do
@@ -84,21 +83,21 @@ module MnoEnterprise
       end
 
       context 'when both dimensions are smaller than 150x150' do
-        let (:original_dimensions) { [120, 75] }
+        let(:original_dimensions) { [120, 75] }
         it "doesn't modify the dimensions" do
           expect(helper.main_logo_white_bg_size_to_fit).to eq({ width: 120, height: 75 })
         end
       end
 
       context 'when the width is bigger' do
-        let (:original_dimensions) { [170, 75] }
+        let(:original_dimensions) { [170, 75] }
         it "returns the dimensions to fit" do
           expect(helper.main_logo_white_bg_size_to_fit).to eq({ width: 150, height: 75 * 150 / 170 })
         end
       end
 
       context 'when the height is bigger' do
-        let (:original_dimensions) { [40, 200] }
+        let(:original_dimensions) { [40, 200] }
         it "returns the dimensions to fit" do
           expect(helper.main_logo_white_bg_size_to_fit).to eq({ width: 40 * 150 / 200, height: 150 })
         end

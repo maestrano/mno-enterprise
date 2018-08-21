@@ -24,7 +24,7 @@ module MnoEnterprise
 
     # Remove testing support when not in test
     unless Rails.env.test?
-      path_rejector = lambda { |s| s.include?('/testing_support/') }
+      path_rejector = ->(s) { s.include?('/testing_support/') }
       config.autoload_paths.reject!(&path_rejector)
     end
 
@@ -75,14 +75,14 @@ module MnoEnterprise
 
       MnoEnterprise.configure_api
 
-      unless Rails.env.test? || File.basename($0) == "rake"
+      unless Rails.env.test? || File.basename($PROGRAM_NAME) == "rake"
         Rails.logger.debug "Settings loaded -> Fetching Tenant Config"
         MnoEnterprise::TenantConfig.load_config!
       end
     end
 
     config.after_initialize do
-      unless Rails.env.test? || File.basename($0) == "rake"
+      unless Rails.env.test? || File.basename($PROGRAM_NAME) == "rake"
         Rails.logger.debug "Initialized -> Updating locales"
         MnoEnterprise::TenantConfig.update_locales_list!
         MnoEnterprise::TenantConfig.clear_cache

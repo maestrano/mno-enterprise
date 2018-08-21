@@ -14,7 +14,9 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
 
     PROVIDERS_WITH_OPTIONS = ['xero','myob']
     helper_method :main_logo_white_bg # To use in the provision view
+
     private
+
       def app_instance
         @app_instance ||= MnoEnterprise::AppInstance.includes(:app).where(uid: params[:id]).first
       end
@@ -75,7 +77,7 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
     path = session.delete(:redirect_path).presence || mnoe_home_path
 
     if error_key = params.fetch(:oauth, {})[:error]
-      path = add_param_to_fragment(path.to_s, 'flash', [{msg: error_message(error_key),  type: :error}.to_json])
+      path = add_param_to_fragment(path.to_s, 'flash', [{msg: error_message(error_key), type: :error}.to_json])
     end
 
     unless params.fetch(:oauth, {})[:error]

@@ -19,7 +19,7 @@ module MnoEnterprise
       stub_api_v2(:put, "/orga_invites/#{invite.id}", invite)
     end
 
-    let!(:orga_invites_stub){  stub_api_v2(:get, '/orga_invites', [invite], %i(user organization), {filter:{id: invite.id, status: 'pending', token: token}, page:{number: 1, size: 1}})}
+    let!(:orga_invites_stub){ stub_api_v2(:get, '/orga_invites', [invite], %i(user organization), {filter:{id: invite.id, status: 'pending', token: token}, page:{number: 1, size: 1}})}
 
     describe 'GET #show' do
       subject { get :show, id: invite.id, token: token}

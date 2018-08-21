@@ -38,14 +38,12 @@ module MnoEnterprise
                        load_required(:product, :product_pricing)
                      end
 
-      event.merge!(
-        product_name: subscription.product.name,
-        product_pricing_name: subscription.product_pricing&.name || 'N/A'
-      )
+      event[:product_name] = subscription.product.name
+      event[:product_pricing_name] = subscription.product_pricing&.name || 'N/A'
       event
     end
 
-    def process_staged_update_request!(subscription, edit_action)
+    def process_staged_update_request!(_subscription, edit_action)
       case edit_action
       when 'cancel'
         abandon!

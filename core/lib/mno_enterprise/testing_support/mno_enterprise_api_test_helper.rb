@@ -12,21 +12,21 @@ module MnoEnterpriseApiTestHelper
 
   def serialize_type(res)
     case
-    when res.kind_of?(Array)
+    when res.is_a?(Array)
       return res.map { |e| serialize_type(e) }
-    when res.kind_of?(MnoEnterprise::BaseResource)
+    when res.is_a?(MnoEnterprise::BaseResource)
       hash = res.attributes.dup
       hash.each do |k,v|
         hash[k] = serialize_type(v)
       end
       return hash
-    when res.kind_of?(Hash)
+    when res.is_a?(Hash)
       hash = res.dup
       hash.each do |k,v|
         hash[k] = serialize_type(v)
       end
       return hash
-    when res.kind_of?(Money)
+    when res.is_a?(Money)
       return { cents: res.cents, currency: res.currency_as_string }
     when res.respond_to?(:iso8601)
       return res.iso8601
@@ -37,9 +37,9 @@ module MnoEnterpriseApiTestHelper
 
   def entity_count(res)
     case
-    when res.kind_of?(Array)
+    when res.is_a?(Array)
       return res.count
-    when res.kind_of?(Hash)
+    when res.is_a?(Hash)
       return res.count
     else
       return 1
@@ -119,7 +119,7 @@ module MnoEnterpriseApiTestHelper
       relations = entity.send(fields.shift)
       next unless relations
 
-      data = if relations.kind_of?(Array)
+      data = if relations.is_a?(Array)
                relations.map { |r| serialize_relation(r, included_entities, fields) }
              else
                serialize_relation(relations, included_entities, fields)
@@ -140,7 +140,7 @@ module MnoEnterpriseApiTestHelper
   # API server
   def from_apiv2(entity, included)
     included_entities = {}
-    data = if entity.kind_of?(Array)
+    data = if entity.is_a?(Array)
              entity.map{|e| serialize_data(e, included, included_entities)}
            else
              serialize_data(entity, included, included_entities)

@@ -105,7 +105,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::SubscriptionsController
     head :no_content
   end
 
-
   # POST /mnoe/jpi/v1/organizations/1/subscriptions/submit_cart_subscriptions
   def submit_cart_subscriptions
     authorize! :manage_app_instances, parent_organization

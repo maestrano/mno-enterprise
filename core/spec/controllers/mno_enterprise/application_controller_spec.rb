@@ -7,6 +7,7 @@ module MnoEnterprise
       def after_sign_in_path_for(resource)
         super
       end
+
       def add_param_to_fragment(url, param_name, param_value)
         super
       end
@@ -22,7 +23,7 @@ module MnoEnterprise
     describe '#after_sign_in_path_for' do
       before { @request.env["devise.mapping"] = Devise.mappings[:user] }
 
-      it { expect(controller.after_sign_in_path_for(User.new())).to eq('/dashboard/') }
+      it { expect(controller.after_sign_in_path_for(User.new)).to eq('/dashboard/') }
       it { expect(controller.after_sign_in_path_for(User.new(admin_role: "staff"))).to eq('/admin/') }
       it { expect(controller.after_sign_in_path_for(User.new(admin_role: ""))).to eq('/dashboard/') }
       it { expect(controller.after_sign_in_path_for(User.new(admin_role: "admin"))).to eq('/admin/') }

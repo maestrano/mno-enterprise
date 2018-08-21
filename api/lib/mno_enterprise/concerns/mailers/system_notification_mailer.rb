@@ -163,7 +163,6 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     )
   end
 
-
   def request_access(user_access_request_id)
     user_access_request = MnoEnterprise::UserAccessRequest.find_one(user_access_request_id, :user, :requester)
     user = user_access_request.user
@@ -279,7 +278,7 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
       invitee_first_name: new_user ? nil : org_invite.user.name,
       invitee_last_name: new_user ? nil : org_invite.user.surname,
       invitee_full_name: new_user ? nil : "#{org_invite.user.name} #{org_invite.user.surname}".strip,
-      invitee_email: org_invite.user.email,
+      invitee_email: org_invite.user.email
     }
   end
 end

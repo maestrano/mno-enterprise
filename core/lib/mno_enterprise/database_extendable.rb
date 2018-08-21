@@ -36,6 +36,7 @@ module MnoEnterprise::DatabaseExtendable
     end
 
     protected
+
     def save_extensions
       # Set extension foreign key
       if extension.send(foreign_key).blank?

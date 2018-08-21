@@ -144,11 +144,9 @@ module MnoEnterprise
 
     def update_sub_tenant(user)
       if current_user.admin_role == 'admin' && params.require(:user).has_key?(:sub_tenant_id)
-        if params.require(:user)[:sub_tenant_id]
-          user.relationships.sub_tenant = MnoEnterprise::SubTenant.new(id: params.require(:user)[:sub_tenant_id])
-        else
-          user.relationships.sub_tenant = nil
-        end
+        user.relationships.sub_tenant = if params.require(:user)[:sub_tenant_id]
+                                          MnoEnterprise::SubTenant.new(id: params.require(:user)[:sub_tenant_id])
+                                        end
       end
     end
   end

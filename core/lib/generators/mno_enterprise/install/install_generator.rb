@@ -73,16 +73,16 @@ module MnoEnterprise
         create_file '.gitignore' unless File.exists? '.gitignore'
 
         append_to_file '.gitignore' do
-          "\n"                                +
-          "# Ignore application configuration\n" +
-          "config/application.yml\n"          +
-          "config/application-*.yml\n"        +
-          "config/settings.local.yml\n"       +
-          "config/settings/*.local.yml\n"     +
-          "config/environments/*.local.yml\n" +
-          "\n"                                +
-          "# Bower and Node packages\n"       +
-          "bower_components\n"                +
+          "\n"                                \
+          "# Ignore application configuration\n" \
+          "config/application.yml\n"          \
+          "config/application-*.yml\n"        \
+          "config/settings.local.yml\n"       \
+          "config/settings/*.local.yml\n"     \
+          "config/environments/*.local.yml\n" \
+          "\n"                                \
+          "# Bower and Node packages\n"       \
+          "bower_components\n"                \
           "node_modules\n"
         end
       end
@@ -109,8 +109,8 @@ module MnoEnterprise
 
       # Inject engine routes
       def notify_about_routes
-        if (routes_file = destination_path.join('config', 'routes.rb')).file? && (routes_file.read !~ %r{mount\ MnoEnterprise::Engine})
-          mount = %Q{  # This line mount Maestrano Enterprise routes in your application under /mnoe.
+        if (routes_file = destination_path.join('config', 'routes.rb')).file? && (routes_file.read !~ /mount\ MnoEnterprise::Engine/)
+          mount = %{  # This line mount Maestrano Enterprise routes in your application under /mnoe.
   # If you would like to change where this engine is mounted, simply change the :at option to something different
   #
   # We ask that you don't use the :as option here, as Mnoe relies on it being the default of "mno_enterprise"
@@ -161,6 +161,7 @@ module MnoEnterprise
       end
 
       private
+
         # Helper method to quickly convert destination_root to a Pathname for easy file path manipulation
         def destination_path
           @destination_path ||= Pathname.new(self.destination_root)
@@ -177,7 +178,7 @@ module MnoEnterprise
             answer = default if answer.empty?
             valid = (answer  =~ /\Ay(?:es)?|no?\Z/i)
           end
-          answer.downcase[0] == ?y
+          answer.downcase[0] == 'y'
         end
 
         def new_relic_app_name

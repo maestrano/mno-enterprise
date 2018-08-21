@@ -9,7 +9,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::TeamsController
     if params[:terms]
       # Search mode
       @teams = []
-      JSON.parse(params[:terms]).map { |t| @teams = @teams | fetch_teams(params[:organization_id]).where(Hash[*t]) }
+      JSON.parse(params[:terms]).map { |t| @teams |= fetch_teams(params[:organization_id]).where(Hash[*t]) }
       response.headers['X-Total-Count'] = @teams.count
     else
       query = fetch_teams(params[:organization_id])
@@ -26,11 +26,13 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::TeamsController
       .apply_query_params(params)
       .where('organization.id': organization_id)
       .includes(:app_instances, :users, app_instances: :app)
-      .with_params(fields:{
-        teams: 'id,name,app_instances,users',
-        app_instances:'id,name,app',
-        users: 'id,name,surname,email',
-        apps: 'logo'
-      })
+      .with_params(
+        fields: {
+          teams: 'id,name,app_instances,users',
+          app_instances: 'id,name,app',
+          users: 'id,name,surname,email',
+          apps: 'logo'
+        }
+      )
   end
 end

@@ -76,7 +76,7 @@ namespace :gem do
     ruby = File.read(file)
 
     ruby.gsub!(/^(\s*)VERSION(\s*)= '.*?'$/, "\\1VERSION = '#{version}'")
-    raise "Could not insert VERSION in #{file}" unless $1
+    raise "Could not insert VERSION in #{file}" unless Regexp.last_match(1)
 
     File.open(file, 'w') { |f| f.write ruby }
   end

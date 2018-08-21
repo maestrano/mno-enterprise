@@ -22,7 +22,7 @@ module MnoEnterprise
       end
       rebuild_previewer_style
       SystemManager.publish_assets
-      render json: {status:  'Ok'},  status: :created
+      render json: {status: 'Ok'}, status: :created
     end
 
     # POST /mnoe/jpi/v1/admin/theme/reset
@@ -35,7 +35,7 @@ module MnoEnterprise
       end
       rebuild_previewer_style
       SystemManager.publish_assets
-      render json: {status:  'Ok'}
+      render json: {status: 'Ok'}
     end
 
     # POST /mnoe/jpi/v1/admin/theme/logo
@@ -54,7 +54,7 @@ module MnoEnterprise
       SystemManager.publish_assets
       # Need to restart in non dev to get the new precompiled assets
       SystemManager.restart unless Rails.env.development?
-      render json: {status:  'Ok'},  status: :created
+      render json: {status: 'Ok'}, status: :created
     end
 
     #=====================================================

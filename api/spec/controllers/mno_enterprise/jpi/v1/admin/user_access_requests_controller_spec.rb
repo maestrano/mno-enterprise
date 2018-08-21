@@ -33,7 +33,6 @@ module MnoEnterprise
       }
       it_behaves_like 'a jpi v1 admin action'
 
-
       it 'sends the invitation email' do
         expect(message_delivery).to receive(:deliver_later).with(no_args)
         subject

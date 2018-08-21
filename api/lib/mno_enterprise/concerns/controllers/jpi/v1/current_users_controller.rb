@@ -39,7 +39,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::CurrentUsersController
     MnoEnterprise::EventLogger.info('register_developer', current_user.id, 'Developer registration', @user)
     @user = @user.load_required_dependencies
     render :show
-
   end
 
   # PUT /mnoe/jpi/v1/current_user/update_password

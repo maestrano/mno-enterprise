@@ -10,6 +10,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
     before_filter :signed_in_and_unconfirmed, only: [:lounge,:update]
 
     private
+
       # Redirects unless user is signed in and not confirmed yet
       def signed_in_and_unconfirmed
         resource = resource_class.to_adapter.get((send(:"current_#{resource_name}") || MnoEnterprise::User.new).to_key)
@@ -147,6 +148,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
   end
 
   protected
+
     # The path used after resending confirmation instructions.
     # def after_resending_confirmation_instructions_path_for(resource_name)
     #   super(resource_name)
@@ -164,7 +166,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::ConfirmationsController
         # invites
         # Get invites from previous_url (user was accepting invite but didn't have an account)
         org_invites = []
-        if !session[:previous_url].blank? && (r = session[:previous_url].match(/\/org_invites\/(\d+)\?token=(\w+)/))
+        if !session[:previous_url].blank? && (r = session[:previous_url].match(%r{/org_invites/(\d+)\?token=(\w+)}))
           invite_params = { id: r.captures[0].to_i, token: r.captures[1] }
           org_invites << MnoEnterprise::OrgaInvite.where(invite_params).first
         end

@@ -37,7 +37,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
     MnoEnterprise::EventLogger.info('widget_update', current_user.id, 'Widget Update', widget, {widget_action: params[:widget]})
     @nocontent = !params['metadata']
     render 'show'
-
   end
 
   # DELETE /mnoe/jpi/v1/impac/widgets/:id
@@ -48,7 +47,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::WidgetsController
     widget.destroy!
     head status: :ok
   end
-
 
   #=================================================
   # Private methods

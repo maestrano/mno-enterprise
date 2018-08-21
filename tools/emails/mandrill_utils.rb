@@ -18,7 +18,7 @@ class MandrillUtils
 
     templates.each do |t|
       puts "Copying #{t['name']}"
-      output.templates.add t['name'], t['from_email'],  t['from_name'], t['subject'], t['code'], t['text'], false, t['labels']
+      output.templates.add t['name'], t['from_email'], t['from_name'], t['subject'], t['code'], t['text'], false, t['labels']
     end
     return true
   end

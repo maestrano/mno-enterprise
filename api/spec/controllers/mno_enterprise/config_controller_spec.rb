@@ -38,7 +38,7 @@ module MnoEnterprise
             subject
             expected = [
               {id: 'en-AU', name: 'English (Australia)', flag: ''},
-              {id: 'en-US', name: 'English (US)', flag: ''},
+              {id: 'en-US', name: 'English (US)', flag: ''}
             ]
             expect(assigns(:available_locales)).to eq(expected)
           end
@@ -46,7 +46,7 @@ module MnoEnterprise
 
         context 'when I18n is disabled' do
           before { Settings.system.i18n.enabled = false }
-          it 'only returns the default locale'do
+          it 'only returns the default locale' do
             subject
             expected = [{id: 'en-AU', name: 'English (Australia)', flag: ''}]
             expect(assigns(:available_locales)).to eq(expected)

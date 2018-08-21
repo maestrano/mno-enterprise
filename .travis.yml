@@ -9,6 +9,7 @@ script:
   - bundle install --quiet
   - bundle exec rake test_app
   - bundle exec rake spec
+  - bundle exec rubocop
 rvm:
   - 2.3.4
   - 2.4.1

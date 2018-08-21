@@ -9,7 +9,7 @@ module MnoEnterprise
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
 
-    let(:tenant) { build(:tenant,  domain: 'tenant.domain.test')}
+    let(:tenant) { build(:tenant, domain: 'tenant.domain.test')}
     let(:user) { build(:user, :admin) }
 
     before do

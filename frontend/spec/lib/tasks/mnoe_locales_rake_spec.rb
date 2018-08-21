@@ -20,7 +20,7 @@ end
 describe 'mnoe:locales:generate' do
   include_context 'rake_task'
 
-  let(:generator)  { instance_double("MnoEnterprise::Frontend::LocalesGenerator", generate_json: true)}
+  let(:generator) { instance_double("MnoEnterprise::Frontend::LocalesGenerator", generate_json: true)}
 
   before do
     allow(MnoEnterprise::Frontend::LocalesGenerator).to receive(:new) { generator }
@@ -50,7 +50,6 @@ describe 'mnoe:locales:generate' do
     subject.invoke
   end
 end
-
 
 describe 'mnoe:locales:impac' do
   include_context 'rake_task'

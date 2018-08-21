@@ -50,7 +50,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   #==================================================================
   # Private
   #==================================================================
+
   private
+
   # Return the default relation to use for index and show queries
   def app_relation(org_id = nil)
     rel = MnoEnterprise::App
@@ -68,9 +70,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   def parent_organization
     return nil unless current_user && params[:organization_id].presence
     @org ||= MnoEnterprise::Organization
-                  .select(:id)
-                  .where('id' => params[:organization_id], 'users.id' => current_user.id)
-                  .first
+             .select(:id)
+             .where('id' => params[:organization_id], 'users.id' => current_user.id)
+             .first
   end
 
   # Return the organization_id passed as query parameters if the current_user

@@ -233,7 +233,6 @@ module MnoEnterprise
             before { params[:number] = mastercard }
             before { expect_any_instance_of(MnoEnterprise::CreditCard).not_to receive(:update_attributes) }
 
-
             it 'does not update the entity credit card' do
               subject
               expect(assigns(:credit_card).errors).to_not be_empty

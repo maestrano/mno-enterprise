@@ -1,0 +1,16 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  TargetRubyVersion: 2.3
+  Exclude:
+    - '**/dummy/**/*'
+    - '**/templates/**/*'
+
+# Nex!™
+Style/AsciiComments:
+  Exclude:
+    - 'core/lib/mno_enterprise/platform_adapters/nex_adapter.rb'
+    - 'core/lib/mno_enterprise/platform_adapters/nex_cluster_adapter.rb'
+    - 'core/spec/lib/mno_enterprise/platform_adapters/nex_adapter_spec.rb'

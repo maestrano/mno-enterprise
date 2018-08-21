@@ -28,10 +28,14 @@ module MnoEnterprise
     def show
       @invoice = MnoEnterprise::Invoice
         .with_params(_metadata: { act_as_manager: current_user.id })
-        .select(:id, :price, :started_at, :ended_at, :created_at, :updated_at, :paid_at, :slug, :tax_pips_applied,
+        .select(
+          :id, :price, :started_at, :ended_at, :created_at, :updated_at, :paid_at, :slug, :tax_pips_applied,
           :organization, { organizations: [:id, :name] },
-          :bills, bills: [:id, :adjustment, :billing_group, :end_user_price_cents, :currency, :description,
-            :closed_end_user_price, :closure_exchange_rate])
+          :bills, bills: [
+            :id, :adjustment, :billing_group, :end_user_price_cents, :currency, :description,
+            :closed_end_user_price, :closure_exchange_rate
+          ]
+        )
         .includes(:organization, :bills)
         .find(params[:id]).first
     end

@@ -75,6 +75,6 @@ module MnoEnterprise
       .except(:metadata)
     end
 
-    alias :find_valid_kpi  :kpi
+    alias :find_valid_kpi :kpi
   end
 end

@@ -9,7 +9,6 @@ module MnoEnterprise
     let(:unconfirmed_user) { build(:user, :unconfirmed, organizations: []) }
     let(:confirmed_user) { build(:user, organizations: []) }
 
-
     describe 'GET #show' do
       subject { get :show, confirmation_token: user.confirmation_token }
 

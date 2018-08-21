@@ -39,7 +39,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::KpisController
         kpi.merge(
           name: "#{kpi[:name]} #{watchable.capitalize unless kpi[:name].downcase.index(watchable)}".strip,
           watchables: [watchable],
-          target_placeholders: { watchable => kpi[:target_placeholders][watchable] },
+          target_placeholders: { watchable => kpi[:target_placeholders][watchable] }
         )
       end
     end.flatten

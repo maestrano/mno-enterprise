@@ -6,7 +6,6 @@ json.organization do
   json.extract! audit_event.organization , :id, :name, :uid
 end if audit_event.organization
 
-
 if audit_event.formatted_details.present?
   json.details audit_event.formatted_details
 end

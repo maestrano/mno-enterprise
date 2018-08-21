@@ -7,7 +7,7 @@ module MnoEnterprise
 
       # Add assets
       # TODO: remove me
-      if config.respond_to? (:assets)
+      if config.respond_to?(:assets)
         config.assets.precompile += %w( mno_enterprise/config.js )
 
         # Allow sprockets to find file in the config/ path

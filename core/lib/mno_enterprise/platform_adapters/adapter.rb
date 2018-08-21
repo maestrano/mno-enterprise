@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module MnoEnterprise
   module PlatformAdapters
     # @abstract Subclass and override methods to implement

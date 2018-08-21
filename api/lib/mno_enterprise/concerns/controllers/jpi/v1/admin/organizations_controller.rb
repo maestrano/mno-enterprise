@@ -35,22 +35,22 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
       JSON.parse(params[:terms]).map do |t|
 
         query = MnoEnterprise::Organization
-                  .apply_query_params(params.except(:terms))
-                  .select(INCLUDED_FIELDS_INDEX)
-                  .with_params(_metadata: { act_as_manager: current_user.id })
-                  .where(Hash[*t])
+                .apply_query_params(params.except(:terms))
+                .select(INCLUDED_FIELDS_INDEX)
+                .with_params(_metadata: { act_as_manager: current_user.id })
+                .where(Hash[*t])
         query = query.with_params(sub_tenant_id: params[:sub_tenant_id]) if params[:sub_tenant_id]
         query = query.with_params(account_manager_id: params[:account_manager_id]) if params[:account_manager_id]
-        @organizations = @organizations | query
+        @organizations |= query
       end
       response.headers['X-Total-Count'] = @organizations.count
     else
       # Index mode
       # Explicitly list fields to be retrieved to trigger financial_metrics calculation
       query = MnoEnterprise::Organization
-                .apply_query_params(params)
-                .with_params(_metadata: { act_as_manager: current_user.id })
-                .select(INCLUDED_FIELDS_INDEX)
+              .apply_query_params(params)
+              .with_params(_metadata: { act_as_manager: current_user.id })
+              .select(INCLUDED_FIELDS_INDEX)
       query = query.with_params(sub_tenant_id: params[:sub_tenant_id]) if params[:sub_tenant_id]
       query = query.with_params(account_manager_id: params[:account_manager_id]) if params[:account_manager_id]
       @organizations = query.to_a
@@ -60,18 +60,19 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
   # GET /mnoe/jpi/v1/admin/organizations/:id
   def show
-    @organization = MnoEnterprise::Organization.apply_query_params(params)
-                      .with_params(_metadata: { act_as_manager: current_user.id })
-                      .select(INCLUDED_FIELDS_SHOW)
-                      .includes(*DEPENDENCIES)
-                      .find(params[:id])
-                      .first
+    @organization = MnoEnterprise::Organization
+                    .apply_query_params(params)
+                    .with_params(_metadata: {act_as_manager: current_user.id})
+                    .select(INCLUDED_FIELDS_SHOW)
+                    .includes(*DEPENDENCIES)
+                    .find(params[:id])
+                    .first
 
     statuses = MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')
-    @organization_active_apps = MnoEnterprise::AppInstance.includes(:app)
-                      .where('owner.id': params[:id], 'status.in': statuses, 'fulfilled_only': true)
-                      .select(&:active?)
-
+    @organization_active_apps = MnoEnterprise::AppInstance
+                                .includes(:app)
+                                .where('owner.id': params[:id], 'status.in': statuses, 'fulfilled_only': true)
+                                .select(&:active?)
   end
 
   # TODO: sub-tenant scoping
@@ -83,10 +84,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
   # GET /mnoe/jpi/v1/admin/organizations/count
   def count
-    organizations_count = MnoEnterprise::TenantReporting.with_params(_metadata: { act_as_manager: current_user.id })
-                            .find
-                            .first
-                            .organizations_count
+    organizations_count = MnoEnterprise::TenantReporting
+                          .with_params(_metadata: {act_as_manager: current_user.id})
+                          .find
+                          .first
+                          .organizations_count
     render json: { count: organizations_count }
   end
 
@@ -107,10 +109,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   # PATCH /mnoe/jpi/v1/admin/organizations/:id
   def update
     # get organization
-    @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
-                      .includes(*DEPENDENCIES)
-                      .find(params[:id])
-                      .first
+    @organization = MnoEnterprise::Organization
+                    .with_params(_metadata: {act_as_manager: current_user.id})
+                    .includes(*DEPENDENCIES)
+                    .find(params[:id])
+                    .first
     return render_not_found('Organization') unless @organization
 
     # Update organization
@@ -127,10 +130,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   # This does not send any emails (emails are manually triggered later)
   # POST /mnoe/jpi/v1/admin/organizations/:id/users
   def invite_member
-    @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
-                      .includes(:orga_relations)
-                      .find(params[:id])
-                      .first
+    @organization = MnoEnterprise::Organization
+                    .with_params(_metadata: {act_as_manager: current_user.id})
+                    .includes(:orga_relations)
+                    .find(params[:id])
+                    .first
     return render_not_found('Organization') unless @organization
 
     # Find or create a new user - We create it in the frontend as MnoHub will send confirmation instructions for newly
@@ -173,10 +177,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
   # PUT /mnoe/jpi/v1/admin/organizations/:id/freeze
   def freeze_account
-    @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
-                                               .includes(*DEPENDENCIES)
-                                               .find(params[:id])
-                                               .first
+    @organization = MnoEnterprise::Organization
+                    .with_params(_metadata: { act_as_manager: current_user.id })
+                    .includes(*DEPENDENCIES)
+                    .find(params[:id])
+                    .first
     return render_not_found('Organization') unless @organization
 
     @organization.freeze!
@@ -185,10 +190,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
   # PUT /mnoe/jpi/v1/admin/organizations/:id/unfreeze
   def unfreeze
-    @organization = MnoEnterprise::Organization.with_params(_metadata: { act_as_manager: current_user.id })
-                                               .includes(*DEPENDENCIES)
-                                               .find(params[:id])
-                                               .first
+    @organization = MnoEnterprise::Organization
+                    .with_params(_metadata: {act_as_manager: current_user.id})
+                    .includes(*DEPENDENCIES)
+                    .find(params[:id])
+                    .first
     return render_not_found('Organization') unless @organization
 
     @organization.unfreeze!
@@ -238,7 +244,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     # we won't find them from their email, so we look from their id first.
     return nil unless @organization
     user = @organization.users.find { |u| u.id == params.require(:member)[:id] }
-    user ||= begin
+    user || begin
       email = params.require(:member).require(:email)
       @organization.orga_invites.find { |u| u.status == 'pending' && u.user_email == email }
     end

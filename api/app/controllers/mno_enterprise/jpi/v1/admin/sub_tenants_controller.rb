@@ -57,6 +57,7 @@ module MnoEnterprise
     end
 
     private
+
     def sub_tenant_params
       params.require(:sub_tenant).permit(:name)
     end

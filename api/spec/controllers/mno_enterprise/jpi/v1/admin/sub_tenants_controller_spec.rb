@@ -122,7 +122,7 @@ module MnoEnterprise
       it_behaves_like 'a jpi v1 admin action'
 
       context 'success' do
-        before { sign_in user  }
+        before { sign_in user }
         before { subject }
         it { expect(response).to be_success }
         it { expect(stub).to have_been_requested }

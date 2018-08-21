@@ -1,4 +1,4 @@
-$:.push File.expand_path("../lib", __FILE__)
+$LOAD_PATH.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
 require_relative 'core/lib/mno_enterprise/mno_enterprise_version.rb'

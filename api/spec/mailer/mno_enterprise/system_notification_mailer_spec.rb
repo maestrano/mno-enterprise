@@ -34,7 +34,7 @@ module MnoEnterprise
         invitee_first_name: new_user ? nil : orga_invite.user.name,
         invitee_last_name: new_user ? nil : orga_invite.user.surname,
         invitee_full_name: new_user ? nil : "#{orga_invite.user.name} #{orga_invite.user.surname}".strip,
-        invitee_email: orga_invite.user.email,
+        invitee_email: orga_invite.user.email
       }
     end
 

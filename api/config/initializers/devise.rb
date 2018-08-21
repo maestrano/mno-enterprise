@@ -290,6 +290,6 @@ Devise.setup do |config|
 
   Rails.application.config.after_initialize do
     config.omniauth_path_prefix = '/mnoe/users/auth'
-    ::OmniAuth::config.path_prefix = config.omniauth_path_prefix if defined?(OmniAuth)
+    ::OmniAuth.config.path_prefix = config.omniauth_path_prefix if defined?(OmniAuth)
   end
 end

@@ -7,7 +7,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::QuotesController
   # POST /mnoe/jpi/v1/organizations/:id/quote
   # Sends post request to MnoHub
   def create
-    @quote =  MnoEnterprise::ProductQuote.fetch_quote!(params)
+    @quote = MnoEnterprise::ProductQuote.fetch_quote!(params)
     if @quote.errors.empty?
       render :show
     else

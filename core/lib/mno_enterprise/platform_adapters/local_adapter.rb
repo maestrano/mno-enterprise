@@ -1,11 +1,12 @@
 # frozen_string_literal: true
+
 module MnoEnterprise
   module PlatformAdapters
     # Local Adapter for MnoEnterprise::PlatformClient
     class LocalAdapter < Adapter
       class << self
         # @see MnoEnterprise::PlatformAdapters::Adapter#restart
-        def restart(timestamp = nil)
+        def restart(_timestamp = nil)
           FileUtils.touch('tmp/restart.txt')
         end
 

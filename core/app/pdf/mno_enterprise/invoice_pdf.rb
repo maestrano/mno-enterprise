@@ -135,7 +135,7 @@ module MnoEnterprise
           @pdf.float do
             @pdf.image main_logo_white_bg_path(true), fit: [135, (@format[:footer_size])]
           end
-          if contact_details = Settings.dashboard&.organization_management&.billing&.invoice_contact_details.presence
+          if (contact_details = Settings.dashboard&.organization_management&.billing&.invoice_contact_details.presence)
             @pdf.move_down 10
             @pdf.font_size(10) { @pdf.text contact_details, align: :right }
           end
@@ -271,7 +271,7 @@ module MnoEnterprise
       # ---
       # Only if greater than zero
       #===============================
-      if @data[:customer_current_credit] && @data[:customer_current_credit].positive?
+      if @data[:customer_current_credit]&.positive?
         @pdf.move_up 23
 
         @pdf.float do
@@ -398,7 +398,7 @@ module MnoEnterprise
             '',
             t('tax'),
             '+',
-            money(@data[:invoice_tax_payable]),
+            money(@data[:invoice_tax_payable])
           ]
 
           # Draw table background
@@ -454,7 +454,7 @@ module MnoEnterprise
             '',
             t('total_including_tax'),
             '=',
-            money(@data[:invoice_total_payable_with_tax]),
+            money(@data[:invoice_total_payable_with_tax])
           ]
 
           # Draw table background
@@ -531,7 +531,7 @@ module MnoEnterprise
       #===============================
       # Payment Information
       #===============================
-      if payment_information = Settings.dashboard&.organization_management&.billing&.invoice_payment_information.presence
+      if (payment_information = Settings.dashboard&.organization_management&.billing&.invoice_payment_information.presence)
         @pdf.start_new_page
         @pdf.font_size(20) { @pdf.text t('payment_information'), style: :bold }
         @pdf.stroke_horizontal_rule

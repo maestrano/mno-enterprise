@@ -2,7 +2,6 @@ require 'csv'
 module MnoEnterprise
   class Jpi::V1::Admin::AuditEventsController < Jpi::V1::Admin::BaseResourceController
 
-
     # GET /mnoe/jpi/v1/admin/audit_events
     def index
       query = MnoEnterprise::AuditEvent.apply_query_params(params)

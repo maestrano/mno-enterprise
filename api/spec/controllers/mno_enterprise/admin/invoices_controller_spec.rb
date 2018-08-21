@@ -21,7 +21,6 @@ module MnoEnterprise
 
     before {stub_api_v2(:get, '/invoices', [invoice], [:organization], {filter:{slug: invoice.slug}, page:{number: 1, size: 1}})}
 
-
     describe "GET #show" do
       subject { get :show, id: invoice.slug }
 

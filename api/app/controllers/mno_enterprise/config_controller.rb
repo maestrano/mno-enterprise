@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module MnoEnterprise
   class ConfigController < ApplicationController
     protect_from_forgery except: :show
@@ -30,11 +31,12 @@ module MnoEnterprise
 
     def available_locales
       available_locales = if Settings.system.i18n.enabled
-        Settings.system.i18n.available_locales
-      else
-        set_default_locale
-        Settings.system.i18n.preferred_locale
-      end
+                            Settings.system.i18n.available_locales
+                          else
+                            set_default_locale
+                            Settings.system.i18n.preferred_locale
+                          end
+
       Array(available_locales).map do |locale|
         name = begin
           I18n.t('language', locale: locale)

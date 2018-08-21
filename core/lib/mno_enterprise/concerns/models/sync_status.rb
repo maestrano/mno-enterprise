@@ -20,11 +20,11 @@ module MnoEnterprise::Concerns::Models::SyncStatus
   #==================================================================
 
   def to_audit_event
-      {
-        id: id,
-        status: status,
-        app_instance_id: app_instance_id,
-        product_instance_id: product_instance_id
-      }
-    end
+    {
+      id: id,
+      status: status,
+      app_instance_id: app_instance_id,
+      product_instance_id: product_instance_id
+    }
+  end
 end

@@ -63,7 +63,7 @@ module MnoEnterprise
                     }
                   }
                 }
-              },
+              }
             },
             accounts: {
               type: "array",
@@ -80,7 +80,7 @@ module MnoEnterprise
                   acct: {
                     type: "string",
                     title: "account",
-                    description: "Name of merchant account",
+                    description: "Name of merchant account"
                   },
                   default: {
                     type: "integer",

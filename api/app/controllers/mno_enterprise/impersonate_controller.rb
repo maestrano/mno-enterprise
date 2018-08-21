@@ -50,7 +50,7 @@ module MnoEnterprise
 
     def redirect_with_error(msg)
       path = session.delete(:impersonator_redirect_path).presence || '/admin/'
-      redirect_path = add_param_to_fragment(path, 'flash', [{msg: msg,  type: :error}.to_json])
+      redirect_path = add_param_to_fragment(path, 'flash', [{msg: msg, type: :error}.to_json])
       redirect_to redirect_path
     end
   end

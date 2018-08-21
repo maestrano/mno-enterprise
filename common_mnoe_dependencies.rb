@@ -12,11 +12,11 @@ group :test do
   gem 'webmock', '~> 3.1.1'
   gem 'timecop'
   gem 'climate_control'
-  # gem 'simplecov'
   gem 'fakefs', require: 'fakefs/safe'
+  gem 'simplecov'
 end
 
 group :test, :development do
   gem 'figaro'
-  # gem 'rubocop', require: false
+  gem 'rubocop', '~> 0.50.0', require: false
 end

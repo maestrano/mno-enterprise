@@ -10,7 +10,7 @@ module MnoEnterprise
         description: description,
         metadata: metadata,
         subject_type: subject_type,
-        subject_id: subject_id,
+        subject_id: subject_id
       }
       organization_id = if (subject_type == 'MnoEnterprise::Organization') then
                           subject_id

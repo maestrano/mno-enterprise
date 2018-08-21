@@ -28,10 +28,10 @@ module MnoEnterprise
       event = self.attributes.slice(:id, :status)
 
       record = if loaded?(:subscription) && subscription.loaded?(:product) && subscription.loaded?(:product_pricing)
-        self
-      else
-        load_required(:subscription, 'subscription.product', 'subscription.product_pricing')
-      end
+                 self
+               else
+                 load_required(:subscription, 'subscription.product', 'subscription.product_pricing')
+               end
 
       event.merge!(
         subscription_id: record.subscription.id,

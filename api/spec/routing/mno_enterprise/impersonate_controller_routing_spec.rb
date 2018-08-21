@@ -6,7 +6,7 @@ module MnoEnterprise
 
     context "Impersonation is enabled" do
       before(:all) do
-        Settings.merge!(admin_panel: {impersonation: {enabled: true}})
+        Settings.admin_panel.impersonation.enabled = true
         Rails.application.reload_routes!
       end
 
@@ -21,7 +21,7 @@ module MnoEnterprise
 
     context "Impersonation is disabled" do
       before(:all) do
-        Settings.merge!(admin_panel: {impersonation: {enabled: false}})
+        Settings.admin_panel.impersonation.enabled = false
         Rails.application.reload_routes!
       end
 

@@ -41,7 +41,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::TeamsController
     @team.update_attributes!(update_params)
     # # Update permissions
     if params[:team] && params[:team][:app_instances]
-      list = params[:team][:app_instances].select { |e| e != {} }
+      list = params[:team][:app_instances].reject { |e| e == {} }
       MnoEnterprise::EventLogger.info('team_apps_update', current_user.id, 'Team apps updated', @team,
                                       {apps: list.map{|l| l['name']}})
     end

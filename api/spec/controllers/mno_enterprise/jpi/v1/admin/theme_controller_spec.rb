@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rails_helper'
 require 'mno_enterprise/testing_support/be_same_files_as'
 
@@ -81,7 +82,7 @@ module MnoEnterprise
         let(:params) { {} }
 
         # TODO: it is_expected.to have_http_status(:bad_request)?
-        it { expect{ subject }.to raise_error(ActionController::ParameterMissing) }
+        it { expect { subject }.to raise_error(ActionController::ParameterMissing) }
       end
 
       context 'when saving' do

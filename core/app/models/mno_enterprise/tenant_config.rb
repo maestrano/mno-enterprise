@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module MnoEnterprise
   # Frontend configuration management
   class TenantConfig
@@ -126,7 +127,7 @@ module MnoEnterprise
     # A field is readonly if the `<field>_readonly` key is `true` in the `frontend_config`
     def self.flag_readonly_fields(schema, frontend_config)
       frontend_config.each do |current_key, value|
-        if field_label = current_key[/(.*)_readonly$/, 1]
+        if (field_label = current_key[/(.*)_readonly$/, 1])
           # Flag field as RO
           schema['properties'][field_label]['readonly'] = true
         elsif value.is_a?(Hash)

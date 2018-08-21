@@ -213,7 +213,7 @@ MnoEnterprise::Engine.routes.draw do
         resources :app_feedbacks, only: [:index]
         resources :app_questions, only: [:index]
         resources :app_instances, only: [:destroy], shallow: true
-        resources :app_reviews, only: [:index, :show,  :update]
+        resources :app_reviews, only: [:index, :show, :update]
         resources :app_comments, only: [:create]
         resources :app_answers, only: [:create]
         resources :account_transactions, only: [:create]

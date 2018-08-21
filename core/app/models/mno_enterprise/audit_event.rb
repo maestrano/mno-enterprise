@@ -8,12 +8,10 @@ module MnoEnterprise
 
     def formatted_details
       case metadata
-        when String
-          metadata
-        when Hash
-          format_serialized_details
-        else
-          nil
+      when String
+        metadata
+      when Hash
+        format_serialized_details
       end
     end
 

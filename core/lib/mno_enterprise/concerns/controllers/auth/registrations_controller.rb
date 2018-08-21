@@ -11,6 +11,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
     # before_filter :configure_account_update_params, only: [:update]
 
     protected
+
       def configure_sign_up_params
         devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(
           :email,
@@ -129,12 +130,13 @@ module MnoEnterprise::Concerns::Controllers::Auth::RegistrationsController
     end
 
     # Check whether we should create an organization for the user
+    # TODO: Extact duplicated in other controllers
     def create_orga_on_user_creation(user_attrs)
       return false unless user_attrs['email']
 
       # First check previous url to see if the user
       # was trying to accept an orga
-      if !session[:previous_url].blank? && (r = session[:previous_url].match(/\/orga_invites\/(\d+)\?token=(\w+)/))
+      if !session[:previous_url].blank? && (r = session[:previous_url].match(%r{/orga_invites/(\d+)\?token=(\w+)}))
         invite_params = { id: r.captures[0].to_i, token: r.captures[1] }
         return false if MnoEnterprise::OrgaInvite.where(invite_params).any?
       end

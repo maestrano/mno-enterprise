@@ -14,7 +14,6 @@ class HtmlProcessor
   #======================================
   DESCRIPTION_PROCESSING_ORDER = %w( p h1 h2 h3 h4 h5 h6 )
 
-
   # Define Youtube transformer for Sanitize
   YOUTUBE_TRANSFORMER = lambda do |env|
     node      = env[:node]
@@ -99,7 +98,7 @@ class HtmlProcessor
       if match && match.captures.any?
         @description = match.captures.compact.join('')
       end
-      break if !@description.empty?
+      break unless @description.empty?
     end
 
     return @description

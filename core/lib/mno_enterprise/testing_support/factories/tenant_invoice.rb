@@ -3,7 +3,6 @@
 FactoryGirl.define do
   factory :mno_enterprise_tenant_invoice, :class => 'TenantInvoice' do
 
-
     factory :tenant_invoice, class: MnoEnterprise::TenantInvoice do
       sequence(:id)
       sequence(:slug) { |n| "201504-NU#{n}" }
@@ -23,7 +22,6 @@ FactoryGirl.define do
       # Make sure the object is not dirty
       initialize_with { new(attributes).tap { |e| e.clear_changes_information } }
     end
-
 
   end
 end

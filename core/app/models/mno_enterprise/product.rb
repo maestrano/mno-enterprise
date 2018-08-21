@@ -21,7 +21,6 @@ module MnoEnterprise
     property :billed_locally, type: :boolean
     property :available_actions
 
-
     def to_audit_event
       {
         id: id,
