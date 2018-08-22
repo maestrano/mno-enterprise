@@ -38,8 +38,9 @@ module MnoEnterprise
 
     describe 'GET #authorize' do
       let(:redir_params) { extra_params.reject { |k, v| k.to_sym == :perform } }
-      let(:redirect_url) { MnoEnterprise.router.authorize_oauth_url(app_instance.uid, redir_params.merge(wtk: MnoEnterprise.jwt(user_id: user.uid))) }
-      subject { get :authorize, extra_params.merge(id: app_instance.uid) }
+      let(:redirect_url) { MnoEnterprise.router.authorize_oauth_url(app_instance.uid, redir_params.merge(wtk: MnoEnterprise.jwt(user_id: user.uid), redirect_path: redirect_path)) }
+      let(:redirect_path) { 'www.example.com' }
+      subject { get :authorize, extra_params.merge(id: app_instance.uid, redirect_path: redirect_path) }
       before { sign_in user }
 
       it_behaves_like 'a navigatable protected user action'
@@ -93,14 +94,16 @@ module MnoEnterprise
     end
 
     describe 'GET #sync' do
-      let(:redirect_url) { MnoEnterprise.router.sync_oauth_url(app_instance.uid, extra_params.merge(wtk: MnoEnterprise.jwt(user_id: user.uid))) }
+      let(:redirect_url) { MnoEnterprise.router.sync_oauth_url(app_instance.uid, extra_params.merge(wtk: MnoEnterprise.jwt(user_id: user.uid), redirect_path: redirect_path)) }
+      let(:redirect_path) { 'www.example.com' }
       before { sign_in user }
-      subject { get :sync, extra_params.merge(id: app_instance.uid) }
+      subject { get :sync, extra_params.merge(id: app_instance.uid, redirect_path: redirect_path) }
 
       it_behaves_like 'a navigatable protected user action'
       it_behaves_like 'a user protected resource'
 
       it { subject; expect(response).to redirect_to(redirect_url) }
+      it { subject; expect(session[:redirect_path]).to eq(redirect_path) }
     end
   end
 end
