@@ -57,9 +57,7 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
   #==================================================================
   # GET /mnoe/webhook/oauth/:id/authorize
   def authorize
-    if params[:redirect_path].present?
-      session[:redirect_path] = params[:redirect_path]
-    end
+    set_session_redirect
 
     # Certain providers require options to be selected
     if !params[:perform] && app_instance.app && PROVIDERS_WITH_OPTIONS.include?(app_instance.app.nid.to_s)
@@ -97,7 +95,16 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
 
   # GET /mnoe/webhook/oauth/:id/sync
   def sync
+    set_session_redirect
     redirect_to MnoEnterprise.router.sync_oauth_url(params[:id], extra_params.merge(wtk: wtk))
+  end
+
+  private
+
+  def set_session_redirect
+    if params[:redirect_path].present?
+      session[:redirect_path] = params[:redirect_path]
+    end
   end
 
 end
