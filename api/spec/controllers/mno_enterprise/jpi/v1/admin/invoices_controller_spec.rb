@@ -47,7 +47,7 @@ module MnoEnterprise
       let(:select_fields) do
         {
           bills: 'id,adjustment,billing_group,end_user_price_cents,currency,description,closed_end_user_price,closure_exchange_rate',
-          invoices: 'id,price,started_at,ended_at,created_at,updated_at,paid_at,slug,tax_pips_applied,organization,bills',
+          invoices: 'id,price,started_at,ended_at,created_at,updated_at,paid_at,slug,tax_pips_applied,previous_total_due,tax_payable,organization,bills',
           organizations: 'id,name'
         }
       end
