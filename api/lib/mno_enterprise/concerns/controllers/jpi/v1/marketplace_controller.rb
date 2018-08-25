@@ -79,10 +79,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
     parent_organization&.id
   end
 
+  # Returns the list of active apps sorted by rank then alphabetically
   def fetch_apps
     Rails.cache.fetch("marketplace/index-apps-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
-      apps = MnoEnterprise::App.fetch_all(app_relation(parent_organization_id).includes(:app_shared_entities, { app_shared_entities: :shared_entity }).where(active: true))
-      apps.sort_by! { |app| [app.rank ? 0 : 1, app.rank, app.name ? app.name.downcase : ''] } # the nil ranks will appear at the end. Nil names at the start
+      apps = MnoEnterprise::App.fetch_all(app_relation(parent_organization_id).includes(:app_shared_entities, { app_shared_entities: :shared_entity }).where(active: true).order(:name))
+      apps.sort_by! { |app| [app.rank ? 0 : 1, app.rank] } # the nil ranks will appear at the end
       apps
     end
   end
