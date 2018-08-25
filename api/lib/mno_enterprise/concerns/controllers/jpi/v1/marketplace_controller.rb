@@ -81,7 +81,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
 
   # Returns the list of active apps sorted by rank then alphabetically
   def fetch_apps
-    Rails.cache.fetch("marketplace/index-apps-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
+    Rails.cache.fetch("v1/marketplace/index-apps-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
       apps = MnoEnterprise::App.fetch_all(app_relation(parent_organization_id).includes(:app_shared_entities, { app_shared_entities: :shared_entity }).where(active: true).order(:name))
       apps.sort_by! { |app| [app.rank ? 0 : 1, app.rank] } # the nil ranks will appear at the end
       apps
@@ -89,7 +89,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::MarketplaceController
   end
 
   def fetch_products
-    Rails.cache.fetch("marketplace/index-products-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
+    Rails.cache.fetch("v1/marketplace/index-products-#{@last_modified}-#{I18n.locale}-#{parent_organization_id}") do
       MnoEnterprise::Product.fetch_all(product_relation(parent_organization_id).includes(PRODUCT_DEPENDENCIES).where(active: true).order(:name))
     end
   end
