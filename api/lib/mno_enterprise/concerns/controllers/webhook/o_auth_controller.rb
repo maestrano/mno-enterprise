@@ -11,10 +11,15 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
     before_filter :authenticate_user!, only: [:authorize, :disconnect, :sync]
     before_filter :redirect_to_lounge_if_unconfirmed
     before_filter :check_permissions, only: [:authorize, :disconnect, :sync]
+    before_filter :capture_redirect_path_session, only: [:authorize, :disconnect, :sync]
 
     PROVIDERS_WITH_OPTIONS = ['xero','myob']
     helper_method :main_logo_white_bg # To use in the provision view
     private
+      def capture_redirect_path_session
+        session[:redirect_path] = params[:redirect_path] if params[:redirect_path].present?
+      end
+
       def app_instance
         @app_instance ||= MnoEnterprise::AppInstance.includes(:app).where(uid: params[:id]).first
       end
@@ -57,17 +62,19 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
   #==================================================================
   # GET /mnoe/webhook/oauth/:id/authorize
   def authorize
-    if params[:redirect_path].present?
-      session[:redirect_path] = params[:redirect_path]
-    end
-
     # Certain providers require options to be selected
     if !params[:perform] && app_instance.app && PROVIDERS_WITH_OPTIONS.include?(app_instance.app.nid.to_s)
       render "mno_enterprise/webhook/o_auth/providers/#{app_instance.app.nid}"
       return
     end
 
+    # MnoHub redirection to perform the authorise call
     @redirect_to = MnoEnterprise.router.authorize_oauth_url(params[:id], extra_params.merge(wtk: wtk))
+
+    if ENV['SKIP_REDIRECTION_SPEEDBUMPS']
+      # Redirect immediately if speedbumps are disabled
+      redirect_to @redirect_to
+    end
   end
 
   # GET /mnoe/webhook/oauth/:id/callback

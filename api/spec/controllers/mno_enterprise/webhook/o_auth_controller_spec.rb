@@ -15,7 +15,7 @@ module MnoEnterprise
 
     # Stub controller ability
     let!(:ability) { stub_ability }
-    let(:extra_params) { {some: 'param'} }
+    let(:extra_params) { { some: 'param', redirect_path: '/some/path' } }
     before { allow(ability).to receive(:can?).with(any_args).and_return(true) }
 
     # Stub model calls
@@ -47,6 +47,16 @@ module MnoEnterprise
 
       it { subject; expect(response).to be_success }
       it { subject; expect(assigns(:redirect_to)).to eq(redirect_url) }
+      it { subject; expect(session[:redirect_path]).to eq(extra_params[:redirect_path]) }
+
+      context 'when speedbumps must be skipped' do
+        it 'redirects immediately' do
+          ClimateControl.modify SKIP_REDIRECTION_SPEEDBUMPS: 'true' do
+            subject
+            expect(response).to redirect_to(redirect_url)
+          end
+        end
+      end
 
       Webhook::OAuthController::PROVIDERS_WITH_OPTIONS.each do |provider|
         describe "#{provider.capitalize} provider" do
@@ -90,6 +100,7 @@ module MnoEnterprise
       it_behaves_like 'a user protected resource'
 
       it { subject; expect(response).to redirect_to redirect_url }
+      it { subject; expect(session[:redirect_path]).to eq(extra_params[:redirect_path]) }
     end
 
     describe 'GET #sync' do
@@ -101,6 +112,7 @@ module MnoEnterprise
       it_behaves_like 'a user protected resource'
 
       it { subject; expect(response).to redirect_to(redirect_url) }
+      it { subject; expect(session[:redirect_path]).to eq(extra_params[:redirect_path]) }
     end
   end
 end
