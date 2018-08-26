@@ -49,13 +49,9 @@ module MnoEnterprise
       it { subject; expect(assigns(:redirect_to)).to eq(redirect_url) }
       it { subject; expect(session[:redirect_path]).to eq(extra_params[:redirect_path]) }
 
-      context 'when speedbumps must be skipped' do
-        it 'redirects immediately' do
-          ClimateControl.modify SKIP_REDIRECTION_SPEEDBUMPS: 'true' do
-            subject
-            expect(response).to redirect_to(redirect_url)
-          end
-        end
+      context 'when connection speedbump is deactivated' do
+        before { allow(Settings.dashboard.marketplace).to receive(:connection_speedbump).and_return(false) }
+        it { subject; expect(response).to redirect_to(redirect_url) }
       end
 
       Webhook::OAuthController::PROVIDERS_WITH_OPTIONS.each do |provider|

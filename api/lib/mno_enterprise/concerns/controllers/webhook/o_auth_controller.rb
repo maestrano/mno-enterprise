@@ -71,9 +71,10 @@ module MnoEnterprise::Concerns::Controllers::Webhook::OAuthController
     # MnoHub redirection to perform the authorise call
     @redirect_to = MnoEnterprise.router.authorize_oauth_url(params[:id], extra_params.merge(wtk: wtk))
 
-    if ENV['SKIP_REDIRECTION_SPEEDBUMPS']
+    if !Settings.dashboard.marketplace.connection_speedbump
       # Redirect immediately if speedbumps are disabled
       redirect_to @redirect_to
+      return
     end
   end
 
