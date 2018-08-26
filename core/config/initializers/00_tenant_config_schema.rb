@@ -275,6 +275,17 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 }
               }
             },
+            connection_speedbump: {
+              type: "object",
+              title: "Connection Speedbump Page",
+              properties: {
+                enabled: {
+                  type: "boolean",
+                  default: true,
+                  description: "Display a redirection warning page to users when they connect a product for data sharing purpose"
+                }
+              }
+            }
           }
         },
         # commented until products are properly handled
