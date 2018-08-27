@@ -74,10 +74,10 @@ module MnoEnterprise
 
       bill.save!
       # Refetch invoice totals
-      invoice = MnoEnterprise::Invoice.select(:price, :total_due).find(params[:id]).first
+      invoice = MnoEnterprise::Invoice.select(:price, :total_due, :tax_payable).find(params[:id]).first
 
       # Render invoice totals
-      render json: { id: bill.id, invoice: { price: invoice.price, total_due: invoice.total_due } }
+      render json: { id: bill.id, invoice: { price: invoice.price, total_due: invoice.total_due, tax_payable: invoice.tax_payable } }
     end
 
     # NOTE: it would be preferable to use Invoice#price_cents
@@ -101,10 +101,10 @@ module MnoEnterprise
       # instead of cancelled.
       bill.destroy!
       # Refetch invoice totals
-      invoice = MnoEnterprise::Invoice.select(:price, :total_due).find(params[:id]).first
+      invoice = MnoEnterprise::Invoice.select(:price, :total_due, :tax_payable).find(params[:id]).first
 
       # Render invoice totals
-      render json: { invoice: { price: invoice.price, total_due: invoice.total_due } }
+      render json: { invoice: { price: invoice.price, total_due: invoice.total_due, tax_payable: invoice.tax_payable } }
 
     end
 

@@ -82,12 +82,13 @@ module MnoEnterprise
       before { allow(invoice).to receive(:organization).and_return(organization) }
       before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization), expected_params) }
       before { stub_api_v2(:post, "/bills", bill) }
-      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], { fields: { invoices: 'price,total_due' } }) }
+      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], { fields: { invoices: 'price,total_due,tax_payable' } }) }
       before { subject }
 
       it { expect(data['id']).to eq(bill.id) }
       it { expect(data['invoice']['total_due']['fractional']).to eq(invoice.total_due.cents.to_f.to_s) }
       it { expect(data['invoice']['price']['fractional']).to eq(invoice.price.cents.to_f.to_s) }
+      it { expect(data['invoice']['tax_payable']['fractional']).to eq(invoice.tax_payable.cents.to_f.to_s) }
     end
 
     describe 'DELETE #delete_adjustment' do
@@ -106,11 +107,12 @@ module MnoEnterprise
           })
       end
       before { stub_api_v2(:delete, "/bills/#{bill.id}") }
-      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], { fields: { invoices: 'price,total_due' } }) }
+      before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], { fields: { invoices: 'price,total_due,tax_payable' } }) }
       before { subject }
 
       it { expect(data['invoice']['total_due']['fractional']).to eq(invoice.total_due.cents.to_f.to_s) }
       it { expect(data['invoice']['price']['fractional']).to eq(invoice.price.cents.to_f.to_s) }
+      it { expect(data['invoice']['tax_payable']['fractional']).to eq(invoice.tax_payable.cents.to_f.to_s) }
     end
 
     describe 'POST #send_to_customer' do
