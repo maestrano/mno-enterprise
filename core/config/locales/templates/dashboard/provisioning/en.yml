@@ -30,6 +30,7 @@ en:
             suspend_title: "Suspend your plan"
             cancel_title: "Cancel your plan"
             next: "Next"
+            cancel: "Cancel"
           confirm:
             title: "Subscription"
             name: "Name"
