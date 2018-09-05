@@ -37,6 +37,7 @@ en:
             description: "Description"
             order_type: "Order type"
             edit_order: "Edit Order"
+            cancel: "Cancel"
             update_cart: "Update Cart"
             validate: "Validate"
             price: "Price"
