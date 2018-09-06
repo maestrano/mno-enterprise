@@ -98,6 +98,8 @@ en:
               title_email: "Edit Member: {email}"
               title_enter_emails: "Enter email addresses"
               title_select_roles: "Select role for each new member"
+              invalid_emails: "The following email address{COUNT, plural, one{} other{es}} {COUNT, plural, one{is} other{are}} invalid: '{emails}'"
+              existing_emails: "'{emails}' {COUNT, plural, one{has an} other{have}} active invitation{COUNT, plural, one{} other{s}}, or already belongs to this organization"
               description: Enter the email addresses of the people you want to invite in your company
               example: "One address per line, e.g.:"
               disclaimer: Please note that for security reasons unaccepted invites will automatically expire after 3 days.
