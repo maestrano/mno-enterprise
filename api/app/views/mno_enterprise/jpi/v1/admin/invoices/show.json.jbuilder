@@ -1,5 +1,5 @@
 json.invoice do
-  json.extract! @invoice, :id, :price, :started_at, :ended_at, :created_at, :updated_at, :paid_at, :slug, :tax_pips_applied
+  json.extract! @invoice, :id, :price, :started_at, :ended_at, :created_at, :updated_at, :paid_at, :slug, :tax_pips_applied, :previous_total_due, :tax_payable
   json.organization @invoice.organization, :id, :name
 
   json.adjustments @invoice.bills.select(&:adjustment) do |bill|
