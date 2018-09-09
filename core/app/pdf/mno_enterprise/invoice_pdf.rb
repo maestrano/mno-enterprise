@@ -39,7 +39,7 @@ module MnoEnterprise
 
       # Financial values
       @data[:invoice_price] = @invoice.price
-      @data[:invoice_currency] = @invoice.price.currency_as_string
+      @data[:invoice_currency] = @invoice.price.currency.to_s
       @data[:invoice_currency_name] = @invoice.price.currency.name
       @data[:invoice_credit_paid] = @invoice.credit_paid
       @data[:invoice_total_payable] = @invoice.total_payable
@@ -124,7 +124,7 @@ module MnoEnterprise
 
     # Format a money object
     def money(m)
-      "#{m.format(symbol: false)} #{m.currency_as_string}"
+      "#{m.format(symbol: false)} #{m.currency.to_s}"
     end
 
     # Add a repeated header to the document

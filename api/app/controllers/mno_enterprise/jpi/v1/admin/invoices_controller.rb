@@ -176,7 +176,7 @@ module MnoEnterprise
 
     def format_money(money)
       if money
-        {amount: money.amount, currency: money.currency_as_string}
+        {amount: money.amount, currency: money.currency.to_s}
       else
         {amount: 'N/A', currency: ''}
       end
