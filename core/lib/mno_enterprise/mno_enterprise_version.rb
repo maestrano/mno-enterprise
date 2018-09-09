@@ -1,3 +1,3 @@
 module MnoEnterprise
-  VERSION = '4.0.0-dev'
+  VERSION = '5.0.0-dev'
 end
