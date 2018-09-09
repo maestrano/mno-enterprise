@@ -9,7 +9,7 @@ group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'shoulda-matchers'
-  gem 'webmock', '~> 3.1.1'
+  gem 'webmock', '~> 3.4.2'
   gem 'timecop'
   gem 'climate_control'
   # gem 'simplecov'

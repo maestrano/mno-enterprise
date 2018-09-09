@@ -10,8 +10,8 @@ script:
   - bundle exec rake test_app
   - bundle exec rake spec
 rvm:
-  - 2.3.4
-  - 2.4.1
+  - 2.3.7
+  - 2.4.4
 # jruby not supported because of redcarpet
 #  - jruby-9.1.7.0
 #matrix:
