@@ -158,7 +158,7 @@ module MnoEnterprise
         it { expect(response).to be_success }
 
         it 'returns a valid amount' do
-          expected = {'last_portfolio_amount' => {'amount' => tenant.last_portfolio_amount.amount, 'currency' => tenant.last_portfolio_amount.currency_as_string}}
+          expected = {'last_portfolio_amount' => {'amount' => tenant.last_portfolio_amount.amount, 'currency' => tenant.last_portfolio_amount.currency.to_s}}
 
           expect(response.body).to eq(expected.to_json)
         end
