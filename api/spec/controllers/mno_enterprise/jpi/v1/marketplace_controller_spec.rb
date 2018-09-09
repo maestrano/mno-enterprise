@@ -103,9 +103,9 @@ module MnoEnterprise
 
       before do
         stub_api_v2(:get, '/tenant', tenant)
-        stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { filter: { active: true } })
+        stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { filter: { active: true }, sort: 'name' })
         stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
-        stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { filter: { active: true }} )
+        stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { filter: { active: true }, sort: 'name' } )
         stub_api_v2(:get, '/products', [product], [], { fields: { products: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
       end
 
@@ -117,18 +117,21 @@ module MnoEnterprise
       end
 
       context 'with multiple apps' do
-        let(:app1) { build(:app, rank: 5) }
-        let(:app2) { build(:app, rank: 0) }
+        let(:app1) { build(:app, name: 'A App', rank: 5) }
+        let(:app2) { build(:app, name: 'C App', rank: 0) }
+        let(:app3) { build(:app, name: 'B App', rank: 5) }
 
         before do
-          stub_api_v2(:get, '/apps', [app1, app2], DEPENDENCIES, { filter: { active: true } })
+          # Return app sorted alphabetically (order: name)
+          stub_api_v2(:get, '/apps', [app1, app3, app2], DEPENDENCIES, { filter: { active: true }, sort: 'name' })
           stub_api_v2(:get, '/products', [], PRODUCT_DEPENDENCIES, { filter: { active: true }} )
           stub_api_v2(:get, '/apps', [app], [], { fields: { apps: 'updated_at' }, page: { number: 1, size: 1 }, sort: '-updated_at' })
         end
 
+        # Order by rank then name
         it 'returns the apps in the correct order' do
           subject
-          expect(assigns(:apps).map(&:id)).to eq([app2.id, app1.id])
+          expect(assigns(:apps).map(&:id)).to eq([app2.id, app1.id, app3.id])
         end
       end
 
@@ -139,7 +142,7 @@ module MnoEnterprise
         let(:product1) { build(:product) }
 
         before do
-          stub_api_v2(:get, '/apps', [app1, app3, app2], DEPENDENCIES, { filter: { active: true } })
+          stub_api_v2(:get, '/apps', [app1, app3, app2], DEPENDENCIES, { filter: { active: true }, sort: 'name' })
           stub_api_v2(:get, '/apps', [app1], [],
                       {
                         fields: { apps: 'updated_at' },
@@ -169,8 +172,8 @@ module MnoEnterprise
 
         before { sign_in user }
         before { stub_api_v2(:get, "/organizations", [organization], [], { fields: { organizations: 'id' }, filter: { id: organization.id, 'users.id' => user.id }, page: { number: 1, size: 1 } }) }
-        before { stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true } }) }
-        before { stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true } }) }
+        before { stub_api_v2(:get, '/apps', [app], DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true }, sort: 'name' }) }
+        before { stub_api_v2(:get, '/products', [product], PRODUCT_DEPENDENCIES, { _metadata: { organization_id: organization.id }, filter: { active: true }, sort: 'name' }) }
         before do
           stub_api_v2(:get, '/apps', [app], [],
                       {

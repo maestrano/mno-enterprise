@@ -117,6 +117,7 @@ module MnoEnterprise::Concerns::Models::Organization
     when MnoEnterprise::User
       orga_relation = orga_relations.find { |rel| rel.user_id == updated_user.id }
       orga_relation.update_attributes!(role: new_role)
+      updated_user.refresh_user_cache if updated_user.id == user.id
     when MnoEnterprise::OrgaInvite
       updated_user.update_attributes!(user_role: new_role)
     end

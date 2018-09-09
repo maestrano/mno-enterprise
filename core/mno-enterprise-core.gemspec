@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   # Authentication & Authorization
   s.add_dependency 'devise', '~> 3.0'
   s.add_dependency 'cancancan', '~> 1.10'
-  s.add_dependency 'omniauth', '~> 1.3.1'
+  s.add_dependency 'omniauth', '~> 1.8.1'
 
   # Markdown parsing
   s.add_dependency 'redcarpet', '~> 3.3', '>= 3.3.3'
@@ -58,5 +58,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'sparkpost', '~> 0.1.4'
 
   # Platform
-  s.add_development_dependency 'nex_client', '~> 0.16.0'
+  s.add_development_dependency 'nex_client', '~> 0.17.0'
 end

@@ -30,7 +30,7 @@
 
       - else
         .input-group
-          = f.password_field :password, :placeholder => "*Choose Password", 'ng-model' => 'user.password', class: 'form-control', 'ng-minlength' => 6, 'mno-password-strength' => true, "password-score" => 'user.$pwdScore', :required => true
+          = f.password_field :password, placeholder: "*Choose Password", 'ng-model' => 'user.password', class: 'form-control', 'ng-minlength' => 6, 'mno-password-strength' => true, "password-score" => 'user.$pwdScore', required: true, autocomplete: 'new-password'
           %span.input-group-addon.classic.pw-strength-indicator{'ng-class' => 'user.$pwdScore.class' }
             {{ user.$pwdScore.value }}
 

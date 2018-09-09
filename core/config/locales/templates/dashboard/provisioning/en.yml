@@ -20,7 +20,7 @@ en:
               free: "Free"
             licenses: "Number of licenses"
             total: "Total price"
-            no_pricing_found: "There are currently no subscriptions available in your currency"
+            no_pricing_found: "There are currently no price plans available in your billing currency"
           details:
             provision_title: "Enter your details"
             modify_title: "Modify your details"

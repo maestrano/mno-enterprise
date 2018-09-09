@@ -315,6 +315,12 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                   default: true,
                   description: "Display information about billing (invoices...)"
                 },
+                billing_currency_selection: {
+                  type: "boolean",
+                  title: "Billing Currency Selection",
+                  description: "Allow your customer to change their billing currency",
+                  default: true
+                },
                 invoice_contact_details: {
                   type: "string",
                   title: "Invoice Contact Details",
