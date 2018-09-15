@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 module MnoEnterprise
-  describe Jpi::V1::InvoicesController, type: :controller do
+  describe InvoicesController, type: :controller do
     render_views
     routes { MnoEnterprise::Engine.routes }
 

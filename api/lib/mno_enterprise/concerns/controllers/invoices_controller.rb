@@ -1,4 +1,4 @@
-module MnoEnterprise::Concerns::Controllers::Jpi::V1::InvoicesController
+module MnoEnterprise::Concerns::Controllers::InvoicesController
   extend ActiveSupport::Concern
 
   #==================================================================
@@ -16,7 +16,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::InvoicesController
   # Instance methods
   #================================================================
 
-  # GET /mnoe/jpi/v1/invoices/201504-NU4
+  # GET /mnoe/invoices/201504-NU4
   # Invoices endpoint for admins of an organization, rather than admin of a tenant
   def show
     @invoice = MnoEnterprise::Invoice.where(slug: params[:id].upcase).includes(:organization).first
