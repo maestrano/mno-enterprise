@@ -20,7 +20,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::InvoicesController
   # Invoices endpoint for admins of an organization, rather than admin of a tenant
   def show
     @invoice = MnoEnterprise::Invoice.where(slug: params[:id].upcase).includes(:organization).first
-    authorize! :manage_billing, current_user.organizations.find(@invoice.organization_id).first
+    authorize! :manage_billing, @invoice.organization
 
     respond_to do |format|
       if @invoice
