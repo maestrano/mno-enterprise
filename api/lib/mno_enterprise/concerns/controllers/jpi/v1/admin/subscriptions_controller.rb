@@ -4,7 +4,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   included do
     SUBSCRIPTION_INCLUDES ||= [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
 
-    skip_before_filter :block_support_users, if: :skip_block_support_users?
+    skip_before_action :block_support_users, if: :skip_block_support_users?
     before_filter :authorize_support_user_organization, if: :skip_block_support_users?
   end
   #==================================================================

@@ -1,6 +1,6 @@
 module MnoEnterprise
   class Admin::InvoicesController < MnoEnterprise::Jpi::V1::Admin::BaseResourceController
-    skip_before_filter :block_support_users, only: :show
+    skip_before_action :block_support_users, only: :show
 
     # GET /mnoe/invoices/201504-NU4
     def show

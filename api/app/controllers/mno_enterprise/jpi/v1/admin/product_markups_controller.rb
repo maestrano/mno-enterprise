@@ -4,7 +4,7 @@ module MnoEnterprise
     DEPENDENCIES = [:product, :'product.product_pricings', :organization]
 
     # Overwrite check support authorization for index action only.
-    skip_before_filter :block_support_users, only: [:index]
+    skip_before_action :block_support_users, only: [:index]
     before_filter :authorize_support_product_markups, only: [:index], if: -> { current_user.support? }
 
     # GET /mnoe/jpi/v1/admin/product_markups

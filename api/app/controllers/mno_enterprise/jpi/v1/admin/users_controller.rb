@@ -3,7 +3,7 @@ module MnoEnterprise
 
     # Overwrite check support authorization for specific actions, as these authorizations take place in controller.
     before_filter :user_support?, only: [:logout_support, :login_with_org_external_id]
-    skip_before_filter :block_support_users, only: [:show, :logout_support, :login_with_org_external_id]
+    skip_before_action :block_support_users, only: [:show, :logout_support, :login_with_org_external_id]
 
     # GET /mnoe/jpi/v1/admin/users
     def index

@@ -27,10 +27,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
     # Workaround because using only and if are not possible (it checks to see if either satisfy, not both.)
     # https://github.com/rails/rails/issues/9703#issuecomment-223574827
-    skip_before_filter :block_support_users, if: -> { support_org_external_id && action_name == 'index'}
+    skip_before_action :block_support_users, if: -> { support_org_external_id && action_name == 'index'}
     before_filter :support_enabled?, if: -> { support_org_external_id && action_name == 'index'}
 
-    skip_before_filter :block_support_users, only: [:show]
+    skip_before_action :block_support_users, only: [:show]
     before_filter :authorize_support_user_organization, only: [:show]
   end
 

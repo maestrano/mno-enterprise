@@ -6,7 +6,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
 
     # Workaround because using only and if are not possible (it checks to see if either satisfy, not both.)
     # https://github.com/rails/rails/issues/9703#issuecomment-223574827
-    skip_before_filter :block_support_users, if: :authorize_support?
+    skip_before_action :block_support_users, if: :authorize_support?
     before_filter :authorize_support_user_organization, if: :authorize_support?
   end
 
