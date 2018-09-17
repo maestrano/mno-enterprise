@@ -12,15 +12,14 @@ RSpec.describe MnoEnterprise::Ability, type: :model do
   before { allow(user).to receive(:role).with(organization) { nil } }
 
   context 'admin abilities' do
+    context 'when User#admin_role is staff' do
+      # TODO: Implement full scale staff abilities.
+    end
+
     context 'when User#admin_role is admin' do
       let(:admin_role) { 'admin' }
 
-
-      it { is_expected.to be_able_to(:manage, :all)}
-
-      describe '#manage_app_instances' do
-        it { is_expected.to be_able_to(:manage_app_instances, organization) }
-      end
+      it { is_expected.to be_able_to(:manage_app_instances, organization) }
 
       describe '#create_account_transaction' do
         let(:tenant) { build(:tenant, metadata: { can_manage_organization_credit: can_manage_organization_credit }) }

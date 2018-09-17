@@ -20,8 +20,21 @@ module MnoEnterprise::Concerns::Models::Ability
   # Instance methods
   #==================================================================
   def initialize(user, session)
-    user ||= MnoEnterprise::User.new(id: nil)
-    session ||= {}
+
+    #===================================================
+    # Authorizations for users using the company view
+    #===================================================
+    company_view_abilities(user)
+
+    #===================================================
+    # Impac
+    #===================================================
+    impac_abilities(user)
+
+    #===================================================
+    # Admin abilities
+    #===================================================
+    admin_abilities(user, session)
 
     # Define abilities for the passed in user here. For example:
     #
@@ -49,89 +62,17 @@ module MnoEnterprise::Concerns::Models::Ability
     #
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
-
-    if user.admin_role
-      admin_abilities(user, session)
-    else
-      regular_user_abilities(user)
-    end
-
-    impac_abilities(user)
   end
 
-  def impac_abilities(user)
-    can :manage_impac, MnoEnterprise::Dashboard do |dhb|
-      dhb.organizations.any? && dhb.organizations.all? do |org|
-        !!user.role(org) && ['Super Admin', 'Admin'].include?(user.role(org))
-      end
-    end
+  def company_view_abilities(user)
+    user ||= MnoEnterprise::User.new(id: nil)
 
-    can :manage_dashboard, MnoEnterprise::Dashboard do |dashboard|
-      if dashboard.owner_type == "Organization"
-        # The current user is a member of the organization that owns the dashboard that has the kpi attached to
-        owner = MnoEnterprise::Organization.find(dashboard.owner_id)
-        owner && !!user.role(owner)
-      elsif dashboard.owner_type == "User"
-        # The current user is the owner of the dashboard that has the kpi attached to
-        dashboard.owner_id == user.id
-      else
-        false
-      end
-    end
-
-    can :manage_widget, MnoEnterprise::Widget do |widget|
-      dashboard = widget.dashboard
-      authorize! :manage_dashboard, dashboard
-    end
-
-    can :manage_kpi, MnoEnterprise::Kpi do |kpi|
-      if kpi.widget.present?
-        authorize! :manage_widget, MnoEnterprise::Widget.find(kpi.widget.id)
-      else
-        authorize! :manage_dashboard, kpi.dashboard
-      end
-    end
-
-    can :manage_alert, MnoEnterprise::Alert do |alert|
-      kpi = alert.kpi
-      authorize! :manage_kpi, kpi
-    end
-  end
-
-  # Abilities for admin user
-  def admin_abilities(user, session)
-    if user.support?
-      can :read, MnoEnterprise::Invoice do |invoice|
-        invoice.organization&.id == session[:support_org_id]
-      end
-
-      can :read, MnoEnterprise::User do |user|
-        !!user.role(MnoEnterprise::Organization.new(id: session[:support_org_id]))
-      end
-
-      can :read, MnoEnterprise::Organization do |organization|
-        # Can read an organization if the user is part of the organization, a support users with the organizations external id, or a non-support admin user.
-        session[:support_org_id].to_i == organization.id.to_i
-      end
-    elsif user.admin? || user.staff?
-      can :manage, :all
-      # Must override #create_account_transaction, as multiple can statements are logically 'or'ed and 'and
-      # https://github.com/ryanb/cancan/wiki/Ability-Precedence
-      cannot :create_account_transaction, MnoEnterprise::Tenant
-      can :create_account_transaction, MnoEnterprise::Tenant do |tenant|
-        tenant.metadata[:can_manage_organization_credit]
-      end
-    end
-  end
-
-  def regular_user_abilities(user)
     #===================================================
     # Organization
     #===================================================
     can :create, MnoEnterprise::Organization
 
     can :read, MnoEnterprise::Organization do |organization|
-      # Can read an organization if the user is part of the organization, a support users with the organizations external id, or a non-support admin user.
       !!user.role(organization)
     end
 
@@ -180,6 +121,71 @@ module MnoEnterprise::Concerns::Models::Ability
           user.teams.empty? ||
           user.teams.map(&:product_instances).compact.flatten.map(&:id).include?(product_instance.id)
       )
+    end
+  end
+
+  def impac_abilities(user)
+    can :manage_impac, MnoEnterprise::Dashboard do |dhb|
+      dhb.organizations.any? && dhb.organizations.all? do |org|
+        !!user.role(org) && ['Super Admin', 'Admin'].include?(user.role(org))
+      end
+    end
+
+    can :manage_dashboard, MnoEnterprise::Dashboard do |dashboard|
+      if dashboard.owner_type == "Organization"
+        # The current user is a member of the organization that owns the dashboard that has the kpi attached to
+        owner = MnoEnterprise::Organization.find(dashboard.owner_id)
+        owner && !!user.role(owner)
+      elsif dashboard.owner_type == "User"
+        # The current user is the owner of the dashboard that has the kpi attached to
+        dashboard.owner_id == user.id
+      else
+        false
+      end
+    end
+
+    can :manage_widget, MnoEnterprise::Widget do |widget|
+      dashboard = widget.dashboard
+      authorize! :manage_dashboard, dashboard
+    end
+
+    can :manage_kpi, MnoEnterprise::Kpi do |kpi|
+      if kpi.widget.present?
+        authorize! :manage_widget, MnoEnterprise::Widget.find(kpi.widget.id)
+      else
+        authorize! :manage_dashboard, kpi.dashboard
+      end
+    end
+
+    can :manage_alert, MnoEnterprise::Alert do |alert|
+      kpi = alert.kpi
+      authorize! :manage_kpi, kpi
+    end
+
+    can :create_account_transaction, MnoEnterprise::Tenant do |tenant|
+      tenant.metadata[:can_manage_organization_credit]
+    end
+  end
+
+  # Abilities for admin user
+  def admin_abilities(user, session)
+    # TODO: Implement full scale staff role abilities.
+    if user.admin? || user.staff?
+      can :manage_app_instances, MnoEnterprise::Organization
+      can :manage_sub_tenant, MnoEnterprise::SubTenant
+    elsif user.support?
+      # Support users are 'logged in' when they have the support_org_id stored inside their session.
+      can :read, MnoEnterprise::Invoice do |invoice|
+        invoice.organization&.id == session[:support_org_id]
+      end
+
+      can :read, MnoEnterprise::User do |user|
+        !!user.role(MnoEnterprise::Organization.new(id: session[:support_org_id]))
+      end
+
+      can :read, MnoEnterprise::Organization do |organization|
+        session[:support_org_id].to_i == organization.id.to_i
+      end
     end
   end
 end

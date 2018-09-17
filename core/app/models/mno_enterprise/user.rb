@@ -269,15 +269,15 @@ module MnoEnterprise
     end
 
     def support?
-      admin_role.downcase == SUPPORT_ROLE
+      admin_role.to_s.casecmp(SUPPORT_ROLE).zero?
     end
 
     def staff?
-      admin_role.downcase == STAFF_ROLE
+      admin_role.to_s.casecmp(STAFF_ROLE).zero?
     end
 
     def admin?
-      admin_role.downcase == ADMIN_ROLE
+      admin_role.to_s.casecmp(ADMIN_ROLE).zero?
     end
   end
 end
