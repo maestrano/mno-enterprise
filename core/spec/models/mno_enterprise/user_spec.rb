@@ -404,12 +404,12 @@ module MnoEnterprise
       let(:admin_role) { MnoEnterprise::User::ADMIN_ROLE }
 
       context 'when the user is not support' do
-        it { is_expected. to be false}
+        it { is_expected.to be false}
       end
 
       context 'when the user is support' do
         let(:admin_role) { MnoEnterprise::User::SUPPORT_ROLE }
-        it { is_expected. to be true}
+        it { is_expected.to be true}
       end
     end
 
@@ -419,12 +419,12 @@ module MnoEnterprise
       let(:admin_role) { MnoEnterprise::User::ADMIN_ROLE }
 
       context 'when the user is not staff' do
-        it { is_expected. to be false}
+        it { is_expected.to be false}
       end
 
       context 'when the user is staff' do
         let(:admin_role) { MnoEnterprise::User::STAFF_ROLE }
-        it { is_expected. to be true}
+        it { is_expected.to be true}
       end
     end
   end

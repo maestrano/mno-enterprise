@@ -1,9 +1,7 @@
 module MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
   shared_examples "a jpi v1 admin action" do
     context "without a signed in user" do
-      before do
-        sign_out('user')
-      end
+      before { sign_out('user') }
 
       it "prevents access" do
         expect(subject).to_not be_successful
