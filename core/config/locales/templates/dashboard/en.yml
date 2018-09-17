@@ -41,7 +41,7 @@ en:
                 title: Connection status
                 last_sync: "Last sync:"
                 sync_in_progress: Sync In Progress
-                never_sync: None
+                never_sync: "N/A"
 
               order_history:
                 title: Order history
