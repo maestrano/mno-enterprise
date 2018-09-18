@@ -218,10 +218,8 @@ module MnoEnterprise
 
           it { is_expected.to be_success }
           it 'sets the session of support_org_id' do
-            expect(cookies[:support_org_id]).to be_nil
             expect(session[:support_org_id]).to be_nil
             subject
-            expect(cookies[:support_org_id]).to eq(organization.id)
             expect(session[:support_org_id]).to eq(organization.id)
           end
 
@@ -256,7 +254,6 @@ module MnoEnterprise
           it { is_expected.to be_success }
           it 'sets the session of support_org_id' do
             subject
-            expect(cookies[:support_org_id]).to be_nil
             expect(session[:support_org_external_id]).to be_nil
           end
         end

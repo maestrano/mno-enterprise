@@ -1,4 +1,4 @@
-json.cache! ['v2', @user.cache_key, session[:impersonator_user_id]] do
+json.cache! ['v2', @user.cache_key, session[:impersonator_user_id],  session[:support_org_id]] do
   json.current_user do
     json.id @user.id
     json.name @user.name
@@ -49,6 +49,10 @@ json.cache! ['v2', @user.cache_key, session[:impersonator_user_id]] do
       end
 
       json.kpi_enabled !!@user.kpi_enabled
+    end
+
+    if @user.support?
+      json.support_org_id session[:support_org_id]
     end
   end
 end

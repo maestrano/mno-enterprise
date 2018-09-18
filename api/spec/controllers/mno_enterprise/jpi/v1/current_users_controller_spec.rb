@@ -111,6 +111,29 @@ module MnoEnterprise
           expect(JSON.parse(response.body)).to eq(json_hash_for(user))
         end
       end
+
+      describe 'support user' do
+        subject { get :show, nil, {support_org_id: support_org_id} }
+
+        before { sign_in user }
+        let!(:user) { build(:user, :with_deletion_request, :with_organizations, :kpi_enabled, admin_role: MnoEnterprise::User::SUPPORT_ROLE) }
+        let(:current_user_hash) { json_hash_for(user) }
+        let(:support_org_id) { 6 }
+
+        it 'is successful' do
+          subject
+          expect(response).to be_success
+        end
+
+        before do
+          current_user_hash['current_user']['support_org_id'] = support_org_id
+        end
+
+        it 'returns the right response' do
+          subject
+          expect(JSON.parse(response.body)).to eq(current_user_hash)
+        end
+      end
     end
 
     describe 'PUT #update' do

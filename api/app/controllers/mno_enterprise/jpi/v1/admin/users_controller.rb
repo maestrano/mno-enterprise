@@ -118,22 +118,21 @@ module MnoEnterprise
       # Can only log in with an external_id if you are a support user.
       org = Organization.where(external_id: params[:organization_external_id]).first
       return render_not_found('Organization') unless org
-      set_support_cookies(org)
+      set_support_session(org)
       head :no_content
     end
 
     # DELETE /mnoe/jpi/v1/admin/users/:id
     def logout_support
-      set_support_cookies(nil)
+      set_support_session(nil)
       head :no_content
     end
 
     private
 
-    def set_support_cookies(org = nil)
+    def set_support_session(org = nil)
       # Add #support_org_id in the cookies so that the frontend can read it.
       # Store #support_org_external_id in the session so that the support user can authenticate with mnoe.
-      cookies[:support_org_id] = org&.id
       session[:support_org_id] = org&.id
     end
 
