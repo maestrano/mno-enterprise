@@ -68,7 +68,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
                       .first
 
     statuses = MnoEnterprise::AppInstance::ACTIVE_STATUSES.join(',')
-    @organization_active_apps = MnoEnterprise::AppInstance.includes(:app)
+    @organization_active_apps = MnoEnterprise::AppInstance.includes(:app, :sync_status)
                       .where('owner.id': params[:id], 'status.in': statuses, 'fulfilled_only': true)
                       .select(&:active?)
 
