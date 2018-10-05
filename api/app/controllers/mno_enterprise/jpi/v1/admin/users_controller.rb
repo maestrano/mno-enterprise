@@ -131,7 +131,6 @@ module MnoEnterprise
     private
 
     def set_support_session(org = nil)
-      # Add #support_org_id in the cookies so that the frontend can read it.
       # Store #support_org_external_id in the session so that the support user can authenticate with mnoe.
       session[:support_org_id] = org&.id
     end

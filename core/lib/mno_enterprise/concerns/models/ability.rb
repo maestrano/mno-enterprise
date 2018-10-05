@@ -20,6 +20,7 @@ module MnoEnterprise::Concerns::Models::Ability
   # Instance methods
   #==================================================================
   def initialize(user, session)
+    user ||= MnoEnterprise::User.new(id: nil)
 
     #===================================================
     # Authorizations for users using the company view
@@ -65,7 +66,6 @@ module MnoEnterprise::Concerns::Models::Ability
   end
 
   def company_view_abilities(user)
-    user ||= MnoEnterprise::User.new(id: nil)
 
     #===================================================
     # Organization
