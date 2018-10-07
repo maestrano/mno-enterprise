@@ -36,8 +36,6 @@ module MnoEnterprise
                                  .includes(:orga_relations, :organizations, :user_access_requests, :sub_tenant)
                                  .find(params[:id])
                                  .first
-
-      @user_organizations = @user.organizations
     end
 
     # POST /mnoe/jpi/v1/admin/users
