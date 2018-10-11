@@ -60,9 +60,10 @@ module MnoEnterprise
 
     describe 'GET #show' do
       subject { get :show, id: organization.id }
+      let(:sync_status) { build(:sync_status) }
       let(:data) { JSON.parse(response.body) }
       let(:includes) { [:app_instances, :'app_instances.app', :users, :'users.user_access_requests', :orga_relations, :invoices, :credit_card, :orga_invites, :'orga_invites.user', :main_address] }
-      let(:app_instance_includes) { [:app] }
+      let(:app_instance_includes) { [:app, :sync_status] }
       let(:app_instance_filter) do
         {
           fulfilled_only: true,
@@ -83,6 +84,7 @@ module MnoEnterprise
       let(:expected_params) { { _metadata: { act_as_manager: user.id }, fields: selected_fields } }
 
       before { allow(app_instance).to receive(:app).and_return(app) }
+      before { allow(app_instance).to receive(:sync_status).and_return(sync_status) }
       before { allow(organization).to receive(:app_instances).and_return([app_instance]) }
       before { allow(organization).to receive(:invoices).and_return([]) }
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, includes, expected_params) }
