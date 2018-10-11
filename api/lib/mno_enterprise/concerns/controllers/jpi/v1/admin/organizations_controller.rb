@@ -11,6 +11,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     DEPENDENCIES = %i[app_instances app_instances.app users
                       users.user_access_requests orga_relations invoices
                       credit_card orga_invites orga_invites.user main_address].freeze
+
     INCLUDED_FIELDS_INDEX = %i[uid name account_frozen soa_enabled mails logo
                                latitude longitude geo_country_code geo_state_code
                                geo_city geo_tz geo_currency metadata industry size
@@ -71,7 +72,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     @organization_active_apps = MnoEnterprise::AppInstance.includes(:app, :sync_status)
                       .where('owner.id': params[:id], 'status.in': statuses, 'fulfilled_only': true)
                       .select(&:active?)
-
   end
 
   # TODO: sub-tenant scoping

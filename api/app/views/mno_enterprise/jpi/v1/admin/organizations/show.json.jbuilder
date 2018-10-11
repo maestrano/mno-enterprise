@@ -11,8 +11,8 @@ json.organization do
     json.app_logo instance.app.logo
     json.nid instance.app.nid
     json.sync_status do
-      if app_sync_status = instance.sync_status
-        json.extract! app_sync_status, :created_at, :updated_at, :status, :messages, :progress, :started_at, :finished_at
+      if instance.respond_to?(:sync_status) && instance.sync_status
+        json.extract! instance.sync_status, :created_at, :updated_at, :status, :messages, :progress, :started_at, :finished_at
       end
     end
   end
