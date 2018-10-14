@@ -1,7 +1,14 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_EVENT_INCLUDES ||= [:'subscription', :'subscription.organization', :'subscription.product', :'product_pricing']
+  included do
+    SUBSCRIPTION_EVENT_INCLUDES ||= [:'subscription', :'subscription.organization', :'subscription.product', :'product_pricing']
+
+    # Workaround because using only and if are not possible (it checks to see if either satisfy, not both.)
+    # https://github.com/rails/rails/issues/9703#issuecomment-223574827
+    skip_before_action :block_support_users, if: :authorize_support?
+    before_filter :authorize_support_user_organization, if: :authorize_support?
+  end
 
   #==================================================================
   # Instance methods
@@ -17,7 +24,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
     # Fetch all the subscription events of an organization
     elsif params[:organization_id]
       org = MnoEnterprise::Organization
-              .with_params(_metadata: { act_as_manager: current_user.id })
+              .with_params(_metadata: special_roles_metadata)
               .includes([:subscriptions])
               .find(params[:organization_id]).first
 
@@ -86,12 +93,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
   end
 
   def fetch_subscription_events(organization_id: nil, subscription_id: nil)
-    metadata = {act_as_manager: current_user.id}
-    metadata[:organization_id] = organization_id if organization_id
-
     rel = MnoEnterprise::SubscriptionEvent
             .apply_query_params(params)
-            .with_params(_metadata: metadata)
+            .with_params(_metadata: subscription_metadata(organization_id))
             .includes(SUBSCRIPTION_EVENT_INCLUDES)
 
     rel = rel.where('subscription.id' => subscription_id.presence) if subscription_id
@@ -101,9 +105,19 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionEventsC
 
   def fetch_subscription_event(organization_id, subscription_id, id, includes = nil)
     rel = MnoEnterprise::SubscriptionEvent
-            .with_params(_metadata: { act_as_manager: current_user.id, organization_id: organization_id })
+            .with_params(_metadata: subscription_metadata(organization_id))
             .where('subscription.id' => subscription_id, id: id)
     rel = rel.includes(*includes) if includes.present?
     rel.first
+  end
+
+  def subscription_metadata(organization_id = nil)
+    metadata = special_roles_metadata
+    metadata[:organization_id] = organization_id if organization_id
+    metadata
+  end
+
+  def authorize_support?
+    support_org_params && ['show', 'index'].include?(action_name)
   end
 end

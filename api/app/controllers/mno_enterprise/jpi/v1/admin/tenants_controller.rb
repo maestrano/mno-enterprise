@@ -1,6 +1,8 @@
 module MnoEnterprise
   class Jpi::V1::Admin::TenantsController < Jpi::V1::Admin::BaseResourceController
     before_action :fix_json_params, only: :update
+    # Must be able to load the tenant config.
+    skip_before_action :block_support_users, only: :show
 
     # GET /mnoe/jpi/v1/admin/tenant
     def show

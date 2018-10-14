@@ -34,11 +34,15 @@ module MnoEnterprise
 
       describe 'creation' do
         context 'success' do
-          before { stub_api_v2(:get, '/tenant', tenant) }
-          before { subject }
-
           let(:data) { JSON.parse(response.body) }
+
+          before { stub_api_v2(:get, '/tenant', tenant) }
+
+          it_behaves_like "a jpi v1 admin action"
+          it_behaves_like "an unauthorized route for support users"
+
           it 'creates the account_transaction' do
+            subject
             expect(data['attributes']['currency']).to eq(account_transaction.currency)
             expect(data['attributes']['amount_cents']).to eq(account_transaction.amount_cents)
           end
@@ -47,9 +51,9 @@ module MnoEnterprise
         context 'Tenant feature flag not active' do
           before { tenant.metadata[:can_manage_organization_credit] = false }
           before { stub_api_v2(:get, '/tenant', tenant) }
-          before { subject }
 
           it "does not create the account_transaction" do
+            subject
             expect(response.body).to be_blank
             expect(response).to have_http_status(:forbidden)
           end

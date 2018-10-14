@@ -83,6 +83,7 @@ module MnoEnterprise
       end
 
       it_behaves_like "a jpi v1 admin action"
+      it_behaves_like "an unauthorized route for support users"
 
       it 'returns a list of dashboard templates' do
         subject
@@ -98,6 +99,7 @@ module MnoEnterprise
       end
 
       it_behaves_like "a jpi v1 admin action"
+      it_behaves_like "an unauthorized route for support users"
 
       it 'returns a dashboard template' do
         subject
@@ -130,6 +132,7 @@ module MnoEnterprise
 
       # TODO: APIv2
       # it_behaves_like "a jpi v1 admin action"
+      # it_behaves_like "an unauthorized route for support users"
 
       it 'creates a dashboard template'
 
@@ -169,6 +172,7 @@ module MnoEnterprise
 
       # TODO: APIv2
       # it_behaves_like "a jpi v1 admin action"
+      # it_behaves_like "an unauthorized route for support users"
 
       it 'updates the dashboard template'
 
@@ -198,6 +202,7 @@ module MnoEnterprise
       end
 
       it_behaves_like "a jpi v1 admin action"
+      it_behaves_like "an unauthorized route for support users"
 
       it 'deletes the template' do
         subject

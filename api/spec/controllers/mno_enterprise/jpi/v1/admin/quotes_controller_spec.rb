@@ -34,6 +34,7 @@ module MnoEnterprise
 
       context 'success' do
         it_behaves_like 'a jpi v1 admin action'
+        it_behaves_like 'an unauthorized route for support users'
 
         it 'Fetches the Product Quote' do
           subject

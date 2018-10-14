@@ -22,7 +22,10 @@ module MnoEnterprise
       describe '#index' do
         subject { get :index }
         let!(:stub) { stub_api_v2(:get, "/apps", [app], [], { filter: { stack: 'cloud' } }) }
+
         it_behaves_like 'a jpi v1 admin action'
+        it_behaves_like "an unauthorized route for support users"
+
         it 'returns the cloud aplications' do
           subject
           expect(JSON.parse(response.body)).to eq({ "cloud_apps" => [{ "id" => app.id, "uid" => app.uid, "name" => app.name, "api_key" => app.api_key, "tiny_description" => app.tiny_description, "description" => app.description, "metadata_url" => nil, "details" => nil, "terms_url" => app.terms_url }] })
@@ -42,7 +45,10 @@ module MnoEnterprise
         end
 
         subject { put :update, id: app.id, cloud_app: params }
+
         it_behaves_like 'a jpi v1 admin action'
+        it_behaves_like "an unauthorized route for support users"
+
         it 'does the request with the right parameters' do
           subject
           expect(stub).to have_been_requested
@@ -53,7 +59,10 @@ module MnoEnterprise
       describe '#regenerate_api_key' do
         subject { put :regenerate_api_key, id: app.id }
         let!(:stub) { stub_api_v2(:patch, "/apps/#{app.id}/regenerate_api_key", app) }
+
         it_behaves_like 'a jpi v1 admin action'
+        it_behaves_like "an unauthorized route for support users"
+
         it do
           subject
           expect(stub).to have_been_requested

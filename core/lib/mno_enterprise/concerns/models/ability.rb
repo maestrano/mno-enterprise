@@ -19,8 +19,53 @@ module MnoEnterprise::Concerns::Models::Ability
   #==================================================================
   # Instance methods
   #==================================================================
-  def initialize(user)
+  def initialize(user, session)
     user ||= MnoEnterprise::User.new(id: nil)
+
+    #===================================================
+    # Authorizations for users using the company view
+    #===================================================
+    company_view_abilities(user)
+
+    #===================================================
+    # Impac
+    #===================================================
+    impac_abilities(user)
+
+    #===================================================
+    # Admin abilities
+    #===================================================
+    admin_abilities(user, session)
+
+    # Define abilities for the passed in user here. For example:
+    #
+    #   user ||= User.new # guest user (not logged in)
+    #   if user.admin?
+    #     can :manage, :all
+    #   else
+    #     can :read, :all
+    #   end
+    #
+    # The first argument to `can` is the action you are giving the user
+    # permission to do.
+    # If you pass :manage it will apply to every action. Other common actions
+    # here are :read, :create, :update and :destroy.
+    #
+    # The second argument is the resource the user can perform the action on.
+    # If you pass :all it will apply to every resource. Otherwise pass a Ruby
+    # class of the resource.
+    #
+    # The third argument is an optional hash of conditions to further filter the
+    # objects.
+    # For example, here the user can only update published articles.
+    #
+    #   can :update, Article, :published => true
+    #
+    # See the wiki for details:
+    # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
+  end
+
+  def company_view_abilities(user)
 
     #===================================================
     # Organization
@@ -34,8 +79,6 @@ module MnoEnterprise::Concerns::Models::Ability
     can [:update, :destroy, :manage_billing], MnoEnterprise::Organization do |organization|
       user.role(organization) == 'Super Admin'
     end
-
-
 
     # TODO: replace by organization_id, no need to load a full organization, and make user.role accept a string
     can [:upload,
@@ -79,43 +122,6 @@ module MnoEnterprise::Concerns::Models::Ability
           user.teams.map(&:product_instances).compact.flatten.map(&:id).include?(product_instance.id)
       )
     end
-
-    #===================================================
-    # Impac
-    #===================================================
-    impac_abilities(user)
-
-    #===================================================
-    # Admin abilities
-    #===================================================
-    admin_abilities(user)
-
-    # Define abilities for the passed in user here. For example:
-    #
-    #   user ||= User.new # guest user (not logged in)
-    #   if user.admin?
-    #     can :manage, :all
-    #   else
-    #     can :read, :all
-    #   end
-    #
-    # The first argument to `can` is the action you are giving the user
-    # permission to do.
-    # If you pass :manage it will apply to every action. Other common actions
-    # here are :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on.
-    # If you pass :all it will apply to every resource. Otherwise pass a Ruby
-    # class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the
-    # objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, :published => true
-    #
-    # See the wiki for details:
-    # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
   end
 
   def impac_abilities(user)
@@ -162,10 +168,24 @@ module MnoEnterprise::Concerns::Models::Ability
   end
 
   # Abilities for admin user
-  def admin_abilities(user)
-    if user.admin_role.to_s.casecmp('admin').zero? || user.admin_role.to_s.casecmp('staff').zero?
+  def admin_abilities(user, session)
+    # TODO: Implement full scale staff role abilities.
+    if user.admin? || user.staff?
       can :manage_app_instances, MnoEnterprise::Organization
       can :manage_sub_tenant, MnoEnterprise::SubTenant
+    elsif user.support?
+      # Support users are 'logged in' when they have the support_org_id stored inside their session.
+      can :read, MnoEnterprise::Invoice do |invoice|
+        invoice.organization&.id == session[:support_org_id]
+      end
+
+      can :read, MnoEnterprise::User do |user|
+        !!user.role(MnoEnterprise::Organization.new(id: session[:support_org_id]))
+      end
+
+      can :read, MnoEnterprise::Organization do |organization|
+        session[:support_org_id].to_i == organization.id.to_i
+      end
     end
   end
 end

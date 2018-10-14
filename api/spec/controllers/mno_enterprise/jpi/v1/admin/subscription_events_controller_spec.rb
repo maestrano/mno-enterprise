@@ -16,10 +16,11 @@ module MnoEnterprise
     #===============================================
     # Assignments
     #===============================================
-    let(:user) { build(:user, :admin) }
+    let(:user) { build(:user, admin_role) }
+    let(:admin_role) { :admin }
     let!(:current_user_stub) { stub_user(user) }
 
-    let(:organization) { build(:organization) }
+    let(:organization) { build(:organization, subscriptions: [subscription]) }
     let(:subscription) { build(:subscription) }
     let!(:subscription_event) { build(:subscription_event, subscription: subscription) }
 
@@ -40,10 +41,24 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/subscription_events", [subscription_event], includes, expected_params) }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       it 'returns the subscription events' do
         subject
         expect(data['subscription_events'].first['id']).to eq(subscription_event.id)
+      end
+
+      context 'support users' do
+        let(:expected_params) { { _metadata: { act_as_manager: user.id }, filter: { organization_id: orgId} } }
+        let(:controller_action) { :index }
+        let(:entity) { nil }
+
+        before do
+          stub_api_v2(:get, "/organizations/#{organization.id}", [organization], [:subscriptions], { '_metadata' => { 'act_as_manager' => user.id } })
+          stub_api_v2(:get, "/subscription_events", [subscription_event], includes, { '_metadata' => { 'act_as_manager' => user.id }, 'filter' => { 'subscription.id': [subscription.id]} })
+        end
+
+        it_behaves_like "an authorized #organization_id route for support users"
       end
     end
 
@@ -69,6 +84,15 @@ module MnoEnterprise
         subject
         expect(data['subscription_event']['id']).to eq(subscription_event.id)
       end
+
+      context 'support users' do
+        let(:admin_role) { :support }
+
+        it 'calls authorize on the organization' do
+          expect(controller).to receive(:authorize!).with(:read, MnoEnterprise::Organization.new(id: organization.id))
+          subject
+        end
+      end
     end
 
     describe 'POST #approve' do
@@ -85,6 +109,7 @@ module MnoEnterprise
       before { stub_api_v2(:post, "/subscription_events/#{subscription_event.id}/approve") }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
     end
 
     describe 'POST #reject' do
@@ -101,6 +126,7 @@ module MnoEnterprise
       before { stub_api_v2(:post, "/subscription_events/#{subscription_event.id}/reject") }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
     end
   end
 end

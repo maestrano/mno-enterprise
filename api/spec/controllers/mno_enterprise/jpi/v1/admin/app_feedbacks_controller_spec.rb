@@ -37,7 +37,10 @@ module MnoEnterprise
 
     describe '#index' do
       subject { get :index }
+
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
+
       context 'success' do
         before { subject }
         it 'returns a list of app_feedbacks' do

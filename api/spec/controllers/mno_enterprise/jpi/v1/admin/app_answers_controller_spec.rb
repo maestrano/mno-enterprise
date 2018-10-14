@@ -4,6 +4,7 @@ module MnoEnterprise
   describe Jpi::V1::Admin::AppAnswersController, type: :controller do
     include MnoEnterprise::TestingSupport::JpiV1TestHelper
     include MnoEnterprise::TestingSupport::ReviewsSharedHelpers
+    include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
@@ -35,6 +36,7 @@ module MnoEnterprise
 
       subject { post :create, app_answer: params, question_id: question.id }
 
+      it_behaves_like "an unauthorized route for support users"
       it 'renders the new review' do
         expect(JSON.parse(subject.body)['app_answer']).to eq(expected_hash_for_answer)
       end

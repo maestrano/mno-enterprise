@@ -3,7 +3,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/app_metrics
     def index
-      staff_role = current_user.admin_role == 'staff'
+      staff_role = current_user.staff?
       org_ids = current_user.client_ids
       @app_metrics = []
 

@@ -6,7 +6,7 @@ Rails.application.load_tasks # load application tasks
 module MnoEnterprise
   class Jpi::V1::Admin::ThemeController < Jpi::V1::Admin::BaseResourceController
     # No xsrf
-    skip_before_filter :verify_authenticity_token
+    skip_before_action :verify_authenticity_token
 
     # POST /mnoe/jpi/v1/admin/theme/save
     def save

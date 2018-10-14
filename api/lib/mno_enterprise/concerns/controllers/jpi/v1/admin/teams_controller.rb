@@ -1,6 +1,11 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::TeamsController
   extend ActiveSupport::Concern
 
+  included do
+    skip_before_action :block_support_users, only: :index
+    before_filter :authorize_support_user_organization, only: :index
+  end
+
   #==================================================================
   # Instance methods
   #==================================================================

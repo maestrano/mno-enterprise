@@ -32,7 +32,7 @@ module MnoEnterprise
         allow(message_delivery).to receive(:deliver_later).with(no_args)
       }
       it_behaves_like 'a jpi v1 admin action'
-
+      it_behaves_like 'an unauthorized route for support users'
 
       it 'sends the invitation email' do
         expect(message_delivery).to receive(:deliver_later).with(no_args)

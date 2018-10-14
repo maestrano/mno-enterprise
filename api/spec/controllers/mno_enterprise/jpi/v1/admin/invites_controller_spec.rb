@@ -11,7 +11,7 @@ module MnoEnterprise
     # Assignments
     #===============================================
     # Stub user and user call
-    let(:user) { build(:user, admin_role: 'admin') }
+    let(:user) { build(:user, admin_role: MnoEnterprise::User::ADMIN_ROLE) }
     let!(:current_user_stub) { stub_user(user) }
     before do
       sign_in user
@@ -48,7 +48,9 @@ module MnoEnterprise
       subject { post :create, user_id: invitee.id, organization_id: organization.id }
 
       before { allow(SystemNotificationMailer).to receive(:organization_invite).and_return(message_delivery) }
+
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
 
       context 'existing user' do
         it 'sends the invitation email' do
