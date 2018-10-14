@@ -76,6 +76,7 @@ module MnoEnterprise
       end
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       context 'with bad parameters' do
         let(:params) { {} }
@@ -138,6 +139,7 @@ module MnoEnterprise
       end
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       context 'when resetting to default' do
         let(:params) { {default: true} }
@@ -207,6 +209,7 @@ module MnoEnterprise
       subject { put :logo, logo: logo }
 
       it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       it { is_expected.to have_http_status(:created) }
 

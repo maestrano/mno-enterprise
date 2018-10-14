@@ -23,8 +23,8 @@ module MnoEnterprise
     describe 'GET #show' do
       subject { get :show }
 
-      # TODO: fix
-      # it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an authorized route for support users'
 
       it { is_expected.to have_http_status(:ok) }
       it { is_expected.to render_template(:show) }
@@ -51,12 +51,12 @@ module MnoEnterprise
     end
 
     describe 'PATCH #update' do
-      # TODO: fix
-      # it_behaves_like 'a jpi v1 admin action'
-
       let(:tenant_params) { {frontend_config: {}} }
 
       subject { patch :update, tenant: tenant_params }
+
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
       it { is_expected.to have_http_status(:ok) }
 
       it 'restart the app' do
@@ -70,6 +70,8 @@ module MnoEnterprise
 
       subject { get :restart_status }
       it { is_expected.to have_http_status(:ok) }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       it 'gets the restart status' do
         expect(MnoEnterprise::SystemManager).to receive(:restart_status)
@@ -82,6 +84,8 @@ module MnoEnterprise
 
       subject { patch :update_domain, tenant: tenant_params }
       it { is_expected.to have_http_status(:ok) }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       it 'updates the domain then restart the app' do
         expect(MnoEnterprise::SystemManager).to receive(:update_domain).with('foo.test').and_return(true).ordered
@@ -111,6 +115,8 @@ module MnoEnterprise
 
       subject { post :add_certificates, tenant: tenant_params }
       it { is_expected.to have_http_status(:ok) }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like 'an unauthorized route for support users'
 
       it 'adds the certificates then restart the app' do
         expect(MnoEnterprise::SystemManager).to receive(:add_ssl_certs).with('foo.test', 'my-cert', 'my-ca-bundle', 'my-private-key').and_return(true).ordered
@@ -122,7 +128,6 @@ module MnoEnterprise
 
         it { is_expected.to have_http_status(:bad_request) }
       end
-
     end
   end
 end

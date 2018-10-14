@@ -614,6 +614,17 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             }
           }
         },
+        support: {
+          type: "object",
+          title: "Support",
+          properties: {
+            enabled: {
+              type: "boolean",
+              default: false,
+              description: "Enable support users who can selectively view organization information"
+            }
+          }
+        },
         sub_tenant: {
           type: "object",
           # Disable sub_tenant activation for now

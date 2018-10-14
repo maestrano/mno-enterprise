@@ -1,8 +1,12 @@
 module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsController
   extend ActiveSupport::Concern
 
-  SUBSCRIPTION_INCLUDES ||= [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
+  included do
+    SUBSCRIPTION_INCLUDES ||= [:'product_pricing.product', :product, :product_contract, :organization, :user, :'license_assignments.user', :'product_instance.product']
 
+    skip_before_action :block_support_users, if: :skip_block_support_users?
+    before_filter :authorize_support_user_organization, if: :skip_block_support_users?
+  end
   #==================================================================
   # Instance methods
   #==================================================================
@@ -33,7 +37,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   def create
     # Abort if user does not have access to the organization
     organization = MnoEnterprise::Organization
-      .with_params(_metadata: { act_as_manager: current_user.id })
+      .with_params(_metadata: special_roles_metadata)
       .select(:id)
       .find(params[:organization_id])
       .first
@@ -93,6 +97,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
 
   protected
 
+  def skip_block_support_users?
+    # Workaround because using only and if are not possible (it checks to see if either satisfy, not both.)
+    # https://github.com/rails/rails/issues/9703#issuecomment-223574827
+    support_org_params && ["index", "show"].include?(action_name)
+  end
+
   def cart_subscription_param
     params.dig(:subscription, :cart_entry)
   end
@@ -118,22 +128,25 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::SubscriptionsContro
   def fetch_all_subscriptions
     MnoEnterprise::Subscription
       .apply_query_params(params)
-      .with_params(_metadata: { act_as_manager: current_user.id })
+      .with_params(_metadata: special_roles_metadata)
       .includes(SUBSCRIPTION_INCLUDES)
   end
 
   def fetch_subscriptions(organization_id)
     MnoEnterprise::Subscription
       .apply_query_params(params)
-      .with_params(_metadata: { act_as_manager: current_user.id })
+      .with_params(_metadata: special_roles_metadata)
       .includes(SUBSCRIPTION_INCLUDES)
       .where(organization_id: organization_id)
   end
 
   def fetch_subscription(organization_id, id, includes = nil)
+    metadata = special_roles_metadata
+    metadata[:organization_id] = organization_id
+
     rel = MnoEnterprise::Subscription
             .apply_query_params(params)
-            .with_params(_metadata: { act_as_manager: current_user.id, organization_id: organization_id })
+            .with_params(_metadata: metadata)
             .where(organization_id: organization_id, id: id)
     rel = rel.includes(*includes) if includes.present?
     rel.first

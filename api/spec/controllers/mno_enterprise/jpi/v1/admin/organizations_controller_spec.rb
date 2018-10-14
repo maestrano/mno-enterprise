@@ -9,14 +9,16 @@ module MnoEnterprise
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
+    before { Settings.admin_panel.support.enabled = true }
 
     #===============================================
     # Assignments
     #===============================================
     let!(:organization) { build(:organization, orga_invites: [], users: [], orga_relations: [], main_address: main_address) }
     let(:role) { 'Admin' }
+    let(:admin_role) { :admin }
     let!(:user) {
-      u = build(:user, :admin, organizations: [organization], orga_relations: [orga_relation], dashboards: [])
+      u = build(:user, admin_role, organizations: [organization], orga_relations: [orga_relation], dashboards: [])
       orga_relation.user_id = u.id
       u
     }
@@ -30,6 +32,15 @@ module MnoEnterprise
     let!(:app_instance) { build(:app_instance, organization: organization) }
     let!(:main_address) { build(:main_address) }
     let(:money) { Money.new(0, 'AUD') }
+    let(:select_fields) do
+      {
+        organizations: [
+          :uid, :name, :account_frozen, :soa_enabled, :mails, :logo, :latitude, :longitude, :geo_country_code, :geo_state_code,
+          :geo_city, :geo_tz, :geo_currency, :metadata, :industry, :size, :financial_year_end_month, :credit_card,
+          :financial_metrics, :created_at, :external_id, :belong_to_sub_tenant, :belong_to_account_manager, :demo_account
+        ].join(',')
+      }
+    end
 
     #===============================================
     # Specs
@@ -38,24 +49,31 @@ module MnoEnterprise
     before { allow_any_instance_of(MnoEnterprise::Organization).to receive(:current_credit).and_return(money) }
 
     describe 'GET #index' do
-      subject { get :index }
-
       let(:data) { JSON.parse(response.body) }
-      let(:select_fields) do
-        {
-          organizations: [
-            :uid, :name, :account_frozen, :soa_enabled, :mails, :logo, :latitude, :longitude, :geo_country_code, :geo_state_code,
-            :geo_city, :geo_tz, :geo_currency, :metadata, :industry, :size, :financial_year_end_month, :credit_card,
-            :financial_metrics, :created_at, :external_id, :belong_to_sub_tenant, :belong_to_account_manager, :demo_account
-          ].join(',')
-        }
+      context 'with no parameters' do
+        subject { get :index }
+
+        let(:expected_params) { { fields: select_fields, _metadata: { act_as_manager: user.id } } }
+
+        before { stub_api_v2(:get, "/organizations", [organization], [], expected_params) }
+
+        it { subject; expect(data['organizations'].first['id']).to eq(organization.id) }
+        it_behaves_like 'an unauthorized route for support users'
       end
-      let(:expected_params) { { fields: select_fields, _metadata: { act_as_manager: user.id } } }
 
-      before { stub_api_v2(:get, "/organizations", [organization], [], expected_params) }
-      before { subject }
+      context 'with an #organization_external_id' do
+        subject { get :index, organization_external_id: external_id }
+        let(:admin_role) { :support }
+        let(:external_id) { 1 }
+        let(:external_id_filter){ { fields: select_fields, filter: { external_id: external_id } } }
 
-      it { expect(data['organizations'].first['id']).to eq(organization.id) }
+        before { stub_api_v2(:get, "/organizations", [organization], [], external_id_filter) }
+        before { subject }
+
+        it { is_expected.to be_success }
+        it { expect(data['organizations'].first['id']).to eq(organization.id) }
+        it_behaves_like 'an authorized route for support users'
+      end
     end
 
     describe 'GET #show' do
@@ -87,9 +105,16 @@ module MnoEnterprise
       before { allow(organization).to receive(:invoices).and_return([]) }
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, includes, expected_params) }
       before { stub_api_v2(:get, "/app_instances", app_instance, app_instance_includes, { filter: app_instance_filter }) }
-      before { subject }
 
-      it { expect(data['organization']['id']).to eq(organization.id) }
+      it { subject; expect(data['organization']['id']).to eq(organization.id) }
+
+      context 'with a support user' do
+        let(:admin_role) { :support }
+        it 'authorizes the organization' do
+          expect(controller).to receive(:authorize!).with(:read, MnoEnterprise::Organization.new(id: organization.id))
+          subject
+        end
+      end
     end
 
     describe 'GET #in_arrears' do

@@ -8,6 +8,9 @@ module MnoEnterprise
     include ActiveModel::Validations
 
     INCLUDED_DEPENDENCIES = %i(deletion_requests organizations orga_relations dashboards teams sub_tenant)
+    SUPPORT_ROLE = 'support'
+    STAFF_ROLE = 'staff'
+    ADMIN_ROLE = 'admin'
 
     # ids
     property :id
@@ -265,5 +268,16 @@ module MnoEnterprise
       'never_requested'
     end
 
+    def support?
+      admin_role.to_s.casecmp(SUPPORT_ROLE).zero?
+    end
+
+    def staff?
+      admin_role.to_s.casecmp(STAFF_ROLE).zero?
+    end
+
+    def admin?
+      admin_role.to_s.casecmp(ADMIN_ROLE).zero?
+    end
   end
 end

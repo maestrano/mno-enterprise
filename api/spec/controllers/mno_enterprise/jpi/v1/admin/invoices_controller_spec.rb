@@ -3,6 +3,8 @@ require 'rails_helper'
 module MnoEnterprise
   describe Jpi::V1::Admin::InvoicesController, type: :controller do
     include MnoEnterprise::TestingSupport::JpiV1TestHelper
+    include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
+
     render_views
     routes { MnoEnterprise::Engine.routes }
     before { request.env['HTTP_ACCEPT'] = 'application/json' }
@@ -35,9 +37,14 @@ module MnoEnterprise
       before { allow(invoice).to receive(:bills).and_return([bill]) }
       before { allow(invoice).to receive(:organization).and_return(organization) }
       before { stub_api_v2(:get, "/invoices", [invoice], %i(organization), expected_params) }
-      before { subject }
 
-      it { expect(data['invoices'].first['id']).to eq(invoice.id) }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
+
+      it 'finds all invoices' do
+        subject
+        expect(data['invoices'].first['id']).to eq(invoice.id)
+      end
     end
 
     describe 'GET #show' do
@@ -56,9 +63,14 @@ module MnoEnterprise
       before { allow(invoice).to receive(:bills).and_return([bill]) }
       before { allow(invoice).to receive(:organization).and_return(organization) }
       before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization bills), expected_params) }
-      before { subject }
 
-      it { expect(data['invoice']['id']).to eq(invoice.id) }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
+
+      it 'find correct invoice' do
+        subject
+        expect(data['invoice']['id']).to eq(invoice.id)
+      end
     end
 
     describe 'PATCH #update' do
@@ -69,6 +81,9 @@ module MnoEnterprise
 
       before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], expected_params) }
       before { stub_api_v2(:patch, "/invoices/#{invoice.id}", invoice) }
+
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
 
       it { is_expected.to be_successful }
     end
@@ -83,11 +98,16 @@ module MnoEnterprise
       before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization), expected_params) }
       before { stub_api_v2(:post, "/bills", bill) }
       before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], { fields: { invoices: 'price,total_due' } }) }
-      before { subject }
 
-      it { expect(data['id']).to eq(bill.id) }
-      it { expect(data['invoice']['total_due']['fractional']).to eq(invoice.total_due.cents.to_f.to_s) }
-      it { expect(data['invoice']['price']['fractional']).to eq(invoice.price.cents.to_f.to_s) }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
+
+      it 'creates the proper adjustments' do
+        subject
+        expect(data['id']).to eq(bill.id)
+        expect(data['invoice']['total_due']['fractional']).to eq(invoice.total_due.cents.to_f.to_s)
+        expect(data['invoice']['price']['fractional']).to eq(invoice.price.cents.to_f.to_s)
+      end
     end
 
     describe 'DELETE #delete_adjustment' do
@@ -107,10 +127,15 @@ module MnoEnterprise
       end
       before { stub_api_v2(:delete, "/bills/#{bill.id}") }
       before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, [], { fields: { invoices: 'price,total_due' } }) }
-      before { subject }
 
-      it { expect(data['invoice']['total_due']['fractional']).to eq(invoice.total_due.cents.to_f.to_s) }
-      it { expect(data['invoice']['price']['fractional']).to eq(invoice.price.cents.to_f.to_s) }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
+
+      it 'deletes the proper adjustments' do
+        subject
+        expect(data['invoice']['total_due']['fractional']).to eq(invoice.total_due.cents.to_f.to_s)
+        expect(data['invoice']['price']['fractional']).to eq(invoice.price.cents.to_f.to_s)
+      end
     end
 
     describe 'POST #send_to_customer' do
@@ -122,9 +147,14 @@ module MnoEnterprise
       before { allow(invoice).to receive(:organization).and_return(organization) }
       before { stub_api_v2(:get, "/invoices/#{invoice.id}", invoice, %i(organization), expected_params) }
       before { stub_api_v2(:get, "/organizations/#{organization.id}", organization, %i(orga_relations), { fields: { organizations: 'orga_relations',  orga_relations: 'id,user_id,role' } }) }
-      before { subject }
 
-      it { expect(data['status']).to eq('request_sent') }
+      it_behaves_like 'a jpi v1 admin action'
+      it_behaves_like "an unauthorized route for support users"
+
+      it 'sends to customer' do
+        subject
+        expect(data['status']).to eq('request_sent')
+      end
     end
 
   # TODO: re-spec reporting endpoints
@@ -235,7 +265,7 @@ module MnoEnterprise
   #       it { expect(response).to be_success }
   #
   #       it 'returns a valid amount' do
-  #         expected = {'last_portfolio_amount' => {'amount' => tenant.last_portfolio_amount.amount, 'currency' => tenant.last_portfolio_amount.currency_as_string}}
+  #         expected = {'last_portfolio_amount' => {'amount' => tenant.last_portfolio_amount.amount, 'currency' => tenant.last_portfolio_amount.currency.to_s}}
   #
   #         expect(response.body).to eq(expected.to_json)
   #       end
