@@ -5,8 +5,7 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/impac/dashboards
     def index
-      # dashboards = MnoEnterprise::Dashboard
-      #           .apply_query_params(params.except(:terms))
+      @dashboards = MnoEnterprise::Dashboard.apply_query_params(params).to_a
     end
 
     private
