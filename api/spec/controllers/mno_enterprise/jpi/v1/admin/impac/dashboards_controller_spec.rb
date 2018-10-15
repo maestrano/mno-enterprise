@@ -38,6 +38,7 @@ module MnoEnterprise
         context 'with an authorized support user search' do
           let(:user) { build(:user, :support) }
           let(:params) { { where: filters } }
+          let(:includes) { [:widgets, :kpis] }
 
           let(:filters) do
              {
@@ -48,7 +49,7 @@ module MnoEnterprise
 
           let(:dashboard) { build(:impac_dashboard) }
           let(:api_request_options) { { filter: filters } }
-          before { stub_api_v2(:get, "/dashboards", [dashboard], [], api_request_options) }
+          before { stub_api_v2(:get, "/dashboards", [dashboard], includes, api_request_options) }
 
           context 'when searching for a user' do
             let(:owner_type) { 'User'}

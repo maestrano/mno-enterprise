@@ -11,6 +11,7 @@ FactoryGirl.define do
       widgets []
       widgets_order []
       kpis []
+      settings {}
     end
   end
 end

@@ -3,9 +3,14 @@ module MnoEnterprise
     skip_before_action :block_support_users, only: [:index]
     before_filter :authorize_support, only: [:index]
 
+    DASHBOARD_DEPENDENCIES = [:widgets, :kpis]
+
     # GET /mnoe/jpi/v1/admin/impac/dashboards
     def index
-      @dashboards = MnoEnterprise::Dashboard.apply_query_params(params).to_a
+      @dashboards = MnoEnterprise::Dashboard
+        .apply_query_params(params)
+        .includes(*DASHBOARD_DEPENDENCIES)
+        .to_a
     end
 
     private
