@@ -354,6 +354,7 @@ MnoEnterprise::Engine.routes.draw do
 
         # Dashboard templates designer
         namespace :impac do
+          resources :dashboards, only: :index
           resources :dashboard_templates, only: [:index, :show, :destroy, :update, :create] do
             resources :widgets, shallow: true, only: [:create, :update, :destroy]
             resources :kpis, shallow: true, only: [:create, :update, :destroy]

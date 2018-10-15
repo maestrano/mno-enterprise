@@ -287,7 +287,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   private
 
   def support_enabled?
-    return head :forbidden unless Settings.admin_panel.support.enabled && current_user.support?
+    return head :forbidden unless Settings.admin_panel&.support&.enabled && current_user.support?
   end
 
   def support_org_external_id
