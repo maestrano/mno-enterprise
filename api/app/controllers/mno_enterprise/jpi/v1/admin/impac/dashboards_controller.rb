@@ -30,9 +30,5 @@ module MnoEnterprise
         return head :forbidden
       end
     end
-
-    def valid_support_search?
-      params.dig('where', 'owner_id') && params.dig('where', 'owner_type') == 'User'
-    end
   end
 end

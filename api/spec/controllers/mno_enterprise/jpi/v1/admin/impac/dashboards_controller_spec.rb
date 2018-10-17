@@ -4,7 +4,6 @@ module MnoEnterprise
   describe Jpi::V1::Admin::Impac::DashboardsController, type: :controller do
     include MnoEnterprise::TestingSupport::JpiV1TestHelper
     include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
-    render_views
 
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
@@ -13,8 +12,6 @@ module MnoEnterprise
     before do
       stub_user(user)
       sign_in user
-
-      stub_audit_events
     end
 
     describe '#index' do
