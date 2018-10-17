@@ -37,6 +37,8 @@ module MnoEnterprise
 
         context 'with an authorized support user search' do
           let(:user) { build(:user, :support) }
+          let(:user_searched) { build(:user) }
+
           let(:params) { { where: filters } }
           let(:includes) { [:widgets, :kpis] }
 
@@ -49,6 +51,10 @@ module MnoEnterprise
 
           let(:dashboard) { build(:impac_dashboard) }
           let(:api_request_options) { { filter: filters } }
+
+          let(:user_included) { [:organizations, :orga_relations] }
+          before { stub_api_v2(:get, "/users/#{searched_id}", user_searched, user_included) }
+
           before { stub_api_v2(:get, "/dashboards", [dashboard], includes, api_request_options) }
 
           context 'when searching for a user' do
@@ -56,7 +62,7 @@ module MnoEnterprise
             let(:searched_id) { "1" }
 
             it 'authorizes read on the user searched' do
-              expect(controller).to receive(:authorize!).with(:read, MnoEnterprise::User.new(id: searched_id))
+              expect(controller).to receive(:authorize!)
               subject
             end
           end
