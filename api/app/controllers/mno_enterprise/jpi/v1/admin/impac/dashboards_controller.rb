@@ -23,7 +23,7 @@ module MnoEnterprise
 
       case params.dig('where', 'owner_type')
       when 'User'
-        authorize!(:read, MnoEnterprise::User.new(id: params.dig('where', 'owner_id')))
+        authorize!(:read, MnoEnterprise::User.find_one(params.dig('where', 'owner_id'), :organizations, :orga_relations))
       when 'Organization'
         authorize!(:read, MnoEnterprise::Organization.new(id: params.dig('where', 'owner_id')))
       else
