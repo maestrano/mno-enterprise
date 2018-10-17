@@ -667,6 +667,17 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
             }
           }
         },
+        view_user_dashboards: {
+          type: "object",
+          title: "View user Dashboards",
+          properties: {
+            enabled: {
+              type: "boolean",
+              description: "Enable admin view of user's dashboards",
+              default: false
+            }
+          }
+        },
         audit_log: {
           type: "object",
           title: "Audit log",
