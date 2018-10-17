@@ -7,10 +7,13 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/impac/dashboards
     def index
-      @dashboards = MnoEnterprise::Dashboard
+      query = MnoEnterprise::Dashboard
         .apply_query_params(params)
         .includes(*DASHBOARD_DEPENDENCIES)
-        .to_a
+
+      response.headers['X-Total-Count'] = query.meta.record_count
+
+      @dashboards = query.to_a
     end
 
     private
