@@ -221,36 +221,20 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
   # GET /mnoe/jpi/v1/admin/organizations/support_search
   def support_search
-    debugger
-    # user_search = params[:user_search]
-    #
-    # users = MnoEnterprise::User.where(params[:user_search])
-    # organization_users = MnoEnterprise::User.includes(:users, :orga_relations).where(params[:org_search])
-    #
-    # @users = users & organization_users
+    org_search = params[:org_search] && JSON.parse(params[:org_search]).with_indifferent_access
+    user_search = params[:user_search] && JSON.parse(params[:user_search]).with_indifferent_access
+
+    @organizations = MnoEnterprise::Organization.apply_query_params(org_search).to_a
+
+    # @organization_users = MnoEnterprise::User
+    #   .includes(:organizations, :orga_relations)
+    #   .apply_query_params(user_search)
+    #   .map(&:organizations).flatten
+
+    render 'index'
   end
 
   protected
-
-  def valid_support_search
-    external_id = params.dig('org_search', 'external_id')
-
-    # Must either search by external id, or by name, surname and org name.
-    valid_search = external_id || valid_search_by_name_surname_org_name?
-
-    return head :forbidden unless valid_search
-  end
-
-  def valid_search_by_name_surname_org_name?
-    user_name = params.dig('user_search', 'name.like')
-    surname = params.dig('user_search', 'surname.like')
-    org_name = params.dig('org_search', 'name.like')
-
-    # Search must exceed 2 letters.
-    [user_name, surname, org_name].all? do |search|
-      search && search.length >= 2
-    end
-  end
 
   def organization_params
     params.require(:organization)
