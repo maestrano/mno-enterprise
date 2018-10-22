@@ -40,7 +40,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
       # Search mode
       @organizations = []
       JSON.parse(params[:terms]).map do |t|
-
         query = MnoEnterprise::Organization
                   .apply_query_params(params.except(:terms))
                   .select(INCLUDED_FIELDS_INDEX)
@@ -224,12 +223,20 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     org_search = params[:org_search] && JSON.parse(params[:org_search]).with_indifferent_access
     user_search = params[:user_search] && JSON.parse(params[:user_search]).with_indifferent_access
 
-    @organizations = MnoEnterprise::Organization.apply_query_params(org_search).to_a
+    # Searching by external id.
+    if org_search.dig('where', 'external_id').present?
+      @organizations = MnoEnterprise::Organization.apply_query_params(org_search).to_a
 
-    # @organization_users = MnoEnterprise::User
-    #   .includes(:organizations, :orga_relations)
-    #   .apply_query_params(user_search)
-    #   .map(&:organizations).flatten
+    # Searching by user name, surname, and org name.
+    else
+      orgs = MnoEnterprise::Organization.apply_query_params(org_search).to_a
+
+      user_orgs = MnoEnterprise::User.apply_query_params(user_search)
+        .includes(:organizations, :orga_relations)
+        .map(&:organizations).flatten
+
+      @organizations = user_orgs.select { |org| orgs.include?(org) }
+    end
 
     render 'index'
   end
