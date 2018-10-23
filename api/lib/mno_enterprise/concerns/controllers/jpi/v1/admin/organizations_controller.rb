@@ -28,7 +28,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
     skip_before_action :block_support_users, only: [:show, :support_search]
     before_filter :authorize_support_user_organization, only: [:show]
-    before_filter :valid_support_search, only: [:support_search]
   end
 
   #==================================================================
@@ -220,6 +219,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
   # GET /mnoe/jpi/v1/admin/organizations/support_search
   def support_search
+    return head :forbidden unless valid_support_search?
+
     org_search = params[:org_search] && JSON.parse(params[:org_search]).with_indifferent_access
     user_search = params[:user_search] && JSON.parse(params[:user_search]).with_indifferent_access
 
