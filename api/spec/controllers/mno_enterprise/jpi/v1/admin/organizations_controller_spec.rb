@@ -91,6 +91,22 @@ module MnoEnterprise
         end
 
         it_behaves_like 'an unauthorized route for support users'
+
+        let(:params) do
+          {
+            org_search: {
+              where: {
+                admin_role: 'Admin'
+              }
+            }.to_json,
+            user_search: {
+              where: {
+                admin_role: 'Admin'
+              }
+            }.to_json
+          }
+        end
+        it_behaves_like 'an unauthorized route for support users'
       end
 
       context 'with an #organization_external_id' do
