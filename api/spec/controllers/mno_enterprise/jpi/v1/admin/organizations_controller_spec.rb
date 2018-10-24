@@ -68,100 +68,28 @@ module MnoEnterprise
 
     describe 'GET #support_search' do
       subject { get :support_search, params}
+      let(:data) { JSON.parse(response.body) }
       let(:admin_role) { :support }
       let(:params) { {} }
-      let(:data) { JSON.parse(response.body) }
+      let(:support_search) { MnoEnterprise::SupportSearch.new(params) }
 
-      context 'with an invalid search' do
-        it_behaves_like 'an unauthorized route for support users'
-        let(:params) do
-          {
-            org_search: {
-              where: {
-                'name.like' => 'a'
-              }
-            }.to_json,
-            user_search: {
-              where: {
-                'name.like' => 'a',
-                'surname.like' => 'a'
-              }
-            }.to_json
-          }
+      context 'when its an unauthorized search' do
+        before do
+          expect(MnoEnterprise::SupportSearch).to receive(:new).with(params).and_return(support_search)
+          allow(support_search).to receive(:authorized_search?).and_return(false)
         end
 
-        it_behaves_like 'an unauthorized route for support users'
-
-        let(:params) do
-          {
-            org_search: {
-              where: {
-                admin_role: 'Admin'
-              }
-            }.to_json,
-            user_search: {
-              where: {
-                admin_role: 'Admin'
-              }
-            }.to_json
-          }
-        end
         it_behaves_like 'an unauthorized route for support users'
       end
 
-      context 'with an #organization_external_id' do
-        let(:params) do
-          {
-            org_search: {
-              where: {
-                external_id: external_id
-              }
-            }.to_json
-          }
+      context 'when its an authorized search' do
+        before do
+          expect(MnoEnterprise::SupportSearch).to receive(:new).with(params).and_return(support_search)
+          allow(support_search).to receive(:authorized_search?).and_return(true)
+          expect(support_search).to receive(:search).and_return([organization])
         end
 
-        let(:external_id) { 1 }
-        let(:external_id_filter){ { filter: { external_id: external_id } } }
-
-        before { stub_api_v2(:get, "/organizations", [organization], [], external_id_filter) }
-        before { subject }
-
-        it { is_expected.to be_success }
-        it { expect(data['organizations'].first['id']).to eq(organization.id) }
-        it_behaves_like 'an authorized route for support users'
-      end
-
-      context 'with an Organization#name, User#name and User#surname' do
-        let(:returned_user) { build(:user, organizations: [organization]) }
-        let(:params) do
-          {
-            org_search: {
-              where: {
-                'name.like' => org_name
-              }
-            }.to_json,
-            user_search: {
-              where: {
-                'name.like' => user_name,
-                'surname.like' => surname
-              }
-            }.to_json
-          }
-        end
-
-        let(:org_name) { 'Testing1234' }
-        let(:user_name) { 'Jane' }
-        let(:surname) { 'Doe' }
-        let(:external_id) { 1 }
-        let(:org_filter){ { filter: { 'name.like' => org_name } } }
-        let(:user_filter){ { filter: { 'name.like' => user_name, 'surname.like' => surname } } }
-
-        before { stub_api_v2(:get, "/organizations", [organization], [], org_filter) }
-        before { stub_api_v2(:get, "/users", [returned_user], [:organizations, :orga_relations], user_filter) }
-        before { subject }
-
-        it { is_expected.to be_success }
-        it { expect(data['organizations'].first['id']).to eq(organization.id) }
+        it { subject; expect(data['organizations'].first['id']).to eq(organization.id) }
         it_behaves_like 'an authorized route for support users'
       end
     end

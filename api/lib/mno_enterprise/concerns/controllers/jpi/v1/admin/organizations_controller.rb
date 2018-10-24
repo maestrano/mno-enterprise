@@ -219,26 +219,9 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
   # GET /mnoe/jpi/v1/admin/organizations/support_search
   def support_search
-    return head :forbidden unless valid_support_search?
-
-    org_search = params[:org_search] && JSON.parse(params[:org_search]).with_indifferent_access
-    user_search = params[:user_search] && JSON.parse(params[:user_search]).with_indifferent_access
-
-    # Searching by external id.
-    if org_search.dig('where', 'external_id').present?
-      @organizations = MnoEnterprise::Organization.apply_query_params(org_search).to_a
-
-    # Searching by user name, surname, and org name.
-    else
-      orgs = MnoEnterprise::Organization.apply_query_params(org_search).to_a
-
-      user_orgs = MnoEnterprise::User.apply_query_params(user_search)
-        .includes(:organizations, :orga_relations)
-        .map(&:organizations).flatten
-
-      @organizations = user_orgs.select { |org| orgs.include?(org) }
-    end
-
+    support_search = MnoEnterprise::SupportSearch.new(params.except(:action, :controller))
+    return head :forbidden unless support_search.authorized_search?
+    @organizations = support_search.search
     render 'index'
   end
 
