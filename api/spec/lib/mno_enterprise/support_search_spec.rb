@@ -205,7 +205,8 @@ module MnoEnterprise
       end
 
       context 'with partial search on Organization#name, User#name, and User#surname' do
-        let(:returned_user) { build(:user, organizations: [organization]) }
+        let(:organization_two) { build(:organization) }
+        let(:returned_user) { build(:user, organizations: [organization, organization_two]) }
         let(:params) do
           {
             org_search: {
@@ -223,8 +224,8 @@ module MnoEnterprise
         end
 
         let(:org_name) { 'Testing1234' }
-        let(:user_name) { 'Jane' }
-        let(:surname) { 'Doe' }
+        let(:user_name) { 'Jeffrey' }
+        let(:surname) { 'Donut' }
         let(:external_id) { 1 }
         let(:org_filter){ { filter: { 'name.like' => org_name } } }
         let(:user_filter){ { filter: { 'name.like' => user_name, 'surname.like' => surname } } }
@@ -232,6 +233,7 @@ module MnoEnterprise
         before { stub_api_v2(:get, "/organizations", [organization], [], org_filter) }
         before { stub_api_v2(:get, "/users", [returned_user], [:organizations, :orga_relations], user_filter) }
 
+        it { expect(subject.search.length).to eq(1) }
         it { expect(subject.search.first['id']).to eq(organization.id) }
       end
 

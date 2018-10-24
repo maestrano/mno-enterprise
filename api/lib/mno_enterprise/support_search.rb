@@ -27,12 +27,12 @@ module MnoEnterprise
       if valid_search_by_external_id?
         # Just search the orgs.
         search_orgs
+      elsif valid_search_by_name_surname_org_name? || valid_exact_search_by_name_and_org_name?
+        # Search orgs and users and find intersection.
+        search_users_with_orgs.select { |org| search_orgs.include?(org) }
       elsif valid_search_by_just_user_name? || valid_exact_search_by_name?
         # Just search the users.
         search_users_with_orgs
-      elsif valid_search_by_name_surname_org_name?
-        # Search orgs and users and find intersection.
-        search_users_with_orgs.select { |org| search_orgs.include?(org) }
       else
         # If no valid search, return an empty array.
         []
@@ -59,6 +59,11 @@ module MnoEnterprise
     def valid_exact_search_by_name?
       # Exact search by user name and surname.
       user_name_exact.present? && surname_exact.present?
+    end
+
+    def valid_exact_search_by_name_and_org_name?
+      # Exact search by user name and surname.
+      user_name_exact.present? && surname_exact.present? && org_name_exact.present?
     end
 
     def valid_search_by_name_surname_org_name?
