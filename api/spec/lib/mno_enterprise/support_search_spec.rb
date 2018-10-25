@@ -210,25 +210,6 @@ module MnoEnterprise
         it { expect(subject.first['id']).to eq(organization.id) }
       end
 
-      context 'with an #organization_external_id' do
-        let(:params) do
-          {
-            org_search: {
-              where: {
-                external_id: external_id
-              }
-            }.to_json
-          }
-        end
-
-        let(:external_id) { 1 }
-        let(:external_id_filter){ { filter: { external_id: external_id } } }
-
-        before { stub_api_v2(:get, "/organizations", [organization], [], external_id_filter) }
-
-        it { expect(subject.first['id']).to eq(organization.id) }
-      end
-
       context 'with partial search on Organization#name, User#name, and User#surname' do
         let(:organization_two) { build(:organization) }
         let(:returned_user) { build(:user, organizations: user_organizations) }
