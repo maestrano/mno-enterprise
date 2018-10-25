@@ -7,9 +7,30 @@ module MnoEnterprise
     let!(:organization) { build(:organization) }
 
     describe '#initialize' do
-      let(:params) { { testing: 'isItWorking?' } }
+      let(:params) do
+        {
+          org_search: {
+            where: {
+              external_id: ''
+            }
+          }.to_json,
+        }
+      end
 
-      it { expect(subject.params).to eq(params) }
+      let(:expected_params) do
+        {
+          org_search: {
+            "where" => {
+              "external_id" => ''
+            }
+          },
+          user_search: {
+            "where" => nil
+          }
+        }
+      end
+
+      it { expect(subject.params).to eq(expected_params) }
     end
 
     describe '#valid_search?' do
