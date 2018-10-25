@@ -28,10 +28,10 @@ module MnoEnterprise
         # Just search the orgs.
         search_orgs
       elsif valid_search_by_name_surname_org_name?
-        # Search orgs and users and find intersection.
-        user_orgs = search_users_with_orgs
-        orgs = search_orgs
-        user_orgs.select { |org| orgs.include?(org) }
+        # Find intersection between user's orgs and orgs search.
+        org_ids = search_users_with_orgs.map(&:id)
+        @params[:org_search][:where][:id] = org_ids
+        search_orgs
       elsif valid_search_by_just_user_name? || valid_exact_search_by_name?
         # Just search the users.
         search_users_with_orgs
@@ -84,12 +84,16 @@ module MnoEnterprise
       end
     end
 
+    def org_name_partial
+      org_search.dig('where', 'name.like')
+    end
+
     def external_id_exact
       org_search.dig('where', 'external_id')
     end
 
-    def org_name_partial
-      org_search.dig('where', 'name.like')
+    def org_name_exact
+      org_search.dig('where', 'name')
     end
 
     def surname_partial
@@ -98,10 +102,6 @@ module MnoEnterprise
 
     def user_name_partial
       user_search.dig('where', 'name.like')
-    end
-
-    def org_name_exact
-      org_search.dig('where', 'name')
     end
 
     def user_name_exact

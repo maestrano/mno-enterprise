@@ -227,7 +227,7 @@ module MnoEnterprise
 
       context 'with partial search on Organization#name, User#name, and User#surname' do
         let(:organization_two) { build(:organization) }
-        let(:returned_user) { build(:user, organizations: [organization, organization_two]) }
+        let(:returned_user) { build(:user, organizations: user_organizations) }
         let(:params) do
           {
             org_search: {
@@ -248,7 +248,8 @@ module MnoEnterprise
         let(:user_name) { 'Jeffrey' }
         let(:surname) { 'Donut' }
         let(:external_id) { 1 }
-        let(:org_filter){ { filter: { 'name.like' => org_name } } }
+        let(:user_organizations) { [organization, organization_two] }
+        let(:org_filter){ { filter: { 'name.like' => org_name, 'id' => user_organizations.map(&:id) } } }
         let(:user_filter){ { filter: { 'name.like' => user_name, 'surname.like' => surname } } }
 
         before { stub_api_v2(:get, "/organizations", [organization], [], org_filter) }
