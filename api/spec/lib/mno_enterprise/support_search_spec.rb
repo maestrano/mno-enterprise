@@ -2,11 +2,13 @@ require 'rails_helper'
 
 module MnoEnterprise
   describe SupportSearch do
-    subject { MnoEnterprise::SupportSearch.new(params) }
+    subject { described_class.new(params) }
     let(:params){ {} }
     let!(:organization) { build(:organization) }
 
     describe '#initialize' do
+      subject { described_class.new(params).params }
+
       let(:params) do
         {
           org_search: {
@@ -30,13 +32,15 @@ module MnoEnterprise
         }
       end
 
-      it { expect(subject.params).to eq(expected_params) }
+      it { is_expected.to eq(expected_params) }
     end
 
     describe '#valid_search?' do
       context 'invalid searches' do
+        subject(:valid_search) { described_class.new(params).authorized_search? }
+
         context 'no search' do
-          it { expect(subject.authorized_search?).to eq(false) }
+          it { is_expected.to eq(false) }
         end
 
           context 'blank attributes' do
@@ -56,7 +60,7 @@ module MnoEnterprise
               }
             end
 
-          it { expect(subject.authorized_search?).to eq(false) }
+          it { is_expected.to eq(false) }
         end
 
         context 'under 3 letters for first name, last name, and org name' do
@@ -76,7 +80,7 @@ module MnoEnterprise
             }
           end
 
-          it { expect(subject.authorized_search?).to eq(false) }
+          it { is_expected.to eq(false) }
         end
 
         context 'under 4 letters for first name and last name' do
@@ -91,13 +95,13 @@ module MnoEnterprise
             }
           end
 
-          it { expect(subject.authorized_search?).to eq(false) }
+          it { is_expected.to eq(false) }
         end
       end
     end
 
     context 'valid searches' do
-
+      subject(:valid_search) { described_class.new(params).authorized_search? }
 
       context 'exact search with a business external id' do
         let(:params) do
@@ -110,7 +114,7 @@ module MnoEnterprise
           }
         end
 
-        it { expect(subject.authorized_search?).to eq(true) }
+        it { is_expected.to eq(true) }
       end
 
       context 'exact search with first name and last name and org name' do
@@ -130,7 +134,7 @@ module MnoEnterprise
           }
         end
 
-        it { expect(subject.authorized_search?).to eq(true) }
+        it { is_expected.to eq(true) }
       end
 
       context 'partial search with a first name, last name, and org name with 3 or more characters' do
@@ -150,7 +154,7 @@ module MnoEnterprise
           }
         end
 
-        it { expect(subject.authorized_search?).to eq(true) }
+        it { is_expected.to eq(true) }
       end
 
       context 'partial search with a first name, and last name with 4 or more characters' do
@@ -165,7 +169,7 @@ module MnoEnterprise
           }
         end
 
-        it { expect(subject.authorized_search?).to eq(true) }
+        it { is_expected.to eq(true) }
       end
 
       context 'with a first name, and last name with 4 or more characters' do
@@ -180,11 +184,13 @@ module MnoEnterprise
           }
         end
 
-        it { expect(subject.authorized_search?).to eq(true) }
+        it { is_expected.to eq(true) }
       end
     end
 
     describe '#search' do
+      subject(:search) { described_class.new(params).search }
+
       context 'with an #organization_external_id' do
         let(:params) do
           {
@@ -201,9 +207,7 @@ module MnoEnterprise
 
         before { stub_api_v2(:get, "/organizations", [organization], [], external_id_filter) }
 
-        it 'returns the proper orgs' do
-          expect(subject.search.first['id']).to eq(organization.id)
-        end
+        it { expect(subject.first['id']).to eq(organization.id) }
       end
 
       context 'with an #organization_external_id' do
@@ -222,7 +226,7 @@ module MnoEnterprise
 
         before { stub_api_v2(:get, "/organizations", [organization], [], external_id_filter) }
 
-        it { expect(subject.search.first['id']).to eq(organization.id) }
+        it { expect(subject.first['id']).to eq(organization.id) }
       end
 
       context 'with partial search on Organization#name, User#name, and User#surname' do
@@ -255,8 +259,8 @@ module MnoEnterprise
         before { stub_api_v2(:get, "/organizations", [organization], [], org_filter) }
         before { stub_api_v2(:get, "/users", [returned_user], [:organizations, :orga_relations], user_filter) }
 
-        it { expect(subject.search.length).to eq(1) }
-        it { expect(subject.search.first['id']).to eq(organization.id) }
+        it { expect(subject.length).to eq(1) }
+        it { expect(subject.first['id']).to eq(organization.id) }
       end
 
       context 'with partial search on User#name, and User#surname' do
@@ -279,7 +283,7 @@ module MnoEnterprise
 
         before { stub_api_v2(:get, "/users", [returned_user], [:organizations, :orga_relations], user_filter) }
 
-        it { expect(subject.search.first['id']).to eq(organization.id) }
+        it { expect(subject.first['id']).to eq(organization.id) }
       end
 
       context 'with exact search on User#name, and User#surname' do
@@ -302,11 +306,11 @@ module MnoEnterprise
 
         before { stub_api_v2(:get, "/users", [returned_user], [:organizations, :orga_relations], user_filter) }
 
-        it { expect(subject.search.first['id']).to eq(organization.id) }
+        it { expect(subject.first['id']).to eq(organization.id) }
       end
 
       context 'with unauthorized search' do
-        it { expect(subject.search).to eq([]) }
+        it { is_expected.to eq([])}
       end
     end
   end
