@@ -45,8 +45,8 @@ module MnoEnterprise
 
     def format_params(params)
       {
-        org_search: ((params[:org_search] && JSON.parse(params[:org_search])) || { where: nil }).with_indifferent_access,
-        user_search: ((params[:user_search] && JSON.parse(params[:user_search])) || { where: nil }).with_indifferent_access
+        org_search: ((params[:org_search] && JSON.parse(params[:org_search])) || {}).with_indifferent_access,
+        user_search: ((params[:user_search] && JSON.parse(params[:user_search])) || {}).with_indifferent_access
       }
     end
 

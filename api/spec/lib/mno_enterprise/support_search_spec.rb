@@ -26,9 +26,7 @@ module MnoEnterprise
               "external_id" => ''
             }
           },
-          user_search: {
-            "where" => nil
-          }
+          user_search: {}
         }
       end
 
