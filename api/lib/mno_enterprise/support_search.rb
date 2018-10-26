@@ -27,7 +27,7 @@ module MnoEnterprise
       if valid_search_by_external_id?
         # Just search the orgs.
         search_orgs
-      elsif valid_search_by_name_surname_org_name?
+      elsif valid_search_by_name_surname_org_name? || valid_exact_search_by_name_org_name?
         # Find intersection between user's orgs and orgs search.
         org_ids = search_users_with_orgs.map(&:id)
         @params[:org_search][:where][:id] = org_ids
@@ -68,6 +68,11 @@ module MnoEnterprise
     def valid_exact_search_by_name?
       # Exact search by user name and surname.
       user_name_exact.present? && surname_exact.present?
+    end
+
+    def valid_exact_search_by_name_org_name?
+      # Exact search by user name and surname.
+      valid_exact_search_by_name? && org_name_exact.present?
     end
 
     def valid_search_by_name_surname_org_name?

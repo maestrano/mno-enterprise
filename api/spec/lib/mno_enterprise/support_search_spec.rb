@@ -290,6 +290,38 @@ module MnoEnterprise
         it { expect(subject.first['id']).to eq(organization.id) }
       end
 
+      context 'with exact search on User#name, User#surname, and Organization#name' do
+        let(:returned_user) { build(:user, organizations: user_organizations) }
+        let(:user_organizations) { [organization] }
+        let(:org_name) { 'orgName' }
+        let(:params) do
+          {
+            user_search: {
+              where: {
+                'name' => user_name,
+                'surname' => surname
+              }
+            }.to_json,
+            org_search: {
+              where: {
+                'name' => org_name
+              }
+            }.to_json
+          }
+        end
+
+        let(:user_name) { 'Jay' }
+        let(:surname) { 'Doe' }
+        let(:external_id) { 1 }
+        let(:user_filter){ { filter: { 'name' => user_name, 'surname' => surname } } }
+        let(:org_filter){ { filter: { 'name' => org_name, 'id' => user_organizations.map(&:id) } } }
+
+        before { stub_api_v2(:get, "/users", [returned_user], [:organizations, :orga_relations], user_filter) }
+        before { stub_api_v2(:get, "/organizations", [organization], [], org_filter) }
+
+        it { expect(subject.first['id']).to eq(organization.id) }
+      end
+
       context 'with unauthorized search' do
         it { is_expected.to eq([])}
       end
