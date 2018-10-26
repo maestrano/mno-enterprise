@@ -22,12 +22,7 @@ module JsonApiClient
 
     # @see OrmAdapter::Base#get
     def get(id)
-      res = klass.includes(*klass::INCLUDED_DEPENDENCIES).find(wrap_key(id))
-      error = res&.errors&.first
-      if (error && error.code != '404')
-        raise error.detail
-      end
-      res.first
+      klass.includes(*klass::INCLUDED_DEPENDENCIES).where(klass.primary_key => wrap_key(id)).first
     end
 
     # @see OrmAdapter::Base#find_first
@@ -50,5 +45,4 @@ module JsonApiClient
       object.destroy if valid_object?(object)
     end
   end
-
 end
