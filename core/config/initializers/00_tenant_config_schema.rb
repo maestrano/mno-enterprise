@@ -324,6 +324,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
                 },
                 invoice_contact_details: {
                   type: "string",
+                  maxLength: 100,
                   title: "Invoice Contact Details",
                   description: "Let your customer know who to contact for invoice support.",
                   default: ""
