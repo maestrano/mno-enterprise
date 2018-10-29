@@ -1,4 +1,6 @@
-json.extract! product, :id, :nid, :name, :active, :product_type, :logo, :external_id, :externally_provisioned, :free_trial_enabled, :free_trial_duration, :free_trial_unit, :single_billing_enabled, :billed_locally, :created_at, :updated_at
+json.extract! product, :id, :nid, :name, :active, :product_type, :logo, :external_id, :externally_provisioned,
+  :free_trial_enabled, :free_trial_duration, :free_trial_unit, :single_billing_enabled, :billed_locally, :multi_instantiable,
+  :created_at, :updated_at
 
 json.values_attributes do
   json.array! product.values.each do |value|

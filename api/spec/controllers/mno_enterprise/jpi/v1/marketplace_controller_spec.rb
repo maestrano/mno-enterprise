@@ -85,7 +85,6 @@ module MnoEnterprise
     end
 
     def index_hash(apps, products)
-      # hash_for_apps(apps).merge(hash_for_products(products))
       hash = {}
       hash['categories'] = App.categories(apps)
       hash['categories'].delete('Most Popular')

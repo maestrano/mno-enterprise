@@ -19,8 +19,8 @@ module MnoEnterprise
     property :free_trial_unit, type: :string
     property :single_billing_enabled, type: :boolean
     property :billed_locally, type: :boolean
+    property :multi_instantiable, type: :boolean
     property :available_actions
-
 
     def to_audit_event
       {
