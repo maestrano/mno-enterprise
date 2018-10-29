@@ -20,4 +20,3 @@ json.product_pricings do
 end
 
 json.categories product.categories&.map(&:name) if product.respond_to?(:categories)
-json.js_editor_enabled product.nid.in? Settings.product_nids.to_a
