@@ -278,6 +278,9 @@ MnoEnterprise::Engine.routes.draw do
             get :count
             get :download_batch_example
             post :batch_import
+            if Settings&.admin_panel&.support&.enabled
+              get :support_search
+            end
           end
           member do
             post :users, action: :invite_member

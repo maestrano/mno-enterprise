@@ -7,9 +7,13 @@ module MnoEnterprise
     include MnoEnterprise::TestingSupport::SharedExamples::OrganizationSharedExamples
 
     render_views
+    before  do
+      Settings.admin_panel.support.enabled = true
+      Rails.application.reload_routes!
+    end
+
     routes { MnoEnterprise::Engine.routes }
     before { request.env["HTTP_ACCEPT"] = 'application/json' }
-    before { Settings.admin_panel.support.enabled = true }
 
     #===============================================
     # Assignments
@@ -60,18 +64,32 @@ module MnoEnterprise
         it { subject; expect(data['organizations'].first['id']).to eq(organization.id) }
         it_behaves_like 'an unauthorized route for support users'
       end
+    end
 
-      context 'with an #organization_external_id' do
-        subject { get :index, organization_external_id: external_id }
-        let(:admin_role) { :support }
-        let(:external_id) { 1 }
-        let(:external_id_filter){ { fields: select_fields, filter: { external_id: external_id } } }
+    describe 'GET #support_search' do
+      subject { get :support_search, params}
+      let(:data) { JSON.parse(response.body) }
+      let(:admin_role) { :support }
+      let(:params) { {} }
+      let(:support_search) { MnoEnterprise::SupportSearch.new(params) }
 
-        before { stub_api_v2(:get, "/organizations", [organization], [], external_id_filter) }
-        before { subject }
+      context 'when its an unauthorized search' do
+        before do
+          expect(MnoEnterprise::SupportSearch).to receive(:new).with(params).and_return(support_search)
+          allow(support_search).to receive(:authorized_search?).and_return(false)
+        end
 
-        it { is_expected.to be_success }
-        it { expect(data['organizations'].first['id']).to eq(organization.id) }
+        it_behaves_like 'an unauthorized route for support users'
+      end
+
+      context 'when its an authorized search' do
+        before do
+          expect(MnoEnterprise::SupportSearch).to receive(:new).with(params).and_return(support_search)
+          allow(support_search).to receive(:authorized_search?).and_return(true)
+          expect(support_search).to receive(:search).and_return([organization])
+        end
+
+        it { subject; expect(data['organizations'].first['id']).to eq(organization.id) }
         it_behaves_like 'an authorized route for support users'
       end
     end

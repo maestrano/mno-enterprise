@@ -26,12 +26,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
     # Overwrite check support authorization for index action only.
 
-    # Workaround because using only and if are not possible (it checks to see if either satisfy, not both.)
-    # https://github.com/rails/rails/issues/9703#issuecomment-223574827
-    skip_before_action :block_support_users, if: -> { support_org_external_id && action_name == 'index'}
-    before_filter :support_enabled?, if: -> { support_org_external_id && action_name == 'index'}
-
-    skip_before_action :block_support_users, only: [:show]
+    skip_before_action :block_support_users, only: [:show, :support_search]
     before_filter :authorize_support_user_organization, only: [:show]
   end
 
@@ -40,16 +35,10 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   #==================================================================
   # GET /mnoe/jpi/v1/admin/organizations
   def index
-    if params[:organization_external_id]
-      # Created so that users with support #admin_role cannot see an organization unless they match their external_id.
-      @organizations = MnoEnterprise::Organization
-        .select(INCLUDED_FIELDS_INDEX)
-        .where(external_id: support_org_external_id)
-    elsif params[:terms]
+    if params[:terms]
       # Search mode
       @organizations = []
       JSON.parse(params[:terms]).map do |t|
-
         query = MnoEnterprise::Organization
                   .apply_query_params(params.except(:terms))
                   .select(INCLUDED_FIELDS_INDEX)
@@ -217,7 +206,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     send_file(path, filename: 'batch-example.csv', type: 'application/csv')
   end
 
-  # POST /mnoe/jpi/v1/admin/organization/batch_import
+  # POST /mnoe/jpi/v1/admin/organizations/batch_import
   def batch_import
     file = params[:file]
     # get the file's temporary path
@@ -226,6 +215,14 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     render 'batch_import'
   rescue MnoEnterprise::CSVImportError => e
     render json: e.errors, status: :bad_request
+  end
+
+  # GET /mnoe/jpi/v1/admin/organizations/support_search
+  def support_search
+    support_search = MnoEnterprise::SupportSearch.new(params.except(:action, :controller))
+    return head :forbidden unless support_search.authorized_search?
+    @organizations = support_search.search
+    render 'index'
   end
 
   protected
@@ -286,10 +283,6 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
   end
 
   private
-
-  def support_enabled?
-    return head :forbidden unless Settings.admin_panel&.support&.enabled && current_user.support?
-  end
 
   def support_org_external_id
     params[:organization_external_id]
