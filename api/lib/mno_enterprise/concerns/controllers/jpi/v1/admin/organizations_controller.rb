@@ -22,7 +22,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
                               financial_metrics billing_currency external_id
                               app_instances orga_invites users orga_relations
                               invoices credit_card demo_account main_address
-                              current_credit].freeze
+                              current_credit in_arrears].freeze
 
     # Overwrite check support authorization for index action only.
 
