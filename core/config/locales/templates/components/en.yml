@@ -32,12 +32,12 @@ en:
           logout: "Logout"
 
         app_install_btn:
-          conflicting_app: "You cannot install this App as it is incompatible with:"
+          conflicting_app: "You cannot install this App as it is incompatible with: {app_name}"
           start_app: "Start Now!"
           launch_app: "Launch App"
           create_account: "Create an account"
           create_account_tooltip: "A new tab will open for you to create an account. Afterwards, return here to connect it."
-          connect_app: "Connect an existing account"
+          connect_app: "Connect"
           access_addon: "Access Add-on"
           access_addon_tooltip: "This application requires you to set-up the connection in a separate screen."
           insufficient_privilege: "You do not have the sufficient privileges. Contact your administrator."
@@ -47,6 +47,7 @@ en:
           app_requires_no_set_up: "No set-up required."
           app_connects_on_launch: "This app connects when launched."
           app_connected: "(connected)"
+          billing_details_req: "Billing details required"
 
         audit_events_list:
           loading_events: Loading Events
