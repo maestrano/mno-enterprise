@@ -20,10 +20,16 @@ HealthCheck.setup do |config|
   config.http_status_for_error_object = 500
 
   # You can customize which checks happen on a standard health check
-  config.standard_checks = %w(site cache redis-if-present)
+  # NOTE: do not use the 'redis-if-present' test as health_check does not take into consideration the
+  # Redis specific configuration passed to Rails.cache in application.rb.
+  # It also runs the health check if the redis gem is loaded, whereas we configure the mnoe cache
+  # based on REDIS_URL presence
+  # The 'cache' test is sufficient in our case.
+  config.standard_checks = %w(site cache)
 
   # You can set what tests are run with the 'full' or 'all' parameter
-  config.full_checks = %w(site cache custom redis-if-present sidekiq-redis-if-present)
+  # NOTE: do not use the 'redis-if-present' test - see above
+  config.full_checks = %w(site cache custom sidekiq-redis-if-present)
 
   # Add one or more custom checks that return a blank string if ok, or an error message if there is an error
   config.add_custom_check do
