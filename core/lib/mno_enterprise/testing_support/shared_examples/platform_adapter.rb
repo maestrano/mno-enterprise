@@ -5,5 +5,6 @@ module MnoEnterprise::TestingSupport::SharedExamples::PlatformAdapter
     it { expect(described_class).to respond_to(:fetch_assets) }
     it { expect(described_class).to respond_to(:update_domain) }
     it { expect(described_class).to respond_to(:add_ssl_certs) }
+    it { expect(described_class).to respond_to(:health_check) }
   end
 end

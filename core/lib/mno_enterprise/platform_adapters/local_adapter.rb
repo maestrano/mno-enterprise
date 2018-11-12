@@ -33,6 +33,11 @@ module MnoEnterprise
         def add_ssl_certs(cert_name, public_cert, cert_bundle, private_key)
           # NOOP
         end
+
+        # @see MnoEnterprise::PlatformAdapters::Adapter#health_check
+        def health_check
+          ''
+        end
       end
     end
   end

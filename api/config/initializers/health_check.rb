@@ -32,8 +32,13 @@ HealthCheck.setup do |config|
   config.full_checks = %w(site cache custom sidekiq-redis-if-present)
 
   # Add one or more custom checks that return a blank string if ok, or an error message if there is an error
-  config.add_custom_check do
+  config.add_custom_check('mnohub') do
     # any code that returns blank on success and non blank string upon failure
     MnoEnterprise::HealthCheck.perform_mno_hub_check
+  end
+
+  config.add_custom_check('platform') do
+    # any code that returns blank on success and non blank string upon failure
+    MnoEnterprise::HealthCheck.perform_platform_check
   end
 end

@@ -30,6 +30,11 @@ module MnoEnterprise
         def add_ssl_certs(*args)
           true
         end
+
+        # @see MnoEnterprise::PlatformAdapters::Adapter#health_check
+        def health_check
+          ''
+        end
       end
     end
   end

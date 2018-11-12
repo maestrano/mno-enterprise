@@ -36,6 +36,9 @@ module MnoEnterprise
 
       # @see MnoEnterprise::PlatformAdapters::Adapter#add_ssl_certs
       delegate :add_ssl_certs, to: :adapter
+
+      # @see MnoEnterprise::PlatformAdapters::Adapter#health_check
+      delegate :health_check, to: :adapter
     end
 
     private

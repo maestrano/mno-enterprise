@@ -12,5 +12,13 @@ module MnoEnterprise
     rescue => e
       "MNO-HUB: #{e}. "
     end
+
+    # Check that the platform is behaving as expected
+    # This leverage the platform adapter self check
+    def self.perform_platform_check
+      SystemManager.health_check
+    rescue => e
+      "['platform adapter' - #{e.message}] "
+    end
   end
 end
