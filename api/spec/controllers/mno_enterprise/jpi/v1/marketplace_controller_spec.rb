@@ -74,9 +74,7 @@ module MnoEnterprise
         "single_billing_enabled" => product.single_billing_enabled,
         "billed_locally" => product.billed_locally,
         "values_attributes" => product.values,
-        "assets_attributes" => product.assets,
-        "js_editor_enabled" => false # This should always expected to be false till it is set as a proper setting in code refactor at a later stage.
-        # "product_pricings" => product.product_pricings
+        "assets_attributes" => product.assets
       }
     end
 
@@ -87,7 +85,6 @@ module MnoEnterprise
     end
 
     def index_hash(apps, products)
-      # hash_for_apps(apps).merge(hash_for_products(products))
       hash = {}
       hash['categories'] = App.categories(apps)
       hash['categories'].delete('Most Popular')

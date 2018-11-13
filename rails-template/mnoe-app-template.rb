@@ -92,6 +92,7 @@ end
 # ==================================================
 
 require 'shellwords'
+require 'tmpdir'
 
 #
 # Add this template directory to source_paths so that Thor actions like
