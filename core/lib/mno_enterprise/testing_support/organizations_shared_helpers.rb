@@ -56,7 +56,8 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
         'soa_enabled' => organization.soa_enabled,
         'account_frozen' => organization.account_frozen,
         'payment_restriction' => organization.payment_restriction,
-        'billing_currency' => organization.billing_currency
+        'billing_currency' => organization.billing_currency,
+        'in_arrears' => organization.in_arrears
     }
 
     if admin
@@ -134,17 +135,18 @@ module MnoEnterprise::TestingSupport::OrganizationsSharedHelpers
     }
     hash['organization']['members'] = partial_hash_for_members(organization)
 
+    cc = organization.credit_card
+
     if user.role(organization) == 'Super Admin'
       hash.merge!(partial_hash_for_billing(organization))
       hash.merge!(partial_hash_for_invoices(organization))
-
-      if (cc = organization.credit_card)
-        hash.merge!(partial_hash_for_credit_card(cc))
-      end
+      hash.merge!(partial_hash_for_credit_card(cc)) if cc
 
       if (situations = organization.arrears_situations)
         hash.merge!(partial_hash_for_arrears_situations(situations))
       end
+    elsif cc
+      hash.merge!('credit_card' => { 'id' => cc.id })
     end
 
     return hash

@@ -10,7 +10,7 @@ FactoryGirl.define do
       role 'Admin'
       created_at 3.days.ago
       updated_at 1.hour.ago
-      in_arrears? false
+      in_arrears false
       billing_currency 'AUD'
       has_myob_essentials_only false
       orga_invites []

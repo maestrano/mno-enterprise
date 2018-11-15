@@ -117,6 +117,8 @@ en:
               payg: "Usage Based"
               free: "Free"
               one-off: "One-time Payment"
+            details_required_message: "Before adding products to this account, please "
+            details_required_link: "update your billing information."
 
           app_selection:
             next: "Next"

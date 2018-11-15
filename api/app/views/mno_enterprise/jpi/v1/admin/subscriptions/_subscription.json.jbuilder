@@ -36,6 +36,7 @@ if subscription.organization
   json.organization do
     json.id subscription.organization.id
     json.name subscription.organization.name
+    json.in_arrears subscription.organization.in_arrears
   end
 end
 json.user_id subscription.user&.id
