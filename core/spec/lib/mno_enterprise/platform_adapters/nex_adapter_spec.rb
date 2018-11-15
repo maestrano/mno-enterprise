@@ -120,5 +120,38 @@ describe MnoEnterprise::PlatformAdapters::NexAdapter do
       end
     end
   end
+
+  describe '.health_check' do
+    let(:aws_cmd) { "AWS_ACCESS_KEY_ID=${MINIO_ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${MINIO_SECRET_KEY} aws --endpoint-url ${MINIO_URL}" }
+
+    # Stub system calls
+    before { allow(described_class).to receive(:`) }
+
+    subject { described_class.health_check }
+
+    it { is_expected.to eq('') }
+
+    it 'tests read permission' do
+      expect(described_class).to receive(:`).with("#{aws_cmd} s3api list-objects --bucket ${MINIO_BUCKET}")
+      subject
+    end
+
+    it 'tests write permission' do
+      expect(described_class).to receive(:`).with("#{aws_cmd} s3api put-object --bucket ${MINIO_BUCKET} --key 'healthcheck_Dummy'")
+      subject
+    end
+
+    it 'tests delete permission' do
+      expect(described_class).to receive(:`).with("#{aws_cmd} s3api delete-object --bucket ${MINIO_BUCKET} --key 'healthcheck_Dummy'")
+      subject
+    end
+
+    context 'error' do
+      before { allow(described_class).to receive(:health_check_R).and_raise('some error') }
+      it 'raise an error' do
+        expect { subject }.to raise_error('permission:R - some error')
+      end
+    end
+  end
 end
 

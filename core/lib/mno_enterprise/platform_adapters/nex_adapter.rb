@@ -188,6 +188,35 @@ module MnoEnterprise
             $?.exitstatus == 0
           end
         end
+
+        # Health check methods
+        # Read test
+        def health_check_R
+          %x(#{"#{aws_cli} s3api list-objects --bucket ${MINIO_BUCKET}"})
+          $?.exitstatus == 0
+        end
+
+        def health_check_W
+          args = [
+            '--bucket ${MINIO_BUCKET}',
+            "--key 'healthcheck_#{Rails.application.class.parent_name}'",
+          ].join(' ')
+
+          # Write test
+          %x(#{"#{aws_cli} s3api put-object #{args}"})
+          $?.exitstatus == 0
+        end
+
+        def health_check_D
+          args = [
+            '--bucket ${MINIO_BUCKET}',
+            "--key 'healthcheck_#{Rails.application.class.parent_name}'",
+          ].join(' ')
+
+          # Delete test
+          %x(#{"#{aws_cli} s3api delete-object #{args}"})
+          $?.exitstatus == 0
+        end
       end
     end
   end
