@@ -54,9 +54,12 @@ module MnoEnterprise
       api_stub_for(get: "/organizations/#{organization.id}/users", response: from_api([user]))
       api_stub_for(get: "/organizations/#{organization.id}/org_invites", response: from_api([org_invite]))
       api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
+      api_stub_for(get: "/org_invites?filter[organization_id]=#{organization.id}&filter[user_id]=#{user.id}&limit=1", response: from_api([org_invite]))
       api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api([credit_card]))
       api_stub_for(get: "/arrears_situations", response: from_api([arrears]))
+      api_stub_for(get: "/org_invites/#{org_invite.id}", response: from_api(org_invite))
       api_stub_for(post: "/organizations", response: from_api([organization]))
+      api_stub_for(put: "/org_invites/#{org_invite.id}", response: from_api([org_invite]))
     end
 
     let(:expected_hash_for_organizations) {
@@ -67,7 +70,6 @@ module MnoEnterprise
           'name' => organization.name,
           'soa_enabled' => organization.soa_enabled,
           'created_at' => organization.created_at,
-          'credit_card' => {'presence' => organization.credit_card?},
           'account_frozen' => organization.account_frozen
         }],
         'metadata' => {'pagination' => {'count' => 1}}

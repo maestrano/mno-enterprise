@@ -36,8 +36,8 @@ Gem::Specification.new do |s|
   # Omniauth authentication strategies
   s.add_development_dependency 'omniauth-openid', '~> 1.0'
   s.add_development_dependency 'omniauth-linkedin-oauth2', '~> 0.1.5'
-  s.add_development_dependency 'omniauth-google-oauth2', '~> 0.2.6'
-  s.add_development_dependency 'omniauth-facebook', '~> 2.0.1'
+  s.add_development_dependency 'omniauth-google-oauth2', '~> 0.5.3'
+  s.add_development_dependency 'omniauth-facebook', '~> 4.0.0'
   # TODO make gem works with rails 4
   # s.add_runtime_dependency 'active_record_openid_store', '~> 0.1.5'
 end

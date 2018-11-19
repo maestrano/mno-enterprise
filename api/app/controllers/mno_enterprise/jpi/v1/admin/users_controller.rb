@@ -6,7 +6,7 @@ module MnoEnterprise
       if params[:terms]
         # Search mode
         @users = []
-        JSON.parse(params[:terms]).map { |t| @users = @users | MnoEnterprise::User.where(Hash[*t]) }
+        JSON.parse(params[:terms]).map { |t| @users = @users | MnoEnterprise::User.where(Hash[*t]).fetch }
         response.headers['X-Total-Count'] = @users.count
       else
         # Index mode

@@ -1,4 +1,4 @@
-json.cache! ['v2', @user.cache_key] do
+json.cache! ['v2', @user.cache_key, session[:impersonator_user_id]] do
   json.current_user do
     json.id @user.id
     json.name @user.name
@@ -16,6 +16,7 @@ json.cache! ['v2', @user.cache_key] do
     json.sso_session @user.sso_session
     json.admin_role @user.admin_role
     json.avatar_url avatar_url(@user)
+    json.tos_accepted_at @user.meta_data[:tos_accepted_at] || false
     json.mnoe_sub_tenant_id @user.mnoe_sub_tenant_id
     if current_impersonator
       json.current_impersonator true

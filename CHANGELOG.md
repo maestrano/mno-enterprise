@@ -1,7 +1,10 @@
 # Change Log
 
 ## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/master)
-[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.2...HEAD)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.3...HEAD)
+
+## [v3.3.3](https://github.com/maestrano/mno-enterprise/tree/v3.3.3) (2018-10-26)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.2...v3.3.3)
 
 **Dependencies:**
 
@@ -11,11 +14,30 @@ Requires MnoHub containing
 
 **Implemented enhancements:**
 
+- \[MNOE-872\] Expose session timeout config [\#654](https://github.com/maestrano/mno-enterprise/pull/654) ([MAhsenArif](https://github.com/MAhsenArif))
+- \[KAPP-114\] Added new action to accept TOS for a user [\#653](https://github.com/maestrano/mno-enterprise/pull/653) ([MAhsenArif](https://github.com/MAhsenArif))
+- \[MNOE-827\] Improve admin endpoints performances [\#633](https://github.com/maestrano/mno-enterprise/pull/633) ([ouranos](https://github.com/ouranos))
+- \[MNOE-887\] Invitations rework [\#631](https://github.com/maestrano/mno-enterprise/pull/631) ([MAhsenArif](https://github.com/MAhsenArif))
+- \[MNOE-702\] Updated admin locale for product reviews [\#620](https://github.com/maestrano/mno-enterprise/pull/620) ([MAhsenArif](https://github.com/MAhsenArif))
+- \[MNOE-534\] Added message for 500 error and prevent auto page refresh [\#617](https://github.com/maestrano/mno-enterprise/pull/617) ([MAhsenArif](https://github.com/MAhsenArif))
+- \[MNOE-110\] Handle MnoHub Errors [\#612](https://github.com/maestrano/mno-enterprise/pull/612) ([ouranos](https://github.com/ouranos))
 - \[MNOE-209\]\[MNOE-788\] Improve Devise configuration [\#578](https://github.com/maestrano/mno-enterprise/pull/578) ([ouranos](https://github.com/ouranos))
 
 **Fixed bugs:**
 
+- \[MNOE-814\] Remove flash messages during OAuth workflow [\#765](https://github.com/maestrano/mno-enterprise/pull/765) ([ruthw](https://github.com/ruthw))
+- \[MNOE-1266\] Change of Maestrano name in the content [\#763](https://github.com/maestrano/mno-enterprise/pull/763) ([ruthw](https://github.com/ruthw))
+-  \[MNO-784\] Fix facebook SSO [\#675](https://github.com/maestrano/mno-enterprise/pull/675) ([ouranos](https://github.com/ouranos))
+- \[MNOE-905\] Impersonation topbar showing stable [\#661](https://github.com/maestrano/mno-enterprise/pull/661) ([iseessel](https://github.com/iseessel))
+- Revert "\[MNOE-833\] - Fix wrong entity sent back on user creation" [\#627](https://github.com/maestrano/mno-enterprise/pull/627) ([ouranos](https://github.com/ouranos))
+- \[MNOE-871\] Add missing locale [\#622](https://github.com/maestrano/mno-enterprise/pull/622) ([ouranos](https://github.com/ouranos))
+- \[MNOE-862\] Add missing locale [\#619](https://github.com/maestrano/mno-enterprise/pull/619) ([ouranos](https://github.com/ouranos))
+- \[MNOE-110\] Fix health check when MnoHub is down [\#607](https://github.com/maestrano/mno-enterprise/pull/607) ([ouranos](https://github.com/ouranos))
+- \[MNOE-833\] - Fix wrong entity sent back on user creation [\#602](https://github.com/maestrano/mno-enterprise/pull/602) ([fgourichon](https://github.com/fgourichon))
+- Update min rubocop version due to security issue [\#582](https://github.com/maestrano/mno-enterprise/pull/582) ([ouranos](https://github.com/ouranos))
+- \[MNOE-249\] Fix Devise::FailureApp routes [\#581](https://github.com/maestrano/mno-enterprise/pull/581) ([ouranos](https://github.com/ouranos))
 - \[MNOE-209\] Unlimited failed attempts of login [\#162](https://github.com/maestrano/mno-enterprise/pull/162) ([x4d3](https://github.com/x4d3))
+
 
 ## [v3.3.2](https://github.com/maestrano/mno-enterprise/tree/v3.3.2) (2017-11-09)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.1...v3.3.2)

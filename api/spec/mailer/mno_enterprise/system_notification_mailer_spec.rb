@@ -125,14 +125,29 @@ module MnoEnterprise
       let(:org_invite) { build(:org_invite, user: invitee, referrer: user) }
 
       context 'when invitee is a confirmed user' do
-        it 'sends the right email' do
-          expect(MnoEnterprise::MailClient).to receive(:deliver).with('organization-invite-existing-user',
-            SystemNotificationMailer::DEFAULT_SENDER,
-            { name: "#{invitee.name} #{invitee.surname}".strip, email: invitee.email },
-            invite_vars(org_invite).merge(confirmation_link: routes.org_invite_url(id: org_invite.id, token: org_invite.token))
-          )
+        context 'when invite is from Admin Panel' do
+          before { org_invite.status = 'accepted' }
 
-          subject.organization_invite(org_invite).deliver_now
+          it 'sends the right email' do
+            expect(MnoEnterprise::MailClient).to receive(:deliver).with('organization-invite-notification',
+              SystemNotificationMailer::DEFAULT_SENDER,
+              { name: "#{invitee.name} #{invitee.surname}".strip, email: invitee.email },
+              invite_vars(org_invite).merge(confirmation_link: routes.org_invite_url(id: org_invite.id, token: org_invite.token))
+            )
+
+            subject.organization_invite(org_invite).deliver_now
+          end
+        end
+        context 'when invite is from Customer View' do
+          it 'sends the right email' do
+            expect(MnoEnterprise::MailClient).to receive(:deliver).with('organization-invite-existing-user',
+              SystemNotificationMailer::DEFAULT_SENDER,
+              { name: "#{invitee.name} #{invitee.surname}".strip, email: invitee.email },
+              invite_vars(org_invite).merge(confirmation_link: routes.org_invite_url(id: org_invite.id, token: org_invite.token))
+            )
+
+            subject.organization_invite(org_invite).deliver_now
+          end
         end
       end
 

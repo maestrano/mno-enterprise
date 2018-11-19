@@ -7,12 +7,14 @@
     %hr
     .error-context
       %p
-        = t("mno_enterprise.errors.#{@status}.description")
+        = t("mno_enterprise.errors.#{@status}.description", support_email: MnoEnterprise.support_email)
     .error-button
       %button
         = link_to(mno_enterprise.root_path) do
           %i{class: "fa fa-home"}
           = t("mno_enterprise.errors.redirection")
     #error-loader
+
+= hidden_field_tag :status_code, @status
 
 = javascript_include_tag "mno_enterprise/error_page"

@@ -113,6 +113,7 @@ MnoEnterprise::Engine.routes.draw do
       resource :current_user, only: [:show, :update] do
         put :update_password
         put :register_developer
+        put :update_tos
         #post :deletion_request, action: :create_deletion_request
         #delete :deletion_request, action: :cancel_deletion_request
       end

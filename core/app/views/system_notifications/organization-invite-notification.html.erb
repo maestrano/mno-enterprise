@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <%= stylesheet_link_tag('mno_enterprise/mail.css') %>
+  </head>
+  <body>
+    <p class="header">
+      <%= image_tag(main_logo_white_bg_path, style: fit_image) %>
+    </p>
+
+    <p>Hi there,</p>
+
+    <p>You have been invited by <%= @info[:ref_full_name] %> to join <%= @info[:organization] %> on our platform!</p>
+
+    <% if @info[:team] %>
+      <p>You have been added to the <%= @info[:team] %> team.</p>
+    <% end %>
+
+    <p>
+       Regards,<br/>
+       The Marketplace team
+    </p>
+
+    <p class="footer">
+      <%= @info[:company] %>
+    </p>
+  </body>
+</html>

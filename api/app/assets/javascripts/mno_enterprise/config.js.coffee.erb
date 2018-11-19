@@ -25,5 +25,5 @@ angular.module('mnoEnterprise.configuration', [])
   .constant('APP_NAME', <%= MnoEnterprise.app_name.to_json %>)
   .constant('URL_CONFIG', <%= Hash(Settings.url_config).to_json %>)
   .constant('DEVISE_CONFIG', <%=
-      Hash(Settings.devise).merge(min_password_length: Devise.password_length.min).to_json
+      Hash(Settings.devise).merge(min_password_length: Devise.password_length.min, timeout_in: Devise.timeout_in).to_json
     %>)

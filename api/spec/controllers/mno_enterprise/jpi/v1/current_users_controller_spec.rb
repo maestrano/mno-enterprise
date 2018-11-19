@@ -34,6 +34,7 @@ module MnoEnterprise
           'sso_session' => res.sso_session,
           'admin_role' => res.admin_role,
           'avatar_url' => avatar_url(res),
+          'tos_accepted_at' => res.meta_data[:tos_accepted_at] || false,
           'mnoe_sub_tenant_id' => res.mnoe_sub_tenant_id
       }
 
@@ -85,6 +86,7 @@ module MnoEnterprise
       subject { get :show }
 
       describe 'guest' do
+        before { expect_any_instance_of(MnoEnterprise::User).to receive(:meta_data).and_return({}) }
         it 'is successful' do
           subject
           expect(response).to be_success
@@ -139,6 +141,23 @@ module MnoEnterprise
       describe 'logged in' do
         before { subject }
         it { expect(response).to be_success }
+      end
+    end
+
+    describe 'PUT #update_tos' do
+      before { api_stub_for(put: "/users/#{user.id}", response: from_api(user)) }
+      subject { put :update_tos }
+
+      describe 'guest' do
+        before { subject }
+        it { expect(response).to_not be_success }
+      end
+
+      describe 'logged in' do
+        before { sign_in user }
+        before { subject }
+        it { expect(response).to be_success }
+        it { expect(controller.current_user).to eq(user) }
       end
     end
 
