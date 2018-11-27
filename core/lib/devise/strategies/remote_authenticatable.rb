@@ -13,7 +13,7 @@ module Devise
         auth_params = params[scope]
         
         # mapping.to is a wrapper over the resource model
-        resource = mapping.to.new
+        resource = mapping.to.where(email: auth_params[:email]).first || mapping.to.new
 
         return fail! unless resource
 

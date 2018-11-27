@@ -48,6 +48,20 @@ module MnoEnterprise
         def add_ssl_certs(cert_name, public_cert, cert_bundle, private_key)
           raise NotImplementedError
         end
+
+        # Perform a health check of the adapter
+        # @return [Sting] blank string if ok, or an error message if there is an error
+        def health_check
+          permissions = [:R, :W, :D]
+          permissions.each do |permission|
+            begin
+              send("health_check_#{permission}")
+            rescue => e
+              raise "permission:#{permission} - #{e.message}"
+            end
+          end
+          ''
+        end
       end
     end
   end

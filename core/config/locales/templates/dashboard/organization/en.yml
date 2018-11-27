@@ -46,6 +46,12 @@ en:
               postcode: Postcode
               country: Country
               country_select: "-- SELECT --"
+            confirm_modal:
+              cancel: "Cancel"
+              confirm: "Ok"
+              header: "Payment terms"
+              disclaimer: "Please note: This credit card will be used to process all outstanding invoices automatically on the 2nd of each month. Click ok to continue."
+            success_toastr: "Your billing details have been updated successfully"
 
           index:
             title: Company
