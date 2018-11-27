@@ -7,6 +7,7 @@ module MnoEnterprise
     before {
       stub_user(user)
       stub_api_v2(:patch, "/users/#{user.id}", user)
+      stub_api_v2(:get, "/users", [user], [], { filter: { email: user.email }, 'page[number]': 1, 'page[size]': 1 })
     }
     let!(:authentication_stub){ stub_api_v2(:post, "/users/authenticate", user)}
 
