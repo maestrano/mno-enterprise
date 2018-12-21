@@ -6,12 +6,15 @@ module MnoEnterprise
   class Jpi::V1::Admin::Impac::WidgetsController < Jpi::V1::Admin::BaseResourceController
 
     # POST /mnoe/jpi/v1/admin/impac/dashboard_templates/:id/widgets
+    # POST /mnoe/jpi/v1/admin/impac/dashboards/:id/widgets
     def create
-      return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless template.present?
+      # TODO: dynamic message
+      return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless dashboard.present?
 
-      @widget = template.widgets.create(widget_create_params)
+      @widget = dashboard.widgets.create(widget_create_params)
       return render json: { errors: (widget && widget.errors).to_a }, status: :bad_request unless widget.present? && widget.valid?
 
+      # TODO: dynamic message
       MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Template Widget Creation', widget)
       @no_content = true
       render 'show'
@@ -23,6 +26,7 @@ module MnoEnterprise
         return render json: { errors: 'Cannot update widget' }, status: :bad_request
       end
 
+      # TODO: dynamic?
       MnoEnterprise::EventLogger.info('widget_update', current_user.id, 'Template Widget Update', widget)
       @nocontent = !params['metadata']
       render 'show'
@@ -34,15 +38,24 @@ module MnoEnterprise
         return render json: { errors: 'Cannot delete widget' }, status: :bad_request
       end
 
+      # TODO: dynamic?
       MnoEnterprise::EventLogger.info('widget_delete', current_user.id, 'Template Widget Deletion', widget)
       head status: :ok
     end
 
     private
 
-    def template
-      MnoEnterprise::Impac::Dashboard.templates.find(params[:dashboard_template_id].to_i)
+    def dashboard
+      @dashboard ||= if params[:dashboard_template_id]
+                       MnoEnterprise::Impac::Dashboard.templates.find(params[:dashboard_template_id])
+                     elsif  params[:dashboard_id]
+                       MnoEnterprise::Impac::Dashboard.find(params[:dashboard_id])
+                     end
     end
+
+    # def template
+    #   MnoEnterprise::Impac::Dashboard.templates.find(params[:dashboard_template_id].to_i)
+    # end
 
     def widget
       @widget ||= MnoEnterprise::Impac::Widget.find(params[:id].to_i)
