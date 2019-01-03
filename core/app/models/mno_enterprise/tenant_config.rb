@@ -156,9 +156,9 @@ module MnoEnterprise
     # Populate the app list after fetching it from MnoHub
     # TODO: replace with a Proc.call
     def self.update_application_list!
-      available_app_nids = App.all.map(&:nid)
+      available_app_nids = App.where(active: true).map(&:nid)
       available_local_product_nids = Product.where(local: true, active: true).map(&:nid)
-      available_app_map = Hash[App.all.map{|a| [a.nid, a.name]}]
+      available_app_map = Hash[App.where(active: true).map{|a| [a.nid, a.name]}]
       available_local_product_map = Hash[Product.where(local: true, active: true).map{|a| [a.nid, a.name]}]
       public_pages_properties = json_schema['properties']['dashboard']['properties']['public_pages']['properties']
       public_pages_properties['applications']['items']['enum'] = available_app_nids

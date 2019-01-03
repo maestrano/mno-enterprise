@@ -5,6 +5,7 @@ env:
   - GEM=frontend
 before_install:
   - cd $GEM; export BUNDLE_GEMFILE="`pwd`/Gemfile"
+  - gem update --system
 script:
   - bundle install --quiet
   - bundle exec rake test_app
