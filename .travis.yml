@@ -4,6 +4,7 @@ env:
   - GEM=core
   - GEM=frontend
 before_install:
+  - gem install bundler --version '< 2'
   - cd $GEM; export BUNDLE_GEMFILE="`pwd`/Gemfile"
 script:
   - bundle install --quiet
