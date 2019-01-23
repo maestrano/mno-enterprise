@@ -13,7 +13,7 @@ describe HtmlProcessor do
         let(:input) { '<img class="ta-insert-video" ta-insert-video="http://www.youtube.com/embed/XOhZgAPn_CU" src="" allowfullscreen="true" width="521" frameborder="0" height="293"/>' }
 
         it 'sanitizes the input' do
-          expect(HtmlProcessor.new(input, format: :markdown).html).to eql("<p><img class=\"ta-insert-video\" ta-insert-video=\"http://www.youtube.com/embed/XOhZgAPn_CU\" src allowfullscreen=\"true\" frameborder=\"0\"></p>\n")
+          expect(HtmlProcessor.new(input, format: :markdown).html).to eql(%{<p><img class="ta-insert-video" ta-insert-video="http://www.youtube.com/embed/XOhZgAPn_CU" src="" allowfullscreen="true" frameborder="0"></p>\n})
         end
       end
     end
