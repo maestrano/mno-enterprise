@@ -38,6 +38,8 @@ Gem::Specification.new do |s|
   # Markdown parsing
   s.add_dependency 'redcarpet', '~> 3.3', '>= 3.3.3'
   s.add_dependency 'sanitize', '~> 4.0'
+  # Lock nokogiri version > 1.9 (no longer strip empty string from attributes - see HtmlProcessor spec)
+  s.add_dependency 'nokogiri', '~> 1.9'
 
   # Configuration & Settings
   # Config files per environment
