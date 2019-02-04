@@ -4,9 +4,9 @@ module MnoEnterprise
   # Base class (instantiable) for SMTP adapter
   class SmtpClient < ActionMailer::Base
     helper MnoEnterprise::ImageHelper
-    
+
     # Send SMTP template - terminal mailing part
-    def deliver(template, from, to, vars={}, opts={})
+    def deliver(template, from, to, vars = {}, opts = {})
       @info = vars
       @info[:company] = from[:name]
 
@@ -15,7 +15,7 @@ module MnoEnterprise
       mail(
         from: format_sender(from),
         to: to[:email],
-        subject: humanize(template),
+        subject: opts[:subject] || humanize(template),
         template_path: 'system_notifications',
         template_name: template
       )
@@ -30,7 +30,7 @@ module MnoEnterprise
     # Returns humanized template subject
     # @i.e. "reset-password-instructions" to "Reset password instructions"
     def humanize(template_slug)
-      template_slug.tr("-", "_").humanize
+      template_slug.tr('-', '_').humanize
     end
 
     def attach_files(files)
