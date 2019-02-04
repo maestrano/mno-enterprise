@@ -82,4 +82,4 @@ end
 
 # http://stackoverflow.com/questions/30910214/rubymine-doesnt-recognize-it-behaves-like-method
 # tricking" RubyMine into recognising the method exists
-def it_behaves_like(*args) ; end
+def it_behaves_like(*args); end

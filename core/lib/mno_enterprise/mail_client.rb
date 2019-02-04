@@ -21,6 +21,7 @@ module MnoEnterprise
     end
 
     private
+
     def self.load_adapter(name)
       "MnoEnterprise::MailAdapters::#{name.to_s.camelize}Adapter".constantize
     end
