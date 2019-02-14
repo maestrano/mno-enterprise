@@ -29,16 +29,30 @@ module MnoEnterprise::Concerns::Controllers::Auth::SessionsController
   # end
   
   # POST /resource/sign_in
-  # def create
-  #   super
-  # end
-  # def create
-  #   self.resource = warden.authenticate!(auth_options)
-  #   set_flash_message(:notice, :signed_in) if is_flashing_format?
-  #   sign_in(resource_name, resource)
-  #   yield resource if block_given?
-  #   respond_with resource, location: after_sign_in_path_for(resource)
-  # end
+  def create
+    @user = warden.authenticate!(auth_options)
+    if @user.requires_otp_for_login?
+      @user.activate_otp
+      if @user.unconfirmed_otp_secret.present?
+        @user.set_quick_response_code_in_attributes
+      end
+      return respond_with @user, location: after_sign_in_path_for(@user)
+    end
+    sign_in(@user)
+    yield @user if block_given?
+    respond_with @user, location: after_sign_in_path_for(@user)
+  end
+
+  def verify_otp
+    user = MnoEnterprise::User.find(id: params[:user_id]).first
+    if user.validate_and_consume_otp!(params[:otp_attempt])
+      sign_in(user)
+      respond_with user, location: after_sign_in_path_for(user)
+    else
+      render json: { error: 'Incorrect, please try again.' },
+             status: :unauthorized
+    end
+  end
 
   # DELETE /resource/sign_out
   # def destroy
