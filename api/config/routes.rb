@@ -29,6 +29,7 @@ MnoEnterprise::Engine.routes.draw do
   end
 
   # Invoices
+  resources :invoices, only: [:show], constraints: { id: /[\w\-]+/ }
   namespace :admin do
     resources :invoices, only: [:show], constraints: { id: /[\w\-]+/ }
   end
@@ -102,7 +103,6 @@ MnoEnterprise::Engine.routes.draw do
   #============================================================
   namespace :jpi do
     namespace :v1 do
-      resources :invoices, only: [:show], constraints: { id: /[\w\-]+/ }
       resources :system_identity, only: [:index]
 
       resources :marketplace, only: [:index, :show] do
