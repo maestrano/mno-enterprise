@@ -13,7 +13,7 @@ module MnoEnterprise
     private
 
     def apply_intercom_auth(response)
-      user_hash = current_user.intercom_user_hash
+      user_hash = MnoEnterprise.intercom_enabled? && current_user.intercom_user_hash
       return response.body unless user_hash.present?
 
       resp_body = JSON.parse(response.body)

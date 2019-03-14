@@ -9,12 +9,6 @@ module MnoEnterprise
     include_context 'v2 api controller requests context'
 
     describe 'GET #show' do
-      before do
-        allow_any_instance_of(MnoEnterprise::User).to receive(:intercom_user_hash).and_return(nil)
-
-        get :show, id: record.id
-      end
-
       let(:stub_resp) do
         { 'data' => { 'attributes' => { 'name' => user.name } } }
       end
@@ -25,22 +19,41 @@ module MnoEnterprise
           .to_return(status: 200, body: stub_resp.to_json, headers: {})
       end
 
-      it { expect(stub).to have_been_requested }
-      it { expect(JSON.parse(response.body)).to eq(stub_resp) }
-
-      context 'when intercom is enabled' do
+      context 'when intercom is disabled' do
         before do
-          allow_any_instance_of(MnoEnterprise::User).to receive(:intercom_user_hash).and_return('hash')
+          allow(MnoEnterprise).to receive(:intercom_enabled?).and_return(false)
+          allow_any_instance_of(MnoEnterprise::User).to receive(:intercom_user_hash).and_return(nil)
 
-          # Otherwise the controller action is run before this before block
           get :show, id: record.id
         end
 
-        it 'adds the intercom_user_hash key to user attributes' do
-          expected_resp_body = stub_resp.clone.deep_merge(
-            'data' => { 'attributes' => { 'intercom_user_hash' => 'hash' } }
-          )
-          expect(JSON.parse(response.body)).to eq(expected_resp_body)
+
+        it { expect(stub).to have_been_requested }
+        it { expect(JSON.parse(response.body)).to eq(stub_resp) }
+      end
+
+      context 'when intercom is enabled' do
+        let(:user_hash) { nil }
+
+        before do
+          allow(MnoEnterprise).to receive(:intercom_enabled?).and_return(true)
+          allow_any_instance_of(MnoEnterprise::User).to receive(:intercom_user_hash).and_return(user_hash)
+
+          get :show, id: record.id
+        end
+
+        it { expect(stub).to have_been_requested }
+        it { expect(JSON.parse(response.body)).to eq(stub_resp) }
+
+        context 'when user authentication is configured' do
+          let(:user_hash) { 'hash' }
+
+          it 'adds the intercom_user_hash key to user attributes' do
+            expected_resp_body = stub_resp.clone.deep_merge(
+              'data' => { 'attributes' => { 'intercom_user_hash' => 'hash' } }
+            )
+            expect(JSON.parse(response.body)).to eq(expected_resp_body)
+          end
         end
       end
     end
