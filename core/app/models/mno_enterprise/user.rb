@@ -1,3 +1,5 @@
+require 'rqrcode_png'
+
 module MnoEnterprise
   class User < BaseResource
     include MnoEnterprise::Concerns::Models::IntercomUser
@@ -49,6 +51,9 @@ module MnoEnterprise
     property :geo_currency, type: :string
     property :failed_attempts
     property :password_changed_at
+    # Two factor
+    property :otp_attempt_successful, type: :boolean
+    property :unconfirmed_otp_secret, type: :string
 
     has_one :sub_tenant
 
@@ -278,6 +283,45 @@ module MnoEnterprise
 
     def admin?
       admin_role.to_s.casecmp(ADMIN_ROLE).zero?
+    end
+
+    def requires_otp_for_login?
+      if admin?
+        Settings&.authentication&.two_factor&.admin_enabled
+      else
+        Settings&.authentication&.two_factor&.users_enabled
+      end
+    end
+
+    def activate_otp
+      self.attributes = {
+        otp_required_for_login: true,
+        unconfirmed_otp_secret: nil
+      }
+      save!
+      reload
+    end
+
+    def set_quick_response_code_in_attributes
+      two_factor_url = 'otpauth://totp/'\
+                       "#{Settings.authentication.two_factor.app_id}:"\
+                       "#{email}?"\
+                       "secret=#{unconfirmed_otp_secret}"\
+                       "&issuer=#{Settings.authentication.two_factor.app_name}"
+      qr_code = RQRCode::QRCode.new(two_factor_url)
+                               .to_img
+                               .resize(240, 240)
+                               .to_data_url
+      attributes['quick_response_code'] = qr_code
+    end
+
+    def validate_and_consume_otp!(otp_attempt)
+      self.attributes = {
+        otp_attempt: otp_attempt,
+        otp_attempt_successful: false
+      }
+      save!
+      reload.otp_attempt_successful
     end
   end
 end

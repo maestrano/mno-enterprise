@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'devise', '~> 3.0'
   s.add_dependency 'cancancan', '~> 1.10'
   s.add_dependency 'omniauth', '~> 1.8.1'
+  s.add_dependency 'rqrcode_png', '0.1.5'
 
   # Markdown parsing
   s.add_dependency 'redcarpet', '~> 3.3', '>= 3.3.3'

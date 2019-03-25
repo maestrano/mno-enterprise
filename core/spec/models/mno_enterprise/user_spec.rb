@@ -373,6 +373,38 @@ module MnoEnterprise
       end
     end
 
+    describe '#activate_otp' do
+      let(:user) { build(:user) }
+      before do
+        allow(user).to receive(:save)
+        allow(user).to receive(:reload)
+      end
+
+      context 'before saving' do
+        it 'sets otp_required_for_login to true' do
+          user.otp_required_for_login = false
+          user.activate_otp
+          expect(user.otp_required_for_login).to be true
+        end
+
+        it 'removes unconfirmed_otp_secret for user' do
+          user.unconfirmed_otp_secret = 231
+          user.activate_otp
+          expect(user.unconfirmed_otp_secret).to be nil
+        end
+      end
+
+      it 'saves user' do
+        expect(user).to receive(:save!)
+        user.activate_otp
+      end
+
+      it 'reloads user' do
+        expect(user).to receive(:reload)
+        user.activate_otp
+      end
+    end
+
     describe '#clear_clients!' do
       subject { user.clear_clients! }
 
@@ -382,6 +414,82 @@ module MnoEnterprise
       it 'clears the clients' do
         subject
         expect(stub).to have_been_requested
+      end
+    end
+
+    describe '#requires_otp_for_login?' do
+      subject { user.requires_otp_for_login? }
+
+      context 'when user is an admin' do
+        let(:user) { build(:user, :admin) }
+        context 'when two factor auth is enabled for admins' do
+          before { Settings.authentication.two_factor.admin_enabled = true }
+          it { is_expected.to be true }
+        end
+
+        context 'when two factor auth is disabled for admins' do
+          before { Settings.authentication.two_factor.admin_enabled = false }
+          it { is_expected.to be false }
+        end
+      end
+
+      context 'when user is not an admin' do
+        let(:user) { build(:user) }
+        context 'when two factor auth is enabled for users' do
+          before { Settings.authentication.two_factor.users_enabled = true }
+          it { is_expected.to be true }
+        end
+
+        context 'when two factor auth is disabled for users' do
+          before { Settings.authentication.two_factor.users_enabled = false }
+          it { is_expected.to be false }
+        end
+      end
+    end
+
+    describe '#set_quick_response_code_in_attributes' do
+      it "sets the user's attributes['quick_response_code']" do
+        user = build(:user)
+        user.unconfirmed_otp_secret = 'asdfas'
+        expect(user.attributes).to_not include('quick_response_code')
+        user.set_quick_response_code_in_attributes
+        expect(user.attributes).to include('quick_response_code')
+      end
+    end
+
+    describe '#validate_and_consume_otp!' do
+      let(:attempt) { 12321 }
+      let(:user) { build(:user) }
+
+      before do
+        allow(user).to receive(:save!)
+        allow(user).to receive(:reload) { user }
+      end
+
+      context 'before save' do
+        it 'sets user.otp_attempt with otp_attempt argument' do
+          user.validate_and_consume_otp!(attempt)
+          expect(user.otp_attempt).to eq(attempt)
+        end
+
+        it 'sets user.otp_attempt_successful to false' do
+          user.validate_and_consume_otp!(attempt)
+          expect(user.otp_attempt_successful).to eq(false)
+        end
+      end
+
+      it 'saves user' do
+        expect(user).to receive(:save!)
+        user.validate_and_consume_otp!(attempt)
+      end
+
+      it 'reloads user' do
+        expect(user).to receive(:reload)
+        user.validate_and_consume_otp!(attempt)
+      end
+
+      it 'return user.otp_attempt_successful' do
+        expect(user.validate_and_consume_otp!(attempt)).to be false
       end
     end
 

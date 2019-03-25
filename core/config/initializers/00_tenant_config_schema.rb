@@ -704,6 +704,40 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
           }
         },
       }
+    },
+    authentication: {
+      title: 'Authentication feature',
+      description: 'Authentication feature',
+      type: 'object',
+      properties: {
+        two_factor: {
+          title: 'Two factor',
+          description: 'Two factor',
+          type: 'object',
+          properties: {
+            admin_enabled: {
+              type: 'boolean',
+              description: 'Enable for admin',
+              default: false
+            },
+            app_id: {
+              type: 'string',
+              description: 'App id to display on the authenticator',
+              default: ''
+            },
+            app_name: {
+              type: 'string',
+              description: 'App name to display on the authenticator',
+              default: ''
+            },
+            users_enabled: {
+              type: 'boolean',
+              description: 'Enable for users',
+              default: false
+            }
+          }
+        }
+      }
     }
   }
 }.with_indifferent_access.freeze
