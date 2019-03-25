@@ -66,8 +66,10 @@ MnoEnterprise::Engine.routes.draw do
     get "/auth/users/confirmation/lounge", to: "auth/confirmations#lounge", as: :user_confirmation_lounge
     patch "/auth/users/confirmation/finalize", to: "auth/confirmations#finalize", as: :user_confirmation_finalize
     patch "/auth/users/confirmation", to: "auth/confirmations#update"
-    two_factor_enabled = Settings.authentication.two_factor.admin_enabled || Settings.authentication.two_factor.users_enabled
-    post "auth/users/sessions/verify_otp", to: "auth/sessions#verify_otp" if two_factor_enabled
+
+    if Settings&.authentication&.two_factor&.admin_enabled || Settings&.authentication&.two_factor&.users_enabled
+        post "auth/users/sessions/verify_otp", to: "auth/sessions#verify_otp"
+    end
 
     # Patch omniauth routes as per plataformatec/devise#2692
     providers = Regexp.union(Devise.omniauth_providers.map(&:to_s))

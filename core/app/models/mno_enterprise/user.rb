@@ -287,9 +287,9 @@ module MnoEnterprise
 
     def requires_otp_for_login?
       if admin?
-        Settings.authentication.two_factor.admin_enabled
+        Settings&.authentication&.two_factor&.admin_enabled
       else
-        Settings.authentication.two_factor.users_enabled
+        Settings&.authentication&.two_factor&.users_enabled
       end
     end
 
