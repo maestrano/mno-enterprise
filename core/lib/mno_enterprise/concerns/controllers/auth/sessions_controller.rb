@@ -30,27 +30,26 @@ module MnoEnterprise::Concerns::Controllers::Auth::SessionsController
   
   # POST /resource/sign_in
   def create
-    @user = warden.authenticate!(auth_options)
-    if @user.requires_otp_for_login?
-      @user.activate_otp
-      if @user.unconfirmed_otp_secret.present?
-        @user.set_quick_response_code_in_attributes
-      end
-      return respond_with @user, location: after_sign_in_path_for(@user)
+    self.resource = warden.authenticate!(auth_options)
+    if resource.requires_otp_for_login?
+      resource.activate_otp
+      resource.set_quick_response_code_in_attributes if resource.unconfirmed_otp_secret.present?
+    else
+      sign_in(resource)
     end
-    sign_in(@user)
-    yield @user if block_given?
-    respond_with @user, location: after_sign_in_path_for(@user)
+    yield resource if block_given?
+    respond_with(resource, location: after_sign_in_path_for(resource))
   end
 
+  # POST /resource/sessions/verify_otp
   def verify_otp
-    user = MnoEnterprise::User.find(id: params[:user_id]).first
-    if user.validate_and_consume_otp!(params[:otp_attempt])
-      sign_in(user)
-      respond_with user, location: after_sign_in_path_for(user)
+    self.resource = MnoEnterprise::User.find(id: params[:user_id])&.first
+    if resource.validate_and_consume_otp!(params[:otp_attempt])
+      sign_in(resource)
+      yield resource if block_given?
+      respond_with(resource, location: after_sign_in_path_for(resource))
     else
-      render json: { error: 'Incorrect, please try again.' },
-             status: :unauthorized
+      render(json: { error: 'Incorrect, please try again.' }, status: :unauthorized)
     end
   end
 
