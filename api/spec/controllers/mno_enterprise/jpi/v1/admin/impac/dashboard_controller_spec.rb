@@ -177,5 +177,34 @@ module MnoEnterprise
 
       it_behaves_like "a jpi v1 admin action"
     end
+
+    describe 'POST copy' do
+      subject { post :copy, id: template.id, dashboard: dashboard_params }
+
+      let(:template) { build(:impac_dashboard, dashboard_type: 'template') }
+      let(:dashboard_params) do
+        {
+          name: dashboard.name,
+          currency: dashboard.currency,
+          organization_ids: [org.id]
+        }
+      end
+
+      before do
+        api_stub_for(
+          get: "/dashboards/#{template.id}",
+          params: { filter: { 'dashboard_type' => 'template' } },
+          response: from_api(template)
+        )
+        api_stub_for(
+          post: "/dashboards/#{template.id}/copy",
+          response: from_api(dashboard)
+        )
+      end
+
+      include_context "#{described_class}: dashboard dependencies stubs"
+
+      it_behaves_like "a jpi v1 admin action"
+    end
   end
 end

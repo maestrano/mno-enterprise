@@ -20,5 +20,9 @@ module MnoEnterprise
     it 'routes to #destroy' do
       expect(delete('/jpi/v1/admin/impac/dashboards/2')).to route_to('mno_enterprise/jpi/v1/admin/impac/dashboards#destroy', id: '2', format: 'json')
     end
+
+    it 'routes to #copy' do
+      expect(post('/jpi/v1/admin/impac/dashboards/2/copy')).to route_to('mno_enterprise/jpi/v1/admin/impac/dashboards#copy', id: '2', format: 'json')
+    end
   end
 end

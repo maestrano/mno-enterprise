@@ -223,6 +223,8 @@ MnoEnterprise::Engine.routes.draw do
 
         # Dashboard templates designer
         namespace :impac do
+          post 'dashboards/:id/copy', to: 'dashboards#copy'
+
           # TODO: DRY between both?
           resources :dashboards, only: [:index, :create, :update, :destroy] do
             resources :widgets, shallow: true, only: [:create, :update, :destroy]
