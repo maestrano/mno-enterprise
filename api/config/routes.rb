@@ -224,8 +224,7 @@ MnoEnterprise::Engine.routes.draw do
         # Dashboard templates designer
         namespace :impac do
           # TODO: DRY between both?
-          # TODO: specs?
-          resources :dashboards, only: [:index, :show, :create, :update, :destroy] do
+          resources :dashboards, only: [:index, :create, :update, :destroy] do
             resources :widgets, shallow: true, only: [:create, :update, :destroy]
             resources :kpis, shallow: true, only: [:create, :update, :destroy]
           end
