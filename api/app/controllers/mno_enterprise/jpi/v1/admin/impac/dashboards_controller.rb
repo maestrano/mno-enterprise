@@ -2,34 +2,21 @@ module MnoEnterprise
   # TODO: DRY with dashboard templates?
   class Jpi::V1::Admin::Impac::DashboardsController < Jpi::V1::Admin::BaseResourceController
     # GET /mnoe/jpi/v1/admin/impac/dashboards
-    # TODO: filter by org Id in mnoe
-    # TODO: should filter to current_user?
-    # TODO: what happen when more than 30 dhb? => custom scope in MnoHub? with LIKE text search
     def index
-      # query = MnoEnterprise::Impac::Dashboard
-      #           .apply_query_params(params)
-      #           # .includes(*DASHBOARD_DEPENDENCIES)
-      #
-      # response.headers['X-Total-Count'] = query.meta.record_count
-      #
-      # @dashboards = query.to_a
-
-      data_source = params[:where].delete(:data_sources) if params[:where]
+      if params[:where]
+        data_source = params[:where].delete(:data_sources)
+        params[:where]['settings.like'] = "%#{data_source}%"
+      end
 
       @dashboards = MnoEnterprise::Impac::Dashboard
       @dashboards = @dashboards.limit(params[:limit]) if params[:limit]
       @dashboards = @dashboards.skip(params[:offset]) if params[:offset]
       @dashboards = @dashboards.order_by(params[:order_by]) if params[:order_by]
       @dashboards = @dashboards.where(params[:where]) if params[:where]
+      @dashboards = @dashboards.where(owner_type: 'User', owner_id: current_user.id)
       @dashboards = @dashboards.all.fetch
 
       response.headers['X-Total-Count'] = @dashboards.metadata[:pagination][:count]
-
-      if data_source
-        @dashboards = @dashboards.select { |dhb| dhb.organizations.map(&:id).include?(data_source.to_i) }
-      end
-
-      # @dashboards = current_user.dashboards
     end
 
     # POST /mnoe/jpi/v1/admin/impac/dashboard
