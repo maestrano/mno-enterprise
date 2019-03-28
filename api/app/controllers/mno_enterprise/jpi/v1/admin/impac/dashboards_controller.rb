@@ -79,10 +79,12 @@ module MnoEnterprise
     protected
 
     def dashboard
-      @dashboard ||= MnoEnterprise::Impac::Dashboard.find(params[:id])
+      # Staff dashboard is scoped to current staff
+      @dashboard ||= MnoEnterprise::Impac::Dashboard.find_by(id: params[:id], owner_type: 'User', owner_id: current_user.id)
     end
 
     def template
+      # Templates are available to all staff
       @template ||= MnoEnterprise::Impac::Dashboard.templates.find(params[:id])
     end
 

@@ -84,7 +84,7 @@ module MnoEnterprise
       before do
         api_stub_for(
           get: '/dashboards',
-          # params: { filter: { 'dashboard_type' => 'dashboard' } },
+          params: { filter: { 'owner_type' => 'User', 'owner_id' => user.id } },
           response: from_api([dashboard])
         )
       end
@@ -142,8 +142,12 @@ module MnoEnterprise
 
       before do
         api_stub_for(
-          get: "/dashboards/#{dashboard.id}",
-          response: from_api(dashboard)
+          get: "/dashboards",
+          params: {
+            filter: { 'id' => dashboard.id, 'owner_id' => user.id, 'owner_type' => 'User' },
+            limit: 1
+          },
+          response: from_api([dashboard])
         )
         api_stub_for(
           put: "/dashboards/#{dashboard.id}",
@@ -166,8 +170,12 @@ module MnoEnterprise
 
       before do
         api_stub_for(
-          get: "/dashboards/#{dashboard.id}",
-          response: from_api(dashboard)
+          get: "/dashboards",
+          params: {
+            filter: { 'id' => dashboard.id, 'owner_id' => user.id, 'owner_type' => 'User' },
+            limit: 1
+          },
+          response: from_api([dashboard])
         )
         api_stub_for(
           delete: "/dashboards/#{dashboard.id}",

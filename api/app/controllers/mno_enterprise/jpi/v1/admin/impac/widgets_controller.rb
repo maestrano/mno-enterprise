@@ -48,8 +48,8 @@ module MnoEnterprise
     def dashboard
       @dashboard ||= if params[:dashboard_template_id]
                        MnoEnterprise::Impac::Dashboard.templates.find(params[:dashboard_template_id])
-                     elsif  params[:dashboard_id]
-                       MnoEnterprise::Impac::Dashboard.find(params[:dashboard_id])
+                     elsif params[:dashboard_id]
+                       MnoEnterprise::Impac::Dashboard.find_by(id: params[:dashboard_id], owner_type: 'User', owner_id: current_user.id)
                      end
     end
 
