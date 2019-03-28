@@ -1,12 +1,9 @@
 require 'rails_helper'
+require 'mno_enterprise/testing_support/shared_contexts/jpi_v1_admin_controller'
 
 module MnoEnterprise
   describe Jpi::V1::Admin::Impac::WidgetsController, type: :controller do
-    # include MnoEnterprise::TestingSupport::JpiV1TestHelper
-    include MnoEnterprise::TestingSupport::SharedExamples::JpiV1Admin
-    render_views
-    routes { MnoEnterprise::Engine.routes }
-    before { request.env["HTTP_ACCEPT"] = 'application/json' }
+    include_context MnoEnterprise::Jpi::V1::Admin::BaseResourceController
 
     let(:user) { build(:user, :admin, :with_organizations) }
     let(:org) { build(:organization, users: [user]) }
@@ -32,11 +29,6 @@ module MnoEnterprise
         "kpis" => [hash_for_kpi],
         "layouts" => widget.layouts
       }
-    end
-
-    before do
-      api_stub_for(get: "/users/#{user.id}", response: from_api(user))
-      sign_in user
     end
 
     describe '#create' do
