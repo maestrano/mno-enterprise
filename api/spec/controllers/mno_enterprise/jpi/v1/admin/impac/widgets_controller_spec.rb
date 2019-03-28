@@ -51,50 +51,110 @@ module MnoEnterprise
         }
       end
 
-      subject { post :create, dashboard_template_id: template.id, widget: widget_params }
+      context 'with a dashboard' do
+        subject { post :create, dashboard_id: dashboard.id, widget: widget_params }
 
-      context 'when the template exists' do
-        before do
-          api_stub_for(
-            get: "/dashboards/#{template.id}",
-            params: { filter: { 'dashboard_type' => 'template' } },
-            response: from_api(template)
-          )
-          api_stub_for(
-            post: "dashboards/#{template.id}/widgets",
-            response: from_api(widget)
-          )
-          # Why is Her doing a GET /widgets after doing a POST /widgets?
-          api_stub_for(
-            get: "dashboards/#{template.id}/widgets",
-            response: from_api([widget])
-          )
-          api_stub_for(
-            get: "/widgets/#{widget.id}/kpis",
-            response: from_api([kpi])
-          )
+        let(:dashboard) { build(:impac_dashboard) }
+
+        context 'when the dashboard exists' do
+          before do
+            api_stub_for(
+              get: "/dashboards",
+              params: {
+                filter: { 'id' => dashboard.id, 'owner_id' => user.id, 'owner_type' => 'User' },
+                limit: 1
+              },
+              response: from_api([dashboard])
+            )
+            api_stub_for(
+              post: "dashboards/#{dashboard.id}/widgets",
+              response: from_api(widget)
+            )
+            # Why is Her doing a GET /widgets after doing a POST /widgets?
+            api_stub_for(
+              get: "dashboards/#{dashboard.id}/widgets",
+              response: from_api([widget])
+            )
+            api_stub_for(
+              get: "/widgets/#{widget.id}/kpis",
+              response: from_api([kpi])
+            )
+          end
+
+          it_behaves_like "a jpi v1 admin action"
+
+          it 'returns a widget' do
+            subject
+            expect(JSON.parse(response.body)).to eq(hash_for_widget)
+          end
         end
 
-        it_behaves_like "a jpi v1 admin action"
+        context 'when the dashboard does not exist' do
+          before do
+            api_stub_for(
+              get: "/dashboards",
+              params: {
+                filter: { 'id' => dashboard.id, 'owner_id' => user.id, 'owner_type' => 'User' },
+                limit: 1
+              },
+              response: from_api([])
+            )
+          end
 
-        it 'returns a widget' do
-          subject
-          expect(JSON.parse(response.body)).to eq(hash_for_widget)
+          it 'returns an error message' do
+            subject
+            expect(response).to have_http_status(:not_found)
+            expect(JSON.parse(response.body)).to eq({ 'errors' => { 'message' => 'Dashboard not found' } })
+          end
         end
       end
 
-      context 'when the template does not exist' do
-        before do
-          api_stub_for(
-            get: "/dashboards/#{template.id}",
-            params: { filter: { 'dashboard_type' => 'template' } },
-            code: 404
-          )
+      context 'with a dashboard template' do
+        subject { post :create, dashboard_template_id: template.id, widget: widget_params }
+
+        context 'when the template exists' do
+          before do
+            api_stub_for(
+              get: "/dashboards/#{template.id}",
+              params: { filter: { 'dashboard_type' => 'template' } },
+              response: from_api(template)
+            )
+            api_stub_for(
+              post: "dashboards/#{template.id}/widgets",
+              response: from_api(widget)
+            )
+            # Why is Her doing a GET /widgets after doing a POST /widgets?
+            api_stub_for(
+              get: "dashboards/#{template.id}/widgets",
+              response: from_api([widget])
+            )
+            api_stub_for(
+              get: "/widgets/#{widget.id}/kpis",
+              response: from_api([kpi])
+            )
+          end
+
+          it_behaves_like "a jpi v1 admin action"
+
+          it 'returns a widget' do
+            subject
+            expect(JSON.parse(response.body)).to eq(hash_for_widget)
+          end
         end
 
-        it 'returns an error message' do
-          subject
-          expect(JSON.parse(response.body)).to eq({ 'errors' => { 'message' => 'Dashboard template not found' } })
+        context 'when the template does not exist' do
+          before do
+            api_stub_for(
+              get: "/dashboards/#{template.id}",
+              params: { filter: { 'dashboard_type' => 'template' } },
+              code: 404
+            )
+          end
+
+          it 'returns an error message' do
+            subject
+            expect(JSON.parse(response.body)).to eq({ 'errors' => { 'message' => 'Dashboard template not found' } })
+          end
         end
       end
     end
