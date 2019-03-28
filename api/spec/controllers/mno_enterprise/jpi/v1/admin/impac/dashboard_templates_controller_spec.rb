@@ -94,26 +94,39 @@ module MnoEnterprise
 
     describe '#show' do
       subject { get :show, id: template.id }
-      
-      before do
-        api_stub_for(
-          get: "/dashboards/#{template.id}",
-          params: { filter: { 'dashboard_type' => 'template' } },
-          response: from_api(template)
-        )
+
+      context 'when the template exists' do
+        before do
+          api_stub_for(
+            get: "/dashboards/#{template.id}",
+            params: { filter: { 'dashboard_type' => 'template' } },
+            response: from_api(template)
+          )
+        end
+        include_context "#{described_class}: dashboard dependencies stubs"
+
+        it_behaves_like "a jpi v1 admin action"
+
+        it 'returns a dashboard template' do
+          subject
+          expect(JSON.parse(response.body)).to eq(hash_for_template)
+        end
       end
-      include_context "#{described_class}: dashboard dependencies stubs"
 
-      it_behaves_like "a jpi v1 admin action"
+      context 'when the template does not exist' do
+        before do
+          api_stub_for(
+            get: "/dashboards/#{template.id}",
+            params: { filter: { 'dashboard_type' => 'template' } },
+            code: 404
+          )
+        end
 
-      it 'returns a dashboard template' do
-        subject
-        expect(JSON.parse(response.body)).to eq(hash_for_template)
-      end
-
-      # api_stub should be modified to allow this case to be stubbed
-      context 'when the template cannot be found' do
-        xit 'spec to be described'
+        it 'returns an error message' do
+          subject
+          expect(response).to have_http_status(:not_found)
+          expect(JSON.parse(response.body)).to eq({ 'errors' => { 'message' => 'Dashboard template not found' } })
+        end
       end
     end
 
@@ -130,25 +143,38 @@ module MnoEnterprise
       end
 
       subject { post :create, dashboard: template_params }
-      
-      before do
-        api_stub_for(
-          post: "/dashboards",
-          response: from_api(template)
-        )
+
+      context 'when the dashboard creation is successful' do
+        before do
+          api_stub_for(
+            post: "/dashboards",
+            response: from_api(template)
+          )
+        end
+        include_context "#{described_class}: dashboard dependencies stubs"
+
+        it_behaves_like "a jpi v1 admin action"
+
+        it 'returns a dashboard template' do
+          subject
+          expect(JSON.parse(response.body)).to eq(hash_for_template)
+        end
       end
-      include_context "#{described_class}: dashboard dependencies stubs"
 
-      it_behaves_like "a jpi v1 admin action"
-
-      it 'returns a dashboard template' do
-        subject
-        expect(JSON.parse(response.body)).to eq(hash_for_template)
-      end
-
-      # api_stub should be modified to allow this case to be stubbed
       context 'when the dashboard creation is unsuccessful' do
-        xit 'spec to be described'
+        before do
+          api_stub_for(
+            post: "/dashboards",
+            code: 400,
+            response: { errors: [{ attribute: "name", value: "can't be blank" }] }
+          )
+        end
+
+        it 'returns an error message' do
+          subject
+          expect(response).to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)).to eq({ 'errors' => { 'name' => ["can't be blank"] } })
+        end
       end
     end
 
@@ -166,59 +192,100 @@ module MnoEnterprise
       end
 
       subject { put :update, id: template.id, dashboard: template_params }
-      
-      before do
-        api_stub_for(
-          get: "/dashboards/#{template.id}",
-          params: { filter: { 'dashboard_type' => 'template' } },
-          response: from_api(template)
-        )
-        api_stub_for(
-          put: "/dashboards/#{template.id}",
-          response: from_api(template)
-        )
-      end
-      include_context "#{described_class}: dashboard dependencies stubs"
-      
-      it_behaves_like "a jpi v1 admin action"
 
-      it 'returns a dashboard template' do
-        subject
-        expect(JSON.parse(response.body)).to eq(hash_for_template)
+      context 'when the template exists' do
+        before do
+          api_stub_for(
+            get: "/dashboards/#{template.id}",
+            params: { filter: { 'dashboard_type' => 'template' } },
+            response: from_api(template)
+          )
+          api_stub_for(
+            put: "/dashboards/#{template.id}",
+            response: from_api(template)
+          )
+        end
+        include_context "#{described_class}: dashboard dependencies stubs"
+
+        it_behaves_like "a jpi v1 admin action"
+
+        it 'returns a dashboard template' do
+          subject
+          expect(JSON.parse(response.body)).to eq(hash_for_template)
+        end
       end
 
-      # api_stub should be modified to allow these cases to be stubbed
-      context 'when the template cannot be found' do
-        xit 'spec to be described'
+      context 'when the template does not exist' do
+        before do
+          api_stub_for(
+            get: "/dashboards/#{template.id}",
+            params: { filter: { 'dashboard_type' => 'template' } },
+            code: 404
+          )
+        end
+
+        it 'returns an error message' do
+          subject
+          expect(response).to have_http_status(:not_found)
+          expect(JSON.parse(response.body)).to eq({ 'errors' => { 'message' => 'Dashboard template not found' } })
+        end
       end
+
       context 'when the dashboard update is unsuccessful' do
-        xit 'spec to be described'
+        before do
+          api_stub_for(
+            get: "/dashboards/#{template.id}",
+            params: { filter: { 'dashboard_type' => 'template' } },
+            response: from_api(template)
+          )
+          api_stub_for(
+            put: "/dashboards/#{template.id}",
+            code: 400,
+            response: { errors: [{ attribute: "name", value: "can't be blank" }] }
+          )
+        end
+
+        it 'returns an error message' do
+          subject
+          expect(response).to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)).to eq({ 'errors' => { 'name' => ["can't be blank"] } })
+        end
       end
     end
 
     describe '#destroy' do
       subject { delete :destroy, id: template.id }
 
-      before do
-        api_stub_for(
-          get: "/dashboards/#{template.id}",
-          params: { filter: { 'dashboard_type' => 'template' } },
-          response: from_api(template)
-        )
-        api_stub_for(
-          delete: "/dashboards/#{template.id}",
-          response: from_api(nil)
-        )
-      end
-      
-      it_behaves_like "a jpi v1 admin action"
+      context 'when the template exists' do
+        before do
+          api_stub_for(
+            get: "/dashboards/#{template.id}",
+            params: { filter: { 'dashboard_type' => 'template' } },
+            response: from_api(template)
+          )
+          api_stub_for(
+            delete: "/dashboards/#{template.id}",
+            response: from_api(nil)
+          )
+        end
 
-      # api_stub should be modified to allow these cases to be stubbed
-      context 'when the template cannot be found' do
-        xit 'spec to be described'
+        it_behaves_like "a jpi v1 admin action"
       end
-      context 'when the dashboard destruction is unsuccessful' do
-        xit 'spec to be described'
+
+      context 'when the template does not exist' do
+        before do
+          api_stub_for(
+            get: "/dashboards/#{template.id}",
+            params: { filter: { 'dashboard_type' => 'template' } },
+            code: 404
+          )
+        end
+
+        it 'returns an error message' do
+          subject
+          expect(response).to have_http_status(:not_found)
+          expect(JSON.parse(response.body)).to eq({ 'errors' => { 'message' => 'Dashboard template not found' } })
+        end
       end
     end
   end
