@@ -3,7 +3,8 @@
 # the one component of Mnoe.
 source 'https://rubygems.org'
 
-gem 'sqlite3'
+# sqlite3_adapter requires 1.3.x
+gem 'sqlite3', '~> 1.3.13'
 
 group :test do
   gem 'rspec-rails'
