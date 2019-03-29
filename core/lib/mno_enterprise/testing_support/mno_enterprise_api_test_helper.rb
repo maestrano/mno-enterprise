@@ -24,7 +24,7 @@ module MnoEnterpriseApiTestHelper
       end
       return hash
     when res.kind_of?(Money)
-      return { cents: res.cents, currency: res.currency_as_string }
+      return { cents: res.cents, currency: res.currency.to_s }
     when res.respond_to?(:iso8601)
       return res.iso8601
     else

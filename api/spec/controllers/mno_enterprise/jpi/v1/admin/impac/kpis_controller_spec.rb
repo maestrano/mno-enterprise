@@ -42,34 +42,46 @@ module MnoEnterprise
       end
 
       subject { post :create, dashboard_template_id: template.id, kpi: kpi_params }
-      
-      before do
-        api_stub_for(
-          get: "/dashboards/#{template.id}",
-          params: { filter: { 'dashboard_type' => 'template' } },
-          response: from_api(template)
-        )
-        api_stub_for(
-          post: "dashboards/#{template.id}/kpis",
-          response: from_api(kpi)
-        )
-        # Why is Her doing a GET /kpis after doing a POST /kpis?
-        api_stub_for(
-          get: "dashboards/#{template.id}/kpis",
-          response: from_api([kpi])
-        )
+
+      context 'when the template exists' do
+        before do
+          api_stub_for(
+            get: "/dashboards/#{template.id}",
+            params: { filter: { 'dashboard_type' => 'template' } },
+            response: from_api(template)
+          )
+          api_stub_for(
+            post: "dashboards/#{template.id}/kpis",
+            response: from_api(kpi)
+          )
+          # Why is Her doing a GET /kpis after doing a POST /kpis?
+          api_stub_for(
+            get: "dashboards/#{template.id}/kpis",
+            response: from_api([kpi])
+          )
+        end
+
+        it_behaves_like "a jpi v1 admin action"
+
+        it 'returns a kpi' do
+          subject
+          expect(JSON.parse(response.body)).to eq(hash_for_kpi)
+        end
       end
 
-      it_behaves_like "a jpi v1 admin action"
+      context 'when the template does not exist' do
+        before do
+          api_stub_for(
+            get: "/dashboards/#{template.id}",
+            params: { filter: { 'dashboard_type' => 'template' } },
+            code: 404
+          )
+        end
 
-      it 'returns a kpi' do
-        subject
-        expect(JSON.parse(response.body)).to eq(hash_for_kpi)
-      end
-
-      # api_stub should be modified to allow this case to be stubbed
-      context 'when the template cannot be found' do
-        xit 'spec to be described'
+        it 'returns an error message' do
+          subject
+          expect(JSON.parse(response.body)).to eq({ 'errors' => { 'message' => 'Dashboard template not found' } })
+        end
       end
     end
 
@@ -84,50 +96,72 @@ module MnoEnterprise
       end
 
       subject { put :update, id: kpi.id, kpi: kpi_params }
-      
-      before do
-        api_stub_for(
-          get: "kpis/#{kpi.id}",
-          response: from_api(kpi)
-        )
-        api_stub_for(
-          put: "/kpis/#{kpi.id}",
-          response: from_api(kpi)
-        )
+
+      context 'when the kpi exists' do
+        before do
+          api_stub_for(
+            get: "kpis/#{kpi.id}",
+            response: from_api(kpi)
+          )
+          api_stub_for(
+            put: "/kpis/#{kpi.id}",
+            response: from_api(kpi)
+          )
+        end
+
+        it_behaves_like "a jpi v1 admin action"
+
+        it 'returns a kpi' do
+          subject
+          expect(JSON.parse(response.body)).to eq(hash_for_kpi)
+        end
       end
 
-      it_behaves_like "a jpi v1 admin action"
+      context 'when the kpi does not exist' do
+        before do
+          api_stub_for(
+            get: "kpis/#{kpi.id}",
+            code: 404
+          )
+        end
 
-      it 'returns a kpi' do
-        subject
-        expect(JSON.parse(response.body)).to eq(hash_for_kpi)
-      end
-
-      # api_stub should be modified to allow this case to be stubbed
-      context 'when the kpi update is unsuccessful' do
-        xit 'spec to be described'
+        it 'returns an error message' do
+          subject
+          expect(JSON.parse(response.body)).to eq({ 'errors' => 'Cannot update kpi' })
+        end
       end
     end
 
     describe '#destroy' do
       subject { delete :destroy, id: kpi.id }
-      
-      before do
-        api_stub_for(
-          get: "kpis/#{kpi.id}",
-          response: from_api(kpi)
-        )
-        api_stub_for(
-          delete: "/kpis/#{kpi.id}",
-          response: from_api(nil)
-        )
+
+      context 'when the kpi exists' do
+        before do
+          api_stub_for(
+            get: "kpis/#{kpi.id}",
+            response: from_api(kpi)
+          )
+          api_stub_for(
+            delete: "/kpis/#{kpi.id}",
+            response: from_api(nil)
+          )
+        end
+
+        it_behaves_like "a jpi v1 admin action"
       end
 
-      it_behaves_like "a jpi v1 admin action"
+      context 'when the kpi does not exist' do
+        before do
+          api_stub_for(
+            get: "kpis/#{kpi.id}",
+            code: 404
+          )
+        end
 
-      # api_stub should be modified to allow this case to be stubbed
-      context 'when the kpi destruction is unsuccessful' do
-        xit 'spec to be described'
+        it 'returns an error message' do
+          subject
+          expect(JSON.parse(response.body)).to eq({ 'errors' => 'Cannot delete kpi' })
+        end
       end
     end
   end

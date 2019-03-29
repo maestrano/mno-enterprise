@@ -53,37 +53,49 @@ module MnoEnterprise
 
       subject { post :create, dashboard_template_id: template.id, widget: widget_params }
 
-      before do
-        api_stub_for(
-          get: "/dashboards/#{template.id}",
-          params: { filter: { 'dashboard_type' => 'template' } },
-          response: from_api(template)
-        )
-        api_stub_for(
-          post: "dashboards/#{template.id}/widgets",
-          response: from_api(widget)
-        )
-        # Why is Her doing a GET /widgets after doing a POST /widgets?
-        api_stub_for(
-          get: "dashboards/#{template.id}/widgets",
-          response: from_api([widget])
-        )
-        api_stub_for(
-          get: "/widgets/#{widget.id}/kpis",
-          response: from_api([kpi])
-        )
+      context 'when the template exists' do
+        before do
+          api_stub_for(
+            get: "/dashboards/#{template.id}",
+            params: { filter: { 'dashboard_type' => 'template' } },
+            response: from_api(template)
+          )
+          api_stub_for(
+            post: "dashboards/#{template.id}/widgets",
+            response: from_api(widget)
+          )
+          # Why is Her doing a GET /widgets after doing a POST /widgets?
+          api_stub_for(
+            get: "dashboards/#{template.id}/widgets",
+            response: from_api([widget])
+          )
+          api_stub_for(
+            get: "/widgets/#{widget.id}/kpis",
+            response: from_api([kpi])
+          )
+        end
+
+        it_behaves_like "a jpi v1 admin action"
+
+        it 'returns a widget' do
+          subject
+          expect(JSON.parse(response.body)).to eq(hash_for_widget)
+        end
       end
 
-      it_behaves_like "a jpi v1 admin action"
+      context 'when the template does not exist' do
+        before do
+          api_stub_for(
+            get: "/dashboards/#{template.id}",
+            params: { filter: { 'dashboard_type' => 'template' } },
+            code: 404
+          )
+        end
 
-      it 'returns a widget' do
-        subject
-        expect(JSON.parse(response.body)).to eq(hash_for_widget)
-      end
-
-      # api_stub should be modified to allow this case to be stubbed
-      context 'when the template cannot be found' do
-        xit 'spec to be described'
+        it 'returns an error message' do
+          subject
+          expect(JSON.parse(response.body)).to eq({ 'errors' => { 'message' => 'Dashboard template not found' } })
+        end
       end
     end
 
@@ -99,53 +111,75 @@ module MnoEnterprise
 
       subject { put :update, id: widget.id, widget: widget_params }
 
-      before do
-        api_stub_for(
-          get: "widgets/#{widget.id}",
-          response: from_api(widget)
-        )
-        api_stub_for(
-          put: "/widgets/#{widget.id}",
-          response: from_api(widget)
-        )
-        api_stub_for(
-          get: "/widgets/#{widget.id}/kpis",
-          response: from_api([kpi])
-        )
+      context 'when the widget exists' do
+        before do
+          api_stub_for(
+            get: "widgets/#{widget.id}",
+            response: from_api(widget)
+          )
+          api_stub_for(
+            put: "/widgets/#{widget.id}",
+            response: from_api(widget)
+          )
+          api_stub_for(
+            get: "/widgets/#{widget.id}/kpis",
+            response: from_api([kpi])
+          )
+        end
+
+        it_behaves_like "a jpi v1 admin action"
+
+        it 'returns a widget' do
+          subject
+          expect(JSON.parse(response.body)).to eq(hash_for_widget)
+        end
       end
 
-      it_behaves_like "a jpi v1 admin action"
+      context 'when the widget does not exist' do
+        before do
+          api_stub_for(
+            get: "widgets/#{widget.id}",
+            code: 404
+          )
+        end
 
-      it 'returns a widget' do
-        subject
-        expect(JSON.parse(response.body)).to eq(hash_for_widget)
-      end
-
-      # api_stub should be modified to allow this case to be stubbed
-      context 'when the widget update is unsuccessful' do
-        xit 'spec to be described'
+        it 'returns an error message' do
+          subject
+          expect(JSON.parse(response.body)).to eq({ 'errors' => 'Cannot update widget' })
+        end
       end
     end
 
     describe '#destroy' do
       subject { delete :destroy, id: widget.id }
 
-      before do
-        api_stub_for(
-          get: "widgets/#{widget.id}",
-          response: from_api(widget)
-        )
-        api_stub_for(
-          delete: "/widgets/#{widget.id}",
-          response: from_api(nil)
-        )
+      context 'when the widget exists' do
+        before do
+          api_stub_for(
+            get: "widgets/#{widget.id}",
+            response: from_api(widget)
+          )
+          api_stub_for(
+            delete: "/widgets/#{widget.id}",
+            response: from_api(nil)
+          )
+        end
+
+        it_behaves_like "a jpi v1 admin action"
       end
 
-      it_behaves_like "a jpi v1 admin action"
+      context 'when the widget does not exist' do
+        before do
+          api_stub_for(
+            get: "widgets/#{widget.id}",
+            code: 404
+          )
+        end
 
-      # api_stub should be modified to allow this case to be stubbed
-      context 'when the widget destruction is invalidunsuccessful' do
-        xit 'spec to be described'
+        it 'returns an error message' do
+          subject
+          expect(JSON.parse(response.body)).to eq({ 'errors' => 'Cannot delete widget' })
+        end
       end
     end
   end

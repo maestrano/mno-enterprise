@@ -12,7 +12,7 @@ module AccountingjsSerializer
         'subunit_symbol' => subunit_symbol(money.currency),
         'subunit_format' => subunit_symbol_first(money.currency) ? "%s%v" : "%v%s",
         'subunit_to_unit' => money.currency.subunit_to_unit,
-        'iso_code' => money.currency_as_string
+        'iso_code' => money.currency.to_s
       }
     }
   end
