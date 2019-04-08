@@ -1,7 +1,26 @@
 # Change Log
 
-## [Unreleased](https://github.com/maestrano/mno-enterprise/tree/master)
-[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.3...HEAD)
+## [v3.4.0](https://github.com/maestrano/mno-enterprise/tree/v3.4.0) (2019-04-08)
+[Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.3...v3.4.0)
+
+**Dependencies:**
+
+For the Staff Dashboard feature, MnoHub v2.1.15 with the IDMv2 enabled is required. 
+
+**Implemented enhancements:**
+
+- \[KAPP-175\] Staff Dashboard [\#809](https://github.com/maestrano/mno-enterprise/pull/809) ([ouranos](https://github.com/ouranos))
+- Code Improvements [\#808](https://github.com/maestrano/mno-enterprise/pull/808) ([ouranos](https://github.com/ouranos))
+- \[IMPAC-793\] Add layouts attribute to Widget [\#665](https://github.com/maestrano/mno-enterprise/pull/665) ([xaun](https://github.com/xaun))
+- \[APPINT-1169\] Dynamic financial year end month [\#655](https://github.com/maestrano/mno-enterprise/pull/655) ([MehreenT](https://github.com/MehreenT))
+- \[MNOE-823\] Fix alphabetical order [\#623](https://github.com/maestrano/mno-enterprise/pull/623) ([ouranos](https://github.com/ouranos))
+- \[MNOE-823\] "Account Manager" feature flag [\#598](https://github.com/maestrano/mno-enterprise/pull/598) ([x4d3](https://github.com/x4d3))
+- Impac! permissions [\#588](https://github.com/maestrano/mno-enterprise/pull/588) ([cesar-tonnoir](https://github.com/cesar-tonnoir))
+- \[MNOE-483\] Add Sub Tenant Feature [\#380](https://github.com/maestrano/mno-enterprise/pull/380) ([ouranos](https://github.com/ouranos))
+
+**Fixed bugs:**
+
+- fix bug on kpis create [\#599](https://github.com/maestrano/mno-enterprise/pull/599) ([cesar-tonnoir](https://github.com/cesar-tonnoir))
 
 ## [v3.3.3](https://github.com/maestrano/mno-enterprise/tree/v3.3.3) (2018-10-26)
 [Full Changelog](https://github.com/maestrano/mno-enterprise/compare/v3.3.2...v3.3.3)
