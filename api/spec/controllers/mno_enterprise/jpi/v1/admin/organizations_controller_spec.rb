@@ -70,7 +70,8 @@ module MnoEnterprise
           'name' => organization.name,
           'soa_enabled' => organization.soa_enabled,
           'created_at' => organization.created_at,
-          'account_frozen' => organization.account_frozen
+          'account_frozen' => organization.account_frozen,
+          'financial_year_end_month' => organization.financial_year_end_month
         }],
         'metadata' => {'pagination' => {'count' => 1}}
       }

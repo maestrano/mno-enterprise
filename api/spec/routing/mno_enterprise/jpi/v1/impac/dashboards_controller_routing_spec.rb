@@ -24,5 +24,9 @@ module MnoEnterprise
     it 'routes to #destroy' do
       expect(delete('/jpi/v1/impac/dashboards/2')).to route_to('mno_enterprise/jpi/v1/impac/dashboards#destroy', id: '2')
     end
+
+    it 'routes to #copy' do
+      expect(post('/jpi/v1/impac/dashboards/2/copy')).to route_to('mno_enterprise/jpi/v1/impac/dashboards#copy', id: '2')
+    end
   end
 end

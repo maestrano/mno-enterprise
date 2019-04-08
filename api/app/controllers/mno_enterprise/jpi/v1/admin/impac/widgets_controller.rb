@@ -1,18 +1,20 @@
 module MnoEnterprise
   # From the Admin panel, an admin can:
+  # - add widgets to staff dashboards (passing the dashboard id)
   # - add widgets to template dashboards (passing the dashboard template id)
   # - update any widget (passing its id)
   # - delete any widget (passing its id)
   class Jpi::V1::Admin::Impac::WidgetsController < Jpi::V1::Admin::BaseResourceController
 
     # POST /mnoe/jpi/v1/admin/impac/dashboard_templates/:id/widgets
+    # POST /mnoe/jpi/v1/admin/impac/dashboards/:id/widgets
     def create
-      return render json: { errors: { message: 'Dashboard template not found' } }, status: :not_found unless template.present?
+      return render json: { errors: { message: "#{container} not found" } }, status: :not_found unless dashboard.present?
 
-      @widget = template.widgets.create(widget_create_params)
+      @widget = dashboard.widgets.create(widget_create_params)
       return render json: { errors: (widget && widget.errors).to_a }, status: :bad_request unless widget.present? && widget.valid?
 
-      MnoEnterprise::EventLogger.info('widget_create', current_user.id, 'Template Widget Creation', widget)
+      MnoEnterprise::EventLogger.info('widget_create', current_user.id, "#{container} Widget Creation", widget)
       @no_content = true
       render 'show'
     end
@@ -23,7 +25,7 @@ module MnoEnterprise
         return render json: { errors: 'Cannot update widget' }, status: :bad_request
       end
 
-      MnoEnterprise::EventLogger.info('widget_update', current_user.id, 'Template Widget Update', widget)
+      MnoEnterprise::EventLogger.info('widget_update', current_user.id, "#{container} Widget Update", widget)
       @nocontent = !params['metadata']
       render 'show'
     end
@@ -34,14 +36,23 @@ module MnoEnterprise
         return render json: { errors: 'Cannot delete widget' }, status: :bad_request
       end
 
-      MnoEnterprise::EventLogger.info('widget_delete', current_user.id, 'Template Widget Deletion', widget)
+      MnoEnterprise::EventLogger.info('widget_delete', current_user.id, "#{container} Widget Deletion", widget)
       head status: :ok
     end
 
     private
 
-    def template
-      MnoEnterprise::Impac::Dashboard.templates.find(params[:dashboard_template_id].to_i)
+    def dashboard
+      @dashboard ||= if params[:dashboard_template_id]
+                       MnoEnterprise::Impac::Dashboard.templates.find(params[:dashboard_template_id])
+                     elsif params[:dashboard_id]
+                       MnoEnterprise::Impac::Dashboard.find_by(id: params[:dashboard_id], owner_type: 'User', owner_id: current_user.id)
+                     end
+    end
+
+    # Used to customise the error message
+    def container
+      params[:dashboard_template_id] ? 'Dashboard template' : 'Dashboard'
     end
 
     def widget

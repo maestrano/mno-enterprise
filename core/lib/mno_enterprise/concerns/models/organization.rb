@@ -41,7 +41,12 @@ module MnoEnterprise::Concerns::Models::Organization
 
     scope :in_arrears, -> { where(in_arrears?: true) }
     scope :active, -> { where(account_frozen: false) }
-    scope :include_acl, ->(imp_id) { tap { |x| x.params.merge!(include_acl?: true, account_manager_id: imp_id) } }
+    scope :include_acl, ->(imp_id) do
+      tap do |x|
+        x.params[:include_acl?] = true
+        x.params[:account_manager_id] = imp_id if Settings.admin_panel.account_manager.enabled?
+      end
+    end
     default_scope lambda { where(account_frozen: false) }
 
     #================================
