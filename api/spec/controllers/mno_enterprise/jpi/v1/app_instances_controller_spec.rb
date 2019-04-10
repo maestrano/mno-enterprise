@@ -19,6 +19,8 @@ module MnoEnterprise
     let(:organization) { build(:organization) }
     before { allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return([organization]) }
 
+    let(:app) { build(:app) }
+
     describe 'GET #index' do
       let(:app_instance) { build(:app_instance, status: "running") }
       let(:app_instance) { build(:app_instance, under_free_trial: false) }
@@ -30,6 +32,11 @@ module MnoEnterprise
         allow(app_instances).to receive(:active).and_return(app_instances)
         # Updated since last tick
         allow(app_instances).to receive(:where).and_return([app_instance])
+
+        allow(app_instance).to receive(:app_id).and_return(app.id)
+
+        api_stub_for(get: "/apps?filter[id.in][]=#{app.id}&filter[unscoped]=false", response: from_api([app]))
+        api_stub_for(get: "/apps?filter[id.in]&filter[unscoped]=false", response: from_api(nil))
       end
 
       before { sign_in user }
@@ -43,6 +50,15 @@ module MnoEnterprise
 
         it 'filter only active instances' do
           expect(app_instances).to receive(:active)
+          subject
+        end
+      end
+
+      context 'with unscoped data' do
+        before { api_stub_for(get: "/apps?filter[id.in][]=#{app.id}&filter[unscoped]=true", response: from_api([app])) }
+        subject { get :index, organization_id: organization.id, timestamp: timestamp, unscoped: true }
+
+        it 'retrieved the app instance with the app' do
           subject
         end
       end

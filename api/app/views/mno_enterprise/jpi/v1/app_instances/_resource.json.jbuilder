@@ -23,7 +23,7 @@ end
 #   json.connector_version app_instance.oauth_keys[:version]
 # end
 
-app_instance.app.tap do |a|
+@apps[app_instance.app_id].first.tap do |a|
   json.app_id a.id
   json.app_name a.name
   json.app_nid a.nid

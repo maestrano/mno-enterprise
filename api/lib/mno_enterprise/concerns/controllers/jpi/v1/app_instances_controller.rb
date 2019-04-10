@@ -20,6 +20,8 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::AppInstancesController
       i.owner = parent_organization
       can?(:access,i)
     end
+    ids = @app_instances.collect{ |i| i.app_id }
+    @apps = MnoEnterprise::App.where('id.in' => ids, unscoped: params[:unscoped].present?).group_by(&:id)
   end
 
   # POST /mnoe/jpi/v1/organization/1/app_instances
