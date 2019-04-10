@@ -99,7 +99,7 @@ module MnoEnterprise
     end
 
     def user_params
-      params.require(:user).permit(:email, :name, :surname, :phone)
+      params.require(:user).permit(:email, :name, :surname, :phone, :phone_country_code)
     end
 
     # Create an unconfirmed user and skip the confirmation notification
