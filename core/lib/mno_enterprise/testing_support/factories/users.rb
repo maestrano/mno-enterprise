@@ -38,6 +38,7 @@ FactoryGirl.define do
     user_access_requests []
     dashboards []
     metadata {{}}
+    settings {{}}
     external_id 1
     trait :unconfirmed do
       confirmed_at nil
