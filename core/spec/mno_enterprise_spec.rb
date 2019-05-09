@@ -45,6 +45,15 @@ describe MnoEnterprise do
       it { expect(MnoEnterprise.router.launch_url(id)).to eq(url) }
     end
 
+    describe 'deeplink_url' do
+      let(:oid) { 'org=12s2' }
+      let(:etype) { 'invoices' }
+      let(:eid) { '123245da-2sah4as-344wq' }
+
+      let(:url) { "#{root_path}/deeplink/#{oid}/#{etype}/#{eid}" }
+      it { expect(MnoEnterprise.router.deeplink_url(oid, etype, eid)).to eq(url) }
+    end
+
     describe 'authorize_oauth_url' do
       let(:url) { "#{root_path}/oauth/#{id}/authorize" }
       it { expect(MnoEnterprise.router.authorize_oauth_url(id)).to eq(url) }
