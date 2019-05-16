@@ -10,7 +10,7 @@ module MnoEnterprise
     end
 
     it "routes to #deeplink" do
-      expect(get("/deeplink/org-1f47/invoices/3456-we43")).to route_to("mno_enterprise/pages#deeplink", oid: 'org-1f47', etype: 'invoices', eid: '3456-we43')
+      expect(get("/deeplink/org-1f47/invoices/3456-we43")).to route_to("mno_enterprise/pages#deeplink", organization_id: 'org-1f47', entity_type: 'invoices', entity_id: '3456-we43')
     end
 
     it "routes to #loading" do

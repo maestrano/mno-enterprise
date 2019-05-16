@@ -55,8 +55,8 @@ module MnoEnterprise
       host_url("/launch/#{id}",opts)
     end
 
-    def deeplink_url(oid,etype,eid,opts = {})
-      host_url("/deeplink/#{oid}/#{etype}/#{eid}", opts)
+    def deeplink_url(organization_id,entity_type,entity_id,opts = {})
+      host_url("/deeplink/#{organization_id}/#{entity_type}/#{entity_id}", opts)
     end
 
     def authorize_oauth_url(id,opts = {})

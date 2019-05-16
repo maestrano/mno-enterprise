@@ -30,11 +30,11 @@ module MnoEnterprise::Concerns::Controllers::PagesController
     redirect_to MnoEnterprise.router.launch_url(params[:id], {wtk: MnoEnterprise.jwt(user_id: current_user.uid)}.reverse_merge(request.query_parameters))
   end
 
-  # GET /deeplink/:oid/:etype/:eid?params
+  # GET /deeplink/:organization_id/:entity_type/:entity_id?params
   # Redirect to Mno Enterprise entity deeplink
   # Deeplink an entity (from dashboard) should redirect to this action
   def deeplink
-    redirect_to MnoEnterprise.router.deeplink_url(params[:oid], params[:etype], params[:eid], {wtk: MnoEnterprise.jwt(user_id: current_user.uid)}.reverse_merge(request.query_parameters))
+    redirect_to MnoEnterprise.router.deeplink_url(params[:organization_id], params[:entity_type], params[:entity_id], {wtk: MnoEnterprise.jwt(user_id: current_user.uid)}.reverse_merge(request.query_parameters))
   end
 
   # GET /loading/:id
