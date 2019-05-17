@@ -38,9 +38,9 @@ module MnoEnterprise
             allow(user).to receive(:activate_otp)
           end
 
-          it 'does not sign in the user' do
+          it 'signs the user out' do
+            expect(controller).to receive(:sign_out).with(user)
             post :create
-            expect(controller.current_user).to be nil
           end
 
           it 'activates otp' do

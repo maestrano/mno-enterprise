@@ -34,6 +34,7 @@ module MnoEnterprise::Concerns::Controllers::Auth::SessionsController
     if resource.requires_otp_for_login?
       resource.activate_otp
       resource.set_quick_response_code_in_attributes if resource.unconfirmed_otp_secret.present?
+      sign_out(resource)
     else
       sign_in(resource)
     end
