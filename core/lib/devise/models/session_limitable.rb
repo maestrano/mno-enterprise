@@ -12,10 +12,9 @@ module Devise
 
       def update_unique_session_id!(unique_session_id)
         self.unique_session_id = unique_session_id
-        puts self.inspect
-        # save(:validate => false)
-      end
 
+        save(validate: false)
+      end
     end
   end
 end
