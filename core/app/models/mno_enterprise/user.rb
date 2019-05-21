@@ -49,6 +49,7 @@ module MnoEnterprise
     property :geo_currency, type: :string
     property :failed_attempts
     property :password_changed_at
+    property :unique_session_id
 
     has_one :sub_tenant
 
