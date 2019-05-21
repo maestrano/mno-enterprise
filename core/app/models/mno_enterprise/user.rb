@@ -66,7 +66,7 @@ module MnoEnterprise
       devise_modules = [
         :remote_authenticatable, :recoverable, :rememberable,
         :trackable, :validatable, :lockable, :confirmable, :timeoutable, :password_expirable,
-        :omniauthable
+        :omniauthable, :session_limitable
       ]
       devise_modules << :registerable if Settings&.dashboard&.registration&.enabled
       devise(*devise_modules, omniauth_providers: Devise.omniauth_providers)
