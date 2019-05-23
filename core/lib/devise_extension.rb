@@ -1,6 +1,6 @@
 require 'devise'
 require 'devise/models/password_expirable'
-require 'devise/models/session_limitable'
+# require 'devise/models/session_limitable'
 require 'devise/extension_routes'
 
 # Hook for impersonation
@@ -30,7 +30,7 @@ end
 
 # modules
 Devise.add_module :password_expirable, controller: :password_expirable, model: 'devise/models/password_expirable', route: :password_expired
-Devise.add_module :session_limitable, model: 'devise/models/session_limitable'
+# Devise.add_module :session_limitable, model: 'devise/models/session_limitable'
 
 ActiveSupport.on_load(:action_controller) do
   include DeviseExtension::Controllers::Helpers
