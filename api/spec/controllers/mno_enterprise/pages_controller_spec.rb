@@ -44,6 +44,21 @@ module MnoEnterprise
       end
     end
 
+    describe 'GET #deeplink with parameters' do
+      let(:organization) { build(:organization) }
+      let(:entity_type) { 'invoices' }
+      let(:entity_id) { SecureRandom.uuid }
+      before { sign_in user }
+      subject { get :deeplink, organization_id: organization.uid, entity_type: entity_type, entity_id: entity_id, specific_parameters: 'specific:parameters_value' }
+
+      it_behaves_like "a navigatable protected user action"
+
+      it 'redirects to the mno enterprise deeplink page with a web token and extra params' do
+        subject
+        expect(response).to redirect_to(MnoEnterprise.router.deeplink_url(organization.uid, entity_type, entity_id, wtk: MnoEnterprise.jwt({user_id: user.uid}), specific_parameters: 'specific:parameters_value'))
+      end
+    end
+
     describe 'GET #loading' do
       subject { get :loading, id: app_instance.uid }
 

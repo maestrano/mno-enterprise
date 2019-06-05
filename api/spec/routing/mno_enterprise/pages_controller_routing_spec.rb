@@ -9,7 +9,11 @@ module MnoEnterprise
       expect(get("/launch/bla.mcube.co")).to route_to("mno_enterprise/pages#launch", id: 'bla.mcube.co')
     end
 
-    it "routes to #launch" do
+    it "routes to #deeplink" do
+      expect(get("/deeplink/org-1f47/invoices/3456-we43")).to route_to("mno_enterprise/pages#deeplink", organization_id: 'org-1f47', entity_type: 'invoices', entity_id: '3456-we43')
+    end
+
+    it "routes to #loading" do
       expect(get("/loading/cld-1f47d5s4")).to route_to("mno_enterprise/pages#loading", id: 'cld-1f47d5s4')
       expect(get("/loading/bla.mcube.co")).to route_to("mno_enterprise/pages#loading", id: 'bla.mcube.co')
     end
