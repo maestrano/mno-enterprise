@@ -17,7 +17,11 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
     if params[:terms]
       # Search mode
       @organizations = []
-      JSON.parse(params[:terms]).map { |t| @organizations = @organizations | MnoEnterprise::Organization.where(Hash[*t]).fetch }
+      JSON.parse(params[:terms]).map do |t|
+        query = MnoEnterprise::Organization.where(Hash[*t])
+        query.params.merge!(account_manager_scope)
+        @organizations |= query.fetch
+      end
       response.headers['X-Total-Count'] = @organizations.count
     else
       # Index mode
@@ -27,9 +31,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
       query = query.order_by(params[:order_by]) if params[:order_by]
       query = query.where(params[:where]) if params[:where]
       all = query.all
-
-      all.params[:sub_tenant_id] = params[:sub_tenant_id]
-      all.params[:account_manager_id] = params[:account_manager_id]
+      all.params.merge!(account_manager_scope)
 
       @organizations = all.fetch
 
@@ -117,6 +119,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
   def user_params
     params.require(:user).permit(:email, :name, :surname, :phone)
+  end
+
+  # Scope query to the current account manager
+  def account_manager_scope
+    if Settings.admin_panel.account_manager.enabled
+      {sub_tenant_id: current_user.mnoe_sub_tenant_id, account_manager_id: current_user.id}.compact
+    else
+      {}
+    end
   end
 
   # Create an unconfirmed user and skip the confirmation notification

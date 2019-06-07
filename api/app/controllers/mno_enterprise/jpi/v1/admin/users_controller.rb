@@ -6,7 +6,11 @@ module MnoEnterprise
       if params[:terms]
         # Search mode
         @users = []
-        JSON.parse(params[:terms]).map { |t| @users = @users | MnoEnterprise::User.where(Hash[*t]).fetch }
+        JSON.parse(params[:terms]).map do |t|
+          query = MnoEnterprise::User.where(Hash[*t])
+          query.params.merge!(account_manager_scope)
+          @users |= query.fetch
+        end
         response.headers['X-Total-Count'] = @users.count
       else
         # Index mode
@@ -16,8 +20,7 @@ module MnoEnterprise
         query = query.order_by(params[:order_by]) if params[:order_by]
         query = query.where(params[:where]) if params[:where]
         all = query.all
-        all.params[:sub_tenant_id] = params[:sub_tenant_id]
-        all.params[:account_manager_id] = params[:account_manager_id]
+        all.params.merge!(account_manager_scope)
 
         @users = all.fetch
 
@@ -28,7 +31,11 @@ module MnoEnterprise
     # GET /mnoe/jpi/v1/admin/users/1
     def show
       @user = MnoEnterprise::User.find(params[:id])
-      @user_organizations = @user.organizations
+
+      query = @user.organizations.all
+      query.params.merge!(account_manager_scope)
+      @user_organizations = query.fetch
+
       @user_clients = @user.clients
     end
 
@@ -99,6 +106,15 @@ module MnoEnterprise
 
     def user_create_params
       user_update_params.merge(password: Devise.friendly_token.first(12))
+    end
+
+    # Scope query to the current account manager
+    def account_manager_scope
+      if Settings.admin_panel.account_manager.enabled
+        {sub_tenant_id: current_user.mnoe_sub_tenant_id, account_manager_id: current_user.id}.compact
+      else
+        {}
+      end
     end
   end
 end
