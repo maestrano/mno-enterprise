@@ -91,12 +91,57 @@ module MnoEnterprise
       it_behaves_like 'a jpi v1 admin action'
 
       context 'success' do
-        before { subject }
+        context 'index' do
+          it 'returns a list of organizations' do
+            expect(subject).to be_success
+            expect(JSON.parse(response.body)).to eq(JSON.parse(expected_hash_for_organizations.to_json))
+          end
 
-        it { expect(response).to be_success }
+          context 'when Account Manager is enabled' do
+            before { Settings.merge!(admin_panel: {account_manager: {enabled: true}}) }
+            after { Settings.reload! }
 
-        it 'returns a list of organizations' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(expected_hash_for_organizations.to_json))
+            # Remove the stub to  /organizations so we can test the params (filter, account_manager_id)
+            before { api_stub_remove(get: "/organizations", response: from_api([organization])) }
+
+            before { api_stub_for(get: "/organizations?account_manager_id=#{user.id}", response: from_api([organization])) }
+
+
+            it 'returns a list of organizations' do
+              expect(subject).to be_success
+              expect(JSON.parse(response.body)).to eq(JSON.parse(expected_hash_for_organizations.to_json))
+            end
+          end
+        end
+
+
+        context 'search' do
+          subject { get :index, terms: "{\"name.like\":\"%search%\"}" }
+          let(:org) { build(:organization, name: 'QWE Corp')}
+
+          # Remove the stub to  /organizations so we can test the params (filter, account_manager_id)
+          before { api_stub_remove(get: "/organizations", response: from_api([organization])) }
+
+          context 'when Account Manager is disabled' do
+            before { api_stub_for(get: URI::encode("/organizations?filter[name.like]=%search%"), response: from_api([organization])) }
+
+            it 'returns a list of organizations' do
+              expect(subject).to be_success
+              expect(JSON.parse(response.body)).to eq(JSON.parse(expected_hash_for_organizations.except('metadata').to_json))
+            end
+          end
+
+          context 'when Account Manager is enabled' do
+            before { Settings.merge!(admin_panel: {account_manager: {enabled: true}}) }
+            after { Settings.reload! }
+
+            before { api_stub_for(get: URI::encode("/organizations?account_manager_id=#{user.id}&filter[name.like]=%search%"), response: from_api([organization])) }
+
+            it 'returns a list of organizations' do
+              expect(subject).to be_success
+              expect(JSON.parse(response.body)).to eq(JSON.parse(expected_hash_for_organizations.except('metadata').to_json))
+            end
+          end
         end
       end
     end
