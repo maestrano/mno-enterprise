@@ -49,17 +49,18 @@ module MnoEnterprise
       allow(organizations).to receive(:loaded?).and_return(true)
       allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return(organizations)
       api_stub_for(get: "/organizations/#{organization.id}/invoices", response: from_api([invoice]))
-      api_stub_for(get: "/organizations", response: from_api([organization]))
       api_stub_for(get: "/organizations/#{organization.id}", response: from_api(organization))
-      api_stub_for(get: "/organizations/#{organization.id}/users", response: from_api([user]))
       api_stub_for(get: "/organizations/#{organization.id}/org_invites", response: from_api([org_invite]))
-      api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
       api_stub_for(get: "/org_invites?filter[organization_id]=#{organization.id}&filter[user_id]=#{user.id}&limit=1", response: from_api([org_invite]))
-      api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api([credit_card]))
-      api_stub_for(get: "/arrears_situations", response: from_api([arrears]))
       api_stub_for(get: "/org_invites/#{org_invite.id}", response: from_api(org_invite))
-      api_stub_for(post: "/organizations", response: from_api([organization]))
       api_stub_for(put: "/org_invites/#{org_invite.id}", response: from_api([org_invite]))
+    end
+
+    # Used for show and create
+    def stubs_for_show
+      api_stub_for(get: "/organizations/#{organization.id}/users", response: from_api([user]))
+      api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
+      api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api([credit_card]))
     end
 
     let(:expected_hash_for_organizations) {
@@ -83,6 +84,10 @@ module MnoEnterprise
     describe '#index' do
       subject { get :index }
 
+      before do
+        api_stub_for(get: "/organizations", response: from_api([organization]))
+      end
+
       it_behaves_like 'a jpi v1 admin action'
 
       context 'success' do
@@ -98,6 +103,8 @@ module MnoEnterprise
 
     describe 'GET #show' do
       subject { get :show, id: organization.id }
+
+      before { stubs_for_show }
 
       it_behaves_like 'a jpi v1 admin action'
 
@@ -116,6 +123,10 @@ module MnoEnterprise
     describe 'GET #in_arrears' do
       subject { get :in_arrears }
 
+      before do
+        api_stub_for(get: "/arrears_situations", response: from_api([arrears]))
+      end
+
       it_behaves_like 'a jpi v1 admin action'
 
       context 'success' do
@@ -129,10 +140,13 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
+      subject { post :create, organization: params }
+
+      before { api_stub_for(post: "/organizations", response: from_api([organization])) }
+
       let(:params) { FactoryGirl.attributes_for(:organization) }
       before { allow(MnoEnterprise::Organization).to receive(:create) { organization } }
-
-      subject { post :create, organization: params }
+      before { stubs_for_show }
 
       it_behaves_like 'a jpi v1 admin action'
 
