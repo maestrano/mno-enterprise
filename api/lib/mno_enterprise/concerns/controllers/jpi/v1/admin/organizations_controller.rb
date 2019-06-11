@@ -41,8 +41,15 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::OrganizationsContro
 
   # GET /mnoe/jpi/v1/admin/organizations/1
   def show
-    @organization = MnoEnterprise::Organization.find(params[:id])
-    @organization_active_apps = @organization.app_instances.active.to_a
+    rel = MnoEnterprise::Organization.all
+    rel.params.merge!(account_manager_scope)
+    @organization = rel.find(params[:id])
+
+    if @organization
+      @organization_active_apps = @organization.app_instances.active.to_a
+    else
+      render_not_found('organization')
+    end
   end
 
   # GET /mnoe/jpi/v1/admin/organizations/in_arrears

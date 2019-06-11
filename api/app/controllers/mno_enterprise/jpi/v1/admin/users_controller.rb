@@ -30,13 +30,19 @@ module MnoEnterprise
 
     # GET /mnoe/jpi/v1/admin/users/1
     def show
-      @user = MnoEnterprise::User.find(params[:id])
-
-      query = @user.organizations.all
+      query = MnoEnterprise::User.all
       query.params.merge!(account_manager_scope)
-      @user_organizations = query.fetch
+      @user = query.find(params[:id])
 
-      @user_clients = @user.clients
+      if @user
+        query = @user.organizations.all
+        query.params.merge!(account_manager_scope)
+        @user_organizations = query.fetch
+
+        @user_clients = @user.clients
+      else
+        render_not_found('user')
+      end
     end
 
     # POST /mnoe/jpi/v1/admin/users

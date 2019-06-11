@@ -153,13 +153,35 @@ module MnoEnterprise
       it_behaves_like 'a jpi v1 admin action'
 
       context 'success' do
-        before { subject }
+        it { expect(subject).to be_success }
 
-        it { expect(response).to be_success }
+        context 'when Account Manager is enabled' do
+          before { Settings.merge!(admin_panel: {account_manager: {enabled: true}}) }
+          after { Settings.reload! }
+
+          # Remove the stub to /organizations so we can test the params (account_manager_id)
+          before { api_stub_remove(get: "/organizations/#{organization.id}", response: from_api(organization)) }
+
+          before { api_stub_for(get: "/organizations/#{organization.id}?account_manager_id=#{user.id}", response: from_api(organization)) }
+
+          it 'returns the organization' do
+            expect(subject).to be_success
+          end
+        end
 
         # TODO: admin and normal views are different we should test another way
         xit 'returns a complete description of the organization' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(admin_hash_for_organization(organization).to_json))
+        end
+      end
+
+      context 'when the organization is not found' do
+        before { api_stub_remove(get: "/organizations/#{organization.id}", response: from_api(organization)) }
+        before { api_stub_for(get: "/organizations/#{organization.id}", code: 404) }
+
+        it 'returns an error' do
+          subject
+          expect(response).to have_http_status(:not_found)
         end
       end
     end
