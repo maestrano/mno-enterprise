@@ -117,7 +117,6 @@ module MnoEnterprise
 
         context 'search' do
           subject { get :index, terms: "{\"name.like\":\"%search%\"}" }
-          let(:org) { build(:organization, name: 'QWE Corp')}
 
           # Remove the stub to  /organizations so we can test the params (filter, account_manager_id)
           before { api_stub_remove(get: "/organizations", response: from_api([organization])) }
