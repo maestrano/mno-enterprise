@@ -712,7 +712,7 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
       properties: {
         session_limitable: {
           title: 'Session limitable',
-          description: 'One session usable per account at once',
+          description: 'This option limits the number of active sessions per user to one: if the user attempts to create a new session, the old ones become invalid',
           type: 'object',
           properties: {
             enabled: {
