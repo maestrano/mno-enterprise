@@ -54,7 +54,6 @@ module MnoEnterprise
     # Two factor
     property :otp_attempt_successful, type: :boolean
     property :unconfirmed_otp_secret, type: :string
-    property :unique_session_id, type: :string
 
     has_one :sub_tenant
 

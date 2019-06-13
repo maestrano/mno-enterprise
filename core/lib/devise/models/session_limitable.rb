@@ -9,14 +9,6 @@ module Devise
     # someone used his credentials to sign in.
     module SessionLimitable
       extend ActiveSupport::Concern
-
-      def update_unique_session_id!(unique_session_id)
-        self.attributes = {
-          unique_session_id: unique_session_id
-        }
-        save!
-        reload
-      end
     end
   end
 end

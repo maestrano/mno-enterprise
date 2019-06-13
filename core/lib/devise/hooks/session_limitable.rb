@@ -1,13 +1,11 @@
-# After each sign in, update unique_session_id.
+# After each sign in, update sso_session.
 # This is only triggered when the user is explicitly set (with set_user)
 # and on authentication. Retrieving the user from session (:fetch) does
 # not trigger it.
 Warden::Manager.after_set_user except: :fetch do |record, warden, options|
   if Settings&.authentication&.session_limitable&.enabled
-    if record.respond_to?(:update_unique_session_id!) && warden.authenticated?(options[:scope])
-      unique_session_id = Devise.friendly_token
-      warden.session(options[:scope])['unique_session_id'] = unique_session_id
-      record.update_unique_session_id!(unique_session_id)
+    if warden.authenticated?(options[:scope])
+      warden.session(options[:scope])['sso_session'] = record.sso_session
     end
   end
 end
@@ -20,8 +18,8 @@ Warden::Manager.after_set_user only: :fetch do |record, warden, options|
   env   = warden.request.env  
 
   if Settings&.authentication&.session_limitable&.enabled
-    if record.respond_to?(:unique_session_id) && warden.authenticated?(scope) && options[:store] != false
-      if record.unique_session_id != warden.session(scope)['unique_session_id'] && !env['devise.skip_session_limitable']
+    if warden.authenticated?(scope) && options[:store] != false
+      if record.sso_session != warden.session(scope)['sso_session'] && !env['devise.skip_session_limitable']
         warden.raw_session.clear
         warden.logout(scope)
         throw :warden, :scope => scope, :message => :session_limited
