@@ -73,7 +73,6 @@ module MnoEnterprise
     let(:organization) { build(:organization) }
 
     before do
-      api_stub_for(get: "/users", response: from_api([user]))
       api_stub_for(get: "/users/#{user.id}", response: from_api(user))
       api_stub_for(get: "/users/#{user.id}/organizations", response: from_api([organization]))
       api_stub_for(get: "/users/#{user.id}/clients", response: from_api([organization]))
@@ -87,29 +86,108 @@ module MnoEnterprise
     describe '#index' do
       subject { get :index }
 
+      before { api_stub_for(get: "/users", response: from_api([user])) }
+
       it_behaves_like "a jpi v1 admin action"
 
       context 'success' do
-        before { subject }
+        context 'index' do
+          context 'when Account Manager is disabed' do
+            before { subject }
 
-        it 'returns a list of users' do
-          expect(response).to be_success
-          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_users([user]).to_json))
+            it 'returns a list of users' do
+              expect(response).to be_success
+              expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_users([user]).to_json))
+            end
+          end
+
+          context 'when Account Manager is enabled' do
+            before { Settings.merge!(admin_panel: {account_manager: {enabled: true}}) }
+            after { Settings.reload! }
+
+            # Remove the stub to  /users so we can test the params (filter, account_manager_id)
+            before { api_stub_remove(get: "/users", response: from_api([user])) }
+
+            before { api_stub_for(get: "/users?account_manager_id=#{user.id}", response: from_api([user])) }
+
+            it 'returns a list of users' do
+              expect(subject).to be_success
+              expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_users([user]).to_json))
+            end
+          end
+        end
+
+        context 'search' do
+          subject { get :index, terms: "{\"name.like\":\"%search%\"}" }
+
+          # Remove the stub to  /users so we can test the params (filter, account_manager_id)
+          before { api_stub_remove(get: "/users", response: from_api([user])) }
+
+          context 'when Account Manager is disabled' do
+            before { api_stub_for(get: URI::encode("/users?filter[name.like]=%search%"), response: from_api([user])) }
+
+            it 'returns a list of users' do
+              expect(subject).to be_success
+              expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_users([user]).except('metadata').to_json))
+            end
+          end
+
+          context 'when Account Manager is enabled' do
+            before { Settings.merge!(admin_panel: {account_manager: {enabled: true}}) }
+            after { Settings.reload! }
+
+            before { api_stub_for(get: URI::encode("/users?account_manager_id=#{user.id}&filter[name.like]=%search%"), response: from_api([user])) }
+
+            it 'returns a list of users' do
+              expect(subject).to be_success
+              expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_users([user]).except('metadata').to_json))
+            end
+          end
         end
       end
     end
 
     describe 'GET #show' do
-      subject { get :show, id: user.id }
+      subject { get :show, id: other_user.id }
+
+      let(:other_user) { build(:user) }
+      before do
+        api_stub_for(get: "/users/#{other_user.id}", response: from_api(other_user))
+        api_stub_for(get: "/users/#{other_user.id}/organizations", response: from_api([organization]))
+        api_stub_for(get: "/users/#{other_user.id}/clients", response: from_api([organization]))
+      end
 
       it_behaves_like "a jpi v1 admin action"
 
       context 'success' do
-        before { subject }
-
         it 'returns a complete description of the user' do
-          expect(response).to be_success
-          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_user(user).to_json))
+          expect(subject).to be_success
+          expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_user(other_user).to_json))
+        end
+
+        context 'when Account Manager is enabled' do
+          before { Settings.merge!(admin_panel: {account_manager: {enabled: true}}) }
+          after { Settings.reload! }
+
+          # Remove the stub so we can test the params (account_manager_id)
+          before { api_stub_remove(get: "/users/#{other_user.id}", response: from_api(other_user)) }
+
+          before { api_stub_for(get: "/users/#{other_user.id}?account_manager_id=#{user.id}", response: from_api(other_user)) }
+
+          it 'returns the organization' do
+            expect(subject).to be_success
+            expect(JSON.parse(response.body)).to eq(JSON.parse(hash_for_user(other_user).to_json))
+          end
+        end
+      end
+
+      context 'when the user is not found' do
+        before { api_stub_remove(get: "/users/#{other_user.id}", response: from_api(other_user)) }
+        before { api_stub_for(get: "/users/#{other_user.id}", code: 404) }
+
+        it 'returns an error' do
+          subject
+          expect(response).to have_http_status(:not_found)
         end
       end
     end

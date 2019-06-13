@@ -49,17 +49,18 @@ module MnoEnterprise
       allow(organizations).to receive(:loaded?).and_return(true)
       allow_any_instance_of(MnoEnterprise::User).to receive(:organizations).and_return(organizations)
       api_stub_for(get: "/organizations/#{organization.id}/invoices", response: from_api([invoice]))
-      api_stub_for(get: "/organizations", response: from_api([organization]))
       api_stub_for(get: "/organizations/#{organization.id}", response: from_api(organization))
-      api_stub_for(get: "/organizations/#{organization.id}/users", response: from_api([user]))
       api_stub_for(get: "/organizations/#{organization.id}/org_invites", response: from_api([org_invite]))
-      api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
       api_stub_for(get: "/org_invites?filter[organization_id]=#{organization.id}&filter[user_id]=#{user.id}&limit=1", response: from_api([org_invite]))
-      api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api([credit_card]))
-      api_stub_for(get: "/arrears_situations", response: from_api([arrears]))
       api_stub_for(get: "/org_invites/#{org_invite.id}", response: from_api(org_invite))
-      api_stub_for(post: "/organizations", response: from_api([organization]))
       api_stub_for(put: "/org_invites/#{org_invite.id}", response: from_api([org_invite]))
+    end
+
+    # Used for show and create
+    def stubs_for_show
+      api_stub_for(get: "/organizations/#{organization.id}/users", response: from_api([user]))
+      api_stub_for(get: "/organizations/#{organization.id}/app_instances", response: from_api([app_instance]))
+      api_stub_for(get: "/organizations/#{organization.id}/credit_card", response: from_api([credit_card]))
     end
 
     let(:expected_hash_for_organizations) {
@@ -83,15 +84,63 @@ module MnoEnterprise
     describe '#index' do
       subject { get :index }
 
+      before do
+        api_stub_for(get: "/organizations", response: from_api([organization]))
+      end
+
       it_behaves_like 'a jpi v1 admin action'
 
       context 'success' do
-        before { subject }
+        context 'index' do
+          it 'returns a list of organizations' do
+            expect(subject).to be_success
+            expect(JSON.parse(response.body)).to eq(JSON.parse(expected_hash_for_organizations.to_json))
+          end
 
-        it { expect(response).to be_success }
+          context 'when Account Manager is enabled' do
+            before { Settings.merge!(admin_panel: {account_manager: {enabled: true}}) }
+            after { Settings.reload! }
 
-        it 'returns a list of organizations' do
-          expect(JSON.parse(response.body)).to eq(JSON.parse(expected_hash_for_organizations.to_json))
+            # Remove the stub to  /organizations so we can test the params (filter, account_manager_id)
+            before { api_stub_remove(get: "/organizations", response: from_api([organization])) }
+
+            before { api_stub_for(get: "/organizations?account_manager_id=#{user.id}", response: from_api([organization])) }
+
+
+            it 'returns a list of organizations' do
+              expect(subject).to be_success
+              expect(JSON.parse(response.body)).to eq(JSON.parse(expected_hash_for_organizations.to_json))
+            end
+          end
+        end
+
+
+        context 'search' do
+          subject { get :index, terms: "{\"name.like\":\"%search%\"}" }
+
+          # Remove the stub to  /organizations so we can test the params (filter, account_manager_id)
+          before { api_stub_remove(get: "/organizations", response: from_api([organization])) }
+
+          context 'when Account Manager is disabled' do
+            before { api_stub_for(get: URI::encode("/organizations?filter[name.like]=%search%"), response: from_api([organization])) }
+
+            it 'returns a list of organizations' do
+              expect(subject).to be_success
+              expect(JSON.parse(response.body)).to eq(JSON.parse(expected_hash_for_organizations.except('metadata').to_json))
+            end
+          end
+
+          context 'when Account Manager is enabled' do
+            before { Settings.merge!(admin_panel: {account_manager: {enabled: true}}) }
+            after { Settings.reload! }
+
+            before { api_stub_for(get: URI::encode("/organizations?account_manager_id=#{user.id}&filter[name.like]=%search%"), response: from_api([organization])) }
+
+            it 'returns a list of organizations' do
+              expect(subject).to be_success
+              expect(JSON.parse(response.body)).to eq(JSON.parse(expected_hash_for_organizations.except('metadata').to_json))
+            end
+          end
         end
       end
     end
@@ -99,22 +148,50 @@ module MnoEnterprise
     describe 'GET #show' do
       subject { get :show, id: organization.id }
 
+      before { stubs_for_show }
+
       it_behaves_like 'a jpi v1 admin action'
 
       context 'success' do
-        before { subject }
+        it { expect(subject).to be_success }
 
-        it { expect(response).to be_success }
+        context 'when Account Manager is enabled' do
+          before { Settings.merge!(admin_panel: {account_manager: {enabled: true}}) }
+          after { Settings.reload! }
+
+          # Remove the stub to /organizations so we can test the params (account_manager_id)
+          before { api_stub_remove(get: "/organizations/#{organization.id}", response: from_api(organization)) }
+
+          before { api_stub_for(get: "/organizations/#{organization.id}?account_manager_id=#{user.id}", response: from_api(organization)) }
+
+          it 'returns the organization' do
+            expect(subject).to be_success
+          end
+        end
 
         # TODO: admin and normal views are different we should test another way
         xit 'returns a complete description of the organization' do
           expect(JSON.parse(response.body)).to eq(JSON.parse(admin_hash_for_organization(organization).to_json))
         end
       end
+
+      context 'when the organization is not found' do
+        before { api_stub_remove(get: "/organizations/#{organization.id}", response: from_api(organization)) }
+        before { api_stub_for(get: "/organizations/#{organization.id}", code: 404) }
+
+        it 'returns an error' do
+          subject
+          expect(response).to have_http_status(:not_found)
+        end
+      end
     end
 
     describe 'GET #in_arrears' do
       subject { get :in_arrears }
+
+      before do
+        api_stub_for(get: "/arrears_situations", response: from_api([arrears]))
+      end
 
       it_behaves_like 'a jpi v1 admin action'
 
@@ -129,10 +206,13 @@ module MnoEnterprise
     end
 
     describe 'POST #create' do
+      subject { post :create, organization: params }
+
+      before { api_stub_for(post: "/organizations", response: from_api([organization])) }
+
       let(:params) { FactoryGirl.attributes_for(:organization) }
       before { allow(MnoEnterprise::Organization).to receive(:create) { organization } }
-
-      subject { post :create, organization: params }
+      before { stubs_for_show }
 
       it_behaves_like 'a jpi v1 admin action'
 
