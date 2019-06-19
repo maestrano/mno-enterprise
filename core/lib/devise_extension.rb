@@ -1,10 +1,10 @@
 require 'devise'
 require 'devise/models/password_expirable'
-require 'devise/models/session_limitable'
 require 'devise/extension_routes'
 
-# Hook for impersonation
+# Hooks for impersonation & session limitation
 require 'devise/hooks/impersonatable'
+require 'devise/hooks/session_limitable'
 
 module Devise
   # Should the password expire (e.g 3.months)

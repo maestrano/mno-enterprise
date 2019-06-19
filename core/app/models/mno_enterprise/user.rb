@@ -74,7 +74,6 @@ module MnoEnterprise
         :omniauthable
       ]
       devise_modules << :registerable if Settings&.dashboard&.registration&.enabled
-      devise_modules << :session_limitable if Settings&.authentication&.session_limitable&.enabled
       devise(*devise_modules, omniauth_providers: Devise.omniauth_providers)
     end
     configure_devise
