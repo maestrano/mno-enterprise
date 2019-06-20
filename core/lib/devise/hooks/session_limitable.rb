@@ -18,7 +18,7 @@ Warden::Manager.after_set_user only: :fetch do |record, warden, options|
   env   = warden.request.env  
 
   if Settings&.authentication&.session_limitable&.enabled
-    if warden.authenticated?(scope) && options[:store] != false
+    if warden.authenticated?(scope) && options[:store] != false && warden.session(scope)['sso_session'].present?
       if record.sso_session != warden.session(scope)['sso_session'] && !env['devise.skip_session_limitable']
         warden.raw_session.clear
         warden.logout(scope)
