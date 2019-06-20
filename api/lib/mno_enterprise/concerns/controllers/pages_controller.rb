@@ -8,8 +8,8 @@ module MnoEnterprise::Concerns::Controllers::PagesController
   # 'included do' causes the included code to be evaluated in the
   # context where it is included rather than being executed in the module's context
   included do
-    before_filter :authenticate_user!, only: [:launch]
-    before_filter :redirect_to_lounge_if_unconfirmed, only: [:launch]
+    before_filter :authenticate_user!, only: [:launch, :deeplink]
+    before_filter :redirect_to_lounge_if_unconfirmed, only: [:launch, :deeplink]
     helper_method :main_logo_white_bg_path # To use in the provision view
   end
 
@@ -28,6 +28,13 @@ module MnoEnterprise::Concerns::Controllers::PagesController
     app_instance = MnoEnterprise::AppInstance.where(uid: params[:id]).first
     MnoEnterprise::EventLogger.info('app_launch', current_user.id, 'App launched', app_instance)
     redirect_to MnoEnterprise.router.launch_url(params[:id], {wtk: MnoEnterprise.jwt(user_id: current_user.uid)}.reverse_merge(request.query_parameters))
+  end
+
+  # GET /deeplink/:organization_id/:entity_type/:entity_id?params
+  # Redirect to Mno Enterprise entity deeplink
+  # Deeplink an entity (from dashboard) should redirect to this action
+  def deeplink
+    redirect_to MnoEnterprise.router.deeplink_url(params[:organization_id], params[:entity_type], params[:entity_id], {wtk: MnoEnterprise.jwt(user_id: current_user.uid)}.reverse_merge(request.query_parameters))
   end
 
   # GET /loading/:id
