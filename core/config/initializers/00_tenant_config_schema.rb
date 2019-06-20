@@ -710,6 +710,18 @@ MnoEnterprise::CONFIG_JSON_SCHEMA = {
       description: 'Authentication feature',
       type: 'object',
       properties: {
+        session_limitable: {
+          title: 'Session limitable',
+          description: 'This option limits the number of active sessions per user to one: if the user attempts to create a new session, the old ones become invalid',
+          type: 'object',
+          properties: {
+            enabled: {
+              type: 'boolean',
+              description: 'Enabled?',
+              default: false
+            }
+          }
+        },
         two_factor: {
           title: 'Two factor',
           description: 'Two factor',
