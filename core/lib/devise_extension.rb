@@ -30,7 +30,6 @@ end
 
 # modules
 Devise.add_module :password_expirable, controller: :password_expirable, model: 'devise/models/password_expirable', route: :password_expired
-Devise.add_module :session_limitable, model: 'devise/models/session_limitable'
 
 ActiveSupport.on_load(:action_controller) do
   include DeviseExtension::Controllers::Helpers
