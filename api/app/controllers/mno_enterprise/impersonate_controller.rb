@@ -2,6 +2,7 @@ module MnoEnterprise
   class ImpersonateController < ApplicationController
     include MnoEnterprise::ImpersonateHelper
 
+    before_filter :skip_devise_trackable!, only: [:create]
     before_filter :authenticate_user!, except: [:destroy]
     before_filter :current_user_must_be_admin!, except: [:destroy]
 

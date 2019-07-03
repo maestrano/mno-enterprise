@@ -66,8 +66,12 @@ module MnoEnterprise
     # user action and should therefore be taken into account
     def skip_devise_trackable_on_xhr
       if request.format == 'application/json' && request.get?
-        request.env["devise.skip_trackable"] = true
+        skip_devise_trackable!
       end
+    end
+
+    def skip_devise_trackable!
+      request.env["devise.skip_trackable"] = true
     end
 
     # Return the user to the 'return_to' url if one was specified
