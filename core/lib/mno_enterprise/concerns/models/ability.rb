@@ -132,13 +132,12 @@ module MnoEnterprise::Concerns::Models::Ability
     end
 
     can :manage_dashboard, MnoEnterprise::Dashboard do |dashboard|
-      if dashboard.owner_type == "Organization"
+      case dashboard.owner
+      when MnoEnterprise::Organization
         # The current user is a member of the organization that owns the dashboard that has the kpi attached to
-        owner = MnoEnterprise::Organization.find(dashboard.owner_id)
-        owner && !!user.role(owner)
-      elsif dashboard.owner_type == "User"
-        # The current user is the owner of the dashboard that has the kpi attached to
-        dashboard.owner_id == user.id
+        !!user.role(dashboard.owner)
+      when MnoEnterprise::User
+        dashboard.owner.id == user.id
       else
         false
       end

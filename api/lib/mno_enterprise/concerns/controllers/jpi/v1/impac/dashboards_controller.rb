@@ -10,56 +10,52 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     respond_to :json
   end
 
-  DASHBOARD_DEPENDENCIES = [:widgets, :'widgets.kpis', :kpis, :'kpis.alerts', :'kpis.alerts.recipients']
+  DASHBOARD_DEPENDENCIES = [:owner, :widgets, :'widgets.kpis', :kpis, :'kpis.alerts', :'kpis.alerts.recipients']
 
   #==================================================================
   # Instance methods
   #==================================================================
   # GET /mnoe/jpi/v1/impac/dashboards
   def index
-    dashboards
+    @dashboards = load_dashboards
   end
 
   # GET /mnoe/jpi/v1/impac/dashboards/1
   #   -> GET /api/mnoe/v1/users/1/dashboards
   def show
-    render_not_found('dashboard') unless dashboard(*DASHBOARD_DEPENDENCIES)
+    render_not_found('dashboard') unless @dashboard = load_dashboard(*DASHBOARD_DEPENDENCIES)
+    authorize! :manage_dashboard, @dashboard
   end
 
   # POST /mnoe/jpi/v1/impac/dashboards
   #   -> POST /api/mnoe/v1/users/1/dashboards
   def create
-    # TODO: enable authorization
-    # authorize! :manage_dashboard, @dashboard
-    # if @dashboard.save
-    @dashboard = MnoEnterprise::Dashboard.create!(dashboard_create_params)
+    @dashboard = MnoEnterprise::Dashboard.new(dashboard_params)
+    @dashboard.relationships.owner = current_user
+    @dashboard.save!
     MnoEnterprise::EventLogger.info('dashboard_create', current_user.id, 'Dashboard Creation', @dashboard)
-    @dashboard = dashboard.load_required(*DASHBOARD_DEPENDENCIES)
+    @dashboard = @dashboard.load_required(*DASHBOARD_DEPENDENCIES)
     render 'show'
   end
 
   # PUT /mnoe/jpi/v1/impac/dashboards/1
   #   -> PUT /api/mnoe/v1/dashboards/1
   def update
-    return render_not_found('dashboard') unless dashboard
-
-    # TODO: enable authorization
-    # authorize! :manage_dashboard, dashboard
-    dashboard.update_attributes!(dashboard_update_params)
-
+    return render_not_found('dashboard') unless @dashboard = load_dashboard(:owner)
+    authorize! :manage_dashboard, @dashboard
+    @dashboard.update_attributes!(dashboard_params)
     # Reload Dashboard
-    @dashboard = dashboard.load_required(DASHBOARD_DEPENDENCIES)
+    @dashboard = @dashboard.load_required(DASHBOARD_DEPENDENCIES)
     render 'show'
   end
 
   # DELETE /mnoe/jpi/v1/impac/dashboards/1
   #   -> DELETE /api/mnoe/v1/dashboards/1
   def destroy
-    return render_not_found('dashboard') unless dashboard
-    MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', dashboard)
-    # TODO: enable authorization
-    # authorize! :manage_dashboard, dashboard
-    dashboard.destroy!
+    return render_not_found('dashboard') unless @dashboard = load_dashboard(:owner)
+    authorize! :manage_dashboard, @dashboard
+    MnoEnterprise::EventLogger.info('dashboard_delete', current_user.id, 'Dashboard Deletion', @dashboard)
+    @dashboard.destroy!
     head status: :ok
   end
 
@@ -78,14 +74,12 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
 
   private
 
-    def dashboard(*included)
-      # TODO: [APIv2] Improve filtering by owner (owner_type?)
-      @dashboard ||= MnoEnterprise::Dashboard.where(owner_id: current_user.id).includes(included).find(params[:id].to_i).first
+    def load_dashboard(*included)
+      MnoEnterprise::Dashboard.includes(included).find(params[:id]).first
     end
 
-    def dashboards
-      # TODO: [APIv2] Improve filtering by owner (owner_type?)
-      @dashboards ||= MnoEnterprise::Dashboard.includes(*DASHBOARD_DEPENDENCIES).find(owner_id: current_user.id)
+    def load_dashboards
+      MnoEnterprise::Dashboard.includes(*DASHBOARD_DEPENDENCIES).where('owner.id': current_user.id, 'owner.type': 'User')
     end
 
     def templates
@@ -93,7 +87,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
     end
 
     def template
-      @template ||= MnoEnterprise::Dashboard.templates.find(params[:id].to_i).first
+      @template ||= MnoEnterprise::Dashboard.templates.find(params[:id]).first
     end
 
     def whitelisted_params
@@ -107,9 +101,5 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Impac::DashboardsControlle
         whitelisted[:settings] = params[:dashboard][:metadata] || {}
       end
       .except(:metadata)
-      .merge(owner_type: "User", owner_id: current_user.id)
     end
-    alias :dashboard_update_params  :dashboard_params
-    alias :dashboard_create_params  :dashboard_params
-
 end
