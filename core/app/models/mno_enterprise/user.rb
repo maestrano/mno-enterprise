@@ -15,6 +15,7 @@ module MnoEnterprise
     # ids
     property :id
     property :uid, type: :string
+    property :external_id, type: :string
 
     # timestamps
     property :confirmed_at, type: :time
@@ -22,6 +23,7 @@ module MnoEnterprise
     property :locked_at, type: :time
     property :updated_at, type: :time
     property :last_sign_in_at, type: :time
+    property :last_active_at, type: :time
     # Other
     property :admin_role, type: :string
     property :api_key, type: :string
