@@ -251,7 +251,40 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
     )
   end
 
+  def order_status_changed(system_event_id)
+    sys_event = MnoEnterprise::SystemEvent.find_one(system_event_id)
+    sub_event = MnoEnterprise::SubscriptionEvent.find_one(sys_event.id, :subscription)
+    subscription = MnoEnterprise::Subscription.find_one(sub_event.subscription.id, :organization, :product, :user)
+    organization = MnoEnterprise::Organization.find_one(subscription.organization.id, :account_managers)
+    reseller_owners = MnoEnterprise::User.where(admin_role: 'admin')&.map(&:email) || []
+    reseller_users = organization.account_managers&.map{ |a| (a.admin_role == 'admin') ? a.email : nil }.compact || []
+    user_emails = (reseller_owners + reseller_users).uniq
+    product = subscription.product
+    user = subscription.user
+    if product && user && product.send("notification_on_#{sys_event.to['status']}")
+      user_emails.each do |user_email|
+        MnoEnterprise::MailClient.deliver(
+          'order-status-changed',
+          default_sender,
+          { email: user_email },
+          user_vars(user).merge(
+            {
+              product_name: product.name,
+              subscription_id: subscription.id,
+              subscription_status: sub_event.status,
+              subscription_link: get_spa_url("!/orders/#{subscription.id}", 'orgId', organization.id)
+            }
+          )
+        )
+      end
+    end
+  end
+
   protected
+
+  def get_spa_url(url, param_name, param_value)
+    "#{main_app.root_url(anchor: add_param_to_fragment(url, param_name, param_value))}"
+  end
 
   def recipient(record, new_user = false)
     # Org Invite for unconfirmed users will have the email in #unconfirmed_email
@@ -262,9 +295,9 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
 
   def user_vars(record)
     {
-      first_name: record.name,
-      last_name: record.surname,
-      full_name: "#{record.name} #{record.surname}".strip
+      first_name: record.name.strip,
+      last_name: record.surname.strip,
+      full_name: "#{record.name.strip} #{record.surname.strip}"
     }
   end
 
@@ -281,5 +314,14 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
       invitee_full_name: new_user ? nil : "#{org_invite.user.name} #{org_invite.user.surname}".strip,
       invitee_email: org_invite.user.email,
     }
+  end
+
+  def add_param_to_fragment(url, param_name, param_value)
+    uri = URI(url)
+    fragment = URI(uri.fragment || '')
+    params = URI.decode_www_form(fragment.query || "") << [param_name, param_value]
+    fragment.query = URI.encode_www_form(params)
+    uri.fragment = fragment.to_s
+    uri.to_s
   end
 end
