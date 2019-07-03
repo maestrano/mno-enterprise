@@ -4,3 +4,4 @@ json.extract! user, :id, :uid, :email, :phone_country_code, :phone, :name, :surn
 json.access_locked user.access_locked?
 json.sub_tenant_id user.sub_tenant&.id
 json.access_request_status user.access_request_status(current_user)
+json.phone_country_code_number ISO3166::Country[user.phone_country_code]&.country_code if user.phone_country_code && user.phone
