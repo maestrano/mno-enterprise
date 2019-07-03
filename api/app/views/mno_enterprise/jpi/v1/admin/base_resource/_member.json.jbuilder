@@ -30,3 +30,4 @@ end
 json.extract! user, :id, :created_at, :email, :name, :surname, :last_sign_in_at
 json.status status
 json.access_request_status access_request_status
+json.confirmed user.confirmed?
