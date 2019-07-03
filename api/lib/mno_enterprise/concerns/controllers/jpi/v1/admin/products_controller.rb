@@ -98,6 +98,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
     end
 
     @product = @product.load_required(DEPENDENCIES)
+    MnoEnterprise::TenantConfig.update_application_list! unless product_update_params['active'].nil?
     render :show
   end
 
@@ -105,6 +106,7 @@ module MnoEnterprise::Concerns::Controllers::Jpi::V1::Admin::ProductsController
   def destroy
     product = MnoEnterprise::Product.find_one(params[:id])
     product.destroy!
+    MnoEnterprise::TenantConfig.update_application_list!
     head :no_content
   end
 
