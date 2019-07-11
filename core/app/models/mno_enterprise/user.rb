@@ -95,6 +95,7 @@ module MnoEnterprise
     custom_endpoint :authenticate, on: :collection, request_method: :post
     custom_endpoint :update_password, on: :member, request_method: :patch
     custom_endpoint :update_clients, on: :member, request_method: :patch
+    custom_endpoint :increment_failed_attempts, on: :member, request_method: :patch # Custom endpoint to support Devise Lockable module
 
     #================================
     # Class Methods
@@ -252,6 +253,17 @@ module MnoEnterprise
       user.save
 
       user
+    end
+
+    # Support Devise Lockable module
+    # When a failed attempt is made, Devise calls
+    # increment_counter which is an ActiveRecord method
+    def self.increment_counter(counter_name, id)
+      if counter_name == :failed_attempts
+        # Custom endpoint which will ultimately call increment_counter
+        # on the user in MnoHub
+        self.new(id: id).increment_failed_attempts
+      end
     end
 
     def to_audit_event
