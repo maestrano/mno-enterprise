@@ -36,13 +36,19 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   #   :confirmation_link
   #
   def confirmation_instructions(record, token, opts={})
+    if defined?( custom_confirmation_url )
+      confirmation_link = custom_confirmation_url( token )
+    else
+      confirmation_link = user_confirmation_url(confirmation_token: token)
+    end
+
     update_email = record.confirmed? && record.unconfirmed_email.present?
     template = update_email ? 'reconfirmation-instructions' : 'confirmation-instructions'
     email = update_email ? record.unconfirmed_email : record.email
     MnoEnterprise::MailClient.deliver(template,
       default_sender,
       recipient(record).merge(email: email),
-      user_vars(record).merge(confirmation_link: user_confirmation_url(confirmation_token: token))
+      user_vars(record).merge(confirmation_link: confirmation_link)
     )
     if update_email
       MnoEnterprise::MailClient.deliver('email-change',
@@ -64,10 +70,16 @@ module MnoEnterprise::Concerns::Mailers::SystemNotificationMailer
   #   :reset_password_link
   #
   def reset_password_instructions(record, token, opts={})
+    if defined?( custom_reset_password_url )
+      reset_link = custom_reset_password_url( token )
+    else
+      reset_link = edit_user_password_url(reset_password_token: token)
+    end
+
     MnoEnterprise::MailClient.deliver('reset-password-instructions',
       default_sender,
       recipient(record),
-      user_vars(record).merge(reset_password_link: edit_user_password_url(reset_password_token: token))
+      user_vars(record).merge(reset_password_link: reset_link)
     )
   end
 
